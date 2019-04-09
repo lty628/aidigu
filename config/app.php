@@ -133,8 +133,8 @@ return [
     'dispatch_success_tmpl'  => Env::get('think_path') . 'tpl/success.tpl',
     'dispatch_error_tmpl'    => Env::get('think_path') . 'tpl/error.tpl',
 
-    'exception_tmpl'         => Env::get('think_path') . 'tpl/404.tpl',
-    // 'exception_tmpl'         => Env::get('think_path') . 'tpl/think_exception.tpl',
+    // 'exception_tmpl'         => Env::get('think_path') . 'tpl/404.tpl',
+    'exception_tmpl'         => Env::get('think_path') . 'tpl/think_exception.tpl',
 
     // 错误显示信息,非调试模式有效
     'error_message'          => '页面错误！请稍后再试～',

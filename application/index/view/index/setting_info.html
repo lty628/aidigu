@@ -85,66 +85,6 @@
 			</div>
 		</div>
 	</div>
-	
-	<!-- <script src="/static/index/js/setting.js"> -->
-<!-- 	<script>
-
-		$(function (){
-			$("#changeInfo").click(function(event) {
-				var jsonData = {};
-				jsonData.username = $("input[name='username']").val();
-				jsonData.blog = $("input[name='blog']").val();
-				jsonData.nickname = $("input[name='nickname']").val();
-				jsonData.phone = $("input[name='phone']").val();
-				jsonData.email = $("input[name='email']").val();
-				jsonData.sex = $("input[name='sex']:checked").val();
-				jsonData.province = $("select[name='province'] option:selected").val();
-				jsonData.city = $("select[name='city'] option:selected").val();
-				jsonData.intro = $("textarea[name='intro']").val();
-				var config = {};
-				config.action = 'changeInfo';
-				changeUserInfo(jsonData, config);
-			});
-		})
-		function changeUserInfo(info, config)
-		{
-			$.ajax({
-				url: '/index/user/'+config.action,
-				type: 'GET',
-				dataType: 'json',
-				data: {info: info},
-			})
-			.done(function(data) {
-				alertMsg(data.msg);
-			})
-			.always(function() {
-				console.log("complete");
-			});
-			
-		}
-		function checkInfo2(obj, type)
-		{
-			var text = $(obj).val();
-			if (!text) {
-				return false;
-			}
-			var action = $(obj).attr('id');
-			$.ajax({
-				url: '/index/setting/checkInfo2',
-				type: 'GET',
-				dataType: 'json',
-				data: {text: text, type: type},
-			})
-			.done(function(data) {
-				if (!data.status) {
-					if (!data.status) {
-						alertMsg(data.msg);
-						$(obj).focus();
-					}
-				}
-			})
-		}	
-	</script> -->
 	<script src="/static/index/js/setting.js"></script>
 {include file='index/sidebar_index' /}
 {include file='index/footer' /}
