@@ -1,0 +1,52 @@
+{include file='index/header' /}
+<div class="main">
+	<div class="contents">
+<div class="sendMsg"></div>
+{if '' != $userMessage}
+		{foreach $userMessage as $message}
+		<div class="entry">
+			<div class="avatar"><div class="imgborder"><a href=""><img src="{$userInfo.head_image|default=$defaultImage}" /></a></div></div>
+			<div class="box">
+				<p><a href="{:url('/'.$userInfo.blog.'/')}" id="nickname">{$message.nickname}：</a>{$message.contents|raw}{$message.repost|raw}</p>
+
+				<div class="static">
+<span>
+<!-- <a href="{:url('/'.$userInfo.blog.'/'.'message/'.$message.msg_id)}" target="_blank">查看</a> |  -->
+<a href="javascript:void(0);" onclick="repost(this)">转发{if 0 != $message.repostsum}（{$message.repostsum}）{/if}</a> | 
+<!-- <a href="javascript:void(0);" onclick="showform('atuser', {$message.msg_id}, '<i>回复</i> @{$message.nickname}  {cutwin str=$message.contents len="5"}');">回复</a> | 
+ --><a href="javascript:void(0);" onclick="comment({$message.msg_id}, {$siteUserId});">评论{if 0 != $message.commentsum}（{$message.commentsum}）{/if}</a>
+ | <a href="{:url('/'.$userInfo.blog.'/'.'del/message/'.$message.msg_id)}">删除</a>
+</span>
+{$message.ctime|date='Y-m-d H:i:s'} 来自 {$message.refrom}
+				</div>
+				{if $messageBlock}
+				{foreach $messageBlock as $block}
+				<div class="block">
+					
+					<div class="block_top"></div>
+					
+					<div class="block_body"><div class="repost"><a href="">{$block.nickname}:</a>{$block.msg}</div><div class="block_static"><!-- <a href="javascript:void(0);" onclick="repost2(this)">转发（0）</a> | --> <a href="javascript:void(0);" onclick="showform('comment',asdfasdf>, '<i>评论</i> ');">回复</a></div></div>
+					
+					<div class="block_bottom"></div>
+
+				</div>
+				{/foreach}
+				{$messageBlock|raw}
+				{/if}
+			</div>
+
+			<div class="clear"></div>
+
+		</div>
+		{/foreach}
+{else}
+		<div class="entry">
+			<div class="box">
+				<p>暂无微博...</p>
+			</div>
+			<div class="clear"></div>
+		</div>
+{/if}
+	</div>
+{include file='index/sidebar_index' /}
+{include file='index/footer' /}

@@ -1,0 +1,23 @@
+{include file='index/header' /}
+
+<div class="main">
+	<div class="contents">
+		<div class="top">修改密码</div>
+		<h2><a href="{:url('/'.$userInfo.blog.'/setting/')}">个人资料 | </a><span><a href="{:url('/'.$userInfo.blog.'/setting/avatar/')}">修改头像 | </a></span><span><a href="{:url('/'.$userInfo.blog.'/setting/passwd/')}">修改密码</a></span></h2>
+		<h3>请验证你的旧密码：</h3>
+		<div class="entry">
+			<div class="box">
+				<form action="" class="postform" method="POST">
+					<p  class="formitem"><span>旧密码：</span><input type="password" name="oldpw" class="input" id="oldpw" /></p>
+					<p  class="formitem"><span>新密码：</span><input type="password" name="newpw" class="input" id="newpw" /></p>
+					<p  class="formitem"><span>确认密码：</span><input type="password" name="compw" class="input" id="compw" /></p>
+					<div class="formhr"></div>
+					<p  class="formsubmit"><input type="button" value="提交" id="passwd" class="button" /></p>
+				</form>
+			</div>
+		</div>
+	</div>
+	
+	<script src="/static/index/js/setting.js"></script>
+{include file='index/sidebar_index' /}
+{include file='index/footer' /}

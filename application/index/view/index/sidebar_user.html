@@ -1,0 +1,60 @@
+<div class="sidebar">
+		<div class="box">
+
+			<div class="info">
+				<div class="avatar"><a href="{:url('/'.$userInfo.blog.'/')}"><img src="{$userInfo.head_image}" /></a></div>
+				<div class="detail"><p><a href="{:url('/'.$userInfo.blog.'/')}">{$userInfo.nickname}</a></p><p>{$userInfo.city}</p>
+					<p><b>
+						{if $userInfo.is_concern}
+						<a href="javascript:;"  onclick="fansFollow({$userInfo.uid}, 'unfollow')" onmouseover="blurToUnfollow(this,{$userInfo.uid})">已关注</a>
+						{else}
+						<a href="javascript:;" onclick="fansFollow({$userInfo.uid}, 'addFollow')">+关注</a>
+						{/if}
+					</b></p>
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="counter">
+				<div class="counterbox"><strong>{$userInfo.follownum}</strong><br /><a href="{:url('/'.$userInfo.blog.'/concern/')}">{$userInfo.sex|getPerson}关注的</a></div>
+				<div class="counterbox"><strong>{$userInfo.fansnum}</strong><br /><a href="{:url('/'.$userInfo.blog.'/fans/')}">关注{$userInfo.sex|getPerson}的</a></div>
+				<div class="counterbox"><strong>{$userInfo.message_sum}</strong><br /><a href="{:url('/'.$userInfo.blog.'/own/')}">{$userInfo.sex|getPerson}的微博</a></div>
+			</div>
+			<h2><a href="javascript:;">个人资料</a></h2>
+			<p>{$userInfo.intro|default="暂无个人资料"}</p>
+		</div>
+		<div class="box">
+			<h3><span><a href="{:url('/'.$userInfo.blog.'/concern/')}">更多>></a></span><a href="{:url('/'.$userInfo.blog.'/concern/')}">{$userInfo.sex|getPerson}关注的人</a></h3>
+			<ul class="users">
+				{foreach $getMyConcern as $fans}
+					<li>
+						<a href="{:url('/'.$fans.blog.'/')}" /><img src="{$fans.head_image}" /></a><br /><a href="{:url('/'.$fans.blog.'/')}">{$fans.nickname}</a><br />
+						<span><a href="{:url('/'.$fans.blog.'/')}">进入主页</a></span>
+					</li>
+				{/foreach}
+			</ul>
+			<div class="clear"></div>
+		</div>
+		<div class="box">
+			<h3><span><a href="{:url('/'.$userInfo.blog.'/fans/')}">更多>></a></span><a href="{:url('/'.$userInfo.blog.'/fans/')}">关注{$userInfo.sex|getPerson}的人</a></h3>
+			<ul class="users">
+				{foreach $fansInfo as $fans}
+					<li>
+						<a href="{:url('/'.$fans.blog.'/')}"><img src="{$fans.head_image}" /></a><br /><a href="{:url('/'.$fans.blog.'/')}">{$fans.nickname}</a><br />
+						<span><a href="{:url('/'.$fans.blog.'/')}">进入主页</a></span>
+					</li>
+				{/foreach}
+			</ul>
+			<div class="clear"></div>
+		</div>
+		<div class="box">
+			<!-- <h3>意见反馈</h3>
+			<ul>
+				<li>欢迎使用aidigu.cn并提出宝贵建议。请点击<a href="">这里</a>提交微博意见反馈。 </li>
+			</ul>
+			<ul>
+				<li><a href="">举报不良信息</a></li>
+			</ul> -->
+		</div>
+	</div>
+	<div class="clear"></div>
+</div>

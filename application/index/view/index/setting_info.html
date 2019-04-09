@@ -1,0 +1,150 @@
+{include file='index/header' /}
+
+<div class="main">
+	<div class="contents">
+		<div class="top">个人资料</div>
+		<h2><a href="{:url('/'.$userInfo.blog.'/setting/')}">个人资料 | </a><span><a href="{:url('/'.$userInfo.blog.'/setting/avatar/')}">修改头像 | </a></span><span><a href="{:url('/'.$userInfo.blog.'/setting/passwd/')}">修改密码</a></span></h2>
+		<h3>请填写以下信息：</h3>
+		<div class="entry">
+			<div class="box">
+			<form action="" method="POST">
+				<input type="hidden" name="ustatic" value="1">
+				<p class="formitem"><span>姓名：</span><input type="text" name="username" class="input" value="{$userInfo.username|default='无'}"><u>(保密)</u></p>
+				<p class="formitem"><span>账号：</span><input type="text" name="blog" onfocusout="checkInfo2(this, 1)" class="input" value="{$userInfo.blog}"><u>(必填)</u></p>
+				<p class="formitem"><span>昵称：</span>	<input type="text" name="nickname"onfocusout="checkInfo2(this, 1)" class="input" value="{$userInfo.nickname}"><u>(必填)</u></p>
+				<p class="formitem"><span>手机号：</span><input type="text" name="phone" class="input" value="{$userInfo.phone}"><u>(保密)</u></p>
+				<p class="formitem"><span>电子邮件：</span><input type="text" name="email" class="input" value="{$userInfo.email|default='无'}"><u>(保密)</u></p>
+				<p class="formitem"><span>性别：</span>
+					<input name="sex" type="radio" value="0" {if $userInfo.sex==0}checked{/if}>保密
+					<input name="sex" type="radio" value="1" {if $userInfo.sex==1}checked{/if}>男
+					<input name="sex" type="radio" value="2" {if $userInfo.sex==2}checked{/if}>女
+				</p>
+				<div class="formhr"></div>
+				<p class="formitem"><span>所在城市：</span>
+				<script language=javascript src="/static/index/js/city.js"></script>
+				<select name="province" id="selProvince" onChange = "getCity(this.options[this.selectedIndex].value)"> 
+				        <option value="">-请选择省份-</option> 
+				        <option value="北京市">北京市</option> 
+				        <option value="上海市">上海市</option> 
+				        <option value="天津市">天津市</option> 
+				        <option value="重庆市">重庆市</option> 
+				        <option value="河北省">河北省</option> 
+				        <option value="山西省">山西省</option> 
+				        <option value="内蒙古自治区">内蒙古自治区</option> 
+				        <option value="辽宁省">辽宁省</option> 
+				        <option value="吉林省">吉林省</option> 
+				        <option value="黑龙江省">黑龙江省</option> 
+				        <option value="江苏省">江苏省</option> 
+				        <option value="浙江省">浙江省</option> 
+				        <option value="安徽省">安徽省</option> 
+				        <option value="福建省">福建省</option> 
+				        <option value="江西省">江西省</option> 
+				        <option value="山东省">山东省</option> 
+				        <option value="河南省">河南省</option> 
+				        <option value="湖北省">湖北省</option> 
+				        <option value="湖南省">湖南省</option> 
+				        <option value="广东省">广东省</option> 
+				        <option value="广西壮族自治区">广西壮族自治区</option> 
+				        <option value="海南省">海南省</option> 
+				        <option value="四川省">四川省</option> 
+				        <option value="贵州省">贵州省</option> 
+				        <option value="云南省">云南省</option> 
+				        <option value="西藏自治区">西藏自治区</option> 
+				        <option value="陕西省">陕西省</option> 
+				        <option value="甘肃省">甘肃省</option> 
+				        <option value="宁夏回族自治区">宁夏回族自治区</option> 
+				        <option value="青海省">青海省</option> 
+				        <option value="新疆维吾尔族自治区">新疆维吾尔族自治区</option> 
+				        <option value="香港特别行政区">香港特别行政区</option> 
+				        <option value="澳门特别行政区">澳门特别行政区</option> 
+				        <option value="台湾省">台湾省</option> 
+				        <option value="其它">其它</option> 
+				    </select> 
+				    <select id="selCity" name="city" style="width:100px"> 
+				        <option value="">-请选择城市-</option> 
+				    </select> 	
+				</p>
+				<input type="hidden" id="provinceVal" value="{$userInfo.province}">
+				<input type="hidden" id="cityVal" value="{$userInfo.city}">
+				<script language=javascript>
+					var provinceVal = $("#provinceVal").val();
+					// alert(provinceVal)
+					var cityVal = $("#cityVal").val();
+					if (provinceVal && cityVal) {
+						getCity(provinceVal,cityVal)
+					}
+					if (provinceVal && !cityVal) {
+						getCity(provinceVal)
+					}
+					
+				</script>
+    			<p class="formitem"><span>自我介绍：</span><u>(选填)</u><br /><textarea class="formintro" name="intro">{$userInfo.intro}</textarea></p>
+    			<div class="formhr"></div>
+				<p class="formsubmit"><input type="button" id="changeInfo" value="提交"></p>
+			</form>
+			</div>
+		</div>
+	</div>
+	
+	<!-- <script src="/static/index/js/setting.js"> -->
+<!-- 	<script>
+
+		$(function (){
+			$("#changeInfo").click(function(event) {
+				var jsonData = {};
+				jsonData.username = $("input[name='username']").val();
+				jsonData.blog = $("input[name='blog']").val();
+				jsonData.nickname = $("input[name='nickname']").val();
+				jsonData.phone = $("input[name='phone']").val();
+				jsonData.email = $("input[name='email']").val();
+				jsonData.sex = $("input[name='sex']:checked").val();
+				jsonData.province = $("select[name='province'] option:selected").val();
+				jsonData.city = $("select[name='city'] option:selected").val();
+				jsonData.intro = $("textarea[name='intro']").val();
+				var config = {};
+				config.action = 'changeInfo';
+				changeUserInfo(jsonData, config);
+			});
+		})
+		function changeUserInfo(info, config)
+		{
+			$.ajax({
+				url: '/index/user/'+config.action,
+				type: 'GET',
+				dataType: 'json',
+				data: {info: info},
+			})
+			.done(function(data) {
+				alertMsg(data.msg);
+			})
+			.always(function() {
+				console.log("complete");
+			});
+			
+		}
+		function checkInfo2(obj, type)
+		{
+			var text = $(obj).val();
+			if (!text) {
+				return false;
+			}
+			var action = $(obj).attr('id');
+			$.ajax({
+				url: '/index/setting/checkInfo2',
+				type: 'GET',
+				dataType: 'json',
+				data: {text: text, type: type},
+			})
+			.done(function(data) {
+				if (!data.status) {
+					if (!data.status) {
+						alertMsg(data.msg);
+						$(obj).focus();
+					}
+				}
+			})
+		}	
+	</script> -->
+	<script src="/static/index/js/setting.js"></script>
+{include file='index/sidebar_index' /}
+{include file='index/footer' /}

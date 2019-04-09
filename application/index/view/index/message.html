@@ -1,0 +1,55 @@
+{include file='index/header' /}
+<div class="main">
+	<div class="contents">
+<div class="sendMsg"></div>
+		{foreach $userMessage as $message}
+		<div class="entry">
+			<div class="avatar"><div class="imgborder"><a href="{:url('/'.$message.blog.'/')}"><img src="{$userInfo.head_image|default=$defaultImage}" /></a></div></div>
+			<div class="box">
+				<p><a href="{:url('/'.$userInfo.blog.'/')}" id="nickname">{$message.nickname}：</a>{$message.contents|raw}{$message.repost|raw}</p>
+
+				<div class="static">
+<span>
+<a href="javascript:void(0);" onclick="repost(this)">转发{if 0 != $message.repostsum}（{$message.repostsum}）{/if}</a> | 
+<a href="javascript:void(0);" onclick="comment({$message.msg_id}, {$message.uid});">评论{if 0 != $message.commentsum}（{$message.commentsum}）{/if}</a>
+  {if $userInfo.isSiteUser}
+ | <a href="{:url('/'.$userInfo.blog.'/'.'del/message/'.$message.msg_id)}">删除</a>
+ {/if}
+</span>
+
+{$message.ctime|date='Y-m-d H:i:s'} 来自 {$message.refrom}
+				</div>
+				{if isset($messageBlock[0])}
+				<div class="block">
+					<div class="block_top"></div>
+					
+					{foreach $messageBlock as $block}
+					<div class="block_body"><div class="repost"><span><a href="{:url('/'.$block.blog.'/')}">{$block.nickname}:</a>{$block.msg|raw}</span></div><div class="block_static">
+					{$block.ctime|date='Y-m-d H:i:s'}
+						{if $block.fromuid!=getLoginUid()}
+						<a href="javascript:void(0);" onclick="reply(this,{$block.msg_id}, {$block.fromuid});">回复</a>
+						{/if}
+					</div></div>
+					{/foreach}
+					{$messageBlock|raw}
+					
+					<div class="block_bottom"></div>
+				
+				</div>
+				{/if}
+			</div>
+
+			<div class="clear"></div>
+
+		</div>
+		{/foreach}
+	</div>
+	{if $userInfo.isSiteUser}
+		{include file='index/sidebar_index' /}
+	{else}
+		{include file='index/sidebar_user' /}
+	{/if}
+{include file='index/footer' /}
+<script>
+
+</script>

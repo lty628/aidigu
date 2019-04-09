@@ -1,0 +1,40 @@
+{include file='index/header' /}
+<div class="main">
+	<div class="contents">
+	<div class="top">{$userInfo.nickname}</div>
+<!-- <div class="post" id="postform" style="display:block;"><div class="postad" id="wcontent">&nbsp;</div>
+<textarea name="contents" placeholder="你在做什么呢？" maxlength="140" id="msgInput" onkeyup="check_len1()"></textarea>
+<div class="postnow"><span><input type="button" value="发布" class="button" id="button" /></span>你还可以发布<em id="leftlen1">140</em>字</div></div> -->
+<div class="sendMsg"></div>
+{if isset($userMessage[0])}
+		{foreach $userMessage as $message}
+		<div class="entry">
+			<div class="avatar"><div class="imgborder"><a href="{:url('/'.$message.blog.'/')}"><img src="{$userInfo.head_image}" /></a></div></div>
+			<div class="box">
+				<p><a href="{:url('/'.$message.blog.'/')}" id="nickname">{$message.nickname}：</a>{$message.contents|raw}{$message.repost|raw}</p>
+				<div class="static">
+<span>
+<a href="{:url('/'.$userInfo.blog.'/'.'message/'.$message.msg_id)}" target="_blank">查看</a> | 
+<a href="javascript:void(0);" onclick="repost(this, {$message.msg_id})">转发{if 0 != $message.repostsum}（{$message.repostsum}）{/if}</a> | 
+<a href="javascript:void(0);" onclick="comment({$message.msg_id}, {$siteUserId});">评论{if 0 != $message.commentsum}（{$message.commentsum}）{/if}</a><!-- 
+ | <a href="{:url('/'.$userInfo.blog.'/'.'del/message/'.$message.msg_id)}">删除</a> -->
+</span>
+{$message.ctime|setMessageTime} 来自 {$message.refrom}
+				</div>
+			</div>
+			<div class="clear"></div>
+		</div>
+		{/foreach}
+{else}
+		<div class="entry">
+			<div class="box">
+				<p>暂无微博...</p>
+			</div>
+			<div class="clear"></div>
+		</div>
+{/if}
+{$userMessage|raw}
+	</div>
+
+{include file='index/sidebar_user' /}
+{include file='index/footer' /}
