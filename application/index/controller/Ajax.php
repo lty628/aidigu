@@ -37,11 +37,11 @@ class Ajax extends Base
         $comment->touid = (int)input('get.uid');
         $msgId = (int)input('get.commentId');
         $comment->msg_id = $msgId;
+        if (!$comment->save()) return json(array('status' =>  0,'msg' => '回复失败'));
         if ($msgId) {
             if (getLoginUid()!=(int)input('get.uid'))
             Reminder::saveReminder($msgId, getLoginUid(), (int)input('get.uid'), 2);
         }
-        if (!$comment->save()) return json(array('status' =>  0,'msg' => '回复失败'));
         return json(array('status' =>  1,'msg' => '回复成功'));
     }
     //fans 粉丝关注

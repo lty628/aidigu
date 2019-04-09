@@ -95,7 +95,7 @@ class Info extends Base
 	}
 	protected function getMessageById($msgId = '')
 	{
-		Reminder::where('touid', $this->userid)->where('msg_id', $msgId)->whereOr('fromuid', $this->userid)->delete();
+		Reminder::where('touid', $this->userid)->where('msg_id', $msgId)->delete();
 		$userMessage[0] = Message::getMessageById($msgId);
 		$messageBlock = $userMessage[0]->comments()->where('msg_id',$msgId)->with('User')->order('ctime','desc')->paginate(20);
 		$this->assign('userMessage', $userMessage);

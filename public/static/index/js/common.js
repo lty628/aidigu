@@ -204,6 +204,12 @@ function comdel(url){
 	function reply(obj,commentId, uid)
 	{
 		var replyUser = $(obj).parents('.block_body').children('.repost').children('span').html();
+		var replyArr = replyUser.split('||<a');
+		replyUser = replyArr[0];
+		if (!replyUser) {
+			alertMsg('未找到回复内容');
+			return false;
+		}
 		layer.open({
 		  type: 1,
 		  skin: 'layui-layer-rim', //加上边框
