@@ -1,8 +1,8 @@
 ul,li,p,h1,h2,h3,h4,form,ol,table{list-style:none;margin:0;padding:0}
-body{background:url(../images/bg.jpg) top left repeat-x #E5ECF4;text-align:center;font:12px/1.5 Arial,Helvetica;color:#393939;margin:0;padding:0;}
+body{background:url(../images/bg.jpg) top left;text-align:center;font:12px/1.5 Arial,Helvetica;color:#393939;margin:0;padding:0;}
 a{text-decoration:none;color:#3B5999;}
 a:hover{text-decoration:underline;padding-bottom:2px;}
-a img{border:0;}
+a img{border:0;border-radius: 10px;}
 .clear{clear:both}
 .clearall{clear:both;height:1px;}
 .container{text-align:left;width:800px;margin:auto;}
@@ -10,8 +10,8 @@ a img{border:0;}
 .logo{float:left;margin:5px 0 0 5px;}
 .navigation{float:right;margin:20px 5px 0 0;background-color:#FFF;padding:8px;}
 .navigation li{display:inline;padding:0 10px;}
-.main{background:#FFF url(../images/bg.jpg) 0 0 repeat-y;}
-.contents{float:left;width:600px;background-color:#FFF;}
+.main{background:#d5f3f4 url(../images/bg.jpg) 0 0 repeat-y;}
+.contents{float:left;width:600px;min-height:600px;background-color:#FFF;}
 .sidebar{float:right;width:200px;background-color:#D5F3F4;}
 .top{padding:8px 12px;background-color:#EEE;}
 .sidebar h2{background:url(../images/rightnavbg.gif) 0 0 no-repeat;font-size:14px;line-height:30px;font-weight:normal;padding:0 10px;}
