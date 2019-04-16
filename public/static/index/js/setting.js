@@ -35,7 +35,7 @@ $(function (){
 				config.action = 'passwd';
 				changeUserInfo(jsonData, config);
 			});
-
+			
 			layui.use('upload', function(){
 			  var upload = layui.upload;
 			   

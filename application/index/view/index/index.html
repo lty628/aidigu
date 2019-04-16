@@ -4,7 +4,17 @@
 {if $userInfo.isSiteUser}
 	<div class="post" id="postform" style="display:block;"><div class="postad" id="wcontent">&nbsp;</div>
 <textarea name="contents" placeholder="你在做什么呢？" maxlength="140" id="msgInput" onkeyup="check_len1()"></textarea>
-<div class="postnow"><span><input type="button" value="发布" class="button" id="button" /></span>你还可以发布<em id="leftlen1">140</em>字</div></div>
+<div class="postnow">
+	<span><input type="button" value="发布" class="button layui-btn layui-btn" id="button" />
+</span>你还可以发布<em id="leftlen1">140</em>字</div>
+	<div class="tool-class">
+		<i class="layui-icon layui-icon-face-smile-b" onclick="showEmoji(this)" style="margin: 10px;cursor:pointer;color: #ffa700;font-size:20px!important" title="表情"></i>
+		<i class="layui-icon layui-icon-picture" id="msgInputImg" style="color: #1c7ca5;cursor:pointer;font-size:20px!important" title="图片"></i>
+		<div class="emojiHtml" style="display: none"></div>
+		<div class="imgHtml" style="margin-left: 69px; position: absolute;margin-top: -22px;border-radius: 3px;"><img src="" width="70px" alt=""></div>
+		<input type="hidden" id="imgVal">
+	</div>
+</div>
 {else}
 <div class="top"></div>
 {/if}
@@ -17,6 +27,9 @@
 			<div class="avatar"><div class="imgborder"><a href="{:url('/'.$message.blog.'/')}"><img src="{$message.head_image}" /></a></div></div>
 			<div class="box">
 				<p><a href="{:url('/'.$message.blog.'/')}" id="nickname">{$message.nickname}：</a>{$message.contents|raw}{$message.repost|raw}</p>
+				{if $message.image}
+					<p><img width="150px" src="{$message.image}"></p>
+				{/if}
 				<div class="static">
 <span>
 <a href="{:url('/'.$userInfo.blog.'/'.'message/'.$message.msg_id)}">查看</a> | 

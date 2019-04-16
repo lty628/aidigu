@@ -35,8 +35,8 @@ class Info extends Base
 		}
 		if ($this->siteUserId != $this->userid) $this->isSiteUser = false;
     	$this->getSiteUserInfo($this->siteUserId);
-    	$this->getMyFans($this->siteUserId);
-    	$this->getMyConcern($this->siteUserId);
+    	$this->setMyFans($this->siteUserId);
+    	$this->setMyConcern($this->siteUserId);
 		// $this->assign('siteUserId', $this->siteUserId);
 		$this->assign('loginUserInfo', $this->loginUserInfo);
 	}
@@ -59,31 +59,49 @@ class Info extends Base
 		$userInfo['isSiteUser'] = $this->isSiteUser;
 		$this->assign('userInfo', $userInfo);
 	}
-	//关注我的
-	protected function getMyFans($userid, $count = 9, $isReturn = false)
+	protected function setMyFans($userid)
 	{
 		$fansInfo = Db::name('user')
 			->alias('user')
 			->join([$this->prefix.'fans'=>'fans'],'user.uid=fans.fromuid')->where('fans.touid',$userid)->where('fans.fromuid','<>',$userid)
 			->field('user.uid,user.nickname,user.province,user.city,user.message_sum,user.head_image,user.blog,fans.touid,fans.fromuid,fans.mutual_concern')
-			->paginate($count);
-		if($isReturn) return $fansInfo;
-		// dump($fansInfo);die;
-		// dump($fansInfo[0]->follow);die;
+			->order('fans.ctime desc')
+			->limit(9)
+			->select();
 		$this->assign('fansInfo', $fansInfo);
 	}
-	//我关注的
-	protected function getMyConcern($userid, $count = 9, $isReturn = false)
+	protected function setMyConcern($userid)
 	{
 		$getConcern = Db::name('user')
 			->alias('user')
 			->join([$this->prefix.'fans'=>'fans'],'user.uid=fans.touid')->where('fans.fromuid',$userid)->where('fans.touid','<>',$userid)
 			->field('user.uid,user.nickname,user.province,user.city,user.message_sum,user.head_image,user.blog,fans.touid,fans.fromuid,fans.mutual_concern')
-			->paginate($count);
-		if($isReturn) return $getConcern;
-		// dump($getConcern);die;
-		// $getConcern = Fans::with('concern')->where('fromuid',$userid)->paginate($count);
+			->order('fans.ctime desc')
+			->limit(9)
+			->select();
 		$this->assign('getMyConcern', $getConcern);
+	}
+	//关注我的
+	protected function getMyFans($userid, $count = 9)
+	{
+		$fansInfo = Db::name('user')
+			->alias('user')
+			->join([$this->prefix.'fans'=>'fans'],'user.uid=fans.fromuid')->where('fans.touid',$userid)->where('fans.fromuid','<>',$userid)
+			->field('user.uid,user.nickname,user.province,user.city,user.message_sum,user.head_image,user.blog,fans.touid,fans.fromuid,fans.mutual_concern')
+			->order('fans.ctime desc')
+			->paginate($count);
+		return $fansInfo;
+	}
+	//我关注的
+	protected function getMyConcern($userid, $count = 9)
+	{
+		$getConcern = Db::name('user')
+			->alias('user')
+			->join([$this->prefix.'fans'=>'fans'],'user.uid=fans.touid')->where('fans.fromuid',$userid)->where('fans.touid','<>',$userid)
+			->field('user.uid,user.nickname,user.province,user.city,user.message_sum,user.head_image,user.blog,fans.touid,fans.fromuid,fans.mutual_concern')
+			->order('fans.ctime desc')
+			->paginate($count);
+		return $getConcern;	
 	}
 	protected function getMessage($userid, $count = 50) 
 	{

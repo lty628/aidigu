@@ -87,14 +87,44 @@ class Setting extends Base
 		if (!$result) return json(['status'=>0, 'msg'=>'保存失败']);
 		return json(['status'=>1, 'msg'=>'保存成功']);
 	}
-	protected function uploadImage($size = 4194304, $path = 'uploads')
+	public function msgInputImg()
 	{
-		// 获取表单上传文件 例如上传了001.jpg
+		$path = 'uploads/'.getLoginBlog().'/message';
+		// 4m
+		$size = 4194304;
 		$file = request()->file('file');
 		// 移动到框架应用根目录/uploads/ 目录下
 		$info = $file->validate(['size'=>$size,'ext'=>'jpg,bmp,jpeg,png,gif'])->move($path);
-		if (!$info) $file->getError();
+		// $info = $this->uploadImage($size, $path);
+		if($info){
+			// 成功上传后 获取上传信息
+			$fileFath = $path.'/'.$info->getSaveName();
+			$fileName = explode('.', $info->getSaveName())[0];
+			$image = Image::open($fileFath);
+			$image->save($path.'/'.$fileName.'_small.'.$info->getExtension(),$image->type(), 5);
+			$image = Image::open($fileFath);
+			$image->save($path.'/'.$fileName.'_middle.'.$info->getExtension(),$image->type(), 10);
+			$image = Image::open($fileFath);
+			$image->save($path.'/'.$fileName.'_big.'.$info->getExtension(),$image->type(), 20);
+			$data['image_info'] = '/'.$path.'/'.$fileName;
+			$data['image_type'] = $info->getExtension();
+			$data['small'] = '/'.$path.'/'.$fileName.'_small.'.$info->getExtension();
+			$data['big'] = '/'.$path.'/'.$fileName.'_big.'.$info->getExtension();
+			return json(['status'=>1, 'msg'=>'上传成功','data'=>$data]);
+		}else{
+			// 上传失败获取错误信息
+			return json(['status'=>0, 'msg'=>$file->getError()]);
+		}
 	}
+
+	// protected function uploadImage($size = 4194304, $path = 'uploads')
+	// {
+	// 	// 获取表单上传文件 例如上传了001.jpg
+	// 	$file = request()->file('file');
+	// 	// 移动到框架应用根目录/uploads/ 目录下
+	// 	$info = $file->validate(['size'=>$size,'ext'=>'jpg,bmp,jpeg,png,gif'])->move($path);
+	// 	if (!$info) $file->getError();
+	// }
 	public function passwd()
 	{
 		$info = input('get.info');

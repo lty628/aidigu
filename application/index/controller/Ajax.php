@@ -33,7 +33,7 @@ class Ajax extends Base
     {
         $comment = new Comment();
         $comment->fromuid = getLoginUid();
-        $comment->msg = strip_tags(input('get.comment'), '<p><a>');
+        $comment->msg = strip_tags(input('get.comment'), '<img><p><a>');
         $comment->touid = (int)input('get.uid');
         $msgId = (int)input('get.commentId');
         $comment->msg_id = $msgId;
@@ -68,7 +68,7 @@ class Ajax extends Base
     {
     	$comment = new Comment();
     	$comment->fromuid = getLoginUid();
-        $comment->msg = strip_tags(input('get.comment'), '<p><a>');
+        $comment->msg = strip_tags(input('get.comment'), '<img><p><a>');
     	$comment->touid = (int)input('get.uid');
         $msgId = (int)input('get.commentId');
     	$comment->msg_id = $msgId;
@@ -83,12 +83,20 @@ class Ajax extends Base
     protected function saveMessage()
     {
     	$contents = input('get.contents');
+        $imageInfo = input('get.imageInfo');
+        if ($imageInfo) {
+            $imageInfo = json_decode($imageInfo, true);
+            $info['image_info'] = $imageInfo['image_info'];
+            $info['image_type'] = $imageInfo['image_type'];
+            $data['image'] = $info['image_info'].'_middle.'.$info['image_type'];
+            $data['image_info'] = json_encode($info);
+        }
         if (!$contents) return false;
     	$repost = input('get.repost');
     	$message = new Message();
         $data['repost'] = '';
-    	if ($repost)  $data['repost'] = $this->getMessage(strip_tags($repost, '<p><a>'));
-        $data['contents'] = $this->getMessage(strip_tags($contents, '<p><a>'));
+    	if ($repost)  $data['repost'] = $this->getMessage(strip_tags($repost, '<img><p><a>'));
+        $data['contents'] = $this->getMessage(strip_tags($contents, '<img><p><a>'));
         $data['uid'] = getLoginUid();
         $data['refrom'] = '网站';
     	$result = $message->save($data);
@@ -110,7 +118,7 @@ class Ajax extends Base
     	return preg_replace_callback(
 	        // '/^@(\w*[0-9]*[\u4e00-\u9fa5]*)(:){0,1}(:.;)*$/',
 	        // '/^@(\w*[0-9]*)(:){0,1}([:\.;])*$/ius',
-	        '/@{1}(\w*[0-9]*[\x{4e00}-\x{9fa5}]*)([：:]){0,1}([：:\.;])*/ui',
+	        '/@{1}(\w*[\.0-9]*[\x{4e00}-\x{9fa5}]*)([：:]){0,1}([：:\.;])*/ui',
 	        function ($matches) {
 	        	// dump($matches);die;
 	            $findUser = User::where('nickname',$matches[1])->field('uid,blog')->find();

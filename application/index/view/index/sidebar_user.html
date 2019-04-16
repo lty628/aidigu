@@ -20,7 +20,7 @@
 				<div class="counterbox"><strong>{$userInfo.message_sum}</strong><br /><a href="{:url('/'.$userInfo.blog.'/own/')}">{$userInfo.sex|getPerson}的微博</a></div>
 			</div>
 			<h2><a href="javascript:;">个人资料</a></h2>
-			<p>{$userInfo.intro|default="暂无个人资料"}</p>
+			<p>{$userInfo.intro|raw|default="暂无个人资料"}</p>
 		</div>
 		<div class="box">
 			<h3><span><a href="{:url('/'.$userInfo.blog.'/concern/')}">更多>></a></span><a href="{:url('/'.$userInfo.blog.'/concern/')}">{$userInfo.sex|getPerson}关注的人</a></h3>

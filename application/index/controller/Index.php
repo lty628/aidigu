@@ -16,7 +16,7 @@ class Index extends Info
             ->join([$this->prefix.'fans'=>'fans'],'message.uid=fans.touid and fans.fromuid='.$this->siteUserId)
             ->join([$this->prefix.'user'=>'user'],'user.uid=fans.touid')
             ->order('message.msg_id desc')
-            ->field('user.uid,user.nickname,user.head_image,user.blog,message.ctime,message.contents,message.repost,message.refrom,message.repostsum,message.commentsum,message.msg_id')
+            ->field('user.uid,user.nickname,user.head_image,user.blog,message.ctime,message.contents,message.repost,message.refrom,message.repostsum,message.image,message.commentsum,message.msg_id')
             ->paginate(30);
         $this->assign('userMessage', $userMessage);
         return $this->fetch();
@@ -35,13 +35,13 @@ class Index extends Info
     }
     public function fans()
     {
-        $userFans = $this->getMyFans($this->siteUserId, 20, true);
+        $userFans = $this->getMyFans($this->siteUserId, 20);
         $this->assign('userFans', $userFans);
         return $this->fetch('fansInfo');
     }
     public function concern()
     {
-        $userFans =$this->getMyConcern($this->siteUserId, 20, true);
+        $userFans =$this->getMyConcern($this->siteUserId, 20);
         $this->assign('userFans', $userFans);
         return $this->fetch('fansInfo');
     }
