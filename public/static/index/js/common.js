@@ -158,7 +158,6 @@ function comdel(url){
 						} else {
 							var str = '<div class="entry"><div class="avatar"><div class="imgborder"><a href="/'+userInfo.blog+'/"><img src="'+userInfo.head_image+'" /></a></div></div><div class="box"><p><a href="/'+userInfo.blog+'/">'+userInfo.nickname+'：</a>'+message.contents+message.repost+'</p><div class="static"><span><a href="/'+userInfo.blog+'/message/'+message.msg_id+'" target="_blank">查看</a> | <a href="javascript:void(0);" onclick="repost(this)"> 转发 </a> |<a href="javascript:void(0);" onclick="comment('+message.msg_id+', {$siteUserId});"> 评论 </a>| <a href="/'+userInfo.blog+'/del/message/'+message.msg_id+'">删除</a></span>刚刚 来自 '+message.refrom+'</div></div><div class="clear"></div></div>';
 						}
-						
 						$("#msgContent").prepend(str);
 						var num = $("#messageSum").text();
 						$("#messageSum").text(parseInt(num)+1);
@@ -312,6 +311,7 @@ function comdel(url){
 	function removeImg(obj)
 	{
 		$(".imgHtml img").attr('src', '');
+		$("#imgVal").val('')
 		$(obj).detach();
 	}
 	function showMessageImg(obj)
