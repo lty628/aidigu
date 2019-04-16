@@ -28,7 +28,7 @@
 			<div class="box">
 				<p><a href="{:url('/'.$message.blog.'/')}" id="nickname">{$message.nickname}：</a>{$message.contents|raw}{$message.repost|raw}</p>
 				{if $message.image}
-					<p><img width="150px" src="{$message.image}"></p>
+					<p><img width="150px" src="{$message.image}" onclick="showMessageImg(this)" style="cursor:pointer;"></p>
 				{/if}
 				<div class="static">
 <span>

@@ -141,6 +141,6 @@ class Ajax extends Base
         $result = Message::delMessageById((int)input('param.msg_id'), getLoginUid());
         if (!$result) 
             return $this->error('删除失败');
-        return $this->success('删除成功', '/'.getLoginBlog().'/');
+        return $this->success('删除成功', '/'.getLoginBlog().'/own/');
     }
 }
