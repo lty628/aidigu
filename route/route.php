@@ -8,8 +8,9 @@
 // +----------------------------------------------------------------------
 // | Author: liu21st <liu21st@gmail.com>
 // +----------------------------------------------------------------------
+$url = config('app.url_domain_root');
 
-Route::domain('weibo.test', function () {
+Route::domain($url, function () {
 	Route::get('/$','index/Index/blog');
 	Route::get('/page/:page$','index/Index/blog')->pattern(['page'=>'[0-9]+']);
 	// Route::get('ajax', '/index/ajax/ajax/');
