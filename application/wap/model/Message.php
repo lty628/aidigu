@@ -1,5 +1,5 @@
 <?php
-namespace app\index\model;
+namespace app\wap\model;
 use think\Model;
 class Message extends Model
 {

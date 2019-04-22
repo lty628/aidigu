@@ -1,0 +1,33 @@
+{include file='index/header' /}
+<div class="main">
+	<div class="contents">
+<div class="sendMsg"></div>
+		{foreach $userMessage as $message}
+		<div class="entry">
+			<div class="avatar"><div class="imgborder"><a href="{:url('/'.$message.blog.'/')}"><img src="{$message.head_image}" /></a></div></div>
+			<div class="box">
+				<p><a href="{:url('/'.$message.blog.'/')}" id="nickname">{$message.nickname}：</a>{$message.type|getReminderTypeName}了您的微博</p>
+
+				<div class="static">
+				<span>
+				<a href="{:url('/'.$userInfo.blog.'/'.'message/'.$message.msg_id)}">查看</a>
+				</span>
+				</div>
+				
+				<div class="block">
+					<div class="block_top"></div>
+					<div class="block_body"><div class="repost"><span><a href="{:url('/'.$message.blog.'/')}">{$userInfo.nickname}:</span></a>{$message.contents|raw}{$message.repost|raw}</div><div class="block_static">
+						{$message.ctime|date='Y-m-d H:i:s'} 来自 {$message.refrom}
+					</div></div>
+					<div class="block_bottom"></div>
+				
+				</div>
+				
+			</div>
+
+			<div class="clear"></div>
+
+		</div>
+		{/foreach}
+	</div>
+{include file='index/footer' /}

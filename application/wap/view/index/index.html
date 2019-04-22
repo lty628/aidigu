@@ -1,0 +1,60 @@
+{include file='index/header' /}
+<div class="main">
+	<div class="contents">
+{if $userInfo.isSiteUser}
+	<div class="post" id="postform" style="display:block;"><div class="postad" id="wcontent">&nbsp;</div>
+<textarea name="contents" placeholder="你在做什么呢？" maxlength="140" id="msgInput" onkeyup="check_len1()"></textarea>
+<div class="postnow">
+	<span><input type="button" value="发布" class="button layui-btn layui-btn" id="button" />
+</span>你还可以发布<em id="leftlen1">140</em>字</div>
+	<div class="tool-class">
+		<i class="layui-icon layui-icon-face-smile-b" onclick="showEmoji(this)" style="margin: 10px;cursor:pointer;color: #ffa700;font-size:20px!important" title="表情"></i>
+		<i class="layui-icon layui-icon-picture" id="msgInputImg" style="color: #1c7ca5;cursor:pointer;font-size:20px!important" title="图片"></i>
+		<div class="emojiHtml" style="display: none"></div>
+		<div class="imgHtml" style="margin-left: 69px; position: absolute;margin-top: -22px;border-radius: 3px;"><img src="" width="70px" alt=""></div>
+		<input type="hidden" id="imgVal">
+	</div>
+</div>
+{else}
+<div class="top"></div>
+{/if}
+<input type="hidden" id="userInfo" value="{$userInfo|json_encode}" />
+<div class="sendMsg"></div>
+{if isset($userMessage[0])}
+<div id="msgContent">
+		{foreach $userMessage as $message}
+		<div class="entry">
+			<div class="avatar"><div class="imgborder"><a href="{:url('/'.$message.blog.'/')}"><img src="{$message.head_image}" /></a></div></div>
+			<div class="box">
+				<p><a href="{:url('/'.$message.blog.'/')}" id="nickname">{$message.nickname}：</a>{$message.contents|raw}{$message.repost|raw}</p>
+				{if $message.image}
+					<p><img class="messageImg" src="{$message.image}" onclick="showMessageImg(this)"></p>
+				{/if}
+				<div class="static">
+<span>
+<a href="{:url('/'.$userInfo.blog.'/'.'message/'.$message.msg_id)}">查看</a> | 
+<a href="javascript:void(0);" onclick="repost(this, {$message.uid}, {$message.msg_id})">转发{if 0 != $message.repostsum}（{$message.repostsum}）{/if}</a> | 
+<!-- <a href="javascript:void(0);" onclick="showform('atuser', {$message.msg_id}, '<i>回复</i> @{$message.nickname}  {cutwin str=$message.contents len="5"}');">回复</a> | 
+ --><a href="javascript:void(0);" onclick="comment({$message.msg_id}, {$message.uid});">评论{if 0 != $message.commentsum}（{$message.commentsum}）{/if}</a>
+ {if $userInfo.isSiteUser && request()->action()=='own'}
+	 | <a href="{:url('/'.$userInfo.blog.'/'.'del/message/'.$message.msg_id)}">删除</a>
+{/if}
+</span>
+{$message.ctime|setMessageTime} 来自 {$message.refrom}
+				</div>
+			</div>
+			<div class="clear"></div>
+		</div>
+		{/foreach}
+{else}
+		<div class="entry">
+			<div class="box">
+				<p>暂无微博...</p>
+			</div>
+			<div class="clear"></div>
+		</div>
+{/if}
+{$userMessage|raw}
+	</div>
+</div>
+{include file='index/footer' /}

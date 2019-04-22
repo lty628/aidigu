@@ -1,8 +1,8 @@
 <?php
-namespace app\index\controller;
-use app\index\model\User as UserModel;
-use app\index\model\Fans;
-use app\index\validate\User as Validate;
+namespace app\wap\controller;
+use app\wap\model\User as UserModel;
+use app\wap\model\Fans;
+use app\wap\validate\User as Validate;
 use think\Controller;
 /**
  * 登录注册
