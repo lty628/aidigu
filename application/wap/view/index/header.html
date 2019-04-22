@@ -5,7 +5,7 @@
 <title>微博-Powerd By SR.李</title>
 <meta name="description" content="aidigu.cn,lixiaochou.com,微博" />
 <meta name="keywords" content="weibo,微博"/>
-<meta name="viewport" content="inital-scale=1.0,maximum-scale=1.0,user-scalable=no;">
+<meta name="viewport" content="maximum-scale=1.0,user-scalable=no">
 <link rel="stylesheet" href="/static/layui/css/layui.css" type="text/css" media="screen" />
 <link rel="stylesheet" href="/static/wap/css/main.css?2" type="text/css" media="screen" />
 
@@ -24,11 +24,11 @@
 			<li><a href="/">微博首页</a></li>
 			<li><a href="{:url('/'.$loginUserInfo.blog.'/')}">我的首页</a></li>
 			<li><a href="{:url('/'.$loginUserInfo.blog.'/own/')}">我的微博</a></li>
+			{if $userInfo.reply_sum}
+			<li><a href="{:url('/'.$userInfo.blog.'/newreply/')}">消息<span>（{$userInfo.reply_sum}）</span></a></li>
+			{/if}
 			<li><a href="{:url('/'.$loginUserInfo.blog.'/fans/')}">关注详情</a></li>
 			<li><a href="{:url('./'.$loginUserInfo.blog.'/setting/')}">个人设置</a></li>
-			{if "WINADMIN" == 111}
-			<li><a href="">站点管理</a></li>
-			{/if}
 			<li><a href="{:url('/logout/')}">退出</a></li>
 		</ul>
 	</div>
