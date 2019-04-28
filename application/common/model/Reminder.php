@@ -23,10 +23,10 @@ class Reminder extends Model
 	// }
 
 	//$type 0 转发 1 评论 2 回复
-	public static function saveReminder($msgId, $fromuid, $touid, $type)
-	{
-		return self::create(['msg_id'=>$msgId, 'fromuid'=>$fromuid, 'touid'=>$touid, 'type'=>$type]);
-	}
+	// public static function saveReminder($msgId, $fromuid, $touid, $type)
+	// {
+	// 	return self::create(['msg_id'=>$msgId, 'fromuid'=>$fromuid, 'touid'=>$touid, 'type'=>$type]);
+	// }
 
 	// public static function getReminderMsg($userid)
 	// {

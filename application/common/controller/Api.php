@@ -1,12 +1,8 @@
 <?php
 namespace app\common\controller;
 use app\common\controller\Base;
-// use think\Db;
-use app\common\model\Message;
-use app\common\model\User;
+use think\Db;
 use app\common\model\Fans;
-use app\common\model\Comment;
-use app\common\model\Reminder;
 class Api extends Base
 {	
 	//首页
@@ -31,18 +27,24 @@ class Api extends Base
     }
     public function reply()
     {
-        $comment = new Comment();
-        $comment->fromuid = getLoginUid();
-        $comment->msg = strip_tags(input('get.comment'), '<img><p><a>');
-        $comment->touid = (int)input('get.uid');
-        $msgId = (int)input('get.commentId');
-        $comment->msg_id = $msgId;
-        if (!$comment->save()) return json(array('status' =>  0,'msg' => '回复失败'));
-        if ($msgId) {
+        $data['fromuid'] = getLoginUid();
+        $data['msg'] = strip_tags(input('get.comment'), '<img><p><a>');
+        $data['touid'] = (int)input('get.uid');
+        $data['msg_id'] = (int)input('get.commentId');
+        $data['ctime'] = time();
+        Db::startTrans();
+        try {
+            Db::name('comment')->insert($data);
             if (getLoginUid()!=(int)input('get.uid'))
-            Reminder::saveReminder($msgId, getLoginUid(), (int)input('get.uid'), 2);
+            self::saveReminder($data['msg_id'], getLoginUid(), (int)input('get.uid'), 2);
+            // 提交事务
+            Db::commit();
+            return json(array('status' =>  1,'msg' => '回复成功'));
+        } catch (\Exception $e) {
+            // 回滚事务
+            Db::rollback();
+            return json(array('status' =>  0,'msg' => '回复失败'));
         }
-        return json(array('status' =>  1,'msg' => '回复成功'));
     }
     //fans 粉丝关注
     public function unfollow()
@@ -66,19 +68,25 @@ class Api extends Base
     }
     protected static function saveComment()
     {
-    	$comment = new Comment();
-    	$comment->fromuid = getLoginUid();
-        $comment->msg = strip_tags(input('get.comment'), '<img><p><a>');
-    	$comment->touid = (int)input('get.uid');
-        $msgId = (int)input('get.commentId');
-    	$comment->msg_id = $msgId;
-        if ($msgId) {
-            $message = new Message();
-            $message->where('msg_id',$msgId)->setInc('commentsum',1);
+    	$data['fromuid'] = getLoginUid();
+        $data['msg'] = strip_tags(input('get.comment'), '<img><p><a>');
+    	$data['touid'] = (int)input('get.uid');
+        $data['msg_id'] = (int)input('get.commentId');
+        $data['ctime'] = time();
+        Db::startTrans();
+        try {
+            Db::name('message')->where('msg_id',$data['msg_id'])->setInc('commentsum',1);\
+            Db::name('comment')->insert($data);
             if (getLoginUid()!=(int)input('get.uid'))
-                Reminder::saveReminder($msgId, getLoginUid(), (int)input('get.uid'), 1);
+                self::saveReminder($data['msg_id'], getLoginUid(), (int)input('get.uid'), 1);
+            // 提交事务
+            Db::commit();
+            return true;
+        } catch (\Exception $e) {
+            // 回滚事务
+            Db::rollback();
+            return false;
         }
-    	return $comment->save();
     }
     protected static function saveMessage()
     {
@@ -93,25 +101,31 @@ class Api extends Base
         }
         if (!$contents) return false;
     	$repost = input('get.repost');
-    	$message = new Message();
         $data['repost'] = '';
     	if ($repost)  $data['repost'] = self::getMessage(strip_tags($repost, '<img><p><a>'));
         $data['contents'] = self::getMessage(strip_tags($contents, '<img><p><a>'));
         $data['uid'] = getLoginUid();
         $data['refrom'] = '网站';
-    	$result = $message->save($data);
-        if (!$result) return false;
-        $msgId = (int)input('get.msg_id');
-        if ($msgId) {
-            $message->where('msg_id', $msgId)->setInc('repostsum',1);
+        $data['ctime'] = time();
+        Db::startTrans();
+        try {
+            $data['msg_id'] = Db::name('message')->insertGetId($data);
+            $msgId = (int)input('get.msg_id');
+            if ($msgId) {
+                Db::name('message')->where('msg_id', $msgId)->setInc('repostsum',1);
+            }
+            if ($repost && getLoginUid()!=(int)input('get.fromuid')) {
+                self::saveReminder($msgId, getLoginUid(), (int)input('get.fromuid'), 0);
+            }
+            self::updateUserMessageSum();
+            // 提交事务
+            Db::commit();
+            return $data;
+        } catch (\Exception $e) {
+            // 回滚事务
+            Db::rollback();
+            return false;
         }
-        if ($repost) {
-            if (getLoginUid()!=(int)input('get.fromuid'))
-            Reminder::saveReminder($msgId, getLoginUid(), (int)input('get.fromuid'), 0);
-        }
-        self::updateUserMessageSum();
-        $data['msg_id'] = $message->id;
-        return $data;
     }
     protected static function getMessage($contents = null) 
     {
@@ -121,7 +135,7 @@ class Api extends Base
 	        '/@{1}(\w*[\.0-9]*[\x{4e00}-\x{9fa5}]*)([：:]){0,1}([：:\.;])*/ui',
 	        function ($matches) {
 	        	// dump($matches);die;
-	            $findUser = User::where('nickname',$matches[1])->field('uid,blog')->find();
+	            $findUser = Db::name('user')->where('nickname',$matches[1])->field('uid,blog')->find();
 	            if ($findUser) {
 	            	return str_replace('@'.$matches[1], '<a href="/'.$findUser['blog'].'/">@'.$matches[1].'</a>', $matches[0]);
 	            } else {
@@ -132,9 +146,15 @@ class Api extends Base
 	    );
 
     }
+    // $type 0 转发 1 评论 2 回复
+    protected static function saveReminder($msgId, $fromuid, $touid, $type)
+    {
+        $ctime = time();
+        return Db::name('reminder')->insert(['msg_id'=>$msgId, 'fromuid'=>$fromuid, 'touid'=>$touid, 'type'=>$type, 'ctime'=>$ctime]);
+    }
     public static function updateUserMessageSum()
     {
-        User::where('uid', getLoginUid())->setInc('message_sum', 1);
+        return Db::name('user')->where('uid', getLoginUid())->setInc('message_sum', 1);
     }
     public function delMessage()
     {
