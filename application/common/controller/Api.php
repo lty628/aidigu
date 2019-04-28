@@ -3,6 +3,7 @@ namespace app\common\controller;
 use app\common\controller\Base;
 use think\Db;
 use app\common\model\Fans;
+use app\common\model\Message;
 class Api extends Base
 {	
 	//首页
