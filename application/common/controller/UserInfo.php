@@ -51,7 +51,7 @@ class UserInfo extends Controller
 		if (!$result) return json(['status'=>0, 'msg'=>'输入的账号不存在']);
 		if (encryptionPass($password) != $result['password']) return json(['status'=>0, 'msg'=>'密码不正确']);
 		setLoginUid($result['uid']);
-		$this->rememberMe(input('get.remember'), $result);
+		$this->rememberMe(input('get.remember'), $result->toArray());
 		return json(['status'=>1, 'msg'=>'登录成功','data'=>$result['blog']]);
 	}
 	public function checkInfo()
