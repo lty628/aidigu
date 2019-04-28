@@ -1,5 +1,5 @@
 <?php
-namespace app\wap\validate;
+namespace app\common\validate;
 use think\Validate;
 class User extends Validate
 {

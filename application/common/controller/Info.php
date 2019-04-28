@@ -1,12 +1,12 @@
 <?php
-namespace app\index\controller;
+namespace app\common\controller;
 
-use app\index\controller\Base;
+use app\common\controller\Base;
 use think\Db;
-use app\index\model\User;
-use app\index\model\Fans;
-use app\index\model\Message;
-use app\index\model\Reminder;
+use app\common\model\User;
+use app\common\model\Fans;
+use app\common\model\Message;
+use app\common\model\Reminder;
 /**
  * 	自定义基类
  */
