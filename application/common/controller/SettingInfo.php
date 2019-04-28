@@ -101,11 +101,11 @@ class SettingInfo extends Base
 			$fileFath = $path.'/'.$info->getSaveName();
 			$fileName = explode('.', $info->getSaveName())[0];
 			$image = Image::open($fileFath);
-			$image->thumb($image->width(), $image->height())->save($path.'/'.$fileName.'_small.'.$info->getExtension(),$image->type(), 5);
+			$image->save($path.'/'.$fileName.'_small.'.$info->getExtension(),null, 5);
 			$image = Image::open($fileFath);
-			$image->thumb($image->width(), $image->height())->save($path.'/'.$fileName.'_middle.'.$info->getExtension(),$image->type(), 10);
+			$image->save($path.'/'.$fileName.'_middle.'.$info->getExtension(),null, 10);
 			$image = Image::open($fileFath);
-			$image->thumb($image->width(), $image->height())->save($path.'/'.$fileName.'_big.'.$info->getExtension(),$image->type(), 20);
+			$image->save($path.'/'.$fileName.'_big.'.$info->getExtension(),null, 20);
 			$data['image_info'] = '/'.$path.'/'.$fileName;
 			$data['image_type'] = $info->getExtension();
 			$data['small'] = '/'.$path.'/'.$fileName.'_small.'.$info->getExtension();
