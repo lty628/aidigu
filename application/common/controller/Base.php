@@ -10,7 +10,6 @@ class Base extends Controller
 {
 	protected function initialize()
 	{
-		
 		// checkUserCookie(cookie('rememberMe'));
 		if (!getLoginUid()) {
 			$isRightCookie = checkUserCookie(cookie('rememberMe'));

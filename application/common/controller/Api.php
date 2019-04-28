@@ -10,26 +10,26 @@ use app\common\model\Reminder;
 class Api extends Base
 {	
 	//首页
-    public static function index()
+    public function index()
     {
         $data = self::saveMessage();
     	if (!$data) return json(array('status' =>  0,'msg' => '发布失败'));
     	return json(array('status' =>  1,'msg' => '发表成功', 'data'=>$data));
     }
-    public static function repost()
+    public function repost()
     {
         $data = $this->saveMessage();
     	if (!$data) return json(array('status' =>  0,'msg' => '转发失败'));
     	return json(array('status' =>  1,'msg' => '转发成功', 'data'=>$data));
     }
-    public static function comment()
+    public function comment()
     {
     	if (!$this->saveComment()) return json(array('status' =>  0,'msg' => '评论失败'));
         //评论成功
         // Message::save
     	return json(array('status' =>  1,'msg' => '评论成功'));
     }
-    public static function reply()
+    public function reply()
     {
         $comment = new Comment();
         $comment->fromuid = getLoginUid();
@@ -45,7 +45,7 @@ class Api extends Base
         return json(array('status' =>  1,'msg' => '回复成功'));
     }
     //fans 粉丝关注
-    public static function unfollow()
+    public function unfollow()
     {
         $userid = (int)input('get.userid');
         $loginUid = getLoginUid();
@@ -53,7 +53,7 @@ class Api extends Base
         if (!$result) return json(array('status' =>  0,'msg' => '取消关注失败'));
         return json(array('status' =>  1,'msg' => '已成功取消关注'));
     }
-    public static function addFollow()
+    public function addFollow()
     {
         $userid = (int)input('get.userid');
         //是否被跟随
@@ -136,7 +136,7 @@ class Api extends Base
     {
         User::where('uid', getLoginUid())->setInc('message_sum', 1);
     }
-    public static function delMessage()
+    public function delMessage()
     {
         $result = Message::delMessageById((int)input('param.msg_id'), getLoginUid());
         if (!$result) 
