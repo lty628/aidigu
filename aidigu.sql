@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50648
 File Encoding         : 65001
 
-Date: 2021-03-05 15:35:33
+Date: 2021-03-05 16:12:25
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -27,17 +27,13 @@ CREATE TABLE `wb_badword` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of wb_badword
--- ----------------------------
-
--- ----------------------------
 -- Table structure for wb_comment
 -- ----------------------------
 DROP TABLE IF EXISTS `wb_comment`;
 CREATE TABLE `wb_comment` (
   `cid` bigint(20) NOT NULL AUTO_INCREMENT,
-  `fromuid` mediumint(9) NOT NULL,
-  `msg` varchar(200) NOT NULL,
+  `fromuid` bigint(20) NOT NULL,
+  `msg` text NOT NULL,
   `msg_id` bigint(20) NOT NULL,
   `touid` mediumint(9) DEFAULT NULL,
   `ctime` int(11) NOT NULL,
@@ -45,25 +41,17 @@ CREATE TABLE `wb_comment` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of wb_comment
--- ----------------------------
-
--- ----------------------------
 -- Table structure for wb_fans
 -- ----------------------------
 DROP TABLE IF EXISTS `wb_fans`;
 CREATE TABLE `wb_fans` (
   `fansid` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `fromuid` mediumint(9) NOT NULL,
-  `touid` mediumint(9) NOT NULL,
+  `fromuid` bigint(20) NOT NULL,
+  `touid` bigint(20) NOT NULL,
   `mutual_concern` tinyint(4) NOT NULL DEFAULT '0',
   `ctime` bigint(20) NOT NULL DEFAULT '0',
   PRIMARY KEY (`fansid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- ----------------------------
--- Records of wb_fans
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for wb_message
@@ -72,18 +60,16 @@ DROP TABLE IF EXISTS `wb_message`;
 CREATE TABLE `wb_message` (
   `msg_id` mediumint(9) NOT NULL AUTO_INCREMENT,
   `uid` mediumint(9) NOT NULL,
-  `contents` varchar(255) NOT NULL,
+  `contents` text NOT NULL,
   `repost` mediumtext,
   `refrom` varchar(50) NOT NULL,
+  `image` varchar(255) DEFAULT NULL,
+  `image_info` text,
   `repostsum` int(11) NOT NULL DEFAULT '0',
   `commentsum` int(11) NOT NULL DEFAULT '0',
   `ctime` int(11) NOT NULL,
   PRIMARY KEY (`msg_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- ----------------------------
--- Records of wb_message
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for wb_reminder
@@ -100,15 +86,11 @@ CREATE TABLE `wb_reminder` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of wb_reminder
--- ----------------------------
-
--- ----------------------------
 -- Table structure for wb_user
 -- ----------------------------
 DROP TABLE IF EXISTS `wb_user`;
 CREATE TABLE `wb_user` (
-  `uid` mediumint(9) unsigned NOT NULL AUTO_INCREMENT,
+  `uid` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `username` char(10) DEFAULT NULL,
   `phone` bigint(20) DEFAULT NULL COMMENT '手机号',
   `password` char(32) NOT NULL,
@@ -121,14 +103,10 @@ CREATE TABLE `wb_user` (
   `blog` char(10) DEFAULT NULL,
   `email` char(32) DEFAULT NULL,
   `intro` varchar(210) DEFAULT NULL,
-  `ctime` int(11) NOT NULL,
+  `ctime` bigint(20) NOT NULL,
   `message_sum` mediumint(9) NOT NULL DEFAULT '0',
   `themes` varchar(15) NOT NULL DEFAULT 'default',
   `fansnum` bigint(20) NOT NULL DEFAULT '0' COMMENT '粉丝数',
   `follownum` bigint(20) NOT NULL DEFAULT '0' COMMENT '关注数',
   PRIMARY KEY (`uid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- ----------------------------
--- Records of wb_user
--- ----------------------------
