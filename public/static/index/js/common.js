@@ -302,7 +302,7 @@ function comdel(url){
 			});
 		});
 		$(".emojiHtml img").click(function(event) {
-			var imgText = $(this).attr("alt");
+			var imgText = $(this).parents("li").attr("title");
 			var thisTextArea = $(this).parents('.tool-class').parents(".post").children('textarea');
 			thisTextArea.val(thisTextArea.val()+imgText);
 			thisTextArea.focus().trigger('keyup');
