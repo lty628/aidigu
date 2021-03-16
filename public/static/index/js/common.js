@@ -94,7 +94,7 @@ function comdel(url){
 		  	var uploadInst = upload.render({
 		    elem: '#msgInputImg' //绑定元素
 		    ,url: '/index/setting/msgInputImg' //上传接口
-		    ,method: 'GET'
+		    // ,method: 'GET'
 		    ,done: function(res){
 		    	layer.closeAll();
 		      	if (res.status) {

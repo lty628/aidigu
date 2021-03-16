@@ -16,7 +16,7 @@ class IndexInfo extends Info
             ->join([$this->prefix.'fans'=>'fans'],'message.uid=fans.touid and fans.fromuid='.$this->siteUserId)
             ->join([$this->prefix.'user'=>'user'],'user.uid=fans.touid')
             ->order('message.msg_id desc')
-            ->field('user.uid,user.nickname,user.head_image,user.blog,message.ctime,message.contents,message.repost,message.refrom,message.repostsum,message.image,message.commentsum,message.msg_id')
+            ->field('user.uid,user.nickname,user.head_image,user.blog,message.ctime,message.contents,message.repost,message.refrom,message.repostsum,message.image,message.image_info,message.commentsum,message.msg_id')
             ->paginate(30);
         $this->assign('userMessage', $userMessage);
         return $this->fetch();

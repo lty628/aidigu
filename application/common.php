@@ -68,3 +68,11 @@ function getReminderTypeName($type)
 	$status = [0=>'转发',1=>'评论',2=>'回复'];
 	return $status[$type];
 }
+
+// 示例： {"image_info":"\/uploads\/longge\/message\/20210313\/dc2147c971bc0f287f7a585726fbabc8","image_type":"jpg"}
+function getTypeImg($json, $type = '')
+{
+	$info = json_decode($json, true);
+	$newType = $type ? '_' . $type : $type;
+	return $info['image_info'] . $newType . '.' . $info['image_type'];
+}

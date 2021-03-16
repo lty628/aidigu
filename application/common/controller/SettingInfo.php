@@ -91,7 +91,7 @@ class SettingInfo extends Base
 	{
 		$path = 'uploads/'.getLoginBlog().'/message';
 		// 4m
-		$size = 4194304;
+		$size = 14194304;
 		$file = request()->file('file');
 		// 移动到框架应用根目录/uploads/ 目录下
 		$info = $file->validate(['size'=>$size,'ext'=>'jpg,bmp,jpeg,png,gif'])->move($path);
