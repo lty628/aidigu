@@ -167,7 +167,7 @@ function comdel(url){
 						var userInfo = $.parseJSON($("#userInfo").val());
 						var message = data.data;
 						if (message.image) {
-							var str = '<div class="entry"><div class="avatar"><div class="imgborder"><a href="/'+userInfo.blog+'/"><img src="'+userInfo.head_image+'" /></a></div></div><div class="box"><p><a href="/'+userInfo.blog+'/">'+userInfo.nickname+'：</a>'+message.contents+message.repost+'</p><p><img width="150px"  onclick="showMessageImg(this)" src="'+message.image+'"></p><div class="static"><span><a href="/'+userInfo.blog+'/message/'+message.msg_id+'" target="_blank">查看</a> | <a href="javascript:void(0);" onclick="repost(this)"> 转发 </a> |<a href="javascript:void(0);" onclick="comment('+message.msg_id+', {$siteUserId});"> 评论 </a>| <a href="/'+userInfo.blog+'/del/message/'+message.msg_id+'">删除</a></span>刚刚 来自 '+message.refrom+'</div></div><div class="clear"></div></div>';
+							var str = '<div class="entry"><div class="avatar"><div class="imgborder"><a href="/'+userInfo.blog+'/"><img src="'+userInfo.head_image+'" /></a></div></div><div class="box"><p><a href="/'+userInfo.blog+'/">'+userInfo.nickname+'：</a>'+message.contents+message.repost+'</p><p><img width="300px"  onclick="showMessageImg(this)" src="'+message.image+'"></p><div class="static"><span><a href="/'+userInfo.blog+'/message/'+message.msg_id+'" target="_blank">查看</a> | <a href="javascript:void(0);" onclick="repost(this)"> 转发 </a> |<a href="javascript:void(0);" onclick="comment('+message.msg_id+', {$siteUserId});"> 评论 </a>| <a href="/'+userInfo.blog+'/del/message/'+message.msg_id+'">删除</a></span>刚刚 来自 '+message.refrom+'</div></div><div class="clear"></div></div>';
 						} else {
 							var str = '<div class="entry"><div class="avatar"><div class="imgborder"><a href="/'+userInfo.blog+'/"><img src="'+userInfo.head_image+'" /></a></div></div><div class="box"><p><a href="/'+userInfo.blog+'/">'+userInfo.nickname+'：</a>'+message.contents+message.repost+'</p><div class="static"><span><a href="/'+userInfo.blog+'/message/'+message.msg_id+'" target="_blank">查看</a> | <a href="javascript:void(0);" onclick="repost(this)"> 转发 </a> |<a href="javascript:void(0);" onclick="comment('+message.msg_id+', {$siteUserId});"> 评论 </a>| <a href="/'+userInfo.blog+'/del/message/'+message.msg_id+'">删除</a></span>刚刚 来自 '+message.refrom+'</div></div><div class="clear"></div></div>';
 						}
@@ -327,6 +327,72 @@ function comdel(url){
 		$("#imgVal").val('')
 		$(obj).detach();
 	}
+
+
+	// function showMessageImg(config) {
+	// 	if(!config.src || config.src==""){
+	// 		layer.msg("没有发现图片！");
+	// 		return ;
+	// 	}
+	// 	var default_config = {title: "图片预览"};
+	// 	var img = new Image();  
+	// 	img.onload = function() {//避免图片还未加载完成无法获取到图片的大小。
+	// 		//避免图片太大，导致弹出展示超出了网页显示访问，所以图片大于浏览器时下窗口可视区域时，进行等比例缩小。
+	// 		var max_height = $(window).height() - 100;
+	// 		var max_width = $(window).width();
+	// 		//rate1，rate2，rate3 三个比例中取最小的。
+	// 		var rate1 = max_height/img.height;
+	// 		var rate2 = max_width/img.width;
+	// 		var rate3 = 1;
+	// 		var rate = Math.min(rate1,rate2,rate3); 
+	// 		//等比例缩放
+	// 		default_config.height = img.height * rate; //获取图片高度
+	// 		default_config.width = img.width  * rate; //获取图片宽度
+			
+	// 		$.extend( default_config, config);
+	// 		var imgHtml = "<img class='mouseWheelHandlerImg' src='" + default_config.src + "' width='"+default_config.width+"px' height='"+default_config.height+"px'/>";  
+	// 		//弹出层
+	// 		layer.open({  
+	// 			type: 1,  
+	// 			shade: 0.8,
+	// 			offset: 'auto',
+	// 			area: [default_config.width + 'px',default_config.height + 50 +'px'],
+	// 			shadeClose:true,
+	// 			scrollbar: false,
+	// 			title: default_config.title, //不显示标题  
+	// 			content: imgHtml, //捕获的元素，注意：最好该指定的元素要存放在body最外层，否则可能被其它的相对元素所影响  
+	// 			cancel: function () {  
+	// 				//layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构', { time: 5000, icon: 6 });  
+	// 			}  
+	// 		}); 
+	// 		mouseWheelHandler('mouseWheelHandlerImg');
+	// 	}
+	// 	img.src = config.src;
+	// }
+
+	// function mouseWheelHandler(className)
+	// {
+	// 	// var obj = document.getElementsByClassName(className);
+	// 	var obj = $('.'+className)
+	// 	console.log(obj)
+	// 	obj.each(function (i){
+	// 		var objIndex = $(this);
+	// 		console.log(objIndex)
+	// 		// IE9, Chrome, Safari, Opera  
+	// 		objIndex.addEventListener("mousewheel", mouseWheelFunc, false);  
+	// 		// Firefox  
+	// 		objIndex.addEventListener("DOMMouseScroll", mouseWheelFunc, false); 
+	// 		objIndex.attachEvent("onmousewheel", mouseWheelFunc);
+	// 		function mouseWheelFunc(e) {
+	// 			var e = window.event || e; // old IE support  
+	// 			var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
+	// 			objIndex.style.width = Math.max(50, Math.min(1800, objIndex.width + (30 * delta))) + "px"; 
+	// 			return false;  
+	// 		}
+	// 	})
+		
+		
+	// }
 	function showMessageImg(obj)
 	{
 		var imgUrl = $(obj).attr('src');
@@ -340,7 +406,7 @@ function comdel(url){
 		    {
 		      "alt": "",
 		      "pid": 0, //图片id
-		      "src": imgUrl[0]+"_big."+imgUrl[1], //原图地址
+		      "src": imgUrl[0]+"."+imgUrl[1], //原图地址
 		      "thumb": "" //缩略图地址
 		    }
 		  ]
