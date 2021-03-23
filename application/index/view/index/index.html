@@ -21,31 +21,31 @@
 <input type="hidden" id="userInfo" value="{$userInfo|json_encode}" />
 <div class="sendMsg"></div>
 {if isset($userMessage[0])}
-<div id="msgContent">
-		{foreach $userMessage as $message}
-		<div class="entry">
-			<div class="avatar"><div class="imgborder"><a href="{:url('/'.$message.blog.'/')}"><img src="{$message.head_image}" /></a></div></div>
-			<div class="box">
-				<p><a href="{:url('/'.$message.blog.'/')}" id="nickname">{$message.nickname}：</a>{$message.contents|raw}{$message.repost|raw}</p>
-				{if $message.image}
-					<p><img width="300px" src="{:getTypeImg($message.image_info)}" onclick="showMessageImg(this)" style="cursor:pointer;"></p>
-				{/if}
-				<div class="static">
-<span>
-<a href="{:url('/'.$userInfo.blog.'/'.'message/'.$message.msg_id)}">查看</a> | 
-<a href="javascript:void(0);" onclick="repost(this, {$message.uid}, {$message.msg_id})">转发{if 0 != $message.repostsum}（{$message.repostsum}）{/if}</a> | 
-<!-- <a href="javascript:void(0);" onclick="showform('atuser', {$message.msg_id}, '<i>回复</i> @{$message.nickname}  {cutwin str=$message.contents len="5"}');">回复</a> | 
- --><a href="javascript:void(0);" onclick="comment({$message.msg_id}, {$message.uid});">评论{if 0 != $message.commentsum}（{$message.commentsum}）{/if}</a>
- {if $userInfo.isSiteUser && request()->action()=='own'}
-	 | <a href="{:url('/'.$userInfo.blog.'/'.'del/message/'.$message.msg_id)}">删除</a>
-{/if}
-</span>
-{$message.ctime|setMessageTime} 来自 {$message.refrom}
+	<div id="msgContent">
+			{foreach $userMessage as $message}
+			<div class="entry">
+				<div class="avatar"><div class="imgborder"><a href="{:url('/'.$message.blog.'/')}"><img src="{$message.head_image}" /></a></div></div>
+				<div class="box">
+					<p class="massageText"><a href="{:url('/'.$message.blog.'/')}" id="nickname">{$message.nickname}：</a>{$message.contents|raw}{$message.repost|raw}</p>
+					{if $message.image}
+						<p class="massageImg"><img width="300px" src="{:getTypeImg($message.image_info)}" onclick="showMessageImg(this)" style="cursor:pointer;"></p>
+					{/if}
+					<div class="static">
+	<span>
+	<a href="{:url('/'.$message.blog.'/'.'message/'.$message.msg_id)}">查看</a> | 
+	<a href="javascript:void(0);" onclick="repost(this, {$message.uid}, {$message.msg_id})">转发{if 0 != $message.repostsum}（{$message.repostsum}）{/if}</a> | 
+	<!-- <a href="javascript:void(0);" onclick="showform('atuser', {$message.msg_id}, '<i>回复</i> @{$message.nickname}  {cutwin str=$message.contents len="5"}');">回复</a> | 
+	--><a href="javascript:void(0);" onclick="comment({$message.msg_id}, {$message.uid});">评论{if 0 != $message.commentsum}（{$message.commentsum}）{/if}</a>
+	{if $userInfo.isSiteUser && request()->action()=='own'}
+		| <a href="{:url('/'.$message.blog.'/'.'del/message/'.$message.msg_id)}">删除</a>
+	{/if}
+	</span>
+	{$message.ctime|setMessageTime} 来自 {$message.refrom}
+					</div>
 				</div>
+				<div class="clear"></div>
 			</div>
-			<div class="clear"></div>
-		</div>
-		{/foreach}
+			{/foreach}
 {else}
 		<div class="entry">
 			<div class="box">
