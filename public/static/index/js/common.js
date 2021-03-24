@@ -99,7 +99,7 @@ function comdel(url){
 		    	layer.closeAll();
 		      	if (res.status) {
 		      		var data = res.data;
-		      		$(".imgHtml img").attr('src', data.small);
+		      		$(".imgHtml img").attr('src', data.big);
 		      		$(".imgHtml").append('<i class="layui-icon layui-icon-close-fill" onclick="removeImg(this)"  style="color: red;cursor:pointer;font-size:20px!important"></i>')
 		      		$("#imgVal").val(JSON.stringify(data));
 		      	}
