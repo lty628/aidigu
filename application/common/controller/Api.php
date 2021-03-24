@@ -97,7 +97,7 @@ class Api extends Base
             $imageInfo = json_decode($imageInfo, true);
             $info['image_info'] = $imageInfo['image_info'];
             $info['image_type'] = $imageInfo['image_type'];
-            $data['image'] = $info['image_info'].'_middle.'.$info['image_type'];
+            $data['image'] = $info['image_info'].'.'.$info['image_type'];
             $data['image_info'] = json_encode($info);
         }
         if (!$contents) return false;
