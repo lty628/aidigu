@@ -193,8 +193,11 @@ function comdel(url){
 	function repost(obj, fromuid, msg_id) 
 	{
 		var repost = '@'+$(obj).parents(".box").children('.massageText').html();
-		var mediaInfo = '<p class="massageImg">' + $(obj).parents(".box").children('.massageImg').html() + '</p>';
-		console.log(repost);
+		var mediaInfo = '';
+		if ($(obj).parents(".box").children('.massageImg').html()) {
+			mediaInfo = '<p class="massageImg">' + $(obj).parents(".box").children('.massageImg').html() + '</p>';
+		}
+		
 		layer.open({
 		  type: 1,
 		  skin: 'layui-layer-rim', //加上边框
