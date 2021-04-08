@@ -28,7 +28,7 @@
 				<div class="box">
 					<p class="massageText"><a href="{:url('/'.$message.blog.'/')}" id="nickname">{$message.nickname}：</a>{$message.contents|raw}{$message.repost|raw}</p>
 					{if $message.image}
-						<p class="massageImg"><img width="300px" src="{:getTypeImg($message.image_info)}" onclick="showMessageImg(this)" style="cursor:pointer;"></p>
+						<p class="massageImg"><img width="75%" src="{:getTypeImg($message.image_info)}" onclick="showMessageImg(this)" style="cursor:pointer;"></p>
 					{/if}
 					<div class="static">
 	<span>
