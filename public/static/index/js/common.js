@@ -61,7 +61,7 @@ function check_len3(){
 function check_len(obj, leftlen){
 	
 	var maxLen=parseInt(obj.getAttribute('maxlength'));
-	var len=obj.value.replace(/[^\x00-\xff]/g,'oo').length; 
+	var len=obj.value.replace(/[^\x00-\xff]/g,'o').length; 
 	var llen=maxLen-len;
 	if(len>maxLen) {
 		var i=0; 
@@ -321,7 +321,10 @@ function comdel(url){
 	   	if (!r) return str;
 	   	for (var i = 0; i <= r.length - 1; i++) {
 	   		// var imgEmoji = $(".layui-clear").children('li[title="'+r[i]+'"]').html();
-	   		str = str.replace(r[i], $(".layui-clear").children('li[title="'+r[i]+'"]').html());
+			var toReplHtml = $(".layui-clear").children('li[title="'+r[i]+'"]').html();
+			if (toReplHtml) {
+				str = str.replace(r[i], toReplHtml);
+			}
 	   	}
 	   	return(str);
 	}
