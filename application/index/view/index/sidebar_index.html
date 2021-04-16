@@ -28,7 +28,8 @@
 			<ul class="users">
 				{foreach $getMyConcern as $fans}
 					<li>
-						<a href="{:url('/'.$fans.blog.'/')}" /><img src="{$fans.head_image}" /></a><br /><a href="{:url('/'.$fans.blog.'/')}">{$fans.nickname}</a><br />
+						<a href="{:url('/'.$fans.blog.'/')}" /><img src="{$fans.head_image}" /></a><br />
+						<a class="users-nickname" href="{:url('/'.$fans.blog.'/')}">{$fans.nickname}</a>
 						{if $fans.mutual_concern}
 						<span><a href="javascript:;" onclick="fansFollow({$fans.uid}, 'unfollow')" onmouseover="blurToUnfollow(this,{$fans.uid})">互相关注</a></span>
 						{else}
@@ -44,7 +45,8 @@
 			<ul class="users">
 				{foreach $fansInfo as $fans}
 					<li>
-						<a href="{:url('/'.$fans.blog.'/')}"><img src="{$fans.head_image}" /></a><br /><a href="{:url('/'.$fans.blog.'/')}">{$fans.nickname}</a><br />
+						<a href="{:url('/'.$fans.blog.'/')}"><img src="{$fans.head_image}" /></a><br />
+						<a class="users-nickname" href="{:url('/'.$fans.blog.'/')}">{$fans.nickname}</a>
 						{if $fans.mutual_concern}
 						<span><a href="javascript:;" onclick="fansFollow({$fans.uid}, 'unfollow')" onmouseover="blurToUnfollow(this,{$fans.uid})">互相关注</a></span>
 						{else}

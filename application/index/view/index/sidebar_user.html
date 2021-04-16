@@ -27,7 +27,8 @@
 			<ul class="users">
 				{foreach $getMyConcern as $fans}
 					<li>
-						<a href="{:url('/'.$fans.blog.'/')}" /><img src="{$fans.head_image}" /></a><br /><a href="{:url('/'.$fans.blog.'/')}">{$fans.nickname}</a><br />
+						<a href="{:url('/'.$fans.blog.'/')}" /><img src="{$fans.head_image}" /></a><br />
+						<a class="users-nickname" href="{:url('/'.$fans.blog.'/')}">{$fans.nickname}</a>
 						<span><a href="{:url('/'.$fans.blog.'/')}">进入主页</a></span>
 					</li>
 				{/foreach}
@@ -39,7 +40,8 @@
 			<ul class="users">
 				{foreach $fansInfo as $fans}
 					<li>
-						<a href="{:url('/'.$fans.blog.'/')}"><img src="{$fans.head_image}" /></a><br /><a href="{:url('/'.$fans.blog.'/')}">{$fans.nickname}</a><br />
+						<a href="{:url('/'.$fans.blog.'/')}"><img src="{$fans.head_image}" /></a><br />
+						<a class="users-nickname" href="{:url('/'.$fans.blog.'/')}">{$fans.nickname}</a>
 						<span><a href="{:url('/'.$fans.blog.'/')}">进入主页</a></span>
 					</li>
 				{/foreach}

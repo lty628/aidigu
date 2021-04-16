@@ -1,7 +1,9 @@
 ul,li,p,h1,h2,h3,h4,form,ol,table{list-style:none;margin:0;padding:0}
 body{background:url(../images/bg.jpg) top left;text-align:center;font:12px/1.5 Arial,Helvetica;color:#393939;margin:0;padding:0;}
 a{text-decoration:none;color:#3B5999;}
+.users .users-nickname{display:block;overflow:hidden;word-break:keep-all;white-space:nowrap;text-overflow:ellipsis;}
 a:hover{text-decoration:underline;padding-bottom:2px;}
+.users .users-nickname:hover{text-decoration:underline;padding-bottom:0;}
 a img{border:0;border-radius: 10px;}
 .clear{clear:both}
 .clearall{clear:both;height:1px;}
