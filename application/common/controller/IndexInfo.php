@@ -59,6 +59,10 @@ class IndexInfo extends Info
     {
         return $this->fetch('setting_avatar');
     }
+    public function background()
+    {
+        return $this->fetch('setting_background');
+    }
     public function passwd()
     {
         return $this->fetch('setting_passwd');

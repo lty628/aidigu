@@ -1,0 +1,74 @@
+{include file='index/header' /}
+
+<div class="main">
+	<div class="contents">
+		<div class="top">修改头像</div>
+		<h2><a href="{:url('/'.$userInfo.blog.'/setting/')}">个人资料 | </a><span><a href="{:url('/'.$userInfo.blog.'/setting/avatar/')}">修改头像 | </a><span><a href="{:url('/'.$userInfo.blog.'/setting/background/')}">修改背景 | </a></span><span><a href="{:url('/'.$userInfo.blog.'/setting/passwd/')}">修改密码</a></span></h2>
+<!-- 		<h2>头像</h2> -->
+		<div class="entry">
+			<div class="backgroundhtml">
+				<img width="500px" src="{$userInfo.theme}" alt="">
+			</div>
+			<div class="uploadhtml">
+				<button type="button" class="layui-btn" id="uploadImage">
+				  <i class="layui-icon">&#xe67c;</i>上传图片
+				</button>
+				<button type="button" class="layui-btn" id="saveUpload">
+				  保存
+				</button>
+			</div>
+		</div>
+
+	</div>
+	<input type="hidden" value="" id="backgroundVal">
+	<script>
+
+		$(function (){
+			layui.use('upload', function(){
+			  var upload = layui.upload;
+			   
+			  //执行实例
+			  var uploadInst = upload.render({
+			    elem: '#uploadImage' //绑定元素
+			    ,url: '/index/setting/uploadImage' //上传接口
+			    ,method: 'GET'
+			    ,done: function(res){
+			      	if (res.status) {
+			      		var data = res.data;
+			      		$(".backgroundhtml img").attr('src', data.image_path);
+			      		$("#backgroundVal").val(JSON.stringify(data));
+			      	}
+			    }
+			    ,error: function(){
+			      //请求异常回调
+			    }
+			  });
+			});
+			$("#saveUpload").click(function(event) {
+				var backgroundVal = $("#backgroundVal").val();
+				if (!backgroundVal) return false;
+				$.ajax({
+					url: '/index/setting/saveTheme',
+					type: 'GET',
+					dataType: 'json',
+					data: {backgroundVal: backgroundVal},
+				})
+				.done(function(data) {
+					if (data.status) {
+						alertMsg('上传成功',0,1);
+					} else {
+						alertMsg(data.msg);
+					}
+				})
+				.fail(function() {
+					console.log("error");
+				})
+				.always(function() {
+					console.log("complete");
+				});
+				
+			});
+		})
+	</script>
+{include file='index/sidebar_index' /}
+{include file='index/footer' /}

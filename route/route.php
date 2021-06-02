@@ -27,6 +27,7 @@ Route::domain($url, function () {
 	Route::get('/:name/setting/$', 'index/Index/setting')->pattern(['name' => '\w+']);
 	Route::get('/:name/setting/avatar/$', 'index/Index/avatar')->pattern(['name' => '\w+']);
 	Route::get('/:name/setting/passwd/$', 'index/Index/passwd')->pattern(['name' => '\w+']);
+	Route::get('/:name/setting/background/$', 'index/Index/background')->pattern(['name' => '\w+']);
 	Route::get('/:name/fans/$', 'index/Index/fans')->pattern(['name' => '\w+']);
 	Route::get('/:name/fans/page/:page$', 'index/Index/fans')->pattern(['name' => '\w+', 'page'=>'[0-9]+']);
 	Route::get('/:name/concern/$', 'index/Index/concern')->pattern(['name' => '\w+']);
@@ -57,6 +58,7 @@ Route::domain('aidigu.cn', function () {
 	Route::get('/:name/setting/$', 'index/Index/setting')->pattern(['name' => '\w+']);
 	Route::get('/:name/setting/avatar/$', 'index/Index/avatar')->pattern(['name' => '\w+']);
 	Route::get('/:name/setting/passwd/$', 'index/Index/passwd')->pattern(['name' => '\w+']);
+	Route::get('/:name/setting/background/$', 'index/Index/background')->pattern(['name' => '\w+']);
 	Route::get('/:name/fans/$', 'index/Index/fans')->pattern(['name' => '\w+']);
 	Route::get('/:name/fans/page/:page$', 'index/Index/fans')->pattern(['name' => '\w+', 'page'=>'[0-9]+']);
 	Route::get('/:name/concern/$', 'index/Index/concern')->pattern(['name' => '\w+']);
