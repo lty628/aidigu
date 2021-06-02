@@ -1,17 +1,3 @@
-/*
-Navicat MySQL Data Transfer
-
-Source Server         : 47.75.11.220
-Source Server Version : 50648
-Source Host           : localhost:3306
-Source Database       : aidigu
-
-Target Server Type    : MYSQL
-Target Server Version : 50648
-File Encoding         : 65001
-
-Date: 2021-03-05 16:12:25
-*/
 
 SET FOREIGN_KEY_CHECKS=0;
 
@@ -105,7 +91,7 @@ CREATE TABLE `wb_user` (
   `intro` varchar(210) DEFAULT NULL,
   `ctime` bigint(20) NOT NULL,
   `message_sum` mediumint(9) NOT NULL DEFAULT '0',
-  `themes` varchar(15) NOT NULL DEFAULT 'default',
+  `theme` varchar(255) NOT NULL,
   `fansnum` bigint(20) NOT NULL DEFAULT '0' COMMENT '粉丝数',
   `follownum` bigint(20) NOT NULL DEFAULT '0' COMMENT '关注数',
   PRIMARY KEY (`uid`)
