@@ -91,7 +91,7 @@ CREATE TABLE `wb_user` (
   `intro` varchar(210) DEFAULT NULL,
   `ctime` bigint(20) NOT NULL,
   `message_sum` mediumint(9) NOT NULL DEFAULT '0',
-  `theme` varchar(255) NOT NULL,
+  `theme` varchar(255) DEFAULT NULL,
   `fansnum` bigint(20) NOT NULL DEFAULT '0' COMMENT '粉丝数',
   `follownum` bigint(20) NOT NULL DEFAULT '0' COMMENT '关注数',
   PRIMARY KEY (`uid`)
