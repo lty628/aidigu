@@ -105,25 +105,16 @@ class SettingInfo extends Base
 	{
 		$path = 'uploads/'.getLoginBlog().'/message';
 		// 4m
-		$size = 14194304;
+		$size = 41943040;
 		$file = request()->file('file');
 		// 移动到框架应用根目录/uploads/ 目录下
-		$info = $file->validate(['size'=>$size,'ext'=>'jpg,bmp,jpeg,png,gif'])->move($path);
+		$info = $file->validate(['size'=>$size,'ext'=>'mp4,jiff,jpg,bmp,jpeg,png,gif'])->move($path);
 		// $info = $this->uploadImage($size, $path);
 		if($info){
 			// 成功上传后 获取上传信息
-			$fileFath = $path.'/'.$info->getSaveName();
 			$fileName = explode('.', $info->getSaveName())[0];
-			$image = Image::open($fileFath);
-			$image->save($path.'/'.$fileName.'_small.'.$info->getExtension(),null, 5);
-			$image = Image::open($fileFath);
-			$image->save($path.'/'.$fileName.'_middle.'.$info->getExtension(),null, 10);
-			$image = Image::open($fileFath);
-			$image->save($path.'/'.$fileName.'_big.'.$info->getExtension(),null, 20);
 			$data['image_info'] = '/'.$path.'/'.$fileName;
 			$data['image_type'] = $info->getExtension();
-			$data['small'] = '/'.$path.'/'.$fileName.'_small.'.$info->getExtension();
-			$data['big'] = '/'.$path.'/'.$fileName.'_big.'.$info->getExtension();
 			return json(['status'=>1, 'msg'=>'上传成功','data'=>$data]);
 		}else{
 			// 上传失败获取错误信息

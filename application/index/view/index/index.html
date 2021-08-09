@@ -9,7 +9,7 @@
 </span>你还可以发布<em id="leftlen1">140</em>字</div>
 	<div class="tool-class">
 		<i class="layui-icon layui-icon-face-smile-b" onclick="showEmoji(this)" style="margin: 10px;cursor:pointer;color: #ffa700;font-size:20px!important" title="表情"></i>
-		<i class="layui-icon layui-icon-picture" id="msgInputImg" style="color: #1c7ca5;cursor:pointer;font-size:20px!important" title="图片"></i>
+		<i class="layui-icon layui-icon-camera-fill" id="msgInputImg" style="color: #1c7ca5;cursor:pointer;font-size:20px!important" title="图片/视频"></i>
 		<div class="emojiHtml" style="display: none"></div>
 		<div class="imgHtml" style="margin-left: 69px; position: absolute;margin-top: -22px;border-radius: 3px;"><img src="" width="70px" alt=""></div>
 		<input type="hidden" id="imgVal">
@@ -28,7 +28,11 @@
 				<div class="box">
 					<p class="massageText"><a href="{:url('/'.$message.blog.'/')}" id="nickname">{$message.nickname}：</a>{$message.contents|raw}{$message.repost|raw}</p>
 					{if $message.image}
+						{if json_decode($message.image_info, true)['image_type'] == 'mp4'}
+						<p><video width="400px"  controls=""  name="media"><source src="{$message.image}" type="video/mp4"></video></p>
+						{else}
 						<p class="massageImg"><img width="75%" src="{:getTypeImg($message.image_info)}" onclick="showMessageImg(this)" style="cursor:pointer;"></p>
+						{/if}
 					{/if}
 					<div class="static">
 	<span>

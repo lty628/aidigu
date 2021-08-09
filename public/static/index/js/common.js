@@ -94,12 +94,13 @@ function comdel(url){
 		  	var uploadInst = upload.render({
 		    elem: '#msgInputImg' //绑定元素
 		    ,url: '/index/setting/msgInputImg' //上传接口
+			,accept: "file"
 		    // ,method: 'GET'
 		    ,done: function(res){
 		    	layer.closeAll();
 		      	if (res.status) {
 		      		var data = res.data;
-		      		$(".imgHtml img").attr('src', data.big);
+		      		$(".imgHtml").html('上传成功！');
 		      		$(".imgHtml").append('<i class="layui-icon layui-icon-close-fill" onclick="removeImg(this)"  style="color: red;cursor:pointer;font-size:20px!important"></i>')
 		      		$("#imgVal").val(JSON.stringify(data));
 		      	}
@@ -160,8 +161,14 @@ function comdel(url){
 					if (additional) {
 						var userInfo = $.parseJSON($("#userInfo").val());
 						var message = data.data;
+						var image_info = $.parseJSON(message.image_info);
 						if (message.image) {
-							var str = '<div class="entry"><div class="avatar"><div class="imgborder"><a href="/'+userInfo.blog+'/"><img src="'+userInfo.head_image+'" /></a></div></div><div class="box"><p><a href="/'+userInfo.blog+'/">'+userInfo.nickname+'：</a>'+message.contents+message.repost+'</p><p><img width="75%"  onclick="showMessageImg(this)" src="'+message.image+'"></p><div class="static"><span> <a href="/'+userInfo.blog+'/del/message/'+message.msg_id+'">删除</a></span>刚刚 来自 '+message.refrom+'</div></div><div class="clear"></div></div>';
+							if (image_info.image_type == 'mp4') {
+								var str = '<div class="entry"><div class="avatar"><div class="imgborder"><a href="/'+userInfo.blog+'/"><img src="'+userInfo.head_image+'" /></a></div></div><div class="box"><p><a href="/'+userInfo.blog+'/">'+userInfo.nickname+'：</a>'+message.contents+message.repost+'</p><p><video width="400px"  controls=""  name="media"><source src="'+message.image+'" type="video/mp4"></video></p><div class="static"><span> <a href="/'+userInfo.blog+'/del/message/'+message.msg_id+'">删除</a></span>刚刚 来自 '+message.refrom+'</div></div><div class="clear"></div></div>';
+							} else {
+								var str = '<div class="entry"><div class="avatar"><div class="imgborder"><a href="/'+userInfo.blog+'/"><img src="'+userInfo.head_image+'" /></a></div></div><div class="box"><p><a href="/'+userInfo.blog+'/">'+userInfo.nickname+'：</a>'+message.contents+message.repost+'</p><p><img width="75%"  onclick="showMessageImg(this)" src="'+message.image+'"></p><div class="static"><span> <a href="/'+userInfo.blog+'/del/message/'+message.msg_id+'">删除</a></span>刚刚 来自 '+message.refrom+'</div></div><div class="clear"></div></div>';
+							}
+							
 						} else {
 							var str = '<div class="entry"><div class="avatar"><div class="imgborder"><a href="/'+userInfo.blog+'/"><img src="'+userInfo.head_image+'" /></a></div></div><div class="box"><p><a href="/'+userInfo.blog+'/">'+userInfo.nickname+'：</a>'+message.contents+message.repost+'</p><div class="static"><span> <a href="/'+userInfo.blog+'/del/message/'+message.msg_id+'">删除</a></span>刚刚 来自 '+message.refrom+'</div></div><div class="clear"></div></div>';
 						}
@@ -330,7 +337,7 @@ function comdel(url){
 	}
 	function removeImg(obj)
 	{
-		$(".imgHtml img").attr('src', '');
+		$(".imgHtml").html('');
 		$("#imgVal").val('')
 		$(obj).detach();
 	}
