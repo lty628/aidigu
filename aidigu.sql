@@ -82,7 +82,7 @@ CREATE TABLE `wb_user` (
   `password` char(32) NOT NULL,
   `head_image` varchar(255) DEFAULT NULL,
   `head_image_info` varchar(255) DEFAULT NULL,
-  `nickname` char(10) NOT NULL,
+  `nickname` char(11) NOT NULL,
   `sex` tinyint(4) NOT NULL DEFAULT '0',
   `province` char(10) DEFAULT NULL,
   `city` char(25) DEFAULT NULL,
