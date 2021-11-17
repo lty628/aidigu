@@ -6,7 +6,7 @@
 
 3.支持表情、关注用户、转发、评论、以及消息提醒
 
-4.支持图片上传，暂不支持视频上传
+4.支持图片上传,视频上传
 
 ### **安装方式**
 
@@ -15,6 +15,8 @@
 2.配置 config/app.php和config/database.php
 
 3.配置nginx伪静态
+
+4.修改route/route.php，改为自己的域名绑定（或者通过config/app.php中修改：'url_domain_root'=> 'weibo.test'）
 
 ### **建议的环境：**
 
