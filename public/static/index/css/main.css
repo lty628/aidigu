@@ -13,6 +13,7 @@ a img{border:0;border-radius: 10px;}
 .navigation{float:right;margin:20px 5px 0 0;background-color:#FFF;padding:8px;}
 .navigation li{display:inline;padding:0 10px;}
 .main{background:#d5f3f4;}
+.main .box .massageText{white-space: break-spaces; word-break: keep-all;}
 .contents{float:left;width:600px;min-height:1300px;background-color:#FFF;}
 .sidebar{float:right;width:200px;background-color:#D5F3F4;}
 .top{padding:8px 12px;background-color:#EEE;}
