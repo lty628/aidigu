@@ -89,7 +89,7 @@ class Info extends Base
 			->join([$this->prefix.'fans'=>'fans'],'user.uid=fans.fromuid')->where('fans.touid',$userid)->where('fans.fromuid','<>',$userid)
 			->field('user.uid,user.nickname,user.province,user.city,user.message_sum,user.head_image,user.blog,fans.touid,fans.fromuid,fans.mutual_concern')
 			->order('fans.ctime desc')
-			->paginate($count);
+			->paginate($count, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
 		return $fansInfo;
 	}
 	//我关注的
@@ -100,12 +100,12 @@ class Info extends Base
 			->join([$this->prefix.'fans'=>'fans'],'user.uid=fans.touid')->where('fans.fromuid',$userid)->where('fans.touid','<>',$userid)
 			->field('user.uid,user.nickname,user.province,user.city,user.message_sum,user.head_image,user.blog,fans.touid,fans.fromuid,fans.mutual_concern')
 			->order('fans.ctime desc')
-			->paginate($count);
+			->paginate($count, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
 		return $getConcern;	
 	}
 	protected function getMessage($userid, $count = 50) 
 	{
-		// $userMessage = Message::where('uid', $userid)->order('msg_id','desc')->paginate($count);
+		// $userMessage = Message::where('uid', $userid)->order('msg_id','desc')->paginate($count, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
 		// $page = $userMessage->render();
 		// $this->assign('page', $page);
 		$userMessage = Message::getMessage($userid, $count);
@@ -130,7 +130,7 @@ class Info extends Base
 			->field('user.uid,user.nickname,message.image,message.image_info,message.contents,message.msg_id,message.repost,message.refrom,message.repostsum,message.commentsum,message.ctime,user.head_image,user.blog,reminder.type,reminder.touid,reminder.fromuid')
 			->order('reminder.ctime desc')
 			->where('touid', $this->userid)
-			->paginate($count);
+			->paginate($count, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
 		$this->assign('userMessage', $reminderMsg);
 		// $result = Reminder::getReminderMsg($this->userid);
 		// // dump($result);die;
