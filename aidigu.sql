@@ -77,16 +77,16 @@ CREATE TABLE `wb_reminder` (
 DROP TABLE IF EXISTS `wb_user`;
 CREATE TABLE `wb_user` (
   `uid` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `nickname` char(11) NOT NULL,
   `username` char(10) DEFAULT NULL,
+  `blog` char(20) DEFAULT NULL,
   `phone` bigint(20) DEFAULT NULL COMMENT '手机号',
   `password` char(32) NOT NULL,
   `head_image` varchar(255) DEFAULT NULL,
   `head_image_info` varchar(255) DEFAULT NULL,
-  `nickname` char(11) NOT NULL,
   `sex` tinyint(4) NOT NULL DEFAULT '0',
   `province` char(10) DEFAULT NULL,
   `city` char(25) DEFAULT NULL,
-  `blog` char(10) DEFAULT NULL,
   `email` char(32) DEFAULT NULL,
   `intro` varchar(210) DEFAULT NULL,
   `ctime` bigint(20) NOT NULL,
@@ -94,5 +94,6 @@ CREATE TABLE `wb_user` (
   `theme` varchar(255) DEFAULT NULL,
   `fansnum` bigint(20) NOT NULL DEFAULT '0' COMMENT '粉丝数',
   `follownum` bigint(20) NOT NULL DEFAULT '0' COMMENT '关注数',
+  `invisible` tinyint(255) unsigned NOT NULL DEFAULT '0' COMMENT '广场隐身1，默认0不隐身',
   PRIMARY KEY (`uid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
