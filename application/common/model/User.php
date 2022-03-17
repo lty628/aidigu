@@ -30,6 +30,6 @@ class User extends Model
 	}
 	public static function getUserSetting($userid)
 	{
-		return User::where('uid', $userid)->field('uid,nickname,head_image_info,username,email,phone,sex,intro,blog,head_image,province,city,follownum,fansnum,message_sum,theme')->find();
+		return User::where('uid', $userid)->field('uid,nickname,head_image_info,username,email,phone,sex,intro,blog,head_image,province,city,follownum,fansnum,message_sum,theme,invisible')->find();
 	}
 }

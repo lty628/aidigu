@@ -36,7 +36,7 @@ class SettingInfo extends Base
 		if ($blogInfo && $blogInfo['uid'] != $userid) return json(['status'=>0, 'msg'=>'账号已存在']);
 		$nicknameInfo = $user->where('nickname', $data['nickname'])->field('uid')->find();
 		if ($nicknameInfo && $nicknameInfo['uid'] != $userid) return json(['status'=>0, 'msg'=>'昵称已存在']);
-		$result = $user->allowField(['username','blog','nickname','phone','email','sex','province','city','intro'])->save($data, ['uid'=>$userid]);
+		$result = $user->allowField(['username','blog','nickname','phone','email','sex','province','city','intro','invisible'])->save($data, ['uid'=>$userid]);
 		if (!$result) return json(['status'=>0, 'msg'=>'修改失败']);
 		return json(['status'=>0, 'msg'=>'修改成功']);
 	}

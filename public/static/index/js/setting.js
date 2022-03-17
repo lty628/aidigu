@@ -88,6 +88,7 @@ $(function (){
 				jsonData.phone = $("input[name='phone']").val();
 				jsonData.email = $("input[name='email']").val();
 				jsonData.sex = $("input[name='sex']:checked").val();
+				jsonData.invisible = $("input[name='invisible']:checked").val();
 				jsonData.province = $("select[name='province'] option:selected").val();
 				jsonData.city = $("select[name='city'] option:selected").val();
 				jsonData.intro = $("textarea[name='intro']").val();
