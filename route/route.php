@@ -11,6 +11,8 @@
 $url = config('app.url_domain_root');
 
 Route::domain($url, function () {
+	Route::get('/square/$','index/Index/blog');
+	Route::get('/square/:page$','index/Index/blog')->pattern(['page'=>'[0-9]+']);
 	Route::get('/$','index/Index/blog');
 	Route::get('/:page$','index/Index/blog')->pattern(['page'=>'[0-9]+']);
 	// Route::get('ajax', '/index/ajax/ajax/');
@@ -42,6 +44,8 @@ Route::domain($url, function () {
 	Route::get('/:name/del/message/:msg_id$', 'index/Ajax/delMessage')->pattern(['name' => '\w+', 'msg_id' => '[0-9]+']);	
 });
 Route::domain('aidigu.cn', function () {
+	Route::get('/square/$','index/Index/blog');
+	Route::get('/square/:page$','index/Index/blog')->pattern(['page'=>'[0-9]+']);
 	Route::get('/$','index/Index/blog');
 	Route::get('/:page$','index/Index/blog')->pattern(['page'=>'[0-9]+']);
 	// Route::get('ajax', '/index/ajax/ajax/');
@@ -73,6 +77,8 @@ Route::domain('aidigu.cn', function () {
 	Route::get('/:name/del/message/:msg_id$', 'index/Ajax/delMessage')->pattern(['name' => '\w+', 'msg_id' => '[0-9]+']);	
 });
 Route::domain('m', function () {
+	Route::get('/square/$','index/Index/blog');
+	Route::get('/square/:page$','index/Index/blog')->pattern(['page'=>'[0-9]+']);
 	Route::get('/$','wap/Index/blog');
 	Route::get('/:page$','wap/Index/blog')->pattern(['page'=>'[0-9]+']);
 	// Route::get('ajax', '/index/ajax/ajax/');

@@ -1,9 +1,12 @@
 <?php
+
 namespace app\common\controller;
+
 use app\common\model\User as UserModel;
 use app\common\model\Fans;
 use app\common\validate\User as Validate;
 use think\Controller;
+
 /**
  * 登录注册
  */
@@ -28,36 +31,36 @@ class UserInfo extends Controller
 		$data['password'] = trim(input('get.password'));
 		$validate = new Validate();
 		if (!$validate->check($data)) {
-			return json(['status'=>0, 'msg'=>$validate->getError()]);
+			return json(['status' => 0, 'msg' => $validate->getError()]);
 		}
 		$user = new UserModel();
 		$hasUser = $user->where('blog', $data['blog'])->whereOr('nickname', $data['nickname'])->find();
-		if ($hasUser) return json(['status'=>0, 'msg'=>'账号或昵称已存在']);
+		if ($hasUser) return json(['status' => 0, 'msg' => '账号或昵称已存在']);
 		$data['password'] = encryptionPass($data['password']);
 		$data['head_image'] = '/static/index/images/noavatar_small.gif';
-		if (!$user->save($data)) return json(['status'=>0, 'msg'=>'注册失败']);
+		if (!$user->save($data)) return json(['status' => 0, 'msg' => '注册失败']);
 		$userid = $user->id;
 		setLoginUid($userid);
-		Fans::create(['fromuid'=>$userid, 'touid'=>$userid, 'mutual_concern'=>1]);
-		return json(['status'=>1, 'msg'=>'注册成功']);
+		Fans::create(['fromuid' => $userid, 'touid' => $userid, 'mutual_concern' => 1]);
+		return json(['status' => 1, 'msg' => '注册成功']);
 	}
 	public function loginAjax()
 	{
 		$username = trim(input('get.username'));
 		$password = trim(input('get.password'));
-		if (!$username || !$password) return json(['status'=>0, 'msg'=>'账号或密码不能为空']);
+		if (!$username || !$password) return json(['status' => 0, 'msg' => '账号或密码不能为空']);
 		$result = UserModel::where('blog', $username)->whereOr('nickname', $username)->field('uid,nickname,blog,password')->find();
-		if (!$result) return json(['status'=>0, 'msg'=>'输入的账号不存在']);
-		if (encryptionPass($password) != $result['password']) return json(['status'=>0, 'msg'=>'密码不正确']);
+		if (!$result) return json(['status' => 0, 'msg' => '输入的账号不存在']);
+		if (encryptionPass($password) != $result['password']) return json(['status' => 0, 'msg' => '密码不正确']);
 		setLoginUid($result['uid']);
-		return json(['status'=>1, 'msg'=>'登录成功','data'=>$result['blog']]);
+		return json(['status' => 1, 'msg' => '登录成功', 'data' => $result['blog']]);
 	}
 	public function checkInfo()
 	{
 		$type = input('get.type');
 		$text = input('get.text');
 		if ($type == 1) {
-			if (in_array($text, ['setting','page','blog','admin','login','register','logout'])) return json(['status'=>0, 'msg'=>'账号账号为关键词']);
+			if (in_array($text, ['setting', 'page', 'blog', 'admin', 'login', 'register', 'logout', 'square'])) return json(['status' => 0, 'msg' => '账号账号为关键词']);
 			$str = 'blog';
 			$errorMsg = '账号已存在';
 		}
@@ -65,16 +68,16 @@ class UserInfo extends Controller
 			$str = 'nickname';
 			$errorMsg = '昵称已存在';
 		}
-		$result = UserModel::where($str,$text)->field('uid')->find();
-		if ($result) return json(['status'=>0, 'msg'=>$errorMsg]);
-		return json(['status'=>1, 'msg'=>'ok']);
+		$result = UserModel::where($str, $text)->field('uid')->find();
+		if ($result) return json(['status' => 0, 'msg' => $errorMsg]);
+		return json(['status' => 1, 'msg' => 'ok']);
 	}
 	public function checkInfo2()
 	{
 		$type = input('get.type');
 		$text = input('get.text');
 		if ($type == 1) {
-			if (in_array($text, ['setting','page','blog','admin','login','register','logout'])) return json(['status'=>0, 'msg'=>'账号账号为关键词']);
+			if (in_array($text, ['setting', 'page', 'blog', 'admin', 'login', 'register', 'logout', 'square'])) return json(['status' => 0, 'msg' => '账号账号为关键词']);
 			$str = 'blog';
 			$errorMsg = '账号已存在';
 		}
@@ -82,10 +85,10 @@ class UserInfo extends Controller
 			$str = 'nickname';
 			$errorMsg = '昵称已存在';
 		}
-		$result = UserModel::where($str,$text)->field('uid')->find();
-		if ($result && $result['uid']!=getLoginUid()) return json(['status'=>0, 'msg'=>$errorMsg]);
+		$result = UserModel::where($str, $text)->field('uid')->find();
+		if ($result && $result['uid'] != getLoginUid()) return json(['status' => 0, 'msg' => $errorMsg]);
 		// if (UserModel::where($str,$text)->find()) return json(['status'=>0, 'msg'=>$errorMsg]);
-		return json(['status'=>1, 'msg'=>'ok']);
+		return json(['status' => 1, 'msg' => 'ok']);
 	}
 	public function logout()
 	{

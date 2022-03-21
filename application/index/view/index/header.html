@@ -25,9 +25,9 @@
 	<!-- <div class="logo"><a href="/"><img src="/static/index/images/logo.gif" alt="logo"/></a></div> -->
 	<div class="navigation">
 		<ul>
-			<li><a href="/">微博首页</a></li>
 			<li><a href="{:url('/'.$loginUserInfo.blog.'/')}">我的首页</a></li>
 			<li><a href="{:url('/'.$loginUserInfo.blog.'/own/')}">我的微博</a></li>
+			<li><a href="/square/">广场</a></li>
 			<li><a href="{:url('./'.$loginUserInfo.blog.'/setting/')}">个人设置</a></li>
 			{if "WINADMIN" == 111}
 			<li><a href="">站点管理</a></li>
