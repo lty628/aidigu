@@ -26,6 +26,9 @@ class UserInfo extends Controller
 	}
 	public function registerAjax()
 	{
+		if (env('app.noRegister')) {
+			return json(['status' => 0, 'msg' => '本站已禁止注册']);
+		}
 		$data['blog'] = strtolower(trim(input('get.account')));
 		$data['nickname'] = trim(input('get.nickname'));
 		$data['password'] = trim(input('get.password'));

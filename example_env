@@ -2,6 +2,7 @@
     debug = true
     trace = true
     urlDomainRoot = weibo.test
+    noRegister = false
 [database]
     type = mysql
     hostname = 127.0.0.1
