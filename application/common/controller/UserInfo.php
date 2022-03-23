@@ -60,7 +60,7 @@ class UserInfo extends Controller
 		$type = input('get.type');
 		$text = input('get.text');
 		if ($type == 1) {
-			if (in_array($text, ['setting', 'page', 'blog', 'admin', 'login', 'register', 'logout', 'square'])) return json(['status' => 0, 'msg' => '账号账号为关键词']);
+			if (in_array($text, ['setting', 'page', 'blog', 'admin', 'login', 'register', 'logout', 'square', 'cloud'])) return json(['status' => 0, 'msg' => '账号账号为关键词']);
 			$str = 'blog';
 			$errorMsg = '账号已存在';
 		}
@@ -77,7 +77,7 @@ class UserInfo extends Controller
 		$type = input('get.type');
 		$text = input('get.text');
 		if ($type == 1) {
-			if (in_array($text, ['setting', 'page', 'blog', 'admin', 'login', 'register', 'logout', 'square'])) return json(['status' => 0, 'msg' => '账号账号为关键词']);
+			if (in_array($text, ['setting', 'page', 'blog', 'admin', 'login', 'register', 'logout', 'square', 'cloud'])) return json(['status' => 0, 'msg' => '账号账号为关键词']);
 			$str = 'blog';
 			$errorMsg = '账号已存在';
 		}

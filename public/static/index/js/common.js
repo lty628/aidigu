@@ -145,7 +145,10 @@ function comdel(url){
 				zIndex: layer.zIndex, //重点1
 				success: function(layero){
 					layer.setTop(layero); //重点2
-				}
+				},
+				end: function(){ 
+					showCloud = false;
+				} 
 			});
 		})
 	})
