@@ -10,6 +10,12 @@
 // +----------------------------------------------------------------------
 $url = config('app.url_domain_root');
 
+
+Route::any('files', 'upload/upload/index');
+Route::any('files/:key', 'upload/upload/index');
+Route::get('/cloud/$','upload/Index/index');
+Route::get('/cloud/show/$','upload/Index/show');
+Route::get('/cloud/collection/$','upload/Index/collection');
 Route::domain($url, function () {
 	Route::get('/square/$','index/Index/blog');
 	Route::get('/square/:page$','index/Index/blog')->pattern(['page'=>'[0-9]+']);

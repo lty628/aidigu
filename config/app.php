@@ -19,9 +19,9 @@ return [
     // 应用地址
     'app_host'               => '',
     // 应用调试模式
-    'app_debug'              => true,
+    'app_debug'              => Env::get('app.debug', 'false'),
     // 应用Trace
-    'app_trace'              => true,
+    'app_trace'              => Env::get('app.trace', 'false'),
     // 是否支持多模块
     'app_multi_module'       => true,
     // 入口自动绑定模块
@@ -105,7 +105,7 @@ return [
     // 使用注解路由
     'route_annotation'       => false,
     // 域名根，如thinkphp.cn
-    'url_domain_root'        => 'weibo.test',
+    'url_domain_root'        => Env::get('app.urlDomainRoot'),
     // 是否自动转换URL中的控制器和操作名
     'url_convert'            => true,
     // 默认的访问控制器层
@@ -132,7 +132,7 @@ return [
     // 默认跳转页面对应的模板文件
     'dispatch_success_tmpl'  => Env::get('app_path') . 'common/view/success.html',
     'dispatch_error_tmpl'    => Env::get('app_path') . 'common/view/error.html',
-    'exception_tmpl'         => Env::get('app_path') . 'common/view/404.html',
+    // 'exception_tmpl'         => Env::get('app_path') . 'common/view/404.html',
     // 'exception_tmpl'         => Env::get('think_path') . 'tpl/404.tpl',
 
     // 错误显示信息,非调试模式有效

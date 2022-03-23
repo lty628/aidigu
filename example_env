@@ -1,0 +1,22 @@
+[app]
+    debug = true
+    trace = true
+    urlDomainRoot = weibo.test
+[database]
+    type = mysql
+    hostname = 127.0.0.1
+    database = 
+    username = root
+    password = root
+    hostport = 3306
+    charset = utf8mb4
+    prefix = 
+    debug = true
+[storage]
+    type = File
+[s3Config]
+    awsAccessKey = ERFSEGEHSEF
+    awsSecretKey = DVFASSADVFFSADSADASD
+    bucket = test
+    endpoint = http://192.168.1.11/
+    region = 中国华北一区

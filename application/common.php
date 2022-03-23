@@ -3,7 +3,7 @@
 function getLoginUserInfo()
 {
 	$userid = getLoginUid();
-	$info = session('userInfo'.$userid);
+	$info = session('userInfo' . $userid);
 	if (!$info) {
 		$info = Db::name('user')->field('blog,uid')->where('uid', $userid)->find();
 	}
@@ -40,7 +40,7 @@ function getLoginBlog()
 }
 function encryptionPass($password)
 {
-	return md5(sha1($password).md5('!@#1%#$q'));
+	return md5(sha1($password) . md5('!@#1%#$q'));
 }
 function getPerson($sex)
 {
@@ -49,23 +49,23 @@ function getPerson($sex)
 function setMessageTime($value)
 {
 	if (!is_int($value)) return $value;
-	$timeDifference = time()-$value;
+	$timeDifference = time() - $value;
 	if ($timeDifference > 259200) {
 		$returnTime = date('Y-m-d H:i:s', $value);
 	} else if ($timeDifference < 60) {
-		$returnTime = $timeDifference.'秒前';
+		$returnTime = $timeDifference . '秒前';
 	} else if ($timeDifference < 3600) {
-		$returnTime = floor($timeDifference/60).'分钟前';
+		$returnTime = floor($timeDifference / 60) . '分钟前';
 	} else if ($timeDifference < 86400) {
-		$returnTime = floor($timeDifference/3600).'小时前';
+		$returnTime = floor($timeDifference / 3600) . '小时前';
 	} else if ($timeDifference < 259200) {
-		$returnTime = floor($timeDifference/86400).'天前';
+		$returnTime = floor($timeDifference / 86400) . '天前';
 	}
 	return $returnTime;
 }
 function getReminderTypeName($type)
 {
-	$status = [0=>'转发',1=>'评论',2=>'回复'];
+	$status = [0 => '转发', 1 => '评论', 2 => '回复'];
 	return $status[$type];
 }
 
@@ -75,4 +75,32 @@ function getTypeImg($json, $type = '')
 	$info = json_decode($json, true);
 	$newType = $type ? '_' . $type : $type;
 	return $info['image_info'] . $newType . '.' . $info['image_type'];
+}
+
+function getFilesize($num)
+{
+	$p = 0;
+	$format = 'bytes';
+	if ($num > 0 && $num < 1024) {
+		$p = 0;
+		return number_format($num) . ' ' . $format;
+	}
+	if ($num >= 1024 && $num < pow(1024, 2)) {
+		$p = 1;
+		$format = 'KB';
+	}
+	if ($num >= pow(1024, 2) && $num < pow(1024, 3)) {
+		$p = 2;
+		$format = 'MB';
+	}
+	if ($num >= pow(1024, 3) && $num < pow(1024, 4)) {
+		$p = 3;
+		$format = 'GB';
+	}
+	if ($num >= pow(1024, 4) && $num < pow(1024, 5)) {
+		$p = 3;
+		$format = 'TB';
+	}
+	$num /= pow(1024, $p);
+	return number_format($num, 2) . ' ' . $format;
 }

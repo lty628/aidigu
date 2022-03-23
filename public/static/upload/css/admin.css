@@ -1,0 +1,79 @@
+.layui-layout-admin .layui-header {
+    background-color: #1d2d44;
+  }
+
+  .layui-layout-admin .layui-logo-user {
+    color: rgba(255, 255, 255, .7);
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 200px;
+    height: 100%;
+    line-height: 60px;
+    margin-left: 20px;
+    font-size: 16px;
+  }
+
+  .layui-nav {
+    background-color: #1d2d44;
+  }
+
+  .layui-bg-black {
+    background-color: #1d2d44 !important;
+    border-top: 1px dashed #565656;
+  }
+
+  .layui-logo-user img {
+    width: 44px;
+    border-radius: 10px;
+  }
+
+  .layui-layout-admin .layui-side {
+    width: 195px;
+  }
+
+  .layui-table {
+    width: 99%;
+  }
+  /* .layui-body{
+    height: 100%;
+  } */
+  .uppy-Root{
+    height: 100%;
+  }
+  #drag-drop-area{
+    height: 100%;
+  }
+  .pagination{
+    display:inline-flex;
+  }
+  .pagination li{
+    display: inline-block;
+    *display: inline;
+    *zoom: 1;
+    vertical-align: middle;
+    padding: 0 15px;
+    height: 28px;
+    line-height: 28px;
+    margin: 0 -1px 5px 0;
+    background-color: #fff;
+    color: #333;
+    font-size: 14px;
+    border: 1px solid #e2e2e2
+  }
+  .pagination .disabled{
+    color: #d2d2d2!important;
+    cursor: not-allowed!important;
+  }
+  .pagination .active{
+    display: inline-block;
+    background-color: #009688;
+    color: #ffffff;
+  }
+  .page{
+    text-align: right;
+    margin-right: 2%;
+  }
+  .logo-title{
+    margin-left: 5px;
+  }

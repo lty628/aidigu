@@ -130,6 +130,24 @@ function comdel(url){
 			config.flush = 0;
 			sendMsg(jsonData, config)
 		});
+		// 显示网盘
+		var showCloud = false;
+		$("#showCloud").click(function () {
+			if (showCloud) return
+			showCloud = true
+			layer.open({
+				type: 2,
+				shade: false,
+				area: ['1024px', '500px'],
+				resize: false,
+				maxmin: true,
+				content: '/cloud/',
+				zIndex: layer.zIndex, //重点1
+				success: function(layero){
+					layer.setTop(layero); //重点2
+				}
+			});
+		})
 	})
 	var flag = false;
 	function sendMsg(jsonData, config)
