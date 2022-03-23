@@ -3,5 +3,4 @@
 *.log
 .env
 .DS_Store
-/public/uploads
 /runtime
