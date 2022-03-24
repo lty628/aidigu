@@ -61,6 +61,7 @@ function check_len3(){
 function check_len(obj, leftlen){
 	
 	var maxLen=parseInt(obj.getAttribute('maxlength'));
+	console.log(maxLen);
 	var len=obj.value.replace(/[^\x00-\xff]/g,'o').length; 
 	var llen=maxLen-len;
 	if(len>maxLen) {
@@ -115,14 +116,25 @@ function comdel(url){
 		});
 		$("#button").click(function(event) {
 			var jsonData = {};
-			jsonData.contents = $("#msgInput").val();
-			jsonData.imageInfo = $("#imgVal").val();
-			if (!jsonData.contents) {
+			// jsonData.contents = $("#msgInput").val();
+
+			var text = editor.txt.text();
+
+
+			if(text.length > 14){
+				alertMsg('超过内容长度限制！');
+				return false;
+			}
+
+			/*jsonData.imageInfo = $("#imgVal").val();*/
+			if (!text) {
 				alertMsg('请输入微博内容！');
 				$("#msgInput").focus();
 				return false;
 			}
-			jsonData.contents = ReplaceEmoji(jsonData.contents)
+			// jsonData.contents = ReplaceEmoji(jsonData.contents)
+			jsonData.contents = editor.txt.html();
+			// console.log(jsonData.contents);return false;
 			var config = {};
 			config.action = 'index';
 			config.index = '';
