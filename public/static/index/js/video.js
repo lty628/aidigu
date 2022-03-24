@@ -4,7 +4,7 @@ $(function () {
 		if (url) {
 			const dp = new DPlayer({
 				container: document.getElementsByClassName('massageImg')[index],
-				autoplay: true,
+				autoplay: false,
                 theme: '#d5f3f4',
 				lang: 'zh-cn',
 				video: {

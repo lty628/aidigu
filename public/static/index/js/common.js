@@ -149,6 +149,7 @@ function comdel(url){
 			showCloud = true
 			layer.open({
 				type: 2,
+				title: "我的云盘",
 				shade: false,
 				area: ['1024px', '500px'],
 				resize: false,
