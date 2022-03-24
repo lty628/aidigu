@@ -1,12 +1,22 @@
 {include file='index/header' /}
+<style>
+	.toolbar {
+		/* border: 1px solid #ccc; */
+	}
+	.text {
+		border: 1px solid #ccc;
+		min-height: 100px;
+	}
+</style>
 <div class="main">
 	<div class="contents">
 		{if $userInfo.isSiteUser}
 		<div class="post" id="postform" style="display:block;">
 			<div class="postad" id="wcontent">&nbsp;</div>
-			<div id="msgInput">
-				<p>你在做什么呢</p>
+			<div id="msgInput" class="text">
+				<!-- <p>你在做什么呢</p> -->
 			</div>
+			<div id="msgToolBar" class="toolbar"></div>
 			<div class="postnow">
 				<span><input type="button" value="发布" class="button layui-btn layui-btn" id="button" />
 			</div>
@@ -82,7 +92,8 @@
 	></script>
 	<script type="text/javascript">
 		const E = window.wangEditor
-		const editor = new E("#msgInput")
+		const editor = new E("#msgToolBar", "#msgInput")
+		editor.config.placeholder = '你在做什么呢？'
 		editor.config.uploadImgServer = '/index/setting/msgInputImg'
 		editor.config.uploadFileName = 'file'
 		editor.config.uploadVideoServer = '/index/setting/msgInputImg'
@@ -143,6 +154,12 @@
 				insertVideoFn(result.data['image_info']+'.'+result.data['image_type'])
 			}
 		}
+		editor.config.menus = [
+			'emoticon',
+			'image',
+			'video',
+		]
+		editor.config.showFullScreen = false
 		// 或者 const editor = new E(document.getElementById('div1'))
 		editor.create()
 
