@@ -42,12 +42,12 @@ a img{border:0;border-radius: 10px;}
 .contents .post{padding:15px 30px;}
 .contents .post textarea{width:534px;height:100px;}
 .contents .mywii{width:334px;height:130px;}
-.contents .post .postnow span{float:right;}
+.contents .post .postnow span{margin-top: 10px;float:right;}
 .contents h2, .contents h3,.contents table{margin:5px 20px;}
 .contents h2{font-size:14px;height:23px;border-bottom:1px solid #D5D5D5;}
 .contents h3{font-size:12px;font-weight:normal;}
 .contents h3 span{padding-left:40px;line-height:25px;}
-.contents .entry{background:url(../images/linedot.gif) bottom left repeat-x;margin:15px 20px 20px 20px;font-size:14px;}
+.contents .entry{clear: both;background:url(../images/linedot.gif) bottom left repeat-x;margin:15px 20px 20px 20px;font-size:14px;}
 .contents .entry .avatar{float:left;width:60px;text-align:center;}
 .contents .entry .avatarhtml{text-align:center;}
 .contents .entry .avatar img{width:48px;height:48px;border:2px solid #FFF;}
