@@ -48,7 +48,7 @@
 							<source src="{$message.image}" type="video/mp4">
 						</video></p>
 					{else}
-					<p class="massageImg"><img width="75%", src="{:getTypeImg($message.image_info)}"
+					<p class="massageImg"><img width="75%" , src="{:getTypeImg($message.image_info)}"
 							onclick="showMessageImg(this)" style="cursor:pointer;"></p>
 					{/if}
 					{/if}
@@ -90,7 +90,8 @@
 
 	{include file='index/footer' /}
 
-	<script type="text/javascript", src="https://cdn.jsdelivr.net/npm/wangeditor@latest/dist/wangEditor.min.js"></script>
+	<script type="text/javascript" ,
+		src="https://cdn.jsdelivr.net/npm/wangeditor@latest/dist/wangEditor.min.js"></script>
 	<script type="text/javascript">
 		const E = window.wangEditor
 		const editor = new E("#msgToolBar", "#msgInput")
@@ -241,10 +242,24 @@
 				]
 			},
 			{
-				title: 'emoji',  // tab 的标题
-				type: 'emoji', // 'emoji' / 'image'
-				// emoji 表情，content 是一个数组即可
-				content: '😀 😃 😄 😁 😆 😅 😂 😊 😇 🙂 🙃 😉 😓 😪 😴 🙄 🤔 😬 🤐'.split(/\s/),
+				// tab 的标题
+				title: '表情',
+				// type -> 'emoji' / 'image'
+				type: 'emoji',
+				// content -> 数组
+				content: '😀 😃 😄 😁 😆 😅 😂 🤣 😊 😇 🙂 🙃 😉 😌 😍 😘 😗 😙 😚 😋 😛 😝 😜 🤓 😎 😏 😒 😞 😔 😟 😕 🙁 😣 😖 😫 😩 😢 😭 😤 😠 😡 😳 😱 😨 🤗 🤔 😶 😑 😬 🙄 😯 😴 😷 🤑 😈 🤡 💩 👻 💀 👀 👣'.split(
+					/\s/
+				),
+			},
+			{
+				// tab 的标题
+				title: '手势',
+				// type -> 'emoji' / 'image'
+				type: 'emoji',
+				// content -> 数组
+				content: '👐 🙌 👏 🤝 👍 👎 👊 ✊ 🤛 🤜 🤞 ✌️ 🤘 👌 👈 👉 👆 👇 ☝️ ✋ 🤚 🖐 🖖 👋 🤙 💪 🖕 ✍️ 🙏'.split(
+					/\s/
+				),
 			}
 		]
 		// 或者 const editor = new E(document.getElementById('div1'))
