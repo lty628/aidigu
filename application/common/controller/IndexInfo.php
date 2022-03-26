@@ -8,7 +8,7 @@ use app\common\model\Message;
 use app\common\model\Fans;
 class IndexInfo extends Info
 {	
-	// 首页
+	// 个人首页
     public function index()
     {
         $userMessage = Db::name('message')

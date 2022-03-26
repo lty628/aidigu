@@ -43,7 +43,7 @@ class Message extends Model
 		// return self::with(['user' => function($query){$query->field('username,blog,head_image,uid,nickname');}])->where('uid',$userid)->order('msg_id','desc')->paginate($count, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
 		// if ($userid) return self::withJoin(['user' => function ($query) {$query->where('invisible', 0);}])->where('uid',$userid)->order('msg_id','desc')->paginate($count, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
 		if ($userid) return self::with('user')->where('uid',$userid)->order('msg_id','desc')->paginate($count, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
-		return self::withJoin(['user' => function ($query) {$query->where('invisible', 0);}])->order('msg_id','desc')->paginate($count, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
+		return self::with(['user' => function ($query) {$query->where('invisible', 0);}])->order('msg_id','desc')->paginate($count, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
 	}
 	public static function getUserMessage($userid = '', $count = 50)
 	{
