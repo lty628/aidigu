@@ -19,19 +19,30 @@ class IndexInfo extends Info
             ->field('user.uid,user.nickname,user.head_image,user.blog,message.ctime,message.contents,message.repost,message.refrom,message.repostsum,message.image,message.image_info,message.commentsum,message.msg_id')
             // ->where('user.invisible', 0)
             ->paginate(30, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
-        $this->assign('userMessage', $userMessage);
+        $this->assign('userMessage', []);
+        if (request()->isAjax()) {
+            return json(array('status' =>  1,'msg' => 'ok', 'data'=>$userMessage));
+        }
         return $this->fetch();
     }
     public function own()
     {
-        $this->getMessage($this->siteUserId, 30);
+        $userMessage = $this->getMessage($this->siteUserId, 30);
+        if (request()->isAjax()) {
+            return json(array('status' =>  1,'msg' => 'ok', 'data'=>$userMessage));
+        }
         $this->assign('siteUser', $this->siteUserId);
+        $this->assign('userMessage', []);
         return $this->fetch('index');
     }
     public function blog()
     {
-        $this->getMessage('', 30);
+        $userMessage = $this->getMessage('', 30);
         $this->assign('siteUser', $this->siteUserId);
+        if (request()->isAjax()) {
+            return json(array('status' =>  1,'msg' => 'ok', 'data'=>$userMessage));
+        }
+        $this->assign('userMessage', []);
         return $this->fetch('index');
     }
     public function fans()

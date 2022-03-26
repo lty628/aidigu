@@ -54,8 +54,8 @@
 		{/if}
 		<input type="hidden" id="userInfo" value="{$userInfo|json_encode}" />
 		<div class="sendMsg"></div>
-		{if isset($userMessage[0])}
 		<div id="msgContent">
+			{if isset($userMessage[0])}
 			{foreach $userMessage as $message}
 			<div class="entry">
 				<div class="avatar">
@@ -98,14 +98,16 @@
 			</div>
 			{/foreach}
 			{else}
-			<div class="entry">
+			<!-- <div class="entry">
 				<div class="box">
 					<p>暂无微博...</p>
 				</div>
 				<div class="clear"></div>
-			</div>
+			</div> -->
 			{/if}
-			{$userMessage|raw}
+		</div>
+		<div id="showMore">
+				
 		</div>
 	</div>
 	{if $userInfo.isSiteUser}
@@ -115,3 +117,56 @@
 	{/if}
 
 	{include file='index/footer' /}
+	<script>
+		$(function () {
+			var canLoad = true
+			function initNextPage(page, url){
+				if (!canLoad) return
+				canLoad = false
+				var url = window.location.pathname
+				$.ajax({
+					type: "get",
+					url: url,
+					data: {page: page},
+					dataType: "json",
+				})
+				.done(function (json) {
+					var data = json.data.data
+					if (!data) return
+					for (var i= 0;i< data.length;i++) {
+						var mediaStr = '';
+						str = '';
+						if (data[i].image) {
+							data[i].image_info = $.parseJSON(data[i].image_info)
+							if (data[i].image_info.image_type == 'mp4') {
+								mediaStr = '<p class="massageImg showVideo'+data[i].msg_id+'" vid="'+data[i].image+'"><video width="400px"  controls=""  name="media"><source src="" type="video/mp4"></video></p>';
+							} else {
+								mediaStr = '<p  class="massageImg"><img width="75%"  onclick="showMessageImg(this)" src="'+data[i].image+'"></p>';
+							}
+						}
+						var str = '<div class="entry"><div class="avatar"><div class="imgborder"><a href="/'+data[i].user.blog+'/"><img src="'+data[i].user.head_image+'" /></a></div></div><div class="box box-main"><p class="massageText"><a href="/'+data[i].user.blog+'/">'+data[i].user.nickname+'：</a>'+data[i].contents+data[i].repost+'</p>'+mediaStr+'<div class="static"><span> <a href="/'+data[i].user.blog+'/del/message/'+data[i].msg_id+'">删除</a></span>刚刚 来自 '+data[i].refrom+'</div></div><div class="clear"></div></div>';
+						$("#msgContent").append(str);
+						iniVideo(data[i].msg_id)
+					}
+					
+					canLoad = true
+				})
+				.always(function () {
+				})
+				.fail(function() {
+				});
+			}
+			var page = 1;
+			$(window).scroll(function(){
+                var top = $(window).scrollTop() ;
+                var winH = $(window).height() ;
+                var docH = $(document).height();
+                if(docH<=(top+winH+200)){
+					page++
+					initNextPage(page)
+                }
+            });
+			initNextPage(1)
+		})
+
+	</script>

@@ -108,8 +108,8 @@ class Info extends Base
 		// $userMessage = Message::where('uid', $userid)->order('msg_id','desc')->paginate($count, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
 		// $page = $userMessage->render();
 		// $this->assign('page', $page);
-		$userMessage = Message::getMessage($userid, $count);
-		$this->assign('userMessage', $userMessage);
+		return Message::getMessage($userid, $count);
+		
 	}
 	protected function getMessageById($msgId = '')
 	{
