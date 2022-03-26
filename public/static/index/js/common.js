@@ -61,14 +61,14 @@ function check_len3(){
 function check_len(obj, leftlen){
 	
 	var maxLen=parseInt(obj.getAttribute('maxlength'));
-	console.log(maxLen);
-	var len=obj.value.replace(/[^\x00-\xff]/g,'o').length; 
+	var text = $(".w-e-text").html()
+	var len=text.replace(/[^\x00-\xff]/g,'o').length; 
 	var llen=maxLen-len;
 	if(len>maxLen) {
 		var i=0; 
 		for(var z=0;z<len;z++) {
-			if(obj.value.charCodeAt(z)>255) {i=i+2;}else {i=i+1;} 
-			if(i>=maxLen) {obj.value=obj.value.slice(0,(z + 1)); break; } 
+			if(text.charCodeAt(z)>255) {i=i+2;}else {i=i+1;} 
+			if(i>=maxLen) {text=text.slice(0,(z + 1)); break; } 
 		} 
 	} 
 	if(llen<0)llen=0;
@@ -118,15 +118,13 @@ function comdel(url){
 			var jsonData = {};
 			// jsonData.contents = $("#msgInput").val();
 
-			var text = editor.txt.text();
-
-
-			if(text.length > 14){
+			var text = editor.txt.html();
+			if(text.length > 1400){
 				alertMsg('超过内容长度限制！');
 				return false;
 			}
 
-			/*jsonData.imageInfo = $("#imgVal").val();*/
+			jsonData.imageInfo = $("#imgVal").val();
 			if (!text) {
 				alertMsg('请输入微博内容！');
 				$("#msgInput").focus();
@@ -190,7 +188,8 @@ function comdel(url){
 				}
 				if (index) layer.close(index);
 				if (data.status) {
-					$("#msgInput").val('');
+					// $("#msgInput").val('');
+					editor.txt.clear()
 					check_len1();
 					if (additional) {
 						var userInfo = $.parseJSON($("#userInfo").val());

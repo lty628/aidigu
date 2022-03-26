@@ -104,7 +104,7 @@ class Api extends Base
     	$repost = input('get.repost');
         $data['repost'] = '';
     	if ($repost)  $data['repost'] = self::getMessage(strip_tags($repost, '<source><video><img><p><a>'));
-        $data['contents'] = self::getMessage(strip_tags($contents, '<source><video><img><p><a>'));
+        $data['contents'] = self::getMessage($contents);
         $data['uid'] = getLoginUid();
         $data['refrom'] = '网站';
         $data['ctime'] = time();
