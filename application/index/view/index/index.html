@@ -180,10 +180,10 @@
 				return Y + '-' + M + '-' + D + '&nbsp;' + H + ':' + m;
 			}
 		}
-		var page = 1;
+		var page = 0;
 		$(function () {
 			var canLoad = true
-			function initNextPage(page, url) {
+			function initNextPage(url) {
 				if (!canLoad) return
 				page++
 				canLoad = false
@@ -229,7 +229,7 @@
 					initNextPage(page)
 				}
 			});
-			initNextPage(0)
+			initNextPage(page)
 		})
 
 	</script>
