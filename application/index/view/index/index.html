@@ -107,7 +107,7 @@
 			{/if}
 		</div>
 		<div id="showMore">
-				
+
 		</div>
 	</div>
 	{if $userInfo.isSiteUser}
@@ -118,56 +118,118 @@
 
 	{include file='index/footer' /}
 	<script>
+		//字符串转换为时间戳
+		function getDateTimeStamp(dateStr) {
+			return dateStr + '000'
+			return Date.parse(dateStr.replace(/-/gi, "/"));
+		}
+		function getDateDiff(dateStr) {
+			var publishTime = getDateTimeStamp(dateStr) / 1000,
+				d_seconds,
+				d_minutes,
+				d_hours,
+				d_days,
+				timeNow = parseInt(new Date().getTime() / 1000),
+				d,
+
+				date = new Date(publishTime * 1000),
+				Y = date.getFullYear(),
+				M = date.getMonth() + 1,
+				D = date.getDate(),
+				H = date.getHours(),
+				m = date.getMinutes(),
+				s = date.getSeconds();
+			//小于10的在前面补0
+			if (M < 10) {
+				M = '0' + M;
+			}
+			if (D < 10) {
+				D = '0' + D;
+			}
+			if (H < 10) {
+				H = '0' + H;
+			}
+			if (m < 10) {
+				m = '0' + m;
+			}
+			if (s < 10) {
+				s = '0' + s;
+			}
+
+			d = timeNow - publishTime;
+			d_days = parseInt(d / 86400);
+			d_hours = parseInt(d / 3600);
+			d_minutes = parseInt(d / 60);
+			d_seconds = parseInt(d);
+
+			if (d_days > 0 && d_days < 3) {
+				return d_days + '天前';
+			} else if (d_days <= 0 && d_hours > 0) {
+				return d_hours + '小时前';
+			} else if (d_hours <= 0 && d_minutes > 0) {
+				return d_minutes + '分钟前';
+			} else if (d_seconds < 60) {
+				if (d_seconds <= 0) {
+					return '刚刚';
+				} else {
+					return d_seconds + '秒前';
+				}
+			} else if (d_days >= 3 && d_days < 30) {
+				return M + '-' + D + '&nbsp;' + H + ':' + m;
+			} else if (d_days >= 30) {
+				return Y + '-' + M + '-' + D + '&nbsp;' + H + ':' + m;
+			}
+		}
+
 		$(function () {
 			var canLoad = true
-			function initNextPage(page, url){
+			function initNextPage(page, url) {
 				if (!canLoad) return
 				canLoad = false
 				var url = window.location.pathname
 				$.ajax({
 					type: "get",
 					url: url,
-					data: {page: page},
+					data: { page: page },
 					dataType: "json",
 				})
-				.done(function (json) {
-					var data = json.data.data
-					console.log(data)
-					if (!data) return
-					for (var i= 0;i< data.length;i++) {
-						var mediaStr = '';
-						str = '';
-						if (data[i].image) {
-							data[i].image_info = $.parseJSON(data[i].image_info)
-							if (data[i].image_info.image_type == 'mp4') {
-								mediaStr = '<p class="massageImg clear showVideo'+data[i].msg_id+'" vid="'+data[i].image+'"><video width="400px"  controls=""  name="media"><source src="" type="video/mp4"></video></p>';
-							} else {
-								mediaStr = '<p  class="massageImg clear"><img width="75%"  onclick="showMessageImg(this)" src="'+data[i].image+'"></p>';
+					.done(function (json) {
+						var data = json.data.data
+						console.log(data)
+						if (!data) return
+						for (var i = 0; i < data.length; i++) {
+							var mediaStr = '';
+							str = '';
+							if (data[i].image) {
+								data[i].image_info = $.parseJSON(data[i].image_info)
+								if (data[i].image_info.image_type == 'mp4') {
+									mediaStr = '<p class="massageImg clear showVideo' + data[i].msg_id + '" vid="' + data[i].image + '"><video width="400px"  controls=""  name="media"><source src="" type="video/mp4"></video></p>';
+								} else {
+									mediaStr = '<p  class="massageImg clear"><img width="75%"  onclick="showMessageImg(this)" src="' + data[i].image + '"></p>';
+								}
+								delStr = '<div class="static"><span> <a href="/' + data[i].blog + '/del/message/' + data[i].msg_id + '">删除</a></span>刚刚 来自 ' + data[i].refrom + '</div>';
 							}
-							delStr = '<div class="static"><span> <a href="/'+data[i].blog+'/del/message/'+data[i].msg_id+'">删除</a></span>刚刚 来自 '+data[i].refrom+'</div>';
+							var str = '<div class="entry"><div class="avatar"><div class="imgborder"><a href="/' + data[i].blog + '/"><img src="' + data[i].head_image + '" /></a></div></div><div class="box box-main"><p class="massageText"><a href="/' + data[i].blog + '/">' + data[i].nickname + '：</a>' + data[i].contents + data[i].repost + '</p>' + mediaStr + '<div class="static"><span></span>' + getDateDiff(data[i].ctime) + ' 来自 ' + data[i].refrom + '</div></div><div class="clear"></div></div>';
+							$("#msgContent").append(str);
+							iniVideo(data[i].msg_id)
 						}
-						var str = '<div class="entry"><div class="avatar"><div class="imgborder"><a href="/'+data[i].blog+'/"><img src="'+data[i].head_image+'" /></a></div></div><div class="box box-main"><p class="massageText"><a href="/'+data[i].blog+'/">'+data[i].nickname+'：</a>'+data[i].contents+data[i].repost+'</p>'+mediaStr+'<div class="static"><span></span>刚刚 来自 '+data[i].refrom+'</div></div><div class="clear"></div></div>';
-						$("#msgContent").append(str);
-						iniVideo(data[i].msg_id)
-					}
-					
-					canLoad = true
-				})
-				.always(function () {
-				})
-				.fail(function() {
-				});
+						canLoad = true
+					})
+					.always(function () {
+					})
+					.fail(function () {
+					});
 			}
 			var page = 1;
-			$(window).scroll(function(){
-                var top = $(window).scrollTop() ;
-                var winH = $(window).height() ;
-                var docH = $(document).height();
-                if(docH<=(top+winH+200)){
+			$(window).scroll(function () {
+				var top = $(window).scrollTop();
+				var winH = $(window).height();
+				var docH = $(document).height();
+				if (docH <= (top + winH + 200)) {
 					page++
 					initNextPage(page)
-                }
-            });
+				}
+			});
 			initNextPage(1)
 		})
 
