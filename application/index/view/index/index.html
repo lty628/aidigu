@@ -180,11 +180,12 @@
 				return Y + '-' + M + '-' + D + '&nbsp;' + H + ':' + m;
 			}
 		}
-
+		var page = 1;
 		$(function () {
 			var canLoad = true
 			function initNextPage(page, url) {
 				if (!canLoad) return
+				page++
 				canLoad = false
 				var url = window.location.pathname
 				$.ajax({
@@ -220,17 +221,15 @@
 					.fail(function () {
 					});
 			}
-			var page = 1;
 			$(window).scroll(function () {
 				var top = $(window).scrollTop();
 				var winH = $(window).height();
 				var docH = $(document).height();
 				if (docH <= (top + winH + 200)) {
-					page++
 					initNextPage(page)
 				}
 			});
-			initNextPage(1)
+			initNextPage(0)
 		})
 
 	</script>
