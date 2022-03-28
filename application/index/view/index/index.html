@@ -70,11 +70,11 @@
 					</p>
 					{if $message.image}
 					{if json_decode($message.image_info, true)['image_type'] == 'mp4'}
-					<p class="massageImg" vid="{$message.image}"><video width="400px" controls="" name="media">
+					<p class="massageImg clear" vid="{$message.image}"><video width="400px" controls="" name="media">
 							<source src="{$message.image}" type="video/mp4">
 						</video></p>
 					{else}
-					<p class="massageImg"><img width="75%" , src="{:getTypeImg($message.image_info)}"
+					<p class="massageImg clear"><img width="75%" , src="{:getTypeImg($message.image_info)}"
 							onclick="showMessageImg(this)" style="cursor:pointer;"></p>
 					{/if}
 					{/if}
