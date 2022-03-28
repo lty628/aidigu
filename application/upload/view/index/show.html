@@ -19,7 +19,7 @@
             <td>{$fileValue['create_time']}</td>
             <td>
               <div class="layui-table-cell laytable-cell-1-0-11">
-                <a href="{:url('upload/index/download',['id'=>$fileValue['id']])}" class="layui-btn layui-btn-xs">分享</a>
+                <!-- <a href="{:url('upload/index/download',['id'=>$fileValue['id']])}" class="layui-btn layui-btn-xs">分享</a> -->
                 <a href="{:url('upload/index/download',['id'=>$fileValue['id']])}" class="layui-btn layui-btn-xs">下载</a>
                 <a href="{:url('upload/index/del',['id'=>$fileValue['id']])}"
                   class="layui-btn layui-btn-danger layui-btn-xs">删除</a>
@@ -34,7 +34,7 @@
     </div>
 
 {include file='index/footer' /}
-
+<script src="/static/common/js/clipboard.min.js"></script>
 <script>
   function copyLink(obj, id) {
     $(obj).attr('data-clipboard-text', url);
