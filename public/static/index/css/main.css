@@ -106,6 +106,6 @@ i.warning{color:red}
 .framebottom{height:35px;background-color:#EEE;line-height:35px;text-align:center;}
 .framebottom span{float:right;padding-right:15px;}
 .sendMsg{text-align: center;background-color: #fff8bf;display: none}
-.dplayer{border-radius: 8px;width: 400px;}
+.dplayer{border-radius: 8px;/*width: 400px;*/}
 .info .detail p:nth-child(3){width:55px;height: 17px;text-align: center;font-size: 10px;background: #0db2f7;border-radius: 4px;}
 .newReminder li span{color: red;};
