@@ -19,7 +19,7 @@
         <td>{$fileValue['create_time']}</td>
         <td>
           <div class="layui-table-cell laytable-cell-1-0-11">
-            {if $fileValue['is_share'] == 0}
+            {if $fileValue['share_msg_id'] == 0}
             <a href="{:url('upload/index/siteShare',['id'=>$fileValue['id']])}" class="layui-btn layui-btn-xs">微博分享</a>
             {else}
             <a href="{:url('upload/index/siteCanleShare',['id'=>$fileValue['id']])}" class="layui-btn layui-btn-xs">取消分享</a>
