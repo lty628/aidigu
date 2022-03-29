@@ -117,7 +117,7 @@ class Index extends Controller
         $id = (int) input('param.id');
         $fileInfo = Db::name('file')->where('id', $id)->where('userid', getLoginUid())->find();
         if (!$fileInfo) return $this->error('无分享权限');
-        if ($fileInfo['is_share']) return $this->error('已分享过了，不能重复分享哦！');
+        if ($fileInfo['share_msg_id']) return $this->error('已分享过了，不能重复分享哦！');
         $type = explode('/', $fileInfo['file_type']);
         $pathinfo = pathinfo($fileInfo['file_path']);
         $filePath = $pathinfo['dirname']. '/' . $pathinfo['filename'];
@@ -144,9 +144,20 @@ class Index extends Controller
         } else {
             $data['content'] = '<p>分享文件，点击<a href="'.$fileInfo['file_path'].'">'.$fileInfo['file_name'].'</a>下载</p>';
         }
-        Db::name('file')->where('id', $id)->update(['is_share' => 1]);
-        \app\common\controller\Api::saveMessage($data['content'], $data['image_info']);
+        $result = \app\common\controller\Api::saveMessage($data['content'], $data['image_info']);
+        Db::name('file')->where('id', $id)->update(['share_msg_id' => $result['msg_id'] ?? 0]);
         return $this->success('分享成功,请在我的首页中查看！');
+    }
+
+    public function siteCanleShare()
+    {
+        $id = (int) input('param.id');
+        $fileInfo = Db::name('file')->where('id', $id)->where('userid', getLoginUid())->find();
+        if (!$fileInfo) return $this->error('无分享权限');
+        $messageId = $fileInfo['share_msg_id'];
+        Db::name('message')->where('msg_id', $messageId)->delete();
+        Db::name('file')->where('id', $id)->update(['share_msg_id' => 0]);
+        return $this->success('已取消分享！');
     }
 
 }
