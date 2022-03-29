@@ -22,7 +22,7 @@ return [
         // 值为类名
         'type' => env('storage.type'), // File S3File ...
         'FileConfig' => [
-            'Path' => './uploads/cloud_upload/'
+            'Path' => '/uploads/cloud_upload/'
         ],
         // 在S3File中使用的配置
         'S3FileConfig' => [

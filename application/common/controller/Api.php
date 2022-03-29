@@ -9,13 +9,17 @@ class Api extends Base
 	//首页
     public function index()
     {
-        $data = self::saveMessage();
+        $contents = input('get.contents');
+        $imageInfo = input('get.imageInfo');
+        $data = self::saveMessage($contents, $imageInfo);
     	if (!$data) return json(array('status' =>  0,'msg' => '发布失败'));
     	return json(array('status' =>  1,'msg' => '发表成功', 'data'=>$data));
     }
     public function repost()
     {
-        $data = $this->saveMessage();
+        $contents = input('get.contents');
+        $imageInfo = input('get.imageInfo');
+        $data = self::saveMessage($contents, $imageInfo);
     	if (!$data) return json(array('status' =>  0,'msg' => '转发失败'));
     	return json(array('status' =>  1,'msg' => '转发成功', 'data'=>$data));
     }
@@ -89,10 +93,8 @@ class Api extends Base
             return false;
         }
     }
-    protected static function saveMessage()
+    public static function saveMessage($contents, $imageInfo)
     {
-    	$contents = input('get.contents');
-        $imageInfo = input('get.imageInfo');
         if ($imageInfo) {
             $imageInfo = json_decode($imageInfo, true);
             $info['image_info'] = $imageInfo['image_info'];

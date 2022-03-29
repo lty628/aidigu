@@ -111,4 +111,42 @@ class Index extends Controller
         return $this->success('永久删除成功');
     }
 
+    //站内分享
+    public function siteShare()
+    {
+        $id = (int) input('param.id');
+        $fileInfo = Db::name('file')->where('id', $id)->where('userid', getLoginUid())->find();
+        if (!$fileInfo) return $this->error('无分享权限');
+        if ($fileInfo['is_share']) return $this->error('已分享过了，不能重复分享哦！');
+        $type = explode('/', $fileInfo['file_type']);
+        $pathinfo = pathinfo($fileInfo['file_path']);
+        $filePath = $pathinfo['dirname']. '/' . $pathinfo['filename'];
+        $fileExtension = $pathinfo['extension'];
+        // dump($type);die;
+        // 视频分享
+        // {"image_info":"\/uploads\/72\/message\/20220326\/6b5b2500aade4230a7778bdc143eca51","image_type":"png"}
+        // $data['image_info']['image_type'] = $type[1];
+        $data['image_info'] = '';
+        if ($type[1] == 'mp4') {
+            $data['content'] = '<p>分享视频</p>';
+            $data['image'] = $fileInfo['file_path'];
+            $data['image_info'] = json_encode([
+                'image_info' => $filePath,
+                'image_type' => $fileExtension,
+            ]);
+        } elseif ($type[0] == 'image') {
+            $data['content'] = '<p>分享图片</p>';
+            $data['image'] = $fileInfo['file_path'];
+            $data['image_info'] = json_encode([
+                'image_info' => $filePath,
+                'image_type' => $fileExtension,
+            ]);
+        } else {
+            $data['content'] = '<p>分享文件，点击<a href="'.$fileInfo['file_path'].'">'.$fileInfo['file_name'].'</a>下载</p>';
+        }
+        Db::name('file')->where('id', $id)->update(['is_share' => 1]);
+        \app\common\controller\Api::saveMessage($data['content'], $data['image_info']);
+        return $this->success('分享成功,请在我的首页中查看！');
+    }
+
 }

@@ -20,7 +20,7 @@ class Listener
         if ($storageConfig['type'] == 'S3File') {
             $fileMeta['file_path'] = rtrim($storageConfig['S3FileConfig']['endpoint'],'/').'/'.$storageConfig['S3FileConfig']['bucket'].'/'.$fileMeta['name'];
         } else {
-            $data['file_path'] = $fileMeta['file_path'] ?? '';
+            $data['file_path'] = $fileMeta['file_path'] ?? getTusUploadFile(false).'/'.$fileMeta['name'];
         }
         // $savePath = config('tus.uploadDir').'/'.$fileMeta['name'];
         $data['type'] = $typeArr[$storageConfig['type']] ?? 0;

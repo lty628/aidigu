@@ -1,37 +1,38 @@
 {include file='index/header' /}
 
-    <div class="layui-body">
+<div class="layui-body">
 
-      <table class="layui-table">
-        <thead>
-          <tr>
-            <th>文件名</th>
-            <th>文件大小</th>
-            <th>上传时间</th>
-            <th>操作</th>
-          </tr>
-        </thead>
-        <tbody>
-          {volist name="fileList" id="fileValue"}
-          <tr>
-            <td>{$fileValue['file_name']}</td>
-            <td>{:getFilesize($fileValue['file_size'])}</td>
-            <td>{$fileValue['create_time']}</td>
-            <td>
-              <div class="layui-table-cell laytable-cell-1-0-11">
-                <!-- <a href="{:url('upload/index/download',['id'=>$fileValue['id']])}" class="layui-btn layui-btn-xs">分享</a> -->
-                <a href="{:url('upload/index/download',['id'=>$fileValue['id']])}" class="layui-btn layui-btn-xs">下载</a>
-                <a href="{:url('upload/index/del',['id'=>$fileValue['id']])}"
-                  class="layui-btn layui-btn-danger layui-btn-xs">删除</a>
-              </div>
-            </td>
-          </tr>
-          {/volist}
-        </tbody>
-      </table>
-      <div class="page">{$fileList|raw}</div>
-      
-    </div>
+  <table class="layui-table">
+    <thead>
+      <tr>
+        <th>文件名</th>
+        <th>文件大小</th>
+        <th>上传时间</th>
+        <th>操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      {volist name="fileList" id="fileValue"}
+      <tr>
+        <td>{$fileValue['file_name']}</td>
+        <td>{:getFilesize($fileValue['file_size'])}</td>
+        <td>{$fileValue['create_time']}</td>
+        <td>
+          <div class="layui-table-cell laytable-cell-1-0-11">
+            <a href="{:url('upload/index/siteShare',['id'=>$fileValue['id']])}" class="layui-btn layui-btn-xs">微博分享</a>
+            <!-- <a href="javascript:;" v-href="{:url('upload/index/commonShare',['id'=>$fileValue['id']])}" onclick="copyLink(this)" class="layui-btn layui-btn-xs">链接分享</a> -->
+            <a href="{:url('upload/index/download',['id'=>$fileValue['id']])}" class="layui-btn layui-btn-xs">下载</a>
+            <a href="{:url('upload/index/del',['id'=>$fileValue['id']])}"
+              class="layui-btn layui-btn-danger layui-btn-xs">删除</a>
+          </div>
+        </td>
+      </tr>
+      {/volist}
+    </tbody>
+  </table>
+  <div class="page">{$fileList|raw}</div>
+
+</div>
 
 {include file='index/footer' /}
 <script src="/static/common/js/clipboard.min.js"></script>

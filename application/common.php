@@ -30,6 +30,22 @@ function getLoginUid()
 {
 	return session('userid');
 }
+function getLoginMd5Uid()
+{
+	return md5(getLoginUid());
+}
+
+// tus上传路径
+function getTusUploadFile($absolute = true)
+{
+	$path = '/' . trim(config('upload.storge.FileConfig.Path'), '/') . '/' . getLoginMd5Uid();
+	$absolutePath = env('root_path') . 'public' . $path;
+	if (!is_dir($absolutePath)) {
+		mkdir($absolutePath);
+	}
+	return $absolute ? $absolutePath : $path;
+	# code...
+}
 function setLoginUid($userid)
 {
 	session('userid', $userid);

@@ -13,7 +13,7 @@ class Upload extends Controller
     public function index()
     {
         $listener = new \app\upload\listener\Index();
-        $basePath = config('upload.storge.FileConfig.Path');
+        $basePath = getTusUploadFile();
         $server   = new \app\upload\libs\Server('file'); // Either redis, file or apcu. Leave empty for file based cache.
         $server->setUploadDir($basePath);
         $server->event()->addListener('tus-server.upload.complete', [$listener, 'postUploadOperation']);

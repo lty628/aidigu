@@ -42,7 +42,7 @@ class SettingInfo extends Base
 	}
 	public function uploadAvatar()
 	{
-		$path = 'uploads/'.getLoginUid().'/avatar';
+		$path = 'uploads/'.getLoginMd5Uid().'/avatar';
 		// 4m
 		$size = 4194304;
 		$file = request()->file('file');
@@ -103,7 +103,7 @@ class SettingInfo extends Base
 	
 	public function msgInputImg()
 	{
-		$path = 'uploads/'.getLoginUid().'/message';
+		$path = 'uploads/'.getLoginMd5Uid().'/message';
 		// 4m
 		$size = 41943040;
 		$file = request()->file('file');
@@ -124,7 +124,7 @@ class SettingInfo extends Base
 
 	public function uploadImage()
 	{
-		$path = 'uploads/'.getLoginUid().'/theme';
+		$path = 'uploads/'.getLoginMd5Uid().'/theme';
 		// 4m
 		$size = 4194304;
 		$file = request()->file('file');
