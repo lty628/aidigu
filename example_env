@@ -21,3 +21,9 @@
     bucket = test
     endpoint = http://192.168.1.11/
     region = 中国华北一区
+[wechat]
+app_id = wadfas
+secret = sdfasdaasdffdsg
+token = asdfasdfdsfdddadweqwdeff
+aes_key = ''
+callback = /examples/oauth_callback.php
