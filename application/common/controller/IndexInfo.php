@@ -30,8 +30,8 @@ class IndexInfo extends Info
     {
         $userMessage = $this->getMessage($this->siteUserId, 30);
         if (request()->isAjax()) {
-            $allwoDelete = 0;
-            if ($this->siteUserId != $this->userid) $allwoDelete = 1;
+            $allwoDelete = 1;
+            if ($this->siteUserId != $this->userid) $allwoDelete = 0;
             $userMessage = $userMessage->toArray()['data'];
             return json(array('status' =>  1,'msg' => 'ok', 'data' => ['data'=>$userMessage, 'allow_delete' => $allwoDelete]));
         }
