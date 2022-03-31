@@ -17,23 +17,23 @@ class User
     public static function checkUser($wxUser, $qrSceneStr)
     {
         return true;
-        $findUser = \think\Db::name('user')->where(['openid' => $wxUser['openid']])->find();
-        // 存在用户
-        if ($findUser) {
-            return \think\Db::name('user')->where(['openid' => $wxUser['openid']])->update(['qr_scene_str' => $qrSceneStr]);
-        } else {
-            // file_put_contents('1.txt', json_encode($wxUser));
-            $data['headimage'] = $wxUser['headimgurl'];
-            $data['openid'] = $wxUser['openid'];
-            $data['nickname'] = $wxUser['nickname'];
-            $data['sex'] = $wxUser['sex'];
-            $data['city'] = $wxUser['city'];
-            $data['province'] = $wxUser['province'];
-            $data['country'] = $wxUser['country'];
-            $data['qr_scene_str'] = $qrSceneStr;
-            $data['create_time'] = date('Y-m-d H:i:s', time());
-            return \think\Db::name('user')->insert($data);
-        }
+        // $findUser = \think\Db::name('user')->where(['openid' => $wxUser['openid']])->find();
+        // // 存在用户
+        // if ($findUser) {
+        //     return \think\Db::name('user')->where(['openid' => $wxUser['openid']])->update(['qr_scene_str' => $qrSceneStr]);
+        // } else {
+        //     // file_put_contents('1.txt', json_encode($wxUser));
+        //     $data['headimage'] = $wxUser['headimgurl'];
+        //     $data['openid'] = $wxUser['openid'];
+        //     $data['nickname'] = $wxUser['nickname'];
+        //     $data['sex'] = $wxUser['sex'];
+        //     $data['city'] = $wxUser['city'];
+        //     $data['province'] = $wxUser['province'];
+        //     $data['country'] = $wxUser['country'];
+        //     $data['qr_scene_str'] = $qrSceneStr;
+        //     $data['create_time'] = date('Y-m-d H:i:s', time());
+        //     return \think\Db::name('user')->insert($data);
+        // }
         
     }
 }
