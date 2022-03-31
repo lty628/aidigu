@@ -21,7 +21,8 @@ class IndexInfo extends Info
             ->paginate(30, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
         $this->assign('userMessage', []);
         if (request()->isAjax()) {
-            return json(array('status' =>  1,'msg' => 'ok', 'data'=>$userMessage));
+            $userMessage = $userMessage->toArray()['data'];
+            return json(array('status' =>  1,'msg' => 'ok', 'data' => ['data'=>$userMessage, 'allow_delete' => 0]));
         }
         return $this->fetch();
     }
@@ -29,7 +30,8 @@ class IndexInfo extends Info
     {
         $userMessage = $this->getMessage($this->siteUserId, 30);
         if (request()->isAjax()) {
-            return json(array('status' =>  1,'msg' => 'ok', 'data'=>$userMessage));
+            $userMessage = $userMessage->toArray()['data'];
+            return json(array('status' =>  1,'msg' => 'ok', 'data' => ['data'=>$userMessage, 'allow_delete' => 1]));
         }
         $this->assign('siteUser', $this->siteUserId);
         $this->assign('userMessage', []);
@@ -40,7 +42,8 @@ class IndexInfo extends Info
         $userMessage = $this->getMessage('', 30);
         $this->assign('siteUser', $this->siteUserId);
         if (request()->isAjax()) {
-            return json(array('status' =>  1,'msg' => 'ok', 'data'=>$userMessage));
+            $userMessage = $userMessage->toArray()['data'];
+            return json(array('status' =>  1,'msg' => 'ok', 'data' => ['data'=>$userMessage, 'allow_delete' => 0]));
         }
         $this->assign('userMessage', []);
         return $this->fetch('index');
