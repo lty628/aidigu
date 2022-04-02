@@ -141,6 +141,8 @@ class Index extends Controller
                 'image_info' => $filePath,
                 'image_type' => $fileExtension,
             ]);
+        } elseif ($fileInfo['file_type'] == 'audio/mpeg') {
+            $data['content'] = '<p>分享 '.$fileInfo['file_name'].'</p><p><audio controls="" name="media"><source src="'.$fileInfo['file_path'].'" type="audio/mpeg"></audio></p>';
         } else {
             $data['content'] = '<p>分享文件，点击<a href="'.$fileInfo['file_path'].'">'.$fileInfo['file_name'].'</a>下载</p>';
         }
