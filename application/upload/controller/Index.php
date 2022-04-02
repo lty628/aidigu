@@ -23,7 +23,7 @@ class Index extends Controller
 
     public function show()
     {
-        $result = Db::name('file')->where('is_delete', 0)->order('create_time', 'desc')->where('userid', getLoginUid())->paginate(8);
+        $result = Db::name('file')->where('is_delete', 0)->order('create_time', 'desc')->where('userid', getLoginUid())->paginate(7, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
         $this->assign('fileList', $result);
         return $this->fetch();
     }
@@ -31,7 +31,7 @@ class Index extends Controller
     // 回收站
     public function collection()
     {
-        $result = Db::name('file')->where('is_delete', 1)->order('create_time', 'desc')->where('userid', getLoginUid())->paginate(8);
+        $result = Db::name('file')->where('is_delete', 1)->order('create_time', 'desc')->where('userid', getLoginUid())->paginate(7, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
         $this->assign('fileList', $result);
         return $this->fetch(); 
     }
