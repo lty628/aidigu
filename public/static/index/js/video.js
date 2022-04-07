@@ -1,3 +1,12 @@
+
+var playIngMusicId = '';
+function stopOther(obj) {
+	var id = $(obj).attr("id")
+	if (playIngMusicId != '' && id != playIngMusicId) {
+		document.getElementById(playIngMusicId).pause()
+	}
+	playIngMusicId = id;
+}
 $(function () {
     $(".massageImg").each(function (index) {
 		var url = $(this).attr('vid')

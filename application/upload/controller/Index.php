@@ -1,5 +1,7 @@
 <?php
+
 namespace app\upload\controller;
+
 use think\Controller;
 use think\Db;
 use app\upload\libs\Upload;
@@ -33,7 +35,7 @@ class Index extends Controller
     {
         $result = Db::name('file')->where('is_delete', 1)->order('create_time', 'desc')->where('userid', getLoginUid())->paginate(7, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
         $this->assign('fileList', $result);
-        return $this->fetch(); 
+        return $this->fetch();
     }
 
     public function upload(Upload $upload)
@@ -84,7 +86,7 @@ class Index extends Controller
         $id = (int) input('param.id');
         $fileInfo = Db::name('file')->where('id', $id)->where('userid', getLoginUid())->find();
         if (!$fileInfo) return $this->error('无删除权限');
-        $result = Db::name('file')->where('id', $id)->update(['is_delete'=> 1]);
+        $result = Db::name('file')->where('id', $id)->update(['is_delete' => 1]);
         if (!$result) return $this->error('删除失败');
         return $this->success('删除成功');
     }
@@ -94,7 +96,7 @@ class Index extends Controller
         $id = (int) input('param.id');
         $fileInfo = Db::name('file')->where('id', $id)->where('userid', getLoginUid())->find();
         if (!$fileInfo) return $this->error('无权限');
-        $result = Db::name('file')->where('id', $id)->update(['is_delete'=> 0]);
+        $result = Db::name('file')->where('id', $id)->update(['is_delete' => 0]);
         if (!$result) return $this->error('还原失败');
         return $this->success('还原成功');
     }
@@ -120,7 +122,7 @@ class Index extends Controller
         if ($fileInfo['share_msg_id']) return $this->error('已分享过了，不能重复分享哦！');
         $type = explode('/', $fileInfo['file_type']);
         $pathinfo = pathinfo($fileInfo['file_path']);
-        $filePath = $pathinfo['dirname']. '/' . $pathinfo['filename'];
+        $filePath = $pathinfo['dirname'] . '/' . $pathinfo['filename'];
         $fileExtension = $pathinfo['extension'];
         // dump($type);die;
         // 视频分享
@@ -142,9 +144,9 @@ class Index extends Controller
                 'image_type' => $fileExtension,
             ]);
         } elseif ($fileInfo['file_type'] == 'audio/mpeg') {
-            $data['content'] = '<p>分享 '.$fileInfo['file_name'].'</p><p><audio class="music" controls="controls" loop="loop" onplay="stopOther()" preload="none" controlsList="nodownload" οncοntextmenu="return false" name="media"><source src="'.$fileInfo['file_path'].'" type="audio/mpeg"></audio></p>';
+            $data['content'] = '<p>分享 ' . $fileInfo['file_name'] . '</p><p><audio id="' . 'music_' . $id . '" class="music" controls="controls" loop="loop" onplay="stopOther(this)" preload="none" controlsList="nodownload" οncοntextmenu="return false" name="media"><source src="' . $fileInfo['file_path'] . '" type="audio/mpeg"></audio></p>';
         } else {
-            $data['content'] = '<p>分享文件，点击<a href="'.$fileInfo['file_path'].'">'.$fileInfo['file_name'].'</a>下载</p>';
+            $data['content'] = '<p>分享文件，点击<a href="' . $fileInfo['file_path'] . '">' . $fileInfo['file_name'] . '</a>下载</p>';
         }
         $result = \app\common\controller\Api::saveMessage($data['content'], $data['image_info']);
         Db::name('file')->where('id', $id)->update(['share_msg_id' => $result['msg_id'] ?? 0]);
@@ -161,5 +163,4 @@ class Index extends Controller
         Db::name('file')->where('id', $id)->update(['share_msg_id' => 0]);
         return $this->success('已取消分享！');
     }
-
 }
