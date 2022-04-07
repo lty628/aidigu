@@ -463,22 +463,22 @@ function comdel(url){
 		});
 	}
 
-	function iniVideo(i)
-	{
-		$(".massageImg").each(function (index) {
-			var url = $(this).attr('vid')
-			if (!$(this).hasClass("showVideo"+i)) return
-			if (url) {
-				const dp = new DPlayer({
-					container: document.getElementsByClassName('massageImg')[index],
-					autoplay: false,
-					theme: '#d5f3f4',
-					lang: 'zh-cn',
-					video: {
-						url: url,
-						type: 'auto',
-					},
-				});
-			}
-		})
-	}
+	// function iniVideo(i)
+	// {
+	// 	$(".massageImg").each(function (index) {
+	// 		var url = $(this).attr('vid')
+	// 		if (!$(this).hasClass("showVideo"+i)) return
+	// 		if (url) {
+	// 			const dp = new DPlayer({
+	// 				container: document.getElementsByClassName('massageImg')[index],
+	// 				autoplay: false,
+	// 				theme: '#d5f3f4',
+	// 				lang: 'zh-cn',
+	// 				video: {
+	// 					url: url,
+	// 					type: 'auto',
+	// 				},
+	// 			});
+	// 		}
+	// 	})
+	// }
