@@ -142,7 +142,7 @@ class Index extends Controller
                 'image_type' => $fileExtension,
             ]);
         } elseif ($fileInfo['file_type'] == 'audio/mpeg') {
-            $data['content'] = '<p>分享 '.$fileInfo['file_name'].'</p><p><audio class="music" controls="controls" onplay="stopOther()" preload="none" controlsList="nodownload" οncοntextmenu="return false" name="media"><source src="'.$fileInfo['file_path'].'" type="audio/mpeg"></audio></p>';
+            $data['content'] = '<p>分享 '.$fileInfo['file_name'].'</p><p><audio class="music" controls="controls" loop="loop" onplay="stopOther()" preload="none" controlsList="nodownload" οncοntextmenu="return false" name="media"><source src="'.$fileInfo['file_path'].'" type="audio/mpeg"></audio></p>';
         } else {
             $data['content'] = '<p>分享文件，点击<a href="'.$fileInfo['file_path'].'">'.$fileInfo['file_name'].'</a>下载</p>';
         }
