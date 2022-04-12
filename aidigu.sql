@@ -40,6 +40,25 @@ CREATE TABLE `wb_fans` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
+-- Table structure for wb_file
+-- ----------------------------
+DROP TABLE IF EXISTS `wb_file`;
+CREATE TABLE `wb_file` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `userid` int(10) unsigned NOT NULL COMMENT '用户id',
+  `type` tinyint(255) unsigned NOT NULL DEFAULT '0' COMMENT '0File, 1S3File',
+  `file_name` varchar(255) NOT NULL COMMENT '文件名',
+  `file_type` varchar(255) NOT NULL,
+  `file_size` double NOT NULL COMMENT '文件大小',
+  `file_location` varchar(255) NOT NULL COMMENT '文件地址',
+  `file_path` varchar(255) NOT NULL COMMENT '文件地址',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  `is_delete` tinyint(255) unsigned NOT NULL DEFAULT '0' COMMENT '是否删除',
+  `share_msg_id` bigint(255) unsigned NOT NULL DEFAULT '0' COMMENT '是否站内分享，0未分享',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- ----------------------------
 -- Table structure for wb_message
 -- ----------------------------
 DROP TABLE IF EXISTS `wb_message`;
