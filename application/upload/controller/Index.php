@@ -130,7 +130,7 @@ class Index extends Controller
         // $data['image_info']['image_type'] = $type[1];
         $data['image_info'] = '';
         if ($type[1] == 'mp4') {
-            $data['content'] = '<p>分享视频</p>';
+            $data['content'] = '<p>分享视频' . $fileInfo['file_name'] . '</p>';
             $data['image'] = $fileInfo['file_path'];
             $data['image_info'] = json_encode([
                 'image_info' => $filePath,
