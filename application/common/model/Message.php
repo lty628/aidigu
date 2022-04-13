@@ -42,8 +42,8 @@ class Message extends Model
 	{
 		// return self::with(['user' => function($query){$query->field('username,blog,head_image,uid,nickname');}])->where('uid',$userid)->order('msg_id','desc')->paginate($count, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
 		// if ($userid) return self::withJoin(['user' => function ($query) {$query->where('invisible', 0);}])->where('uid',$userid)->order('msg_id','desc')->paginate($count, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
-		if ($userid) return self::with('user')->where('uid',$userid)->order('msg_id','desc')->paginate($count, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
-		return self::withJoin(['user' => function ($query) {$query->where('invisible', 0);}])->order('msg_id','desc')->paginate($count, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
+		if ($userid) return self::with('user')->where('uid',$userid)->where('is_delete', 0)->order('msg_id','desc')->paginate($count, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
+		return self::withJoin(['user' => function ($query) {$query->where('invisible', 0);}])->where('is_delete', 0)->order('msg_id','desc')->paginate($count, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
 	}
 	public static function getUserMessage($userid = '', $count = 50)
 	{
@@ -61,6 +61,6 @@ class Message extends Model
 		User::where('uid',$userid)->setDec('message_sum',1);
 		Comment::where('msg_id',$msgId)->where('touid',$userid)->delete();
 		Reminder::where('msg_id',$msgId)->delete();
-		return self::where('msg_id',$msgId)->where('uid',$userid)->delete();
+		return self::where('msg_id',$msgId)->where('uid',$userid)->update(['is_delete' => 1]);
 	}
 }
