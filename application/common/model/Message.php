@@ -59,8 +59,8 @@ class Message extends Model
 	{
 		if (!$msgId || !$userid) return false;
 		User::where('uid',$userid)->setDec('message_sum',1);
-		Comment::where('msg_id',$msgId)->where('touid',$userid)->delete();
-		Reminder::where('msg_id',$msgId)->delete();
+		// Comment::where('msg_id',$msgId)->where('touid',$userid)->delete();
+		// Reminder::where('msg_id',$msgId)->delete();
 		return self::where('msg_id',$msgId)->where('uid',$userid)->update(['is_delete' => 1]);
 	}
 }
