@@ -182,6 +182,8 @@ editor.config.customAlert = function (s, t) {
     alertMsg(s);
 }
 // 或者 const editor = new E(document.getElementById('div1'))
+editor.config.uploadImgMaxSize = 20 * 1024 * 1024 // 20M
+editor.config.uploadVideoMaxSize = 1 * 1024 * 1024 * 1024 // 1024m
 
 // 粘贴图片
 editor.config.pasteIgnoreImg = true
