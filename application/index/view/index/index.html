@@ -19,8 +19,56 @@
 	.w-e-panel-tab-content {
 		height: 249px;
 	}
+
 	.music {
 		background: #f1f3f4;
+	}
+
+	.loading {
+		display: inline-block;
+		height: 10px;
+		width: 10px;
+		border-radius: 50%;
+		border: 2px solid #999;
+		border-bottom-color: transparent;
+		-webkit-animation: loading 0.75s linear infinite;
+		animation: loading 0.75s linear infinite;
+		margin: 6px;
+		vertical-align: middle;
+	}
+
+	@-webkit-keyframes loading {
+		0% {
+			-webkit-transform: rotate(0deg);
+		}
+
+		50% {
+			-webkit-transform: rotate(180deg);
+		}
+
+		100% {
+			-webkit-transform: rotate(360deg);
+		}
+	}
+
+	@keyframes loading {
+		0% {
+			-webkit-transform: rotate(0deg);
+		}
+
+		50% {
+			-webkit-transform: rotate(180deg);
+		}
+
+		100% {
+			-webkit-transform: rotate(360deg);
+		}
+	}
+
+	.showMore {
+		text-align: center;
+		font-size: 20px;
+		color: #999999;
 	}
 </style>
 <div class="main">
@@ -109,8 +157,9 @@
 			</div> -->
 			{/if}
 		</div>
-		<div id="showMore">
-
+		<div id="showMore" class="showMore">
+			<span class="loading"></span>
+			加载中...
 		</div>
 	</div>
 	{if $userInfo.isSiteUser}
@@ -199,14 +248,16 @@
 				})
 					.done(function (json) {
 						var data = json.data.data
-						console.log(data)
-						if (!data) return
+						if (!data.length) {
+							$("#showMore").hide()
+							return
+						}
 						for (var i = 0; i < data.length; i++) {
 							var mediaStr = '';
 							var str = '';
 							var delStr = '';
 							var c1 = '';
-							var c2  = '';
+							var c2 = '';
 							if (data[i].image) {
 								data[i].image_info = $.parseJSON(data[i].image_info)
 								if (data[i].image_info.image_type == 'mp4') {
@@ -219,16 +270,16 @@
 							// 	c1 = '('+data[i].repostsum+')'
 							// }
 							if (0 != data[i].commentsum) {
-								c2 = '('+data[i].commentsum+')'
+								c2 = '(' + data[i].commentsum + ')'
 							}
-							delStr += '<a href="/'+ data[i].blog + '/message/'+ data[i].msg_id + '">查看</a> | ';
+							delStr += '<a href="/' + data[i].blog + '/message/' + data[i].msg_id + '">查看</a> | ';
 							// delStr += '<a href="javascript:void(0);" onclick="repost(this, '+data[i].uid+', '+data[i].msg_id+')">转发'+c1+'</a> |';
-							delStr += '<a href="javascript:void(0);" onclick="comment('+data[i].msg_id+', '+data[i].uid+');">评论'+c2+'</a>';
-							
+							delStr += '<a href="javascript:void(0);" onclick="comment(' + data[i].msg_id + ', ' + data[i].uid + ');">评论' + c2 + '</a>';
+
 							if (json.data.allow_delete) {
 								delStr += ' | <a href="/' + data[i].blog + '/del/message/' + data[i].msg_id + '">删除</a>';
 							}
-							str = '<div class="entry"><div class="avatar"><div class="imgborder"><a href="/' + data[i].blog + '/own/"><img src="' + data[i].head_image + '" /></a></div></div><div class="box box-main"><p class="massageText"><a href="/' + data[i].blog + '/own/">' + data[i].nickname + '：</a>' + data[i].contents + data[i].repost + '</p>' + mediaStr + '<div class="static clear"><span>'+delStr+'</span>' + getDateDiff(data[i].ctime) + ' 来自 ' + data[i].refrom + '</div></div><div class="clear"></div></div>';
+							str = '<div class="entry"><div class="avatar"><div class="imgborder"><a href="/' + data[i].blog + '/own/"><img src="' + data[i].head_image + '" /></a></div></div><div class="box box-main"><p class="massageText"><a href="/' + data[i].blog + '/own/">' + data[i].nickname + '：</a>' + data[i].contents + data[i].repost + '</p>' + mediaStr + '<div class="static clear"><span>' + delStr + '</span>' + getDateDiff(data[i].ctime) + ' 来自 ' + data[i].refrom + '</div></div><div class="clear"></div></div>';
 							$("#msgContent").append(str);
 							iniVideo(data[i].msg_id)
 						}
