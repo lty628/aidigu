@@ -248,8 +248,10 @@
 				})
 					.done(function (json) {
 						var data = json.data.data
-						if (!data.length) {
+						if (data.length < 20) {
 							$("#showMore").hide()
+						}
+						if (!data.length) {
 							return
 						}
 						for (var i = 0; i < data.length; i++) {
