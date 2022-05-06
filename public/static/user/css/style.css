@@ -20,8 +20,9 @@ body.style-2 {
   height: 100%;
 }
 body.style-3 {
-  background: #ffffff url(../images/geometry2.png) no-repeat 0 0;
-  background-attachment:fixed;background-size:100% 100%;height:auto;min-height: 100%
+  /* background: #ffffff url(../images/geometry2.png) no-repeat 0 0; */
+  background: #ffffff url(../images/bg.svg) no-repeat 0 0;
+  background-attachment:fixed;background-size:60% 100%;height:auto;min-height: 100%
 }
 
 a {
