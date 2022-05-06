@@ -101,8 +101,8 @@ function comdel(url){
 		    	layer.closeAll();
 		      	if (res.status) {
 		      		var data = res.data;
-		      		$(".imgHtml").html('上传成功！');
-		      		$(".imgHtml").append('<i class="layui-icon layui-icon-close-fill" onclick="removeImg(this)"  style="color: red;cursor:pointer;font-size:20px!important"></i>')
+		      		// $(".imgHtml").html('上传成功！');
+		      		// $(".imgHtml").append('<i class="layui-icon layui-icon-close-fill" onclick="removeImg(this)"  style="color: red;cursor:pointer;font-size:20px!important"></i>')
 		      		$("#imgVal").val(JSON.stringify(data));
 		      	}
 		    }
@@ -369,9 +369,10 @@ function comdel(url){
 	}
 	function removeImg(obj)
 	{
-		$(".imgHtml").html('');
+		// $(".imgHtml").hide();
+		$(".tool-up-class").hide();
 		$("#imgVal").val('')
-		$(obj).detach();
+		// $(obj).detach();
 	}
 
 

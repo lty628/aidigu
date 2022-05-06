@@ -26,10 +26,10 @@ editor.config.uploadImgHooks = {
     // 例如服务器端返回的不是 { errno: 0, data: [...] } 这种格式，可使用 customInsert
     customInsert: function (insertImgFn, res) {
         // result 即服务端返回的接口
-        // console.log('customInsert', result)
+        // console.log('customInsert', res)
         if (res.status) {
             var data = res.data;
-            $(".tool-class").show();
+            $(".tool-up-class").show();
             $("#imgVal").val(JSON.stringify(data));
         }
         return
@@ -62,7 +62,7 @@ editor.config.uploadVideoHooks = {
 
         if (res.status) {
             var data = res.data;
-            $(".tool-class").show();
+            $(".tool-up-class").show();
             $("#imgVal").val(JSON.stringify(data));
         }
         return
