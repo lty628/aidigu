@@ -203,7 +203,6 @@ function comdel(url){
 							}
 							
 						} else {
-							str = '<div class="entry"><div class="avatar"><div class="imgborder"><a href="/' + data[i].blog + '/own/"><img src="' + data[i].head_image + '" /></a></div></div><div class="box box-main"><p class="massageText"><a href="/' + data[i].blog + '/own/">' + data[i].nickname + '：</a>' + data[i].contents + data[i].repost + '</p>' + mediaStr + '<div class="static clear"><span>' + delStr + '</span>' + getDateDiff(data[i].ctime) + ' 来自 ' + data[i].refrom + '</div></div><div class="clear"></div></div>';
 							var str = '<div class="entry"><div class="avatar"><div class="imgborder"><a href="/'+userInfo.blog+'/"><img src="'+userInfo.head_image+'" /></a></div></div><div class="box box-main"><p class="massageText"><a href="/'+userInfo.blog+'/">'+userInfo.nickname+'：</a>'+message.contents+message.repost+'</p><div class="static"><span> <a href="/'+userInfo.blog+'/del/message/'+message.msg_id+'">删除</a></span>刚刚 来自 '+message.refrom+'</div></div><div class="clear"></div></div>';
 						}
 						// if (message.image) {
