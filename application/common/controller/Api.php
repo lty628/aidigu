@@ -102,7 +102,7 @@ class Api extends Base
             $data['image'] = $info['image_info'].'.'.$info['image_type'];
             $data['image_info'] = json_encode($info);
         }
-        if (!$contents) return false;
+        if (!$contents && !$imageInfo) return false;
     	$repost = input('get.repost');
         $data['repost'] = '';
     	if ($repost)  $data['repost'] = self::getMessage(strip_tags($repost, '<source><video><img><p><a>'));
