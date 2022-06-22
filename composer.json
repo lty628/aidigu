@@ -19,7 +19,9 @@
         "php": ">=5.6.0",
         "topthink/framework": "5.1.*",
         "topthink/think-image": "^1.0",
-        "ankitpokhrel/tus-php": "v1.3.2"
+        "ankitpokhrel/tus-php": "v1.3.2",
+        "aws/aws-sdk-php": "3.128",
+        "league/flysystem-aws-s3-v3": "^1.0"
     },
     "autoload": {
         "psr-4": {
