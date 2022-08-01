@@ -70,6 +70,20 @@
 		font-size: 20px;
 		color: #999999;
 	}
+
+	.back-to-top {
+		width: 14px;
+		padding: 6px;
+		border: 1px solid #ccc;
+		box-shadow: 0 0 2px #333;
+		position: fixed;
+		right: 20px;
+		bottom: 40px;
+	}
+
+	.back-to-top:hover {
+		cursor: pointer;
+	}
 </style>
 <div class="main">
 	<div class="contents">
@@ -162,6 +176,10 @@
 			加载中...
 		</div>
 	</div>
+	<!-- 回到顶部 -->
+	<section class="back-to-top">
+		回到顶部
+	</section>
 	{if $userInfo.isSiteUser}
 	{include file='index/sidebar_index' /}
 	{else}
@@ -169,6 +187,53 @@
 	{/if}
 
 	{include file='index/footer' /}
+	<script>
+		/**
+		* 缓冲函数
+		* @param {Number} position 当前滚动位置
+		* @param {Number} destination 目标位置
+		* @param {Number} rate 缓动率
+		* @param {Function} callback 缓动结束回调函数 两个参数分别是当前位置和是否结束
+		*/
+		var easeout = function (position, destination, rate, callback) {
+			if (position === destination || typeof destination !== 'number') {
+				return false;
+			}
+			destination = destination || 0;
+			rate = rate || 2;
+
+			// 不存在原生`requestAnimationFrame`，用`setTimeout`模拟替代
+			if (!window.requestAnimationFrame) {
+				window.requestAnimationFrame = function (fn) {
+					return setTimeout(fn, 17);
+				}
+			}
+
+			var step = function () {
+				position = position + (destination - position) / rate;
+				if (Math.abs(destination - position) < 1) {
+					callback(destination, true);
+					return;
+				}
+				callback(position, false);
+				requestAnimationFrame(step);
+			};
+			step();
+		}
+
+		var scrollTopSmooth = function (position) {
+			// 当前滚动高度
+			var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+			easeout(scrollTop, position, 5, function (val) {
+				window.scrollTo(0, val);
+			});
+		}
+
+		$backToTop = document.querySelector('.back-to-top')
+		$backToTop.addEventListener('click', function () {
+			scrollTopSmooth(0);
+		}, false);
+	</script>
 	<script>
 		//字符串转换为时间戳
 		function getDateTimeStamp(dateStr) {
