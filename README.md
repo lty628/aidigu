@@ -1,5 +1,7 @@
 ## **PHP开发的开源微博系统**
 
+QQ群：434615423
+
 1.测试地址 http://t.aidigu.cn
 
 2.采用PHP + MySql开发，框架采用ThinkPHP5.1
