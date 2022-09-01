@@ -54,7 +54,7 @@ CREATE TABLE `wb_file` (
   `file_path` varchar(255) NOT NULL COMMENT '文件地址',
   `create_time` datetime NOT NULL COMMENT '创建时间',
   `is_delete` tinyint(255) unsigned NOT NULL DEFAULT '0' COMMENT '是否删除',
-  `share_msg_id` bigint(255) unsigned NOT NULL DEFAULT '0' COMMENT '是否站内分享，0未分享',
+  `share_msg_id` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '是否站内分享0未分享',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -72,6 +72,7 @@ CREATE TABLE `wb_message` (
   `image_info` text,
   `repostsum` int(11) NOT NULL DEFAULT '0',
   `commentsum` int(11) NOT NULL DEFAULT '0',
+  `is_delete` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '是否删除0未删除，1已删除',
   `ctime` int(11) NOT NULL,
   PRIMARY KEY (`msg_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
