@@ -120,7 +120,7 @@ function getFilesize($num)
 		$format = 'GB';
 	}
 	if ($num >= pow(1024, 4) && $num < pow(1024, 5)) {
-		$p = 3;
+		$p = 4;
 		$format = 'TB';
 	}
 	$num /= pow(1024, $p);
