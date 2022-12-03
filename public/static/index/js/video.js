@@ -22,6 +22,9 @@ function iniVideo(i)
 			DP[index] = new DPlayer({
 				container: document.getElementsByClassName('massageImg')[index],
 				autoplay: false,
+				loop: true,
+				screenshot: true,
+				chromecast: true,
 				theme: '#d5f3f4',
 				lang: 'zh-cn',
 				video: {
