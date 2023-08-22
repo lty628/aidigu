@@ -1,0 +1,249 @@
+
+{include file='index/header' /}
+
+<div id="msgContent">
+	<!-- <div class="post">
+		<img class="post-head" src="" />
+		<div class="post-article">
+			<div class="post-info-i">
+				<h2><a title="张三" href="">张三</a></h2>
+				<small><i class="fa fa-clock-o"></i>2023-11-11
+				<i class="fa fa-eye"></i>
+				<a href=""><i class="fa fa-pencil-square-o"></i>编辑</a></small>
+			</div>
+			<div class="post-content">
+			<p class="more"><a href="" title="asdfasfasf">继续阅读</a></p>
+			</div>
+		</div>
+		<div class="clear"></div>
+		<div class="post-meta">
+				<span><i class="fa fa-user"></i><a href="asdfasfdasd">张三</a></span>
+				<span><i class="fa fa-inbox"></i>safasdfas</span>
+				<span><i class="fa fa-comment"></i>('1111 条')</span>
+				<div class="clear"></div>
+		</div>
+	</div>	 -->
+</div>
+
+
+<div  id="showMore" class="sidebar-mb-show">
+	<div class="box sidebar-readmore">
+		<div class="box-body"><stonrg>加载中...</stonrg></div>
+	</div>
+</div>
+
+<!-- <div class="post">
+	<img class="post-head" src="" />
+	<div class="post-article">
+		<div class="post-info-i">
+			<h2><a href="#">404 啥也没找到</a></h2>
+		</div>
+		<div class="post-content">
+			<p>什么都没有找到啊。。抱歉啦！</p>
+			404页面是客户端在浏览网页时，服务器无法正常提供信息，或是服务器无法回应，且不知道原因所返回的页面。据说在第三次科技革命之前，互联网的形态就是一个大型的中央数据库，这个数据库就设置在404房间里面。那时候所有的请求都是由人工手动完成的，如果在数据库中没有找到请求者所需要的文件，或者由于请求者写错了文件编号，用户就会得到一个返回信息：room 404 : file not found。404错误信息通常是在目标页面被更改或移除，或客户端输入页面地址错误后显示的页面，人们也就习惯了用404作为服务器未找到文件的错误代码了。当然实际考证传说中的room 404是不存在的，在http请求3位的返回码中，4开头的代表客户错误，5开头代表服务器端错误。
+		</div>
+	</div>
+	<div class="clear"></div>
+	<div class="post-meta">
+			<span><i class="fa fa-user"></i> <a href="#">System</a></span>
+			<span><i class="fa fa-inbox"></i> 404,not,found</span>
+	    	<span><i class="fa fa-comment"></i> Zero</span>
+	    	<div class="clear"></div>
+	</div>
+</div> -->
+
+{include file='index/foot' /}
+
+<script>
+	/**
+	* 缓冲函数
+	* @param {Number} position 当前滚动位置
+	* @param {Number} destination 目标位置
+	* @param {Number} rate 缓动率
+	* @param {Function} callback 缓动结束回调函数 两个参数分别是当前位置和是否结束
+	*/
+	var easeout = function (position, destination, rate, callback) {
+		if (position === destination || typeof destination !== 'number') {
+			return false;
+		}
+		destination = destination || 0;
+		rate = rate || 2;
+
+		// 不存在原生`requestAnimationFrame`，用`setTimeout`模拟替代
+		if (!window.requestAnimationFrame) {
+			window.requestAnimationFrame = function (fn) {
+				return setTimeout(fn, 17);
+			}
+		}
+
+		var step = function () {
+			position = position + (destination - position) / rate;
+			if (Math.abs(destination - position) < 1) {
+				callback(destination, true);
+				return;
+			}
+			callback(position, false);
+			requestAnimationFrame(step);
+		};
+		step();
+	}
+
+	var scrollTopSmooth = function (position) {
+		// 当前滚动高度
+		var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+		easeout(scrollTop, position, 5, function (val) {
+			window.scrollTo(0, val);
+		});
+	}
+
+</script>
+<script>
+	//字符串转换为时间戳
+	function getDateTimeStamp(dateStr) {
+		return dateStr + '000'
+		return Date.parse(dateStr.replace(/-/gi, "/"));
+	}
+	function getDateDiff(dateStr) {
+		var publishTime = getDateTimeStamp(dateStr) / 1000,
+			d_seconds,
+			d_minutes,
+			d_hours,
+			d_days,
+			timeNow = parseInt(new Date().getTime() / 1000),
+			d,
+
+			date = new Date(publishTime * 1000),
+			Y = date.getFullYear(),
+			M = date.getMonth() + 1,
+			D = date.getDate(),
+			H = date.getHours(),
+			m = date.getMinutes(),
+			s = date.getSeconds();
+		//小于10的在前面补0
+		if (M < 10) {
+			M = '0' + M;
+		}
+		if (D < 10) {
+			D = '0' + D;
+		}
+		if (H < 10) {
+			H = '0' + H;
+		}
+		if (m < 10) {
+			m = '0' + m;
+		}
+		if (s < 10) {
+			s = '0' + s;
+		}
+
+		d = timeNow - publishTime;
+		d_days = parseInt(d / 86400);
+		d_hours = parseInt(d / 3600);
+		d_minutes = parseInt(d / 60);
+		d_seconds = parseInt(d);
+
+		if (d_days > 0 && d_days < 3) {
+			return d_days + '天前';
+		} else if (d_days <= 0 && d_hours > 0) {
+			return d_hours + '小时前';
+		} else if (d_hours <= 0 && d_minutes > 0) {
+			return d_minutes + '分钟前';
+		} else if (d_seconds < 60) {
+			if (d_seconds <= 0) {
+				return '刚刚';
+			} else {
+				return d_seconds + '秒前';
+			}
+		} else if (d_days >= 3 && d_days < 30) {
+			return M + '-' + D + '&nbsp;' + H + ':' + m;
+		} else if (d_days >= 30) {
+			return Y + '-' + M + '-' + D + '&nbsp;' + H + ':' + m;
+		}
+	}
+	var page = 0;
+	$(function () {
+		var canLoad = true
+		function initNextPage(url) {
+			if (!canLoad) return
+			page++
+			canLoad = false
+			var url = window.location.pathname
+			$.ajax({
+				type: "get",
+				url: url,
+				data: { page: page },
+				dataType: "json",
+			})
+				.done(function (json) {
+					var data = json.data.data
+					if (data.length < 20) {
+						$("#showMore").hide()
+					}
+					if (!data.length) {
+						return
+					}
+					for (var i = 0; i < data.length; i++) {
+						var mediaStr = '';
+						var str = '';
+						var delStr = '';
+						var c1 = '';
+						var c2 = '';
+						if (data[i].image) {
+							data[i].image_info = $.parseJSON(data[i].image_info)
+							if (data[i].image_info.image_type == 'mp4') {
+								mediaStr = '<p class="massageImg clear showVideo' + data[i].msg_id + '" vid="' + data[i].image + '"><video width="400px"  controls=""  name="media"><source src="" type="video/mp4"></video></p>';
+							} else {
+								mediaStr = '<p  class="massageImg clear"><img class="massageImgCommon massageImg_'+data[i].image_info.image_type+'"  onclick="showMessageImg(this)" src="' + data[i].image + '"></p>';
+							}
+						}
+						// if (0 != data[i].repostsum) {
+						// 	c1 = '('+data[i].repostsum+')'
+						// }
+						if (0 != data[i].commentsum) {
+							c2 = '(' + data[i].commentsum + ')'
+						}
+						delStr += '<span><i class="fa fa-user"></i><a href="/' + data[i].blog + '/message/' + data[i].msg_id + '">查看</a></span>';
+						// delStr += '<a href="javascript:void(0);" onclick="repost(this, '+data[i].uid+', '+data[i].msg_id+')">转发'+c1+'</a> |';
+						delStr += '<span><i class="fa fa-user"></i><a href="javascript:void(0);" onclick="comment(' + data[i].msg_id + ', ' + data[i].uid + ');">评论' + c2 + '</a></span>';
+
+						if (json.data.allow_delete) {
+							delStr += '<span><i class="fa fa-user"></i><a href="/' + data[i].blog + '/del/message/' + data[i].msg_id + '">删除</a></span>';
+						} else {
+							delStr += '<span><i class="fa fa-user"></i><a href="javascript:void(0);">收藏</a></span>';
+						}
+
+						str = '<div class="post"><img class="post-head" src="' + data[i].head_image + '" />'
+							+ '<div class="post-article">'
+							+ '<div class="post-info-i">'
+							+ '<h2><a href="/' + data[i].blog + '/own/">' + data[i].nickname + '</a></h2><small><i class="fa fa-clock-o"></i>2023-11-11<i class="fa fa-eye"></i>'
+							+ '</div>'
+							+ '<div class="post-content"><p>' + data[i].contents + data[i].repost + '</p>'  + mediaStr + '</div>'
+							+ '</div>'
+							+ '<div class="clear"></div>'
+							+ '<div class="post-meta">'+delStr
+							+ '<div class="clear"></div>'
+							+ '</div>'
+							+ '</div>';
+
+						$("#msgContent").append(str);
+						iniVideo(data[i].msg_id)
+					}
+					canLoad = true
+				})
+				.always(function () {
+				})
+				.fail(function () {
+				});
+		}
+		$(window).scroll(function () {
+			var top = $(window).scrollTop();
+			var winH = $(window).height();
+			var docH = $(document).height();
+			if (docH <= (top + winH + 200)) {
+				initNextPage(page)
+			}
+		});
+		initNextPage(page)
+	})
+
+</script>

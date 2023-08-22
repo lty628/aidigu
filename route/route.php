@@ -20,67 +20,72 @@ Route::get('/cloud/collection/$','upload/Index/collection');
 
 // 绑定域名方式
 Route::domain($url, function () {
+    if (isMobile()) {
+        $module = 'm';
+    } else {
+        $module = 'index';
+    }
 	Route::get('/square/$','index/Index/blog');
-	Route::get('/square/:page$','index/Index/blog')->pattern(['page'=>'[0-9]+']);
-	Route::get('/$','index/Index/blog');
-	Route::get('/:page$','index/Index/blog')->pattern(['page'=>'[0-9]+']);
+	Route::get('/square/:page$',$module . '/Index/blog')->pattern(['page'=>'[0-9]+']);
+	Route::get('/$',$module . '/Index/blog');
+	Route::get('/:page$',$module . '/Index/blog')->pattern(['page'=>'[0-9]+']);
 	// Route::get('ajax', '/index/ajax/ajax/');
-	// Route::get(':name','index/Ajax')->pattern(['name' => 'ajax']);
-	// Route::get('/:name/$', 'index/Index')->pattern(['name' => '\w+(?!ajax)']);
-	// Route::get('/index/ajax$', 'index/Ajax/index');
-	Route::get('/login/$','index/User/login');
-	Route::get('/register/$','index/User/register');
-	Route::get('/forgot/$','index/User/forgot');
-	Route::get('/logout/$','index/User/logout');
+	// Route::get(':name',$module . '/Ajax')->pattern(['name' => 'ajax']);
+	// Route::get('/:name/$', $module . '/Index')->pattern(['name' => '\w+(?!ajax)']);
+	// Route::get('/index/ajax$', $module . '/Ajax/index');
+	Route::get('/login/$',$module . '/User/login');
+	Route::get('/register/$',$module . '/User/register');
+	Route::get('/forgot/$',$module . '/User/forgot');
+	Route::get('/logout/$',$module . '/User/logout');
 
-	Route::get('/:name/$', 'index/Index/index')->pattern(['name' => '\w+']);
-	Route::get('/:name/:page$', 'index/Index/index')->pattern(['name' => '\w+', 'page'=>'[0-9]+']);
-	Route::get('/:name/setting/$', 'index/Index/setting')->pattern(['name' => '\w+']);
-	Route::get('/:name/setting/avatar/$', 'index/Index/avatar')->pattern(['name' => '\w+']);
-	Route::get('/:name/setting/passwd/$', 'index/Index/passwd')->pattern(['name' => '\w+']);
-	Route::get('/:name/setting/background/$', 'index/Index/background')->pattern(['name' => '\w+']);
-	Route::get('/:name/fans/$', 'index/Index/fans')->pattern(['name' => '\w+']);
-	Route::get('/:name/fans/:page$', 'index/Index/fans')->pattern(['name' => '\w+', 'page'=>'[0-9]+']);
-	Route::get('/:name/concern/$', 'index/Index/concern')->pattern(['name' => '\w+']);
-	Route::get('/:name/concern/:page$', 'index/Index/concern')->pattern(['name' => '\w+', 'page'=>'[0-9]+']);
-	Route::get('/:name/own/$', 'index/Index/own')->pattern(['name' => '\w+']);
-	Route::get('/:name/own/:page$', 'index/Index/own')->pattern(['name' => '\w+', 'page'=>'[0-9]+']);
-	// Route::get('/:name/newrepeat/$', 'index/Index/newrepeat')->pattern(['name' => '\w+']);
-	// Route::get('/:name/newcomment/$', 'index/Index/newcomment')->pattern(['name' => '\w+']);
-	Route::get('/:name/newreply/$', 'index/Index/newreply')->pattern(['name' => '\w+']);
-	Route::get('/:name/newreply/:page$', 'index/Index/newreply')->pattern(['name' => '\w+', 'page'=>'[0-9]+']);
-	Route::get('/:name/message/:msg_id$', 'index/Index/messageInfo')->pattern(['name' => '\w+', 'msg_id' => '[0-9]+']);
-	Route::get('/:name/del/message/:msg_id$', 'index/Ajax/delMessage')->pattern(['name' => '\w+', 'msg_id' => '[0-9]+']);	
+	Route::get('/:name/$', $module . '/Index/index')->pattern(['name' => '\w+']);
+	Route::get('/:name/:page$', $module . '/Index/index')->pattern(['name' => '\w+', 'page'=>'[0-9]+']);
+	Route::get('/:name/setting/$', $module . '/Index/setting')->pattern(['name' => '\w+']);
+	Route::get('/:name/setting/avatar/$', $module . '/Index/avatar')->pattern(['name' => '\w+']);
+	Route::get('/:name/setting/passwd/$', $module . '/Index/passwd')->pattern(['name' => '\w+']);
+	Route::get('/:name/setting/background/$', $module . '/Index/background')->pattern(['name' => '\w+']);
+	Route::get('/:name/fans/$', $module . '/Index/fans')->pattern(['name' => '\w+']);
+	Route::get('/:name/fans/:page$', $module . '/Index/fans')->pattern(['name' => '\w+', 'page'=>'[0-9]+']);
+	Route::get('/:name/concern/$', $module . '/Index/concern')->pattern(['name' => '\w+']);
+	Route::get('/:name/concern/:page$', $module . '/Index/concern')->pattern(['name' => '\w+', 'page'=>'[0-9]+']);
+	Route::get('/:name/own/$', $module . '/Index/own')->pattern(['name' => '\w+']);
+	Route::get('/:name/own/:page$', $module . '/Index/own')->pattern(['name' => '\w+', 'page'=>'[0-9]+']);
+	// Route::get('/:name/newrepeat/$', $module . '/Index/newrepeat')->pattern(['name' => '\w+']);
+	// Route::get('/:name/newcomment/$', $module . '/Index/newcomment')->pattern(['name' => '\w+']);
+	Route::get('/:name/newreply/$', $module . '/Index/newreply')->pattern(['name' => '\w+']);
+	Route::get('/:name/newreply/:page$', $module . '/Index/newreply')->pattern(['name' => '\w+', 'page'=>'[0-9]+']);
+	Route::get('/:name/message/:msg_id$', $module . '/Index/messageInfo')->pattern(['name' => '\w+', 'msg_id' => '[0-9]+']);
+	Route::get('/:name/del/message/:msg_id$', $module . '/Ajax/delMessage')->pattern(['name' => '\w+', 'msg_id' => '[0-9]+']);	
 });
 
-// 通用路由（若绑定域名以下可删除）
-Route::get('/square/$','index/Index/blog');
-Route::get('/square/:page$','index/Index/blog')->pattern(['page'=>'[0-9]+']);
-Route::get('/$','index/Index/blog');
-Route::get('/:page$','index/Index/blog')->pattern(['page'=>'[0-9]+']);
-Route::get('/login/$','index/User/login');
-Route::get('/register/$','index/User/register');
-Route::get('/forgot/$','index/User/forgot');
-Route::get('/logout/$','index/User/logout');
+// // 通用路由（若绑定域名以下可删除）
+// Route::get('/square/$','index/Index/blog');
+// Route::get('/square/:page$','index/Index/blog')->pattern(['page'=>'[0-9]+']);
+// Route::get('/$','index/Index/blog');
+// Route::get('/:page$','index/Index/blog')->pattern(['page'=>'[0-9]+']);
+// Route::get('/login/$','index/User/login');
+// Route::get('/register/$','index/User/register');
+// Route::get('/forgot/$','index/User/forgot');
+// Route::get('/logout/$','index/User/logout');
 
-Route::get('/:name/$', 'index/Index/index')->pattern(['name' => '\w+']);
-Route::get('/:name/:page$', 'index/Index/index')->pattern(['name' => '\w+', 'page'=>'[0-9]+']);
-Route::get('/:name/setting/$', 'index/Index/setting')->pattern(['name' => '\w+']);
-Route::get('/:name/setting/avatar/$', 'index/Index/avatar')->pattern(['name' => '\w+']);
-Route::get('/:name/setting/passwd/$', 'index/Index/passwd')->pattern(['name' => '\w+']);
-Route::get('/:name/setting/background/$', 'index/Index/background')->pattern(['name' => '\w+']);
-Route::get('/:name/fans/$', 'index/Index/fans')->pattern(['name' => '\w+']);
-Route::get('/:name/fans/:page$', 'index/Index/fans')->pattern(['name' => '\w+', 'page'=>'[0-9]+']);
-Route::get('/:name/concern/$', 'index/Index/concern')->pattern(['name' => '\w+']);
-Route::get('/:name/concern/:page$', 'index/Index/concern')->pattern(['name' => '\w+', 'page'=>'[0-9]+']);
-Route::get('/:name/own/$', 'index/Index/own')->pattern(['name' => '\w+']);
-Route::get('/:name/own/:page$', 'index/Index/own')->pattern(['name' => '\w+', 'page'=>'[0-9]+']);
-// Route::get('/:name/newrepeat/$', 'index/Index/newrepeat')->pattern(['name' => '\w+']);
-// Route::get('/:name/newcomment/$', 'index/Index/newcomment')->pattern(['name' => '\w+']);
-Route::get('/:name/newreply/$', 'index/Index/newreply')->pattern(['name' => '\w+']);
-Route::get('/:name/newreply/:page$', 'index/Index/newreply')->pattern(['name' => '\w+', 'page'=>'[0-9]+']);
-Route::get('/:name/message/:msg_id$', 'index/Index/messageInfo')->pattern(['name' => '\w+', 'msg_id' => '[0-9]+']);
-Route::get('/:name/del/message/:msg_id$', 'index/Ajax/delMessage')->pattern(['name' => '\w+', 'msg_id' => '[0-9]+']);
+// Route::get('/:name/$', 'index/Index/index')->pattern(['name' => '\w+']);
+// Route::get('/:name/:page$', 'index/Index/index')->pattern(['name' => '\w+', 'page'=>'[0-9]+']);
+// Route::get('/:name/setting/$', 'index/Index/setting')->pattern(['name' => '\w+']);
+// Route::get('/:name/setting/avatar/$', 'index/Index/avatar')->pattern(['name' => '\w+']);
+// Route::get('/:name/setting/passwd/$', 'index/Index/passwd')->pattern(['name' => '\w+']);
+// Route::get('/:name/setting/background/$', 'index/Index/background')->pattern(['name' => '\w+']);
+// Route::get('/:name/fans/$', 'index/Index/fans')->pattern(['name' => '\w+']);
+// Route::get('/:name/fans/:page$', 'index/Index/fans')->pattern(['name' => '\w+', 'page'=>'[0-9]+']);
+// Route::get('/:name/concern/$', 'index/Index/concern')->pattern(['name' => '\w+']);
+// Route::get('/:name/concern/:page$', 'index/Index/concern')->pattern(['name' => '\w+', 'page'=>'[0-9]+']);
+// Route::get('/:name/own/$', 'index/Index/own')->pattern(['name' => '\w+']);
+// Route::get('/:name/own/:page$', 'index/Index/own')->pattern(['name' => '\w+', 'page'=>'[0-9]+']);
+// // Route::get('/:name/newrepeat/$', 'index/Index/newrepeat')->pattern(['name' => '\w+']);
+// // Route::get('/:name/newcomment/$', 'index/Index/newcomment')->pattern(['name' => '\w+']);
+// Route::get('/:name/newreply/$', 'index/Index/newreply')->pattern(['name' => '\w+']);
+// Route::get('/:name/newreply/:page$', 'index/Index/newreply')->pattern(['name' => '\w+', 'page'=>'[0-9]+']);
+// Route::get('/:name/message/:msg_id$', 'index/Index/messageInfo')->pattern(['name' => '\w+', 'msg_id' => '[0-9]+']);
+// Route::get('/:name/del/message/:msg_id$', 'index/Ajax/delMessage')->pattern(['name' => '\w+', 'msg_id' => '[0-9]+']);
 
 
 // 手机站（已取消）
