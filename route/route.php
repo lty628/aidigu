@@ -33,7 +33,7 @@ Route::domain($url, function () {
 	// Route::get(':name',$module . '/Ajax')->pattern(['name' => 'ajax']);
 	// Route::get('/:name/$', $module . '/Index')->pattern(['name' => '\w+(?!ajax)']);
 	// Route::get('/index/ajax$', $module . '/Ajax/index');
-	Route::get('/login/$','indexindex/User/login');
+	Route::get('/login/$','index/User/login');
 	Route::get('/register/$','index/User/register');
 	Route::get('/forgot/$','index/User/forgot');
 	Route::get('/logout/$','index/User/logout');
