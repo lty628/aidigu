@@ -25,7 +25,7 @@ Route::domain($url, function () {
     } else {
         $module = 'index';
     }
-	Route::get('/square/$','index/Index/blog');
+	Route::get('/square/$',$module . '/Index/blog');
 	Route::get('/square/:page$',$module . '/Index/blog')->pattern(['page'=>'[0-9]+']);
 	Route::get('/$',$module . '/Index/blog');
 	Route::get('/:page$',$module . '/Index/blog')->pattern(['page'=>'[0-9]+']);
