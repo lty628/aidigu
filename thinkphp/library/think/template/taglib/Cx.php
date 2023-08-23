@@ -227,7 +227,7 @@ class Cx extends Taglib
     {
         $condition = !empty($tag['expression']) ? $tag['expression'] : $tag['condition'];
         $condition = $this->parseCondition($condition);
-        $parseStr  = '<?php if(' . $condition . '): ?>' . $content . '';
+        $parseStr  = '<?php if(' . $condition . '): ?>' . $content . '<?php endif; ?>';
 
         return $parseStr;
     }
@@ -367,7 +367,7 @@ class Cx extends Taglib
                 break;
         }
         $type     = $this->parseCondition(' ' . $type . ' ');
-        $parseStr = '<?php if(' . $name . ' ' . $type . ' ' . $value . '): ?>' . $content . '';
+        $parseStr = '<?php if(' . $name . ' ' . $type . ' ' . $value . '): ?>' . $content . '<?php endif; ?>';
 
         return $parseStr;
     }
@@ -400,12 +400,12 @@ class Cx extends Taglib
         }
 
         if ('between' == $type) {
-            $parseStr = '<?php $_RANGE_VAR_=' . $str . ';if(' . $name . '>= $_RANGE_VAR_[0] && ' . $name . '<= $_RANGE_VAR_[1]):?>' . $content . '';
+            $parseStr = '<?php $_RANGE_VAR_=' . $str . ';if(' . $name . '>= $_RANGE_VAR_[0] && ' . $name . '<= $_RANGE_VAR_[1]):?>' . $content . '<?php endif; ?>';
         } elseif ('notbetween' == $type) {
-            $parseStr = '<?php $_RANGE_VAR_=' . $str . ';if(' . $name . '<$_RANGE_VAR_[0] || ' . $name . '>$_RANGE_VAR_[1]):?>' . $content . '';
+            $parseStr = '<?php $_RANGE_VAR_=' . $str . ';if(' . $name . '<$_RANGE_VAR_[0] || ' . $name . '>$_RANGE_VAR_[1]):?>' . $content . '<?php endif; ?>';
         } else {
             $fun      = ('in' == $type) ? 'in_array' : '!in_array';
-            $parseStr = '<?php if(' . $fun . '((' . $name . '), ' . $str . ')): ?>' . $content . '';
+            $parseStr = '<?php if(' . $fun . '((' . $name . '), ' . $str . ')): ?>' . $content . '<?php endif; ?>';
         }
 
         return $parseStr;
@@ -424,7 +424,7 @@ class Cx extends Taglib
     {
         $name     = $tag['name'];
         $name     = $this->autoBuildVar($name);
-        $parseStr = '<?php if(isset(' . $name . ')): ?>' . $content . '';
+        $parseStr = '<?php if(isset(' . $name . ')): ?>' . $content . '<?php endif; ?>';
 
         return $parseStr;
     }
@@ -442,7 +442,7 @@ class Cx extends Taglib
     {
         $name     = $tag['name'];
         $name     = $this->autoBuildVar($name);
-        $parseStr = '<?php if(!isset(' . $name . ')): ?>' . $content . '';
+        $parseStr = '<?php if(!isset(' . $name . ')): ?>' . $content . '<?php endif; ?>';
 
         return $parseStr;
     }
@@ -460,7 +460,7 @@ class Cx extends Taglib
     {
         $name     = $tag['name'];
         $name     = $this->autoBuildVar($name);
-        $parseStr = '<?php if(empty(' . $name . ') || ((' . $name . ' instanceof \think\Collection || ' . $name . ' instanceof \think\Paginator ) && ' . $name . '->isEmpty())): ?>' . $content . '';
+        $parseStr = '<?php if(empty(' . $name . ') || ((' . $name . ' instanceof \think\Collection || ' . $name . ' instanceof \think\Paginator ) && ' . $name . '->isEmpty())): ?>' . $content . '<?php endif; ?>';
 
         return $parseStr;
     }
@@ -478,7 +478,7 @@ class Cx extends Taglib
     {
         $name     = $tag['name'];
         $name     = $this->autoBuildVar($name);
-        $parseStr = '<?php if(!(empty(' . $name . ') || ((' . $name . ' instanceof \think\Collection || ' . $name . ' instanceof \think\Paginator ) && ' . $name . '->isEmpty()))): ?>' . $content . '';
+        $parseStr = '<?php if(!(empty(' . $name . ') || ((' . $name . ' instanceof \think\Collection || ' . $name . ' instanceof \think\Paginator ) && ' . $name . '->isEmpty()))): ?>' . $content . '<?php endif; ?>';
 
         return $parseStr;
     }
@@ -494,7 +494,7 @@ class Cx extends Taglib
     public function tagDefined($tag, $content)
     {
         $name     = $tag['name'];
-        $parseStr = '<?php if(defined("' . $name . '")): ?>' . $content . '';
+        $parseStr = '<?php if(defined("' . $name . '")): ?>' . $content . '<?php endif; ?>';
 
         return $parseStr;
     }
@@ -510,7 +510,7 @@ class Cx extends Taglib
     public function tagNotdefined($tag, $content)
     {
         $name     = $tag['name'];
-        $parseStr = '<?php if(!defined("' . $name . '")): ?>' . $content . '';
+        $parseStr = '<?php if(!defined("' . $name . '")): ?>' . $content . '<?php endif; ?>';
 
         return $parseStr;
     }
@@ -537,7 +537,7 @@ class Cx extends Taglib
             $name = $this->autoBuildVar($name);
             $name = 'isset(' . $name . ')';
             $parseStr .= '<?php if(' . $name . '): ?>';
-            $endStr = '';
+            $endStr = '<?php endif; ?>';
         }
 
         // 文件方式导入
