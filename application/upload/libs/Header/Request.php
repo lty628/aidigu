@@ -87,7 +87,8 @@ class Request
      */
     public function url() : string
     {
-        return rtrim($this->request->getUriForPath('/'), '/');
+        return '';
+        // return rtrim($this->request->getUriForPath('/'), '/');
     }
 
     /**
