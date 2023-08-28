@@ -1,6 +1,131 @@
 
 {include file='index/header' /}
+<style>
+	.toolbar {
+		margin-left: -6px;
+		/* width: 55%; */
+		float: left;
+		/* border: 1px solid #ccc; */
+	}
 
+	.text {
+		border: 1px solid #ccc;
+		min-height: 100px;
+	}
+
+	.box-main .massageText {
+		float: left;
+	}
+
+	.w-e-panel-tab-content {
+		height: 249px;
+	}
+
+	.music {
+		background: #f1f3f4;
+	}
+
+	.loading {
+		display: inline-block;
+		height: 10px;
+		width: 10px;
+		border-radius: 50%;
+		border: 2px solid #999;
+		border-bottom-color: transparent;
+		-webkit-animation: loading 0.75s linear infinite;
+		animation: loading 0.75s linear infinite;
+		margin: 6px;
+		vertical-align: middle;
+	}
+
+	@-webkit-keyframes loading {
+		0% {
+			-webkit-transform: rotate(0deg);
+		}
+
+		50% {
+			-webkit-transform: rotate(180deg);
+		}
+
+		100% {
+			-webkit-transform: rotate(360deg);
+		}
+	}
+
+	@keyframes loading {
+		0% {
+			-webkit-transform: rotate(0deg);
+		}
+
+		50% {
+			-webkit-transform: rotate(180deg);
+		}
+
+		100% {
+			-webkit-transform: rotate(360deg);
+		}
+	}
+
+	.showMore {
+		text-align: center;
+		font-size: 20px;
+		color: #999999;
+	}
+
+	.back-to-top {
+		width: 14px;
+		padding: 6px;
+		border: 1px solid #ccc;
+		box-shadow: 0 0 2px #333;
+		position: fixed;
+		right: 20px;
+		bottom: 40px;
+	}
+
+	.back-to-top:hover {
+		cursor: pointer;
+	}
+	.massageImg .massageImgCommon{
+		width: 60%;
+	}
+	.massageImg .massageImg_gif{
+		width: 35%;
+	}
+	/* .dplayer-menu-show{display: none;}
+	.dplayer ::v-deep .dplayer-menu-show{display: none;} */
+</style>
+{if $userInfo.isSiteUser}
+<div>
+	<div method="post" class="post" action="" id="comment_form">
+			<!-- <small></small> -->
+			<div id="msgInput" class="text" maxlength="1400" onkeyup="check_len1()">
+				<!-- <p>你在做什么呢</p> -->
+			</div>
+			<div class="postnow" style="display: none;">
+				<!-- <span>
+					<input type="button" value="发布" class="button layui-btn layui-btn" id="button" />
+				</span> -->
+				<span style="margin-left: 3%;">你还可以发布<em id="leftlen1">1400</em>字</span>
+			</div>
+
+			<!-- 表情等 -->
+			<div id="msgToolBar" class="toolbar"></div>
+			<div class="tool-up-class" style="display: none;">
+				<div class="imgHtml" style="display: block;border-radius: 3px;">
+					<!-- <img src="" width="70px" alt=""> -->
+					上传成功！
+					<i class="layui-icon layui-icon-close-fill" onclick="removeImg(this)"
+						style="color: red;cursor:pointer;font-size:20px!important"></i>
+				</div>
+				<input type="hidden" id="imgVal">
+			</div>
+			<br />
+			
+			 <p><input type="submit" id="button" value="嘀咕~" class="form_submit" /></p>
+		</div>
+</div>
+{/if}
+<input type="hidden" id="userInfo" value="{$userInfo|json_encode}" />
 <div id="msgContent">
 	<!-- <div class="post">
 		<img class="post-head" src="" />
@@ -215,12 +340,12 @@
 						str = '<div class="post"><img class="post-head" src="' + data[i].head_image + '" />'
 							+ '<div class="post-article">'
 							+ '<div class="post-info-i">'
-							+ '<h2><a href="/' + data[i].blog + '/own/">' + data[i].nickname + '</a></h2><small><i class="fa fa-clock-o"></i>2023-11-11<i class="fa fa-eye"></i>'
+							+ '<h2><a href="/' + data[i].blog + '/own/">' + data[i].nickname + '</a></h2><small><i class="fa fa-clock-o"></i>'+getDateDiff(data[i].ctime)+'<i class="fa fa-eye"></i>'
 							+ '</div>'
 							+ '<div class="post-content"><p>' + data[i].contents + data[i].repost + '</p>'  + mediaStr + '</div>'
 							+ '</div>'
 							+ '<div class="clear"></div>'
-							+ '<div class="post-meta">'+delStr
+							+ '<div class="post-meta">'+delStr+'</div>'
 							+ '<div class="clear"></div>'
 							+ '</div>'
 							+ '</div>';
