@@ -206,8 +206,8 @@ function comdel(url){
 								+ '<p class="massageImg clear showVideo' + message.msg_id + '" vid="' + message.image + '"><video width="400px"  controls=""  name="media"><source src="" type="video/mp4"></video></p>'
 								+ '</div>'
 								+ '<div class="clear"></div>'
-								+ '<div class="post-meta">'+'<span><i class="fa fa-user"></i><a href="/' + message.blog + '/del/message/' + message.msg_id + '">删除</a></span></div>'
-								+ '<div class="clear"></div>'
+								// + '<div class="post-meta">'+'<span><i class="fa fa-user"></i><a href="/' + message.blog + '/del/message/' + message.msg_id + '">删除</a></span></div>'
+								// + '<div class="clear"></div>'
 								+ '</div>'
 								+ '</div>';
 							} else {
@@ -220,8 +220,8 @@ function comdel(url){
 								+ '<p  class="massageImg clear"><img class="massageImgCommon massageImg_'+message.image_info.image_type+'"  onclick="showMessageImg(this)" src="' + message.image + '"></p>';
 								+ '</div>'
 								+ '<div class="clear"></div>'
-								+ '<div class="post-meta">'+'<span><i class="fa fa-user"></i><a href="/' + message.blog + '/del/message/' + message.msg_id + '">删除</a></span></div>'
-								+ '<div class="clear"></div>'
+								// + '<div class="post-meta">'+'<span><i class="fa fa-user"></i><a href="/' + message.blog + '/del/message/' + message.msg_id + '">删除</a></span></div>'
+								// + '<div class="clear"></div>'
 								+ '</div>'
 								+ '</div>';
 							}
@@ -235,8 +235,8 @@ function comdel(url){
 								+ '<div class="post-content"><p>' +message.contents +message.repost + '</p></div>'
 								+ '</div>'
 								+ '<div class="clear"></div>'
-								+ '<div class="post-meta">'+'<span><i class="fa fa-user"></i><a href="/' + message.blog + '/del/message/' + message.msg_id + '">删除</a></span></div>'
-								+ '<div class="clear"></div>'
+								// + '<div class="post-meta">'+'<span><i class="fa fa-user"></i><a href="/' + message.blog + '/del/message/' + message.msg_id + '">删除</a></span></div>'
+								// + '<div class="clear"></div>'
 								+ '</div>'
 								+ '</div>';
 							
@@ -276,9 +276,9 @@ function comdel(url){
 		layer.open({
 		  type: 1,
 		  skin: 'layui-layer-rim', //加上边框
-		  area: ['625px', '320px'], //宽高
+		  area: ['100%', '320px'], //宽高
 		  title: "<b>转发：</b>"+repost,
-		  content: '<div class="contents"><div class="post" id="postform"><div class="postad">&nbsp;</div><textarea placeholder="请输入转发内容" maxlength="1400" id="repostInput" onkeyup="check_len2()"></textarea><div class="postnow">你还可以发布<em id="leftlen2">1400</em>字</div><div class="tool-class"><i class="layui-icon layui-icon-face-smile-b" onclick="showEmoji(this)" style="margin: 10px;cursor:pointer;color: #ffa700;font-size:20px!important" title="表情"></i><div class="emojiHtml" style="display: none"></div></div></div></div>',
+		  content: '<div class="contents"><div class="post" id="postform"><div class="postad">&nbsp;</div><textarea style="height: 80px" placeholder="请输入转发内容" maxlength="1400" id="repostInput" onkeyup="check_len2()"></textarea><div class="postnow">你还可以发布<em id="leftlen2">1400</em>字</div><div class="tool-class"><i class="layui-icon layui-icon-face-smile-b" onclick="showEmoji(this)" style="margin: 10px;cursor:pointer;color: #ffa700;font-size:20px!important" title="表情"></i><div class="emojiHtml" style="display: none"></div></div></div></div>',
 		  btn: ['转发',"取消"],
 		  yes: function(index, layero){
 		  	var jsonData = {};
@@ -301,9 +301,9 @@ function comdel(url){
 		layer.open({
 		  type: 1,
 		  skin: 'layui-layer-rim', //加上边框
-		  area: ['625px', '320px'], //宽高
+		  area: ['100%', '320px'], //宽高
 		  title: "<b>评论：</b>",
-		  content: '<div class="contents"><div class="post" id="commentform"><div class="postad" >&nbsp;</div><textarea placeholder="请输入评论内容" maxlength="140" id="commentInput" onkeyup="check_len3()"></textarea><div class="postnow">你还可以发布<em id="leftlen3">140</em>字</div><div class="tool-class"><i class="layui-icon layui-icon-face-smile-b" onclick="showEmoji(this)" style="margin: 10px;cursor:pointer;color: #ffa700;font-size:20px!important" title="表情"></i><div class="emojiHtml" style="display: none"></div></div></div></div>',
+		  content: '<div class="contents"><div class="post" id="commentform"><div class="postad" >&nbsp;</div><textarea style="height: 80px" placeholder="请输入评论内容" maxlength="140" id="commentInput" onkeyup="check_len3()"></textarea><div class="postnow">你还可以发布<em id="leftlen3">140</em>字</div><div class="tool-class"><i class="layui-icon layui-icon-face-smile-b" onclick="showEmoji(this)" style="margin: 10px;cursor:pointer;color: #ffa700;font-size:20px!important" title="表情"></i><div class="emojiHtml" style="display: none"></div></div></div></div>',
 		  btn: ['评论',"取消"],
 		  yes: function(index, layero){
 		  	var jsonData = {};
@@ -332,9 +332,9 @@ function comdel(url){
 		layer.open({
 		  type: 1,
 		  skin: 'layui-layer-rim', //加上边框
-		  area: ['625px', '320px'], //宽高
+		  area: ['100%', '320px'], //宽高
 		  title: "<b>回复：</b>"+replyUser,
-		  content: '<div class="contents"><div class="post" id="commentform"><div class="postad" >&nbsp;</div><textarea placeholder="请输入回复内容" maxlength="1400" id="commentInput" onkeyup="check_len3()"></textarea><div class="postnow">你还可以发布<em id="leftlen3">1400</em>字</div><div class="tool-class"><i class="layui-icon layui-icon-face-smile-b" onclick="showEmoji(this)" style="margin: 10px;cursor:pointer;color: #ffa700;font-size:20px!important" title="表情"></i><div class="emojiHtml" style="display: none"></div></div></div></div>',
+		  content: '<div class="contents"><div class="post" id="commentform"><div class="postad" >&nbsp;</div><textarea style="height: 80px" placeholder="请输入回复内容" maxlength="1400" id="commentInput" onkeyup="check_len3()"></textarea><div class="postnow">你还可以发布<em id="leftlen3">1400</em>字</div><div class="tool-class"><i class="layui-icon layui-icon-face-smile-b" onclick="showEmoji(this)" style="margin: 10px;cursor:pointer;color: #ffa700;font-size:20px!important" title="表情"></i><div class="emojiHtml" style="display: none"></div></div></div></div>',
 		  btn: ['回复',"取消"],
 		  yes: function(index, layero){
 		  	var jsonData = {};

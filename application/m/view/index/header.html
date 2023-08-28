@@ -33,7 +33,11 @@
 
     <div class="body c-min">
         
+        {if $userInfo['theme']}
+        <div class="body-top-bg shadow" style="background-image: url({$userInfo['theme']})">
+        {else}
         <div class="body-top-bg shadow" style="background-image: url(/static/index/images/bg4.svg)">
+        {/if}
             <img class="body-gravatar" src="{$userInfo.head_image}" />
             <h2>{$userInfo.nickname}</h2>
             <small><i>{$userInfo.intro|raw|default="暂无个人资料"}</i></small>
