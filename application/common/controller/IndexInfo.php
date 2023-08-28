@@ -39,6 +39,7 @@ class IndexInfo extends Info
         $this->assign('userMessage', []);
         return $this->fetch('index');
     }
+    // 广场
     public function blog()
     {
         $userMessage = $this->getMessage('', 30);

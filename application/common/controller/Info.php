@@ -38,6 +38,8 @@ class Info extends Base
     	$this->setMyFans($this->siteUserId);
     	$this->setMyConcern($this->siteUserId);
 		// $this->assign('siteUserId', $this->siteUserId);
+		$this->assign('action', request()->action());
+		dump(request()->action());die;
 		$this->assign('loginUserInfo', $this->loginUserInfo);
 	}
 	protected function getSiteUserInfo($userid) 
