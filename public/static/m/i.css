@@ -68,7 +68,7 @@ button.sm{padding: 2px 5px;font-size: 13px;color: #888;border: 1px solid #ddd;ba
 .box ul li:nth-last-child(1){padding-bottom:0}
 .post{box-shadow:0 0 2px rgba(0,0,0,.2);padding:15px 15px 5px 15px;background-color:#fff;position:relative;word-break:break-all;word-wrap:break-word;white-space:normal}
 p.more{margin:5px 0 0 0;padding: 0;float:right}
-.post+.post{margin-top:20px}
+.post+.post{margin-top:5px}
 .a-l-fc{margin-bottom:-5px;background-color:#f2f2f5;padding:0}
 .a-l-fc a{padding:12px 11px 11px 11px;line-height:1;float: left;height:38px;display:block;border-bottom:2px solid #fa7d3c;border-right:1px solid #d8d8d8;background-color:#fff}
 .a-l-fc form button{display:none}
@@ -99,7 +99,7 @@ p.more{margin:5px 0 0 0;padding: 0;float:right}
 .post-meta span{display:block;width:33.33333333333%;float:left;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:0 8px}
 .post-meta span+span{border-left:1px solid #d9d9d9}
 #comment_form,.post-near{padding-bottom:15px}
-#comment_form{margin-top:20px;max-width:100%;margin-bottom:20px}
+#comment_form{margin-top:10px;max-width:100%;margin-bottom:10px}
 .input-g{position: relative}
 .input-g input{display: block;width: 100%;margin: 5px 0;padding-left: 53px}
 .input-g label{position: absolute;left: 1px;top: 1px;padding: 8px 0;text-align: center;width: 40px;height: 34px;border-right: 1px solid #bfbfbf;background-color: #ececec}
