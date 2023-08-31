@@ -519,3 +519,42 @@ function comdel(url){
 	// 		}
 	// 	})
 	// }
+
+	function checkMediaType(url) {
+		// 创建URL对象
+		var link = new URL(url);
+	   
+		// 获取路径部分（去除参数）
+		var path = link.href;
+	    var media = {}
+		// 获取路径的最后一个点之后的内容作为文件扩展名
+		var linkArr = path.split('.');
+		var extension = linkArr.pop().toLowerCase();
+		var image_info = path.substring(0, path.lastIndexOf("."));
+		media.image_info = image_info
+		media.image_type = extension
+		var extensions = ['jpg', 'jpeg', 'gif', 'png', 'mp4'];
+		// 判断文件扩展名是否在图片扩展名数组中
+		if (extensions.includes(extension)) {
+		  return media;
+		}
+
+		return false;
+	  }
+	  
+
+	  // 获取url中需要的数据  type  1: 获取文件名  2：获取后缀  3：获取文件名+后缀  4:获取文件前缀
+// function urlDemo(url, type) {
+//     let filename = url.substring(url.lastIndexOf('/') + 1)
+//     switch (type){
+//         case 1: return filename; break;
+//         case 2: return filename.substring(filename.lastIndexOf(".") + 1); break;
+//         case 3: return filename.substring(0, filename.lastIndexOf(".")); break;
+//         case 4: return url.substring(0, url.lastIndexOf('/') + 1)
+//     }   
+// }
+
+// console.log(urlDemo(url, 1))
+// console.log(urlDemo(url, 2))
+// console.log(urlDemo(url, 3))
+// console.log(urlDemo(url, 4))

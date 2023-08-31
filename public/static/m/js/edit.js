@@ -75,6 +75,7 @@ editor.config.menus = [
     'emoticon',
     'image',
     'video',
+    'link',
 ]
 editor.config.showFullScreen = false
 editor.config.emotions = [
@@ -191,4 +192,53 @@ editor.config.showLinkImg = false
 editor.config.showLinkVideo = false
 editor.config.showMenuTooltips = false
 editor.config.uploadImgMaxLength = 1
+
+
+// 配置粘贴文本的内容处理
+// editor.config.pasteTextHandle = function (pasteStr) {
+//     // 对粘贴的文本进行处理，然后返回处理后的结果
+//     return pasteStr + '巴拉巴拉'
+// }
+
+// editor.config.linkImgCheck = function(imgSrc,alt,href) {
+//     // 以下情况，请三选一
+//     console.log(3)
+//     // 1. 返回 true ，说明检查通过
+//     return true
+
+//     // // 2. 返回一个字符串，说明检查未通过，编辑器会阻止图片插入。会 alert 出错误信息（即返回的字符串）
+//     // return '图片 src 有 xxx 错误'
+
+//     // 3. 返回 undefined（即没有任何返回），说明检查未通过，编辑器会阻止图片插入。
+//     // 此处，你可以自定义提示错误信息，自由发挥
+// }
+
+// // 自定义检查插入视频的链接
+// editor.config.onlineVideoCheck = function(video) {
+//     // 编辑器会根据返回的内容做校验：比如以下几种情况
+//     console.log(2)
+//     // 1. 返回 true ，说明检查通过
+//     return true
+
+//     // 2. 返回一个字符串，说明检查未通过，编辑器会阻止视频插入。会 alert 出错误信息（即返回的字符串）
+//     // return '插入的视频 有 xxx 错误'
+
+//     // 3. 返回 undefined（即没有任何返回），说明检查未通过，编辑器会阻止视频插入。
+//     // 此处，你可以自定义提示错误信息，自由发挥
+// }
+
+// // 自定义检查插入的链接
+editor.config.linkCheck = function(text, link) {
+    // 以下情况，请三选一
+    var media = checkMediaType(link);
+
+    if (media != false) {
+        $("#imgVal").val(JSON.stringify(media));
+    }
+    console.log($("#imgVal").val())
+    return true;
+}
+
+
+
 editor.create()
