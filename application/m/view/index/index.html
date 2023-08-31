@@ -73,7 +73,7 @@
 	}
 
 	.back-to-top {
-		width: 14px;
+		width: 2px;
 		padding: 6px;
 		border: 1px solid #ccc;
 		box-shadow: 0 0 2px #333;
@@ -159,7 +159,10 @@
 		<div class="box-body"><stonrg>加载中...</stonrg></div>
 	</div>
 </div>
-
+<!-- 回到顶部 -->
+<!-- <section class="back-to-top">
+	回到顶部
+</section> -->
 <!-- <div class="post">
 	<img class="post-head" src="" />
 	<div class="post-article">
@@ -318,7 +321,7 @@
 						var c2 = '';
 						if (data[i].image) {
 							data[i].image_info = $.parseJSON(data[i].image_info)
-							if (data[i].image_info.image_type == 'mp4') {
+							if (data[i].image_info.image_type == 'mp4' || data[i].image_info.image_type == 'm3u8') {
 								mediaStr = '<p class="massageImg clear showVideo' + data[i].msg_id + '" vid="' + data[i].image + '"><video width="400px"  controls=""  name="media"><source src="" type="video/mp4"></video></p>';
 							} else {
 								mediaStr = '<p  class="massageImg clear"><img class="massageImgCommon massageImg_'+data[i].image_info.image_type+'"  onclick="showMessageImg(this)" src="' + data[i].image + '"></p>';

@@ -497,7 +497,7 @@ function comdel(url){
 		var image_info = path.substring(0, path.lastIndexOf("."));
 		media.image_info = image_info
 		media.image_type = extension
-		var extensions = ['jpg', 'jpeg', 'gif', 'png', 'mp4'];
+		var extensions = ['jpg', 'jpeg', 'gif', 'png', 'mp4', 'm3u8'];
 		// 判断文件扩展名是否在图片扩展名数组中
 		if (extensions.includes(extension)) {
 		  return media;

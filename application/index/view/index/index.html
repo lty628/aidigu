@@ -335,7 +335,7 @@
 							var c2 = '';
 							if (data[i].image) {
 								data[i].image_info = $.parseJSON(data[i].image_info)
-								if (data[i].image_info.image_type == 'mp4') {
+								if (data[i].image_info.image_type == 'mp4' || data[i].image_info.image_type == 'm3u8') {
 									mediaStr = '<p class="massageImg clear showVideo' + data[i].msg_id + '" vid="' + data[i].image + '"><video width="400px"  controls=""  name="media"><source src="" type="video/mp4"></video></p>';
 								} else {
 									mediaStr = '<p  class="massageImg clear"><img class="massageImgCommon massageImg_'+data[i].image_info.image_type+'"  onclick="showMessageImg(this)" src="' + data[i].image + '"></p>';
