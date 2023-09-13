@@ -23,7 +23,7 @@ function iniVideo(i)
 				container: document.getElementsByClassName('massageImg')[index],
 				autoplay: false,
 				loop: true,
-				screenshot: true,
+				// screenshot: true,
 				chromecast: true,
 				theme: '#d5f3f4',
 				lang: 'zh-cn',
