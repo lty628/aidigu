@@ -210,6 +210,20 @@ function comdel(url){
 								// + '<div class="clear"></div>'
 								+ '</div>'
 								+ '</div>';
+							} else if (image_info.image_type == 'mp3') {
+								var str = '<div class="post"><img class="post-head" src="' +userInfo.head_image + '" />'
+								+ '<div class="post-article">'
+								+ '<div class="post-info-i">'
+								+ '<h2><a href="/' +userInfo.blog + '/own/">' +userInfo.nickname + '</a></h2><small><i class="fa fa-clock-o"></i>刚刚<i class="fa fa-eye"></i>'
+								+ '</div>'
+								+ '<div class="post-content"><p>' +message.contents +message.repost + '</p></div>'
+								+ '<p class="massageImg clear"><audio id="music_'+message.msg_id+'" class="music" controls="controls" loop="loop" onplay="stopOther(this)" preload="none" controlsList="nodownload" οncοntextmenu="return false" name="media"><source src="'+message.image+'" type="audio/mpeg"></audio></p>'
+								+ '</div>'
+								+ '<div class="clear"></div>'
+								// + '<div class="post-meta">'+'<span><i class="fa fa-user"></i><a href="/' + message.blog + '/del/message/' + message.msg_id + '">删除</a></span></div>'
+								// + '<div class="clear"></div>'
+								+ '</div>'
+								+ '</div>';
 							} else {
 								var str = '<div class="post"><img class="post-head" src="' +userInfo.head_image + '" />'
 								+ '<div class="post-article">'

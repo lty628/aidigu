@@ -198,7 +198,9 @@ function comdel(url){
 						if (message.image) {
 							if (image_info.image_type == 'mp4') {
 								var str = '<div class="entry"><div class="avatar"><div class="imgborder"><a href="/'+userInfo.blog+'/"><img src="'+userInfo.head_image+'" /></a></div></div><div class="box box-main"><p class="massageText"><a href="/'+userInfo.blog+'/">'+userInfo.nickname+'：</a>'+message.contents+message.repost+'</p><p  class="massageImg clear"><video width="400px"  controls=""  name="media"><source src="'+message.image+'" type="video/mp4"></video></p><div class="static"><span> <a href="/'+userInfo.blog+'/del/message/'+message.msg_id+'">删除</a></span>刚刚 来自 '+message.refrom+'</div></div><div class="clear"></div></div>';
-							} else {
+							} else if (image_info.image_type == 'mp3') {
+								var str = '<div class="entry"><div class="avatar"><div class="imgborder"><a href="/'+userInfo.blog+'/"><img src="'+userInfo.head_image+'" /></a></div></div><div class="box box-main"><p class="massageText"><a href="/'+userInfo.blog+'/">'+userInfo.nickname+'：</a>'+message.contents+message.repost+'</p><p class="massageImg clear"><audio id="music_'+message.msg_id+'" class="music" controls="controls" loop="loop" onplay="stopOther(this)" preload="none" controlsList="nodownload" οncοntextmenu="return false" name="media"><source src="'+message.image+'" type="audio/mpeg"></audio></p><div class="static"><span> <a href="/'+userInfo.blog+'/del/message/'+message.msg_id+'">删除</a></span>刚刚 来自 '+message.refrom+'</div></div><div class="clear"></div></div>';
+							}  else {
 								var str = '<div class="entry"><div class="avatar"><div class="imgborder"><a href="/'+userInfo.blog+'/"><img src="'+userInfo.head_image+'" /></a></div></div><div class="box box-main"><p class="massageText"><a href="/'+userInfo.blog+'/">'+userInfo.nickname+'：</a>'+message.contents+message.repost+'</p><p  class="massageImg clear"><img width="75%"  onclick="showMessageImg(this)" src="'+message.image+'"></p><div class="static"><span> <a href="/'+userInfo.blog+'/del/message/'+message.msg_id+'">删除</a></span>刚刚 来自 '+message.refrom+'</div></div><div class="clear"></div></div>';
 							}
 							

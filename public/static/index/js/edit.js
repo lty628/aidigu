@@ -192,6 +192,7 @@ editor.config.showLinkImg = false
 editor.config.showLinkVideo = false
 editor.config.showMenuTooltips = false
 editor.config.uploadImgMaxLength = 1
+editor.config.uploadVideoAccept = ['mp4','mp3']
 
 // 配置粘贴文本的内容处理
 // editor.config.pasteTextHandle = function (pasteStr) {

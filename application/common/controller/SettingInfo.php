@@ -47,7 +47,7 @@ class SettingInfo extends Base
 		$size = 4194304;
 		$file = request()->file('file');
 		// 移动到框架应用根目录/uploads/ 目录下
-		$info = $file->validate(['size'=>$size,'ext'=>'jpg,bmp,jpeg,png,gif'])->move($path);
+		$info = $file->validate(['size'=>$size,'ext'=>'jpg,jiff,bmp,jpeg,png,gif'])->move($path);
 		// $info = $this->uploadImage($size, $path);
 		if($info){
 			// 成功上传后 获取上传信息
@@ -108,7 +108,7 @@ class SettingInfo extends Base
 		$size = 41943040;
 		$file = request()->file('file');
 		// 移动到框架应用根目录/uploads/ 目录下
-		$info = $file->validate(['size'=>$size,'ext'=>'mp4,jiff,jpg,bmp,jpeg,png,gif'])->move($path);
+		$info = $file->validate(['size'=>$size,'ext'=>'mp4,mp3,jiff,jpg,bmp,jpeg,png,gif'])->move($path);
 		// $info = $this->uploadImage($size, $path);
 		if($info){
 			// 成功上传后 获取上传信息
@@ -129,7 +129,7 @@ class SettingInfo extends Base
 		$size = 4194304;
 		$file = request()->file('file');
 		// 移动到框架应用根目录/uploads/ 目录下
-		$info = $file->validate(['size'=>$size,'ext'=>'jpg,bmp,jpeg,png,gif'])->move($path);
+		$info = $file->validate(['size'=>$size,'ext'=>'jpg,jiff,bmp,jpeg,png,gif'])->move($path);
 		// $info = $this->uploadImage($size, $path);
 		if($info){
 			// 成功上传后 获取上传信息

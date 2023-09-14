@@ -337,6 +337,8 @@
 								data[i].image_info = $.parseJSON(data[i].image_info)
 								if (data[i].image_info.image_type == 'mp4' || data[i].image_info.image_type == 'm3u8') {
 									mediaStr = '<p class="massageImg clear showVideo' + data[i].msg_id + '" vid="' + data[i].image + '"><video width="400px"  controls=""  name="media"><source src="" type="video/mp4"></video></p>';
+								} else if (data[i].image_info.image_type == 'mp3') {
+									mediaStr = '<p class="massageImg clear"><audio id="music_'+data[i].msg_id+'" class="music" controls="controls" loop="loop" onplay="stopOther(this)" preload="none" controlsList="nodownload" οncοntextmenu="return false" name="media"><source src="'+data[i].image+'" type="audio/mpeg"></audio></p>';
 								} else {
 									mediaStr = '<p  class="massageImg clear"><img class="massageImgCommon massageImg_'+data[i].image_info.image_type+'"  onclick="showMessageImg(this)" src="' + data[i].image + '"></p>';
 								}
