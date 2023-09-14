@@ -6,6 +6,7 @@ use app\common\model\Fans;
 use app\common\model\Message;
 class Api extends Base
 {	
+    public static $refrom = '网站';
 	//首页
     public function index()
     {
@@ -108,7 +109,7 @@ class Api extends Base
     	if ($repost)  $data['repost'] = self::getMessage(strip_tags($repost, '<source><video><img><p><a>'));
         $data['contents'] = self::getMessage($contents);
         $data['uid'] = getLoginUid();
-        $data['refrom'] = '网站';
+        $data['refrom'] = self::$refrom;
         $data['ctime'] = time();
         Db::startTrans();
         try {

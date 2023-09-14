@@ -94,7 +94,7 @@ function comdel(url){
 		  	var upload = layui.upload;
 		  	var uploadInst = upload.render({
 		    elem: '#msgInputImg' //绑定元素
-		    ,url: '/index/setting/msgInputImg' //上传接口
+		    ,url: '/m/setting/msgInputImg' //上传接口
 			,accept: "file"
 		    // ,method: 'GET'
 		    ,done: function(res){
@@ -173,7 +173,7 @@ function comdel(url){
 		var additional = config.additional;
 		var flush = config.flush;
 		$.ajax({
-				url: '/?s=index/ajax/'+action,
+				url: '/?s=m/ajax/'+action,
 				type: 'GET',
 				dataType: 'json',
 				data: jsonData,
