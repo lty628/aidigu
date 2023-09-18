@@ -149,7 +149,7 @@ function comdel(url){
 				type: 2,
 				title: "我的云盘",
 				shade: false,
-				area: ['1024px', '500px'],
+				area: ['100%', '500px'],
 				resize: false,
 				maxmin: true,
 				content: '/cloud/show/',

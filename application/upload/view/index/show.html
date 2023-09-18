@@ -1,6 +1,6 @@
 {include file='index/header' /}
 
-<div class="layui-body">
+<div class="layui-body" style="left: 0px; position: unset;">
 
   <table class="layui-table">
     <thead>
@@ -18,7 +18,7 @@
         <td>{:getFilesize($fileValue['file_size'])}</td>
         <td>{$fileValue['create_time']}</td>
         <td>
-          <div class="layui-table-cell laytable-cell-1-0-11">
+          <!-- <div class="layui-table-cell laytable-cell-1-0-11"> -->
             {if $fileValue['share_msg_id'] == 0}
             <a href="{:url('upload/index/siteShare',['id'=>$fileValue['id']])}" class="layui-btn layui-btn-normal layui-btn-xs">微博分享</a>
             {else}
@@ -28,7 +28,7 @@
             <a href="{:url('upload/index/download',['id'=>$fileValue['id']])}" class="layui-btn layui-btn-xs">下载</a>
             <a href="{:url('upload/index/del',['id'=>$fileValue['id']])}"
               class="layui-btn layui-btn-danger layui-btn-xs">删除</a>
-          </div>
+          <!-- </div> -->
         </td>
       </tr>
       {/volist}

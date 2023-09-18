@@ -51,7 +51,8 @@
                 <li {if $action == 'own'}class="current"{/if}><a href="{:url('/'.$loginUserInfo.blog.'/own/')}" title="我的微博">我的微博</a></li>
                 <li {if $action == 'blog'}class="current"{/if}><a href="/square/" title="广场">广场</a></li>
                 <!-- <li><a href="javascript:;" id="showCloud">网盘</a></li> -->
-                <li {if $action == 'setting'}class="current"{/if}><a href="{:url('./'.$loginUserInfo.blog.'/setting/')}">个人设置</a></li>
+                <!-- <li {if $action == 'setting'}class="current"{/if}><a href="{:url('./'.$loginUserInfo.blog.'/setting/')}">个人设置</a></li> -->
+                <li><a href="javascript:;" id="showCloud">网盘</a></li>
                 {else} 
                 <li {if $action == 'index' || !$action}class="current"{/if}><a href="{:url('/'.$userInfo.blog.'/')}">TA的首页</a></li>
                 <li {if $action == 'own'}class="current"{/if}><a href="{:url('/'.$userInfo.blog.'/own/')}" title="我的微博">TA的微博</a></li>
