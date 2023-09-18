@@ -1,0 +1,66 @@
+{include file='index/header' /}
+<div id="msgContent">
+	{foreach $userMessage as $message}
+	<div class="post">
+		<img class="post-head" src="{$userInfo.head_image|default=$defaultImage}" />
+		<div class="post-article">
+			<div class="post-info-i">
+				<h2><a title="{:url('/'.$userInfo.blog.'/')}" href="">{$message.nickname}：</a></h2>
+				<small>
+					<i class="fa fa-clock-o"></i>{$message.ctime|date='Y-m-d H:i:s'} 来自 {$message.refrom}
+				</small>
+			</div>
+			<div class="post-content">
+				{$message.contents|raw}{$message.repost|raw}
+				{if $message.image}
+						{if json_decode($message.image_info, true)['image_type'] == 'mp4'}
+						<p  class="massageImg"><video width="400px"  controls=""  name="media"><source src="{$message.image}" type="video/mp4"></video></p>
+						{else}
+						<p class="massageImg"><img width="75%" src="{:getTypeImg($message.image_info)}" onclick="showMessageImg(this)" style="cursor:pointer;"></p>
+						{/if}
+				{/if}
+			</div>
+		</div>
+		<div class="clear"></div>
+		<div class="post-meta">
+			<span><i class="fa fa-user"></i><a href="javascript:void(0);" onclick="repost(this)">转发{if 0 != $message.repostsum}（{$message.repostsum}）{/if}</a> </span>
+			<span><i class="fa fa-inbox"></i><a href="javascript:void(0);" onclick="comment({$message.msg_id}, {$message.uid});">评论</a></span>
+			<span><i class="fa fa-comment"></i>
+				{if $userInfo.isSiteUser}
+				<a href="{:url('/'.$userInfo.blog.'/'.'del/message/'.$message.msg_id)}">删除</a>
+				{/if}
+			</span>
+			<div class="clear"></div>
+		</div>
+	</div>
+	{/foreach}
+	{if isset($messageBlock[0])}
+	{foreach $messageBlock as $block}
+	<div  class="comment-body">
+		<li id="li-{$block.msg_id}">
+			<div id="{$block.msg_id}">
+				<div class="comment-author block_body">
+					<div class="comment-meta repost">
+						<span class="comment-reply"><a href="{:url('/'.$block.blog.'/')}">{$block.nickname}</a></span><br />
+						<small>{$block.ctime|date='Y-m-d H:i:s'}</small>
+					</div>
+				</div>
+			</div>
+			<div class="comment-children">
+				{$block.msg|raw}
+			</div>
+			<div>
+				{if $block.fromuid==getLoginUid()}
+				<small>
+					<a href="javascript:void(0);" onclick="reply(this,{$block.msg_id}, {$block.fromuid});">回复</a>
+				</small>
+				{/if}
+			</div>
+		</li>
+	</div>
+	{/foreach}
+	{$messageBlock|raw}
+	{/if}
+</div>
+
+{include file='index/foot' /}

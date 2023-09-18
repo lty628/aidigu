@@ -304,7 +304,8 @@ function comdel(url){
 		  btn: ['回复',"取消"],
 		  yes: function(index, layero){
 		  	var jsonData = {};
-		  	jsonData.comment = '||回复：'+$("#commentInput").val()+' ||'+replyUser;
+		  	// jsonData.comment = '||回复：'+$("#commentInput").val()+' ||'+replyUser;
+		  	jsonData.comment = $("#commentInput").val()+' @'+replyUser;
 		  	jsonData.comment = ReplaceEmoji(jsonData.comment);
 		  	jsonData.uid = uid;
 		  	jsonData.commentId = commentId;
