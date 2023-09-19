@@ -1,0 +1,43 @@
+{include file='index/header' /}
+<div class="sidebar">
+	<div class="box">
+		<div class="box-body">
+			<div class="clear"></div>
+			<ul class="li-haf-border">
+				<li><i class="fa fa-thumbs-up"></i>昵称：{$userInfo.nickname}</li>
+				<li><i class="fa fa-home"></i> 地区：{$userInfo.city|default="无"}</li>
+				<li><i class="fa fa-info"></i> 微博数量：{$userInfo.message_sum}</li>
+				<li><i class="fa fa-info"></i> 关注人数：{$userInfo.follownum}</li>
+				<li><i class="fa fa-birthday-cake"></i> 粉丝人数：{$userInfo.fansnum}</li>
+				<li><i class="fa fa-edit"></i> 简介：{$userInfo.intro|raw|default="暂无个人资料"}</li>
+			</ul>
+		</div>
+	</div>
+	<div class="sidebar-pc-show">
+		<div class="box"></div>
+	
+		<div class="box">
+			<b><i class="fa fa-user-o"></i> {$userInfo.sex|getPerson}关注的人</b>
+			<div class="box-body">
+				{foreach $getMyConcern as $fans}
+				<span title="{$fans.nickname}">
+					<a href="{:url('/'.$fans.blog.'/')}" /><img src="{$fans.head_image}" /></a><br />
+				</span>
+				{/foreach}
+				<div class="clear"></div>
+			</div>
+		</div>
+		<div class="box">
+			<b><i class="fa fa-user-o"></i> 关注{$userInfo.sex|getPerson}的人</b>
+			<div class="box-body">
+				{foreach $fansInfo as $fans}
+				<span title="{$fans.nickname}">
+					<a href="{:url('/'.$fans.blog.'/')}" /><img src="{$fans.head_image}" /></a><br />
+				</span>
+				{/foreach}
+				<div class="clear"></div>
+			</div>
+		</div>
+	</div>
+</div> 
+{include file='index/foot' /}
