@@ -21,7 +21,7 @@
 			<div class="box-body">
 				{foreach $getMyConcern as $fans}
 				<span title="{$fans.nickname}">
-					<a href="{:url('/'.$fans.blog.'/')}" /><img src="{$fans.head_image}" /></a>
+					<a href="{:url('/'.$fans.blog.'/')}" /><img width="50px" height="50px" src="{$fans.head_image}" /></a>
 				</span>
 				{/foreach}
 				<div class="clear"></div>
@@ -32,7 +32,7 @@
 			<div class="box-body">
 				{foreach $fansInfo as $fans}
 				<span title="{$fans.nickname}">
-					<a href="{:url('/'.$fans.blog.'/')}" /><img src="{$fans.head_image}" /></a>
+					<a href="{:url('/'.$fans.blog.'/')}" /><img  width="50px" height="50px" src="{$fans.head_image}" /></a>
 				</span>
 				{/foreach}
 				<div class="clear"></div>
