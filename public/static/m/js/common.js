@@ -148,9 +148,9 @@ function comdel(url){
 			layer.open({
 				type: 2,
 				title: "我的云盘",
-				shade: false,
-				area: ['100%', '500px'],
-				resize: false,
+				shade: true,
+				area: ['90%', '500px'],
+				resize: true,
 				maxmin: true,
 				content: '/cloud/show/',
 				zIndex: layer.zIndex, //重点1
