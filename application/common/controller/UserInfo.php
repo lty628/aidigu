@@ -106,8 +106,7 @@ class UserInfo extends Controller
 	{
 		if ($isRemember) {
 			unset($data['uid']);
-			// cookie('rememberMe', serialize(serialize($data)), 86400*15);
-			cookie('rememberMe', serialize(serialize($data)));
+			cookie('rememberMe', serialize(serialize($data)), 86400*60);
 		}
 	}
 
