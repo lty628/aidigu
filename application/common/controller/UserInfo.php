@@ -45,8 +45,6 @@ class UserInfo extends Controller
 		$userid = $user->id;
 		setLoginUid($userid);
 		Fans::create(['fromuid' => $userid, 'touid' => $userid, 'mutual_concern' => 1]);
-		// $this->rememberMe(input('get.remember'), $result->toArray());
-		$this->rememberMe(1, $hasUser->toArray());
 		return json(['status' => 1, 'msg' => '注册成功']);
 	}
 	public function loginAjax()
@@ -58,6 +56,8 @@ class UserInfo extends Controller
 		if (!$result) return json(['status' => 0, 'msg' => '输入的账号不存在']);
 		if (encryptionPass($password) != $result['password']) return json(['status' => 0, 'msg' => '密码不正确']);
 		setLoginUid($result['uid']);
+		// $this->rememberMe(input('get.remember'), $result->toArray());
+		$this->rememberMe(1, $result->toArray());
 		return json(['status' => 1, 'msg' => '登录成功', 'data' => $result['blog']]);
 	}
 	public function checkInfo()
