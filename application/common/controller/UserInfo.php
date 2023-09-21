@@ -45,6 +45,8 @@ class UserInfo extends Controller
 		$userid = $user->id;
 		setLoginUid($userid);
 		Fans::create(['fromuid' => $userid, 'touid' => $userid, 'mutual_concern' => 1]);
+		// $this->rememberMe(input('get.remember'), $result->toArray());
+		$this->rememberMe(1, $hasUser->toArray());
 		return json(['status' => 1, 'msg' => '注册成功']);
 	}
 	public function loginAjax()
@@ -98,6 +100,15 @@ class UserInfo extends Controller
 		session(null);
 		cookie(null);
 		$this->redirect('/login/');
+	}
+
+	public function rememberMe($isRemember = false, $data)
+	{
+		if ($isRemember) {
+			unset($data['uid']);
+			// cookie('rememberMe', serialize(serialize($data)), 86400*15);
+			cookie('rememberMe', serialize(serialize($data)));
+		}
 	}
 
 	// public function changeInfo()
