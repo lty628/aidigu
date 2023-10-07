@@ -104,12 +104,12 @@ class Info extends Base
 			->paginate($count, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
 		return $getConcern;	
 	}
-	protected function getMessage($userid, $count = 50) 
+	protected function getMessage($userid, $count = 50, $topicId = 0) 
 	{
 		// $userMessage = Message::where('uid', $userid)->order('msg_id','desc')->paginate($count, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
 		// $page = $userMessage->render();
 		// $this->assign('page', $page);
-		return Message::getMessage($userid, $count);
+		return Message::getMessage($userid, $count, $topicId);
 		
 	}
 	protected function getMessageById($msgId = '')

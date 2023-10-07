@@ -107,7 +107,9 @@ class Api extends Base
     	$repost = input('get.repost');
         $data['repost'] = '';
     	if ($repost)  $data['repost'] = self::getMessage(strip_tags($repost, '<source><video><img><p><a>'));
-        $data['contents'] = self::getMessage($contents);
+        $topic = self::getTopic($contents);
+        $data['topic_id'] = $topic['topic_id'];
+        $data['contents'] = self::getMessage($topic['contents']);
         $data['uid'] = getLoginUid();
         $data['refrom'] = self::$refrom;
         $data['ctime'] = time();
@@ -131,6 +133,41 @@ class Api extends Base
             return false;
         }
     }
+
+    protected static function getTopic($contents)
+    {
+        $topic = [
+            'contents' => $contents,
+            'topic_id' => 0
+        ];
+
+        if (!preg_match('/^\#.*\#/ui', strip_tags($contents), $matches)) {
+            return $topic;
+        }
+
+        $title = $matches[0];
+
+        $findTopic = Db::name('topic')->where('title', $title)->find();
+
+        $topicData = [
+            'title' => $title,
+            'create_time' => date('Y-m-d H:i:s'),
+            'count' => 1
+        ];
+
+        if (!$findTopic) {
+            $topicId = Db::name('topic')->insertGetId($topicData);
+            $topic['topic_id'] = $topicId;
+        } else {
+            Db::name('topic')->where('topic_id', $findTopic['topic_id'])->setInc('count',1);
+            $topic['topic_id'] = $findTopic['topic_id'];
+        }
+
+        $topic['contents'] = str_replace($title, '<a href="/topic/'.$topic['topic_id'].'/">'.$title.'</a>', $contents);
+        
+        return $topic;
+    }
+
     protected static function getMessage($contents = null) 
     {
     	return preg_replace_callback(

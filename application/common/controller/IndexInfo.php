@@ -51,6 +51,21 @@ class IndexInfo extends Info
         $this->assign('userMessage', []);
         return $this->fetch('index');
     }
+
+     // 话题
+     public function topic()
+     {
+        $topicId = input('topic_id');
+         $userMessage = $this->getMessage('', 30, $topicId);
+         $this->assign('siteUser', $this->siteUserId);
+         if (request()->isAjax()) {
+             $userMessage = $userMessage->toArray()['data'];
+             return json(array('status' =>  1,'msg' => 'ok', 'data' => ['data'=>$userMessage, 'allow_delete' => 0]));
+         }
+         $this->assign('userMessage', []);
+         return $this->fetch('index');
+     }
+
     public function fans()
     {
         $userFans = $this->getMyFans($this->siteUserId, 20);
