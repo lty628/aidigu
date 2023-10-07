@@ -245,5 +245,5 @@ editor.create()
 
 var topicTitle = $("#topicTitle").val()
 if (topicTitle) {
-    editor.txt.html(topicTitle)
+    editor.txt.html(topicTitle+"&nbsp;")
 }
