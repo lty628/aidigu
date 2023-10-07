@@ -65,6 +65,7 @@ class IndexInfo extends Info
             $userMessage = $userMessage->toArray()['data'];
             return json(array('status' =>  1, 'msg' => 'ok', 'data' => ['data' => $userMessage, 'allow_delete' => 0]));
         }
+        Db::name('topic')->where('topic_id', $topicId)->setInc('count',1);
         $topic = Db::name('topic')->where('topic_id', $topicId)->find();
         $this->assign('topicTitle', $topic['title']);
         $this->assign('userMessage', []);
