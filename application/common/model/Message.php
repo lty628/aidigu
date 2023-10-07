@@ -38,12 +38,18 @@ class Message extends Model
 	{
 		return $this->hasMany('Fans','uid','touid');
 	}
-	public static function getMessage($userid = '', $count = 50, $topicId)
+	public static function getMessage($userid = '', $count = 50, $topicId = 0)
 	{
 		// return self::with(['user' => function($query){$query->field('username,blog,head_image,uid,nickname');}])->where('uid',$userid)->order('msg_id','desc')->paginate($count, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
 		// if ($userid) return self::withJoin(['user' => function ($query) {$query->where('invisible', 0);}])->where('uid',$userid)->order('msg_id','desc')->paginate($count, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
-		if ($userid) return self::with('user')->where('uid',$userid)->where('topic_id', $topicId)->where('is_delete', 0)->order('msg_id','desc')->paginate($count, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
-		return self::withJoin(['user' => function ($query) {$query->where('invisible', 0);}])->where('topic_id', $topicId)->where('is_delete', 0)->order('msg_id','desc')->paginate($count, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
+		if ($topicId) {
+			if ($userid) return self::with('user')->where('uid',$userid)->where('topic_id', $topicId)->where('is_delete', 0)->order('msg_id','desc')->paginate($count, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
+			return self::withJoin(['user' => function ($query) {$query->where('invisible', 0);}])->where('topic_id', $topicId)->where('is_delete', 0)->order('msg_id','desc')->paginate($count, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
+		} else {
+			if ($userid) return self::with('user')->where('uid',$userid)->where('is_delete', 0)->order('msg_id','desc')->paginate($count, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
+			return self::withJoin(['user' => function ($query) {$query->where('invisible', 0);}])->where('is_delete', 0)->order('msg_id','desc')->paginate($count, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
+		}
+		
 	}
 	public static function getUserMessage($userid = '', $count = 50)
 	{
