@@ -1,0 +1,20 @@
+{include file='index/header' /}
+
+{foreach $topicArr as $topic}
+<div class="post">
+	<div class="post-article">
+		<div class="post-info-i">
+			<h2><a style="color: #f87a7a;" href="/topic/{$topic['topic_id']}/">{$topic['title']}</a></h2>
+		</div>
+		
+		<div class="post-content">
+	    	
+		</div>
+		<div class="post-content">
+			<li>话题热度： {$topic['count']}</li>
+		</div>
+	</div>
+</div>
+{/foreach}
+
+{include file='index/foot' /}

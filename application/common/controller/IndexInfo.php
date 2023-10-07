@@ -1,20 +1,23 @@
 <?php
+
 namespace app\common\controller;
+
 use app\common\controller\Info;
 use think\Db;
 // use think\facade\Session;
 use app\common\model\Message;
 // use app\common\model\User;
 use app\common\model\Fans;
+
 class IndexInfo extends Info
-{	
-	// 个人首页
+{
+    // 个人首页
     public function index()
     {
         $userMessage = Db::name('message')
             ->alias('message')
-            ->join([$this->prefix.'fans'=>'fans'],'message.uid=fans.touid and fans.fromuid='.$this->siteUserId)
-            ->join([$this->prefix.'user'=>'user'],'user.uid=fans.touid')
+            ->join([$this->prefix . 'fans' => 'fans'], 'message.uid=fans.touid and fans.fromuid=' . $this->siteUserId)
+            ->join([$this->prefix . 'user' => 'user'], 'user.uid=fans.touid')
             ->order('message.msg_id desc')
             ->field('user.uid,user.nickname,user.head_image,user.blog,message.ctime,message.contents,message.repost,message.refrom,message.repostsum,message.image,message.image_info,message.commentsum,message.msg_id')
             ->where('message.is_delete', 0)
@@ -22,7 +25,7 @@ class IndexInfo extends Info
         $this->assign('userMessage', []);
         if (request()->isAjax()) {
             $userMessage = $userMessage->toArray()['data'];
-            return json(array('status' =>  1,'msg' => 'ok', 'data' => ['data'=>$userMessage, 'allow_delete' => 0]));
+            return json(array('status' =>  1, 'msg' => 'ok', 'data' => ['data' => $userMessage, 'allow_delete' => 0]));
         }
         return $this->fetch();
     }
@@ -33,7 +36,7 @@ class IndexInfo extends Info
             $allwoDelete = 1;
             if ($this->siteUserId != $this->userid) $allwoDelete = 0;
             $userMessage = $userMessage->toArray()['data'];
-            return json(array('status' =>  1,'msg' => 'ok', 'data' => ['data'=>$userMessage, 'allow_delete' => $allwoDelete]));
+            return json(array('status' =>  1, 'msg' => 'ok', 'data' => ['data' => $userMessage, 'allow_delete' => $allwoDelete]));
         }
         $this->assign('siteUser', $this->siteUserId);
         $this->assign('userMessage', []);
@@ -46,25 +49,35 @@ class IndexInfo extends Info
         $this->assign('siteUser', $this->siteUserId);
         if (request()->isAjax()) {
             $userMessage = $userMessage->toArray()['data'];
-            return json(array('status' =>  1,'msg' => 'ok', 'data' => ['data'=>$userMessage, 'allow_delete' => 0]));
+            return json(array('status' =>  1, 'msg' => 'ok', 'data' => ['data' => $userMessage, 'allow_delete' => 0]));
         }
         $this->assign('userMessage', []);
         return $this->fetch('index');
     }
 
-     // 话题
-     public function topic()
-     {
+    // 话题
+    public function topic()
+    {
         $topicId = input('topic_id');
-         $userMessage = $this->getMessage('', 30, $topicId);
-         $this->assign('siteUser', $this->siteUserId);
-         if (request()->isAjax()) {
-             $userMessage = $userMessage->toArray()['data'];
-             return json(array('status' =>  1,'msg' => 'ok', 'data' => ['data'=>$userMessage, 'allow_delete' => 0]));
-         }
-         $this->assign('userMessage', []);
-         return $this->fetch('index');
-     }
+        $userMessage = $this->getMessage('', 30, $topicId);
+        $this->assign('siteUser', $this->siteUserId);
+        if (request()->isAjax()) {
+            $userMessage = $userMessage->toArray()['data'];
+            return json(array('status' =>  1, 'msg' => 'ok', 'data' => ['data' => $userMessage, 'allow_delete' => 0]));
+        }
+        $topic = Db::name('topic')->where('topic_id', $topicId)->find();
+        $this->assign('topicTitle', $topic['title']);
+        $this->assign('userMessage', []);
+        return $this->fetch('index');
+    }
+
+    // 话题
+    public function topicSquare()
+    {
+        $topic = Db::name('topic')->order('count', 'desc')->paginate(30, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
+        $this->assign('topicArr', $topic);
+        return $this->fetch('topic_square');
+    }
 
     public function fans()
     {
@@ -74,7 +87,7 @@ class IndexInfo extends Info
     }
     public function concern()
     {
-        $userFans =$this->getMyConcern($this->siteUserId, 20);
+        $userFans = $this->getMyConcern($this->siteUserId, 20);
         $this->assign('userFans', $userFans);
         return $this->fetch('fansInfo');
     }

@@ -25,6 +25,8 @@ Route::domain($url, function () {
     } else {
         $module = 'index';
     }
+	Route::get('/topic_square/$',$module . '/Index/topicSquare');
+	Route::get('/topic_square/:page$', $module . '/Index/topicSquare')->pattern(['page'=>'[0-9]+']);
 	Route::get('/topic/:topic_id/$',$module . '/Index/topic')->pattern(['topic_id' => '[0-9]+']);
 	Route::get('/square/$',$module . '/Index/blog');
 	Route::get('/square/:page$',$module . '/Index/blog')->pattern(['page'=>'[0-9]+']);
@@ -60,7 +62,9 @@ Route::domain($url, function () {
 });
 
 // 通用路由（若绑定域名以下可删除）
-Route::get('/topic/:topic_id/$','index/Index/topic')->pattern(['topic_id' => '[0-9]+']);
+Route::get('/topic_square/$', 'index/Index/topicSquare');
+Route::get('/topic_square/:page$',  'index/Index/topicSquare')->pattern(['page'=>'[0-9]+']);
+Route::get('/topic/:topic_id/$', 'index/Index/topic')->pattern(['topic_id' => '[0-9]+']);
 Route::get('/square/$','index/Index/blog');
 Route::get('/square/:page$','index/Index/blog')->pattern(['page'=>'[0-9]+']);
 Route::get('/$','index/Index/blog');

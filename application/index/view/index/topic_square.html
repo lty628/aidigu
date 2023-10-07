@@ -1,0 +1,30 @@
+{include file='index/header' /}
+{if $userInfo.isSiteUser}
+	{assign name="whichUser" value="我" /}
+{else}
+	{assign name="whichUser" value="$userInfo.nickname" /}
+{/if}
+<div class="main">
+	<div class="contents">
+		<h2>话题列表</h2>
+		{foreach $topicArr as $topic}
+		<div class="entry">
+			<div class="box" style="width: 550px;">
+				<p><a href="/topic/{$topic['topic_id']}/">{$topic['title']}</a></p>
+				<div class="detail">
+					<ul>
+						<li>热度{$topic['count']}</li>
+					</ul>
+				</div>
+			</div>
+			<div class="clear"></div>
+		</div>
+		{/foreach}
+{$topicArr|raw}
+	</div>
+{if $userInfo.isSiteUser}
+	{include file='index/sidebar_index' /}
+{else}
+	{include file='index/sidebar_user' /}
+{/if}
+{include file='index/footer' /}

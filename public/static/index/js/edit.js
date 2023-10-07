@@ -242,3 +242,8 @@ editor.config.linkCheck = function(text, link) {
 
 
 editor.create()
+
+var topicTitle = $("#topicTitle").val()
+if (topicTitle) {
+    editor.txt.html(topicTitle)
+}
