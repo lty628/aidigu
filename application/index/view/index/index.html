@@ -71,7 +71,7 @@
 		color: #999999;
 	}
 
-	.back-to-top {
+	/* .back-to-top {
 		width: 14px;
 		padding: 6px;
 		border: 1px solid #ccc;
@@ -79,11 +79,11 @@
 		position: fixed;
 		right: 20px;
 		bottom: 40px;
-	}
-
+	} */
+/* 
 	.back-to-top:hover {
 		cursor: pointer;
-	}
+	} */
 	.massageImg .massageImgCommon{
 		width: 60%;
 	}
@@ -186,9 +186,9 @@
 		</div>
 	</div>
 	<!-- 回到顶部 -->
-	<section class="back-to-top">
+	<!-- <section class="back-to-top">
 		回到顶部
-	</section>
+	</section> -->
 	{if $userInfo.isSiteUser}
 	{include file='index/sidebar_index' /}
 	{else}
@@ -238,10 +238,10 @@
 			});
 		}
 
-		$backToTop = document.querySelector('.back-to-top')
-		$backToTop.addEventListener('click', function () {
-			scrollTopSmooth(0);
-		}, false);
+		// $backToTop = document.querySelector('.back-to-top')
+		// $backToTop.addEventListener('click', function () {
+		// 	scrollTopSmooth(0);
+		// }, false);
 	</script>
 	<script>
 		//字符串转换为时间戳
