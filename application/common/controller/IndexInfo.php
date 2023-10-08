@@ -77,7 +77,7 @@ class IndexInfo extends Info
     {
         $topic = Db::name('topic')->order('count', 'desc')->paginate(30, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
         $this->assign('topicArr', $topic);
-        return $this->fetch('topic_square');
+        return $this->fetch('topic');
     }
 
     public function fans()
