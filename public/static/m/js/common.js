@@ -189,7 +189,13 @@ function comdel(url){
 				if (index) layer.close(index);
 				if (data.status) {
 					// $("#msgInput").val('');
-					editor.txt.clear()
+					var topicTitle = $("#topicTitle").val()
+					if (topicTitle) {
+						editor.txt.html(topicTitle+"&nbsp;")
+					} else {
+						editor.txt.clear()
+					}
+					
 					check_len1();
 					if (additional) {
 						var userInfo = $.parseJSON($("#userInfo").val());
