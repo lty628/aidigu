@@ -73,4 +73,13 @@ class Fans extends Model
         User::where('uid', $userid)->setDec('fansnum',1);
        return self::where('touid', $userid)->where('fromuid', $loginUid)->delete();
 	}
+
+	public static function isUserFans($fromuid, $touid) 
+	{
+		return self::name('fans')->where([
+			'fromuid' => $fromuid,
+			'touid' => $touid,
+		])->find();
+	}
+
 }

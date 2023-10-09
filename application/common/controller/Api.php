@@ -4,6 +4,8 @@ use app\common\controller\Base;
 use think\Db;
 use app\common\model\Fans;
 use app\common\model\Message;
+use app\common\model\User;
+
 class Api extends Base
 {	
     public static $refrom = '网站';
@@ -64,8 +66,17 @@ class Api extends Base
     public function addFollow()
     {
         $userid = (int)input('get.userid');
-        //是否被跟随
+        $userInfo = User::getUserInfo($userid);
+
         $loginUid = getLoginUid();
+
+        if (!$userInfo) return json(array('status' =>  0,'msg' => '没有这个用户'));
+
+        if ($userInfo['invisible'] && !Fans::isUserFans($userid, $loginUid)) {
+            return json(array('status' =>  0,'msg' => '对方开启隐身模式，无法关注TA'));
+        }
+
+        //是否被跟随
         $result = Fans::addFollow($userid, $loginUid);
         if ($loginUid == $userid ) return json(array('status' =>  0,'msg' => '您不能关注自己')); 
         if ($result == '-1') return json(array('status' =>  0,'msg' => '您已关注，不能重复关注'));

@@ -26,7 +26,7 @@ class User extends Model
 	}
 	public static function getUserInfo($userid)
 	{
-		return User::where('uid', $userid)->field('uid,nickname,intro,sex,blog,head_image,head_image_info,province,city,follownum,fansnum,message_sum,theme')->find();
+		return User::where('uid', $userid)->field('uid,nickname,intro,sex,blog,head_image,head_image_info,province,city,follownum,fansnum,message_sum,theme,invisible')->find();
 	}
 	public static function getUserSetting($userid)
 	{
