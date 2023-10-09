@@ -22,7 +22,7 @@ class User extends Model
 
 	public static function getBlogInfo($blog)
 	{
-		return User::where('blog', $blog)->field('uid,blog')->find();
+		return User::where('blog', $blog)->field('uid,blog,invisible')->find();
 	}
 	public static function getUserInfo($userid)
 	{

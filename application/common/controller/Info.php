@@ -34,6 +34,11 @@ class Info extends Base
 			}
 		}
 		if ($this->siteUserId != $this->userid) $this->isSiteUser = false;
+
+		if ($this->isSiteUser == false && $siteUser['invisible'] && !$this->isUserFans($this->userid, $this->siteUserId)) {
+			$this->error('该用户已隐身！');
+		}
+
     	$this->getSiteUserInfo($this->siteUserId);
     	$this->setMyFans($this->siteUserId);
     	$this->setMyConcern($this->siteUserId);
@@ -139,5 +144,13 @@ class Info extends Base
 		// 	dump($value->message->user);
 		// }
 		// $this->assign('userMessage', $result);
+	}
+
+	protected function isUserFans($fromuid, $touid) 
+	{
+		return Db::name('fans')->where([
+			'fromuid' => $fromuid,
+			'touid' => $touid,
+		])->find();
 	}
 }
