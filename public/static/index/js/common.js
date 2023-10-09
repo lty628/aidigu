@@ -530,26 +530,3 @@ function comdel(url){
 // console.log(urlDemo(url, 2))
 // console.log(urlDemo(url, 3))
 // console.log(urlDemo(url, 4))
-
-layui.use(function(){
-	var util = layui.util;
-	// 自定义固定条
-	util.fixbar({
-	  on: {
-		mouseenter: function(type){
-		  layer.tips(type, this, {
-			tips: 4, 
-			fixed: true
-		  });
-		},
-		mouseleave: function(type){
-		  layer.closeAll('tips');
-		}
-	  },
-	  // 点击事件
-	  click: function(type){
-		console.log(this, type);
-		// layer.msg(type);
-	  }
-	});
-  });
