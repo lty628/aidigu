@@ -95,8 +95,8 @@ class Index
         // dump($content);
         $image = $image[1] ?? '';
         $data['ctime'] = strtotime($time[1]);
-        $data['contents'] = '<p>' . strip_tags($content[0]) . '</p>';
-
+        $data['contents'] = trim(strip_tags($content[0]));
+        if ($data['contents']) $data['contents'] = '<p>'.$data['contents'].'</p>';
         if ($image) {
             $ImageInfo['image_info'] = '/uploads/'.md5($uid).'/aidigu/images'.str_replace('.png', '', $image);
             $ImageInfo['image_type'] = 'png';
