@@ -349,7 +349,7 @@
 						str = '<div class="post"><img class="post-head" src="' + data[i].head_image + '" />'
 							+ '<div class="post-article">'
 							+ '<div class="post-info-i">'
-							+ '<h2><a href="/' + data[i].blog + '/own/">' + data[i].nickname + '</a></h2><small><i class="fa fa-clock-o"></i>'+getDateDiff(data[i].ctime)+'<i class="fa fa-eye"></i>'
+							+ '<h2><a href="/' + data[i].blog + '/own/">' + data[i].nickname + '</a></h2><small><i class="fa fa-clock-o"></i>'+getDateDiff(data[i].ctime)+'<i class="fa fa-eye"></i>'+' 来自' + data[i].refrom+'</small>'
 							+ '</div>'
 							+ '<div class="post-content"><p>' + data[i].contents + data[i].repost + '</p>'  + mediaStr + '</div>'
 							+ '</div>'
