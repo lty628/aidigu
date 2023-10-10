@@ -19,7 +19,7 @@
 	            })
 	            .done(function(data) {
 	                if (data.status) {
-	                    alertInfo($(".alert-success"), '', data.msg, '/' + data.data + '/');
+	                    alertInfo($(".alert-success"), '', data.msg, data.data);
 	                } else {
 	                    alertInfo($(".alert-danger"), '', data.msg);
 	                }

@@ -57,8 +57,8 @@ Route::domain($url, function () {
 	// Route::get('/:name/newcomment/$', $module . '/Index/newcomment')->pattern(['name' => '\w+']);
 	Route::get('/:name/newreply/$', $module . '/Index/newreply')->pattern(['name' => '\w+']);
 	Route::get('/:name/newreply/:page$', $module . '/Index/newreply')->pattern(['name' => '\w+', 'page'=>'[0-9]+']);
-	Route::get('/:name/message/:msg_id$', $module . '/Index/messageInfo')->pattern(['name' => '\w+', 'msg_id' => '[0-9]+']);
-	Route::get('/:name/del/message/:msg_id$', $module . '/Ajax/delMessage')->pattern(['name' => '\w+', 'msg_id' => '[0-9]+']);	
+	Route::get('/:name/message/:msg_id', $module . '/Index/messageInfo')->pattern(['name' => '\w+', 'msg_id' => '[0-9]+']);
+	Route::get('/:name/del/message/:msg_id', $module . '/Ajax/delMessage')->pattern(['name' => '\w+', 'msg_id' => '[0-9]+']);	
 });
 
 // 通用路由（若绑定域名以下可删除）
@@ -90,8 +90,8 @@ Route::get('/:name/own/:page$', 'index/Index/own')->pattern(['name' => '\w+', 'p
 // Route::get('/:name/newcomment/$', 'index/Index/newcomment')->pattern(['name' => '\w+']);
 Route::get('/:name/newreply/$', 'index/Index/newreply')->pattern(['name' => '\w+']);
 Route::get('/:name/newreply/:page$', 'index/Index/newreply')->pattern(['name' => '\w+', 'page'=>'[0-9]+']);
-Route::get('/:name/message/:msg_id$', 'index/Index/messageInfo')->pattern(['name' => '\w+', 'msg_id' => '[0-9]+']);
-Route::get('/:name/del/message/:msg_id$', 'index/Ajax/delMessage')->pattern(['name' => '\w+', 'msg_id' => '[0-9]+']);
+Route::get('/:name/message/:msg_id', 'index/Index/messageInfo')->pattern(['name' => '\w+', 'msg_id' => '[0-9]+']);
+Route::get('/:name/del/message/:msg_id', 'index/Ajax/delMessage')->pattern(['name' => '\w+', 'msg_id' => '[0-9]+']);
 
 
 // 手机站（已取消）
@@ -124,6 +124,6 @@ Route::get('/:name/del/message/:msg_id$', 'index/Ajax/delMessage')->pattern(['na
 // 	// Route::get('/:name/newcomment/$', 'wap/Index/newcomment')->pattern(['name' => '\w+']);
 // 	Route::get('/:name/newreply/$', 'wap/Index/newreply')->pattern(['name' => '\w+']);
 // 	Route::get('/:name/newreply/:page$', 'wap/Index/newreply')->pattern(['name' => '\w+', 'page'=>'[0-9]+']);
-// 	Route::get('/:name/message/:msg_id$', 'wap/Index/messageInfo')->pattern(['name' => '\w+', 'msg_id' => '[0-9]+']);
-// 	Route::get('/:name/del/message/:msg_id$', 'wap/Ajax/delMessage')->pattern(['name' => '\w+', 'msg_id' => '[0-9]+']);	
+// 	Route::get('/:name/message/:msg_id', 'wap/Index/messageInfo')->pattern(['name' => '\w+', 'msg_id' => '[0-9]+']);
+// 	Route::get('/:name/del/message/:msg_id', 'wap/Ajax/delMessage')->pattern(['name' => '\w+', 'msg_id' => '[0-9]+']);	
 // });

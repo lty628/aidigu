@@ -53,7 +53,7 @@ class UserInfo extends Controller
 	{
 		$username = trim(input('get.username'));
 		$password = trim(input('get.password'));
-		$redirectUrl = trim(input('get.redirectUrl'));
+		$redirectUrl = input('get.redirectUrl');
 		if (!$username || !$password) return json(['status' => 0, 'msg' => '账号或密码不能为空']);
 		$result = UserModel::where('blog', $username)->whereOr('nickname', $username)->field('uid,nickname,blog,password')->find();
 		if (!$result) return json(['status' => 0, 'msg' => '输入的账号不存在']);
@@ -62,7 +62,7 @@ class UserInfo extends Controller
 		// $this->rememberMe(input('get.remember'), $result->toArray());
 		$this->rememberMe(1, $result->toArray());
 		if (!$redirectUrl) {
-			$redirectUrl = $result['blog'];
+			$redirectUrl = '/'.$result['blog'].'/';
 		}
 		return json(['status' => 1, 'msg' => '登录成功', 'data' => $redirectUrl]);
 	}

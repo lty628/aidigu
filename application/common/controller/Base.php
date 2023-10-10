@@ -17,7 +17,15 @@ class Base extends Controller
 		}
 		if (!$uid) {
 			$isRightCookie = checkUserCookie(cookie('rememberMe'));
-			if (!$isRightCookie) return $this->redirect('/login/?url=' . request()->url());
+			if (!$isRightCookie) {
+				$url = request()->url();
+				if ($url == '' || $url == '/') {
+					$redirectUrl = '';
+				} else {
+					$redirectUrl = '?url='.$url;
+				}
+				return $this->redirect('/login/' . $redirectUrl);
+			}
 			// if (!$isRightCookie) return $this->error('请先登录', '/login/');
 			// return $this->redirect('/'.$isRightCookie['blog'].'/');
 			
