@@ -2,6 +2,7 @@
 	    $("#login").click(function(event) {
 	        var username = $("#username").val();
 	        var password = $("#password").val();
+	        var redirectUrl = $("#redirectUrl").val();
 	        if (!username) {
 	            alertInfo($(".alert-danger"), $("#username"), '昵称不能为空！');
 	            return false;
@@ -14,7 +15,7 @@
 	                url: '/index/user/loginAjax',
 	                type: 'GET',
 	                dataType: 'json',
-	                data: { username: username, password: password },
+	                data: { username: username, password: password, redirectUrl: redirectUrl },
 	            })
 	            .done(function(data) {
 	                if (data.status) {
