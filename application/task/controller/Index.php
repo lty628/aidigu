@@ -62,5 +62,41 @@ class Index
         }
     }
 
+    public function imporAidigu()
+    {
+        $path = './tmp/stayreal/';
+        $path = 'uploads/'.getLoginMd5Uid().'/theme';
+        $str = file_get_contents($path . '/html/a1.html');
+        preg_match('/<ul id="timeline".*>(.*)<\/ul>/isu', $str, $ul);
+        preg_match_all('/<li.*>(.*)<\/li>/isU', $ul[0], $li);
+
+        $arr = $li[1];
+
+        $count = count($arr);
+        for ($i=$count-1; $i >= 0; $i--) { 
+            $data = $this->pregData($arr[$i]);
+        }
+    }
+
+    protected function pregData($htmlStr)
+    {
+        // preg_match('/<div class="content">(.*)<\/div>/', $htmlStr, $content);
+        // preg_match('/class="source">(.*)<\/a><\/span>/', $htmlStr, $time);
+        preg_match('/(640x480_.*png)/', $htmlStr, $image);
+        dump($htmlStr);
+        dump($image);die;
+        dump($time[1]);
+        dump($content[1]);die;
+        $image = $image[1] ?? '';
+        $data['ctime'] = strtotime($time[1]);
+        $data['contents'] = $content[1];
+        if ($image) {
+
+            $data['image_info'] = ;
+            $data['image'] = '/upload/';
+        }
+
+    }
+
 
 }

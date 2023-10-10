@@ -129,7 +129,7 @@ function getFilesize($num)
 
 function isMobile()
 {
-	$user_agent = $_SERVER['HTTP_USER_AGENT'];
+	$user_agent = $_SERVER['HTTP_USER_AGENT'] ?? '';
 	$mobile_agents = array(
 		'iphone', 'android', 'phone', 'mobile', 'wap', 'netfront', 'java', 'opera mobi',
 		'opera mini', 'ucweb', 'windows ce', 'symbian', 'series', 'webos', 'sony', 'blackberry', 'dopod',
