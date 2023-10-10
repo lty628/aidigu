@@ -64,38 +64,65 @@ class Index
 
     public function imporAidigu()
     {
-        $path = './tmp/stayreal/';
-        $path = 'uploads/'.getLoginMd5Uid().'/theme';
-        $str = file_get_contents($path . '/html/a1.html');
-        preg_match('/<ul id="timeline".*>(.*)<\/ul>/isu', $str, $ul);
-        preg_match_all('/<li.*>(.*)<\/li>/isU', $ul[0], $li);
+        $argv = request()->server()['argv'] ?? [];
+        $uid = $argv[2] ?? 0;
+        $pageCount = $argv[3] ?? 0;
+        if (!$uid || !$pageCount) exit('参数异常');
 
-        $arr = $li[1];
-
-        $count = count($arr);
-        for ($i=$count-1; $i >= 0; $i--) { 
-            $data = $this->pregData($arr[$i]);
+        $path = './uploads/'.md5($uid).'/aidigu';
+        for ($i=$pageCount-1; $i > 0; $i--) { 
+            dump('导入'.$i.'页');
+            $str = file_get_contents($path . '/html/'.$i.'.html');
+            preg_match('/<ul id="timeline".*>(.*)<\/ul>/isu', $str, $ul);
+            preg_match_all('/<li.*>(.*)<\/li>/isU', $ul[0], $li);
+            $arr = $li[1];
+            $count = count($arr);
+            for ($j=$count-1; $j >= 0; $j--) { 
+                $this->pregData($arr[$j], $uid);
+            }
         }
     }
 
-    protected function pregData($htmlStr)
+    protected function pregData($htmlStr, $uid)
     {
-        // preg_match('/<div class="content">(.*)<\/div>/', $htmlStr, $content);
-        // preg_match('/class="source">(.*)<\/a><\/span>/', $htmlStr, $time);
-        preg_match('/(640x480_.*png)/', $htmlStr, $image);
+        // '<div class="content"></div> <div class="pic"><a target="_blank" onclick="return hs.expand(this);" href="..\images\640x480_2638b0bd7cfe80fea2379cb2afd77ef8.jpg"><img src="..\images\100x75_2638b0bd7cfe80fea2379cb2afd77ef8.jpg" class="h_postimg" alt=""></a> </div>'
+        preg_match('/<div class="content">(.*)/', $htmlStr, $content);
+        preg_match('/class="source">(.*)<\/a><\/span>/', $htmlStr, $time);
+        preg_match('/(640x480_.*(png|jpg))/', $htmlStr, $image);
         dump($htmlStr);
-        dump($image);die;
-        dump($time[1]);
-        dump($content[1]);die;
+        // dump($image);die;
+        // dump($time[1]);
+        // dump($content);
         $image = $image[1] ?? '';
         $data['ctime'] = strtotime($time[1]);
-        $data['contents'] = $content[1];
+        $data['contents'] = '<p>' . strip_tags($content[0]) . '</p>';
+
         if ($image) {
-
-            $data['image_info'] = ;
-            $data['image'] = '/upload/';
+            $ImageInfo['image_info'] = '/uploads/'.md5($uid).'/aidigu/images'.str_replace('.png', '', $image);
+            $ImageInfo['image_type'] = 'png';
+            $data['image'] = '/uploads/'.md5($uid).'/aidigu/images/'.$image;
+            $data['image_info'] = json_encode($ImageInfo, 320);
         }
-
+        $data['uid'] = $uid;
+        $data['refrom'] = '网站';
+        $data['repost'] = '';
+        Db::startTrans();
+        try {
+            $data['msg_id'] = Db::name('message')->insertGetId($data);
+            $msgId = (int)input('get.msg_id');
+            if ($msgId) {
+                Db::name('message')->where('msg_id', $msgId)->setInc('repostsum',1);
+            }
+            Db::name('user')->where('uid', $data['uid'])->setInc('message_sum', 1);
+            // 提交事务
+            Db::commit();
+            return $data;
+        } catch (\Exception $e) {
+            // 回滚事务
+            dump($e);
+            Db::rollback();
+            return false;
+        }
     }
 
 
