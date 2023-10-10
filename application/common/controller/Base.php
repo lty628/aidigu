@@ -19,7 +19,7 @@ class Base extends Controller
 			$isRightCookie = checkUserCookie(cookie('rememberMe'));
 			if (!$isRightCookie) return $this->redirect('/login/');
 			// if (!$isRightCookie) return $this->error('请先登录', '/login/');
-			return $this->redirect('/'.$isRightCookie['blog'].'/');
+			// return $this->redirect('/'.$isRightCookie['blog'].'/');
 			
 		}
 	}
