@@ -18,7 +18,7 @@ class IndexInfo extends Info
             ->alias('message')
             ->join([$this->prefix . 'fans' => 'fans'], 'message.uid=fans.touid and fans.fromuid=' . $this->siteUserId)
             ->join([$this->prefix . 'user' => 'user'], 'user.uid=fans.touid')
-            ->order('message.msg_id desc')
+            ->order('message.ctime desc')
             ->field('user.uid,user.nickname,user.head_image,user.blog,message.ctime,message.contents,message.repost,message.refrom,message.repostsum,message.image,message.image_info,message.commentsum,message.msg_id')
             ->where('message.is_delete', 0)
             ->paginate(30, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
