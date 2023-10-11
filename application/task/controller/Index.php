@@ -86,7 +86,7 @@ class Index
     protected function pregData($htmlStr, $uid)
     {
         // '<div class="content"></div> <div class="pic"><a target="_blank" onclick="return hs.expand(this);" href="..\images\640x480_2638b0bd7cfe80fea2379cb2afd77ef8.jpg"><img src="..\images\100x75_2638b0bd7cfe80fea2379cb2afd77ef8.jpg" class="h_postimg" alt=""></a> </div>'
-        preg_match('/<div class="content">(.*)/', $htmlStr, $content);
+        preg_match('/<div class="content">([\s\S]*)/', $htmlStr, $content);
         preg_match('/class="source">(.*)<\/a><\/span>/', $htmlStr, $time);
         preg_match('/(640x480_[a-z0-9A-Z]*\.(png|jpg))/', $htmlStr, $image);
         dump($htmlStr);

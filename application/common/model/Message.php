@@ -40,20 +40,20 @@ class Message extends Model
 	}
 	public static function getMessage($userid = '', $count = 50, $topicId = 0)
 	{
-		// return self::with(['user' => function($query){$query->field('username,blog,head_image,uid,nickname');}])->where('uid',$userid)->order('msg_id','desc')->paginate($count, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
-		// if ($userid) return self::withJoin(['user' => function ($query) {$query->where('invisible', 0);}])->where('uid',$userid)->order('msg_id','desc')->paginate($count, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
+		// return self::with(['user' => function($query){$query->field('username,blog,head_image,uid,nickname');}])->where('uid',$userid)->order('ctime','desc')->paginate($count, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
+		// if ($userid) return self::withJoin(['user' => function ($query) {$query->where('invisible', 0);}])->where('uid',$userid)->order('ctime','desc')->paginate($count, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
 		if ($topicId) {
-			return self::with('user')->where('topic_id', $topicId)->where('is_delete', 0)->order('msg_id','desc')->paginate($count, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
+			return self::with('user')->where('topic_id', $topicId)->where('is_delete', 0)->order('ctime','desc')->paginate($count, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
 		} else {
-			if ($userid) return self::with('user')->where('uid',$userid)->where('is_delete', 0)->order('msg_id','desc')->paginate($count, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
-			return self::withJoin(['user' => function ($query) {$query->where('invisible', 0);}])->where('is_delete', 0)->order('msg_id','desc')->paginate($count, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
+			if ($userid) return self::with('user')->where('uid',$userid)->where('is_delete', 0)->order('ctime','desc')->paginate($count, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
+			return self::withJoin(['user' => function ($query) {$query->where('invisible', 0);}])->where('is_delete', 0)->order('ctime','desc')->paginate($count, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
 		}
 		
 	}
 	public static function getUserMessage($userid = '', $count = 50)
 	{
-		return self::with('fans')->where('uid',$userid)->order('msg_id','desc')->paginate($count, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
-		// return self::with('user')->order('msg_id','desc')->paginate($count, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
+		return self::with('fans')->where('uid',$userid)->order('ctime','desc')->paginate($count, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
+		// return self::with('user')->order('ctime','desc')->paginate($count, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
 	}
 	public static function getMessageById($msgId = '')
 	{
