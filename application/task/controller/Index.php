@@ -100,7 +100,7 @@ class Index
         if ($data['contents']) $data['contents'] = '<p>'.$data['contents'].'</p>';
         if ($image) {
             $typeArr = explode('.', $image);
-            $ImageInfo['image_info'] = '/uploads/'.md5($uid).'/aidigu/images'.str_replace($typeArr[0], '', $image);
+            $ImageInfo['image_info'] = '/uploads/'.md5($uid).'/aidigu/images'.str_replace('.'.$typeArr[1], '', $image);
             $ImageInfo['image_type'] = $typeArr[1];
             $data['image'] = '/uploads/'.md5($uid).'/aidigu/images/'.$image;
             if (!file_exists('.'.$data['image'])) return false;
