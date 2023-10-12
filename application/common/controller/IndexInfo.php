@@ -73,9 +73,9 @@ class IndexInfo extends Info
     }
 
     // 话题
-    public function topicSquare()
+    public function topicList()
     {
-        $topic = Db::name('topic')->order('count', 'desc')->paginate(30, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
+        $topic = Db::name('topic')->order('count desc')->order('topic_id desc')->paginate(30, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
         $this->assign('topicArr', $topic);
         return $this->fetch('topic');
     }

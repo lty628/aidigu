@@ -25,8 +25,8 @@ if (isMobile()) {
 } else {
 	$module = 'index';
 }
-Route::get('/topic/$',$module . '/Index/topicSquare');
-Route::get('/topic/:page$', $module . '/Index/topicSquare')->pattern(['page'=>'[0-9]+']);
+Route::get('/topic/$',$module . '/Index/topicList');
+Route::get('/topic/:page$', $module . '/Index/topicList')->pattern(['page'=>'[0-9]+']);
 Route::get('/topic/:topic_id/$',$module . '/Index/topic')->pattern(['topic_id' => '[0-9]+']);
 Route::get('/square/$',$module . '/Index/blog');
 Route::get('/square/:page$',$module . '/Index/blog')->pattern(['page'=>'[0-9]+']);
