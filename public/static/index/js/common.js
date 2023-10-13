@@ -114,7 +114,7 @@ function comdel(url){
 		    }
 		  });
 		});
-		$("#button").click(function(event) {
+		$("#sendButton").click(function(event) {
 			var jsonData = {};
 			// jsonData.contents = $("#msgInput").val();
 
