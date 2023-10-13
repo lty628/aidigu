@@ -151,7 +151,7 @@ function comdel(url){
 				shade: true,
 				area: ['100%', '100%'],
 				resize: false,
-				maxmin: false,
+				maxmin: true,
 				content: '/cloud/show/',
 				zIndex: layer.zIndex, //重点1
 				success: function(layero){
