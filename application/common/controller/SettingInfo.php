@@ -105,7 +105,7 @@ class SettingInfo extends Base
 	{
 		$path = 'uploads/'.getLoginMd5Uid().'/message';
 		// 4m
-		$size = 41943040;
+		$size = 62914561;
 		$file = request()->file('file');
 		// 移动到框架应用根目录/uploads/ 目录下
 		$info = $file->validate(['size'=>$size,'ext'=>'mp4,mp3,jiff,jpg,bmp,jpeg,png,gif'])->move($path);
