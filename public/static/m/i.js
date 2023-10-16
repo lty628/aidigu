@@ -82,20 +82,20 @@ $("form .tbbq").click(function(){
 });
 //--------------简化标签
 //--------------打赏233
-$(".pay span").click(function(){
-	$(".pay img").click();
-});
+// $(".pay span").click(function(){
+// 	$(".pay img").click();
+// });
 //--------------图片放大
-$("#zooming").click(function(){
-	$(this).fadeOut(200);
-	setTimeout(function(){
-		$("body").css("overflow-y","scroll");
-	},200);
-});
-$(".post-content img").click(function(){
-	zooming($(this).attr("src"));
-});
-$(".post-content .tbbq").unbind("click");
+// $("#zooming").click(function(){
+// 	$(this).fadeOut(200);
+// 	setTimeout(function(){
+// 		$("body").css("overflow-y","scroll");
+// 	},200);
+// });
+// $(".post-content img").click(function(){
+// 	zooming($(this).attr("src"));
+// });
+// $(".post-content .tbbq").unbind("click");
 //--------------
 $(".click-show .show").click(function(){
 	$(this).parent().children(".slideB").css("bottom",$(this).height()+5);
