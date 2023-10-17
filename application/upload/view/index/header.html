@@ -15,10 +15,10 @@
 <body class="main_body white">
   <div class="layui-header">
     <ul class="layui-nav layui-layout">
-      <li class="layui-nav-item"><a href="/cloud/"><i class="layui-icon layui-icon-upload-drag"></i>上传</a></li>
-      <li class="layui-nav-item"><a href="/cloud/show/"><i class="layui-icon layui-icon-file"></i>
+      <li class="layui-nav-item"><a href="/cloud/"><i class="{if $action == 'index'} layui-this {/if} layui-icon layui-icon-upload-drag"></i>上传</a></li>
+      <li class="layui-nav-item"><a href="/cloud/show/"><i class="{if $action == 'show'} layui-this {/if} layui-icon layui-icon-file"></i>
         文件</a></li>
-      <li class="layui-nav-item"><a href="/cloud/collection/"><i class="layui-icon layui-icon-delete"></i> 回收站</a></li>
+      <li class="layui-nav-item"><a href="/cloud/collection/"><i class="{if $action == 'collection'} layui-this {/if} layui-icon layui-icon-delete"></i> 回收站</a></li>
   </div>
   <div class="layui-layout">
     <!-- <div class="layui-side layui-bg-white">

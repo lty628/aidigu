@@ -13,6 +13,7 @@ class Index extends Controller
         if (!getLoginUid()) {
             return $this->error('您没有登录, 请先登录！', '/login/');
         }
+        $this->assign('action', request()->action());
     }
 
     public function index()
