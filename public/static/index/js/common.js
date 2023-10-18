@@ -294,7 +294,7 @@ function comdel(url){
 	function reply(obj,commentId, uid)
 	{
 		var replyUser = $(obj).parents('.block_body').children('.repost').children('span').html();
-		var replyArr = replyUser.split('||<a');
+		var replyArr = replyUser.split('@<a');
 		replyUser = replyArr[0];
 		if (!replyUser) {
 			alertMsg('未找到回复内容');
@@ -309,7 +309,7 @@ function comdel(url){
 		  btn: ['回复',"取消"],
 		  yes: function(index, layero){
 		  	var jsonData = {};
-		  	// jsonData.comment = '||回复：'+$("#commentInput").val()+' ||'+replyUser;
+		  	// jsonData.comment = '@回复：'+$("#commentInput").val()+' @'+replyUser;
 		  	jsonData.comment = $("#commentInput").val()+' @'+replyUser;
 		  	jsonData.comment = ReplaceEmoji(jsonData.comment);
 		  	jsonData.uid = uid;

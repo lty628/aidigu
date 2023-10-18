@@ -343,7 +343,7 @@ function comdel(url){
 	function reply(obj,commentId, uid)
 	{
 		var replyUser = $('.block_body').children('.repost').children('span').html();
-		var replyArr = replyUser.split('||<a');
+		var replyArr = replyUser.split('@<a');
 		replyUser = replyArr[0];
 		if (!replyUser) {
 			alertMsg('未找到回复内容');
