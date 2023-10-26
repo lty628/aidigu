@@ -499,8 +499,8 @@ function comdel(url){
 	function showMessageImg(obj)
 	{
 		var imgUrl = $(obj).attr('src');
-		imgUrl = imgUrl.split(".");
-		imgUrl[0] = imgUrl[0].replace("_middle", '');
+		// imgUrl = imgUrl.split(".");
+		// imgUrl[0] = imgUrl[0].replace("_middle", '');
 		var json = {
 		  "title": "", //相册标题
 		  "id": 0, //相册id
@@ -509,7 +509,8 @@ function comdel(url){
 		    {
 		      "alt": "",
 		      "pid": 0, //图片id
-		      "src": imgUrl[0]+"."+imgUrl[1], //原图地址
+		    //   "src": imgUrl[0]+"."+imgUrl[1], //原图地址
+		      "src": imgUrl, //原图地址
 		      "thumb": "" //缩略图地址
 		    }
 		  ]
