@@ -11,7 +11,7 @@
 						{if json_decode($message.image_info, true)['image_type'] == 'mp4'}
 						<p  class="massageImg"><video width="400px"  controls=""  name="media"><source src="{$message.image}" type="video/mp4"></video></p>
 						{else}
-						<p class="massageImg"><img width="75%" src="{:getTypeImg($message.image_info)}" onclick="showMessageImg(this)" style="cursor:pointer;"></p>
+						<p class="massageImg"><img width="75%" src="{$message.image}" onclick="showMessageImg(this)" style="cursor:pointer;"></p>
 						{/if}
 				{/if}
 				<div class="static">

@@ -161,3 +161,12 @@ function isMobile()
 	}
 	return $ismobile;
 }
+
+function handleMessage($message)
+{
+	$staticDomain = env('app.staticDomain', '');
+	foreach($message as &$data) {
+		$data['image'] = $data['image'] ? $staticDomain . $data['image'] : '';
+	}
+	return $message;
+}

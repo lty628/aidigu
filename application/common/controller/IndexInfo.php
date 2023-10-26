@@ -25,7 +25,7 @@ class IndexInfo extends Info
         $this->assign('userMessage', []);
         if (request()->isAjax()) {
             $userMessage = $userMessage->toArray()['data'];
-            return json(array('status' =>  1, 'msg' => 'ok', 'data' => ['data' => $userMessage, 'allow_delete' => 0]));
+            return json(array('status' =>  1, 'msg' => 'ok', 'data' => ['data' => handleMessage($userMessage), 'allow_delete' => 0]));
         }
         return $this->fetch();
     }
@@ -36,7 +36,7 @@ class IndexInfo extends Info
             $allwoDelete = 1;
             if ($this->siteUserId != $this->userid) $allwoDelete = 0;
             $userMessage = $userMessage->toArray()['data'];
-            return json(array('status' =>  1, 'msg' => 'ok', 'data' => ['data' => $userMessage, 'allow_delete' => $allwoDelete]));
+            return json(array('status' =>  1, 'msg' => 'ok', 'data' => ['data' => handleMessage($userMessage), 'allow_delete' => $allwoDelete]));
         }
         $this->assign('siteUser', $this->siteUserId);
         $this->assign('userMessage', []);
@@ -49,7 +49,7 @@ class IndexInfo extends Info
         $this->assign('siteUser', $this->siteUserId);
         if (request()->isAjax()) {
             $userMessage = $userMessage->toArray()['data'];
-            return json(array('status' =>  1, 'msg' => 'ok', 'data' => ['data' => $userMessage, 'allow_delete' => 0]));
+            return json(array('status' =>  1, 'msg' => 'ok', 'data' => ['data' => handleMessage($userMessage), 'allow_delete' => 0]));
         }
         $this->assign('userMessage', []);
         return $this->fetch('index');

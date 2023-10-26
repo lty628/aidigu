@@ -122,7 +122,7 @@ class Info extends Base
 		Reminder::where('touid', $this->userid)->where('msg_id', $msgId)->delete();
 		$userMessage[0] = Message::getMessageById($msgId);
 		$messageBlock = $userMessage[0]->comments()->where('msg_id',$msgId)->with('User')->order('ctime','desc')->paginate(20);
-		$this->assign('userMessage', $userMessage);
+		$this->assign('userMessage', handleMessage($userMessage));
 		$this->assign('messageBlock', $messageBlock);
 
 	}
