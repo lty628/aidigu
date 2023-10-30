@@ -14,14 +14,28 @@ class IndexInfo extends Info
     // 个人首页
     public function index()
     {
-        $userMessage = Db::name('message')
+        // 我的主页
+        if ($this->isSiteUser) {
+            $userMessage = Db::name('message')
+                ->alias('message')
+                ->join([$this->prefix . 'fans' => 'fans'], 'message.uid=fans.touid and fans.fromuid=' . $this->siteUserId)
+                ->join([$this->prefix . 'user' => 'user'], 'user.uid=fans.touid')
+                ->order('message.ctime desc')
+                ->field('user.uid,user.nickname,user.head_image,user.blog,message.ctime,message.contents,message.repost,message.refrom,message.repostsum,message.image,message.image_info,message.commentsum,message.msg_id')
+                ->where('message.is_delete', 0)
+                ->paginate(30, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
+        } else {
+            $userMessage = Db::name('message')
             ->alias('message')
             ->join([$this->prefix . 'fans' => 'fans'], 'message.uid=fans.touid and fans.fromuid=' . $this->siteUserId)
             ->join([$this->prefix . 'user' => 'user'], 'user.uid=fans.touid')
             ->order('message.ctime desc')
             ->field('user.uid,user.nickname,user.head_image,user.blog,message.ctime,message.contents,message.repost,message.refrom,message.repostsum,message.image,message.image_info,message.commentsum,message.msg_id')
             ->where('message.is_delete', 0)
+            ->where('user.invisible', 0)
             ->paginate(30, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
+        }
+        
         $this->assign('userMessage', []);
         if (request()->isAjax()) {
             $userMessage = $userMessage->toArray()['data'];
