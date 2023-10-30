@@ -62,6 +62,7 @@ class SettingInfo extends Base
 			$data['image_info'] = '/'.$path.'/'.$fileName;
 			$data['image_type'] = $info->getExtension();
 			$data['small'] = '/'.$path.'/'.$fileName.'_small.'.$info->getExtension();
+			$data['middle'] = '/'.$path.'/'.$fileName.'_middle.'.$info->getExtension();
 			$data['big'] = '/'.$path.'/'.$fileName.'_big.'.$info->getExtension();
 			return json(['status'=>1, 'msg'=>'上传成功','data'=>$data]);
 		}else{
@@ -77,11 +78,11 @@ class SettingInfo extends Base
 		// dump($saveUpload);die;
 		$info['image_info'] = $saveUpload['image_info'];
 		$info['image_type'] = $saveUpload['image_type'];
-		if (!isset($saveUpload['small']) || !isset($saveUpload['image_info'])|| !isset($saveUpload['image_type'])) return json(['status'=>0, 'msg'=>'无数据']);
+		if (!isset($saveUpload['middle']) || !isset($saveUpload['image_info'])|| !isset($saveUpload['image_type'])) return json(['status'=>0, 'msg'=>'无数据']);
 		
 		$userid = getLoginUid();
 		$result = UserModel::where('uid', $userid)->update([
-			'head_image'=>$saveUpload['small'],
+			'head_image'=>$saveUpload['middle'],
 			'head_image_info'=>json_encode($info),
 		]);
 		if (!$result) return json(['status'=>0, 'msg'=>'保存失败']);
