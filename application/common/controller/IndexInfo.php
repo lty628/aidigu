@@ -33,8 +33,8 @@ class IndexInfo extends Info
             ->field('user.uid,user.nickname,user.head_image,user.blog,message.ctime,message.contents,message.repost,message.refrom,message.repostsum,message.image,message.image_info,message.commentsum,message.msg_id')
             ->where('message.is_delete', 0)
             ->where([
-                ['user.invisible', 0],
-                ['user.uid', '!=', $this->siteUserId]
+                'user.invisible' => 0,
+                'user.uid' => ['!=', $this->siteUserId]
             ])
             ->paginate(30, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
         }
