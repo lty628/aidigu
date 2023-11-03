@@ -152,7 +152,7 @@
     })
     .use(Uppy.Tus, {
       endpoint: '/files',
-      chunkSize: 5242880,
+      chunkSize: 10485760,
       resume: true,
       limit: 20
       
