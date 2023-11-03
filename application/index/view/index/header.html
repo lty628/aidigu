@@ -27,12 +27,20 @@
 	<!-- <div class="logo"><a href="/"><img src="/static/index/images/logo.gif" alt="logo"/></a></div> -->
 	<div class="navigation">
 		<ul>
-			<li><a href="{:url('/'.$loginUserInfo.blog.'/')}">我的首页</a></li>
-			<li><a href="{:url('/'.$loginUserInfo.blog.'/own/')}">我的微博</a></li>
-			<li><a href="/square/">广场</a></li>
-			<li><a href="/topic/">话题</a></li>
-			<li><a href="javascript:;" id="showCloud">网盘</a></li>
-			<li><a href="{:url('./'.$loginUserInfo.blog.'/setting/')}">个人设置</a></li>
+			{if $userInfo.isSiteUser}
+				<li><a href="{:url('/'.$loginUserInfo.blog.'/')}">我的首页</a></li>
+				<li><a href="{:url('/'.$loginUserInfo.blog.'/own/')}">我的微博</a></li>
+				<li><a href="/square/">广场</a></li>
+				<li><a href="/topic/">话题</a></li>
+				<li><a href="javascript:;" id="showCloud">网盘</a></li>
+				<li><a href="{:url('./'.$loginUserInfo.blog.'/setting/')}">个人设置</a></li>
+			{else}
+				<li><a href="{:url('/'.$userInfo.blog.'/')}">{$userInfo.sex|getPerson}的首页</a></li>
+				<li><a href="{:url('/'.$userInfo.blog.'/own/')}">{$userInfo.sex|getPerson}的微博</a></li>
+				<li><a href="{:url('/'.$loginUserInfo.blog.'/')}">我的首页</a></li>
+				<li><a href="/square/">广场</a></li>
+				<li><a href="/topic/">话题</a></li>
+			{/if}
 			{if "WINADMIN" == 111}
 			<li><a href="">站点管理</a></li>
 			{/if}
