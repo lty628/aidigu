@@ -21,7 +21,7 @@ class IndexInfo extends Info
                 ->join([$this->prefix . 'fans' => 'fans'], 'message.uid=fans.touid and fans.fromuid=' . $this->siteUserId)
                 ->join([$this->prefix . 'user' => 'user'], 'user.uid=fans.touid')
                 ->order('message.ctime desc')
-                ->field('user.uid,user.nickname,user.head_image,user.blog,message.ctime,message.contents,message.repost,message.refrom,message.repostsum,message.image,message.image_info,message.commentsum,message.msg_id')
+                ->field('user.uid,user.nickname,user.head_image,user.blog,user.vip,message.ctime,message.contents,message.repost,message.refrom,message.repostsum,message.image,message.image_info,message.commentsum,message.msg_id')
                 ->where('message.is_delete', 0)
                 ->paginate(30, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
         } else {
@@ -30,7 +30,7 @@ class IndexInfo extends Info
                 ->join([$this->prefix . 'fans' => 'fans'], 'message.uid=fans.touid and fans.fromuid=' . $this->siteUserId)
                 ->join([$this->prefix . 'user' => 'user'], 'user.uid=fans.touid')
                 ->order('message.ctime desc')
-                ->field('user.uid,user.nickname,user.head_image,user.blog,message.ctime,message.contents,message.repost,message.refrom,message.repostsum,message.image,message.image_info,message.commentsum,message.msg_id')
+                ->field('user.uid,user.nickname,user.head_image,user.blog,user.vip,message.ctime,message.contents,message.repost,message.refrom,message.repostsum,message.image,message.image_info,message.commentsum,message.msg_id')
                 ->where('message.is_delete', 0)
                 ->where(function ($query) {
                     $query->where('user.invisible', 0)->whereOr('user.uid', $this->siteUserId);
@@ -39,7 +39,7 @@ class IndexInfo extends Info
         }
         
         $this->assign('userMessage', []);
-        if (request()->isAjax()) {
+        if (request()->isAjax() && !request()->header('x-pjax')) {
             $userMessage = $userMessage->toArray()['data'];
             return json(array('status' =>  1, 'msg' => 'ok', 'data' => ['data' => handleMessage($userMessage), 'allow_delete' => 0]));
         }
@@ -48,7 +48,7 @@ class IndexInfo extends Info
     public function own()
     {
         $userMessage = $this->getMessage($this->siteUserId, 30);
-        if (request()->isAjax()) {
+        if (request()->isAjax() && !request()->header('x-pjax')) {
             $allwoDelete = 1;
             if ($this->siteUserId != $this->userid) $allwoDelete = 0;
             $userMessage = $userMessage->toArray()['data'];
@@ -63,7 +63,7 @@ class IndexInfo extends Info
     {
         $userMessage = $this->getMessage('', 30);
         $this->assign('siteUser', $this->siteUserId);
-        if (request()->isAjax()) {
+        if (request()->isAjax() && !request()->header('x-pjax')) {
             $userMessage = $userMessage->toArray()['data'];
             return json(array('status' =>  1, 'msg' => 'ok', 'data' => ['data' => handleMessage($userMessage), 'allow_delete' => 0]));
         }
@@ -77,7 +77,7 @@ class IndexInfo extends Info
         $topicId = input('topic_id');
         $userMessage = $this->getMessage('', 30, $topicId);
         $this->assign('siteUser', $this->siteUserId);
-        if (request()->isAjax()) {
+        if (request()->isAjax() && !request()->header('x-pjax')) {
             $userMessage = $userMessage->toArray()['data'];
             return json(array('status' =>  1, 'msg' => 'ok', 'data' => ['data' => $userMessage, 'allow_delete' => 0]));
         }

@@ -6,7 +6,7 @@
 		<div class="entry">
 			<div class="avatar"><div class="imgborder"><a href="{:url('/'.$message.blog.'/')}"><img src="{$userInfo.head_image|default=$defaultImage}" /></a></div></div>
 			<div class="box">
-				<p class="massageText"><a href="{:url('/'.$userInfo.blog.'/')}" id="nickname">{$message.nickname}：</a>{$message.contents|raw}{$message.repost|raw}</p>
+				<p class="massageText"><a href="{:url('/'.$userInfo.blog.'/')}" id="nickname">{$message.nickname} </a><span><i class="icon_member icon_member{$message.vip}"></i></span>{$message.contents|raw}{$message.repost|raw}</p>
 				{if $message.image}
 						{if json_decode($message.image_info, true)['image_type'] == 'mp4'}
 						<p  class="massageImg"><video width="400px"  controls=""  name="media"><source src="{$message.image}" type="video/mp4"></video></p>

@@ -26,10 +26,10 @@ class User extends Model
 	}
 	public static function getUserInfo($userid)
 	{
-		return User::where('uid', $userid)->field('uid,nickname,intro,sex,blog,head_image,head_image_info,province,city,follownum,fansnum,message_sum,theme,invisible')->find();
+		return User::where('uid', $userid)->field('uid,nickname,intro,sex,blog,head_image,head_image_info,province,city,follownum,fansnum,message_sum,theme,invisible,vip')->find();
 	}
 	public static function getUserSetting($userid)
 	{
-		return User::where('uid', $userid)->field('uid,nickname,head_image_info,username,email,phone,sex,intro,blog,head_image,province,city,follownum,fansnum,message_sum,theme,invisible')->find();
+		return User::where('uid', $userid)->field('uid,nickname,head_image_info,username,email,phone,sex,intro,blog,head_image,province,city,follownum,fansnum,message_sum,theme,invisible,vip')->find();
 	}
 }

@@ -1,0 +1,41 @@
+.icon_member {
+    width: 1rem;
+    margin-right: .25rem;
+    background-image: url(../images/7223114.png);
+    background-repeat: no-repeat;
+    background-position: -7.8125rem -7.8125rem;
+    height: 14px;
+    display: inline-block
+}
+
+.icon_member.icon_member0 {
+    display: none
+}
+
+.icon_member.icon_member1 {
+    background-position: -1.5625rem 0
+}
+
+.icon_member.icon_member2 {
+    background-position: -1.5625rem -1.5625rem
+}
+
+.icon_member.icon_member3 {
+    background-position: -1.5625rem -3.125rem
+}
+
+.icon_member.icon_member4 {
+    background-position: -1.5625rem -4.6875rem
+}
+
+.icon_member.icon_member5 {
+    background-position: -1.5625rem -6.25rem
+}
+
+.icon_member.icon_member6 {
+    background-position: -1.5625rem -7.8125rem
+}
+
+.icon_member.icon_member7 {
+    background-position: -7.8125rem -7.8125rem
+}

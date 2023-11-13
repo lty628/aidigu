@@ -28,7 +28,7 @@ class Message extends Model
 	// }
 	public function user()
 	{
-		return $this->hasOne('User','uid','uid')->bind('username,blog,head_image,nickname');
+		return $this->hasOne('User','uid','uid')->bind('username,blog,head_image,nickname,vip');
 	}
 	public function comments()
 	{

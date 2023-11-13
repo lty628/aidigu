@@ -1,6 +1,25 @@
 
 <script type="text/javascript" src="/static/common/js/wangEditor.min.js"></script>
 <script type="text/javascript" src="/static/index/js/edit.js?t=1">	</script>
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery.pjax/2.0.1/jquery.pjax.min.js"></script>
+<link href="https://cdn.bootcdn.net/ajax/libs/nprogress/0.2.0/nprogress.css" rel="stylesheet">
+<script src="https://cdn.bootcdn.net/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+<div id="pjax-container"></div>
+<script>
+	$(document).ready(function()
+{
+    $(document).pjax('a', 'body');
+
+    $(document).on('pjax:start', function() {
+      NProgress.start();
+  });
+  $(document).on('pjax:end', function() {
+      NProgress.done();
+      self.siteBootUp();
+  });
+});
+
+</script>
 <div class="clearall"></div>
 <div class="footer">
 	<!-- <div class="poweredby"><p>Powered by <a href="" target="_blank">aidigu</a></p></div> -->
