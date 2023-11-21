@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>图库管理power by www.nbnat.com</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" type="text/css" href="https://www.layuicdn.com/layui/css/layui.css" />
+    <style>.layui-upload-img{width: 100px; height: 100px; margin: 0 10px 10px 0;}</style>
+</head>
+
+<body style='padding:10px'>
+    <div class="layui-fluid">
+        <div id="fileManager" lay-filter="test"></div>
+    </div>
+</body>
+<script src="https://www.layuicdn.com/layui/layui.js"></script>
+<script>
+    layui.extend({'fileManager': '../../../layui_exts/fileManager/fileManager'});
+    layui.use(['fileManager', 'layer', 'upload'], function () {
+        var fileManager = layui.fileManager
+            , $ = layui.$
+            , upload = layui.upload
+            , layer = layui.layer;
+        $('title').html($('title').html() + ' version:' + fileManager.v);
+       
+        fileManager.render({
+            elem: '#fileManager'
+            , method: 'post'
+            , btn_upload: false
+            , btn_create: false
+            , url: 'data.php?action=get_file_data_vm'
+            , thumb: {'nopic': 'upload/null-100x100.jpg', 'width': 100, 'height': 100}
+            , parseData: function (res) {
+                let _res = [];
+                _res.code = 0;
+                _res.data = res.images;
+                _res.count = res.count
+                return _res;
+            }
+            , page: {limit: 15}
+    
+        });
+        //监听图片选择事件
+        fileManager.on('pic(test)', function (obj) {
+            var data = obj.data;
+            var index = parent.layer.getFrameIndex(window.name); 
+            parent.window.callback && parent.window.callback(obj.data);
+            parent.layer.close(index);
+        });
+        
+    });
+</script>
+
+</html>
