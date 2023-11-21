@@ -34,7 +34,7 @@ editor.config.uploadImgHooks = {
         }
         return
         // // insertImgFn 可把图片插入到编辑器，传入图片 src ，执行函数即可
-        // insertImgFn(result.data['image_info'] + '.' + result.data['image_type'])
+        // insertImgFn(result.data['media_info'] + '.' + result.data['media_type'])
     }
 }
 editor.config.uploadVideoHooks = {
@@ -68,7 +68,7 @@ editor.config.uploadVideoHooks = {
         return
         // console.log('customInsert', result)
         // // insertVideoFn 可把视频插入到编辑器，传入视频 src ，执行函数即可
-        // insertVideoFn(result.data['image_info'] + '.' + result.data['image_type'])
+        // insertVideoFn(result.data['media_info'] + '.' + result.data['media_type'])
     }
 }
 editor.config.menus = [

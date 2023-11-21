@@ -13,16 +13,16 @@ class Api extends Base
     public function index()
     {
         $contents = input('get.contents');
-        $imageInfo = input('get.imageInfo');
-        $data = self::saveMessage($contents, $imageInfo);
+        $mediaInfo = input('get.mediaInfo');
+        $data = self::saveMessage($contents, $mediaInfo);
     	if (!$data) return json(array('status' =>  0,'msg' => '发布失败'));
     	return json(array('status' =>  1,'msg' => '发表成功', 'data'=>$data));
     }
     public function repost()
     {
         $contents = input('get.contents');
-        $imageInfo = input('get.imageInfo');
-        $data = self::saveMessage($contents, $imageInfo);
+        $mediaInfo = input('get.mediaInfo');
+        $data = self::saveMessage($contents, $mediaInfo);
     	if (!$data) return json(array('status' =>  0,'msg' => '转发失败'));
     	return json(array('status' =>  1,'msg' => '转发成功', 'data'=>$data));
     }
@@ -105,16 +105,16 @@ class Api extends Base
             return false;
         }
     }
-    public static function saveMessage($contents, $imageInfo)
+    public static function saveMessage($contents, $mediaInfo)
     {
-        if ($imageInfo) {
-            $imageInfo = json_decode($imageInfo, true);
-            $info['image_info'] = $imageInfo['image_info'];
-            $info['image_type'] = $imageInfo['image_type'];
-            $data['image'] = $info['image_info'].'.'.$info['image_type'];
-            $data['image_info'] = json_encode($info);
+        if ($mediaInfo) {
+            $mediaInfo = json_decode($mediaInfo, true);
+            $info['media_info'] = $mediaInfo['media_info'];
+            $info['media_type'] = $mediaInfo['media_type'];
+            $data['media'] = $info['media_info'].'.'.$info['media_type'];
+            $data['media_info'] = json_encode($info);
         }
-        if (!$contents && !$imageInfo) return false;
+        if (!$contents && !$mediaInfo) return false;
     	$repost = input('get.repost');
         $data['repost'] = '';
     	if ($repost)  $data['repost'] = self::getMessage(strip_tags($repost, '<source><video><img><p><a>'));

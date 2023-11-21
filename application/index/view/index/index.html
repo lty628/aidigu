@@ -142,13 +142,13 @@
 						</a>
 						{$message.contents|raw}{$message.repost|raw}
 					</p>
-					{if $message.image}
-					{if json_decode($message.image_info, true)['image_type'] == 'mp4'}
-					<p class="massageImg clear" vid="{$message.image}"><video width="400px" controls="" name="media">
-							<source src="{$message.image}" type="video/mp4">
+					{if $message.media}
+					{if json_decode($message.media_info, true)['media_type'] == 'mp4'}
+					<p class="massageImg clear" vid="{$message.media}"><video width="400px" controls="" name="media">
+							<source src="{$message.media}" type="video/mp4">
 						</video></p>
 					{else}
-					<p class="massageImg clear"><img width="75%" , src="{:getTypeImg($message.image_info)}"
+					<p class="massageImg clear"><img width="75%" , src="{:getTypeImg($message.media_info)}"
 							onclick="showMessageImg(this)" style="cursor:pointer;"></p>
 					{/if}
 					{/if}
@@ -334,14 +334,14 @@
 							var delStr = '';
 							var c1 = '';
 							var c2 = '';
-							if (data[i].image) {
-								data[i].image_info = $.parseJSON(data[i].image_info)
-								if (data[i].image_info.image_type == 'mp4' || data[i].image_info.image_type == 'm3u8') {
-									mediaStr = '<p class="massageImg clear showVideo' + data[i].msg_id + '" vid="' + data[i].image + '"><video width="400px"  controls=""  name="media"><source src="" type="video/mp4"></video></p>';
-								} else if (data[i].image_info.image_type == 'mp3') {
-									mediaStr = '<p class="massageImg clear"><audio id="music_'+data[i].msg_id+'" class="music" controls="controls" loop="loop" onplay="stopOther(this)" preload="none" controlsList="nodownload" οncοntextmenu="return false" name="media"><source src="'+data[i].image+'" type="audio/mpeg"></audio></p>';
+							if (data[i].media) {
+								data[i].media_info = $.parseJSON(data[i].media_info)
+								if (data[i].media_info.media_type == 'mp4' || data[i].media_info.media_type == 'm3u8') {
+									mediaStr = '<p class="massageImg clear showVideo' + data[i].msg_id + '" vid="' + data[i].media + '"><video width="400px"  controls=""  name="media"><source src="" type="video/mp4"></video></p>';
+								} else if (data[i].media_info.media_type == 'mp3') {
+									mediaStr = '<p class="massageImg clear"><audio id="music_'+data[i].msg_id+'" class="music" controls="controls" loop="loop" onplay="stopOther(this)" preload="none" controlsList="nodownload" οncοntextmenu="return false" name="media"><source src="'+data[i].media+'" type="audio/mpeg"></audio></p>';
 								} else {
-									mediaStr = '<p  class="massageImg clear"><img class="massageImgCommon massageImg_'+data[i].image_info.image_type+'"  onclick="showMessageImg(this)" src="' + data[i].image + '"></p>';
+									mediaStr = '<p  class="massageImg clear"><img class="massageImgCommon massageImg_'+data[i].media_info.media_type+'"  onclick="showMessageImg(this)" src="' + data[i].media + '"></p>';
 								}
 							}
 							// if (0 != data[i].repostsum) {

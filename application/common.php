@@ -91,12 +91,12 @@ function getReminderTypeName($type)
 	return $status[$type];
 }
 
-// 示例： {"image_info":"\/uploads\/longge\/message\/20210313\/dc2147c971bc0f287f7a585726fbabc8","image_type":"jpg"}
+// 示例： {"media_info":"\/uploads\/longge\/message\/20210313\/dc2147c971bc0f287f7a585726fbabc8","media_type":"jpg"}
 function getTypeImg($json, $type = '')
 {
 	$info = json_decode($json, true);
 	$newType = $type ? '_' . $type : $type;
-	return $info['image_info'] . $newType . '.' . $info['image_type'];
+	return $info['media_info'] . $newType . '.' . $info['media_type'];
 }
 
 function getFilesize($num)
@@ -166,7 +166,7 @@ function handleMessage($message)
 {
 	$staticDomain = env('app.staticDomain', '');
 	foreach($message as &$data) {
-		$data['image'] = $data['image'] ? $staticDomain . $data['image'] : '';
+		$data['media'] = $data['media'] ? $staticDomain . $data['media'] : '';
 	}
 	return $message;
 }

@@ -17,7 +17,7 @@ class User extends Model
 	{
 		$headBig = json_decode($data['head_image_info'], true);
 		if (!$headBig) return $data['head_image'];
-		return $headBig['image_info'].'_big.'.$headBig['image_type'];
+		return $headBig['media_info'].'_big.'.$headBig['media_type'];
 	}
 
 	public static function getBlogInfo($blog)

@@ -30,12 +30,12 @@ class Index
         dump('任务完成');
     }
 
-    protected function saveMsg($contents, $imageInfo)
+    protected function saveMsg($contents, $mediaInfo)
     {
 
-        if ($imageInfo) {
-            $data['image_info'] = json_encode($imageInfo);
-            $data['image'] = $imageInfo[0]['href'] ?? '';
+        if ($mediaInfo) {
+            $data['media_info'] = json_encode($mediaInfo);
+            $data['media'] = $mediaInfo[0]['href'] ?? '';
         }
 
         $data['uid'] = mt_rand(73, 98);
@@ -88,23 +88,23 @@ class Index
         // '<div class="content"></div> <div class="pic"><a target="_blank" onclick="return hs.expand(this);" href="..\images\640x480_2638b0bd7cfe80fea2379cb2afd77ef8.jpg"><img src="..\images\100x75_2638b0bd7cfe80fea2379cb2afd77ef8.jpg" class="h_postimg" alt=""></a> </div>'
         preg_match('/<div class="content">([\s\S]*)/', $htmlStr, $content);
         preg_match('/class="source">(.*)<\/a><\/span>/', $htmlStr, $time);
-        preg_match('/(640x480_[a-z0-9A-Z]*\.(png|jpg|JPEG|gif))/', $htmlStr, $image);
+        preg_match('/(640x480_[a-z0-9A-Z]*\.(png|jpg|JPEG|gif))/', $htmlStr, $media);
         dump($htmlStr);
-        // dump($image);
+        // dump($media);
         // dump($time[1]);
         // dump($content);
-        $image = $image[1] ?? '';
+        $media = $media[1] ?? '';
         $data['ctime'] = strtotime($time[1]);
         $data['contents'] = trim(strip_tags($content[0]));
-        if (!$data['contents'] && !$image) return false;
+        if (!$data['contents'] && !$media) return false;
         if ($data['contents']) $data['contents'] = '<p>'.$data['contents'].'</p>';
-        if ($image) {
-            $typeArr = explode('.', $image);
-            $ImageInfo['image_info'] = '/uploads/'.md5($uid).'/aidigu/images/'.str_replace('.'.$typeArr[1], '', $image);
-            $ImageInfo['image_type'] = $typeArr[1];
-            $data['image'] = '/uploads/'.md5($uid).'/aidigu/images/'.$image;
-            if (!file_exists('.'.$data['image'])) return false;
-            $data['image_info'] = json_encode($ImageInfo, 320);
+        if ($media) {
+            $typeArr = explode('.', $media);
+            $mediaInfo['media_info'] = '/uploads/'.md5($uid).'/aidigu/images/'.str_replace('.'.$typeArr[1], '', $media);
+            $mediaInfo['media_type'] = $typeArr[1];
+            $data['media'] = '/uploads/'.md5($uid).'/aidigu/images/'.$media;
+            if (!file_exists('.'.$data['media'])) return false;
+            $data['media_info'] = json_encode($mediaInfo, 320);
         }
         $data['uid'] = $uid;
         $data['refrom'] = '网站';

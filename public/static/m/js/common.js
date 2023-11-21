@@ -200,30 +200,30 @@ function comdel(url){
 					if (additional) {
 						var userInfo = $.parseJSON($("#userInfo").val());
 						var message = data.data;
-						var image_info = $.parseJSON(message.image_info);
-						if (message.image) {
-							if (image_info.image_type == 'mp4' || image_info.image_type == 'm3u8') {
+						var media_info = $.parseJSON(message.media_info);
+						if (message.media) {
+							if (media_info.media_type == 'mp4' || media_info.media_type == 'm3u8') {
 								var str = '<div class="post"><img class="post-head" src="' +userInfo.head_image + '" />'
 								+ '<div class="post-article">'
 								+ '<div class="post-info-i">'
 								+ '<h2><a href="/' +userInfo.blog + '/own/">' +userInfo.nickname + '</a></h2><small><i class="fa fa-clock-o"></i>刚刚<i class="fa fa-eye"></i>'
 								+ '</div>'
 								+ '<div class="post-content"><p>' +message.contents +message.repost + '</p></div>'
-								+ '<p class="massageImg clear showVideo' + message.msg_id + '" vid="' + message.image + '"><video width="400px"  controls=""  name="media"><source src="" type="video/mp4"></video></p>'
+								+ '<p class="massageImg clear showVideo' + message.msg_id + '" vid="' + message.media + '"><video width="400px"  controls=""  name="media"><source src="" type="video/mp4"></video></p>'
 								+ '</div>'
 								+ '<div class="clear"></div>'
 								// + '<div class="post-meta">'+'<span><i class="fa fa-user"></i><a href="/' + message.blog + '/del/message/' + message.msg_id + '">删除</a></span></div>'
 								// + '<div class="clear"></div>'
 								+ '</div>'
 								+ '</div>';
-							} else if (image_info.image_type == 'mp3') {
+							} else if (media_info.media_type == 'mp3') {
 								var str = '<div class="post"><img class="post-head" src="' +userInfo.head_image + '" />'
 								+ '<div class="post-article">'
 								+ '<div class="post-info-i">'
 								+ '<h2><a href="/' +userInfo.blog + '/own/">' +userInfo.nickname + '</a></h2><small><i class="fa fa-clock-o"></i>刚刚<i class="fa fa-eye"></i>'
 								+ '</div>'
 								+ '<div class="post-content"><p>' +message.contents +message.repost + '</p></div>'
-								+ '<p class="massageImg clear"><audio id="music_'+message.msg_id+'" class="music" controls="controls" loop="loop" onplay="stopOther(this)" preload="none" controlsList="nodownload" οncοntextmenu="return false" name="media"><source src="'+message.image+'" type="audio/mpeg"></audio></p>'
+								+ '<p class="massageImg clear"><audio id="music_'+message.msg_id+'" class="music" controls="controls" loop="loop" onplay="stopOther(this)" preload="none" controlsList="nodownload" οncοntextmenu="return false" name="media"><source src="'+message.media+'" type="audio/mpeg"></audio></p>'
 								+ '</div>'
 								+ '<div class="clear"></div>'
 								// + '<div class="post-meta">'+'<span><i class="fa fa-user"></i><a href="/' + message.blog + '/del/message/' + message.msg_id + '">删除</a></span></div>'
@@ -237,7 +237,7 @@ function comdel(url){
 								+ '<h2><a href="/' +userInfo.blog + '/own/">' +userInfo.nickname + '</a></h2><small><i class="fa fa-clock-o"></i>刚刚<i class="fa fa-eye"></i>'
 								+ '</div>'
 								+ '<div class="post-content"><p>' +message.contents +message.repost + '</p></div>'
-								+ '<p  class="massageImg clear"><img class="massageImgCommon massageImg_'+message.image_info.image_type+'"  onclick="showMessageImg(this)" src="' + message.image + '"></p>';
+								+ '<p  class="massageImg clear"><img class="massageImgCommon massageImg_'+message.media_info.media_type+'"  onclick="showMessageImg(this)" src="' + message.media + '"></p>';
 								+ '</div>'
 								+ '<div class="clear"></div>'
 								// + '<div class="post-meta">'+'<span><i class="fa fa-user"></i><a href="/' + message.blog + '/del/message/' + message.msg_id + '">删除</a></span></div>'
@@ -261,8 +261,8 @@ function comdel(url){
 								+ '</div>';
 							
 						}
-						// if (message.image) {
-						// 	var str = '<div class="entry"><div class="avatar"><div class="imgborder"><a href="/'+userInfo.blog+'/"><img src="'+userInfo.head_image+'" /></a></div></div><div class="box box-main"><p class="massageText"><a href="/'+userInfo.blog+'/">'+userInfo.nickname+'：</a>'+message.contents+message.repost+'</p><p><img width="75%"  onclick="showMessageImg(this)" src="'+message.image+'"></p><div class="static"><span><a href="/'+userInfo.blog+'/message/'+message.msg_id+'" target="_blank">查看</a> | <a href="javascript:void(0);" onclick="repost(this)"> 转发 </a> |<a href="javascript:void(0);" onclick="comment('+message.msg_id+', {$siteUserId});"> 评论 </a>| <a href="/'+userInfo.blog+'/del/message/'+message.msg_id+'">删除</a></span>刚刚 来自 '+message.refrom+'</div></div><div class="clear"></div></div>';
+						// if (message.media) {
+						// 	var str = '<div class="entry"><div class="avatar"><div class="imgborder"><a href="/'+userInfo.blog+'/"><img src="'+userInfo.head_image+'" /></a></div></div><div class="box box-main"><p class="massageText"><a href="/'+userInfo.blog+'/">'+userInfo.nickname+'：</a>'+message.contents+message.repost+'</p><p><img width="75%"  onclick="showMessageImg(this)" src="'+message.media+'"></p><div class="static"><span><a href="/'+userInfo.blog+'/message/'+message.msg_id+'" target="_blank">查看</a> | <a href="javascript:void(0);" onclick="repost(this)"> 转发 </a> |<a href="javascript:void(0);" onclick="comment('+message.msg_id+', {$siteUserId});"> 评论 </a>| <a href="/'+userInfo.blog+'/del/message/'+message.msg_id+'">删除</a></span>刚刚 来自 '+message.refrom+'</div></div><div class="clear"></div></div>';
 						// } else {
 						// 	var str = '<div class="entry"><div class="avatar"><div class="imgborder"><a href="/'+userInfo.blog+'/"><img src="'+userInfo.head_image+'" /></a></div></div><div class="box box-main"><p class="massageText"><a href="/'+userInfo.blog+'/">'+userInfo.nickname+'：</a>'+message.contents+message.repost+'</p><div class="static"><span><a href="/'+userInfo.blog+'/message/'+message.msg_id+'" target="_blank">查看</a> | <a href="javascript:void(0);" onclick="repost(this)"> 转发 </a> |<a href="javascript:void(0);" onclick="comment('+message.msg_id+', {$siteUserId});"> 评论 </a>| <a href="/'+userInfo.blog+'/del/message/'+message.msg_id+'">删除</a></span>刚刚 来自 '+message.refrom+'</div></div><div class="clear"></div></div>';
 						// }
@@ -551,9 +551,9 @@ function comdel(url){
 		// 获取路径的最后一个点之后的内容作为文件扩展名
 		var linkArr = path.split('.');
 		var extension = linkArr.pop().toLowerCase();
-		var image_info = path.substring(0, path.lastIndexOf("."));
-		media.image_info = image_info
-		media.image_type = extension
+		var media_info = path.substring(0, path.lastIndexOf("."));
+		media.media_info = media_info
+		media.media_type = extension
 		var extensions = ['jpg', 'jpeg', 'gif', 'png', 'mp4', 'm3u8'];
 		// 判断文件扩展名是否在图片扩展名数组中
 		if (extensions.includes(extension)) {

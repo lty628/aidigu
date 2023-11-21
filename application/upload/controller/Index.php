@@ -127,29 +127,29 @@ class Index extends Controller
         $fileExtension = $pathinfo['extension'];
         // dump($type);die;
         // 视频分享
-        // {"image_info":"\/uploads\/72\/message\/20220326\/6b5b2500aade4230a7778bdc143eca51","image_type":"png"}
-        // $data['image_info']['image_type'] = $type[1];
-        $data['image_info'] = '';
+        // {"media_info":"\/uploads\/72\/message\/20220326\/6b5b2500aade4230a7778bdc143eca51","media_type":"png"}
+        // $data['media_info']['media_type'] = $type[1];
+        $data['media_info'] = '';
         if ($type[1] == 'mp4') {
             $data['content'] = '<p>分享视频' . $fileInfo['file_name'] . '</p>';
-            $data['image'] = $fileInfo['file_path'];
-            $data['image_info'] = json_encode([
-                'image_info' => $filePath,
-                'image_type' => $fileExtension,
+            $data['media'] = $fileInfo['file_path'];
+            $data['media_info'] = json_encode([
+                'media_info' => $filePath,
+                'media_type' => $fileExtension,
             ]);
-        } elseif ($type[0] == 'image') {
+        } elseif ($type[0] == 'media') {
             $data['content'] = '<p>分享图片</p>';
-            $data['image'] = $fileInfo['file_path'];
-            $data['image_info'] = json_encode([
-                'image_info' => $filePath,
-                'image_type' => $fileExtension,
+            $data['media'] = $fileInfo['file_path'];
+            $data['media_info'] = json_encode([
+                'media_info' => $filePath,
+                'media_type' => $fileExtension,
             ]);
         } elseif ($fileInfo['file_type'] == 'audio/mpeg') {
             $data['content'] = '<p>分享 ' . $fileInfo['file_name'] . '</p><p><audio id="' . 'music_' . $id . '" class="music" controls="controls" loop="loop" onplay="stopOther(this)" preload="none" controlsList="nodownload" οncοntextmenu="return false" name="media"><source src="' . $fileInfo['file_path'] . '" type="audio/mpeg"></audio></p>';
         } else {
             $data['content'] = '<p>分享文件，点击<a href="' . $fileInfo['file_path'] . '">' . $fileInfo['file_name'] . '</a>下载</p>';
         }
-        $result = \app\common\controller\Api::saveMessage($data['content'], $data['image_info']);
+        $result = \app\common\controller\Api::saveMessage($data['content'], $data['media_info']);
         Db::name('file')->where('id', $id)->update(['share_msg_id' => $result['msg_id'] ?? 0]);
         return $this->success('分享成功,请在我的首页中查看！');
     }

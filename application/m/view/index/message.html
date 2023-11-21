@@ -12,11 +12,11 @@
 			</div>
 			<div class="post-content">
 				{$message.contents|raw}{$message.repost|raw}
-				{if $message.image}
-						{if json_decode($message.image_info, true)['image_type'] == 'mp4'}
-						<p  class="massageImg"><video width="400px"  controls=""  name="media"><source src="{$message.image}" type="video/mp4"></video></p>
+				{if $message.media}
+						{if json_decode($message.media_info, true)['media_type'] == 'mp4'}
+						<p  class="massageImg"><video width="400px"  controls=""  name="media"><source src="{$message.media}" type="video/mp4"></video></p>
 						{else}
-						<p class="massageImg"><img width="75%" src="{:getTypeImg($message.image_info)}" onclick="showMessageImg(this)" style="cursor:pointer;"></p>
+						<p class="massageImg"><img width="75%" src="{:getTypeImg($message.media_info)}" onclick="showMessageImg(this)" style="cursor:pointer;"></p>
 						{/if}
 				{/if}
 			</div>

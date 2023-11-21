@@ -59,8 +59,8 @@ class SettingInfo extends Base
 			$image->thumb(100, 100,Image::THUMB_CENTER)->save($path.'/'.$fileName.'_middle.'.$info->getExtension());
 			$image = Image::open($fileFath);
 			$image->thumb(200, 200,Image::THUMB_CENTER)->save($path.'/'.$fileName.'_big.'.$info->getExtension());
-			$data['image_info'] = '/'.$path.'/'.$fileName;
-			$data['image_type'] = $info->getExtension();
+			$data['media_info'] = '/'.$path.'/'.$fileName;
+			$data['media_type'] = $info->getExtension();
 			$data['small'] = '/'.$path.'/'.$fileName.'_small.'.$info->getExtension();
 			$data['middle'] = '/'.$path.'/'.$fileName.'_middle.'.$info->getExtension();
 			$data['big'] = '/'.$path.'/'.$fileName.'_big.'.$info->getExtension();
@@ -76,9 +76,9 @@ class SettingInfo extends Base
 		// dump($saveUpload);die;
 		$saveUpload = json_decode($saveUpload, true);
 		// dump($saveUpload);die;
-		$info['image_info'] = $saveUpload['image_info'];
-		$info['image_type'] = $saveUpload['image_type'];
-		if (!isset($saveUpload['middle']) || !isset($saveUpload['image_info'])|| !isset($saveUpload['image_type'])) return json(['status'=>0, 'msg'=>'无数据']);
+		$info['media_info'] = $saveUpload['media_info'];
+		$info['media_type'] = $saveUpload['media_type'];
+		if (!isset($saveUpload['middle']) || !isset($saveUpload['media_info'])|| !isset($saveUpload['media_type'])) return json(['status'=>0, 'msg'=>'无数据']);
 		
 		$userid = getLoginUid();
 		$result = UserModel::where('uid', $userid)->update([
@@ -114,8 +114,8 @@ class SettingInfo extends Base
 		if($info){
 			// 成功上传后 获取上传信息
 			$fileName = explode('.', $info->getSaveName())[0];
-			$data['image_info'] = '/'.$path.'/'.$fileName;
-			$data['image_type'] = $info->getExtension();
+			$data['media_info'] = '/'.$path.'/'.$fileName;
+			$data['media_type'] = $info->getExtension();
 			return json(['status'=>1, 'msg'=>'上传成功','data'=>$data]);
 		}else{
 			// 上传失败获取错误信息
