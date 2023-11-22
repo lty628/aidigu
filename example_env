@@ -3,6 +3,7 @@
     trace = true
     urlDomainRoot = weibo.test
     staticDomain = 
+    beian=xxxxxxx
     noRegister = false
 [database]
     type = mysql

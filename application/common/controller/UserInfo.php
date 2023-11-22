@@ -12,6 +12,11 @@ use think\Controller;
  */
 class UserInfo extends Controller
 {
+	public function initialize()
+	{
+		$this->assign('beian', env('app.beian', ''));
+	}
+	
 	public function login()
 	{
 		$redirectUrl = input('get.url');
