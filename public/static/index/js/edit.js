@@ -30,7 +30,7 @@ editor.config.uploadImgHooks = {
         if (res.status) {
             var data = res.data;
             $(".tool-up-class").show();
-            $("#imgVal").val(JSON.stringify(data));
+            $("#mediaVal").val(JSON.stringify(data));
         }
         return
         // // insertImgFn 可把图片插入到编辑器，传入图片 src ，执行函数即可
@@ -63,7 +63,7 @@ editor.config.uploadVideoHooks = {
         if (res.status) {
             var data = res.data;
             $(".tool-up-class").show();
-            $("#imgVal").val(JSON.stringify(data));
+            $("#mediaVal").val(JSON.stringify(data));
         }
         return
         // console.log('customInsert', result)
@@ -233,9 +233,9 @@ editor.config.linkCheck = function(text, link) {
     var media = checkMediaType(link);
 
     if (media != false) {
-        $("#imgVal").val(JSON.stringify(media));
+        $("#mediaVal").val(JSON.stringify(media));
     }
-    console.log($("#imgVal").val())
+    console.log($("#mediaVal").val())
     return true;
 }
 

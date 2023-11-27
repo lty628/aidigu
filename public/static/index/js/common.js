@@ -103,7 +103,7 @@ function comdel(url){
 		      		var data = res.data;
 		      		// $(".imgHtml").html('上传成功！');
 		      		// $(".imgHtml").append('<i class="layui-icon layui-icon-close-fill" onclick="removeImg(this)"  style="color: red;cursor:pointer;font-size:20px!important"></i>')
-		      		$("#imgVal").val(JSON.stringify(data));
+		      		$("#mediaVal").val(JSON.stringify(data));
 		      	}
 		    }
 		    ,before: function(){
@@ -124,8 +124,8 @@ function comdel(url){
 				return false;
 			}
 
-			jsonData.imageInfo = $("#imgVal").val();
-			if (!text && !jsonData.imageInfo) {
+			jsonData.mediaInfo = $("#mediaVal").val();
+			if (!text && !jsonData.mediaInfo) {
 				alertMsg('请输入微博内容！');
 				$("#msgInput").focus();
 				return false;
@@ -379,7 +379,7 @@ function comdel(url){
 	{
 		// $(".imgHtml").hide();
 		$(".tool-up-class").hide();
-		$("#imgVal").val('')
+		$("#mediaVal").val('')
 		// $(obj).detach();
 	}
 
