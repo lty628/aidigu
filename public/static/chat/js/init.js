@@ -1,4 +1,4 @@
 var config = {
-	'domain' : "http://chat.hellosee.cc",
-	'wsserver' : "ws://tt.aidigu.cn/ws/:9502",
+	'domain' : "https://aidigu.cn",
+	'wsserver' : "wss://aidigu.cn/ws/:9502",
 }
