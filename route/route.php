@@ -18,6 +18,8 @@ Route::get('/cloud/show/$','upload/Index/show');
 Route::get('/cloud/show/:page$','upload/Index/show')->pattern(['page'=>'[0-9]+']);
 Route::get('/cloud/collection/$','upload/Index/collection');
 
+// 聊天
+Route::any('chat', 'chat/index/index');
 
 // 微博
 if (isMobile()) {

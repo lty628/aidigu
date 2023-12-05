@@ -15,15 +15,20 @@ function getLoginUserInfo()
 	}
 	return $info;
 }
-function checkUserCookie($rememberMe)
+function checkUserCookie($rememberMe, $fields = 'uid,blog')
 {
 	if (!$rememberMe) return false;
 	$rememberMe = unserialize(unserialize($rememberMe));
-	$info = Db::name('user')->where('blog', $rememberMe['blog'])->where('nickname', $rememberMe['nickname'])->where('password', $rememberMe['password'])->field('uid,blog')->find();
+	$info = Db::name('user')->where('blog', $rememberMe['blog'])->where('nickname', $rememberMe['nickname'])->where('password', $rememberMe['password'])->field($fields)->find();
 	if (!$info) return false;
 	session('userid', $info['uid']);
 	return $info;
 }
+function getWsUserInfoByCookie($rememberMe)
+{
+	return checkUserCookie($rememberMe, 'uid,nickname,head_image,blog');
+}
+
 function getLoginNickName()
 {
 	return getLoginUserInfo()['nickname'];
@@ -165,8 +170,13 @@ function isMobile()
 function handleMessage($message)
 {
 	$staticDomain = env('app.staticDomain', '');
-	foreach($message as &$data) {
+	foreach ($message as &$data) {
 		$data['media'] = $data['media'] ? $staticDomain . $data['media'] : '';
 	}
 	return $message;
+}
+
+function getPrefix()
+{
+	return config('database.prefix');
 }

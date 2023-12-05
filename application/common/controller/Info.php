@@ -67,46 +67,24 @@ class Info extends Base
 	}
 	protected function setMyFans($userid)
 	{
-		$fansInfo = Db::name('user')
-			->alias('user')
-			->join([$this->prefix.'fans'=>'fans'],'user.uid=fans.fromuid')->where('fans.touid',$userid)->where('fans.fromuid','<>',$userid)
-			->field('user.uid,user.nickname,user.province,user.city,user.message_sum,user.head_image,user.blog,fans.touid,fans.fromuid,fans.mutual_concern')
-			->order('fans.ctime desc')
-			->limit(9)
-			->select();
+		$fansInfo = \app\common\helper\Fans::setMyFans($userid);
 		$this->assign('fansInfo', $fansInfo);
 	}
 	protected function setMyConcern($userid)
 	{
-		$getConcern = Db::name('user')
-			->alias('user')
-			->join([$this->prefix.'fans'=>'fans'],'user.uid=fans.touid')->where('fans.fromuid',$userid)->where('fans.touid','<>',$userid)
-			->field('user.uid,user.nickname,user.province,user.city,user.message_sum,user.head_image,user.blog,fans.touid,fans.fromuid,fans.mutual_concern')
-			->order('fans.ctime desc')
-			->limit(9)
-			->select();
+		$getConcern = \app\common\helper\Fans::setMyConcern($userid);
 		$this->assign('getMyConcern', $getConcern);
 	}
 	//关注我的
 	protected function getMyFans($userid, $count = 9)
 	{
-		$fansInfo = Db::name('user')
-			->alias('user')
-			->join([$this->prefix.'fans'=>'fans'],'user.uid=fans.fromuid')->where('fans.touid',$userid)->where('fans.fromuid','<>',$userid)
-			->field('user.uid,user.nickname,user.province,user.city,user.message_sum,user.head_image,user.blog,fans.touid,fans.fromuid,fans.mutual_concern')
-			->order('fans.ctime desc')
-			->paginate($count, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
+		$fansInfo = \app\common\helper\Fans::getMyFans($userid, $count);
 		return $fansInfo;
 	}
 	//我关注的
 	protected function getMyConcern($userid, $count = 9)
 	{
-		$getConcern = Db::name('user')
-			->alias('user')
-			->join([$this->prefix.'fans'=>'fans'],'user.uid=fans.touid')->where('fans.fromuid',$userid)->where('fans.touid','<>',$userid)
-			->field('user.uid,user.nickname,user.province,user.city,user.message_sum,user.head_image,user.blog,fans.touid,fans.fromuid,fans.mutual_concern')
-			->order('fans.ctime desc')
-			->paginate($count, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
+		$getConcern = \app\common\helper\Fans::getMyConcern($userid, $count);
 		return $getConcern;	
 	}
 	protected function getMessage($userid, $count = 50, $topicId = 0) 
@@ -126,17 +104,11 @@ class Info extends Base
 		$this->assign('messageBlock', $messageBlock);
 
 	}
-	protected function getReminderMsg($type = '', $count=20)
+	protected function getReminderMsg($userid = '', $count=20)
 	{
 
-		$reminderMsg = Db::name('Reminder')
-			->alias('reminder')
-			->join([$this->prefix.'message'=>'message'],'reminder.msg_id=message.msg_id')
-			->join([$this->prefix.'user'=>'user'],'user.uid=reminder.fromuid')
-			->field('user.uid,user.nickname,message.media,message.media_info,message.contents,message.msg_id,message.repost,message.refrom,message.repostsum,message.commentsum,message.ctime,user.head_image,user.blog,reminder.type,reminder.touid,reminder.fromuid')
-			->order('reminder.ctime desc')
-			->where('touid', $this->userid)
-			->paginate($count, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
+		if (!$userid) $userid = $this->userid;
+		$reminderMsg = \app\common\helper\Fans::getReminderMsg($userid, $count);
 		$this->assign('userMessage', $reminderMsg);
 		// $result = Reminder::getReminderMsg($this->userid);
 		// // dump($result);die;
