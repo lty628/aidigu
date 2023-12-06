@@ -26,10 +26,16 @@ var cdiv = {
 			break;
 			
 			case 'user':
-				console.log(params)
-				arr = [
-					'<div id=\'user-',params.uid,'\' uid="',params.uid,'" onclick="chat.changeUser(this)" fd="',params.fd,'" uname="',params.nickname,'" class="list-item conv-item context-menu conv-item-company"><i class="iconfont icon-delete-conv tipper-attached"></i><div class="head_image-wrap"><div class="group-head_image"><div class="normal group-logo-head_image" style="background-image: url(',params.head_image,');"></div></div></div><div class="conv-item-content"><div class="title-wrap info"><div class="name-wrap"><p class="name">',params.nickname,'</p></div><span class="time">',params.time,'</span></div></div></div>'
-				];
+				if (params.message_count) {
+					arr = [
+						'<div id=\'user-',params.uid,'\' uid="',params.uid,'" onclick="chat.changeUser(this)" uname="',params.nickname,'" class="list-item conv-item context-menu conv-item-company"><i class="iconfont icon-delete-conv tipper-attached"></i><div class="head_image-wrap"><div class="group-head_image"><div class="normal group-logo-head_image" style="background-image: url(',params.head_image,');"></div></div></div><div class="conv-item-content"><div class="title-wrap info"><div class="name-wrap"><p class="name">',params.nickname,'</p></div></div></div><span class="layui-badge" style="font-size:10px" id="message-',params.uid,'">未读</span></div>'
+					];
+				} else {
+					arr = [
+						'<div id=\'user-',params.uid,'\' uid="',params.uid,'" onclick="chat.changeUser(this)" uname="',params.nickname,'" class="list-item conv-item context-menu conv-item-company"><i class="iconfont icon-delete-conv tipper-attached"></i><div class="head_image-wrap"><div class="group-head_image"><div class="normal group-logo-head_image" style="background-image: url(',params.head_image,');"></div></div></div><div class="conv-item-content"><div class="title-wrap info"><div class="name-wrap"><p class="name">',params.nickname,'</p></div></div></div><span class="layui-badge" style="display:none; font-size:10px" id="message-',params.uid,'">未读</span></div>'
+					];
+				}
+				
 			break;
 			case 'newlogin':
 				arr = [
@@ -42,14 +48,13 @@ var cdiv = {
 				];
 				break;
 			case 'my':
-				console.log(params)
 				arr = [
 					'<div class="big-52 with-border user-head_image" uid="',params.uid,'" title="',params.nickname,'" style="margin-left: 10px; margin-top: 3px;background-image: url(',params.head_image,');"></div>'
 				];
 				break;
 			case 'listtags':
 				arr = [
-					'<li class="menu-item ',params.selected,'" listtagid="',params.listtagid,'" onclick="chat.changeList(this)">',params.listtagname,'<span id="message-',params.listtagid,'">0</span></li>'
+					'<li class="menu-item ',params.selected,'" listtagid="',params.listtagid,'" onclick="chat.changeList(this)">',params.listtagname,'<span id="listtag-',params.listtagid,'">0</span></li>'
 				];
 				break;
 		}

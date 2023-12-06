@@ -40,11 +40,11 @@ class ChatServer extends Command
         $loginUserInfo = getWsUserInfoByCookie($request->cookie['rememberMe']);
         // dump($loginUserInfo);
         $uid = $loginUserInfo['uid'];
-        $friendList = \app\chat\libs\Friends::list($uid);
+        $friendList = \app\chat\libs\TagInfo::friendList($uid);
         $data['fd'] = $request->fd;
         $data['uid'] = $uid;
         $data['online_time'] = time();
-        \app\chat\libs\Chat::upOnlineUserStatus($uid, $data);
+        \app\chat\libs\ChatDbHelper::upOnlineUserStatus($uid, $data);
         $server->push($request->fd, json_encode([
             'code' => 1,
             'msg' => 'success',
@@ -68,21 +68,6 @@ class ChatServer extends Command
         // echo "open\n";
     }
 
-    public function initMessageData($data)
-    {
-        $time = time();
-        $data['create_time'] = date('Y-m-d H:i:s', $time);
-        if (!$data['content_type']) return $data;
-        if ($data['content_type'] == 'mp3') {
-            $data['content'] = '<p class="massageImg clear"><audio id="music_' . (string)$time . '" class="music" controls="controls" loop="loop" onplay="stopOther(this)" preload="none" controlsList="nodownload" οncοntextmenu="return false" name="media"><source src="' . $data['content'] . '" type="audio/mpeg"></audio></p>';
-        } elseif($data['content_type'] == 'mp4' || $data['content_type'] == 'm3u8') {
-            $data['content'] = '<p  class="massageImg"><video width="300px"  controls=""  name="media"><source src="'.$data['content'].'" type="video/mp4"></video></p>';
-        } else {
-            $data['content'] = '<img width="150px" class="massageImgCommon massageImg_jpg" onclick="showMessageImg(this)" src="' . $data['content'] . '">';
-        }
-        return $data;
-    }
-
     public function onMessage($server, $frame)
     {
         $frameData = json_decode($frame->data, true);
@@ -91,42 +76,50 @@ class ChatServer extends Command
             'login',
             'friendChat',
         ];
+        $funcArr = [
+            'none',
+            'login',
+            'friendChat',
+            'friendChatHistory',
+        ];
+        $func = $funcArr[$frameData['type']];
+        \app\chat\libs\Message::{$func}($server,$frame, $frameData);
 
-        if ($frameData['type'] == 2) {
-            // dump($frameData);
-            $frameData['listtagid'] = 'friends';
-            $frameData = $this->initMessageData($frameData);
-            $data['create_time'] = $frameData['create_time'];
-            $data['fromuid'] = $frameData['fromuid'];
-            $data['content'] = $frameData['content'];
-            $data['content_type'] = $frameData['content_type'];
-            $data['touid'] = $frameData['touid'];
-            $server->push($frame->fd, json_encode([
-                'code' => 2,
-                'msg' => 'success',
-                'data' => $frameData
-            ], 320));
-            $isOnline = \app\chat\libs\Chat::isOnline($data['touid']);
-            if ($isOnline) {
-                $server->push($isOnline['fd'], json_encode([
-                    'code' => 2,
-                    'msg' => 'success',
-                    'data' => $frameData
-                ], 320));
-                $data['send_status'] = 1;
-            }
-            \app\chat\libs\Chat::saveFriendChat($data);
-        }
+        // if ($frameData['type'] == 2) {
+        //     // dump($frameData);
+        //     $frameData['listtagid'] = 'friends';
+        //     $frameData = $this->initMessageData($frameData);
+        //     $data['create_time'] = $frameData['create_time'];
+        //     $data['fromuid'] = $frameData['fromuid'];
+        //     $data['content'] = $frameData['content'];
+        //     $data['content_type'] = $frameData['content_type'];
+        //     $data['touid'] = $frameData['touid'];
+        //     $server->push($frame->fd, json_encode([
+        //         'code' => 2,
+        //         'msg' => 'success',
+        //         'data' => $frameData
+        //     ], 320));
+        //     $isOnline = \app\chat\libs\ChatDbHelper::isOnline($data['touid']);
+        //     if ($isOnline) {
+        //         $server->push($isOnline['fd'], json_encode([
+        //             'code' => 2,
+        //             'msg' => 'success',
+        //             'data' => $frameData
+        //         ], 320));
+        //         $data['send_status'] = 1;
+        //     }
+        //     \app\chat\libs\ChatDbHelper::saveFriendChat($data);
+        // }
 
-        if ($frameData['type'] == 3) {
-            $chatHisory = \app\chat\libs\Chat::getChatHistory($frameData);
-            $server->push($frame->fd, json_encode([
-                'code' => 3,
-                'msg' => 'success',
-                'data' => $chatHisory,
-                'listtagid' => 'friends'
-            ], 320));
-        }
+        // if ($frameData['type'] == 3) {
+        //     $chatHisory = \app\chat\libs\ChatDbHelper::getChatHistory($frameData);
+        //     $server->push($frame->fd, json_encode([
+        //         'code' => 3,
+        //         'msg' => 'success',
+        //         'data' => $chatHisory,
+        //         'listtagid' => 'friends'
+        //     ], 320));
+        // }
 
         
         // $server->push($frame->fd, '{"code":2,"msg":"","data":{"listtagid":"a","fd":2,"name":"bookapi","avatar":"/static/index/images/noavatar_small.gif","newmessage":"1111","remains":null,"time":"08:04","mine":1}}');

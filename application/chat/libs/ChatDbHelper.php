@@ -2,7 +2,7 @@
 namespace app\chat\libs;
 use think\Db;
 
-class Chat
+class ChatDbHelper
 {
 
     // 用户是否在线
@@ -28,12 +28,30 @@ class Chat
 
     public static function getChatHistory($data)
     {
-        return Db::name('chat_friends_history')->alias('chat')->join([getPrefix() . 'user' => 'user'], 'user.uid=chat.fromuid')->where('fromuid', 'in', [$data['touid'], $data['fromuid']])
+        $result = Db::name('chat_friends_history')->alias('chat')->join([getPrefix() . 'user' => 'user'], 'user.uid=chat.fromuid')->where('fromuid', 'in', [$data['touid'], $data['fromuid']])
             ->where('touid', 'in', [$data['touid'], $data['fromuid']])
             ->limit(1000)
             ->order('chat_id', 'desc')
             ->field('user.head_image,user.nickname,chat.*')->select();
+        Db::name('chat_friends_history')->where('fromuid', $data['touid'])->where('touid', $data['fromuid'])->where('send_status', 0)->update([
+            'send_status' => 1
+        ]);
+        Db::name('chat_friends')->where('fromuid', $data['fromuid'])->where('touid', $data['touid'])->update([
+            'message_count' => 0
+        ]);
+        return $result;
     }
+
+    public static function getFriendList($uid, $count = 200)
+    {
+        return Db::name('user')
+            ->alias('user')
+            ->join([getPrefix() . 'chat_friends' => 'chat_friends'], 'user.uid=chat_friends.touid')->where('chat_friends.fromuid', $uid)->where('chat_friends.touid', '<>', $uid)
+            ->field('user.uid,user.nickname,user.province,user.city,user.message_sum,user.head_image,user.blog,chat_friends.touid,chat_friends.fromuid,chat_friends.mutual_concern,chat_friends.message_count')
+            ->order('chat_friends.message_count desc,chat_friends.ctime desc')
+            ->limit($count)->select();
+    }
+
 
     // /**
     //  * 登录

@@ -116,24 +116,31 @@ var chat = {
 		var json = {"type": chat.data.type, "content": text, 'content_type': data.media_type, "touid": chat.data.touid, 'head_image': chat.data.head_image, 'nickname': chat.data.nickname, fromuid: chat.data.uid};
 		chat.wsSend(JSON.stringify(json));
 	},
-	initMessage: function(data) {
+	initMessage: function(data, isHistory) {
 		if(data.fromuid == chat.data.uid){
 			chat.addChatLine('mymessage',data,data.listtagid);
-			$("#chattext").val('');
+			// $("#chattext").val('');
 		} else {
-			if(data.remains){
-				for(var i = 0 ; i < data.remains.length;i++){
-					if(chat.data.fd == data.remains[i].fd){
-						chat.shake();
-						var msg = data.nickname + "在群聊@了你。";
-						chat.displayError('chatErrorMessage_logout',msg,0);
+			if (!isHistory) {
+				if(data.remains){
+					for(var i = 0 ; i < data.remains.length;i++){
+						if(chat.data.fd == data.remains[i].fd){
+							chat.shake();
+							var msg = data.nickname + "在群聊@了你。";
+							chat.displayError('chatErrorMessage_logout',msg,0);
+						}
 					}
 				}
+				chat.chatAudio();
+				if (!$("#user-"+data.fromuid).hasClass("selected")) {
+					$("#message-"+data.fromuid).css('display', 'block')
+					return 
+				}
 			}
-			chat.chatAudio();
 			chat.addChatLine('chatLine',data,data.listtagid);
+			// $("#user-"+chat.data.fromid).children('.layui-badge').css('display', 'block')
 			//增加消息
-			chat.showMsgCount(data.listtagid,'show');
+			// chat.showMsgCount(data.listtagid,'show');
 		}
 	},
 	wsMessage : function(){
@@ -158,7 +165,7 @@ var chat = {
 					// chat.displayError('chatErrorMessage_login',d.msg,1);
 					break;
 				case 2:
-					chat.initMessage(d.data)
+					chat.initMessage(d.data, false)
 					// if(d.data.fromuid == chat.data.uid){
 					// 	chat.addChatLine('mymessage',d.data,d.data.listtagid);
 					// 	$("#chattext").val('');
@@ -180,12 +187,12 @@ var chat = {
 					break;
 				case 3:
 					if (d.data) {
-						console.log(d)
+						// console.log(d)
 						$('#chatLineHolder-' + d.listtagid).html('');
 						var len = d.data.length
 						for (let index = len - 1; index >= 0; index--) {
 							d.data[index].listtagid = d.listtagid
-							chat.initMessage(d.data[index])
+							chat.initMessage(d.data[index], true)
 						}				
 					}
 
@@ -230,19 +237,19 @@ var chat = {
 			//alert('服务器关闭，请联系QQ:1335244575 开放测试2');
 		}
 	},
-	showMsgCount:function(listtagid,type){
-		// if(!this.data.login) {return;}
-		if(type == 'hide'){
-			$("#message-"+listtagid).text(parseInt(0));
-			$("#message-"+listtagid).css('display','none');
-		} else {
-			if(chat.data.crd != listtagid){
-				$("#message-"+listtagid).css('display','block');
-				var msgtotal = $("#message-"+listtagid).text();
-				$("#message-"+listtagid).text(parseInt(msgtotal)+1);
-			}
-		}
-	},
+	// showMsgCount:function(listtagid,type){
+	// 	// if(!this.data.login) {return;}
+	// 	if(type == 'hide'){
+	// 		$("#message-"+listtagid).text(parseInt(0));
+	// 		$("#message-"+listtagid).css('display','none');
+	// 	} else {
+	// 		if(chat.data.crd != listtagid){
+	// 			$("#message-"+listtagid).css('display','block');
+	// 			var msgtotal = $("#message-"+listtagid).text();
+	// 			$("#message-"+listtagid).text(parseInt(msgtotal)+1);
+	// 		}
+	// 	}
+	// },
 	/** 
 	 * 当一个用户进来或者刷新页面触发本方法
 	 *
@@ -263,7 +270,7 @@ var chat = {
 				if(data[item]){
 					for (key in data[item]) {
 						// console.log(data[item][key])
-						users.push(cdiv.render('user',data[item][key]));
+						users.unshift(cdiv.render('user',data[item][key]));
 					}
 				}
 				$('#conv-lists-' + item).html(users.join(''));
@@ -369,6 +376,7 @@ var chat = {
 		// }
 		$(".list-item").removeClass("selected")
 		$(obj).addClass('selected')
+		$(obj).children('.layui-badge').css('display', 'none')
 		
 		// $("#main-menus").children().removeClass("selected");
 		// $("#user-lists").children().css("display","none");
