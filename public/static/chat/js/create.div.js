@@ -37,6 +37,18 @@ var cdiv = {
 				}
 				
 			break;
+			case 'group':
+				if (params.message_count) {
+					arr = [
+						'<div id=\'group-',params.listtagid,'-',params.groupid,'\' listtagid="',params.listtagid,'" groupid="',params.groupid,'" onclick="chat.changeGroup(this)" uname="',params.groupname,'" class="list-item conv-item context-menu conv-item-company"><i class="iconfont icon-delete-conv tipper-attached"></i><div class="head_image-wrap"><div class="group-head_image"><div class="normal group-logo-head_image" style="background-image: url(',params.head_image,');"></div></div></div><div class="conv-item-content"><div class="title-wrap info"><div class="name-wrap"><p class="name">',params.groupname,'</p></div></div></div><span class="layui-badge" style="font-size:10px" id="message-',params.listtagid,'-',params.groupid,'">未读</span></div>'
+					];
+				} else {
+					arr = [
+						'<div id=\'group-',params.listtagid,'-',params.groupid,'\' listtagid="',params.listtagid,'" groupid="',params.groupid,'" onclick="chat.changeGroup(this)" uname="',params.groupname,'" class="list-item conv-item context-menu conv-item-company"><i class="iconfont icon-delete-conv tipper-attached"></i><div class="head_image-wrap"><div class="group-head_image"><div class="normal group-logo-head_image" style="background-image: url(',params.head_image,');"></div></div></div><div class="conv-item-content"><div class="title-wrap info"><div class="name-wrap"><p class="name">',params.groupname,'</p></div></div></div><span class="layui-badge" style="display:none; font-size:10px" id="message-',params.listtagid,'-',params.groupid,'">未读</span></div>'
+					];
+				}
+				
+			break;
 			case 'newlogin':
 				arr = [
 					'<div class="chat-status chat-system-notice">系统消息：欢迎&nbsp;',params.nickname,'&nbsp;加入群聊</div>'

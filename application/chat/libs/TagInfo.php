@@ -25,35 +25,44 @@ class TagInfo
     // 好友列表
     public static function friendList($uid)
     {
-        $friendList = \app\chat\libs\ChatDbHelper::getFriendList($uid, 200);
+        $list = \app\chat\libs\ChatDbHelper::getFriendList($uid, 200);
         // {"code":4,"msg":"success","data":{"mine":0,"listtags":[{"listtagid":"1","listtagname":"我的好友"},{"listtagid":"2","listtagname":"我的群聊"}],"users":{"1":[{"fd":7,"name":"bookapi","avatar":"/uploads/c81e728d9d4c2f636f067f89cc14862c/avatar/20231121/dbdc4662fc214ba89ada1ab7088905b7_middle.jpeg","email":"3528@qq.com","time":"10:31","listtagid":"a"}],"2":[]}}}
         $data = [];
-        foreach ($friendList as $userInfo) {
-            $data[$userInfo['uid']]['nickname'] = $userInfo['nickname'];
-            $data[$userInfo['uid']]['head_image'] = $userInfo['head_image'];
-            $data[$userInfo['uid']]['message_count'] = $userInfo['message_count'];
-            $data[$userInfo['uid']]['uid'] = $userInfo['uid'];
+        foreach ($list as $info) {
+            $data[$info['uid']]['nickname'] = $info['nickname'];
+            $data[$info['uid']]['head_image'] = $info['head_image'];
+            $data[$info['uid']]['message_count'] = $info['message_count'];
+            $data[$info['uid']]['uid'] = $info['uid'];
         }
         return $data;
     }
 
     public static function privateLetterList($uid)
     {
-        $friendList = \app\chat\libs\ChatDbHelper::getPrivateLetterList($uid, 200);
+        $list = \app\chat\libs\ChatDbHelper::getPrivateLetterList($uid, 200);
         // {"code":4,"msg":"success","data":{"mine":0,"listtags":[{"listtagid":"1","listtagname":"我的好友"},{"listtagid":"2","listtagname":"我的群聊"}],"users":{"1":[{"fd":7,"name":"bookapi","avatar":"/uploads/c81e728d9d4c2f636f067f89cc14862c/avatar/20231121/dbdc4662fc214ba89ada1ab7088905b7_middle.jpeg","email":"3528@qq.com","time":"10:31","listtagid":"a"}],"2":[]}}}
         $data = [];
-        foreach ($friendList as $userInfo) {
-            $data[$userInfo['uid']]['nickname'] = $userInfo['nickname'];
-            $data[$userInfo['uid']]['head_image'] = $userInfo['head_image'];
-            $data[$userInfo['uid']]['message_count'] = $userInfo['message_count'];
-            $data[$userInfo['uid']]['uid'] = $userInfo['uid'];
+        foreach ($list as $info) {
+            $data[$info['uid']]['nickname'] = $info['nickname'];
+            $data[$info['uid']]['head_image'] = $info['head_image'];
+            $data[$info['uid']]['message_count'] = $info['message_count'];
+            $data[$info['uid']]['uid'] = $info['uid'];
         }
         return $data;
     }
 
     public static function groupList($uid)
     {
-        return [];
+        $list = \app\chat\libs\ChatDbHelper::getGroupList($uid, 50);
+        // {"code":4,"msg":"success","data":{"mine":0,"listtags":[{"listtagid":"1","listtagname":"我的好友"},{"listtagid":"2","listtagname":"我的群聊"}],"users":{"1":[{"fd":7,"name":"bookapi","avatar":"/uploads/c81e728d9d4c2f636f067f89cc14862c/avatar/20231121/dbdc4662fc214ba89ada1ab7088905b7_middle.jpeg","email":"3528@qq.com","time":"10:31","listtagid":"a"}],"2":[]}}}
+        $data = [];
+        foreach ($list as $info) {
+            $data[$info['groupid']]['groupname'] = $info['groupname'];
+            $data[$info['groupid']]['head_image'] = $info['head_image'];
+            $data[$info['groupid']]['message_count'] = $info['message_count'];
+            $data[$info['groupid']]['groupid'] = $info['groupid'];
+        }
+        return $data;
     }
 
     public static function tagList()

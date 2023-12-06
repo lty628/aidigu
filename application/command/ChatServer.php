@@ -77,7 +77,9 @@ class ChatServer extends Command
         $funcArr = [
             'none',
             'login',
+            // 在线聊天
             'chatOnline',
+            // 聊天记录
             'chatHistory',
         ];
         // $frameData['listtagid'] Friends PrivateLetter Group

@@ -16,27 +16,31 @@ class Group
         $data['fromuid'] = $frameData['fromuid'];
         $data['content'] = $frameData['content'];
         $data['content_type'] = $frameData['content_type'];
-        $data['touid'] = $frameData['touid'];
-        $server->push($frame->fd, json_encode([
-            'code' => 2,
-            'msg' => 'success',
-            'data' => $frameData
-        ], 320));
-        $isOnline = \app\chat\libs\ChatDbHelper::isOnline(['uid' => $data['touid']]);
-        if ($isOnline) {
-            $server->push($isOnline['fd'], json_encode([
-                'code' => 2,
-                'msg' => 'success',
-                'data' => $frameData
-            ], 320));
-            $data['send_status'] = 1;
+        $data['groupid'] = $frameData['groupid'];
+        $offLineUser = [];
+        $onlineInfo = \app\chat\libs\ChatDbHelper::groupOnlineInfo($data['groupid']);
+        if ($onlineInfo) {
+            foreach ($onlineInfo as $isOnline) {
+                if (!$isOnline['fd']) {
+                    $offLineUser[] = $isOnline['uid'];
+                    continue;
+                };
+                $server->push($isOnline['fd'], json_encode([
+                    'code' => 2,
+                    'msg' => 'success',
+                    'data' => $frameData
+                ], 320));
+            }
         }
-        \app\chat\libs\ChatDbHelper::saveChatFriendHistory($data);
+        if ($offLineUser) {
+            \app\chat\libs\ChatDbHelper::updateMessageCount('chat_group_user', ['uid', 'in', $offLineUser]);
+        }
+        \app\chat\libs\ChatDbHelper::saveChatGroupHistory($data);
     }
 
     public static function chatHistory($server, $frame, $frameData)
     {
-        $chatHisory = \app\chat\libs\ChatDbHelper::getChatHistory($frameData);
+        $chatHisory = \app\chat\libs\ChatDbHelper::getChatGroupHistory($frameData);
         $server->push($frame->fd, json_encode([
             'code' => 3,
             'msg' => 'success',

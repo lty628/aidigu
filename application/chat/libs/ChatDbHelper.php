@@ -10,6 +10,19 @@ class ChatDbHelper
     {
         return Db::name('chat_online')->where($where)->find();
     }
+    // 群在线信息
+    public static function groupOnlineInfo($groupId)
+    {
+        return Db::name('chat_group_user')->alias('chat_group_user')
+            ->join([getPrefix() . 'chat_online' => 'chat_online'], 'chat_online.uid=chat_group_user.uid')
+            ->where('groupid', $groupId)
+            ->select();
+    }
+
+    public static function updateMessageCount($tableName, $where)
+    {
+        return Db::name($tableName)->where($where)->setInc('message_count', 1);
+    }
 
     // 用户上线
     public static function upOnlineUserStatus($where, $data)
@@ -29,6 +42,11 @@ class ChatDbHelper
     public static function saveChatFriendHistory($data)
     {
         return Db::name('chat_friends_history')->insert($data);
+    }
+
+    public static function saveChatGroupHistory($data)
+    {
+        return Db::name('chat_group_history')->insert($data);
     }
 
     public static function getChatFriendHistory($data)
@@ -63,12 +81,26 @@ class ChatDbHelper
         return $result;
     }
 
+    public static function getChatGroupHistory($data)
+    {
+        $result = Db::name('chat_group_history')->alias('chat')
+            ->join([getPrefix() . 'user' => 'user'], 'user.uid=chat.fromuid')
+            ->where('groupid', $data['groupid'])
+            ->limit(1000)
+            ->order('chat_id', 'desc')
+            ->field('user.head_image,user.nickname,chat.*')->select();
+        Db::name('chat_group_user')->where('uid', $data['uid'])->where('groupid', $data['groupid'])->update([
+            'message_count' => 0
+        ]);
+        return $result;
+    }
+
     public static function getFriendList($uid, $count = 200)
     {
         return Db::name('user')
             ->alias('user')
             ->join([getPrefix() . 'chat_friends' => 'chat_friends'], 'user.uid=chat_friends.touid')->where('chat_friends.fromuid', $uid)->where('chat_friends.touid', '<>', $uid)
-            ->field('user.uid,user.nickname,user.province,user.city,user.message_sum,user.head_image,user.blog,chat_friends.touid,chat_friends.fromuid,chat_friends.mutual_concern,chat_friends.message_count')
+            ->field('user.uid,user.nickname,user.head_image,chat_friends.touid,chat_friends.fromuid,chat_friends.mutual_concern,chat_friends.message_count')
             ->order('chat_friends.message_count desc,chat_friends.ctime desc')
             ->limit($count)->select();
     }
@@ -78,8 +110,18 @@ class ChatDbHelper
         return Db::name('user')
             ->alias('user')
             ->join([getPrefix() . 'chat_private_letter' => 'chat_private_letter'], 'user.uid=chat_private_letter.touid')->where('chat_private_letter.fromuid', $uid)->where('chat_private_letter.touid', '<>', $uid)
-            ->field('user.uid,user.nickname,user.province,user.city,user.message_sum,user.head_image,user.blog,chat_private_letter.touid,chat_private_letter.fromuid,chat_private_letter.mutual_concern,chat_private_letter.message_count')
+            ->field('user.uid,user.nickname,user.head_image,chat_private_letter.touid,chat_private_letter.fromuid,chat_private_letter.mutual_concern,chat_private_letter.message_count')
             ->order('chat_private_letter.message_count desc,chat_private_letter.ctime desc')
+            ->limit($count)->select();
+    }
+
+    public static function getGroupList($uid, $count = 50)
+    {
+        return Db::name('chat_group')
+            ->alias('chat_group')
+            ->join([getPrefix() . 'chat_group_user' => 'chat_group_user'], 'chat_group.groupid=chat_group_user.groupid')->where('chat_group_user.uid', '<>', $uid)
+            ->field('chat_group.groupid,chat_group.groupname,chat_group.head_image,chat_group_user.uid,chat_group_user.message_count')
+            ->order('chat_group_user.message_count desc,chat_group_user.ctime desc')
             ->limit($count)->select();
     }
 
