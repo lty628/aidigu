@@ -119,7 +119,8 @@ class ChatDbHelper
     {
         return Db::name('chat_group')
             ->alias('chat_group')
-            ->join([getPrefix() . 'chat_group_user' => 'chat_group_user'], 'chat_group.groupid=chat_group_user.groupid')->where('chat_group_user.uid', '<>', $uid)
+            ->join([getPrefix() . 'chat_group_user' => 'chat_group_user'], 'chat_group.groupid=chat_group_user.groupid')
+            ->where('chat_group_user.uid', $uid)
             ->field('chat_group.groupid,chat_group.groupname,chat_group.head_image,chat_group_user.uid,chat_group_user.message_count')
             ->order('chat_group_user.message_count desc,chat_group_user.ctime desc')
             ->limit($count)->select();
