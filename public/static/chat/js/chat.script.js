@@ -154,6 +154,9 @@ var chat = {
 	wsMessage : function(){
 		this.data.wSock.onmessage=function(event){
 			heartCheck.reset().start();
+			if (event.data == 'pong') {
+				return 
+			}
 			var d = jQuery.parseJSON(event.data);
 			switch(d.code){
 				case 1:
