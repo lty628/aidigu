@@ -40,17 +40,20 @@ class ChatServer extends Command
         $loginUserInfo = getWsUserInfoByCookie($request->cookie['rememberMe']);
         // dump($loginUserInfo);
         $uid = $loginUserInfo['uid'];
-        $friendList = \app\chat\libs\TagInfo::friendList($uid);
+
+        // 好友列表
+        $friendList = \app\chat\libs\TagInfo::getTagInfo($uid);
         $data['fd'] = $request->fd;
         $data['uid'] = $uid;
         $data['online_time'] = time();
-        \app\chat\libs\ChatDbHelper::upOnlineUserStatus($uid, $data);
+        \app\chat\libs\ChatDbHelper::upOnlineUserStatus(['uid' => $uid], $data);
         $server->push($request->fd, json_encode([
             'code' => 1,
             'msg' => 'success',
             'data' => $loginUserInfo
         ], 320));
         $server->push($request->fd, json_encode($friendList, 320));
+
         // $server->push($request->fd, '{"code":4,"msg":"success","data":{"mine":0,"listtags":[{"listtagid":"a","listtagname":"\u5510"},{"listtagid":"b","listtagname":"\u4f2f"},{"listtagid":"c","listtagname":"\u864e"},{"listtagid":"d","listtagname":"\u70b9"},{"listtagid":"e","listtagname":"\u79cb"},{"listtagid":"f","listtagname":"\u9999"}],"users":{"a":[{"fd":7,"name":"bookapi","avatar":"http:\/\/127.0.0.1:8081\/static\/images\/avatar\/f1\/f_7.jpg","email":"3528@qq.com","time":"10:31","listtagid":"a"}],"b":[],"c":[],"d":[],"e":[],"f":[]}}}');
         // $server->push($request->fd, '{"code":4,"msg":"success","data":{"mine":0,"listtags":[{"listtagid":"1","listtagname":"我的好友"},{"listtagid":"2","listtagname":"我的群聊"}],"users":{"1":[{"fd":7,"name":"bookapi","avatar":"/uploads/c81e728d9d4c2f636f067f89cc14862c/avatar/20231121/dbdc4662fc214ba89ada1ab7088905b7_middle.jpeg","email":"3528@qq.com","time":"10:31","listtagid":"a"}],"2":[]}}}');
         // $server->push($request->fd, '{"code":1,"msg":"bookapi\u52a0\u5165\u4e86\u7fa4\u804a","data":{"listtagid":"1","fd":2,"name":"bookapi","avatar":"/static/index/images/noavatar_small.gif","time":"07:59","mine":1}}');
@@ -71,110 +74,16 @@ class ChatServer extends Command
     public function onMessage($server, $frame)
     {
         $frameData = json_decode($frame->data, true);
-        $func = [
-            'none',
-            'login',
-            'friendChat',
-        ];
         $funcArr = [
             'none',
             'login',
-            'friendChat',
-            'friendChatHistory',
+            'chatOnline',
+            'chatHistory',
         ];
+        // $frameData['listtagid'] Friends PrivateLetter Group
+        $className = '\\app\\chat\\libs\\'.$frameData['listtagid'];
         $func = $funcArr[$frameData['type']];
-        \app\chat\libs\Message::{$func}($server,$frame, $frameData);
-
-        // if ($frameData['type'] == 2) {
-        //     // dump($frameData);
-        //     $frameData['listtagid'] = 'friends';
-        //     $frameData = $this->initMessageData($frameData);
-        //     $data['create_time'] = $frameData['create_time'];
-        //     $data['fromuid'] = $frameData['fromuid'];
-        //     $data['content'] = $frameData['content'];
-        //     $data['content_type'] = $frameData['content_type'];
-        //     $data['touid'] = $frameData['touid'];
-        //     $server->push($frame->fd, json_encode([
-        //         'code' => 2,
-        //         'msg' => 'success',
-        //         'data' => $frameData
-        //     ], 320));
-        //     $isOnline = \app\chat\libs\ChatDbHelper::isOnline($data['touid']);
-        //     if ($isOnline) {
-        //         $server->push($isOnline['fd'], json_encode([
-        //             'code' => 2,
-        //             'msg' => 'success',
-        //             'data' => $frameData
-        //         ], 320));
-        //         $data['send_status'] = 1;
-        //     }
-        //     \app\chat\libs\ChatDbHelper::saveFriendChat($data);
-        // }
-
-        // if ($frameData['type'] == 3) {
-        //     $chatHisory = \app\chat\libs\ChatDbHelper::getChatHistory($frameData);
-        //     $server->push($frame->fd, json_encode([
-        //         'code' => 3,
-        //         'msg' => 'success',
-        //         'data' => $chatHisory,
-        //         'listtagid' => 'friends'
-        //     ], 320));
-        // }
-
-        
-        // $server->push($frame->fd, '{"code":2,"msg":"","data":{"listtagid":"a","fd":2,"name":"bookapi","avatar":"/static/index/images/noavatar_small.gif","newmessage":"1111","remains":null,"time":"08:04","mine":1}}');
-
-        // $data = json_decode($frame->data, true);
-        // switch ($data['type']) {
-        //     case 1: //登录
-        //         $data = array(
-        //             'task' => 'login',
-        //             'params' => array(
-        //                 'name' => $data['name'],
-        //                 'email' => $data['email']
-        //             ),
-        //             'fd' => $frame->fd,
-        //             'listtagid' => $data['listtagid']
-        //         );
-        //         if (!$data['params']['name'] || !$data['params']['email']) {
-        //             $data['task'] = "nologin";
-        //             $this->server->task(json_encode($data));
-        //             break;
-        //         }
-        //         $this->server->task(json_encode($data));
-        //         break;
-        //     case 2: //新消息
-        //         $data = array(
-        //             'task' => 'new',
-        //             'params' => array(
-        //                 'name' => $data['name'],
-        //                 'avatar' => $data['avatar']
-        //             ),
-        //             'c' => $data['c'],
-        //             'message' => $data['message'],
-        //             'fd' => $frame->fd,
-        //             'listtagid' => $data['listtagid']
-        //         );
-        //         $this->server->task(json_encode($data));
-        //         break;
-        //     case 3: // 改变房间
-        //         $data = array(
-        //             'task' => 'change',
-        //             'params' => array(
-        //                 'name'   => $data['name'],
-        //                 'avatar' => $data['avatar'],
-        //             ),
-        //             'fd' => $frame->fd,
-        //             'oldlisttagid' => $data['oldlisttagid'],
-        //             'listtagid' => $data['listtagid']
-        //         );
-
-        //         $this->server->task(json_encode($data));
-
-        //         break;
-        //     default:
-        //         $this->server->push($frame->fd, json_encode(array('code' => 0, 'msg' => 'type error')));
-        // }
+        $className::{$func}($server,$frame, $frameData);
     }
     public function onTask($server, $task_id, $from_id, $data)
     {
@@ -209,6 +118,10 @@ class ChatServer extends Command
     public function onClose($server, $fd)
     {
 
+        \app\chat\libs\ChatDbHelper::upOnlineUserStatus(['fd' => $fd], [
+            'offline_time' => time(),
+            'fd' => 0
+        ]);
         // $pushMsg = array('code' => 0, 'msg' => '', 'data' => array());
         // //获取用户信息
         // $user = Chat::logout("", $fd);

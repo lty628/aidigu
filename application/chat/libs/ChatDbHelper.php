@@ -6,27 +6,32 @@ class ChatDbHelper
 {
 
     // 用户是否在线
-    public static function isOnline($uid)
+    public static function isOnline($where)
     {
-        return Db::name('chat_online')->where(['uid' => $uid])->find();
+        return Db::name('chat_online')->where($where)->find();
     }
 
     // 用户上线
-    public static function upOnlineUserStatus($uid, $data)
+    public static function upOnlineUserStatus($where, $data)
     {
-        $find = Db::name('chat_online')->where(['uid' => $uid])->find();
+        $find = Db::name('chat_online')->where($where)->find();
         if ($find) {
-            return Db::name('chat_online')->where(['uid' => $uid])->update($data);
+            return Db::name('chat_online')->where($where)->update($data);
         }
         return Db::name('chat_online')->insert($data);
     }
 
-    public static function saveFriendChat($data)
+    public static function saveChatPrivateLetterHistory($data)
+    {
+        return Db::name('chat_private_letter_history')->insert($data);
+    }
+
+    public static function saveChatFriendHistory($data)
     {
         return Db::name('chat_friends_history')->insert($data);
     }
 
-    public static function getChatHistory($data)
+    public static function getChatFriendHistory($data)
     {
         $result = Db::name('chat_friends_history')->alias('chat')->join([getPrefix() . 'user' => 'user'], 'user.uid=chat.fromuid')->where('fromuid', 'in', [$data['touid'], $data['fromuid']])
             ->where('touid', 'in', [$data['touid'], $data['fromuid']])
@@ -42,6 +47,22 @@ class ChatDbHelper
         return $result;
     }
 
+    public static function getChatPrivateLetterHistory($data)
+    {
+        $result = Db::name('chat_private_letter_history')->alias('chat')->join([getPrefix() . 'user' => 'user'], 'user.uid=chat.fromuid')->where('fromuid', 'in', [$data['touid'], $data['fromuid']])
+            ->where('touid', 'in', [$data['touid'], $data['fromuid']])
+            ->limit(1000)
+            ->order('chat_id', 'desc')
+            ->field('user.head_image,user.nickname,chat.*')->select();
+        Db::name('chat_private_letter_history')->where('fromuid', $data['touid'])->where('touid', $data['fromuid'])->where('send_status', 0)->update([
+            'send_status' => 1
+        ]);
+        Db::name('chat_private_letter')->where('fromuid', $data['fromuid'])->where('touid', $data['touid'])->update([
+            'message_count' => 0
+        ]);
+        return $result;
+    }
+
     public static function getFriendList($uid, $count = 200)
     {
         return Db::name('user')
@@ -49,6 +70,16 @@ class ChatDbHelper
             ->join([getPrefix() . 'chat_friends' => 'chat_friends'], 'user.uid=chat_friends.touid')->where('chat_friends.fromuid', $uid)->where('chat_friends.touid', '<>', $uid)
             ->field('user.uid,user.nickname,user.province,user.city,user.message_sum,user.head_image,user.blog,chat_friends.touid,chat_friends.fromuid,chat_friends.mutual_concern,chat_friends.message_count')
             ->order('chat_friends.message_count desc,chat_friends.ctime desc')
+            ->limit($count)->select();
+    }
+
+    public static function getPrivateLetterList($uid, $count = 200)
+    {
+        return Db::name('user')
+            ->alias('user')
+            ->join([getPrefix() . 'chat_private_letter' => 'chat_private_letter'], 'user.uid=chat_private_letter.touid')->where('chat_private_letter.fromuid', $uid)->where('chat_private_letter.touid', '<>', $uid)
+            ->field('user.uid,user.nickname,user.province,user.city,user.message_sum,user.head_image,user.blog,chat_private_letter.touid,chat_private_letter.fromuid,chat_private_letter.mutual_concern,chat_private_letter.message_count')
+            ->order('chat_private_letter.message_count desc,chat_private_letter.ctime desc')
             ->limit($count)->select();
     }
 

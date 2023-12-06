@@ -8,7 +8,7 @@ class Index extends Controller
     {
         $urlDomainRoot = env('app.urlDomainRoot');
         // $domain = 'https://'.$urlDomainRoot;
-        $wsserver = 'wss://'.$urlDomainRoot.'/ws/';
+        $wsserver = 'ws://'.$urlDomainRoot.'/ws/';
         $this->assign('wsserver', $wsserver);
         return $this->fetch();
     }

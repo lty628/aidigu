@@ -2,12 +2,15 @@
 namespace app\chat\libs;
 
 
-class Message
+class Friends
 {
-    public static function friendChat($server, $frame, $frameData)
+    protected static $listtagid = 'Friends';
+
+
+    public static function chatOnline($server, $frame, $frameData)
     {
         // dump($frameData);
-        $frameData['listtagid'] = 'friends';
+        $frameData['listtagid'] = self::$listtagid;
         $frameData = self::initMessageData($frameData);
         $data['create_time'] = $frameData['create_time'];
         $data['fromuid'] = $frameData['fromuid'];
@@ -19,7 +22,7 @@ class Message
             'msg' => 'success',
             'data' => $frameData
         ], 320));
-        $isOnline = \app\chat\libs\ChatDbHelper::isOnline($data['touid']);
+        $isOnline = \app\chat\libs\ChatDbHelper::isOnline(['uid' => $data['touid']]);
         if ($isOnline) {
             $server->push($isOnline['fd'], json_encode([
                 'code' => 2,
@@ -28,17 +31,17 @@ class Message
             ], 320));
             $data['send_status'] = 1;
         }
-        \app\chat\libs\ChatDbHelper::saveFriendChat($data);
+        \app\chat\libs\ChatDbHelper::saveChatFriendHistory($data);
     }
 
-    public static function friendChatHistory($server, $frame, $frameData)
+    public static function chatHistory($server, $frame, $frameData)
     {
-        $chatHisory = \app\chat\libs\ChatDbHelper::getChatHistory($frameData);
+        $chatHisory = \app\chat\libs\ChatDbHelper::getChatFriendHistory($frameData);
         $server->push($frame->fd, json_encode([
             'code' => 3,
             'msg' => 'success',
             'data' => $chatHisory,
-            'listtagid' => 'friends'
+            'listtagid' => self::$listtagid
         ], 320));
     }
 

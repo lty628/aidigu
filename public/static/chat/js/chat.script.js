@@ -44,7 +44,7 @@ var chat = {
 	// 	chat.data.type = 1; //登录标志
 	// 	chat.data.email = email; //邮箱
 	// 	chat.data.login = true;
-	// 	var json = {"type": chat.data.type,"name": name,"email": email,'listtagid':'a'};
+	// 	var json = {"type": chat.data.type, "listtagid": chat.data.listtagid,"name": name,"email": email,'listtagid':'a'};
 	// 	chat.wsSend(JSON.stringify(json));
 	// 	return false;
 		 
@@ -78,7 +78,7 @@ var chat = {
 		if(!text) return false;
 		chat.data.type = 2; //发送消息标志
 		// console.log(chat.data)
-		var json = {"type": chat.data.type, "content": text, 'content_type': '', "touid": chat.data.touid, 'head_image': chat.data.head_image, 'nickname': chat.data.nickname, fromuid: chat.data.uid};
+		var json = {"type": chat.data.type, "listtagid": chat.data.listtagid, "content": text, 'content_type': '', "touid": chat.data.touid, 'head_image': chat.data.head_image, 'nickname': chat.data.nickname, fromuid: chat.data.uid};
 		chat.wsSend(JSON.stringify(json));
 		editor.txt.clear()
 		$("#msgInput").focus();
@@ -113,13 +113,12 @@ var chat = {
 	sendMedia: function(data) {
 		var text = data.media_info+'.'+ data.media_type
 		chat.data.type = 2; //发送消息标志
-		var json = {"type": chat.data.type, "content": text, 'content_type': data.media_type, "touid": chat.data.touid, 'head_image': chat.data.head_image, 'nickname': chat.data.nickname, fromuid: chat.data.uid};
+		var json = {"type": chat.data.type, "listtagid": chat.data.listtagid, "content": text, 'content_type': data.media_type, "touid": chat.data.touid, 'head_image': chat.data.head_image, 'nickname': chat.data.nickname, fromuid: chat.data.uid};
 		chat.wsSend(JSON.stringify(json));
 	},
 	initMessage: function(data, isHistory) {
 		if(data.fromuid == chat.data.uid){
 			chat.addChatLine('mymessage',data,data.listtagid);
-			// $("#chattext").val('');
 		} else {
 			if (!isHistory) {
 				if(data.remains){
@@ -132,8 +131,8 @@ var chat = {
 					}
 				}
 				chat.chatAudio();
-				if (!$("#user-"+data.fromuid).hasClass("selected")) {
-					$("#message-"+data.fromuid).css('display', 'block')
+				if (!$("#user-"+data.listtagid+'-'+data.fromuid).hasClass("selected")) {
+					$("#message-"+data.listtagid+'-'+data.fromuid).css('display', 'block')
 					return 
 				}
 			}
@@ -269,6 +268,7 @@ var chat = {
 				var users = [];
 				if(data[item]){
 					for (key in data[item]) {
+						data[item][key].listtagid=item
 						// console.log(data[item][key])
 						users.unshift(cdiv.render('user',data[item][key]));
 					}
@@ -369,6 +369,7 @@ var chat = {
 		// 	return false;
 		// }
 		var uid = $(obj).attr("uid");
+		var listtagid = $(obj).attr("listtagid");
 		// var userObj = $("#conv-lists-"+uid).find('#user-'+this.data.fd);
 		// console.log(userObj)
 		// if(userObj.length > 0){
@@ -390,8 +391,9 @@ var chat = {
 		// this.data.crd = uid;
 		//用户切换房间
 		chat.data.touid = uid
+		chat.data.listtagid = listtagid
 		chat.data.fromuid = chat.data.uid
-		var json = {"type": 3,"touid": uid, 'fromuid': chat.data.uid};
+		var json = {"type": 3,"touid": uid, 'fromuid': chat.data.uid, "listtagid": listtagid};
 		chat.wsSend(JSON.stringify(json));
 		$(".input-area").show()
 	},
