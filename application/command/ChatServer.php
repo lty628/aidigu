@@ -73,19 +73,24 @@ class ChatServer extends Command
 
     public function onMessage($server, $frame)
     {
-        $frameData = json_decode($frame->data, true);
-        $funcArr = [
-            'none',
-            'login',
-            // 在线聊天
-            'chatOnline',
-            // 聊天记录
-            'chatHistory',
-        ];
-        // $frameData['listtagid'] Friends PrivateLetter Group
-        $className = '\\app\\chat\\libs\\'.$frameData['listtagid'];
-        $func = $funcArr[$frameData['type']];
-        $className::{$func}($server,$frame, $frameData);
+        if ($frame->data == 'ping') {
+            $server->push($frame->fd, 'pong');
+        } else {
+            $frameData = json_decode($frame->data, true);
+            $funcArr = [
+                'none',
+                'login',
+                // 在线聊天
+                'chatOnline',
+                // 聊天记录
+                'chatHistory',
+            ];
+            // $frameData['listtagid'] Friends PrivateLetter Group
+            $className = '\\app\\chat\\libs\\'.$frameData['listtagid'];
+            $func = $funcArr[$frameData['type']];
+            $className::{$func}($server,$frame, $frameData);
+        }
+        
     }
     public function onTask($server, $task_id, $from_id, $data)
     {

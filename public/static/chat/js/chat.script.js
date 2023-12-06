@@ -96,6 +96,7 @@ var chat = {
 	},
 	wsOpen : function (){
 		this.data.wSock.onopen = function( event ){
+			heartCheck.reset().start();
 			//初始化房间
 			// chat.print('wsopen',event);
 			//判断是否已经登录过，如果登录过。自动登录。不需要再次输入昵称和邮箱
@@ -152,6 +153,7 @@ var chat = {
 	},
 	wsMessage : function(){
 		this.data.wSock.onmessage=function(event){
+			heartCheck.reset().start();
 			var d = jQuery.parseJSON(event.data);
 			switch(d.code){
 				case 1:
@@ -241,7 +243,7 @@ var chat = {
 	},
 	wsOnerror : function(){
 		this.data.wSock.onerror = function(event){
-			//alert('服务器关闭，请联系QQ:1335244575 开放测试2');
+
 		}
 	},
 	// showMsgCount:function(listtagid,type){
@@ -511,5 +513,29 @@ var chat = {
 		console.log('----' + flag + ' start-------');
 		console.log(obj);
 		console.log('----' + flag + ' end-------');
+	}
+}
+
+
+
+var heartCheck = {
+	timeout: 30000,//毫秒
+	timeoutObj: null,
+	serverTimeoutObj: null,
+	reset: function(){
+		clearTimeout(this.timeoutObj);
+		clearTimeout(this.serverTimeoutObj);
+		return this;
+	},
+	start: function(){
+		var self = this;
+		this.timeoutObj = setTimeout(function(){
+			//这里发送一个心跳，后端收到后，返回一个心跳消息，
+			//onmessage拿到返回的心跳就说明连接正常
+			chat.wsSend("ping");
+			self.serverTimeoutObj = setTimeout(function(){//如果超过一定时间还没重置，说明后端主动断开了
+				chat.wsOnclose();//如果onclose
+			}, self.timeout)
+		}, this.timeout)
 	}
 }
