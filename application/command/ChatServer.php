@@ -2,7 +2,7 @@
 
 namespace app\command;
 
-use app\chat\libs\Chat;
+// use app\chat\libs\Chat;
 
 use Swoole\WebSocket\Server;
 
@@ -11,7 +11,7 @@ use think\console\Input;
 use think\console\Output;
 
 
-// use think\console\input\Argument;
+use think\console\input\Argument;
 // use think\console\input\Option;
 
 class ChatServer extends Command
@@ -23,7 +23,8 @@ class ChatServer extends Command
         // 指令配置
         $this->setName('chatserver');
         $this->setName('chatserver')
-            // ->addArgument('name', Argument::OPTIONAL, "your name")
+            ->addArgument('port', Argument::OPTIONAL, "端口(默认： 9501)")
+            ->addArgument('ip', Argument::OPTIONAL, "ip(默认： 127.0.0.1)")
             // ->addOption('city', null, Option::VALUE_REQUIRED, 'city name')
             ->setDescription('聊天服务');
         // 设置参数
@@ -32,7 +33,11 @@ class ChatServer extends Command
 
     protected function execute(Input $input, Output $output)
     {
-        $this->initServer();
+        $port = trim($input->getArgument('port'));
+        $ip = trim($input->getArgument('ip'));
+      	$port = $port ?: '9501';
+      	$ip = $ip ?: '127.0.0.1';
+        $this->initServer($ip, $port);
     }
 
     public function onOpen($server, $request)
@@ -177,9 +182,9 @@ class ChatServer extends Command
     }
 
 
-    public function initServer()
+    public function initServer($ip, $port)
     {
-        $this->server = new Server("0.0.0.0", 9502);
+        $this->server = new Server($ip, $port);
         $this->server->set(array(
             'task_worker_num'     => 8
         ));

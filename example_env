@@ -2,6 +2,7 @@
     debug = true
     trace = true
     urlDomainRoot = weibo.test
+    chatSocketDomain = ws://weibo.test/
     staticDomain = 
     beian=xxxxxxx
     noRegister = false
