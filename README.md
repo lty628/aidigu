@@ -22,8 +22,10 @@ QQ群：434615423
 
 ### **建议的环境：**
 
-CentOS7+PHP7+Mysql5.6以上
+**Linux发行版：**CentOS7+/Debian9+/Ubuntu20.04+PHP7+Mysql5.6以上
+**PHP版本需求：**建议PHP7.2+
+**MySQL版本需求：**MySQL5.6+
 
 ## 版权信息
 
-MIT
+本项目遵循 MIT License
