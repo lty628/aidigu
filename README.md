@@ -1,3 +1,20 @@
+<p align="center">
+    <a href="https://github.com/lty628/aidigu">
+        <img src="https://raw.githubusercontent.com/lty628/aidigu/master/public/favicon.ico" width="256" alt="aidigu" />
+    </a>
+</p>
+<p align="center">
+    <a href="https://github.com/lty628/aidigu"><img src="https://img.shields.io/badge/PHP-7.2%2B-blue?style=for-the-badge&color=%238d4bbb" alt="PHP 7.2+"></a>
+    <a href="https://github.com/lty628/aidigu"><img src="https://img.shields.io/badge/STABLE-1.5.0-blue?style=for-the-badge&color=%230aa344" alt="Latest Stable Version"></a>
+    <a href="https://github.com/lty628/aidigu"><img src="https://img.shields.io/badge/UNSTABLE-1.5.x--DEV-blue?style=for-the-badge&color=%23ff0097" alt="Latest Unstable Version"></a>
+    <a href="https://github.com/lty628/aidigu"><img src="https://img.shields.io/badge/SIZE-9.3MB-blue?style=for-the-badge&color=%23f0c239" alt="Download Size"></a>
+    <a href="https://raw.githubusercontent.com/lty628/aidigu/master/LICENSE"><img src="https://img.shields.io/badge/LICENSE-MIT-blue?style=for-the-badge&color=%234b5cc4" alt="MIT License"></a>
+</p>
+<p align="center">
+    <a href="https://github.com/phplrt/phplrt/actions"><img src="https://github.com/phplrt/phplrt/workflows/build/badge.svg?branch=3.x&event=push"></a>
+</p>
+
+
 ## **PHP开发的开源微博系统**
 
 QQ群：434615423
@@ -18,7 +35,9 @@ QQ群：434615423
 
 2.复制 example_env 为 .env 并修改.env相关配置
 
-3.配置Web服务器的伪静态  
+3.网站的运行目录设置为 /public
+
+4.配置Web服务器的伪静态  
 
 *Nginx伪静态配置（nginx.conf）*  
 
