@@ -1,3 +1,5 @@
+#基础配置
+#除非你是专业人员正在对网站进行调试，否则在何种情况下都应该默认将'debug'项和'trace'项的值设置为False
 [app]
     debug = true        #调试模式
     trace = true        #详细日志
@@ -17,8 +19,7 @@
     prefix =           #数据库表前缀，默认为wb_
     debug = true       #数据库调试模式
 
-#以下为进阶配置
-
+#进阶配置
 [storage]
     type = File
 [s3Config]             #AWS API调用
