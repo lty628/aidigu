@@ -81,7 +81,7 @@ QQ群：434615423
 
 ***Linux系统***：CentOS7+/Debian9+/Ubuntu20.04+  
 
-***PHP版本需求***：建议PHP7.2+  
+***PHP版本需求***：建议PHP7.2+（暂不支持PHP8）  
 
 ***MySQL版本需求***：MySQL5.6+
 
