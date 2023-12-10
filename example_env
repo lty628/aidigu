@@ -1,30 +1,33 @@
 [app]
-    debug = true
-    trace = true
-    urlDomainRoot = weibo.test
+    debug = true        #调试模式
+    trace = true        #详细日志
+    urlDomainRoot = weibo.test        #网站URL
     chatSocketDomain = ws://weibo.test/
     staticDomain = 
-    beian=xxxxxxx
-    noRegister = false
+    beian=xxxxxxx        #填入备案号
+    noRegister = false        #禁止注册
 [database]
     type = mysql
     hostname = 127.0.0.1
-    database = 
-    username = root
-    password = root
-    hostport = 3306
-    charset = utf8mb4
-    prefix = 
-    debug = true
+    database =         #数据库名
+    username = root    #数据库用户名
+    password = root    #数据库密码
+    hostport = 3306    #数据库端口，默认为3306
+    charset = utf8mb4  #数据库字符集
+    prefix =           #数据库表前缀，默认为wb_
+    debug = true       #数据库调试模式
+
+#以下为进阶配置
+
 [storage]
     type = File
-[s3Config]
+[s3Config]             #AWS API调用
     awsAccessKey = ERFSEGEHSEF
     awsSecretKey = DVFASSADVFFSADSADASD
     bucket = test
     endpoint = http://192.168.1.11/
     region = 中国华北一区
-[wechat]
+[wechat]               #微信API调用
 app_id = wadfas
 secret = sdfasdaasdffdsg
 token = asdfasdfdsfdddadweqwdeff
