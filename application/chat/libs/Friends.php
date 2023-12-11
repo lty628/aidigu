@@ -31,7 +31,7 @@ class Friends
             ], 320));
             $data['send_status'] = 1;
         } else {
-            \app\chat\libs\ChatDbHelper::updateMessageCount('chat_friends', ['fromuid' => $isOnline['uid']]);
+            \app\chat\libs\ChatDbHelper::updateMessageCount('chat_friends', ['fromuid' => $data['touid']]);
         }
         \app\chat\libs\ChatDbHelper::saveChatFriendHistory($data);
     }
