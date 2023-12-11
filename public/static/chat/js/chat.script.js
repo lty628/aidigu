@@ -453,6 +453,7 @@ var chat = {
 		var json = {"type": 3,"groupid": groupid, 'uid': chat.data.uid, "listtagid": listtagid};
 		chat.wsSend(JSON.stringify(json));
 		$(".input-area").show()
+		$("#chat-lists").show();
 	},
 	
 	// The addChatLine method ads a chat entry to the page
