@@ -342,6 +342,8 @@ var chat = {
 		$(".msg-items").css('display',"none");
 		$("#conv-lists-"+tagid).css('display',"block");
 		$("#chatLineHolder-"+tagid).css('display',"block");
+		$(".input-area").hide()
+		$("#chat-lists").hide();
 	},
 	/**
 	 * 1.初始化房间
@@ -383,9 +385,9 @@ var chat = {
 		/*显示头像*/
 		$('.profile').html(cdiv.render('my',data));
 		$('#loginbox').fadeOut(function(){
-			$('.input-area').fadeIn();
+			// $('.input-area').fadeIn();
 			$('.action-area').fadeIn();
-			$('.input-area').focus();
+			// $('.input-area').focus();
 		});
 	},
 	privateChat : function(touid){
@@ -418,6 +420,7 @@ var chat = {
 		$(".list-item").removeClass("selected")
 		$(obj).addClass('selected')
 		$(obj).children('.layui-badge').css('display', 'none')
+		$("#chat-lists").show();
 		
 		// $("#main-menus").children().removeClass("selected");
 		// $("#user-lists").children().css("display","none");
