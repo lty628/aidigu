@@ -38,10 +38,10 @@
 			{else}
 				<li><a href="{:url('/'.$userInfo.blog.'/')}">{$userInfo.sex|getPerson}的首页</a></li>
 				<li><a href="{:url('/'.$userInfo.blog.'/own/')}">{$userInfo.sex|getPerson}的微博</a></li>
+				<li><a target="_blank" href="/chat/private/{$userInfo.uid}">私信{$userInfo.sex|getPerson}</a></li>
 				<li><a href="{:url('/'.$loginUserInfo.blog.'/')}">我的首页</a></li>
 				<li><a href="/square/">广场</a></li>
 				<li><a href="/topic/">话题</a></li>
-				<li><a target="_blank" href="/chat/private/{$userInfo.uid}">私信</a></li>
 			{/if}
 			{if "WINADMIN" == 111}
 			<li><a href="">站点管理</a></li>
