@@ -23,7 +23,7 @@ class Friends
             'data' => $frameData
         ], 320));
         $isOnline = \app\chat\libs\ChatDbHelper::isOnline(['uid' => $data['touid']]);
-        if ($isOnline['fd']) {
+        if ($isOnline && $isOnline['fd']) {
             $server->push($isOnline['fd'], json_encode([
                 'code' => 2,
                 'msg' => 'success',
