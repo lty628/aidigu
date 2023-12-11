@@ -11,7 +11,11 @@ class Index extends Controller
         $fromuid = getLoginUid();
         $wsserver = env('app.chatSocketDomain');
 
-        if ($touid || $fromuid) {
+        if (!$fromuid) {
+            $this->error('没有登录');
+        }
+
+        if ($touid) {
             $this->checkPrivate($touid, $fromuid);
         }
 
