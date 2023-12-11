@@ -20,6 +20,7 @@ Route::get('/cloud/collection/$','upload/Index/collection');
 
 // 聊天
 Route::any('chat', 'chat/index/index');
+Route::any('chat/private/:uid$', 'chat/index/index')->pattern(['uid'=>'[0-9]+']);
 
 // 微博
 if (isMobile()) {

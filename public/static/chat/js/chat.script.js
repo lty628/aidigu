@@ -108,7 +108,12 @@ var chat = {
 				chat.doLogin( name , email );
 			}
 			*/
-			
+			var privateToUid = $("#privateToUid").val()
+			if (privateToUid) {
+				$("#sub-menu-pannel").hide();
+				$("#menu-pannel").hide();
+				chat.privateChat(privateToUid)
+			}
 		}
 	},
 	sendMedia: function(data) {
@@ -382,6 +387,19 @@ var chat = {
 			$('.action-area').fadeIn();
 			$('.input-area').focus();
 		});
+	},
+	privateChat : function(touid){
+		
+		var listtagid = 'PrivateLetter';
+
+		//用户切换房间
+		chat.data.touid = touid
+		chat.data.listtagid = listtagid
+		chat.data.fromuid = $("#privateFromUid").val()
+		chat.data.uid = chat.data.fromuid
+		var json = {"type": 3,"touid": touid, 'fromuid': chat.data.uid, "listtagid": listtagid};
+		chat.wsSend(JSON.stringify(json));
+		$(".input-area").show()
 	},
 	changeUser : function(obj){
 		//未登录

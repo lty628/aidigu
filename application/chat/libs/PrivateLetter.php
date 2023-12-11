@@ -31,7 +31,7 @@ class PrivateLetter
             ], 320));
             $data['send_status'] = 1;
         } else {
-            \app\chat\libs\ChatDbHelper::updateMessageCount('chat_private_letter', ['uid', $isOnline['uid']]);
+            \app\chat\libs\ChatDbHelper::updateMessageCount('chat_private_letter', ['fromuid' => $isOnline['uid']]);
         }
         \app\chat\libs\ChatDbHelper::saveChatPrivateLetterHistory($data);
     }
