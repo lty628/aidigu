@@ -137,14 +137,17 @@ var chat = {
 					}
 				}
 				chat.chatAudio();
+				document.title = '【有新消息～】'
 				if (data.listtagid == 'Group') {
 					if (!$("#group-"+data.listtagid+'-'+data.groupid).hasClass("selected")) {
 						$("#message-"+data.listtagid+'-'+data.groupid).css('display', 'block')
+						$("#conv-lists-"+data.listtagid).prepend($("#group-"+data.listtagid+"-"+data.groupid));
 						return 
 					}
 				} else {
 					if (!$("#user-"+data.listtagid+'-'+data.fromuid).hasClass("selected")) {
 						$("#message-"+data.listtagid+'-'+data.fromuid).css('display', 'block')
+						$("#conv-lists-"+data.listtagid).prepend($("#user-"+data.listtagid+"-"+data.fromuid));
 						return 
 					}
 				}
@@ -152,7 +155,7 @@ var chat = {
 			}
 			chat.addChatLine('chatLine',data,data.listtagid);
 			// $("#user-"+chat.data.fromid).children('.layui-badge').css('display', 'block')
-			//增加消息
+			// 增加消息
 			// chat.showMsgCount(data.listtagid,'show');
 		}
 	},
@@ -344,6 +347,8 @@ var chat = {
 		$("#chatLineHolder-"+tagid).css('display',"block");
 		$(".input-area").hide()
 		$("#chat-lists").hide();
+		// 默认选中第一个
+		// $("#conv-lists-"+tagid).children().first().trigger('click')
 	},
 	/**
 	 * 1.初始化房间
@@ -421,6 +426,7 @@ var chat = {
 		$(obj).addClass('selected')
 		$(obj).children('.layui-badge').css('display', 'none')
 		$("#chat-lists").show();
+		document.title = ''
 		
 		// $("#main-menus").children().removeClass("selected");
 		// $("#user-lists").children().css("display","none");
@@ -446,6 +452,7 @@ var chat = {
 		$(".list-item").removeClass("selected")
 		$(obj).addClass('selected')
 		$(obj).children('.layui-badge').css('display', 'none')
+		document.title = ''
 
 		chat.data.groupid = groupid
 		chat.data.listtagid = listtagid
