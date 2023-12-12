@@ -4,6 +4,45 @@ $(document).ready(function(){
 	chat.init();
 	
 });
+var blinkingTitle = {
+	timer: false,
+	title: '',
+	start : function(newTitle, isParent){
+		if (this.timer) {
+			return
+		}
+		if (isParent) {
+			this.title = parent.document.title
+		} else {
+			this.title = document.title
+		}
+		this.timer = setInterval(() => {
+			if (isParent) {
+				if (parent.document.title == newTitle) {
+					parent.document.title = this.title;
+				} else {
+					parent.document.title = newTitle;
+				}
+			} else {
+				if (document.title == newTitle) {
+					document.title = '';
+				} else {
+					document.title = newTitle;
+				}
+			}
+			
+		}, 800);
+	},
+	stop : function(isParent) {
+		clearInterval(this.timer)
+		if (isParent) {
+			parent.document.title=this.title
+		} else {
+			document.title=this.title
+		}
+	}
+}
+
 var chat = {
 	data : {
 		wSock       : null,
@@ -137,7 +176,7 @@ var chat = {
 					}
 				}
 				chat.chatAudio();
-				document.title = '【有新消息～】'
+				blinkingTitle.start('【未读消息】', true);
 				if (data.listtagid == 'Group') {
 					if (!$("#group-"+data.listtagid+'-'+data.groupid).hasClass("selected")) {
 						$("#message-"+data.listtagid+'-'+data.groupid).css('display', 'block')
@@ -429,7 +468,7 @@ var chat = {
 		$(obj).addClass('selected')
 		$(obj).children('.layui-badge').css('display', 'none')
 		$("#chat-lists").show();
-		document.title = ''
+		blinkingTitle.stop(true);
 		
 		// $("#main-menus").children().removeClass("selected");
 		// $("#user-lists").children().css("display","none");
@@ -455,7 +494,7 @@ var chat = {
 		$(".list-item").removeClass("selected")
 		$(obj).addClass('selected')
 		$(obj).children('.layui-badge').css('display', 'none')
-		document.title = ''
+		blinkingTitle.stop(true);
 
 		chat.data.groupid = groupid
 		chat.data.listtagid = listtagid
