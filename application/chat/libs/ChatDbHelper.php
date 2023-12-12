@@ -5,6 +5,13 @@ use think\Db;
 class ChatDbHelper
 {
 
+    public static function initFd()
+    {
+        return Db::name('chat_online')->where('fd', '>', 0)->update([
+            'fd' => 0
+        ]);
+    }
+
     // 用户是否在线
     public static function isOnline($where)
     {
@@ -21,7 +28,10 @@ class ChatDbHelper
 
     public static function updateMessageCount($tableName, $where)
     {
-        return Db::name($tableName)->where($where)->setInc('message_count', 1);
+        return Db::name($tableName)->where($where)->update([
+            'message_count'		=>	Db::raw('message_count+1'),
+            'utime'	=>	time()
+        ]);
     }
 
     // 用户上线
@@ -101,7 +111,7 @@ class ChatDbHelper
             ->alias('user')
             ->join([getPrefix() . 'chat_friends' => 'chat_friends'], 'user.uid=chat_friends.touid')->where('chat_friends.fromuid', $uid)->where('chat_friends.touid', '<>', $uid)
             ->field('user.uid,user.nickname,user.head_image,chat_friends.touid,chat_friends.fromuid,chat_friends.mutual_concern,chat_friends.message_count')
-            ->order('chat_friends.message_count desc,chat_friends.ctime desc')
+            ->order('chat_friends.utime asc')
             ->limit($count)->select();
     }
 
@@ -111,7 +121,7 @@ class ChatDbHelper
             ->alias('user')
             ->join([getPrefix() . 'chat_private_letter' => 'chat_private_letter'], 'user.uid=chat_private_letter.touid')->where('chat_private_letter.fromuid', $uid)->where('chat_private_letter.touid', '<>', $uid)
             ->field('user.uid,user.nickname,user.head_image,chat_private_letter.touid,chat_private_letter.fromuid,chat_private_letter.mutual_concern,chat_private_letter.message_count')
-            ->order('chat_private_letter.message_count desc,chat_private_letter.ctime desc')
+            ->order('chat_private_letter.utime asc')
             ->limit($count)->select();
     }
 
@@ -122,7 +132,7 @@ class ChatDbHelper
             ->join([getPrefix() . 'chat_group_user' => 'chat_group_user'], 'chat_group.groupid=chat_group_user.groupid')
             ->where('chat_group_user.uid', $uid)
             ->field('chat_group.groupid,chat_group.groupname,chat_group.head_image,chat_group_user.uid,chat_group_user.message_count')
-            ->order('chat_group_user.message_count desc,chat_group_user.ctime desc')
+            ->order('chat_group_user.utime asc')
             ->limit($count)->select();
     }
 

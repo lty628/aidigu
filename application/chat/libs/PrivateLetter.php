@@ -23,16 +23,15 @@ class PrivateLetter
             'data' => $frameData
         ], 320));
         $isOnline = \app\chat\libs\ChatDbHelper::isOnline(['uid' => $data['touid']]);
-        if ($isOnline['fd']) {
+        if ($isOnline && $isOnline['fd']) {
             $server->push($isOnline['fd'], json_encode([
                 'code' => 2,
                 'msg' => 'success',
                 'data' => $frameData
             ], 320));
             $data['send_status'] = 1;
-        } else {
-            \app\chat\libs\ChatDbHelper::updateMessageCount('chat_private_letter', ['uid', $isOnline['uid']]);
         }
+        \app\chat\libs\ChatDbHelper::updateMessageCount('chat_private_letter', ['fromuid' => $data['touid'], 'touid' => $data['fromuid']]);
         \app\chat\libs\ChatDbHelper::saveChatPrivateLetterHistory($data);
     }
 

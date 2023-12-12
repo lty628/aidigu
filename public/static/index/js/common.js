@@ -140,29 +140,33 @@ function comdel(url){
 			config.flush = 0;
 			sendMsg(jsonData, config)
 		});
-		// 显示网盘
-		var showCloud = false;
-		$("#showCloud").click(function () {
-			if (showCloud) return
-			showCloud = true
-			layer.open({
-				type: 2,
-				title: "我的云盘",
-				shade: true,
-				area: ['80%', '80%'],
-				resize: true,
-				maxmin: true,
-				content: '/cloud/show/',
-				zIndex: layer.zIndex, //重点1
-				success: function(layero){
-					layer.setTop(layero); //重点2
-				},
-				end: function(){ 
-					showCloud = false;
-				} 
-			});
-		})
+
 	})
+
+	// 显示网盘
+	var showFrame = false;
+	function showFrameHtml(obj)
+	{
+		if (showFrame) return
+		showFrame = true
+		layer.open({
+			type: 2,
+			title: $(obj).attr('data-title'),
+			shade: false,
+			area: ['80%', '80%'],
+			resize: true,
+			maxmin: true,
+			content: $(obj).attr('data-url'),
+			zIndex: layer.zIndex, //重点1
+			success: function(layero){
+				layer.setTop(layero); //重点2
+			},
+			end: function(){ 
+				showFrame = false;
+			} 
+		});
+	}
+
 	var flag = false;
 	function sendMsg(jsonData, config)
 	{

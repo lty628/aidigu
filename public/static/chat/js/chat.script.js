@@ -4,6 +4,48 @@ $(document).ready(function(){
 	chat.init();
 	
 });
+var blinkingTitle = {
+	timer: false,
+	title: '',
+	start : function(newTitle, isParent){
+		if (this.timer) {
+			return
+		}
+		if (isParent) {
+			this.title = parent.document.title
+		} else {
+			this.title = document.title
+		}
+		this.timer = setInterval(() => {
+			if (isParent) {
+				if (parent.document.title == newTitle) {
+					parent.document.title = this.title;
+				} else {
+					parent.document.title = newTitle;
+				}
+			} else {
+				if (document.title == newTitle) {
+					document.title = '';
+				} else {
+					document.title = newTitle;
+				}
+			}
+			
+		}, 800);
+	},
+	stop : function(isParent) {
+		if (!this.timer) {
+			return
+		}
+		clearInterval(this.timer)
+		if (isParent) {
+			parent.document.title=this.title
+		} else {
+			document.title=this.title
+		}
+	}
+}
+
 var chat = {
 	data : {
 		wSock       : null,
@@ -60,10 +102,11 @@ var chat = {
 	// 	location.reload() ;
 	// },
 	keySend : function( event ){
-		if (event.ctrlKey && event.keyCode == 13) {
+		// if ((event.shiftKey || event.ctrlKey) && event.keyCode == 13) {
+		if (event.shiftKey && event.keyCode == 13) {
 			// var text = editor.txt.html();
-			// editor.txt.html(text+"\r\n")
-			// return true
+			// editor.txt.html(text+"<br>")
+			return true
 		}else if( event.keyCode == 13){
 			event.preventDefault();//避免回车换行
 			this.sendMessage();
@@ -108,7 +151,12 @@ var chat = {
 				chat.doLogin( name , email );
 			}
 			*/
-			
+			var privateToUid = $("#privateToUid").val()
+			if (privateToUid) {
+				$("#sub-menu-pannel").hide();
+				$("#menu-pannel").hide();
+				chat.privateChat(privateToUid)
+			}
 		}
 	},
 	sendMedia: function(data) {
@@ -132,14 +180,17 @@ var chat = {
 					}
 				}
 				chat.chatAudio();
+				blinkingTitle.start('【未读消息】', true);
 				if (data.listtagid == 'Group') {
 					if (!$("#group-"+data.listtagid+'-'+data.groupid).hasClass("selected")) {
 						$("#message-"+data.listtagid+'-'+data.groupid).css('display', 'block')
+						$("#conv-lists-"+data.listtagid).prepend($("#group-"+data.listtagid+"-"+data.groupid));
 						return 
 					}
 				} else {
 					if (!$("#user-"+data.listtagid+'-'+data.fromuid).hasClass("selected")) {
 						$("#message-"+data.listtagid+'-'+data.fromuid).css('display', 'block')
+						$("#conv-lists-"+data.listtagid).prepend($("#user-"+data.listtagid+"-"+data.fromuid));
 						return 
 					}
 				}
@@ -147,7 +198,7 @@ var chat = {
 			}
 			chat.addChatLine('chatLine',data,data.listtagid);
 			// $("#user-"+chat.data.fromid).children('.layui-badge').css('display', 'block')
-			//增加消息
+			// 增加消息
 			// chat.showMsgCount(data.listtagid,'show');
 		}
 	},
@@ -331,12 +382,19 @@ var chat = {
 	},
 	changeList: function (obj) {
 		var tagid = $(obj).attr("listtagid")
+		if ($(obj).hasClass("selected")) {
+			return
+		}
 		$(".menu-item").removeClass("selected")
 		$(obj).addClass("selected")
 		$(".conv-lists").css('display',"none");
 		$(".msg-items").css('display',"none");
 		$("#conv-lists-"+tagid).css('display',"block");
 		$("#chatLineHolder-"+tagid).css('display',"block");
+		$(".input-area").hide()
+		$("#chat-lists").hide();
+		// 默认选中第一个
+		// $("#conv-lists-"+tagid).children().first().trigger('click')
 	},
 	/**
 	 * 1.初始化房间
@@ -378,10 +436,23 @@ var chat = {
 		/*显示头像*/
 		$('.profile').html(cdiv.render('my',data));
 		$('#loginbox').fadeOut(function(){
-			$('.input-area').fadeIn();
+			// $('.input-area').fadeIn();
 			$('.action-area').fadeIn();
-			$('.input-area').focus();
+			// $('.input-area').focus();
 		});
+	},
+	privateChat : function(touid){
+		
+		var listtagid = 'PrivateLetter';
+
+		//用户切换房间
+		chat.data.touid = touid
+		chat.data.listtagid = listtagid
+		chat.data.fromuid = $("#privateFromUid").val()
+		chat.data.uid = chat.data.fromuid
+		var json = {"type": 3,"touid": touid, 'fromuid': chat.data.uid, "listtagid": listtagid};
+		chat.wsSend(JSON.stringify(json));
+		$(".input-area").show()
 	},
 	changeUser : function(obj){
 		//未登录
@@ -400,6 +471,8 @@ var chat = {
 		$(".list-item").removeClass("selected")
 		$(obj).addClass('selected')
 		$(obj).children('.layui-badge').css('display', 'none')
+		$("#chat-lists").show();
+		blinkingTitle.stop(true);
 		
 		// $("#main-menus").children().removeClass("selected");
 		// $("#user-lists").children().css("display","none");
@@ -425,6 +498,7 @@ var chat = {
 		$(".list-item").removeClass("selected")
 		$(obj).addClass('selected')
 		$(obj).children('.layui-badge').css('display', 'none')
+		blinkingTitle.stop(true);
 
 		chat.data.groupid = groupid
 		chat.data.listtagid = listtagid
@@ -432,6 +506,7 @@ var chat = {
 		var json = {"type": 3,"groupid": groupid, 'uid': chat.data.uid, "listtagid": listtagid};
 		chat.wsSend(JSON.stringify(json));
 		$(".input-area").show()
+		$("#chat-lists").show();
 	},
 	
 	// The addChatLine method ads a chat entry to the page

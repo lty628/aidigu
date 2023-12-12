@@ -116,5 +116,11 @@ CREATE TABLE `wb_chat_private_letter_history` (
   PRIMARY KEY (`chat_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
+ALTER TABLE `wb_chat_friends` 
+ADD COLUMN `utime` bigint UNSIGNED NOT NULL DEFAULT 0 AFTER `ctime`;
+ALTER TABLE `wb_chat_group_user` 
+ADD COLUMN `utime` bigint UNSIGNED NOT NULL DEFAULT 0 COMMENT '更新时间' AFTER `dtime`;
+ALTER TABLE `wb_chat_private_letter` 
+ADD COLUMN `utime` bigint UNSIGNED NOT NULL DEFAULT 0 AFTER `ctime`;
 
 ------------chat-----------

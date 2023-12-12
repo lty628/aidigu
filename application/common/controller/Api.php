@@ -61,6 +61,9 @@ class Api extends Base
         $loginUid = getLoginUid();
         $result = Fans::unfollow($userid, $loginUid);
         if (!$result) return json(array('status' =>  0,'msg' => '取消关注失败'));
+
+        \app\chat\model\ChatFriends::editFriend($userid, $loginUid);
+        
         return json(array('status' =>  1,'msg' => '已成功取消关注'));
     }
     public function addFollow()
@@ -71,6 +74,8 @@ class Api extends Base
         $loginUid = getLoginUid();
 
         if (!$userInfo) return json(array('status' =>  0,'msg' => '没有这个用户'));
+
+        \app\chat\model\ChatFriends::addFriend($userid, $loginUid);
 
         if ($userInfo['invisible'] && !Fans::isUserFans($userid, $loginUid)) {
             return json(array('status' =>  0,'msg' => '对方开启隐身模式，无法关注TA'));

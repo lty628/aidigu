@@ -2,8 +2,8 @@
 		<div class="box">
 
 			<div class="info">
-				<div class="avatar"><a href="{:url('/'.$userInfo.blog.'/')}"><img src="{$userInfo.head_image}" /></a></div>
-				<div class="detail"><p><a href="{:url('/'.$userInfo.blog.'/')}">{$userInfo.nickname}</a></p><p>{$userInfo.city}</p>
+				<div class="avatar"><a href="javascript:;" data-title="私信" data-url="/chat/private/{$userInfo.uid}" onclick="showFrameHtml(this)"><img src="{$userInfo.head_image}" /></a></div>
+				<div class="detail"><p><a href="javascript:;" data-title="私信" data-url="/chat/private/{$userInfo.uid}" onclick="showFrameHtml(this)">{$userInfo.nickname}</a></p><p>{$userInfo.city}</p>
 					<p><b>
 						{if $userInfo.is_concern}
 						<a href="javascript:;"  onclick="fansFollow({$userInfo.uid}, 'unfollow')" onmouseover="blurToUnfollow(this,{$userInfo.uid})">已关注</a>

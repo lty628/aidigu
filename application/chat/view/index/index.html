@@ -71,6 +71,8 @@
 	<div class="carrousel"> <span class="close entypo-cancel"></span>
 		<div class="wrapper"> <img src="/static/chat/images/noimg.png" /> </div>
 	</div>
+	<input type="hidden" value="{$touid}" id="privateToUid">
+	<input type="hidden" value="{$fromuid}" id="privateFromUid">
 	<script>
 		var config = {
 			'wsserver' : "{$wsserver}"
@@ -79,7 +81,7 @@
 	<script src="/static/chat/js/jquery.min.js"></script>
 	<script src="/static/chat/js/face.js?v=3345"></script>
 	<script src="/static/chat/js/create.div.js?v=1"></script>
-	<script src="/static/chat/js/chat.script.js?v=26"></script>
+	<script src="/static/chat/js/chat.script.js?v=30"></script>
 	<script src="/static/chat/js/functions.js?v=2115"></script>
 	<script src="/static/chat/js/xlyjs.js?v=215"></script>
 	<script src="/static/layui/layui.js?4"></script>
@@ -91,7 +93,7 @@
 <script>
 	const E = window.wangEditor
 	const editor = new E("#msgToolBar", "#msgInput")
-	editor.config.placeholder = '你在做什么呢？'
+	editor.config.placeholder = ''
 	editor.config.uploadImgServer = '/index/setting/msgInputImg'
 	editor.config.uploadFileName = 'file'
 	editor.config.uploadVideoServer = '/index/setting/msgInputImg'
