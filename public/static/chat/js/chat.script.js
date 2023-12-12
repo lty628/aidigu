@@ -102,10 +102,11 @@ var chat = {
 	// 	location.reload() ;
 	// },
 	keySend : function( event ){
-		if (event.ctrlKey && event.keyCode == 13) {
+		// if ((event.shiftKey || event.ctrlKey) && event.keyCode == 13) {
+		if (event.shiftKey && event.keyCode == 13) {
 			// var text = editor.txt.html();
-			// editor.txt.html(text+"\r\n")
-			// return true
+			// editor.txt.html(text+"<br>")
+			return true
 		}else if( event.keyCode == 13){
 			event.preventDefault();//避免回车换行
 			this.sendMessage();
