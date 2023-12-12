@@ -33,7 +33,7 @@ class Group
             }
         }
         if ($offLineUser) {
-            \app\chat\libs\ChatDbHelper::updateMessageCount('chat_group_user', [['uid', 'in', $offLineUser]]);
+            \app\chat\libs\ChatDbHelper::updateMessageCount('chat_group_user', [['uid', 'in', $offLineUser], ['groupid', '=', $data['groupid']]]);
         }
         \app\chat\libs\ChatDbHelper::saveChatGroupHistory($data);
     }
