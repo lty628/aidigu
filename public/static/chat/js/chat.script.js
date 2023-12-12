@@ -34,6 +34,9 @@ var blinkingTitle = {
 		}, 800);
 	},
 	stop : function(isParent) {
+		if (!this.timer) {
+			return
+		}
 		clearInterval(this.timer)
 		if (isParent) {
 			parent.document.title=this.title
