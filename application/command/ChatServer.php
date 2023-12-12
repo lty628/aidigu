@@ -37,6 +37,8 @@ class ChatServer extends Command
         $ip = trim($input->getArgument('ip'));
       	$port = $port ?: '9501';
       	$ip = $ip ?: '127.0.0.1';
+        // 初始化fd
+        \app\chat\libs\ChatDbHelper::initFd();
         $this->initServer($ip, $port);
     }
 

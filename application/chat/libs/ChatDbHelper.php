@@ -5,6 +5,13 @@ use think\Db;
 class ChatDbHelper
 {
 
+    public static function initFd()
+    {
+        return Db::name('chat_online')->where('fd', '>', 0)->update([
+            'fd' => 0
+        ]);
+    }
+
     // 用户是否在线
     public static function isOnline($where)
     {
