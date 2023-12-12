@@ -339,6 +339,9 @@ var chat = {
 	},
 	changeList: function (obj) {
 		var tagid = $(obj).attr("listtagid")
+		if ($(obj).hasClass("selected")) {
+			return
+		}
 		$(".menu-item").removeClass("selected")
 		$(obj).addClass("selected")
 		$(".conv-lists").css('display',"none");
