@@ -66,7 +66,7 @@ var cdiv = {
 				break;
 			case 'listtags':
 				arr = [
-					'<li class="menu-item ',params.selected,'" listtagid="',params.listtagid,'" onclick="chat.changeList(this)">',params.listtagname,'<span id="listtag-',params.listtagid,'">0</span></li>'
+					'<li class="menu-item ',params.selected,'" listtagid="',params.listtagid,'" onclick="chat.changeList(this)">',params.listtagname,'<span id="listtag-',params.listtagid,'">...</span></li>'
 				];
 				break;
 		}

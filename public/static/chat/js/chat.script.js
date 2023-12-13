@@ -38,6 +38,7 @@ var blinkingTitle = {
 			return
 		}
 		clearInterval(this.timer)
+		this.timer = false
 		if (isParent) {
 			parent.document.title=this.title
 		} else {
@@ -181,6 +182,7 @@ var chat = {
 				}
 				chat.chatAudio();
 				blinkingTitle.start('【未读消息】', true);
+				chat.showMsgCount(data.listtagid);
 				if (data.listtagid == 'Group') {
 					if (!$("#group-"+data.listtagid+'-'+data.groupid).hasClass("selected")) {
 						$("#message-"+data.listtagid+'-'+data.groupid).css('display', 'block')
@@ -199,7 +201,7 @@ var chat = {
 			chat.addChatLine('chatLine',data,data.listtagid);
 			// $("#user-"+chat.data.fromid).children('.layui-badge').css('display', 'block')
 			// 增加消息
-			// chat.showMsgCount(data.listtagid,'show');
+			
 		}
 	},
 	wsMessage : function(){
@@ -300,19 +302,24 @@ var chat = {
 
 		}
 	},
-	// showMsgCount:function(listtagid,type){
-	// 	// if(!this.data.login) {return;}
-	// 	if(type == 'hide'){
-	// 		$("#message-"+listtagid).text(parseInt(0));
-	// 		$("#message-"+listtagid).css('display','none');
-	// 	} else {
-	// 		if(chat.data.crd != listtagid){
-	// 			$("#message-"+listtagid).css('display','block');
-	// 			var msgtotal = $("#message-"+listtagid).text();
-	// 			$("#message-"+listtagid).text(parseInt(msgtotal)+1);
-	// 		}
-	// 	}
-	// },
+	showMsgCount:function(listtagid){
+		// console.log(listtagid)
+		if ($("#listtag-"+listtagid).parent().hasClass('selected')) {
+			return
+		}
+		$("#listtag-"+listtagid).show()
+		// if(!this.data.login) {return;}
+		// if(type == 'hide'){
+		// 	$("#message-"+listtagid).text(parseInt(0));
+		// 	$("#message-"+listtagid).css('display','none');
+		// } else {
+		// 	if(chat.data.crd != listtagid){
+		// 		$("#message-"+listtagid).css('display','block');
+		// 		var msgtotal = $("#message-"+listtagid).text();
+		// 		$("#message-"+listtagid).text(parseInt(msgtotal)+1);
+		// 	}
+		// }
+	},
 	/** 
 	 * 当一个用户进来或者刷新页面触发本方法
 	 *
@@ -336,12 +343,20 @@ var chat = {
 							data[item][key].listtagid=item
 							// console.log(data[item][key])
 							users.unshift(cdiv.render('group',data[item][key]));
+							if (data[item][key].message_count) {
+								chat.showMsgCount(item);
+								blinkingTitle.start('【未读消息】', true);
+							}
 						}
 					} else {
 						for (key in data[item]) {
 							data[item][key].listtagid=item
 							// console.log(data[item][key])
 							users.unshift(cdiv.render('user',data[item][key]));
+							if (data[item][key].message_count) {
+								chat.showMsgCount(item);
+								blinkingTitle.start('【未读消息】', true);
+							}
 						}
 					}
 					
@@ -385,6 +400,8 @@ var chat = {
 		if ($(obj).hasClass("selected")) {
 			return
 		}
+		$(".list-item").removeClass("selected")
+		$("#listtag-"+tagid).hide()
 		$(".menu-item").removeClass("selected")
 		$(obj).addClass("selected")
 		$(".conv-lists").css('display',"none");
