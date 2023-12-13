@@ -32,13 +32,13 @@
 				<li><a href="{:url('/'.$loginUserInfo.blog.'/own/')}">我的微博</a></li>
 				<li><a href="/square/">广场</a></li>
 				<li><a href="/topic/">话题</a></li>
-				<li><a href="javascript:;" data-title="聊天" data-url="/chat" onclick="showFrameHtml(this)">聊天</a></li>
-				<li><a href="javascript:;" data-title="我的云盘" data-url="/cloud/show/" onclick="showFrameHtml(this)">网盘</a></li>
+				<li><a href="javascript:;" data-title="聊天" data-url="/chat" onclick="showFrameHtml(this, '60%', '70%')">聊天</a></li>
+				<li><a href="javascript:;" data-title="我的云盘" data-url="/cloud/show/" onclick="showFrameHtml(this, '80%', '80%')">网盘</a></li>
 				<li><a href="{:url('./'.$loginUserInfo.blog.'/setting/')}">个人设置</a></li>
 			{else}
 				<li><a href="{:url('/'.$userInfo.blog.'/')}">{$userInfo.sex|getPerson}的首页</a></li>
 				<li><a href="{:url('/'.$userInfo.blog.'/own/')}">{$userInfo.sex|getPerson}的微博</a></li>
-				<li><a href="javascript:;" data-title="私信" data-url="/chat/private/{$userInfo.uid}" onclick="showFrameHtml(this)">私信{$userInfo.sex|getPerson}</a></li>
+				<li><a href="javascript:;" data-title="私信" data-url="/chat/private/{$userInfo.uid}" onclick="showFrameHtml(this, '60%', '70%')">私信{$userInfo.sex|getPerson}</a></li>
 				<li><a href="{:url('/'.$loginUserInfo.blog.'/')}">我的首页</a></li>
 				<li><a href="/square/">广场</a></li>
 				<li><a href="/topic/">话题</a></li>

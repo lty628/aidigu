@@ -142,30 +142,7 @@ function comdel(url){
 		});
 
 	})
-
-	// 显示网盘
-	var showFrame = false;
-	function showFrameHtml(obj)
-	{
-		if (showFrame) return
-		showFrame = true
-		layer.open({
-			type: 2,
-			title: $(obj).attr('data-title'),
-			shade: false,
-			area: ['80%', '80%'],
-			resize: true,
-			maxmin: true,
-			content: $(obj).attr('data-url'),
-			zIndex: layer.zIndex, //重点1
-			success: function(layero){
-				layer.setTop(layero); //重点2
-			},
-			end: function(){ 
-				showFrame = false;
-			} 
-		});
-	}
+	
 
 	var flag = false;
 	function sendMsg(jsonData, config)
