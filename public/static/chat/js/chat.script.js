@@ -111,6 +111,7 @@ var chat = {
 		}else if( event.keyCode == 13){
 			event.preventDefault();//避免回车换行
 			this.sendMessage();
+			blinkingTitle.stop(true);
 		}
 	},
 	sendMessage : function(){		
