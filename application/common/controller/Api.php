@@ -5,6 +5,7 @@ use think\Db;
 use app\common\model\Fans;
 use app\common\model\Message;
 use app\common\model\User;
+use app\common\helper\Reminder;
 
 class Api extends Base
 {	
@@ -44,7 +45,7 @@ class Api extends Base
         try {
             Db::name('comment')->insert($data);
             if (getLoginUid()!=(int)input('get.uid'))
-            self::saveReminder($data['msg_id'], getLoginUid(), (int)input('get.uid'), 2);
+            Reminder::saveReminder($data['msg_id'], getLoginUid(), (int)input('get.uid'), 2);
             // 提交事务
             Db::commit();
             return json(array('status' =>  1,'msg' => '回复成功'));
@@ -97,10 +98,10 @@ class Api extends Base
         $data['ctime'] = time();
         Db::startTrans();
         try {
-            Db::name('message')->where('msg_id',$data['msg_id'])->setInc('commentsum',1);\
+            Db::name('message')->where('msg_id',$data['msg_id'])->setInc('commentsum',1);
             Db::name('comment')->insert($data);
             if (getLoginUid()!=(int)input('get.uid'))
-                self::saveReminder($data['msg_id'], getLoginUid(), (int)input('get.uid'), 1);
+                Reminder::saveReminder($data['msg_id'], getLoginUid(), (int)input('get.uid'), 1);
             // 提交事务
             Db::commit();
             return true;
@@ -137,7 +138,7 @@ class Api extends Base
                 Db::name('message')->where('msg_id', $msgId)->setInc('repostsum',1);
             }
             if ($repost && getLoginUid()!=(int)input('get.fromuid')) {
-                self::saveReminder($msgId, getLoginUid(), (int)input('get.fromuid'), 0);
+                Reminder::saveReminder($msgId, getLoginUid(), (int)input('get.fromuid'), 0);
             }
             self::updateUserMessageSum();
             // 提交事务
@@ -203,12 +204,7 @@ class Api extends Base
 	    );
 
     }
-    // $type 0 转发 1 评论 2 回复
-    protected static function saveReminder($msgId, $fromuid, $touid, $type)
-    {
-        $ctime = time();
-        return Db::name('reminder')->insert(['msg_id'=>$msgId, 'fromuid'=>$fromuid, 'touid'=>$touid, 'type'=>$type, 'ctime'=>$ctime]);
-    }
+    
     public static function updateUserMessageSum()
     {
         return Db::name('user')->where('uid', getLoginUid())->setInc('message_sum', 1);

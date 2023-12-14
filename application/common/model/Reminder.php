@@ -6,6 +6,9 @@ class Reminder extends Model
 	protected $autoWriteTimestamp = true;
 	protected $createTime = 'ctime';
 	protected $updateTime = false;
+	protected $type = [
+		'ctime' => 'integer',
+	];
 
 
 	// public function getTypeNameAttr($value, $data)
