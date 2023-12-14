@@ -23,7 +23,7 @@ return [
 		// 缓存前缀
 		'prefix'=> 'bc2e0bf9c851ed78',
 		// 缓存目录
-		'path' => '../runtime/cache/',
+		'path' => env('root_path') . 'runtime/cache/',
 	],
 	'redis' => [
 		'type'  => 'redis',
