@@ -44,6 +44,7 @@ class Info extends Base
     	$this->setMyConcern($this->siteUserId);
 		// $this->assign('siteUserId', $this->siteUserId);
 		$this->assign('action', request()->action());
+		$this->assign('chatRemind', \app\common\libs\Remind::check($this->userid));
 		$this->assign('loginUserInfo', $this->loginUserInfo);
 	}
 	protected function getSiteUserInfo($userid) 

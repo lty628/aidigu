@@ -23,6 +23,7 @@ class Group
             foreach ($onlineInfo as $isOnline) {
                 if (!$isOnline['fd']) {
                     $offLineUser[] = $isOnline['uid'];
+                    \app\common\libs\Remind::open($isOnline['uid']);
                     continue;
                 };
                 $server->push($isOnline['fd'], json_encode([
