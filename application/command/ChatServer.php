@@ -23,6 +23,7 @@ class ChatServer extends Command
         // 指令配置
         $this->setName('chatserver');
         $this->setName('chatserver')
+            ->addArgument('worker_num', Argument::OPTIONAL, "进程数(默认： 8)")
             ->addArgument('port', Argument::OPTIONAL, "端口(默认： 9501)")
             ->addArgument('ip', Argument::OPTIONAL, "ip(默认： 127.0.0.1)")
             // ->addOption('city', null, Option::VALUE_REQUIRED, 'city name')
@@ -35,11 +36,13 @@ class ChatServer extends Command
     {
         $port = trim($input->getArgument('port'));
         $ip = trim($input->getArgument('ip'));
+        $workerNum = trim($input->getArgument('worker_num'));
       	$port = $port ?: '9501';
       	$ip = $ip ?: '127.0.0.1';
+      	$workerNum = $workerNum ?: '8';
         // 初始化fd
         \app\chat\libs\ChatDbHelper::initFd();
-        $this->initServer($ip, $port);
+        $this->initServer($ip, $port, $workerNum);
     }
 
     public function onOpen($server, $request)
@@ -184,11 +187,11 @@ class ChatServer extends Command
     }
 
 
-    public function initServer($ip, $port)
+    public function initServer($ip, $port, $workerNum)
     {
         $this->server = new Server($ip, $port);
         $this->server->set(array(
-            'task_worker_num'     => 8
+            'task_worker_num'     =>  $workerNum
         ));
         $this->server->on("open", array($this, "onOpen"));
         $this->server->on("message", array($this, "onMessage"));
