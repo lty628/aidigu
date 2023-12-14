@@ -31,7 +31,7 @@ class Friends
             ], 320));
             $data['send_status'] = 1;
         } else {
-            \app\common\libs\Remind::open($data['touid']);
+            // \app\common\libs\Remind::open($data['touid']);
         }
         \app\chat\libs\ChatDbHelper::updateMessageCount('chat_friends', ['fromuid' => $data['touid'], 'touid' => $data['fromuid']]);
         \app\chat\libs\ChatDbHelper::saveChatFriendHistory($data);
