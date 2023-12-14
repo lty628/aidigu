@@ -30,10 +30,18 @@ function showMessageImg(obj)
         }
         ]
     }
-    layer.photos({
-        photos: json
-        ,anim: 5
-    });
+    if (parent.layer) {
+        parent.layer.photos({
+            photos: json
+            ,anim: 5
+        });
+    } else {
+        layer.photos({
+            photos: json
+            ,anim: 5
+        });
+    }
+    
 }
 
 // 显示网盘
