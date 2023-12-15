@@ -63,7 +63,7 @@ class ChatDbHelper
     {
         $result = Db::name('chat_friends_history')->alias('chat')->join([getPrefix() . 'user' => 'user'], 'user.uid=chat.fromuid')->where('fromuid', 'in', [$data['touid'], $data['fromuid']])
             ->where('touid', 'in', [$data['touid'], $data['fromuid']])
-            ->limit(1000)
+            ->limit(200)
             ->order('chat_id', 'desc')
             ->field('user.head_image,user.nickname,chat.*')->select();
         Db::name('chat_friends_history')->where('fromuid', $data['touid'])->where('touid', $data['fromuid'])->where('send_status', 0)->update([
@@ -79,7 +79,7 @@ class ChatDbHelper
     {
         $result = Db::name('chat_private_letter_history')->alias('chat')->join([getPrefix() . 'user' => 'user'], 'user.uid=chat.fromuid')->where('fromuid', 'in', [$data['touid'], $data['fromuid']])
             ->where('touid', 'in', [$data['touid'], $data['fromuid']])
-            ->limit(1000)
+            ->limit(200)
             ->order('chat_id', 'desc')
             ->field('user.head_image,user.nickname,chat.*')->select();
         Db::name('chat_private_letter_history')->where('fromuid', $data['touid'])->where('touid', $data['fromuid'])->where('send_status', 0)->update([
@@ -96,7 +96,7 @@ class ChatDbHelper
         $result = Db::name('chat_group_history')->alias('chat')
             ->join([getPrefix() . 'user' => 'user'], 'user.uid=chat.fromuid')
             ->where('groupid', $data['groupid'])
-            ->limit(1000)
+            ->limit(200)
             ->order('chat_id', 'desc')
             ->field('user.head_image,user.nickname,chat.*')->select();
         Db::name('chat_group_user')->where('uid', $data['uid'])->where('groupid', $data['groupid'])->update([
