@@ -168,7 +168,7 @@ var chat = {
 		chat.wsSend(JSON.stringify(json));
 	},
 	initMessage: function(data, isHistory) {
-		data.create_time = getDateDiff(new Date(data.create_time).getTime()/1000)
+		data.ctime = getDateDiff(new Date(data.create_time).getTime()/1000)
 		if(data.fromuid == chat.data.uid){
 			chat.addChatLine('mymessage',data,data.listtagid);
 		} else {
@@ -203,7 +203,11 @@ var chat = {
 			chat.addChatLine('chatLine',data,data.listtagid);
 			// $("#user-"+chat.data.fromid).children('.layui-badge').css('display', 'block')
 			// 增加消息
-			
+		}
+		if (!isHistory) {
+			$("#chatLineHolder-"+data.listtagid+ " .msg-box .chat-time").slice(-10).each(function () { 
+				$(this).html(getDateDiff(new Date($(this).attr("data-ctime")).getTime()/1000))
+		   })
 		}
 	},
 	wsMessage : function(){
