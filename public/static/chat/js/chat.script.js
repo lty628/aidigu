@@ -168,6 +168,7 @@ var chat = {
 		chat.wsSend(JSON.stringify(json));
 	},
 	initMessage: function(data, isHistory) {
+		data.create_time = getDateDiff(new Date(data.create_time).getTime()/1000)
 		if(data.fromuid == chat.data.uid){
 			chat.addChatLine('mymessage',data,data.listtagid);
 		} else {

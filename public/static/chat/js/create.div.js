@@ -21,7 +21,7 @@ var cdiv = {
 			
 			case 'chatLine':
 				arr = [
-					'<div style="display: block;" class="msg-box"><div class="chat-item not-me"><div class="chat-profile-info clearfix"><span class="profile-wrp"><span class="name clearfix"><span class="name-text">',params.nickname,'</span></span></span><span class="chat-time">',params.time,'</span></div><div class="clearfix"><div class="head_image"><div class="normal user-head_image" onclick="chat.changeUser(this)" fd="',params.fd,'" uname="',params.nickname,'" style="background-image: url(\'',params.head_image,'\');"></div></div><div class="msg-bubble-box"><div class="msg-bubble-area"><div class="msg-bubble"><pre class="text">',params.content,'</pre></div></div></div></div></div></div>'
+					'<div style="display: block;" class="msg-box"><div class="chat-item not-me"><div class="chat-profile-info clearfix"><span class="profile-wrp"><span class="name clearfix"><span class="name-text">',params.nickname,'</span></span></span><span class="chat-time">',params.create_time,'</span></div><div class="clearfix"><div class="head_image"><div class="normal user-head_image" onclick="chat.changeUser(this)" uid="',params.touid,'" uname="',params.nickname,'" style="background-image: url(\'',params.head_image,'\');"></div></div><div class="msg-bubble-box"><div class="msg-bubble-area"><div class="msg-bubble"><pre class="text">',params.content,'</pre></div></div></div></div></div></div>'
 				];
 			break;
 			
