@@ -49,4 +49,4 @@ function initL2Dwidget(selectId) {
             "mobile": { "show": true, scale: 0.5 },
         });
 }
-initL2Dwidget('hijiki');
+initL2Dwidget('tororo');
