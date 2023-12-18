@@ -58,7 +58,7 @@ function showFrameHtml(obj, width, height)
         resize: true,
         maxmin: true,
         content: $(obj).attr('data-url'),
-        zIndex: layer.zIndex, //重点1
+        zIndex: layer.zIndex+100, //重点1
         success: function(layero){
             layer.setTop(layero); //重点2
         },
