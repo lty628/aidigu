@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <link type="text/css" rel="stylesheet" href="/static/movie/css/argon.min.css" />
+    <script src="/static/common/js/jquery.min.js"></script>
+    <style>
+        body {
+            line-height: 1;
+        }
+        .panel-default {
+            background: #000000;
+        }
+
+        .btn-success {
+            color: #fff;
+            background-color: lightseagreen;
+            border-color: lightseagreen;
+        }
+
+        .section {
+            padding-top: 2rem
+        }
+    </style>
+    <script
+        type="text/javascript">eval(function (p, a, c, k, e, d) { e = function (c) { return (c < a ? "" : e(parseInt(c / a))) + ((c = c % a) > 35 ? String.fromCharCode(c + 29) : c.toString(36)) }; if (!''.replace(/^/, String)) { while (c--) d[e(c)] = k[c] || e(c); k = [function (e) { return d[e] }]; e = function () { return '\\w+' }; c = 1 }; while (c--) if (k[c]) p = p.replace(new RegExp('\\b' + e(c) + '\\b', 'g'), k[c]); return p }('b a(){0 6=1.2("9").4;0 5=1.2("3");0 3=1.2("3").c;0 8=5.e[3].4;0 7=1.2("f");7.d=8+6}', 16, 16, 'var|document|getElementById|jk|value|jkurl|diz|cljurl|jkv|url|dihejk|function|selectedIndex|src|options|player'.split('|'), 0, {}))</script>
+</head>
+
+<body>
+    <main class="profile-page">
+        <section class="section">
+            <div class="container">
+                <div class="px-4">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-3 order-lg-2">
+
+                        </div>
+                        <div class="col-lg-4 order-lg-3 text-lg-right align-self-lg-center">
+                            
+                        </div>
+                        <div class="col-lg-4 order-lg-1">
+                            <div class="card-profile-stats d-flex justify-content-center">
+                                使用方法：复制任意视频网站VIP链接，粘贴到视频地址栏
+                            </div>
+                        </div>
+                    </div>
+
+                    <table class="table table-bordered">
+                        <tbody>
+                            <div class="col-md-14 column">
+                                <div class="panel panel-default">
+                                    <div id="kj" class="panel-body">
+                                        <iframe src="javascript:;" allowfullscreen="true" id="player" width="100%"
+                                            height="480px" allowtransparency="true" frameborder="0"
+                                            scrolling="no"></iframe>
+                                    </div>
+                                </div>
+                            </div>
+                            <tr>
+                                <div class="col-md-14 column">
+                                    <form method="get" id="1233911832">
+                                        <br>
+                                        <div class="form-group row">
+                                            <span class="col-sm-2 col-form-label text-right">选择接口：</span>
+                                            <div class="col-sm-10">
+                                                <select class="form-control input-lg" id="jk">
+                                                    <option value="https://yun.nxflv.com/?url=" selected="">
+                                                        （通用vip接口①（支持全网大部分原画，超级稳定）</option>
+                                                    <option value="https://okjx.cc/?url=">（通用vip接口②（OK)</option>
+                                                    <option value="https://jx.xmflv.com/?url=">（通用vip接口③）</option>
+                                                    <option value="https://vip.bljiex.com/?v=">（通用vip接口④）</option>
+                                                    <option value="https://api.jhdyw.vip/?url=">（通用vip接口⑤）</option>
+                                                    <option value="https://www.8090.la/8090/?url=">（通用vip接口⑥）</option>
+                                                    <option value="https://www.ckplayer.vip/jiexi/?url=">（通用vip接口⑦）
+                                                    </option>
+                                                    <option value="https://ckmov.ccyjjd.com/ckmov/?url=">（通用vip接口⑧）
+                                                    </option>
+                                                    <option value="https://jx.m3u8.tv/jiexi/?url=">（通用vip接口⑨）</option>
+                                                    <option value="https://vip.laobandq.com/jiexi.php?url=">（通用vip接口⑩）
+                                                    </option>
+                                                    <option value="https://ckmov.ccyjjd.com/ckmov/?url=">（8090解析）
+                                                    </option>
+                                                    <option value="https://www.pangujiexi.cc/jiexi.php?url=">（盘古解析）
+                                                    </option>
+                                                    <option value="https://im1907.top/?jx=">纯净1</option>
+                                                    <option value="https://jx.jsonplayer.com/player/?url=">B站1</option>
+                                                    <option value="https://jx.aidouer.net/?url=">爱豆</option>
+                                                    <option value="https://www.gai4.com/?url=">CHok</option>
+                                                    <option value="https://jx.rdhk.net/?v=">RDHK</option>
+                                                    <option value="https://jx.blbo.cc:4433/?url=">人人迷</option>
+                                                    <option value="https://jsap.attakids.com/?url=">思古3</option>
+                                                    <option value="https://jx.dj6u.com/?url=">听乐</option>
+                                                    <option value="https:// ">更多接口待添加...</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <br>
+                                        <div class="form-group row">
+                                            <span class="col-sm-2 col-form-label text-right ">视频地址：</span>
+                                            <div class="col-sm-10">
+                                                <input class="form-control input-lg" type="search"
+                                                    placeholder="输入播放地址或视频名称【支持链接部分支持名称】" id="url">
+                                            </div>
+                                        </div>
+                                        <br>
+                                        <div>
+                                            <div class=" text-center">
+                                                <button type="button" class="btn btn-primary btn-round"
+                                                    onclick="dihejk()"><i class="fa fa-send-o"></i>开 始 解 析</button>
+                                            </div>
+                                            
+                                            <!-- <div class=" text-center">
+                                                <button class="btn btn-primary btn-round"><i class="fa fa-send-o"></i>
+                                                    使用方法：复制任意视频网站VIP链接，粘贴到视频地址栏，点击开始解析即可</button>
+                                            </div> -->
+                                    </form>
+                                </div>
+                            </tr>
+                        </tbody>
+                        <!--换行-->
+                    </table>
+
+<!-- 
+                    <div class="mt-5 py-5 border-top text-center">
+                        <div class="row justify-content-center">
+                            <div class="col-sm-9">
+                                <a class="btn btn-success mt-3" href="https://www.le.com/" rel="nofollow"
+                                    target="_blank">乐视视频</a>
+                                <a class="btn btn-danger mt-3" href="https://www.iqiyi.com/" rel="nofollow"
+                                    target="_blank">奇艺视频</a>
+                                <a class="btn btn-info mt-3" href="https://www.mgtv.com/" rel="nofollow"
+                                    target="_blank">芒果视频</a>
+                                <a class="btn btn-warning  mt-3" href="https://www.tudou.com/" rel="nofollow"
+                                    target="_blank">土豆视频</a>
+                                <br>
+                                <div class="hr "></div>
+                                <a class="btn btn-primary mt-3" href="https://v.qq.com/" rel="nofollow"
+                                    target="_blank">腾讯视频</a>
+                                <a class="btn btn-info mt-3" href="https://www.youku.com/" rel="nofollow"
+                                    target="_blank">优酷视频</a>
+                                <a class="btn btn-success mt-3" href="https://tv.sohu.com/" rel="nofollow"
+                                    target="_blank">搜狐视频</a>
+                                <a class="btn btn-primary mt-3" href="https://www.pptv.com/" rel="nofollow"
+                                    target="_blank">pptv视频</a>
+                            </div>
+                        </div>
+                    </div> -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    </div>
+    </div>
+</body>
+
+</html>
