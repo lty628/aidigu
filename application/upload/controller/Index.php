@@ -114,6 +114,18 @@ class Index extends Controller
         return $this->success('永久删除成功');
     }
 
+    public function siteUrlShare()
+    {
+        $url = input('param.url');
+        $title = input('param.title');
+        $data['media_info'] = '';
+        $data['content'] = '<p>正在看
+            <a href="javascript:;" data-title="在线影院" data-url="'.$url.'" onclick="showFrameHtml(this, \'100%\', \'100%\')">'.$title.'</a>
+        </p>';
+        \app\common\controller\Api::saveMessage($data['content'], $data['media_info']);
+        return $this->success('分享成功,请在我的首页中查看！');
+    }
+
     //站内分享
     public function siteShare()
     {

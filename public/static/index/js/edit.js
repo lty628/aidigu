@@ -246,7 +246,7 @@ class AlertMenu extends BtnMenu {
       // data-title属性表示当鼠标悬停在该按钮上时提示该按钮的功能简述
         const $elem = E.$(
             `<div class="w-e-menu" data-title="视频">
-                视频
+                <i class="layui-icon layui-icon-website"></i> 
             </div>`
         )
         super($elem, editor)

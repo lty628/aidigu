@@ -2,13 +2,16 @@
 <html>
 
 <head>
-    <meta charset="utf-8" />
+    <meta charset="utf-8" />   
     <link type="text/css" rel="stylesheet" href="/static/movie/css/argon.min.css" />
+    <link rel="stylesheet" href="/static/layui/css/layui.css?t=1" type="text/css" media="screen" />
     <script src="/static/common/js/jquery.min.js"></script>
+    <script src="/static/layui/layui.js?4"></script>
     <style>
         body {
             line-height: 1;
         }
+
         .panel-default {
             background: #000000;
         }
@@ -37,7 +40,7 @@
 
                         </div>
                         <div class="col-lg-4 order-lg-3 text-lg-right align-self-lg-center">
-                            
+
                         </div>
                         <div class="col-lg-4 order-lg-1">
                             <div class="card-profile-stats d-flex justify-content-center">
@@ -107,9 +110,10 @@
                                         <div>
                                             <div class=" text-center">
                                                 <button type="button" class="btn btn-primary btn-round"
-                                                    onclick="dihejk()"><i class="fa fa-send-o"></i>开 始 解 析</button>
+                                                    onclick="dihejk()"><i class="fa fa-send-o"></i>解 析</button>
+                                                <button type="button" class="btn btn-round " id="siteShare"><i class="fa fa-send-o"></i>站内分享</button>
                                             </div>
-                                            
+
                                             <!-- <div class=" text-center">
                                                 <button class="btn btn-primary btn-round"><i class="fa fa-send-o"></i>
                                                     使用方法：复制任意视频网站VIP链接，粘贴到视频地址栏，点击开始解析即可</button>
@@ -121,7 +125,7 @@
                         <!--换行-->
                     </table>
 
-<!-- 
+                    <!-- 
                     <div class="mt-5 py-5 border-top text-center">
                         <div class="row justify-content-center">
                             <div class="col-sm-9">
@@ -154,5 +158,30 @@
     </div>
     </div>
 </body>
+<script>
+    $(function () {
+        $("#siteShare").click(function () {
+            var url = $("#url").val()
+            var jk = $("#jk").val()
+            if (!url || !jk) {
+                return false
+            }
+            layer.prompt({title: '请输入分享标题'}, function(value, index, elem){
+                if(value === '') return elem.focus();
+                $.ajax({
+                    type: "GET",
+                    url: "/upload/index/siteUrlShare",
+                    data: {'url': jk+url, 'title': value},
+                    dataType: "json",
+                    success: function (response) {
+                        layer.msg(response.msg);
+                    }
+                });
+                // 关闭 prompt
+                layer.close(index);
+            });
+        })
+    })
+</script>
 
 </html>
