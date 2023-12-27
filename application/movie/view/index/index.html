@@ -94,7 +94,7 @@
                                                     <option value="https://jx.blbo.cc:4433/?url=">人人迷</option>
                                                     <option value="https://jsap.attakids.com/?url=">思古3</option>
                                                     <option value="https://jx.dj6u.com/?url=">听乐</option>
-                                                    <option value="">纯链接</option>
+                                                    <!-- <option value="">更多接口待添加...</option> -->
                                                 </select>
                                             </div>
                                         </div>
@@ -163,7 +163,7 @@
         $("#siteShare").click(function () {
             var url = $("#url").val()
             var jk = $("#jk").val()
-            if (!url) {
+            if (!url || !jk) {
                 return false
             }
             layer.prompt({title: '请输入分享标题'}, function(value, index, elem){
