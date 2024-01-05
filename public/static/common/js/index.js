@@ -57,6 +57,7 @@ function showFrameHtml(obj, width, height)
         area: [width, height],
         resize: true,
         maxmin: true,
+        scrollbar: false,
         content: $(obj).attr('data-url'),
         zIndex: layer.zIndex, //重点1
         success: function(layero){
@@ -66,6 +67,33 @@ function showFrameHtml(obj, width, height)
             showFrame = false;
         } 
     });
+}
+
+function showFrameUrl(obj, width, height)
+{
+    layer.open({
+        type: 1,
+        title: $(obj).attr('data-title'),
+        shade: 0.8,
+        closeBtn: 0,
+        shadeClose: true,
+        area: [width, height],
+        resize: false,
+        maxmin: false,
+        // moveOut: true,
+        scrollbar: false,
+        content: '<iframe src="'+$(obj).attr('data-url')+'" allowfullscreen="true" allowtransparency="true" width="100%" height="100%" frameborder="0" scrolling="yes"></iframe>',
+        // zIndex: layer.zIndex, //重点1
+        // success: function(layero){
+        //     layer.setTop(layero); //重点2
+        // },
+        // end: function(){ 
+        // } 
+    });
+    $(".layui-layer-content").css("overflow", 'hidden')
+    // layer.style(index, {
+    //     overflow: 'hidden',
+    // });
 }
 
 //字符串转换为时间戳

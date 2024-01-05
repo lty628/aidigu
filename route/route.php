@@ -22,6 +22,8 @@ Route::get('/cloud/collection/$','upload/Index/collection');
 Route::any('chat', 'chat/index/index');
 Route::any('chat/private/:uid$', 'chat/index/index')->pattern(['uid'=>'[0-9]+']);
 
+Route::any('movie', 'movie/index/index');
+
 // 微博
 if (isMobile()) {
 	$module = 'm';
