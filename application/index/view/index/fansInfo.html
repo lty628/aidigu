@@ -11,9 +11,9 @@
 		<h3><a href="{:url('/'.$userInfo.blog.'/'.'concern/')}"><b>{$whichUser}</b> 关注的人</a><span><a href="{:url('/'.$userInfo.blog.'/'.'fans/')}">关注 <b>{$whichUser}</b> 的人</a></span></h3>
 		{foreach $userFans as $fans}
 		<div class="entry">
-			<div class="avatar"><div class="imgborder"><a href="{:url('/'.$fans.blog.'/')}"><img src="{$fans.head_image}" /></a></div></div>
+			<div class="avatar"><div class="imgborder"><a href="{:url('/'.$fans.blog.'/own/')}"><img src="{$fans.head_image}" /></a></div></div>
 			<div class="box">
-				<p><a href="{:url('/'.$fans.blog.'/')}">{$fans.nickname}</a></p>
+				<p><a href="{:url('/'.$fans.blog.'/own/')}">{$fans.nickname}</a></p>
 				<div class="detail">
 					<ul>
 						{if $fans.province && $fans.city}
