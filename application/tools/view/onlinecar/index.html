@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>遥控小车</title>
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+</head>
+<body>
+<canvas class="canvas js-canvas"></canvas>
+<script src="/static/index/js/jquery-1.8.3.min.js"></script>
+<script src="/static/layui/layui.js?4"></script>
+<script type="text/javascript" src="/static/tools/onlinecar/js/main.js"></script>
+<script>
+    var haydata = {
+        layoutcolor: [
+            "#f5883c", //左上角背景颜色(不建议修改)
+            "#ff9043", //左下角背景颜色(不建议修改)
+            "#fccf92", //右上角背景颜色(不建议修改)
+            "#f5aa58", //右下角背景颜色(不建议修改)
+        ],
+        projectlist: [
+            {
+                name: "测试项目", /** 项目名称 **/
+                image: [
+                    "/static/tools/onlinecar/images/demo.jpg", /** 项目图片 **/
+                    "/static/tools/onlinecar/images/dem.jpg"
+                ],
+                floor: "/static/tools/onlinecar/images/test.png", /** 地板图，用于显示描述文字与按钮文字 **/
+                button: {
+                    event: "click",  /** 打开的点击事件，urljump:新窗口打开链接/other:执行function函数 **/
+                    href: "/", /** 需要跳转的链接，只有event变量为urljump时才会执行 **/
+                    function: function(){
+                        /** 需要执行的函数代码，只有event变量不为urljump时才会执行 **/
+                        layer.msg("无");
+                    },
+                    x: -4.8, /** 按钮的x轴位置，根据你图片中的按钮位置跳转 **/
+                    y: -3, /** 按钮的y轴位置，根据你图片中的按钮位置跳转 **/
+                    halfExtents: {
+                        x: 3.2, /** 聚焦按钮时的特效显示的x轴位置 **/
+                        y: 1.5 /** 聚焦按钮时的特效显示的y轴位置 **/
+                    }
+                },
+                distinctions: [{
+                    type: "fwa", /** 一个小的3Dlogo模型 **/
+                    x: 3.95, /** 显示的x轴位置 **/
+                    y: 4.15 /** 显示的y轴位置 **/
+                },
+                {
+                    type: "awwwards",
+                    x: 5.6,
+                    y: 4.15
+                },
+                {
+                    type: "cssda",
+                    x: 6.9,
+                    y: 4.15
+                },
+                {
+                    type: "fwa",
+                    x: 9.1,
+                    y: 4.15
+                }]
+            }
+        ],
+        informationlist: [
+            /** 社交账户 **/
+            {
+                href: "/", /** 链接**/
+                label: "/static/tools/onlinecar/images/demo.png" /** 地板图 **/
+            },
+            {
+                href: "/",
+                label: "/static/tools/onlinecar/images/demo.png"
+            }
+            ,
+            {
+                href: "/",
+                label: "/static/tools/onlinecar/images/demo.png"
+            }
+        ]
+    };
+</script>
+</body>
+</html>

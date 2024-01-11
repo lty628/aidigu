@@ -24,6 +24,7 @@ Route::get('chat/private/:uid$', 'chat/index/index')->pattern(['uid'=>'[0-9]+'])
 
 Route::get('/tools/$', 'index/index/tools');
 Route::get('/tools/movie/$', 'tools/movie/index');
+Route::get('/tools/onlinecar/$', 'tools/Onlinecar/index');
 
 // 微博
 if (isMobile()) {
