@@ -1,9 +1,9 @@
 <?php
-namespace app\movie\controller;
+namespace app\tools\controller;
 use think\Controller;
 
 
-class Index extends Controller
+class Movie extends Controller
 {	
 	public function index()
     {

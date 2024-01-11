@@ -1,0 +1,68 @@
+{include file='index/header' /}
+{if $userInfo.isSiteUser}
+	{assign name="whichUser" value="我" /}
+{else}
+	{assign name="whichUser" value="$userInfo.nickname" /}
+{/if}
+<div class="main">
+	<div class="contents">
+		<div class="top">站内应用</div>
+		
+		<div class="entry" style="float: left;clear: unset;background: center;">
+			<div class="avatar">
+				<div class="imgborder">
+					<a href="javascript:;" data-title="我的云盘" data-url="/cloud/show/" onclick="showFrameHtml(this, '80%', '80%')">
+						<img src="/static/tools/common/images/cloud.jpg" />
+					</a>
+				</div>
+				<p>
+					<a href="javascript:;" data-title="我的云盘" data-url="/cloud/show/" onclick="showFrameHtml(this, '80%', '80%')">
+						我的云盘
+					</a>
+				</p>
+			</div>
+			<div class="clear"></div>
+		</div>
+
+		<div class="entry" style="float: left;clear: unset;background: center;">
+			<div class="avatar">
+				<div class="imgborder">
+					<a href="javascript:;" data-title="聊天" data-url="/chat" onclick="showFrameHtml(this, '60%', '70%')">
+						<img src="/static/tools/common/images/chat.jpg" />
+					</a>
+				</div>
+				<p>
+					<a href="javascript:;" data-title="聊天" data-url="/chat" onclick="showFrameHtml(this, '60%', '70%')">
+						嘀友聊天
+					</a>
+					{if $chatRemind}
+					<span class="layui-badge-dot layui-bg-blue"></span>
+					{/if}
+				</p>
+			</div>
+			<div class="clear"></div>
+		</div>
+
+		<div class="entry" style="float: left;clear: unset;background: center;">
+			<div class="avatar">
+				<div class="imgborder">
+					<a href="javascript:;" data-title="影院" data-url="/tools/movie" onclick="showFrameHtml(this, '80%', '80%')">
+						<img src="/static/tools/common/images/movie.jpg" />
+					</a>
+				</div>
+				<p>
+					<a href="javascript:;" data-title="影院" data-url="/tools/movie" onclick="showFrameHtml(this, '80%', '80%')">
+						嘀咕影院
+					</a>
+				</p>
+			</div>
+			<div class="clear"></div>
+		</div>
+
+	</div>
+{if $userInfo.isSiteUser}
+	{include file='index/sidebar_index' /}
+{else}
+	{include file='index/sidebar_user' /}
+{/if}
+{include file='index/footer' /}
