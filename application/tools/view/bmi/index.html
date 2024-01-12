@@ -1,0 +1,48 @@
+<html>
+<head>
+	<title>BMI Calculator</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+	<link rel="stylesheet" type="text/css" href="/static/tools/bmi/stylesheet.css">
+</head>
+<body>
+    <div class="container">
+    	<div class="panel">
+    		<h2 class="text-center">体脂BMI计算器</h2>
+    		
+    			<p id="introText" class="text-center">输入身高体重计算结果</p>
+    			
+    			<form>
+    				<div id="weightInput">
+    					<p>体重 (KG)</p>
+    		     		<input id="weight" type="number" pattern="[0-9]*" name="a" />
+    				</div>
+    				<div id="heightInput">
+    					<p>身高 (CM)</p>
+	    				 <input id="height" type="number" pattern="[0-9]*" name="b"/> 
+    				</div>
+    		     <button type="button" class="btn" onclick="calculate()">计算 BMI</button>
+    		</form>
+    		<div id="results" class="text-center">结果</div>
+    	</div>
+    </div>
+	<div id="table">
+		<table>
+			<caption>BMI 结果:</caption>
+			<tr>
+				<th>体重不足</th>
+				<th>健康</th>
+				<th>超重</th>
+				<th>肥胖</th>
+			</tr>
+			<tr>
+				<td>低于 18.5</td>
+				<td>18.5 - 24.9</td>
+				<td>25.0 - 29.9 </td>
+				<td>30.0以上</td>
+
+			</tr>
+		</table>
+	</div>
+	<script src="/static/tools/bmi/main.js"></script>
+</body>
+</html>
