@@ -48,12 +48,14 @@ Route::get('/register/$','index/User/register');
 Route::get('/forgot/$','index/User/forgot');
 Route::get('/logout/$','index/User/logout');
 
+Route::get('/setting/$', $module . '/Index/setting')->pattern(['name' => '\w+']);
+Route::get('/setting/avatar/$', $module . '/Index/avatar')->pattern(['name' => '\w+']);
+Route::get('/setting/passwd/$', $module . '/Index/passwd')->pattern(['name' => '\w+']);
+Route::get('/setting/background/$', $module . '/Index/background')->pattern(['name' => '\w+']);
+
 Route::get('/:name/$', $module . '/Index/index')->pattern(['name' => '\w+']);
 Route::get('/:name/:page$', $module . '/Index/index')->pattern(['name' => '\w+', 'page'=>'[0-9]+']);
-Route::get('/:name/setting/$', $module . '/Index/setting')->pattern(['name' => '\w+']);
-Route::get('/:name/setting/avatar/$', $module . '/Index/avatar')->pattern(['name' => '\w+']);
-Route::get('/:name/setting/passwd/$', $module . '/Index/passwd')->pattern(['name' => '\w+']);
-Route::get('/:name/setting/background/$', $module . '/Index/background')->pattern(['name' => '\w+']);
+
 Route::get('/:name/fans/$', $module . '/Index/fans')->pattern(['name' => '\w+']);
 Route::get('/:name/fans/:page$', $module . '/Index/fans')->pattern(['name' => '\w+', 'page'=>'[0-9]+']);
 Route::get('/:name/concern/$', $module . '/Index/concern')->pattern(['name' => '\w+']);
