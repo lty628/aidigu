@@ -152,4 +152,9 @@ class IndexInfo extends Info
         $this->assign('userFans', $userFans);
         return $this->fetch();
     }
+
+    public function info()
+    {
+        return $this->fetch();
+    }
 }

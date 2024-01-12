@@ -53,6 +53,8 @@ Route::get('/setting/avatar/$', $module . '/Index/avatar')->pattern(['name' => '
 Route::get('/setting/passwd/$', $module . '/Index/passwd')->pattern(['name' => '\w+']);
 Route::get('/setting/background/$', $module . '/Index/background')->pattern(['name' => '\w+']);
 
+Route::get('/:name/info/$', $module . '/Index/info')->pattern(['name' => '\w+']);
+
 Route::get('/:name/$', $module . '/Index/index')->pattern(['name' => '\w+']);
 Route::get('/:name/:page$', $module . '/Index/index')->pattern(['name' => '\w+', 'page'=>'[0-9]+']);
 
