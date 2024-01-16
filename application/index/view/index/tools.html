@@ -20,7 +20,7 @@
 						<a href="javascript:;" data-title="{$appInfo['app_name']}" data-url="{$appInfo['app_url']}" onclick="showFrameHtml(this, '{$appInfo[\'app_width\']}', '{$appInfo[\'app_height\']}')">
 							{$appInfo['app_name']}
 						</a>
-						{if in_array($chatRemind[$appInfo['remind_key']])}
+						{if in_array($appInfo['remind_key'], $chatRemind)}
 						<span class="layui-badge-dot layui-bg-blue"></span>
 						{/if}
 					</p>
