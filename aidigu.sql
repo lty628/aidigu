@@ -18,12 +18,17 @@ CREATE TABLE `wb_app` (
   `create_time` datetime NOT NULL COMMENT '创建时间',
   `update_time` datetime NOT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
 -- ----------------------------
 -- Records of wb_app
 -- ----------------------------
 BEGIN;
+INSERT INTO `wb_app` VALUES (1, '我的云盘', '/cloud/show/', 1, 0, '/static/tools/common/images/cloud.jpg', '80%', '80%', '2024-01-16 11:31:53', '2024-01-16 11:31:55');
+INSERT INTO `wb_app` VALUES (2, '嘀友聊天', '/chat', 1, 0, '/static/tools/common/images/chat.jpg', '60%', '70%', '2024-01-16 11:31:53', '2024-01-16 11:31:55');
+INSERT INTO `wb_app` VALUES (3, '嘀咕影院', '/movie', 1, 0, '/static/tools/common/images/movie.jpg', '80%', '80%', '2024-01-16 11:31:53', '2024-01-16 11:31:55');
+INSERT INTO `wb_app` VALUES (4, '开车啦', '/tools/onlinecar', 1, 0, '/static/tools/common/images/onlinecar.jpg', '80%', '80%', '2024-01-16 11:31:53', '2024-01-16 11:31:55');
+INSERT INTO `wb_app` VALUES (5, 'BMI体重计算', '/tools/bmi', 1, 0, '/static/tools/common/images/bmi.jpg', '80%', '80%', '2024-01-16 11:31:53', '2024-01-16 11:31:55');
 COMMIT;
 
 -- ----------------------------
