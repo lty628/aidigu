@@ -12,17 +12,24 @@ class Remind
 
     public static function check($uid)
     {
-        return cache(self::getName($uid));
+        $result = cache(self::getName($uid));
+        if (!$result) return [];
+        return $result;
     }
     
 
-    public static function open($uid)
+    public static function open($uid, $appNameKey = 'chat')
     {
-        cache(self::getName($uid), 1);
+        $data = self::check($uid);
+        if (in_array($appNameKey, $data)) {
+            return true;
+        }
+        array_push($data, $appNameKey);
+        return cache(self::getName($uid), $data);
     }
 
     public static function clean($uid)
     {
-        return cache(self::getName($uid), 0);
+        return cache(self::getName($uid), []);
     }
 }
