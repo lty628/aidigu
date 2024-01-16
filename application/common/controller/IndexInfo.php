@@ -148,8 +148,8 @@ class IndexInfo extends Info
 
     public function tools()
     {
-        $userFans = $this->getMyFans($this->siteUserId, 20);
-        $this->assign('userFans', $userFans);
+        $list = Db::name('app')->where('app_status', 1)->select();
+        $this->assign('list', $list);
         return $this->fetch();
     }
 
