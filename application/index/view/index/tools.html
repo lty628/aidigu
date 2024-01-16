@@ -9,17 +9,15 @@
 		<div class="top">嘀咕小应用</div>
 
 		{foreach $list as $appInfo}
-			{$appInfo['config'] = json_decode($appInfo['config'], true)}
-			{dump($appInfo['config'])}
 			<div class="entry" style="float: left;clear: unset;background: center;">
 				<div class="avatar" style="width: 100px;">
 					<div>
-						<a href="javascript:;" data-title="{$appInfo['app_name']}" data-url="{$appInfo['app_url']}" onclick="showFrameHtml(this, {$appInfo['app_width']}, {$appInfo['app_height']})">
+						<a href="javascript:;" data-title="{$appInfo['app_name']}" data-url="{$appInfo['app_url']}" onclick="showFrameHtml(this, '{$appInfo[\'app_width\']}', '{$appInfo[\'app_height\']}')">
 							<img src="{$appInfo['app_image']}" />
 						</a>
 					</div>
 					<p>
-						<a href="javascript:;" data-title="{$appInfo['app_name']}" data-url="{$appInfo['app_url']}" onclick="showFrameHtml(this, {$appInfo['app_width']}, {$appInfo['app_height']})">
+						<a href="javascript:;" data-title="{$appInfo['app_name']}" data-url="{$appInfo['app_url']}" onclick="showFrameHtml(this, '{$appInfo[\'app_width\']}', '{$appInfo[\'app_height\']}')">
 							{$appInfo['app_name']}
 						</a>
 					</p>
@@ -27,107 +25,6 @@
 				<div class="clear"></div>
 			</div>
 		{/foreach}
-		
-		
-
-		<div class="entry" style="float: left;clear: unset;background: center;">
-			<div class="avatar" style="width: 100px;">
-				<div>
-					<a href="javascript:;" data-title="嘀友聊天" data-url="/chat" onclick="showFrameHtml(this, '60%', '70%')">
-						<img src="/static/tools/common/images/chat.jpg" />
-					</a>
-				</div>
-				<p>
-					<a href="javascript:;" data-title="嘀友聊天" data-url="/chat" onclick="showFrameHtml(this, '60%', '70%')">
-						嘀友聊天
-					</a>
-					{if $chatRemind}
-					<span class="layui-badge-dot layui-bg-blue"></span>
-					{/if}
-				</p>
-			</div>
-			<div class="clear"></div>
-		</div>
-
-		<div class="entry" style="float: left;clear: unset;background: center;">
-			<div class="avatar" style="width: 100px;">
-				<div>
-					<a href="javascript:;" data-title="影院" data-url="/tools/movie" onclick="showFrameHtml(this, '80%', '80%')">
-						<img src="/static/tools/common/images/movie.jpg" />
-					</a>
-				</div>
-				<p>
-					<a href="javascript:;" data-title="影院" data-url="/tools/movie" onclick="showFrameHtml(this, '80%', '80%')">
-						嘀咕影院
-					</a>
-				</p>
-			</div>
-			<div class="clear"></div>
-		</div>
-
-		<div class="entry" style="float: left;clear: unset;background: center;">
-			<div class="avatar" style="width: 100px;">
-				<div>
-					<a href="javascript:;" data-title="开车啦" data-url="/tools/onlinecar" onclick="showFrameHtml(this, '80%', '80%')">
-						<img src="/static/tools/common/images/onlinecar.jpg" />
-					</a>
-				</div>
-				<p>
-					<a href="javascript:;" data-title="开车啦" data-url="/tools/onlinecar" onclick="showFrameHtml(this, '80%', '80%')">
-						开车啦
-					</a>
-				</p>
-			</div>
-			<div class="clear"></div>
-		</div>
-
-		<div class="entry" style="float: left;clear: unset;background: center;">
-			<div class="avatar" style="width: 100px;">
-				<div>
-					<a href="javascript:;" data-title="BMI" data-url="/tools/bmi" onclick="showFrameHtml(this, '80%', '80%')">
-						<img src="/static/tools/common/images/bmi.jpg" />
-					</a>
-				</div>
-				<p>
-					<a href="javascript:;" data-title="BMI" data-url="/tools/bmi" onclick="showFrameHtml(this, '80%', '80%')">
-						BMI体重计算
-					</a>
-				</p>
-			</div>
-			<div class="clear"></div>
-		</div>
-
-		<div class="entry" style="float: left;clear: unset;background: center;">
-			<div class="avatar" style="width: 100px;">
-				<div>
-					<a href="javascript:;" data-title="NAS导航" data-url="https://nav.nas.org.cn/" onclick="showFrameHtml(this, '80%', '80%')">
-						<img src="/static/tools/common/images/nas_nav.png" />
-					</a>
-				</div>
-				<p>
-					<a href="javascript:;" data-title="NAS导航" data-url="https://nav.nas.org.cn/" onclick="showFrameHtml(this, '80%', '80%')">
-						NAS导航
-					</a>
-				</p>
-			</div>
-			<div class="clear"></div>
-		</div>
-
-		<div class="entry" style="float: left;clear: unset;background: center;">
-			<div class="avatar" style="width: 100px;">
-				<div>
-					<a href="javascript:;" data-title="在线影视" data-url="https://xy.ccocn.com/" onclick="showFrameHtml(this, '80%', '80%')">
-						<img src="/static/tools/common/images/xiaoya.png" />
-					</a>
-				</div>
-				<p>
-					<a href="javascript:;" data-title="在线影视" data-url="https://xy.ccocn.com/" onclick="showFrameHtml(this, '80%', '80%')">
-						在线影视
-					</a>
-				</p>
-			</div>
-			<div class="clear"></div>
-		</div>
 
 	</div>
 {if $userInfo.isSiteUser}
