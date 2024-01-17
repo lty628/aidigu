@@ -82,7 +82,7 @@ function showFrameUrl(obj, width, height, maxmin)
         title: title,
         shade: 0.8,
         closeBtn: maxmin,
-        shadeClose: true,
+        shadeClose: !maxmin,
         area: [width, height],
         resize: false,
         maxmin: maxmin,
