@@ -69,17 +69,23 @@ function showFrameHtml(obj, width, height)
     });
 }
 
-function showFrameUrl(obj, width, height)
+function showFrameUrl(obj, width, height, maxmin)
 {
+    if (!maxmin) {
+        maxmin = false
+        title = ''
+    } else {
+        title = $(obj).attr('data-title')
+    }
     layer.open({
         type: 1,
-        title: $(obj).attr('data-title'),
+        title: title,
         shade: 0.8,
-        closeBtn: 0,
+        closeBtn: maxmin,
         shadeClose: true,
         area: [width, height],
         resize: false,
-        maxmin: false,
+        maxmin: maxmin,
         // moveOut: true,
         scrollbar: false,
         content: '<iframe src="'+$(obj).attr('data-url')+'" allowfullscreen="true" allowtransparency="true" width="100%" height="100%" frameborder="0" scrolling="yes"></iframe>',

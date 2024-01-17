@@ -12,12 +12,12 @@
 			<div class="entry" style="float: left;clear: unset;background: center;">
 				<div class="avatar" style="width: 100px;">
 					<div>
-						<a href="javascript:;" data-title="{$appInfo['app_name']}" data-url="{$appInfo['app_url']}" onclick="showFrameHtml(this, '{$appInfo[\'app_width\']}', '{$appInfo[\'app_height\']}')">
+						<a href="javascript:;" data-title="{$appInfo['app_name']}" data-url="{$appInfo['app_url']}" onclick="showFrameUrl(this, '{$appInfo[\'app_width\']}', '{$appInfo[\'app_height\']}', true)">
 							<img src="{$appInfo['app_image']}" />
 						</a>
 					</div>
 					<p>
-						<a href="javascript:;" data-title="{$appInfo['app_name']}" data-url="{$appInfo['app_url']}" onclick="showFrameHtml(this, '{$appInfo[\'app_width\']}', '{$appInfo[\'app_height\']}')">
+						<a href="javascript:;" data-title="{$appInfo['app_name']}" data-url="{$appInfo['app_url']}" onclick="showFrameUrl(this, '{$appInfo[\'app_width\']}', '{$appInfo[\'app_height\']}', true)">
 							{$appInfo['app_name']}
 						</a>
 						{if in_array($appInfo['remind_key'], $chatRemind)}
