@@ -31,7 +31,7 @@ class PrivateLetter
             ], 320));
             $data['send_status'] = 1;
         } else {
-            \app\common\libs\Remind::open($data['touid']);
+            \app\common\libs\Remind::open($data['touid'], 'chat');
         }
         \app\chat\libs\ChatDbHelper::updateMessageCount('chat_private_letter', ['fromuid' => $data['touid'], 'touid' => $data['fromuid']]);
         \app\chat\libs\ChatDbHelper::saveChatPrivateLetterHistory($data);

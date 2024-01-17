@@ -50,7 +50,7 @@ class ChatServer extends Command
         $loginUserInfo = getWsUserInfoByCookie($request->cookie['rememberMe']);
         // dump($loginUserInfo);
         $uid = $loginUserInfo['uid'];
-        \app\common\libs\Remind::clean($uid);
+        \app\common\libs\Remind::clean($uid, 'chat');
         // 好友列表
         $friendList = \app\chat\libs\TagInfo::getTagInfo($uid);
         $data['fd'] = $request->fd;
