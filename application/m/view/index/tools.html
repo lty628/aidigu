@@ -1,0 +1,24 @@
+
+{include file='index/header' /}
+
+{foreach $list as $appInfo}
+<div>
+	<a href="javascript:;" data-title="{$appInfo['app_name']}" data-url="{$appInfo['app_url']}" onclick="showFrameCustom(this, '{$appInfo[\'app_config\']}')">
+		<div class="post"  style="float: left; width: 50%;">
+			<img class="post-head" src="{$appInfo['app_image']}" />
+			<div class="post-article">
+				<div class="post-content">
+					<li>
+						{$appInfo['app_name']}
+						{if in_array($appInfo['remind_key'], $chatRemind)}
+						<span class="layui-badge-dot layui-bg-blue"></span>
+						{/if}
+					</li>
+				</div>
+			</div>
+		</div>
+	</a>
+</div>
+{/foreach}
+
+{include file='index/foot' /}

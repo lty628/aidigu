@@ -22,7 +22,7 @@ Route::get('/cloud/collection/$','upload/Index/collection');
 Route::get('chat', 'chat/index/index');
 Route::get('chat/private/:uid$', 'chat/index/index')->pattern(['uid'=>'[0-9]+']);
 
-Route::get('/tools/$', 'index/index/tools');
+// Route::get('/tools/$', 'index/index/tools');
 // Route::get('/tools/movie/$', 'tools/movie/index');
 // Route::get('/tools/onlinecar/$', 'tools/Onlinecar/index');
 
@@ -32,6 +32,7 @@ if (isMobile()) {
 } else {
 	$module = 'index';
 }
+Route::get('/tools/$',  $module . '/index/tools');
 Route::get('/topic/$',$module . '/Index/topicList');
 Route::get('/topic/:page$', $module . '/Index/topicList')->pattern(['page'=>'[0-9]+']);
 Route::get('/topic/:topic_id/$',$module . '/Index/topic')->pattern(['topic_id' => '[0-9]+']);
