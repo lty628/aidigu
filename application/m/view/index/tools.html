@@ -2,7 +2,7 @@
 {include file='index/header' /}
 
 {foreach $list as $appInfo}
-{if $appInfo['app_type'] == 0 || if $appInfo['app_type'] == 2}
+{if $appInfo['app_type'] == 0 || $appInfo['app_type'] == 2}
 <div>
 	<a href="javascript:;" data-title="{$appInfo['app_name']}" data-url="{$appInfo['app_url']}" onclick="showFrameCustom(this, '{$appInfo[\'app_config\']}')">
 		<div class="post"  style="float: left; width: 50%;">
