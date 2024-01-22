@@ -9,6 +9,7 @@
 		<div class="top">嘀咕小应用</div>
 
 		{foreach $list as $appInfo}
+		{if $appInfo['app_type'] == 0 || if $appInfo['app_type'] == 1}
 			<div class="entry" style="float: left;clear: unset;background: center;">
 				<div class="avatar" style="width: 100px;">
 					<div>
@@ -27,6 +28,7 @@
 				</div>
 				<div class="clear"></div>
 			</div>
+		{/if}
 		{/foreach}
 
 	</div>
