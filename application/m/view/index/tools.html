@@ -4,7 +4,13 @@
 {foreach $list as $appInfo}
 {if $appInfo['app_type'] == 0 || $appInfo['app_type'] == 2}
 <div>
+	{if $appInfo['app_type'] == 0}
 	<a href="javascript:;" data-title="{$appInfo['app_name']}" data-url="{$appInfo['app_url']}" onclick="showFrameCustom(this, '{$appInfo[\'app_config\']}')">
+	{elseif condition="$appInfo['app_type'] eq 1" /}
+	<a href="{$appInfo['app_url']}">
+	{else /}
+	<a href="{$appInfo['app_url']}" target="_blank">
+	{/if}
 		<div class="post"  style="float: left; width: 50%;">
 			<img class="post-head" src="{$appInfo['app_image']}" />
 			<div class="post-article">
