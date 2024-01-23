@@ -30,7 +30,7 @@ INSERT INTO `wb_app` VALUES (2, '嘀友聊天', '/chat', 1, 0, '/static/tools/co
 INSERT INTO `wb_app` VALUES (3, '嘀咕影院', '/tools/movie', 1, 0, '/static/tools/common/images/movie.jpg', '', '{\"title\":\"嘀咕影院\",\"shade\":0.8,\"closeBtn\":true,\"shadeClose\":false,\"area\":[\"80%\",\"80%\"],\"resize\":true,\"maxmin\":true,\"skin\":\"layui-layer-win10\",\"id\":\"app_3\",\"hideOnClose\":false,\"scrollbar\":false}', 0, '2024-01-16 11:31:53', '2024-01-17 19:41:07');
 INSERT INTO `wb_app` VALUES (4, '开车啦', '/tools/onlinecar', 1, 0, '/static/tools/common/images/onlinecar.jpg', '', '{\"title\":\"开车啦\",\"shade\":0.8,\"closeBtn\":true,\"shadeClose\":false,\"area\":[\"80%\",\"80%\"],\"resize\":true,\"maxmin\":true,\"skin\":\"layui-layer-win10\",\"id\":\"app_4\",\"hideOnClose\":false,\"scrollbar\":false}', 0, '2024-01-16 11:31:53', '2024-01-17 19:41:20');
 INSERT INTO `wb_app` VALUES (5, 'BMI体重计算', '/tools/bmi', 1, 0, '/static/tools/common/images/bmi.jpg', '', '{\"title\":\"BMI体重计算\",\"shade\":0.8,\"closeBtn\":true,\"shadeClose\":false,\"area\":[\"80%\",\"80%\"],\"resize\":true,\"maxmin\":true,\"skin\":\"layui-layer-win10\",\"id\":\"app_5\",\"hideOnClose\":false,\"scrollbar\":false}', 0, '2024-01-16 11:31:53', '2024-01-17 19:41:33');
-INSERT INTO `wb_app` VALUES (6, '话题', '/topic/', 1, 2, '/static/tools/common/images/topic', '', '{}', 1, '2024-01-16 11:31:53', '2024-01-16 11:31:53');
+INSERT INTO `wb_app` VALUES (6, '话题', '/topic/', 1, 2, '/static/tools/common/images/topic.jpeg', '', '{}', 1, '2024-01-16 11:31:53', '2024-01-16 11:31:53');
 COMMIT;
 
 -- ----------------------------
