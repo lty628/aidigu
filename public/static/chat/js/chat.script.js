@@ -405,11 +405,11 @@ var chat = {
 	},
 	changeList: function (obj) {
 
-		// if (window.innerWidth < 1000) {
+		if ($("#isMobile").val()) {
 			// $("#menu-pannel").css('display', 'none')
 			$("#sub-menu-pannel").show()
 			$("#content-pannel").hide();
-		// }
+		}
 		window.parent.$(".layui-layer-title").text(chat.data.title);
 
 		var tagid = $(obj).attr("listtagid")
@@ -489,11 +489,11 @@ var chat = {
 	},
 	changeUser : function(obj){
 
-		// if (window.innerWidth < 1000) {
+		if ($("#isMobile").val()) {
 			// $("#menu-pannel").css('display', 'none')
 			$("#sub-menu-pannel").css('display', 'none')
 			$("#content-pannel").show();
-		// }
+		}
 		window.parent.$(".layui-layer-title").text($(obj).attr("uname"));
 		//未登录
 		// if(!this.data.login) {
@@ -534,11 +534,11 @@ var chat = {
 	},
 	changeGroup : function(obj){
 		
-		// if (window.innerWidth < 1000) {
+		if ($("#isMobile").val()) {
 			// $("#menu-pannel").css('display', 'none')
 			$("#sub-menu-pannel").css('display', 'none')
 			$("#content-pannel").show();
-		// }
+		}
 		window.parent.$(".layui-layer-title").text($(obj).attr("uname"));
 
 		var groupid = $(obj).attr("groupid");

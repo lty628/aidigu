@@ -14,14 +14,14 @@
 			margin-top: -265px!important;
 			margin-left: -20px!important;
 		}
-
+		{if $isMobile}
 		#sub-menu-pannel {
 			width: 100%;
 		}
 		#content-pannel {
 			display: none;
 		}
-
+		{/if}
 	</style>
 </head>
 
@@ -90,6 +90,7 @@
 	</div>
 	<input type="hidden" value="{$touid}" id="privateToUid">
 	<input type="hidden" value="{$fromuid}" id="privateFromUid">
+	<input type="hidden" value="{$isMobile}" id="isMobile">
 	<script>
 		var config = {
 			'wsserver' : "{$wsserver}"

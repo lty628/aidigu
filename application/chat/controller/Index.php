@@ -5,6 +5,11 @@ use app\chat\model\ChatPrivateLetter;
 
 class Index extends Controller
 {
+    public function initialize()
+    {
+        $this->assign('isMobile', isMobile());
+    }
+
     public function index()
     {
         $touid = input('private');
