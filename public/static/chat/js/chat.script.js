@@ -59,13 +59,15 @@ var chat = {
 		head_image      : "",
 		rds         : [],//所有房间ID
 		crd         : 'a', //当前房间ID
-		remains     : []
+		remains     : [],
+		title       : '',
 	},
 	init : function (){
 		// this.copyright();
 		this.off();
 		// chat.data.storage = window.localStorage;
 		this.ws();
+		this.data.title = window.parent.$(".layui-layer-title").text();
 	},
 	// doLogin : function( name , email ){
 	// 	if(name == '' || email == ''){
@@ -402,6 +404,14 @@ var chat = {
 		}
 	},
 	changeList: function (obj) {
+
+		// if (window.innerWidth < 1000) {
+			// $("#menu-pannel").css('display', 'none')
+			$("#sub-menu-pannel").show()
+			$("#content-pannel").hide();
+		// }
+		window.parent.$(".layui-layer-title").text(chat.data.title);
+
 		var tagid = $(obj).attr("listtagid")
 		if ($(obj).hasClass("selected")) {
 			return
@@ -478,6 +488,13 @@ var chat = {
 		$(".input-area").show()
 	},
 	changeUser : function(obj){
+
+		// if (window.innerWidth < 1000) {
+			// $("#menu-pannel").css('display', 'none')
+			$("#sub-menu-pannel").css('display', 'none')
+			$("#content-pannel").show();
+		// }
+		window.parent.$(".layui-layer-title").text($(obj).attr("uname"));
 		//未登录
 		// if(!this.data.login) {
 		// 	this.shake();
@@ -516,12 +533,22 @@ var chat = {
 		$(".input-area").show()
 	},
 	changeGroup : function(obj){
+		
+		// if (window.innerWidth < 1000) {
+			// $("#menu-pannel").css('display', 'none')
+			$("#sub-menu-pannel").css('display', 'none')
+			$("#content-pannel").show();
+		// }
+		window.parent.$(".layui-layer-title").text($(obj).attr("uname"));
+
 		var groupid = $(obj).attr("groupid");
 		var listtagid = $(obj).attr("listtagid");
 		$(".list-item").removeClass("selected")
 		$(obj).addClass('selected')
 		$(obj).children('.layui-badge').css('display', 'none')
 		blinkingTitle.stop(true);
+
+		
 
 		chat.data.groupid = groupid
 		chat.data.listtagid = listtagid
