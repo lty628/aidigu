@@ -1,6 +1,16 @@
 
 {include file='index/header' /}
 
+<style>
+	body{
+		background-color: white;
+		
+	}
+	.body{
+		height: 800px;
+	}
+</style>
+
 {foreach $list as $appInfo}
 {if $appInfo['app_type'] == 0 || $appInfo['app_type'] == 2}
 <div>
