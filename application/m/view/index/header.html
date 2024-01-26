@@ -54,7 +54,7 @@
                 <!-- <li><a href="javascript:;" data-title="我的云盘" data-url="/cloud/show/" onclick="showFrameHtml(this, '100%', '100%')">网盘</a></li> -->
                 <!-- <li {if $action == 'info'}class="current"{/if}><a href="/info/">个人设置</a></li> -->
                 <!-- <li><a href="javascript:;" data-title="我的云盘" data-url="/cloud/show/" onclick="showFrameHtml(this, '100%', '100%')">网盘</a></li> -->
-                <li>
+                <li {if $action == 'tools'}class="current"{/if}>
 					<a href="/tools/">小应用</a>
 					{if $chatRemind}
 					<span class="layui-badge-dot layui-bg-blue"></span>
