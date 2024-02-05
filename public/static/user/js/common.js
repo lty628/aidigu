@@ -30,6 +30,7 @@
 	        var nickname = $("#nickname").val();
 	        var password = $("#password").val();
 	        var rePassword = $("#re-password").val();
+	        var inviteCode = $("#invite-code").val();
 	        if (!checkAccount(account)) {
 	            return false;
 	        }
@@ -54,9 +55,9 @@
 	        }
 	        $.ajax({
 	                url: '/index/user/registerAjax',
-	                type: 'GET',
+	                type: 'POST',
 	                dataType: 'json',
-	                data: { account: account, nickname: nickname, password: password },
+	                data: { account: account, nickname: nickname, password: password, inviteCode: inviteCode },
 	            })
 	            .done(function(data) {
 	                if (data.status) {

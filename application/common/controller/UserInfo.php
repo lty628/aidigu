@@ -5,6 +5,7 @@ namespace app\common\controller;
 use app\common\model\User as UserModel;
 use app\common\model\Fans;
 use app\common\validate\User as Validate;
+use think\Db;
 use think\Controller;
 
 /**
@@ -27,18 +28,30 @@ class UserInfo extends Controller
 	{
 		return $this->fetch();
 	}
+
+	public function invite()
+	{
+		$inviteCode = input('get.invite_code');
+		$this->assign('inviteCode', $inviteCode);
+		return $this->fetch();
+	}
+
 	public function forgot()
 	{
 		return $this->fetch();
 	}
 	public function registerAjax()
 	{
-		if (env('app.noRegister')) {
+		$data['inviteCode'] = trim(input('post.inviteCode'));
+		if (env('app.noRegister') && $data['inviteCode']) {
 			return json(['status' => 0, 'msg' => '本站已禁止注册']);
 		}
-		$data['blog'] = strtolower(trim(input('get.account')));
-		$data['nickname'] = trim(input('get.nickname'));
-		$data['password'] = trim(input('get.password'));
+		if (!\app\tools\controller\Userinvite::checkInviteCode($data['inviteCode'])) {
+			return json(['status' => 0, 'msg' => '未知错误']);
+		}
+		$data['blog'] = strtolower(trim(input('post.account')));
+		$data['nickname'] = trim(input('post.nickname'));
+		$data['password'] = trim(input('post.password'));
 		$validate = new Validate();
 		if (!$validate->check($data)) {
 			return json(['status' => 0, 'msg' => $validate->getError()]);
@@ -50,6 +63,7 @@ class UserInfo extends Controller
 		$data['head_image'] = '/static/index/images/noavatar_small.gif';
 		if (!$user->save($data)) return json(['status' => 0, 'msg' => '注册失败']);
 		$userid = $user->id;
+		\app\tools\controller\Userinvite::changeInviteInfo($userid, $data['inviteCode']);
 		setLoginUid($userid);
 		Fans::create(['fromuid' => $userid, 'touid' => $userid, 'mutual_concern' => 1]);
 		return json(['status' => 1, 'msg' => '注册成功']);
