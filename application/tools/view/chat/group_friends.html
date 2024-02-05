@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="/static/layui/css/layui.css" rel="stylesheet">
+</head>
+
+<body class="main_body white">
+  <!-- <div class="layui-header">
+    <ul class="layui-nav layui-layout">
+      <li class="layui-nav-item"><a href="">我的群</a></li>
+  </div> -->
+
+  <div class="layui-layout">
+    <div style="padding: 16px;">
+      <table class="layui-hide" id="initTable" lay-filter="initTable"></table>
+    </div>
+  </div>
+
+  <input type="hidden" id="groupid" value="{$groupid}">
+
+  <script type="text/html" id="barLineInfo">
+    {if $isAdmin}
+    <div class="layui-clear-space">
+      <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="edit">移除群聊</a>
+    </div>
+    {elseif $isUser} 
+    <div class="layui-clear-space">
+
+    </div>
+    {/if}
+</script>
+  <script src="/static/layui/layui.js"></script>
+  <script>
+    layui.use(['table', 'dropdown'], function () {
+      var table = layui.table;
+      var dropdown = layui.dropdown;
+      var $ = layui.$;
+
+      // 创建渲染实例
+      table.render({
+        elem: '#initTable',
+        url: '/tools/chat/groupFriendsList?groupid=' + $("#groupid").val(), // 此处为静态模拟数据，实际使用时需换成真实接口
+        toolbar: false,
+        defaultToolbar: false,
+        height: 'full-35', // 最大高度减去其他容器已占有的高度差
+        lineStyle: 'height: 70px;',
+        css: [ // 重设当前表格样式
+          '.layui-table-tool-temp{padding-right: 145px;}'
+        ].join(''),
+        cellMinWidth: 80,
+        page: false,
+        cols: [[
+          { field: 'nickname', title: '昵称' },
+          { field: 'head_image', width: 100, title: '头像', templet: '<img width="50" height="50" src="{{= d.head_image }}" alt="">' },
+          { field: 'blog', title: '站内id' },
+          { fixed: 'right', title: '操作', width: 134, minWidth: 125, toolbar: '#barLineInfo' }
+        ]]
+      });
+
+      // 触发单元格工具事件
+      table.on('tool(initTable)', function (obj) { // 双击 toolDouble
+        var data = obj.data; // 获得当前行数据
+        // console.log(obj)
+        if (obj.event === 'edit') {
+          layer.confirm('真的移除用户 [' + data.nickname + '] 么', function (index) {
+            $.ajax({
+                  type: "post",
+                  url: "/tools/chat/delGroupUser",
+                  data: {'uid': data.uid,'groupid': data.groupid},
+                  dataType: "json",
+                  success: function (res) {
+                      layer.msg(res.msg);
+                  }
+              });
+            layer.close(index);
+            // 向服务端发送删除指令
+            table.reload('initTable')
+          });
+        }
+      });
+
+    });
+  </script>
+</body>
+
+</html>

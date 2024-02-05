@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="/static/layui/css/layui.css" rel="stylesheet">
+</head>
+
+<body class="main_body white">
+  <!-- <div class="layui-header">
+    <ul class="layui-nav layui-layout">
+      <li class="layui-nav-item"><a href="">我的群</a></li>
+  </div> -->
+
+  <div class="layui-layout">
+    <div style="padding: 16px;">
+      <table class="layui-hide" id="initTable" lay-filter="initTable"></table>
+    </div>
+  </div>
+
+  <script type="text/html" id="toolbarInfo">
+  <div class="layui-btn-container">
+    <button class="layui-btn layui-btn-sm" lay-event="createGroup">创建群</button>
+  </div>
+</script>
+
+  <input type="hidden" value="" id="copyLink">
+
+  <script type="text/html" id="barLineInfo">
+  <div class="layui-clear-space">
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-xs" lay-event="detail">成员管理</a>
+  </div>
+</script>
+  <script src="/static/layui/layui.js"></script>
+  <script src="/static/common/js/clipboard.min.js"></script>
+  <script>
+    function copyLink(obj) {
+      var $ = layui.$;
+      var invite_code = $(obj).attr('data-url');
+      $("#copyLink").attr('data-clipboard-text', window.location.protocol + '//' + window.location.host + '/tools/chat/joinGroup?invite_code=' + invite_code);
+      // window.location.protocol + '//' + window.location.host + window.location.pathname
+      var clipboard = new ClipboardJS('#copyLink')
+      $("#copyLink").trigger('click');
+      clipboard.destroy();
+      layer.msg('链接已复制，分享好友就可以进行群聊天啦');
+    }
+    layui.use(['table', 'dropdown'], function () {
+      var table = layui.table;
+      var dropdown = layui.dropdown;
+
+      // 创建渲染实例
+      table.render({
+        elem: '#initTable',
+        url: '/tools/chat/getGroup', // 此处为静态模拟数据，实际使用时需换成真实接口
+        toolbar: '#toolbarInfo',
+        defaultToolbar: false,
+        height: 'full-35', // 最大高度减去其他容器已占有的高度差
+        lineStyle: 'height: 70px;',
+        css: [ // 重设当前表格样式
+          '.layui-table-tool-temp{padding-right: 145px;}'
+        ].join(''),
+        cellMinWidth: 80,
+        page: false,
+        cols: [[
+          // { field: 'groupid', width: 20, title: 'ID' },
+          { field: 'groupname', width: 180, title: '群名称' },
+          { field: 'head_image', width: 80, title: '头像', templet: '<img width="50" height="50" src="{{= d.head_image }}" alt="">' },
+          { field: 'invite_code', title: '加群码(点击复制分享)', templet: '<a href="javascript:;" data-url="{{= d.invite_code }}" onclick="copyLink(this)" alt="点击复制">{{= d.invite_code }}</a>' },
+          { field: 'intro', title: '介绍', minWidth: 260, expandedWidth: 260 },
+          { field: 'usernum', title: '用户数量', width: 100 },
+          { field: 'ctime', title: '创建时间', width: 150 },
+          { fixed: 'right', title: '操作', width: 150, minWidth: 125, toolbar: '#barLineInfo'}
+        ]],
+        done: function () {
+
+        },
+        error: function (res, msg) {
+          console.log(res, msg)
+        }
+      });
+
+      // 工具栏事件
+      table.on('toolbar(initTable)', function (obj) {
+        var id = obj.config.id;
+        var checkStatus = table.checkStatus(id);
+        var othis = lay(this);
+        switch (obj.event) {
+          case 'createGroup':
+            layer.open({
+              title: '创建群',
+              type: 2,
+              area: ['80%', '80%'],
+              content: '/tools/chat/addGroup',
+              end: function () {
+                table.reload('initTable')
+              }
+            });
+            break;
+          case 'getData':
+            var getData = table.getData(id);
+            console.log(getData);
+            layer.alert(layui.util.escape(JSON.stringify(getData)));
+            break;
+          case 'LAYTABLE_TIPS':
+            layer.alert('自定义工具栏图标按钮');
+            break;
+        };
+      });
+
+      // 触发单元格工具事件
+      table.on('tool(initTable)', function (obj) { // 双击 toolDouble
+        var data = obj.data; // 获得当前行数据
+        // console.log(obj)
+        if (obj.event === 'edit') {
+          layer.open({
+            title: '编辑群信息:' + data.groupid,
+            type: 2,
+            area: ['80%', '80%'],
+            content: '/tools/chat/editGroup?groupid=' + data.groupid,
+            end: function () {
+              table.reload('initTable')
+            }
+            // btn: ['获取表单值', '取消'],
+            // btnAlign: 'c',
+            // yes: function(index, layero){
+            //   // 获取 iframe 的窗口对象
+            //   var iframeWin =  window[layero.find('iframe')[0]['name']];
+            //   var elemMark = iframeWin.$('#mark'); // 获得 iframe 中某个输入框元素
+            //   var value = elemMark.val();
+
+            //   if($.trim(value) === '') return elemMark.focus();
+            //   // 显示获得的值
+            //   layer.msg('获得 iframe 中的输入框标记值：'+ value);
+            // }
+          });
+        } else if (obj.event === 'detail') {
+          layer.open({
+            title: '群成员信息:' + data.groupid,
+            type: 2,
+            area: ['80%', '80%'],
+            content: '/tools/chat/groupFriends?groupid=' + data.groupid,
+            end: function () {
+              // table.reload('initTable')
+            }
+          });
+        }
+      });
+
+    });
+  </script>
+</body>
+
+</html>
