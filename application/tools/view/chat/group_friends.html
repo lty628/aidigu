@@ -30,7 +30,7 @@
     </div>
     {elseif $isUser} 
     <div class="layui-clear-space">
-
+      <a class="layui-btn layui-btn-xs" lay-event="open">查看主页</a>
     </div>
     {/if}
 </script>
@@ -81,6 +81,8 @@
             // 向服务端发送删除指令
             table.reload('initTable')
           });
+        } else if (obj.event === 'open') {
+          window.open('/'+data.blog+'/own/')
         }
       });
 
