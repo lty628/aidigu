@@ -90,7 +90,7 @@ class Chat extends Controller
             
         }
 
-        return $this->success('已进入群聊, 即将进入首页', '/');
+        return $this->success('已进入群聊, 即将进入聊天页', '/chat/');
 
     }
 
