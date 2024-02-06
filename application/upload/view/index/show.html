@@ -1,5 +1,7 @@
 {include file='index/header' /}
 
+
+
 <div class="layui-body" style="left: 0px; position: unset;">
     <div class="layui-layout">
         <div style="padding: 16px;">
@@ -8,6 +10,25 @@
     </div>
 
 </div>
+
+<script type="text/html" id="toolbarInfo">
+    <div class="layui-btn-container">
+        <form class="layui-form layui-row layui-col-space16">
+
+            <div class="layui-col-md4">
+                <div class="layui-input-wrap">
+                    <input type="text" name="file_name" autocomplete="off" placeholder="文件名" lay-affix="clear" class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-col-md4">
+                <button class="layui-btn" lay-submit lay-filter="initTableSearch">搜索</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+
+        </form>
+    </div>
+</script>
 
 {include file='index/footer' /}
 <script src="/static/common/js/clipboard.min.js"></script>
@@ -20,94 +41,86 @@
 
     function convertFileSize(sizeInBytes) {
         var units = ['B', 'KB', 'MB', 'GB']; // 定义可能使用到的单位数组
-        
+
         for (var i = 0; sizeInBytes >= 1024 && i < units.length - 1; i++) {
             sizeInBytes /= 1024; // 除以 1024 来进行单位转换
         }
-        
+
         return Math.round(sizeInBytes * 100) / 100 + " " + units[i]; // 返回结果并添加相应的单位后缀
     }
 
     layui.use(['table', 'dropdown'], function () {
-      var table = layui.table;
-      var dropdown = layui.dropdown;
+        var table = layui.table;
+        // var dropdown = layui.dropdown;
+        var form = layui.form;
+        // var laydate = layui.laydate;
 
-      // 创建渲染实例
-      table.render({
-        elem: '#initTable',
-        url: '/upload/index/getFiles', // 此处为静态模拟数据，实际使用时需换成真实接口
-        toolbar: '#toolbarInfo',
-        defaultToolbar: false,
-        height: 'full-35', // 最大高度减去其他容器已占有的高度差
-        css: [ // 重设当前表格样式
-          '.layui-table-tool-temp{padding-right: 145px;}'
-        ].join(''),
-        cellMinWidth: 80,
-        page: false,
-        cols: [[
-          // { field: 'groupid', width: 20, align: 'center', title: 'ID' },
-          { field: 'file_name', align: 'center', title: '文件名' },
-          { field: 'file_size', align: 'center', title: '文件大小', templet: function(d){
-            return convertFileSize(d.file_size);
-          }},
-          { field: 'create_time', align: 'center', title: '上传时间', minWidth: 120, expandedWidth: 120 },
-          { fixed: 'right', align: 'center', title: '操作', templet: function(d){
-            if (d.share_msg_id == 0) {
-                var shareStr = '<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="siteShare">微博分享</a>';
-            } else {
-                var shareStr = '<a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="siteCanleShare">取消分享</a>'
-            }
-            return '<div class="layui-clear-space">'+
-                shareStr+
-                '<a class="layui-btn layui-btn-xs" lay-event="download">下载</a>' +
-                '<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>' +
-            '</div>';
-          }}
-        ]],
-        done: function () {
-
-        },
-        error: function (res, msg) {
-          console.log(res, msg)
-        }
-      });
-
-      // 触发单元格工具事件
-      table.on('tool(initTable)', function (obj) { // 双击 toolDouble
-        var data = obj.data; // 获得当前行数据
-
-        if (obj.event === 'siteShare') {
-            $.ajax({
-                type: "post",
-                url: "/upload/index/siteShare",
-                data: {"id": data.id},
-                dataType: "json",
-                success: function (response) {
-                    layer.msg(response.msg);
-                    if (response.code == 1) {
-                        table.reload('initTable');
+        // 创建渲染实例
+        table.render({
+            elem: '#initTable',
+            url: '/upload/index/getFiles', // 此处为静态模拟数据，实际使用时需换成真实接口
+            toolbar: '#toolbarInfo',
+            defaultToolbar: false,
+            height: 'full-35', // 最大高度减去其他容器已占有的高度差
+            css: [ // 重设当前表格样式
+                '.layui-table-tool-temp{padding-right: 145px;}'
+            ].join(''),
+            cellMinWidth: 80,
+            page: true,
+            cols: [[
+                // { field: 'groupid', width: 20, align: 'center', title: 'ID' },
+                { field: 'file_name', align: 'center', title: '文件名' },
+                {
+                    field: 'file_size', align: 'center', title: '文件大小', templet: function (d) {
+                        return convertFileSize(d.file_size);
+                    }
+                },
+                { field: 'create_time', align: 'center', title: '上传时间', minWidth: 120, expandedWidth: 120 },
+                {
+                    fixed: 'right', align: 'center', title: '操作', templet: function (d) {
+                        if (d.share_msg_id == 0) {
+                            var shareStr = '<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="siteShare">微博分享</a>';
+                        } else {
+                            var shareStr = '<a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="siteCanleShare">取消分享</a>'
+                        }
+                        return '<div class="layui-clear-space">' +
+                            shareStr +
+                            '<a class="layui-btn layui-btn-xs" lay-event="download">下载</a>' +
+                            '<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>' +
+                            '</div>';
                     }
                 }
+            ]],
+            done: function () {
+
+            },
+            // error: function (res, msg) {
+            //     console.log(res, msg)
+            // }
+        });
+
+        // 搜索提交
+        form.on('submit(initTableSearch)', function(data){
+            var field = data.field; // 获得表单字段
+            // 执行搜索重载
+            table.reload('initTable', {
+            page: {
+                curr: 1 // 重新从第 1 页开始
+            },
+            where: field // 搜索的字段
             });
-        } else if (obj.event === 'siteCanleShare') {
-            $.ajax({
-                type: "post",
-                url: "/upload/index/siteCanleShare",
-                data: {"id": data.id},
-                dataType: "json",
-                success: function (response) {
-                    layer.msg(response.msg);
-                    if (response.code == 1) {
-                        table.reload('initTable');
-                    }
-                }
-            });
-        } else if (obj.event === 'del') {
-            layer.confirm('群定删除 [' + data.file_name + '] 么', function (index) {
+            return false; // 阻止默认 form 跳转
+        });
+
+        // 触发单元格工具事件
+        table.on('tool(initTable)', function (obj) { // 双击 toolDouble
+            var data = obj.data; // 获得当前行数据
+
+            if (obj.event === 'siteShare') {
                 $.ajax({
                     type: "post",
-                    url: "/upload/index/del",
-                    data: {"id": data.id},
+                    url: "/upload/index/siteShare",
+                    data: { "id": data.id },
                     dataType: "json",
                     success: function (response) {
                         layer.msg(response.msg);
@@ -116,12 +129,39 @@
                         }
                     }
                 });
-          });
-            
-        } else if (obj.event === 'download') {
-            window.open('/upload/index/download?id='+data.id)
-        }
-      });
+            } else if (obj.event === 'siteCanleShare') {
+                $.ajax({
+                    type: "post",
+                    url: "/upload/index/siteCanleShare",
+                    data: { "id": data.id },
+                    dataType: "json",
+                    success: function (response) {
+                        layer.msg(response.msg);
+                        if (response.code == 1) {
+                            table.reload('initTable');
+                        }
+                    }
+                });
+            } else if (obj.event === 'del') {
+                layer.confirm('群定删除 [' + data.file_name + '] 么', function (index) {
+                    $.ajax({
+                        type: "post",
+                        url: "/upload/index/del",
+                        data: { "id": data.id },
+                        dataType: "json",
+                        success: function (response) {
+                            layer.msg(response.msg);
+                            if (response.code == 1) {
+                                table.reload('initTable');
+                            }
+                        }
+                    });
+                });
+
+            } else if (obj.event === 'download') {
+                window.open('/upload/index/download?id=' + data.id)
+            }
+        });
 
     });
 

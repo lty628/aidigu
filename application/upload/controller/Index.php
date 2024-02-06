@@ -33,15 +33,33 @@ class Index extends Controller
 
     public function getFiles()
     {
-        $result = Db::name('file')->where('is_delete', 0)->order('create_time', 'desc')->where('userid', getLoginUid())->select();
-        return json(['code' => 0, 'data'=> $result]);
+        $get = input('get.');
+        $page = $get['page'] ?? 1;
+        $limit = $get['limit'] ?? 10;
+        $fileName = $get['file_name'] ?? '';
+        $where[] = ['userid', '=', getLoginUid()];
+        if ($fileName) {
+            $where[] = ['file_name', 'like',  '%'.$fileName.'%'];
+        }
+        $count = Db::name('file')->where('is_delete', 0)->where($where)->count();
+        $result = Db::name('file')->where('is_delete', 0)->order('create_time', 'desc')->where($where)->limit($limit)->page($page)->select();
+        return json(['code' => 0, 'data'=> $result, 'count' => $count]);
     }
 
     // 回收站
     public function getCollection()
     {
-        $result = Db::name('file')->where('is_delete', 1)->order('create_time', 'desc')->where('userid', getLoginUid())->select();
-        return json(['code' => 0, 'data'=> $result]);
+        $get = input('get.');
+        $page = $get['page'] ?? 1;
+        $limit = $get['limit'] ?? 10;
+        $fileName = $get['file_name'] ?? '';
+        $where[] = ['userid', '=', getLoginUid()];
+        if ($fileName) {
+            $where[] = ['file_name', 'like',  '%'.$fileName.'%'];
+        }
+        $count = Db::name('file')->where('is_delete', 1)->where($where)->count();
+        $result = Db::name('file')->where('is_delete', 1)->order('create_time', 'desc')->where($where)->limit($limit)->page($page)->select();
+        return json(['code' => 0, 'data'=> $result, 'count' => $count]);
     }
 
     // 回收站
