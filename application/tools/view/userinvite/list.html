@@ -67,7 +67,6 @@
         cellMinWidth: 80,
         page: false,
         cols: [[
-        { field: 'invite_code', width: 100, title: '邀请码(点击复制链接分享)', templet: '<a href="javascript:;" data-url="{{= d.invite_code }}" onclick="copyLink(this)" alt="点击复制">点击复制</a>' },
           { field: 'nickname', title: '昵称' },
           { field: 'blog', title: '账号' },
           { field: 'head_image', width: 100, title: '头像', templet: function(d){
@@ -76,6 +75,7 @@
             }
             return ''
           }},
+          { field: 'invite_code', width: 150, title: '邀请码(点击复制链接分享)', templet: '<a href="javascript:;" data-url="{{= d.invite_code }}" onclick="copyLink(this)" alt="点击复制">点击复制</a>' },
           { field: 'invite_status', title: '邀请状态', templet: function(d){
             if (d.invite_status == 0) {
               return '<button type="button" class="layui-btn layui-bg-orange">等待用户注册</button>'
