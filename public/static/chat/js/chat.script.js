@@ -429,6 +429,24 @@ var chat = {
 		// 默认选中第一个
 		// $("#conv-lists-"+tagid).children().first().trigger('click')
 	},
+	showGroupUser: function(obj) {
+		var groupid = chat.data.groupid
+		if ($("#isMobile").val()) {
+			var areaInfo = ['100%', '100%']
+		} else {
+			var areaInfo =  ['60%', '80%']
+		}
+
+		layer.open({
+            title: '群成员信息:',
+            type: 2,
+            area: areaInfo,
+            content: '/tools/chat/groupFriends?groupid=' + groupid,
+            end: function () {
+              // table.reload('initTable')
+            }
+          });
+	},
 	/**
 	 * 1.初始化房间
 	 * 2.初始化每个房间的用户列表
@@ -494,6 +512,9 @@ var chat = {
 			$("#sub-menu-pannel").css('display', 'none')
 			$("#content-pannel").show();
 		}
+
+		$("#showGroupUser").hide();
+
 		window.parent.$(".layui-layer-title").text($(obj).attr("uname"));
 		//未登录
 		// if(!this.data.login) {
@@ -539,6 +560,9 @@ var chat = {
 			$("#sub-menu-pannel").css('display', 'none')
 			$("#content-pannel").show();
 		}
+
+		$("#showGroupUser").show();
+
 		window.parent.$(".layui-layer-title").text($(obj).attr("uname"));
 
 		var groupid = $(obj).attr("groupid");

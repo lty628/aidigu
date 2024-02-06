@@ -67,7 +67,15 @@
 													onclick="upload()" title="图片"></i>
 											</li> -->
 										</ul>
-										<span class="user-guide">按 Enter 发送</span>
+										<div class="user-guide">
+											<span>按 Enter 发送</span>
+											<span>
+												<a href="javascript:;" id="showGroupUser" onclick="chat.showGroupUser(this)">
+													<i class="layui-icon layui-icon-group"></i>
+												</a>
+											</span>
+										</div>
+										
 										<div class="msg-box" style="width: 100%; height:100%;" id="msgInput"  onkeydown="chat.keySend(event);">
 											<!-- <textarea class="textarea input-msg-box" onkeydown="chat.keySend(event);"
 												id="chattext"></textarea> -->
@@ -99,7 +107,7 @@
 	<script src="/static/chat/js/jquery.min.js"></script>
 	<script src="/static/chat/js/face.js?v=3345"></script>
 	<script src="/static/chat/js/create.div.js?v=33"></script>
-	<script src="/static/chat/js/chat.script.js?v=33"></script>
+	<script src="/static/chat/js/chat.script.js?v=34"></script>
 	<script src="/static/chat/js/functions.js?v=2115"></script>
 	<script src="/static/chat/js/xlyjs.js?v=215"></script>
 	<script src="/static/layui/layui.js?4"></script>

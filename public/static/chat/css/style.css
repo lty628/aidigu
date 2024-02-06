@@ -192,7 +192,7 @@ button.onloading::after, .button.onloading::after, .datetime-input-box .dtpicker
 .conv-detail-pannel .send-msg-box-wrapper .input-area .msg-box { box-sizing: border-box; position: relative; flex: 1 1 0%;}
 .conv-detail-pannel .send-msg-box-wrapper .input-area .msg-box .input-msg-box, .conv-detail-pannel .send-msg-box-wrapper .input-area .msg-box .hidden-msg-box { height: 100%; flex: 1 1 0%; box-sizing: border-box; padding: 6px; line-height: 1.2em; }
 .conv-detail-pannel .send-msg-box-wrapper .input-area .msg-box .input-msg-box { position: absolute; width: calc(100% - 12px); height: calc(100% - 7px); resize: none; border: 0px none; background-color: transparent; }
-.conv-detail-pannel .send-msg-box-wrapper .action-area { position: relative; width: 78px; border-left: 1px solid rgb(230, 229, 230); }
+.conv-detail-pannel .send-msg-box-wrapper .action-area { position: relative; width: 78px;}
 .conv-detail-pannel .send-msg-box-wrapper .action-area .send-message-button { position: absolute; top: 0px; left: 0px; display: flex; justify-content: center; align-items: center; line-height: 106px; box-sizing: border-box; width: 78px; height: 100%; background-color: rgb(255, 255, 255); padding: 0px; font-size: 13px; border-bottom-right-radius: 3px; }
 .conv-detail-pannel .send-msg-box-wrapper .action-area .send-message-button.disabled, .conv-detail-pannel .send-msg-box-wrapper .action-area .send-message-button.disabled:hover { color: rgb(195, 195, 197); cursor: default; }
 .conv-detail-pannel .drag-to-upload-pop { display: none; pointer-events: none; position: absolute; left: 0px; top: 0px; z-index: 100; width: 100%; height: 100%; background-color: rgba(255, 255, 255, 0.8); }
