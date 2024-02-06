@@ -39,8 +39,8 @@ class Chat extends Controller
     {
         $uid = getLoginUid();
         $groupid = input('get.groupid');
-        $isAdmin = Db::name('chat_group')->where('fromuid', $uid)->find();
-        $isUser = Db::name('chat_group_user')->where('uid', $uid)->find();
+        $isAdmin = Db::name('chat_group')->where('groupid', $groupid)->where('fromuid', $uid)->find();
+        $isUser = Db::name('chat_group_user')->where('groupid', $groupid)->where('uid', $uid)->find();
         if (!$isUser) $this->error('您不再群里无法查看群信息');
         $this->assign('groupid', $groupid);
         $this->assign('isAdmin', $isAdmin);
@@ -97,10 +97,10 @@ class Chat extends Controller
     public function delGroupUser()
     {
         $fromuid = getLoginUid();
-        $isAdmin = Db::name('chat_group')->where('fromuid', $fromuid)->find();
+        $groupid = input('post.groupid');
+        $isAdmin = Db::name('chat_group')->where('groupid', $groupid)->where('fromuid', $fromuid)->find();
         if (!$isAdmin) return json(['code' => 1, 'msg' => '无法删除']);
         $uid = input('post.uid');
-        $groupid = input('post.groupid');
 
         if ($fromuid == $uid) return json(['code' => 1, 'msg' => '无法删除自己']);
 
