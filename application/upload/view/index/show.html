@@ -1,52 +1,11 @@
 {include file='index/header' /}
 
 <div class="layui-body" style="left: 0px; position: unset;">
-    <div class="layui-table-box">
-        <div class="layui-table-body layui-table-main">
-            <table cellspacing="0" cellpadding="0" border="0" class="layui-table">
-                <thead>
-                    <tr>
-                        <th>文件名</th>
-                        <th>文件大小</th>
-                        <th>上传时间</th>
-                        <th>操作</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {volist name="fileList" id="fileValue"}
-                    <tr class="">
-                        <td class="">
-                            <div class="layui-table-cell">{$fileValue['file_name']}</div>
-                        </td>
-                        <td class="">
-                            <div class="layui-table-cell">{:getFilesize($fileValue['file_size'])}</div>
-                        </td>
-                        <td class="">
-                            <div class="layui-table-cell">{$fileValue['create_time']}</div>
-                        </td>
-                        <td class="">
-                            <div class="layui-table-cell">
-                                {if $fileValue['share_msg_id'] == 0}
-                                <a href="{:url('upload/index/siteShare',['id'=>$fileValue['id']])}"
-                                    class="layui-btn layui-btn-normal layui-btn-xs">微博分享</a>
-                                {else}
-                                <a href="{:url('upload/index/siteCanleShare',['id'=>$fileValue['id']])}"
-                                    class="layui-btn layui-btn-warm layui-btn-xs">取消分享</a>
-                                {/if}
-                                <!-- <a href="javascript:;" v-href="{:url('upload/index/commonShare',['id'=>$fileValue['id']])}" onclick="copyLink(this)" class="layui-btn layui-btn-xs">链接分享</a> -->
-                                <a href="{:url('upload/index/download',['id'=>$fileValue['id']])}"
-                                    class="layui-btn layui-btn-xs">下载</a>
-                                <a href="{:url('upload/index/del',['id'=>$fileValue['id']])}"
-                                    class="layui-btn layui-btn-danger layui-btn-xs">删除</a>
-                            </div>
-                        </td>
-                    </tr>
-                    {/volist}
-                </tbody>
-            </table>
+    <div class="layui-layout">
+        <div style="padding: 16px;">
+            <table class="layui-hide" id="initTable" lay-filter="initTable"></table>
         </div>
     </div>
-    <div class="page">{$fileList|raw}</div>
 
 </div>
 
@@ -58,4 +17,112 @@
         var clipboard = new ClipboardJS('.copyLink')
         $(obj).trigger('click');
     }
+
+    function convertFileSize(sizeInBytes) {
+        var units = ['B', 'KB', 'MB', 'GB']; // 定义可能使用到的单位数组
+        
+        for (var i = 0; sizeInBytes >= 1024 && i < units.length - 1; i++) {
+            sizeInBytes /= 1024; // 除以 1024 来进行单位转换
+        }
+        
+        return Math.round(sizeInBytes * 100) / 100 + " " + units[i]; // 返回结果并添加相应的单位后缀
+    }
+
+    layui.use(['table', 'dropdown'], function () {
+      var table = layui.table;
+      var dropdown = layui.dropdown;
+
+      // 创建渲染实例
+      table.render({
+        elem: '#initTable',
+        url: '/upload/index/getFiles', // 此处为静态模拟数据，实际使用时需换成真实接口
+        toolbar: '#toolbarInfo',
+        defaultToolbar: false,
+        height: 'full-35', // 最大高度减去其他容器已占有的高度差
+        css: [ // 重设当前表格样式
+          '.layui-table-tool-temp{padding-right: 145px;}'
+        ].join(''),
+        cellMinWidth: 80,
+        page: false,
+        cols: [[
+          // { field: 'groupid', width: 20, align: 'center', title: 'ID' },
+          { field: 'file_name', align: 'center', title: '文件名' },
+          { field: 'file_size', align: 'center', title: '文件大小', templet: function(d){
+            return convertFileSize(d.file_size);
+          }},
+          { field: 'create_time', align: 'center', title: '上传时间', minWidth: 120, expandedWidth: 120 },
+          { fixed: 'right', align: 'center', title: '操作', templet: function(d){
+            if (d.share_msg_id == 0) {
+                var shareStr = '<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="siteShare">微博分享</a>';
+            } else {
+                var shareStr = '<a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="siteCanleShare">取消分享</a>'
+            }
+            return '<div class="layui-clear-space">'+
+                shareStr+
+                '<a class="layui-btn layui-btn-xs" lay-event="download">下载</a>' +
+                '<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>' +
+            '</div>';
+          }}
+        ]],
+        done: function () {
+
+        },
+        error: function (res, msg) {
+          console.log(res, msg)
+        }
+      });
+
+      // 触发单元格工具事件
+      table.on('tool(initTable)', function (obj) { // 双击 toolDouble
+        var data = obj.data; // 获得当前行数据
+
+        if (obj.event === 'siteShare') {
+            $.ajax({
+                type: "post",
+                url: "/upload/index/siteShare",
+                data: {"id": data.id},
+                dataType: "json",
+                success: function (response) {
+                    layer.msg(response.msg);
+                    if (response.code == 1) {
+                        table.reload('initTable');
+                    }
+                }
+            });
+        } else if (obj.event === 'siteCanleShare') {
+            $.ajax({
+                type: "post",
+                url: "/upload/index/siteCanleShare",
+                data: {"id": data.id},
+                dataType: "json",
+                success: function (response) {
+                    layer.msg(response.msg);
+                    if (response.code == 1) {
+                        table.reload('initTable');
+                    }
+                }
+            });
+        } else if (obj.event === 'del') {
+            layer.confirm('群定删除 [' + data.file_name + '] 么', function (index) {
+                $.ajax({
+                    type: "post",
+                    url: "/upload/index/del",
+                    data: {"id": data.id},
+                    dataType: "json",
+                    success: function (response) {
+                        layer.msg(response.msg);
+                        if (response.code == 1) {
+                            table.reload('initTable');
+                        }
+                    }
+                });
+          });
+            
+        } else if (obj.event === 'download') {
+            window.open('/upload/index/download?id='+data.id)
+        }
+      });
+
+    });
+
 </script>

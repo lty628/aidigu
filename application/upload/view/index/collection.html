@@ -2,32 +2,102 @@
 
       <div class="layui-body" style="left: 0px; position: unset;">
 
-            <table class="layui-table">
-                    <thead>
-                      <tr>
-                        <th>文件名</th>
-                        <th>文件大小</th>
-                        <th>上传时间</th>
-                        <th>操作</th>
-                      </tr> 
-                    </thead>
-                    <tbody>
-                        {volist name="fileList" id="fileValue"}
-                      <tr>
-                        <td>{$fileValue['file_name']}</td>
-                        <td>{:getFilesize($fileValue['file_size'])}</td>
-                        <td>{$fileValue['create_time']}</td>
-                        <td>
-                            <div class="layui-table-cell laytable-cell-1-0-11"> 
-                                <a href="{:url('upload/index/reduction',['id'=>$fileValue['id']])}" class="layui-btn layui-btn-xs">还原</a>
-                                <a href="{:url('upload/index/deldForever',['id'=>$fileValue['id']])}" class="layui-btn layui-btn-danger layui-btn-xs" >永久删除</a>
-                            </div>
-                        </td>
-                      </tr>
-                      {/volist}
-                    </tbody>
-              </table>
-              <div class="page">{$fileList|raw}</div>
+        <div class="layui-layout">
+          <div style="padding: 16px;">
+              <table class="layui-hide" id="initTable" lay-filter="initTable"></table>
+          </div>
+      </div>
+
       </div>
       
 {include file='index/footer' /}
+<script>
+
+
+  function convertFileSize(sizeInBytes) {
+      var units = ['B', 'KB', 'MB', 'GB']; // 定义可能使用到的单位数组
+      
+      for (var i = 0; sizeInBytes >= 1024 && i < units.length - 1; i++) {
+          sizeInBytes /= 1024; // 除以 1024 来进行单位转换
+      }
+      
+      return Math.round(sizeInBytes * 100) / 100 + " " + units[i]; // 返回结果并添加相应的单位后缀
+  }
+
+  layui.use(['table', 'dropdown'], function () {
+    var table = layui.table;
+    var dropdown = layui.dropdown;
+
+    // 创建渲染实例
+    table.render({
+      elem: '#initTable',
+      url: '/upload/index/getCollection', // 此处为静态模拟数据，实际使用时需换成真实接口
+      toolbar: '#toolbarInfo',
+      defaultToolbar: false,
+      height: 'full-35', // 最大高度减去其他容器已占有的高度差
+      css: [ // 重设当前表格样式
+        '.layui-table-tool-temp{padding-right: 145px;}'
+      ].join(''),
+      cellMinWidth: 80,
+      page: true,
+      cols: [[
+        // { field: 'groupid', width: 20, align: 'center', align: 'center', title: 'ID' },
+        { field: 'file_name', title: '文件名' },
+        { field: 'file_size', align: 'center', title: '文件大小', templet: function(d){
+          return convertFileSize(d.file_size);
+        }},
+        { field: 'create_time', align: 'center', title: '上传时间', minWidth: 120, expandedWidth: 120 },
+        { fixed: 'right', align: 'center', title: '操作', templet: function(d){
+          return '<div class="layui-clear-space">'+
+              '<a class="layui-btn layui-btn-xs" lay-event="reduction">还原</a>' +
+              '<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="deldForever">永久删除</a>' +
+          '</div>';
+        }}
+      ]],
+      done: function () {
+
+      },
+      error: function (res, msg) {
+        console.log(res, msg)
+      }
+    });
+
+    // 触发单元格工具事件
+    table.on('tool(initTable)', function (obj) { // 双击 toolDouble
+      var data = obj.data; // 获得当前行数据
+
+      if (obj.event === 'reduction') {
+          $.ajax({
+              type: "post",
+              url: "/upload/index/reduction",
+              data: {"id": data.id},
+              dataType: "json",
+              success: function (response) {
+                  layer.msg(response.msg);
+                  if (response.code == 1) {
+                      table.reload('initTable');
+                  }
+              }
+          });
+      } else if (obj.event === 'deldForever') {
+          layer.confirm('群定永久删除 [' + data.file_name + '] 么', function (index) {
+              $.ajax({
+                  type: "post",
+                  url: "/upload/index/deldForever",
+                  data: {"id": data.id},
+                  dataType: "json",
+                  success: function (response) {
+                      layer.msg(response.msg);
+                      if (response.code == 1) {
+                          table.reload('initTable');
+                      }
+                  }
+              });
+        });
+          
+      }
+    });
+
+  });
+
+</script>

@@ -26,16 +26,29 @@ class Index extends Controller
 
     public function show()
     {
-        $result = Db::name('file')->where('is_delete', 0)->order('create_time', 'desc')->where('userid', getLoginUid())->paginate(7, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
-        $this->assign('fileList', $result);
+        // $result = Db::name('file')->where('is_delete', 0)->order('create_time', 'desc')->where('userid', getLoginUid())->paginate(7, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
+        // $this->assign('fileList', $result);
         return $this->fetch();
+    }
+
+    public function getFiles()
+    {
+        $result = Db::name('file')->where('is_delete', 0)->order('create_time', 'desc')->where('userid', getLoginUid())->select();
+        return json(['code' => 0, 'data'=> $result]);
+    }
+
+    // 回收站
+    public function getCollection()
+    {
+        $result = Db::name('file')->where('is_delete', 1)->order('create_time', 'desc')->where('userid', getLoginUid())->select();
+        return json(['code' => 0, 'data'=> $result]);
     }
 
     // 回收站
     public function collection()
     {
-        $result = Db::name('file')->where('is_delete', 1)->order('create_time', 'desc')->where('userid', getLoginUid())->paginate(7, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
-        $this->assign('fileList', $result);
+        // $result = Db::name('file')->where('is_delete', 1)->order('create_time', 'desc')->where('userid', getLoginUid())->paginate(7, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
+        // $this->assign('fileList', $result);
         return $this->fetch();
     }
 

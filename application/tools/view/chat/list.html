@@ -66,14 +66,14 @@
         cellMinWidth: 80,
         page: false,
         cols: [[
-          // { field: 'groupid', width: 20, title: 'ID' },
-          { field: 'groupname', width: 180, title: '群名称' },
-          { field: 'head_image', width: 80, title: '头像', templet: '<img width="50" height="50" src="{{= d.head_image }}" alt="">' },
-          { field: 'invite_code', width: 100, title: '加群码(点击复制分享)', templet: '<a href="javascript:;" data-url="{{= d.invite_code }}" onclick="copyLink(this)" alt="点击复制">点击复制</a>' },
-          { field: 'intro', title: '介绍', minWidth: 260, expandedWidth: 260 },
-          { field: 'usernum', title: '用户数量', width: 100 },
-          // { field: 'ctime', title: '创建时间', width: 150 },
-          { fixed: 'right', title: '操作', width: 150, minWidth: 125, toolbar: '#barLineInfo'}
+          // { field: 'groupid', width: 20, align: 'center', title: 'ID' },
+          { field: 'groupname', width: 180, align: 'center', title: '群名称' },
+          { field: 'head_image', width: 80, align: 'center', title: '头像', templet: '<img width="50" height="50" src="{{= d.head_image }}" alt="">' },
+          { field: 'invite_code', width: 100, align: 'center', title: '加群码(点击复制分享)', templet: '<a href="javascript:;" data-url="{{= d.invite_code }}" onclick="copyLink(this)" alt="点击复制">点击复制</a>' },
+          { field: 'intro', align: 'center', title: '介绍', minWidth: 260, expandedWidth: 260 },
+          { field: 'usernum', align: 'center', title: '用户数量', width: 100 },
+          // { field: 'ctime', align: 'center', title: '创建时间', width: 150 },
+          { fixed: 'right', align: 'center', title: '操作', width: 150, minWidth: 125, toolbar: '#barLineInfo'}
         ]],
         done: function () {
 

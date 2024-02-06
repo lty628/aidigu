@@ -1,0 +1,61 @@
+{include file='index/header' /}
+
+<div class="layui-body" style="left: 0px; position: unset;">
+    <div class="layui-table-box">
+        <div class="layui-table-body layui-table-main">
+            <table cellspacing="0" cellpadding="0" border="0" class="layui-table">
+                <thead>
+                    <tr>
+                        <th>文件名</th>
+                        <th>文件大小</th>
+                        <th>上传时间</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {volist name="fileList" id="fileValue"}
+                    <tr class="">
+                        <td class="">
+                            <div class="layui-table-cell">{$fileValue['file_name']}</div>
+                        </td>
+                        <td class="">
+                            <div class="layui-table-cell">{:getFilesize($fileValue['file_size'])}</div>
+                        </td>
+                        <td class="">
+                            <div class="layui-table-cell">{$fileValue['create_time']}</div>
+                        </td>
+                        <td class="">
+                            <div class="layui-table-cell">
+                                {if $fileValue['share_msg_id'] == 0}
+                                <a href="{:url('upload/index/siteShare',['id'=>$fileValue['id']])}"
+                                    class="layui-btn layui-btn-normal layui-btn-xs">微博分享</a>
+                                {else}
+                                <a href="{:url('upload/index/siteCanleShare',['id'=>$fileValue['id']])}"
+                                    class="layui-btn layui-btn-warm layui-btn-xs">取消分享</a>
+                                {/if}
+                                <!-- <a href="javascript:;" v-href="{:url('upload/index/commonShare',['id'=>$fileValue['id']])}" onclick="copyLink(this)" class="layui-btn layui-btn-xs">链接分享</a> -->
+                                <a href="{:url('upload/index/download',['id'=>$fileValue['id']])}"
+                                    class="layui-btn layui-btn-xs">下载</a>
+                                <a href="{:url('upload/index/del',['id'=>$fileValue['id']])}"
+                                    class="layui-btn layui-btn-danger layui-btn-xs">删除</a>
+                            </div>
+                        </td>
+                    </tr>
+                    {/volist}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="page">{$fileList|raw}</div>
+
+</div>
+
+{include file='index/footer' /}
+<script src="/static/common/js/clipboard.min.js"></script>
+<script>
+    function copyLink(obj, id) {
+        $(obj).attr('data-clipboard-text', url);
+        var clipboard = new ClipboardJS('.copyLink')
+        $(obj).trigger('click');
+    }
+</script>
