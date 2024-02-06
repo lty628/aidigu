@@ -67,9 +67,9 @@
         cellMinWidth: 80,
         page: false,
         cols: [[
-        { field: 'invite_code', title: '邀请码(点击复制链接分享)', templet: '<a href="javascript:;" data-url="{{= d.invite_code }}" onclick="copyLink(this)" alt="点击复制">{{= d.invite_code }}</a>' },
-          { field: 'nickname', width: 150, title: '昵称' },
-          { field: 'blog', width: 150, title: '账号' },
+        { field: 'invite_code', width: 100, title: '邀请码(点击复制链接分享)', templet: '<a href="javascript:;" data-url="{{= d.invite_code }}" onclick="copyLink(this)" alt="点击复制">点击复制</a>' },
+          { field: 'nickname', title: '昵称' },
+          { field: 'blog', title: '账号' },
           { field: 'head_image', width: 100, title: '头像', templet: function(d){
             if (d.head_image) {
                 return '<img width="50" height="50" src="'+d.head_image+'" alt="">'
