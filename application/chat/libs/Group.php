@@ -21,6 +21,7 @@ class Group extends Base
         $onlineInfo = \app\chat\libs\ChatDbHelper::groupOnlineInfo($data['groupid']);
         if ($onlineInfo) {
             foreach ($onlineInfo as $isOnline) {
+                if ($isOnline['dtime'] != 0) continue;
                 if (!$isOnline['fd']) {
                     $offLineUser[] = $isOnline['uid'];
                     \app\common\libs\Remind::open($isOnline['uid'], 'chat');

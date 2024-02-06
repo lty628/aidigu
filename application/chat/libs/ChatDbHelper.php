@@ -131,6 +131,7 @@ class ChatDbHelper
             ->alias('chat_group')
             ->join([getPrefix() . 'chat_group_user' => 'chat_group_user'], 'chat_group.groupid=chat_group_user.groupid')
             ->where('chat_group_user.uid', $uid)
+            ->where('chat_group_user.dtime', 0)
             ->field('chat_group.groupid,chat_group.groupname,chat_group.head_image,chat_group_user.uid,chat_group_user.message_count')
             ->order('chat_group_user.utime asc')
             ->limit($count)->select();
