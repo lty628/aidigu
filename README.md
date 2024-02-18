@@ -5,8 +5,8 @@
 </p>
 <p align="center">
     <a href="https://github.com/lty628/aidigu"><img src="https://img.shields.io/badge/PHP-7.2%2B-blue?style=for-the-badge&color=%238d4bbb" alt="PHP 7.2+"></a>
-    <a href="https://github.com/lty628/aidigu"><img src="https://img.shields.io/badge/STABLE-1.6.0-blue?style=for-the-badge&color=%230aa344" alt="Latest Stable Version"></a>
-    <a href="https://github.com/lty628/aidigu"><img src="https://img.shields.io/badge/UNSTABLE-1.6.x--DEV-blue?style=for-the-badge&color=%23ff0097" alt="Latest Unstable Version"></a>
+    <a href="https://github.com/lty628/aidigu"><img src="https://img.shields.io/badge/STABLE-1.7.0-blue?style=for-the-badge&color=%230aa344" alt="Latest Stable Version"></a>
+    <a href="https://github.com/lty628/aidigu"><img src="https://img.shields.io/badge/UNSTABLE-1.7.x--DEV-blue?style=for-the-badge&color=%23ff0097" alt="Latest Unstable Version"></a>
     <a href="https://github.com/lty628/aidigu"><img src="https://img.shields.io/badge/SIZE-9.3MB-blue?style=for-the-badge&color=%23f0c239" alt="Download Size"></a>
     <a href="https://raw.githubusercontent.com/lty628/aidigu/master/LICENSE"><img src="https://img.shields.io/badge/LICENSE-MIT-blue?style=for-the-badge&color=%234b5cc4" alt="MIT License"></a>
 </p>

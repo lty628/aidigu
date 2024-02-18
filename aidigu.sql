@@ -19,18 +19,27 @@ CREATE TABLE `wb_app` (
   `create_time` datetime NOT NULL COMMENT '创建时间',
   `update_time` datetime NOT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
 -- ----------------------------
 -- Records of wb_app
 -- ----------------------------
 BEGIN;
-INSERT INTO `wb_app` VALUES (1, '我的云盘', '/cloud/show/', 1, 0, '/static/tools/common/images/cloud.jpg', '', '{\"title\":\"我的云盘\",\"shade\":0.8,\"closeBtn\":true,\"shadeClose\":false,\"area\":[\"80%\",\"80%\"],\"resize\":true,\"maxmin\":true,\"skin\":\"layui-layer-win10\",\"id\":\"app_1\",\"hideOnClose\":false,\"scrollbar\":false}', 0, '2024-01-16 11:31:53', '2024-01-17 19:39:40');
-INSERT INTO `wb_app` VALUES (2, '嘀友聊天', '/chat', 1, 0, '/static/tools/common/images/chat.jpg', 'chat', '{\"title\":\"嘀友聊天\",\"shade\":0.8,\"closeBtn\":true,\"shadeClose\":false,\"area\":[\"60%\",\"70%\"],\"resize\":true,\"maxmin\":true,\"id\":\"app_2\",\"hideOnClose\":true,\"scrollbar\":false}', 0, '2024-01-16 11:31:53', '2024-01-17 19:43:36');
-INSERT INTO `wb_app` VALUES (3, '嘀咕影院', '/tools/movie', 1, 0, '/static/tools/common/images/movie.jpg', '', '{\"title\":\"嘀咕影院\",\"shade\":0.8,\"closeBtn\":true,\"shadeClose\":false,\"area\":[\"80%\",\"80%\"],\"resize\":true,\"maxmin\":true,\"skin\":\"layui-layer-win10\",\"id\":\"app_3\",\"hideOnClose\":false,\"scrollbar\":false}', 0, '2024-01-16 11:31:53', '2024-01-17 19:41:07');
-INSERT INTO `wb_app` VALUES (4, '开车啦', '/tools/onlinecar', 1, 0, '/static/tools/common/images/onlinecar.jpg', '', '{\"title\":\"开车啦\",\"shade\":0.8,\"closeBtn\":true,\"shadeClose\":false,\"area\":[\"80%\",\"80%\"],\"resize\":true,\"maxmin\":true,\"skin\":\"layui-layer-win10\",\"id\":\"app_4\",\"hideOnClose\":false,\"scrollbar\":false}', 0, '2024-01-16 11:31:53', '2024-01-17 19:41:20');
-INSERT INTO `wb_app` VALUES (5, 'BMI体重计算', '/tools/bmi', 1, 0, '/static/tools/common/images/bmi.jpg', '', '{\"title\":\"BMI体重计算\",\"shade\":0.8,\"closeBtn\":true,\"shadeClose\":false,\"area\":[\"80%\",\"80%\"],\"resize\":true,\"maxmin\":true,\"skin\":\"layui-layer-win10\",\"id\":\"app_5\",\"hideOnClose\":false,\"scrollbar\":false}', 0, '2024-01-16 11:31:53', '2024-01-17 19:41:33');
-INSERT INTO `wb_app` VALUES (6, '话题', '/topic/', 1, 2, '/static/tools/common/images/topic.jpeg', '', '{}', 1, '2024-01-16 11:31:53', '2024-01-16 11:31:53');
+INSERT INTO `wb_app` VALUES (1, '我的云盘', '/cloud/show/', 1, 1, '/static/tools/common/images/cloud.jpg', '', '{\"title\":\"我的云盘\",\"shade\":0.8,\"closeBtn\":true,\"shadeClose\":false,\"area\":[\"80%\",\"80%\"],\"resize\":true,\"maxmin\":true,\"skin\":\"layui-layer-win10\",\"id\":\"app_1\",\"hideOnClose\":true,\"scrollbar\":false}', 0, '2024-01-16 11:31:53', '2024-02-06 16:35:07');
+INSERT INTO `wb_app` VALUES (2, '嘀友聊天', '/chat', 1, 1, '/static/tools/common/images/chat.jpg', 'chat', '{\"title\":\"嘀友聊天\",\"shade\":0.8,\"closeBtn\":true,\"shadeClose\":false,\"area\":[\"60%\",\"70%\"],\"resize\":true,\"maxmin\":true,\"id\":\"app_2\",\"hideOnClose\":true,\"scrollbar\":false}', 0, '2024-01-16 11:31:53', '2024-01-22 18:33:56');
+INSERT INTO `wb_app` VALUES (3, '嘀咕影院', '/tools/movie', 1, 1, '/static/tools/common/images/movie.jpg', '', '{\"title\":\"嘀咕影院\",\"shade\":0.8,\"closeBtn\":true,\"shadeClose\":false,\"area\":[\"80%\",\"80%\"],\"resize\":true,\"maxmin\":true,\"skin\":\"layui-layer-win10\",\"id\":\"app_3\",\"hideOnClose\":false,\"scrollbar\":false}', 0, '2024-01-16 11:31:53', '2024-01-22 18:33:56');
+INSERT INTO `wb_app` VALUES (4, '开车啦', '/tools/onlinecar', 1, 1, '/static/tools/common/images/onlinecar.jpg', '', '{\"title\":\"开车啦\",\"shade\":0.8,\"closeBtn\":true,\"shadeClose\":false,\"area\":[\"80%\",\"80%\"],\"resize\":true,\"maxmin\":true,\"skin\":\"layui-layer-win10\",\"id\":\"app_4\",\"hideOnClose\":true,\"scrollbar\":false}', 0, '2024-01-16 11:31:53', '2024-01-22 18:33:56');
+INSERT INTO `wb_app` VALUES (5, 'BMI体重计算', '/tools/bmi', 1, 1, '/static/tools/common/images/bmi.jpg', '', '{\"title\":\"BMI体重计算\",\"shade\":0.8,\"closeBtn\":true,\"shadeClose\":false,\"area\":[\"80%\",\"80%\"],\"resize\":true,\"maxmin\":true,\"skin\":\"layui-layer-win10\",\"id\":\"app_5\",\"hideOnClose\":true,\"scrollbar\":false}', 0, '2024-01-16 11:31:53', '2024-01-22 18:33:56');
+INSERT INTO `wb_app` VALUES (6, '我的云盘', '/cloud/show/', 1, 2, '/static/tools/common/images/cloud.jpg', '', '{\"title\":\"我的云盘\",\"shade\":0.8,\"closeBtn\":true,\"shadeClose\":false,\"area\":[\"100%\",\"100%\"],\"resize\":false,\"maxmin\":false,\"skin\":\"layui-layer-win10\",\"id\":\"app_8\",\"hideOnClose\":true,\"scrollbar\":false}', 0, '2024-01-16 11:31:53', '2024-01-22 18:46:07');
+INSERT INTO `wb_app` VALUES (7, '嘀友聊天', '/chat', 1, 2, '/static/tools/common/images/chat.jpg', 'chat', '{\"title\":\"嘀友聊天\",\"shade\":0.8,\"closeBtn\":true,\"shadeClose\":false,\"area\":[\"100%\",\"100%\"],\"resize\":false,\"maxmin\":false,\"id\":\"app_9\",\"hideOnClose\":true,\"scrollbar\":false}', 0, '2024-01-16 11:31:53', '2024-01-22 18:46:07');
+INSERT INTO `wb_app` VALUES (8, '嘀咕影院', '/tools/movie', 1, 2, '/static/tools/common/images/movie.jpg', '', '{\"title\":\"嘀咕影院\",\"shade\":0.8,\"closeBtn\":true,\"shadeClose\":false,\"area\":[\"100%\",\"100%\"],\"resize\":false,\"maxmin\":false,\"skin\":\"layui-layer-win10\",\"id\":\"app_10\",\"hideOnClose\":false,\"scrollbar\":false}', 0, '2024-01-16 11:31:53', '2024-01-22 18:46:07');
+INSERT INTO `wb_app` VALUES (9, '开车啦', '/tools/onlinecar', 1, 2, '/static/tools/common/images/onlinecar.jpg', '', '{\"title\":\"开车啦\",\"shade\":0.8,\"closeBtn\":true,\"shadeClose\":false,\"area\":[\"100%\",\"100%\"],\"resize\":false,\"maxmin\":false,\"skin\":\"layui-layer-win10\",\"id\":\"app_11\",\"hideOnClose\":true,\"scrollbar\":false}', 0, '2024-01-16 11:31:53', '2024-01-22 18:46:07');
+INSERT INTO `wb_app` VALUES (10, 'BMI体重计算', '/tools/bmi', 1, 2, '/static/tools/common/images/bmi.jpg', '', '{\"title\":\"BMI体重计算\",\"shade\":0.8,\"closeBtn\":true,\"shadeClose\":false,\"area\":[\"100%\",\"100%\"],\"resize\":false,\"maxmin\":false,\"skin\":\"layui-layer-win10\",\"id\":\"app_12\",\"hideOnClose\":true,\"scrollbar\":false}', 0, '2024-01-16 11:31:53', '2024-01-22 18:46:07');
+INSERT INTO `wb_app` VALUES (11, '话题', '/topic/', 1, 2, '/static/tools/common/images/topic.jpeg', '', '{}', 1, '2024-01-16 11:31:53', '2024-01-23 16:15:21');
+INSERT INTO `wb_app` VALUES (12, '群管理', '/tools/chat/list', 1, 1, '/static/tools/common/images/chatgroup.jpeg', '', '{\"title\":\"群管理\",\"shade\":0.8,\"closeBtn\":true,\"shadeClose\":false,\"area\":[\"70%\",\"80%\"],\"resize\":true,\"maxmin\":true,\"skin\":\"layui-layer-win10\",\"id\":\"app_11\",\"hideOnClose\":false,\"scrollbar\":false}', 0, '2024-01-30 11:16:10', '2024-02-06 11:29:34');
+INSERT INTO `wb_app` VALUES (13, '群管理', '/tools/chat/list', 1, 2, '/static/tools/common/images/chatgroup.jpeg', '', '{\"title\":\"群管理\",\"shade\":0.8,\"closeBtn\":true,\"shadeClose\":false,\"area\":[\"100%\",\"100%\"],\"resize\":false,\"maxmin\":false,\"skin\":\"layui-layer-win10\",\"id\":\"app_12\",\"hideOnClose\":false,\"scrollbar\":false}', 0, '2024-01-30 11:16:10', '2024-02-05 23:36:10');
+INSERT INTO `wb_app` VALUES (14, '邀请码', '/tools/userinvite/list', 1, 1, '/static/tools/common/images/userinvite.jpeg', '', '{\"title\":\"邀请码\",\"shade\":0.8,\"closeBtn\":true,\"shadeClose\":false,\"area\":[\"70%\",\"80%\"],\"resize\":true,\"maxmin\":true,\"skin\":\"layui-layer-win10\",\"id\":\"app_13\",\"hideOnClose\":false,\"scrollbar\":false}', 0, '2024-01-30 11:16:10', '2024-02-06 11:29:34');
+INSERT INTO `wb_app` VALUES (15, '邀请码', '/tools/userinvite/list', 1, 2, '/static/tools/common/images/userinvite.jpeg', '', '{\"title\":\"邀请码\",\"shade\":0.8,\"closeBtn\":true,\"shadeClose\":false,\"area\":[\"100%\",\"100%\"],\"resize\":false,\"maxmin\":false,\"skin\":\"layui-layer-win10\",\"id\":\"app_14\",\"hideOnClose\":false,\"scrollbar\":false}', 0, '2024-01-30 11:16:10', '2024-02-05 23:36:23');
 COMMIT;
 
 -- ----------------------------
@@ -102,8 +111,12 @@ CREATE TABLE `wb_chat_group` (
   `head_image` varchar(255) COLLATE utf8mb4_bin DEFAULT '',
   `head_image_info` varchar(255) COLLATE utf8mb4_bin DEFAULT '',
   `city` char(25) COLLATE utf8mb4_bin DEFAULT '',
+  `fromuid` int(10) unsigned NOT NULL DEFAULT '0',
+  `invite_code` varchar(255) COLLATE utf8mb4_bin NOT NULL DEFAULT '',
+  `invite_status` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '是否开启加群',
   `intro` varchar(210) COLLATE utf8mb4_bin DEFAULT '',
   `ctime` bigint(20) DEFAULT NULL,
+  `utime` bigint(20) unsigned DEFAULT NULL,
   `usernum` int(11) NOT NULL DEFAULT '0' COMMENT '粉丝数',
   PRIMARY KEY (`groupid`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
@@ -373,6 +386,26 @@ CREATE TABLE `wb_user` (
 
 -- ----------------------------
 -- Records of wb_user
+-- ----------------------------
+BEGIN;
+COMMIT;
+
+-- ----------------------------
+-- Table structure for wb_user_invite
+-- ----------------------------
+DROP TABLE IF EXISTS `wb_user_invite`;
+CREATE TABLE `wb_user_invite` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `fromuid` int(10) unsigned NOT NULL DEFAULT '0',
+  `touid` int(10) unsigned NOT NULL DEFAULT '0',
+  `invite_code` varchar(255) NOT NULL,
+  `invite_status` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `create_time` datetime NOT NULL ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- ----------------------------
+-- Records of wb_user_invite
 -- ----------------------------
 BEGIN;
 COMMIT;
