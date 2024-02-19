@@ -43,7 +43,7 @@ class UserInfo extends Controller
 	public function registerAjax()
 	{
 		$data['inviteCode'] = trim(input('post.inviteCode'));
-		if (env('app.noRegister') && $data['inviteCode']) {
+		if (env('app.noRegister') && !$data['inviteCode']) {
 			return json(['status' => 0, 'msg' => '本站已禁止注册']);
 		}
 		if (!\app\tools\controller\Userinvite::checkInviteCode($data['inviteCode'])) {
