@@ -437,7 +437,7 @@ var chat = {
 			var areaInfo =  ['60%', '80%']
 		}
 
-		layer.open({
+		parent.layer.open({
             title: '群成员信息:',
             type: 2,
             area: areaInfo,
