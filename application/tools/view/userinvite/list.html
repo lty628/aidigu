@@ -48,12 +48,13 @@
       layer.msg('链接已复制，快邀请好友注册吧！');
     }
 
-    function showBlog(blog) {
+    function showBlog(obj) {
+      var url = $(obj).attr('data-url');
       layer.open({
         title: '',
         type: 2,
         area: ['100%', '100%'],
-        content: '/'+blog+'/own/'
+        content: url
       });
     }
 
@@ -91,7 +92,7 @@
               if (d.invite_status == 0) {
                 return '<a href="javascript:;" data-url="' + d.invite_code + '" onclick="copyLink(this)" alt="点击复制">点击复制</a>'
               } else if (d.invite_status == 2) {
-                return '<a href="javascript:;" onclick="showBlog(' + d.blog + ')" alt="查看主页">查看主页</a>'
+                return '<a href="javascript:;" data-url="/' + d.blog + '/own/" onclick="showBlog(this)" alt="查看主页">查看主页</a>'
               }
 
             }
