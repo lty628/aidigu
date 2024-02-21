@@ -48,6 +48,15 @@
       layer.msg('链接已复制，快邀请好友注册吧！');
     }
 
+    function showUrl(url) {
+      layer.open({
+        title: '',
+        type: 2,
+        area: ['100%', '100%'],
+        content: url
+      });
+    }
+
     layui.use(['table', 'dropdown'], function () {
       var table = layui.table;
       var dropdown = layui.dropdown;
@@ -69,47 +78,53 @@
         cols: [[
           { field: 'nickname', align: 'center', title: '昵称' },
           { field: 'blog', align: 'center', title: '账号' },
-          { field: 'head_image', width: 100, align: 'center', title: '头像', templet: function(d){
-            if (d.head_image) {
-                return '<img width="50" height="50" src="'+d.head_image+'" alt="">'
+          {
+            field: 'head_image', width: 100, align: 'center', title: '头像', templet: function (d) {
+              if (d.head_image) {
+                return '<img width="50" height="50" src="' + d.head_image + '" alt="">'
+              }
+              return ''
             }
-            return ''
-          }},
-          { field: 'invite_code', width: 150, align: 'center', title: '邀请码(点击复制链接分享)', templet: function (d) { 
-            if (d.invite_status == 0) {
-              return '<a href="javascript:;" data-url="'+d.invite_code+'" onclick="copyLink(this)" alt="点击复制">点击复制</a>'
-            } else if (d.invite_status == 2) {
-                return '<a href="/'+d.blog+'/own/" alt="进入主页">进入主页</a>'
+          },
+          {
+            field: 'invite_code', width: 150, align: 'center', title: '邀请码(点击复制链接分享)', templet: function (d) {
+              if (d.invite_status == 0) {
+                return '<a href="javascript:;" data-url="' + d.invite_code + '" onclick="copyLink(this)" alt="点击复制">点击复制</a>'
+              } else if (d.invite_status == 2) {
+                return '<a href="javascript:;" onclick="showFarme('/' + d.blog + '/')" alt="查看主页">查看主页</a>'
+              }
+
             }
-            
-           } },
-          { field: 'invite_status', align: 'center', title: '邀请状态', templet: function(d){
-            if (d.invite_status == 0) {
-              return '<button type="button" class="layui-btn layui-bg-orange">等待用户注册</button>'
-            } else if (d.invite_status == 2) {
+          },
+          {
+            field: 'invite_status', align: 'center', title: '邀请状态', templet: function (d) {
+              if (d.invite_status == 0) {
+                return '<button type="button" class="layui-btn layui-bg-orange">等待用户注册</button>'
+              } else if (d.invite_status == 2) {
                 return '<button type="button" class="layui-btn layui-bg-blue">邀请成功</button>'
+              }
+              return '<button type="button" class="layui-btn layui-btn-disabled">未邀请</button>'
+
             }
-            return '<button type="button" class="layui-btn layui-btn-disabled">未邀请</button>'
-            
-          } },
+          },
           { fixed: 'right', align: 'center', title: '操作', width: 100, minWidth: 100, toolbar: '#barLineInfo' }
         ]]
       });
 
-       // 工具栏事件
-       table.on('toolbar(initTable)', function (obj) {
+      // 工具栏事件
+      table.on('toolbar(initTable)', function (obj) {
         switch (obj.event) {
           case 'createInviteCode':
             $.ajax({
-                type: "post",
-                url: "/tools/userinvite/createInviteCode",
-                dataType: "json",
-                success: function (res) {
-                    layer.msg(res.msg);
-                    if (res.code == 0) {
-                        table.reload('initTable')
-                    }
+              type: "post",
+              url: "/tools/userinvite/createInviteCode",
+              dataType: "json",
+              success: function (res) {
+                layer.msg(res.msg);
+                if (res.code == 0) {
+                  table.reload('initTable')
                 }
+              }
             });
             break;
         };
@@ -122,17 +137,17 @@
         if (obj.event === 'edit') {
           layer.confirm('群定删除 [' + data.invite_code + '] 么', function (index) {
             $.ajax({
-                  type: "post",
-                  url: "/tools/userinvite/delInviteCode",
-                  data: {'id': data.id},
-                  dataType: "json",
-                  success: function (res) {
-                      layer.msg(res.msg);
-                      if (res.code == 0) {
-                        table.reload('initTable')
-                      }
-                  }
-              });
+              type: "post",
+              url: "/tools/userinvite/delInviteCode",
+              data: { 'id': data.id },
+              dataType: "json",
+              success: function (res) {
+                layer.msg(res.msg);
+                if (res.code == 0) {
+                  table.reload('initTable')
+                }
+              }
+            });
             // layer.close(index);
             // // 向服务端发送删除指令
             // table.reload('initTable')
