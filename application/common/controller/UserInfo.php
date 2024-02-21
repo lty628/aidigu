@@ -46,7 +46,7 @@ class UserInfo extends Controller
 		if (env('app.noRegister') && !$data['inviteCode']) {
 			return json(['status' => 0, 'msg' => '本站已禁止注册']);
 		}
-		if (!\app\tools\controller\Userinvite::checkInviteCode($data['inviteCode'])) {
+		if ($data['inviteCode'] && !\app\tools\controller\Userinvite::checkInviteCode($data['inviteCode'])) {
 			return json(['status' => 0, 'msg' => '未知错误']);
 		}
 		$data['blog'] = strtolower(trim(input('post.account')));
