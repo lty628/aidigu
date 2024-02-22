@@ -28,6 +28,19 @@
   </script>
   <script src="/static/layui/layui.js"></script>
   <script>
+    function showMedia(obj) {
+      var $ = layui.$;
+      var url = $(obj).attr('data-url');
+      parent.layer.open({
+        type: 2,
+        title: false,
+        area: ['630px', '360px'],
+        shade: 0.8,
+        closeBtn: 0,
+        shadeClose: true,
+        content: url // video 地址
+      });
+    }
     layui.use(['table', 'dropdown'], function () {
       var table = layui.table;
       var dropdown = layui.dropdown;
@@ -47,7 +60,14 @@
         cellMinWidth: 80,
         page: true,
         cols: [[
-          { field: 'contents', align: 'center', title: '内容' },
+          { field: 'contents', align: 'center', title: '内容',templet: function (d) {
+              if (!d.contents && d.media) {
+                return '<a href="javascript:;" data-url="' + d.media + '" onclick="showMedia(this)" alt="点击查看">点击查看</a>'
+              } else {
+                return d.contents
+              }
+            } 
+          },
           {
             field: 'collect_time', width: 200, align: 'center', title: '收藏时间', templet: function (d) {
               return d.collect_time
