@@ -124,10 +124,10 @@ class Api extends Base
     	$repost = input('get.repost');
         $data['repost'] = '';
     	if ($repost)  $data['repost'] = self::getMessage(strip_tags($repost, '<source><video><img><p><a>'));
-        $topic = self::getTopic($contents);
+        $data['uid'] = getLoginUid();
+        $topic = self::getTopic($contents, $data['uid']);
         $data['topic_id'] = $topic['topic_id'];
         $data['contents'] = self::getMessage($topic['contents']);
-        $data['uid'] = getLoginUid();
         $data['refrom'] = self::$refrom;
         $data['ctime'] = time();
         Db::startTrans();
@@ -151,7 +151,7 @@ class Api extends Base
         }
     }
 
-    protected static function getTopic($contents)
+    protected static function getTopic($contents, $uid)
     {
         $topic = [
             'contents' => $contents,
@@ -166,13 +166,13 @@ class Api extends Base
 
         $findTopic = Db::name('topic')->where('title', $title)->find();
 
-        $topicData = [
-            'title' => $title,
-            'create_time' => date('Y-m-d H:i:s'),
-            'count' => 1
-        ];
-
         if (!$findTopic) {
+            $topicData = [
+                'title' => $title,
+                'uid' => $uid,
+                'create_time' => date('Y-m-d H:i:s'),
+                'count' => 1
+            ];
             $topicId = Db::name('topic')->insertGetId($topicData);
             $topic['topic_id'] = $topicId;
         } else {
