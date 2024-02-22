@@ -96,6 +96,14 @@ class IndexInfo extends Info
         return $this->fetch('topic');
     }
 
+    // 我的话题
+    public function myTopicList()
+    {
+        $topic = Db::name('topic')->where('uid', $this->userid)->order('count desc')->order('topic_id desc')->paginate(30, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
+        $this->assign('topicArr', $topic);
+        return $this->fetch('topic');
+    }
+
     public function fans()
     {
         $userFans = $this->getMyFans($this->siteUserId, 20);

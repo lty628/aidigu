@@ -1,12 +1,12 @@
 {include file='index/header' /}
-{if $userInfo.isSiteUser}
-	{assign name="whichUser" value="我" /}
-{else}
-	{assign name="whichUser" value="$userInfo.nickname" /}
-{/if}
+
 <div class="main">
 	<div class="contents">
-		<h2>话题列表</h2>
+		<div class="top">话题</div>
+		<h2>
+			<a href="/topic/">话题广场 | </a>
+			<a href="/mytopic/">我的话题</a>
+		</h2>
 		{foreach $topicArr as $topic}
 		<div class="entry">
 			<div class="box" style="width: 550px;">
