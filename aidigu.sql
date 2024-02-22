@@ -346,6 +346,7 @@ DROP TABLE IF EXISTS `wb_topic`;
 CREATE TABLE `wb_topic` (
   `topic_id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(255) COLLATE utf8mb4_bin NOT NULL COMMENT '标题',
+  `uid` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '创建人，默认0',
   `create_time` datetime NOT NULL COMMENT '创建时间',
   `count` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '话题数量',
   PRIMARY KEY (`topic_id`) USING BTREE
@@ -386,6 +387,25 @@ CREATE TABLE `wb_user` (
 
 -- ----------------------------
 -- Records of wb_user
+-- ----------------------------
+BEGIN;
+COMMIT;
+
+-- ----------------------------
+-- Table structure for wb_user_collect
+-- ----------------------------
+DROP TABLE IF EXISTS `wb_user_collect`;
+CREATE TABLE `wb_user_collect` (
+  `collect_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `msg_id` bigint(20) unsigned NOT NULL,
+  `fromuid` int(10) unsigned NOT NULL,
+  `collect_time` datetime NOT NULL,
+  `delete_time` bigint(20) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`collect_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- ----------------------------
+-- Records of wb_user_collect
 -- ----------------------------
 BEGIN;
 COMMIT;
