@@ -6,3 +6,6 @@ ADD COLUMN `utime` bigint UNSIGNED NULL AFTER `ctime`;
 
 ALTER TABLE `wb_topic` 
 ADD COLUMN `uid` bigint(0) UNSIGNED NOT NULL DEFAULT 0 COMMENT '创建人，默认0' AFTER `title`;
+
+ALTER TABLE `wb_message` 
+ADD COLUMN `collectsum` int UNSIGNED NOT NULL DEFAULT 0 COMMENT '收藏点赞数' AFTER `commentsum`;

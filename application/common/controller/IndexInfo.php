@@ -47,8 +47,8 @@ class IndexInfo extends Info
     }
     public function own()
     {
-        $userMessage = $this->getMessage($this->siteUserId, 30);
         if (request()->isAjax()) {
+            $userMessage = $this->getMessage($this->siteUserId, 30);
             $allwoDelete = 1;
             if ($this->siteUserId != $this->userid) $allwoDelete = 0;
             $userMessage = $userMessage->toArray()['data'];
@@ -61,9 +61,9 @@ class IndexInfo extends Info
     // 广场
     public function blog()
     {
-        $userMessage = $this->getMessage('', 30);
         $this->assign('siteUser', $this->siteUserId);
         if (request()->isAjax()) {
+            $userMessage = $this->getMessage('', 30);
             $userMessage = $userMessage->toArray()['data'];
             return json(array('status' =>  1, 'msg' => 'ok', 'data' => ['data' => handleMessage($userMessage), 'allow_delete' => 0]));
         }
@@ -75,9 +75,9 @@ class IndexInfo extends Info
     public function topic()
     {
         $topicId = input('topic_id');
-        $userMessage = $this->getMessage('', 30, $topicId);
         $this->assign('siteUser', $this->siteUserId);
         if (request()->isAjax()) {
+            $userMessage = $this->getMessage('', 30, $topicId);
             $userMessage = $userMessage->toArray()['data'];
             return json(array('status' =>  1, 'msg' => 'ok', 'data' => ['data' => $userMessage, 'allow_delete' => 0]));
         }
@@ -165,4 +165,53 @@ class IndexInfo extends Info
     {
         return $this->fetch();
     }
+
+    // 我的收藏
+    public function collect()
+    {
+        if (request()->isAjax()) {
+            $page = input('get.page');
+            $collect = Db::name('user_collect')->where('fromuid', $this->userid)->limit(30)->page($page)->select();
+            $msgIdArr = array_column($collect, 'msg_id');
+            $userMessage = $this->getMessageIdArr($msgIdArr, 30);
+            $userMessage = $userMessage->toArray()['data'];
+            return json(array('status' =>  1, 'msg' => 'ok', 'data' => ['data' => $userMessage, 'allow_delete' => 0, 'is_collect' => 1]));
+        }
+        $this->assign('siteUser', $this->siteUserId);
+        $this->assign('userMessage', []);
+        return $this->fetch('index');
+    }
+
+    public function collectMsg()
+    {
+        $msgId = input('post.msgId');
+        $isCancel = input('post.isCancel');
+        $time = time();
+        $data['delete_time'] = 0;
+        $data['fromuid'] = $this->userid;
+        $data['msg_id'] = $msgId;
+        $data['collect_time'] = date('Y-m-d H:i:s', $time);
+        
+        if ($isCancel) {
+            $data['collect_time'] = date('Y-m-d H:i:s', $time);
+            Db::name('user_collect')->where('fromuid', $this->userid)->where('msg_id', $msgId)->update([
+                'delete_time' => $time
+            ]);
+            Db::name('message')->where('msg_id', $msgId)->setDec('collectsum');
+            $msg = '已取消收藏';
+        } else {
+            $findInfo = Db::name('user_collect')->where('fromuid', $this->userid)->where('msg_id', $msgId)->find();
+            if ($findInfo) {
+                $msg = '已经收藏过了';
+            } else {
+                Db::name('user_collect')->insert($data);
+                Db::name('message')->where('msg_id', $msgId)->setInc('collectsum');
+                $msg = '收藏成功';
+            }
+        }
+        
+        return json(array('status' =>  1, 'msg' => $msg));
+        
+    }
+
 }

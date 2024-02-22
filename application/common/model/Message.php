@@ -50,6 +50,12 @@ class Message extends Model
 		}
 		
 	}
+
+	public static function getMessageIdArr($msgIdArr , $count = 50)
+	{
+		return self::with('user')->where('msg_id', 'in', $msgIdArr)->where('is_delete', 0)->order('ctime','desc')->paginate($count, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
+	}
+	
 	public static function getUserMessage($userid = '', $count = 50)
 	{
 		return self::with('fans')->where('uid',$userid)->order('ctime','desc')->paginate($count, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);

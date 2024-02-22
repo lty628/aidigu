@@ -96,6 +96,12 @@ class Info extends Base
 		return Message::getMessage($userid, $count, $topicId);
 		
 	}
+	
+	protected function getMessageIdArr($msgIdArr, $count = 50) 
+	{
+		return Message::getMessageIdArr($msgIdArr, $count = 50);
+	}
+
 	protected function getMessageById($msgId = '')
 	{
 		Reminder::where('touid', $this->userid)->where('msg_id', $msgId)->delete();
