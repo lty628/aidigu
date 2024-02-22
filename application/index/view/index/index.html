@@ -295,7 +295,7 @@
 							if (json.data.allow_delete) {
 								delStr += ' | <a href="/' + data[i].blog + '/del/message/' + data[i].msg_id + '">删除</a>';
 							} else if(json.data.is_collect) {
-								// delStr += ' | <a href="javascript:void(0);" onclick="collectMsg(' + data[i].msg_id + ',1);">取消收藏</a>';
+								delStr += ' | <a href="javascript:void(0);" onclick="collectMsg(' + data[i].msg_id + ',1);">取消收藏</a>';
 							} else {
 								delStr += ' | <a href="javascript:void(0);" onclick="collectMsg(' + data[i].msg_id + ',0);">收藏</a>';
 							}
