@@ -171,7 +171,7 @@ class IndexInfo extends Info
     {
         if (request()->isAjax()) {
             $page = input('get.page');
-            $collect = Db::name('user_collect')->where('fromuid', $this->userid)->limit(30)->page($page)->select();
+            $collect = Db::name('user_collect')->where('delete_time', 0)->where('fromuid', $this->userid)->limit(30)->page($page)->select();
             $msgIdArr = array_column($collect, 'msg_id');
             $userMessage = $this->getMessageIdArr($msgIdArr, 30);
             $userMessage = $userMessage->toArray()['data'];
@@ -201,8 +201,14 @@ class IndexInfo extends Info
             $msg = '已取消收藏';
         } else {
             $findInfo = Db::name('user_collect')->where('fromuid', $this->userid)->where('msg_id', $msgId)->find();
-            if ($findInfo) {
+            if ($findInfo && $findInfo['delete_time'] == 0) {
                 $msg = '已经收藏过了';
+            } elseif ($findInfo && $findInfo['delete_time'] != 0) {
+                Db::name('user_collect')->where('fromuid', $this->userid)->where('msg_id', $msgId)->update([
+                    'delete_time' => 0
+                ]);
+                Db::name('message')->where('msg_id', $msgId)->setInc('collectsum');
+                $msg = '收藏成功';
             } else {
                 Db::name('user_collect')->insert($data);
                 Db::name('message')->where('msg_id', $msgId)->setInc('collectsum');
