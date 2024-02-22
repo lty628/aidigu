@@ -495,7 +495,7 @@ function collectMsg(msgId, isCancel)
 	$.ajax({
 		type: "POST",
 		// contentType: "application/json; charset=utf-8",
-		dataType: "dataType",
+		dataType: "json",
 		url: "/index/index/collectMsg",
 		data: {msgId: msgId, isCancel:isCancel},
 		success: function (response) {
