@@ -32,18 +32,18 @@
 
 <body>
     <main class="profile-page">
-        <section class="section">
+        <section>
             <div class="container">
                 <div class="px-4">
                     <div class="row justify-content-center">
                         <div class="col-lg-3 order-lg-2">
 
                         </div>
-                        <div class="col-lg-4 order-lg-3 text-lg-right align-self-lg-center">
+                        <div class="col-lg-4 order-lg-3 text-lg-left align-self-lg-center">
 
                         </div>
                         <div class="col-lg-4 order-lg-1">
-                            <div class="card-profile-stats d-flex justify-content-center">
+                            <div class="card-profile-stats d-flex justify-content-left">
                                 使用方法：复制任意视频网站VIP链接，粘贴到视频地址栏
                             </div>
                         </div>
@@ -51,23 +51,26 @@
 
                     <table class="table table-bordered">
                         <tbody>
-                            <div class="col-md-14 column">
-                                <div class="panel panel-default">
-                                    <div id="kj" class="panel-body">
-                                        <iframe src="javascript:;" allowfullscreen="true" id="player" width="100%"
-                                            height="480px" allowtransparency="true" frameborder="0"
-                                            scrolling="no"></iframe>
+                            <tr>
+                                <div class="col-md-14 column">
+                                    <div class="panel panel-default">
+                                        <div id="kj" class="panel-body">
+                                            <iframe src="javascript:;" allowfullscreen="true" id="player" width="100%"
+                                                height="380px" allowtransparency="true" frameborder="0"
+                                                scrolling="no"></iframe>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            </tr>
+                            
                             <tr>
                                 <div class="col-md-14 column">
                                     <form method="get" id="1233911832">
                                         <br>
                                         <div class="form-group row">
-                                            <span class="col-sm-2 col-form-label text-right">选择接口：</span>
-                                            <div class="col-sm-10">
-                                                <select class="form-control input-lg" id="jk">
+                                            <span class="col-sm-1 col-form-label text-left">线路：</span>
+                                            <div class="col-sm-11">
+                                                <select class="form-control input-sm" id="jk">
                                                     <!-- <option value="https://yun.nxflv.com/?url=" selected="">
                                                         （通用vip接口①（支持全网大部分原画，超级稳定）</option>
                                                     <option value="https://okjx.cc/?url=">（通用vip接口②（OK)</option> -->
@@ -98,15 +101,15 @@
                                                 </select>
                                             </div>
                                         </div>
-                                        <br>
+                                        <!-- <br> -->
                                         <div class="form-group row">
-                                            <span class="col-sm-2 col-form-label text-right ">视频地址：</span>
-                                            <div class="col-sm-10">
-                                                <input class="form-control input-lg" type="search"
+                                            <span class="col-sm-1 col-form-label text-left ">地址：</span>
+                                            <div class="col-sm-11">
+                                                <input class="form-control input-sm" type="search"
                                                     placeholder="输入播放地址或视频名称【支持链接部分支持名称】" id="url">
                                             </div>
                                         </div>
-                                        <br>
+                                        <!-- <br> -->
                                         <div>
                                             <div class=" text-center">
                                                 <button type="button" class="btn btn-primary btn-round"
