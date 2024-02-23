@@ -25,7 +25,7 @@ class Collect extends Controller
             ->field('message.msg_id,message.contents,message.media,message.media_info,user_collect.collect_id,user_collect.collect_time')
             ->where('user_collect.fromuid', $uid)
             ->where('user_collect.delete_time', 0)
-            ->order('user_collect.collect_id asc')
+            ->order('user_collect.collect_id desc')
             ->limit($limit)->page($page)
             ->select();
         foreach ($list as &$value) {
