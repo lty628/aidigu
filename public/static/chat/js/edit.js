@@ -286,6 +286,9 @@ const E = window.wangEditor
 				end: function(){ 
 					var htmlStr = ''
 					var cloudShare = layui.sessionData('cloudShare')
+					if (!cloudShare) {
+						return false
+					}
 					var data = cloudShare.data
 					var file_type = data.file_type;
 					var type = file_type.split("/")[0]; // 使用空格作为分隔符
@@ -297,6 +300,7 @@ const E = window.wangEditor
 						htmlStr = '<p>分享文件-点击<a href="'+data.file_path+'">'+data.file_name +'</a>下载</p>'
 					}
 					editor.txt.html(htmlStr)
+					layui.sessionData('cloudShare', null)
 				} 
 			});
 		}
