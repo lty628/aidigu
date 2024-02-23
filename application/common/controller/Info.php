@@ -99,7 +99,7 @@ class Info extends Base
 	
 	protected function getMessageIdArr($msgIdArr, $count = 50) 
 	{
-		return Message::getMessageIdArr($msgIdArr, $count = 50);
+		return Message::getMessageIdArr($msgIdArr, $count);
 	}
 
 	protected function getMessageById($msgId = '')

@@ -28,10 +28,11 @@ class Collect extends Controller
             ->order('user_collect.collect_id desc')
             ->limit($limit)->page($page)
             ->select();
+        $count = Db::name('user_collect')->where('delete_time', 0)->where('fromuid', $uid)->count();
         foreach ($list as &$value) {
             $value['contents'] = strip_tags($value['contents']);
         }
-        return json(['code' => 0, 'data' => $list]);
+        return json(['code' => 0, 'data' => $list, 'count' => $count]);
     }
 
     public function del()
