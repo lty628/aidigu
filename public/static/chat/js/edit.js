@@ -293,9 +293,9 @@ const E = window.wangEditor
 					var file_type = data.file_type;
 					var type = file_type.split("/")[0]; // 使用空格作为分隔符
 					if (type == 'video') {
-						htmlStr = '<p>分享视频-' + data.file_name + '</p><p class="massageImg clear showVideo' + data.file_id + '" vid="' + data.file_path + '"><video width="200px"  controls=""  name="media"><source src="' + data.file_path + '" type="video/mp4"></video></p>'
+						htmlStr = '<p>分享视频-' + data.file_name + '</p><p class="massageImg clear showVideo' + data.file_id + '" vid="' + data.file_path + '"><video width="90%"  controls=""  name="media"><source src="' + data.file_path + '" type="video/mp4"></video></p>'
 					} else if (type == 'audio') {
-						htmlStr = '<p>分享音乐-' + data.file_name + '</p><p class="massageImg clear"><audio id="music_'+data.file_id+'" class="music" controls="controls" loop="loop" onplay="stopOther(this)" preload="none" controlsList="nodownload" οncοntextmenu="return false" name="media"><source src="'+data.file_path+'" type="audio/mpeg"></audio></p>'
+						htmlStr = '<p>分享音乐-' + data.file_name + '</p><p class="massageImg clear"><audio id="music_'+data.file_id+'" class="music" controls="controls" width="90%" loop="loop" onplay="stopOther(this)" preload="none" controlsList="nodownload" οncοntextmenu="return false" name="media"><source src="'+data.file_path+'" type="audio/mpeg"></audio></p>'
 					} else {
 						htmlStr = '<p>分享文件-点击<a href="'+data.file_path+'">'+data.file_name +'</a>下载</p>'
 					}
