@@ -309,6 +309,7 @@ CREATE TABLE `wb_message` (
   `media_info` text COLLATE utf8mb4_bin,
   `repostsum` int(11) NOT NULL DEFAULT '0',
   `commentsum` int(11) NOT NULL DEFAULT '0',
+  `collectsum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '收藏点赞数',
   `topic_id` int(10) unsigned NOT NULL DEFAULT '0',
   `is_delete` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '是否删除0未删除，1已删除',
   `ctime` int(11) NOT NULL,
