@@ -1,0 +1,135 @@
+{include file='index/header' /}
+<style>
+    .layui-header{
+        display: none;
+    }
+</style>
+
+
+
+<div class="layui-body" style="left: 0px; position: unset;">
+    <div class="layui-layout">
+        <div style="padding: 16px;">
+            <table class="layui-hide" id="initTable" lay-filter="initTable"></table>
+        </div>
+    </div>
+
+</div>
+
+<script type="text/html" id="toolbarInfo">
+    <div class="layui-btn-container">
+        <form class="layui-form layui-row layui-col-space16">
+
+            <div class="layui-col-md4">
+                <div class="layui-input-wrap">
+                    <input type="text" name="file_name" autocomplete="off" placeholder="文件名" lay-affix="clear" class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-col-md4">
+                <button class="layui-btn" lay-submit lay-filter="initTableSearch">搜索</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+
+        </form>
+    </div>
+</script>
+
+{include file='index/footer' /}
+<script src="/static/common/js/clipboard.min.js"></script>
+<script>
+    function copyLink(obj, id) {
+        $(obj).attr('data-clipboard-text', url);
+        var clipboard = new ClipboardJS('.copyLink')
+        $(obj).trigger('click');
+    }
+
+    function convertFileSize(sizeInBytes) {
+        var units = ['B', 'KB', 'MB', 'GB']; // 定义可能使用到的单位数组
+
+        for (var i = 0; sizeInBytes >= 1024 && i < units.length - 1; i++) {
+            sizeInBytes /= 1024; // 除以 1024 来进行单位转换
+        }
+
+        return Math.round(sizeInBytes * 100) / 100 + " " + units[i]; // 返回结果并添加相应的单位后缀
+    }
+
+    layui.use(['table', 'dropdown'], function () {
+        var table = layui.table;
+        // var dropdown = layui.dropdown;
+        var form = layui.form;
+        // var laydate = layui.laydate;
+
+        // 创建渲染实例
+        table.render({
+            elem: '#initTable',
+            url: '/upload/index/getFiles', // 此处为静态模拟数据，实际使用时需换成真实接口
+            toolbar: '#toolbarInfo',
+            defaultToolbar: false,
+            height: 'full-35', // 最大高度减去其他容器已占有的高度差
+            css: [ // 重设当前表格样式
+                '.layui-table-tool-temp{padding-right: 145px;}'
+            ].join(''),
+            cellMinWidth: 80,
+            page: true,
+            cols: [[
+                // { field: 'groupid', width: 20, align: 'center', title: 'ID' },
+                { field: 'file_name', width: '80%', align: 'center', title: '文件名' },
+                {
+                    fixed: 'right', align: 'center', title: '操作', templet: function (d) {
+                        return '<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="siteShare">选择</a>';
+                    }
+                }
+            ]],
+            done: function () {
+
+            },
+            // error: function (res, msg) {
+            //     console.log(res, msg)
+            // }
+        });
+
+        // 搜索提交
+        form.on('submit(initTableSearch)', function(data){
+            var field = data.field; // 获得表单字段
+            // 执行搜索重载
+            table.reload('initTable', {
+            page: {
+                curr: 1 // 重新从第 1 页开始
+            },
+            where: field // 搜索的字段
+            });
+            return false; // 阻止默认 form 跳转
+        });
+
+        // 触发单元格工具事件
+        table.on('tool(initTable)', function (obj) { // 双击 toolDouble
+            var data = obj.data; // 获得当前行数据
+
+            if (obj.event === 'siteShare') {
+                // layui.data('test', {
+                //     key: 'nickname',
+                //     remove: true
+                // });
+                // layui.data('test', {
+                //     key: 'nickname',
+                //     value: '张三'
+                // });
+                var sessionData = {};
+                sessionData.file_type = data.file_type
+                sessionData.file_path = data.file_path
+                sessionData.file_name = data.file_name
+                sessionData.file_id = 'file_'+data.id
+                layui.sessionData('cloudShare', null)
+                layui.sessionData('cloudShare', {
+                    key: 'data',
+                    value: sessionData
+                });
+                var index = parent.layer.getFrameIndex(window.name); // 先得到当前 iframe 层的索引
+                parent.layer.close(index);
+            }
+        });
+
+    });
+
+</script>

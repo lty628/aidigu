@@ -15,7 +15,9 @@ Route::any('files', 'upload/upload/index');
 Route::any('files/:key', 'upload/upload/index');
 Route::get('/cloud/$','upload/Index/index');
 Route::get('/cloud/show/$','upload/Index/show');
-Route::get('/cloud/show/:page$','upload/Index/show')->pattern(['page'=>'[0-9]+']);
+// Route::get('/cloud/show/:page$','upload/Index/show')->pattern(['page'=>'[0-9]+']);
+Route::get('/cloud/share/$','upload/Index/share');
+// Route::get('/cloud/share/:page$','upload/Index/share')->pattern(['page'=>'[0-9]+']);
 Route::get('/cloud/collection/$','upload/Index/collection');
 
 // 聊天

@@ -31,6 +31,29 @@ class Index extends Controller
         return $this->fetch();
     }
 
+    public function share()
+    {
+        // $result = Db::name('file')->where('is_delete', 0)->order('create_time', 'desc')->where('userid', getLoginUid())->paginate(7, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
+        // $this->assign('fileList', $result);
+        return $this->fetch();
+    }
+
+    /**
+     * 无用
+     */
+    public function shareHtml()
+    {
+        $id = (int) input('param.id');
+        $fileInfo = Db::name('file')->where('id', $id)->where('userid', getLoginUid())->find();
+        if (!$fileInfo) return $this->error('无分享权限');
+        $type = explode('/', $fileInfo['file_type']);
+        return $this->success('ok', null, [
+            'type' => $type[0],
+            'file_path' => $fileInfo['file_path'],
+            'file_name' => $fileInfo['file_name'],
+        ]);
+    }
+
     public function getFiles()
     {
         $get = input('get.');
@@ -178,7 +201,7 @@ class Index extends Controller
                 'media_info' => $filePath,
                 'media_type' => $fileExtension,
             ]);
-        } elseif ($type[0] == 'media') {
+        } elseif ($type[0] == 'image') {
             $data['content'] = '<p>分享图片</p>';
             $data['media'] = $fileInfo['file_path'];
             $data['media_info'] = json_encode([
