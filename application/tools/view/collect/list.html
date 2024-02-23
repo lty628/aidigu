@@ -63,6 +63,8 @@
           { field: 'contents', width: '60%', align: 'center', title: '内容',templet: function (d) {
               if (!d.contents && d.media) {
                 return '<a href="javascript:;" data-url="' + d.media + '" onclick="showMedia(this)" alt="点击查看">点击查看</a>'
+              } else if(d.media) {
+                return d.contents+'：<a href="javascript:;" data-url="' + d.media + '" onclick="showMedia(this)" alt="点击查看">点击查看</a>'
               } else {
                 return d.contents
               }
