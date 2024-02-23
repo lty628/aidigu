@@ -296,8 +296,10 @@ const E = window.wangEditor
 						htmlStr = '<p>分享视频-' + data.file_name + '</p><p class="massageImg clear showVideo' + data.file_id + '" vid="' + data.file_path + '"><video width="90%"  controls=""  name="media"><source src="' + data.file_path + '" type="video/mp4"></video></p>'
 					} else if (type == 'audio') {
 						htmlStr = '<p>分享音乐-' + data.file_name + '</p><p class="massageImg clear"><audio id="music_'+data.file_id+'" class="music" controls="controls" width="90%" loop="loop" onplay="stopOther(this)" preload="none" controlsList="nodownload" οncοntextmenu="return false" name="media"><source src="'+data.file_path+'" type="audio/mpeg"></audio></p>'
+					} else if (type == 'image') {
+						htmlStr = '<p>分享图片-' + data.file_name + '</p><p  class="massageImg clear"><img class="massageImgCommon massageImg_'+type+'"  onclick="showMessageImg(this)" src="' + data.file_path + '"></p>'
 					} else {
-						htmlStr = '<p>分享文件-点击<a href="'+data.file_path+'">'+data.file_name +'</a>下载</p>'
+						htmlStr = '<p>分享文件-点击<a href="'+data.file_path+'">《'+data.file_name +'》</a>下载</p>'
 					}
 					editor.txt.html(htmlStr)
 					layui.sessionData('cloudShare', null)
