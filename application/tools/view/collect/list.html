@@ -60,7 +60,7 @@
         cellMinWidth: 80,
         page: true,
         cols: [[
-          { field: 'contents', align: 'center', title: '内容',templet: function (d) {
+          { field: 'contents', width: 300, align: 'center', title: '内容',templet: function (d) {
               if (!d.contents && d.media) {
                 return '<a href="javascript:;" data-url="' + d.media + '" onclick="showMedia(this)" alt="点击查看">点击查看</a>'
               } else {
