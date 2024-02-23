@@ -175,7 +175,19 @@ class IndexInfo extends Info
             $msgIdArr = array_column($collect, 'msg_id');
             $userMessage = $this->getMessageIdArr($msgIdArr, 30);
             $userMessage = $userMessage->toArray()['data'];
-            return json(array('status' =>  1, 'msg' => 'ok', 'data' => ['data' => $userMessage, 'allow_delete' => 0, 'is_collect' => 1]));
+            $tmp = [];
+            foreach ($userMessage as $value) {
+                $tmp[$value['msg_id']] = $value;
+            }
+
+            $data = [];
+            foreach ($msgIdArr as $v) {
+                if (isset($tmp[$v])){
+                    $data[$v] = $tmp[$v];
+                }
+            }
+
+            return json(array('status' =>  1, 'msg' => 'ok', 'data' => ['data' => array_values($data), 'allow_delete' => 0, 'is_collect' => 1]));
         }
         $this->assign('siteUser', $this->siteUserId);
         $this->assign('userMessage', []);
