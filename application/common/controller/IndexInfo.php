@@ -79,7 +79,7 @@ class IndexInfo extends Info
         if (request()->isAjax()) {
             $userMessage = $this->getMessage('', 30, $topicId);
             $userMessage = $userMessage->toArray()['data'];
-            return json(array('status' =>  1, 'msg' => 'ok', 'data' => ['data' => $userMessage, 'allow_delete' => 0]));
+            return json(array('status' =>  1, 'msg' => 'ok', 'data' => ['data' => handleMessage($userMessage), 'allow_delete' => 0]));
         }
         Db::name('topic')->where('topic_id', $topicId)->setInc('count',1);
         $topic = Db::name('topic')->where('topic_id', $topicId)->find();
@@ -187,7 +187,7 @@ class IndexInfo extends Info
                 }
             }
 
-            return json(array('status' =>  1, 'msg' => 'ok', 'data' => ['data' => array_values($data), 'allow_delete' => 0, 'is_collect' => 1]));
+            return json(array('status' =>  1, 'msg' => 'ok', 'data' => ['data' => handleMessage(array_values($data)), 'allow_delete' => 0, 'is_collect' => 1]));
         }
         $this->assign('siteUser', $this->siteUserId);
         $this->assign('userMessage', []);
