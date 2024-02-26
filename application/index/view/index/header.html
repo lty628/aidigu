@@ -36,7 +36,9 @@
 				<li>
 					<a href="/tools/">小应用</a>
 					{if $chatRemind}
-					<span class="layui-badge-dot layui-bg-blue"></span>
+					<span class="layui-badge-dot layui-bg-blue" id="checkRemind"></span>
+					{else} 
+					<span class="layui-badge-dot layui-bg-blue" id="checkRemind" style="display: none;"></span>
 					{/if}
 				</li>
 				<!-- <li><a href="javascript:;" data-title="我的云盘" data-url="/cloud/show/" onclick="showFrameHtml(this, '80%', '80%')">网盘</a></li> -->

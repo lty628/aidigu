@@ -216,4 +216,13 @@ class Api extends Base
             return $this->error('删除失败');
         return $this->success('删除成功', '/'.getLoginBlog().'/own/');
     }
+
+    public function checkRemind()
+    {
+        $remind = \app\common\libs\Remind::check(getLoginUid());
+        if (!$remind) {
+            return json(array('status' =>  0,'msg' => ''));
+        }
+        return json(array('status' =>  1,'msg' => 'ok', 'data' => $remind));
+    }
 }
