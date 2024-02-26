@@ -1,0 +1,20 @@
+
+if ($("#checkRemind").css('display') == 'none') {
+    var temindTimer = setInterval(() => {
+        $.ajax({
+            type: "GET",
+            url: "/index/ajax/checkRemind",
+            dataType: "json",
+            success: function (response) {
+                if (response.status ==1) {
+                    $("#checkRemind").show()
+                    if ($("#chatAudio").length <= 0 ) {
+                        $('<audio id="chatAudio"><source src="/static/chat/voices/notify.ogg" type="audio/ogg"><source src="/static/chat/voices/notify.mp3" type="audio/mpeg"><source src="/static/chat/voices/notify.wav" type="audio/wav"></audio>').appendTo('body');
+                    }
+                    $('#chatAudio')[0].play();
+                    clearInterval(temindTimer)
+                }
+            }
+        });
+    }, 10000);
+}
