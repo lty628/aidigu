@@ -144,6 +144,29 @@ class SettingInfo extends Base
 		}
 	}
 
+	public function sourcematerial()
+	{
+		$path = 'uploads/'.getLoginMd5Uid().'/sourcematerial';
+		// 4m
+		$size = 62914561;
+		$file = request()->file('file');
+		// 移动到框架应用根目录/uploads/ 目录下
+		// $info = $file->validate(['size'=>$size,'ext'=>'mp4,mp3,jiff,jpg,bmp,jpeg,png,gif,pdf,zip,rar,7z'])->move($path);
+		$info = $file->validate(['size'=>$size,'ext'=>'mp4,jiff,jpg,bmp,jpeg,png,gif'])->move($path);
+		// $info = $this->uploadImage($size, $path);
+		if($info){
+			// 成功上传后 获取上传信息
+			$fileName = explode('.', $info->getSaveName())[0];
+			$data['media_info'] = '/'.$path.'/'.$fileName;
+			$data['media_type'] = $info->getExtension();
+			return json(['status'=>1, 'msg'=>'上传成功','data'=>$data]);
+		}else{
+			// 上传失败获取错误信息
+			return json(['status'=>0, 'msg'=>$file->getError()]);
+		}
+	}
+	
+
 	public function uploadImage()
 	{
 		$path = 'uploads/'.getLoginMd5Uid().'/theme';

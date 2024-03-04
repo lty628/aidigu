@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="/static/layui/css/layui.css" rel="stylesheet">
+</head>
+
+<body class="main_body white">
+  <!-- <div class="layui-header">
+    <ul class="layui-nav layui-layout">
+      <li class="layui-nav-item"><a href="">我的群</a></li>
+  </div> -->
+
+  <div class="layui-layout">
+    <div style="padding: 16px;">
+      <table class="layui-hide" id="initTable" lay-filter="initTable"></table>
+    </div>
+  </div>
+
+  <script type="text/html" id="toolbarInfo">
+    <div class="layui-btn-container">
+      <form class="layui-form">
+
+          <div class="layui-col-md4">
+              <div class="layui-input-wrap">
+                  <input type="text" name="title" autocomplete="off" placeholder="素材名" lay-affix="clear" class="layui-input">
+              </div>
+          </div>
+
+          <div class="layui-col-md1">
+              <button class="layui-btn layui-btn" lay-submit lay-filter="initTableSearch">搜索</button>
+          </div>
+
+      </form>
+      <div class="layui-col-md1">
+        <button class="layui-btn layui-btn-primary" lay-event="create">创建</button>
+    </div>
+    </div>
+  </script>
+
+  <script type="text/html" id="barLineInfo">
+    <div class="layui-clear-space">
+      <a class="layui-btn layui-btn-xs" lay-event="push">推送</a>
+      <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del">删除</a>
+    </div>
+  </script>
+  <script src="/static/layui/layui.js"></script>
+  <script>
+    function showMedia(obj) {
+      var $ = layui.$;
+      var url = $(obj).attr('data-url');
+      parent.layer.open({
+        type: 2,
+        title: false,
+        area: ['630px', '360px'],
+        shade: 0.8,
+        closeBtn: 0,
+        shadeClose: true,
+        content: url // video 地址
+      });
+    }
+    layui.use(['table', 'dropdown'], function () {
+      var table = layui.table;
+      var dropdown = layui.dropdown;
+      var $ = layui.$;
+      var form = layui.form;
+
+      // 创建渲染实例
+      table.render({
+        elem: '#initTable',
+        url: '/tools/sourcematerial/getList', // 此处为静态模拟数据，实际使用时需换成真实接口
+        toolbar: '#toolbarInfo',
+        defaultToolbar: false,
+        height: 'full-35', // 最大高度减去其他容器已占有的高度差
+        lineStyle: 'height: 70px;',
+        css: [ // 重设当前表格样式
+          '.layui-table-tool-temp{padding-right: 145px;}'
+        ].join(''),
+        cellMinWidth: 80,
+        page: true,
+        cols: [[
+          { field: 'title', width: '60%', align: 'center', title: '素材名称'},
+          {
+            field: 'create_time', align: 'center', title: '创建时间', templet: function (d) {
+              return d.create_time
+            }
+          },
+          { fixed: 'right', align: 'center', title: '操作', toolbar: '#barLineInfo' }
+        ]]
+      });
+
+            // 搜索提交
+      form.on('submit(initTableSearch)', function(data){
+          var field = data.field; // 获得表单字段
+          // 执行搜索重载
+          table.reload('initTable', {
+          page: {
+              curr: 1 // 重新从第 1 页开始
+          },
+          where: field // 搜索的字段
+          });
+          return false; // 阻止默认 form 跳转
+      });
+
+            // 工具栏事件
+      table.on('toolbar(initTable)', function (obj) {
+        var id = obj.config.id;
+        var checkStatus = table.checkStatus(id);
+        var othis = lay(this);
+        switch (obj.event) {
+          case 'create':
+            layer.open({
+              title: '创建群',
+              type: 2,
+              area: ['80%', '80%'],
+              content: '/tools/sourcematerial/add',
+              end: function () {
+                table.reload('initTable')
+              }
+            });
+            return false;
+            break;
+          case 'getData':
+            var getData = table.getData(id);
+            console.log(getData);
+            layer.alert(layui.util.escape(JSON.stringify(getData)));
+            break;
+          case 'LAYTABLE_TIPS':
+            layer.alert('自定义工具栏图标按钮');
+            break;
+        };
+      });
+
+
+      // 触发单元格工具事件
+      table.on('tool(initTable)', function (obj) { // 双击 toolDouble
+        var data = obj.data; // 获得当前行数据
+        // console.log(data)
+        if (obj.event === 'del') {
+          layer.confirm('确定删除吗？', function (index) {
+            $.ajax({
+              type: "post",
+              url: "/tools/sourcematerial/del",
+              data: { 'id': data.id },
+              dataType: "json",
+              success: function (res) {
+                layer.msg(res.msg);
+                if (res.code == 0) {
+                  table.reload('initTable')
+                }
+              }
+            });
+            // layer.close(index);
+            // // 向服务端发送删除指令
+            // table.reload('initTable')
+          });
+        } else if (obj.event === 'push') {
+          $.ajax({
+              type: "post",
+              url: "/tools/sourcematerial/push",
+              data: { 'id': data.id },
+              dataType: "json",
+              success: function (res) {
+                layer.msg(res.msg);
+                if (res.code == 0) {
+                  table.reload('initTable')
+                }
+              }
+            });
+        }
+      });
+
+    });
+  </script>
+</body>
+
+</html>

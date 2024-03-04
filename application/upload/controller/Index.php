@@ -224,7 +224,9 @@ class Index extends Controller
         $fileInfo = Db::name('file')->where('id', $id)->where('userid', getLoginUid())->find();
         if (!$fileInfo) return $this->error('无分享权限');
         $messageId = $fileInfo['share_msg_id'];
-        Db::name('message')->where('msg_id', $messageId)->delete();
+        Db::name('message')->where('msg_id', $messageId)->update([
+            'is_delete' => 1
+        ]);
         Db::name('file')->where('id', $id)->update(['share_msg_id' => 0]);
         return $this->success('已取消分享！');
     }

@@ -19,7 +19,7 @@ CREATE TABLE `wb_app` (
   `create_time` datetime NOT NULL COMMENT '创建时间',
   `update_time` datetime NOT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
 -- ----------------------------
 -- Records of wb_app
@@ -42,6 +42,7 @@ INSERT INTO `wb_app` VALUES (14, '邀请码', '/tools/userinvite/list', 1, 1, '/
 INSERT INTO `wb_app` VALUES (15, '邀请码', '/tools/userinvite/list', 1, 2, '/static/tools/common/images/userinvite.jpeg', '', '{\"title\":\"邀请码\",\"shade\":0.8,\"closeBtn\":true,\"shadeClose\":false,\"area\":[\"100%\",\"100%\"],\"resize\":false,\"maxmin\":false,\"skin\":\"layui-layer-win10\",\"id\":\"app_14\",\"hideOnClose\":false,\"scrollbar\":false}', 0, '2024-01-30 11:16:10', '2024-02-05 23:36:23');
 INSERT INTO `wb_app` VALUES (16, '收藏管理', '/tools/collect/list', 1, 1, '/static/tools/common/images/collect.jpeg', '', '{\"title\":\"收藏管理\",\"shade\":0.8,\"closeBtn\":true,\"shadeClose\":false,\"area\":[\"70%\",\"80%\"],\"resize\":true,\"maxmin\":true,\"skin\":\"layui-layer-win10\",\"id\":\"app_15\",\"hideOnClose\":false,\"scrollbar\":false}', 0, '2024-01-30 11:16:10', '2024-02-06 11:29:54');
 INSERT INTO `wb_app` VALUES (17, '收藏管理', '/tools/collect/list', 1, 2, '/static/tools/common/images/collect.jpeg', '', '{\"title\":\"收藏管理\",\"shade\":0.8,\"closeBtn\":true,\"shadeClose\":false,\"area\":[\"100%\",\"100%\"],\"resize\":false,\"maxmin\":false,\"skin\":\"layui-layer-win10\",\"id\":\"app_16\",\"hideOnClose\":false,\"scrollbar\":false}', 0, '2024-01-30 11:16:10', '2024-02-06 11:29:54');
+INSERT INTO `wb_app` VALUES (18, '素材', '/tools/sourcematerial/list', 1, 1, '/static/tools/common/images/sourcematerial.jpeg', '', '{\"title\":\"素材\",\"shade\":0.8,\"closeBtn\":true,\"shadeClose\":false,\"area\":[\"70%\",\"80%\"],\"resize\":true,\"maxmin\":true,\"skin\":\"layui-layer-win10\",\"id\":\"app_18\",\"hideOnClose\":false,\"scrollbar\":false}', 0, '2024-01-30 11:16:10', '2024-02-06 11:29:54');
 COMMIT;
 
 -- ----------------------------
@@ -338,6 +339,49 @@ CREATE TABLE `wb_reminder` (
 
 -- ----------------------------
 -- Records of wb_reminder
+-- ----------------------------
+BEGIN;
+COMMIT;
+
+-- ----------------------------
+-- Table structure for wb_source_material
+-- ----------------------------
+DROP TABLE IF EXISTS `wb_source_material`;
+CREATE TABLE `wb_source_material` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `uid` bigint(20) unsigned NOT NULL COMMENT '用户id',
+  `title` varchar(255) NOT NULL DEFAULT '0' COMMENT '标题',
+  `status` tinyint(4) NOT NULL DEFAULT '1' COMMENT '状态0删除，1正常',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  `push_time` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '投送时间',
+  `share_msg_id` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '内容id',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- ----------------------------
+-- Records of wb_source_material
+-- ----------------------------
+BEGIN;
+COMMIT;
+
+-- ----------------------------
+-- Table structure for wb_source_material_relation
+-- ----------------------------
+DROP TABLE IF EXISTS `wb_source_material_relation`;
+CREATE TABLE `wb_source_material_relation` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `media_info` varchar(255) NOT NULL DEFAULT '' COMMENT '文件名',
+  `media_type` varchar(255) NOT NULL DEFAULT '' COMMENT '类型',
+  `file_size` double NOT NULL COMMENT '文件大小',
+  `file_name` varchar(255) NOT NULL DEFAULT '' COMMENT '文件名',
+  `source_material_id` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '是否站内分享0未分享',
+  `is_delete` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '是否删除',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- ----------------------------
+-- Records of wb_source_material_relation
 -- ----------------------------
 BEGIN;
 COMMIT;

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="/static/layui/css/layui.css" rel="stylesheet">
+</head>
+
+<body class="main_body white">
+  <!-- <div class="layui-header">
+    <ul class="layui-nav layui-layout">
+      <li class="layui-nav-item"><a href="">我的群</a></li>
+  </div> -->
+
+  <div class="layui-layout">
+    <div style="padding: 16px;">
+      <table class="layui-hide" id="initTable" lay-filter="initTable"></table>
+    </div>
+  </div>
+
+  <script type="text/html" id="barLineInfo">
+    <div class="layui-clear-space">
+      <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="edit">取消收藏</a>
+    </div>
+  </script>
+  <script src="/static/layui/layui.js"></script>
+  <script>
+    function showMedia(obj) {
+      var $ = layui.$;
+      var url = $(obj).attr('data-url');
+      parent.layer.open({
+        type: 2,
+        title: false,
+        area: ['630px', '360px'],
+        shade: 0.8,
+        closeBtn: 0,
+        shadeClose: true,
+        content: url // video 地址
+      });
+    }
+    layui.use(['table', 'dropdown'], function () {
+      var table = layui.table;
+      var dropdown = layui.dropdown;
+      var $ = layui.$;
+
+      // 创建渲染实例
+      table.render({
+        elem: '#initTable',
+        url: '/tools/collect/getList', // 此处为静态模拟数据，实际使用时需换成真实接口
+        toolbar: false,
+        defaultToolbar: false,
+        height: 'full-35', // 最大高度减去其他容器已占有的高度差
+        lineStyle: 'height: 70px;',
+        css: [ // 重设当前表格样式
+          '.layui-table-tool-temp{padding-right: 145px;}'
+        ].join(''),
+        cellMinWidth: 80,
+        page: true,
+        cols: [[
+          { field: 'contents', width: '60%', align: 'center', title: '内容',templet: function (d) {
+              if (!d.contents && d.media) {
+                return '<a href="javascript:;" data-url="' + d.media + '" onclick="showMedia(this)" alt="点击查看">点击查看</a>'
+              } else if(d.media) {
+                return d.contents+'：<a href="javascript:;" data-url="' + d.media + '" onclick="showMedia(this)" alt="点击查看">点击查看</a>'
+              } else {
+                return d.contents
+              }
+            } 
+          },
+          {
+            field: 'collect_time', align: 'center', title: '收藏时间', templet: function (d) {
+              return d.collect_time
+            }
+          },
+          { fixed: 'right', align: 'center', title: '操作', toolbar: '#barLineInfo' }
+        ]]
+      });
+
+
+      // 触发单元格工具事件
+      table.on('tool(initTable)', function (obj) { // 双击 toolDouble
+        var data = obj.data; // 获得当前行数据
+        // console.log(data)
+        if (obj.event === 'edit') {
+          layer.confirm('确定取消收藏么', function (index) {
+            $.ajax({
+              type: "post",
+              url: "/tools/collect/del",
+              data: { 'id': data.collect_id },
+              dataType: "json",
+              success: function (res) {
+                layer.msg(res.msg);
+                if (res.code == 0) {
+                  table.reload('initTable')
+                }
+              }
+            });
+            // layer.close(index);
+            // // 向服务端发送删除指令
+            // table.reload('initTable')
+          });
+        }
+      });
+
+    });
+  </script>
+</body>
+
+</html>

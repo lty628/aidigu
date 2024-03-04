@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="/static/layui/css/layui.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="layui-layout">
+        <div style="padding: 16px;">
+            <form class="layui-form" action="javascript:/">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">群名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="groupname" lay-verify="required" placeholder="请输入"
+                            value="{$data['groupname'] | default='' }" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">加群开关</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="invite_status" value="0" title="关闭" {if $data['invite_status']==0
+                            }checked {/if}>
+                        <input type="radio" name="invite_status" value="1" title="开启" {if $data['invite_status']==1
+                            }checked {/if}>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">头像</label>
+                    <div class="layui-input-block">
+                        <button type="button" class="layui-btn" id="ID-upload-btn">
+                            <i class="layui-icon layui-icon-upload"></i> 单图片上传
+                        </button>
+                        <div style="width: 132px;">
+                            <div class="layui-upload-list">
+                                <img class="layui-upload-img" id="ID-upload-img"
+                                    style="width: 100%; height: 100px;" src="{$data['head_image']}">
+                                <div id="ID-upload-text"></div>
+                            </div>
+                            <div class="layui-progress layui-progress-big" lay-showPercent="yes"
+                                lay-filter="filter-progress">
+                                <div class="layui-progress-bar" lay-percent=""></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">群介绍</label>
+                    <div class="layui-input-block">
+                        <textarea placeholder="请输入内容" name="intro"
+                            class="layui-textarea">{$data['intro'] | default='' }</textarea>
+                    </div>
+                </div>
+                <input type="hidden" name="groupid" value="{$data['groupid'] | default='' }">
+                <input type="hidden" name="head_image" id="headImage" value="{$data['head_image'] | default='' }">
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button type="submit" class="layui-btn" lay-submit lay-filter="submitForm">立即提交</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="/static/layui/layui.js"></script>
+    <script>
+        layui.use(['form', 'laydate', 'util'], function () {
+            var form = layui.form;
+            var layer = layui.layer;
+            var $ = layui.$;
+            // 提交事件
+            form.on('submit(submitForm)', function (data) {
+
+                var field = data.field; // 获取表单字段值
+                field.file = field.head_image
+                // field.groupid=$()
+                // console.log(field);
+                $.ajax({
+                    type: "post",
+                    url: "/tools/chat/addOrEdit",
+                    data: field,
+                    dataType: "json",
+                    success: function (res) {
+                        layer.msg(res.msg, function () {
+                            if (res.code == 0) {
+                                var index = parent.layer.getFrameIndex(window.name); // 先得到当前 iframe 层的索引
+                                parent.layer.close(index);
+                            }
+                        });
+                        
+                    }
+                });
+
+                return false; // 阻止默认 form 跳转
+            });
+        });
+
+        layui.use(function () {
+            var upload = layui.upload;
+            var layer = layui.layer;
+            var element = layui.element;
+            var $ = layui.$;
+            // 单图片上传
+            var uploadInst = upload.render({
+                elem: '#ID-upload-btn',
+                url: '/index/setting/chatMessage', // 实际使用时改成您自己的上传接口即可。
+                before: function (obj) {
+                    // 预读本地文件示例，不支持ie8
+                    obj.preview(function (index, file, result) {
+                        $('#ID-upload-img').attr('src', result); // 图片链接（base64）
+                    });
+
+                    element.progress('filter-progress', '0%'); // 进度条复位
+                    layer.msg('上传中', { icon: 16, time: 0 });
+                },
+                done: function (res) {
+                    // 若上传失败
+                    if (res.code > 0) {
+                        return layer.msg('上传失败');
+                    }
+                    if (res.status == 1) {
+                        var head_image = res.data.media_info + '.' + res.data.media_type
+                        $("#headImage").val(head_image)
+                    } 
+                    // 上传成功的一些操作
+                    // …
+                    $('#ID-upload-text').html(''); // 置空上传失败的状态
+                },
+                error: function () {
+                    // 演示失败状态，并实现重传
+                    var demoText = $('#ID-upload-text');
+                    demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+                    demoText.find('.demo-reload').on('click', function () {
+                        uploadInst.upload();
+                    });
+                },
+                // 进度条
+                progress: function (n, elem, e) {
+                    element.progress('filter-progress', n + '%'); // 可配合 layui 进度条元素使用
+                    if (n == 100) {
+                        layer.msg('上传完毕', { icon: 1 });
+                    }
+                }
+            });
+            // // 多图片上传
+            // upload.render({
+            //     elem: '#ID-upload-btn-2',
+            //     url: '', // 实际使用时改成您自己的上传接口即可。
+            //     multiple: true,
+            //     before: function (obj) {
+            //         // 预读本地文件示例，不支持ie8
+            //         obj.preview(function (index, file, result) {
+            //             $('#upload-demo-preview').append('<img src="' + result + '" alt="' + file.name + '" style="width: 90px; height: 90px;">')
+            //         });
+            //     },
+            //     done: function (res) {
+            //         // 上传完毕
+            //         // …
+            //     }
+            // });
+        });
+    </script>
+
+</body>
+
+</html>

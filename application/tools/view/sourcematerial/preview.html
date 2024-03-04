@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Demo</title>
+  <!-- 请勿在项目正式环境中引用该 layui.css 地址 -->
+  <link href="/static/layui/css/layui.css" rel="stylesheet">
+  <style>
+    .flow-div{height: 100%; overflow: auto; font-size: 0; text-align: center;}
+    .flow-div li{display: inline-block; margin: 5px; font-size: 14px; width: 30%;  margin-bottom: 10px; height: 200px; line-height: 100px; text-align: center; background-color: #eee;}
+    .flow-div img{width: 100%; height: 100%;}
+    /* .flow-div-lazyimg{height: 300px; overflow: auto; text-align: center;}
+    .flow-div-lazyimg img{width: 40%; height: 200px; margin: 0 3px 5px 0; border: none;} */
+  </style>
+</head>
+<body>
+<div class="flow-div" id="ID-flow-div-manual"></div>
+<input type="hidden" value="{$id}" id="previewId">
+  
+<!-- 请勿在项目正式环境中引用该 layui.js 地址 -->
+<script src="/static/layui/layui.js"></script> 
+<script>
+layui.use(function(){
+  var flow = layui.flow;
+  var $ = layui.$
+  var id = $("#previewId").val()
+
+  var imgArray = ['jiff','jpg','bmp','jpeg','png','gif'];
+  var videoArray = ['mp4'];
+  var otherArray = ['zip','rar','7z','pdf'];
+
+  // 流加载实例
+  flow.load({
+    elem: '#ID-flow-div-manual', // 流加载容器
+    scrollElem: '#ID-flow-div-manual', // 滚动条所在元素，一般不用填，此处只是演示需要。
+    isAuto: true,
+    isLazyimg: true,
+    end: ' ',
+    done: function(page, next){ // 加载下一页
+      $.ajax({
+        type: "GET",
+        url: "/tools/sourcematerial/preview",
+        data: {id: id},
+        dataType: "json",
+        success: function (response) {
+          var data = response.data
+          var imgStr = ''
+          var videoStr = ''
+          var otherStr = ''
+          
+          for (var key in data) {
+            if (imgArray.includes(data[key].media_type)) {
+              imgStr += '<li><img onclick="showMessageImg(this)" lay-src="'+data[key].media_info+'.'+data[key].media_type+'"></li>'
+            } else if (videoArray.includes(data[key].media_type)) {
+              videoStr += '<li class="massageImg clear showVideo' + data[key].id + '" vid="' + data[key].media_info+'.'+data[key].media_type + '"><video width="400px"  controls=""  name="media"><source src="" type="video/mp4"></video></li>'
+            } else {
+              otherStr += '<li><img onclick="showMessageImg(this)" lay-src="'+data[key].media_info+'.'+data[key].media_type+'"></li>'
+            }
+          }
+          next(imgStr, page < 1);
+          next(videoStr, page < 1);
+          next(otherStr, page < 1);
+        }
+      });
+    }
+  });
+});
+</script>
+
+</body>
+</html>
