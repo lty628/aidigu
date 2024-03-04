@@ -64,10 +64,17 @@
         ]
       }
 
-      layer.photos({
-        photos: json
-        , anim: 5
-      });
+      if (parent.layer) {
+        parent.layer.photos({
+          photos: json
+          , anim: 5
+        });
+      } else {
+        layer.photos({
+          photos: json
+          , anim: 5
+        });
+      }
     }
 
     layui.use(function () {
