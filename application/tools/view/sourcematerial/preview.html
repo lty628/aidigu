@@ -21,6 +21,32 @@
 <!-- 请勿在项目正式环境中引用该 layui.js 地址 -->
 <script src="/static/layui/layui.js"></script> 
 <script>
+function showMessageImg(obj)
+{
+  var imgUrl = $(obj).attr('src');
+    // imgUrl = imgUrl.split(".");
+    // imgUrl[0] = imgUrl[0].replace("_middle", '');
+    var json = {
+        "title": "", //相册标题
+        "id": 0, //相册id
+        "start": 0, //初始显示的图片序号，默认0
+        "data": [   //相册包含的图片，数组格式
+        {
+            "alt": "",
+            "pid": 0, //图片id
+        //   "src": imgUrl[0]+"."+imgUrl[1], //原图地址
+            "src": imgUrl, //原图地址
+            "thumb": "" //缩略图地址
+        }
+        ]
+    }
+
+    layer.photos({
+        photos: json
+        ,anim: 5
+    });
+}
+
 layui.use(function(){
   var flow = layui.flow;
   var $ = layui.$
@@ -51,11 +77,11 @@ layui.use(function(){
           
           for (var key in data) {
             if (imgArray.includes(data[key].media_type)) {
-              imgStr += '<li><img onclick="showMessageImg(this)" lay-src="'+data[key].media_info+'.'+data[key].media_type+'"></li>'
+              imgStr += '<li><a href="javascript:;"><img onclick="showMessageImg(this)" lay-src="'+data[key].media_info+'.'+data[key].media_type+'"></li>'
             } else if (videoArray.includes(data[key].media_type)) {
               videoStr += '<li class="massageImg clear showVideo' + data[key].id + '" vid="' + data[key].media_info+'.'+data[key].media_type + '"><video width="400px"  controls=""  name="media"><source src="" type="video/mp4"></video></li>'
             } else {
-              otherStr += '<li><img onclick="showMessageImg(this)" lay-src="'+data[key].media_info+'.'+data[key].media_type+'"></li>'
+              otherStr += '<li><a href="javascript:;"><img onclick="showMessageImg(this)" lay-src="'+data[key].media_info+'.'+data[key].media_type+'"></li>'
             }
           }
           next(imgStr, page < 1);
