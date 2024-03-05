@@ -14,6 +14,7 @@ a img{border:0;border-radius: 10px;}
 .navigation{float:right;margin:20px 5px 0 0;background-color:#FFF;padding:8px;}
 .navigation li{display:inline;padding:0 10px;}
 .main{background:#d5f3f4;}
+.main .box .massageText iframe{width: 130%;}
 /* .main .box .massageText{white-space: break-spaces;} */
 /* word-break: keep-all; */
 .contents{float:left;width:600px;min-height:1300px;background-color:#FFF;}
