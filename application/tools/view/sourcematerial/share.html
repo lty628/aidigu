@@ -42,6 +42,14 @@
     </div>
   </script>
 
+  <script type="text/html" id="barLineInfo">
+    <div class="layui-clear-space">
+      <a class="layui-btn layui-btn-xs" lay-event="preview">预览</a>
+      <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="siteShare">选择</a>
+    </div>
+  </script>
+
+  
   <script src="/static/layui/layui.js"></script>
   <script>
     function showMedia(obj) {
@@ -84,9 +92,7 @@
             }
           },
           {
-            fixed: 'right', align: 'center', title: '操作', templet: function (d) {
-              return '<div class="layui-clear-space"><a class="layui-btn layui-btn-xs" lay-event="preview">预览</a><a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="siteShare">选择</a></div>';
-            }
+            fixed: 'right', align: 'center', title: '操作', toolbar: '#barLineInfo'
           }
         ]]
       });
