@@ -11,6 +11,7 @@ function stopOther(obj) {
 		DP[playIngVideoId].pause()
 	}
 	playIngMusicId = id;
+	return
 }
 
 function iniVideo(i)
