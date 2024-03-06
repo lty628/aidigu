@@ -55,7 +55,7 @@ class Sourcematerial extends Controller
             
             $find =  Db::name('source_material')->where('id', $id)->find();
             if (!$find) return $this->error('未知错误');
-            if ($find['uid'] != getLoginUid() || $find['share_msg_id'] == 0) {
+            if ($find['uid'] != getLoginUid() && $find['share_msg_id'] == 0) {
                 $this->error('未知错误');
             }
     
