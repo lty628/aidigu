@@ -18,6 +18,7 @@ class Sourcematerial extends Controller
 
     public function share()
     {
+        $this->assign('isMobile', isMobile());
         return $this->fetch();
     }
 

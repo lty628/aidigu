@@ -14,7 +14,7 @@
     <ul class="layui-nav layui-layout">
       <li class="layui-nav-item"><a href="">我的群</a></li>
   </div> -->
-
+  <input type="hidden" value="{$isMobile}" id="isMobile">
   <div class="layui-layout">
     <div style="padding: 16px;">
       <table class="layui-hide" id="initTable" lay-filter="initTable"></table>
@@ -108,12 +108,20 @@
         var id = obj.config.id;
         var checkStatus = table.checkStatus(id);
         var othis = lay(this);
+
+        var isMobile = $("#isMobile").val()
+        if (isMobile) {
+          var area = ['100%', '100%']
+        } else {
+          var area = ['80%', '80%']
+        }
+
         switch (obj.event) {
           case 'create':
             layer.open({
-              title: '创建群',
+              title: '添加',
               type: 2,
-              area: ['80%', '80%'],
+              area: area,
               content: '/tools/sourcematerial/add',
               end: function () {
                 table.reload('initTable')
