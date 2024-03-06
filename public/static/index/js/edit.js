@@ -255,7 +255,7 @@ class AlertMenu extends BtnMenu {
     clickHandler() {
         // 做任何你想做的事情
         // 可参考【常用 API】文档，来操作编辑器
-        var area = ['40%', '80%']
+        var area = ['60%', '80%']
         parent.layer.open({
             type: 2,
             title: '选择素材',
