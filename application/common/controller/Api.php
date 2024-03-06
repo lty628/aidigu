@@ -115,10 +115,16 @@ class Api extends Base
     {
         if ($mediaInfo) {
             $mediaInfo = json_decode($mediaInfo, true);
-            $info['media_info'] = $mediaInfo['media_info'];
-            $info['media_type'] = $mediaInfo['media_type'];
-            $data['media'] = $info['media_info'].'.'.$info['media_type'];
-            $data['media_info'] = json_encode($info);
+            if ($mediaInfo['media_type'] == 'html') {
+                $frameStr = '<iframe src="'.$mediaInfo['media_info'].'" allowfullscreen="true" allowtransparency="true" width="100%" onload="changeFrameHeight(this)" frameborder="0" scrolling="auto"></iframe>';
+                $contents = $contents . '<p>'.$frameStr.'</p>';
+            } else {
+                $info['media_info'] = $mediaInfo['media_info'];
+                $info['media_type'] = $mediaInfo['media_type'];
+                $data['media'] = $info['media_info'].'.'.$info['media_type'];
+                $data['media_info'] = json_encode($info);
+            }
+            
         }
         if (!$contents && !$mediaInfo) return false;
     	$repost = input('get.repost');

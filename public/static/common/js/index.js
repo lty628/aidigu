@@ -1,5 +1,27 @@
 // 公共js
 
+function checkMediaType(url) {
+    // 创建URL对象
+    var link = new URL(url);
+
+    // 获取路径部分（去除参数）
+    var path = link.href;
+    var media = {}
+    // 获取路径的最后一个点之后的内容作为文件扩展名
+    var linkArr = path.split('.');
+    var extension = linkArr.pop().toLowerCase();
+    var media_info = path.substring(0, path.lastIndexOf("."));
+    media.media_info = media_info
+    media.media_type = extension
+    var extensions = ['jpg', 'jpeg', 'gif', 'png', 'mp4', 'm3u8'];
+    // 判断文件扩展名是否在图片扩展名数组中
+    if (extensions.includes(extension)) {
+        return media;
+    }
+
+    return false;
+}
+
 layui.use(function () {
     var util = layui.util;
     // 自定义固定条
@@ -11,8 +33,7 @@ layui.use(function () {
         }
     });
 });
-function showMessageImg(obj)
-{
+function showMessageImg(obj) {
     var imgUrl = $(obj).attr('src');
     // imgUrl = imgUrl.split(".");
     // imgUrl[0] = imgUrl[0].replace("_middle", '');
@@ -21,33 +42,32 @@ function showMessageImg(obj)
         "id": 0, //相册id
         "start": 0, //初始显示的图片序号，默认0
         "data": [   //相册包含的图片，数组格式
-        {
-            "alt": "",
-            "pid": 0, //图片id
-        //   "src": imgUrl[0]+"."+imgUrl[1], //原图地址
-            "src": imgUrl, //原图地址
-            "thumb": "" //缩略图地址
-        }
+            {
+                "alt": "",
+                "pid": 0, //图片id
+                //   "src": imgUrl[0]+"."+imgUrl[1], //原图地址
+                "src": imgUrl, //原图地址
+                "thumb": "" //缩略图地址
+            }
         ]
     }
     if (parent.layer) {
         parent.layer.photos({
             photos: json
-            ,anim: 5
+            , anim: 5
         });
     } else {
         layer.photos({
             photos: json
-            ,anim: 5
+            , anim: 5
         });
     }
-    
+
 }
 
 // 显示网盘
 var showFrame = false;
-function showFrameHtml(obj, width, height)
-{
+function showFrameHtml(obj, width, height) {
     if (showFrame) return
     showFrame = true
     layer.open({
@@ -60,17 +80,16 @@ function showFrameHtml(obj, width, height)
         scrollbar: false,
         content: $(obj).attr('data-url'),
         zIndex: layer.zIndex, //重点1
-        success: function(layero){
+        success: function (layero) {
             layer.setTop(layero); //重点2
         },
-        end: function(){ 
+        end: function () {
             showFrame = false;
-        } 
+        }
     });
 }
 
-function showFrameUrl(obj, width, height)
-{
+function showFrameUrl(obj, width, height) {
     layer.open({
         type: 1,
         title: $(obj).attr('data-title'),
@@ -82,7 +101,7 @@ function showFrameUrl(obj, width, height)
         maxmin: false,
         // moveOut: true,
         scrollbar: false,
-        content: '<iframe src="'+$(obj).attr('data-url')+'" allowfullscreen="true" allowtransparency="true" width="100%" height="100%" frameborder="0" scrolling="yes"></iframe>',
+        content: '<iframe src="' + $(obj).attr('data-url') + '" allowfullscreen="true" allowtransparency="true" width="100%" height="100%" frameborder="0" scrolling="yes"></iframe>',
         // zIndex: layer.zIndex, //重点1
         // success: function(layero){
         //     layer.setTop(layero); //重点2
@@ -97,8 +116,7 @@ function showFrameUrl(obj, width, height)
 }
 
 // 小应用专用
-function showFrameCustom(obj, appConfig)
-{
+function showFrameCustom(obj, appConfig) {
     appConfig = JSON.parse(appConfig)
     layer.open({
         type: 1,
@@ -114,7 +132,7 @@ function showFrameCustom(obj, appConfig)
         hideOnClose: appConfig.hideOnClose,
         // moveOut: true,
         scrollbar: false,
-        content: '<iframe src="'+$(obj).attr('data-url')+'" allowfullscreen="true" allowtransparency="true" width="100%" height="100%" frameborder="0" scrolling="yes"></iframe>',
+        content: '<iframe src="' + $(obj).attr('data-url') + '" allowfullscreen="true" allowtransparency="true" width="100%" height="100%" frameborder="0" scrolling="yes"></iframe>',
         // zIndex: layer.zIndex, //重点1
         // success: function(layero){
         //     layer.setTop(layero); //重点2
@@ -191,10 +209,10 @@ function getDateDiff(dateStr) {
     }
 }
 
-function changeFrameHeight(ifm){ 
-    ifm.height=document.documentElement.clientHeight - 140;
+function changeFrameHeight(ifm) {
+    ifm.height = document.documentElement.clientHeight - 140;
 }
-window.onresize=function() {       
-    changeFrameHeight();  
-} 
+window.onresize = function () {
+    changeFrameHeight();
+}
 

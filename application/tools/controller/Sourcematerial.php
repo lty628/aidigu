@@ -16,6 +16,36 @@ class Sourcematerial extends Controller
         return $this->fetch();
     }
 
+    public function share()
+    {
+        return $this->fetch();
+    }
+
+    public function siteShare()
+    {
+        $id = input('post.id');
+        $uid = getLoginUid();
+        $time = time();
+        $find =  Db::name('source_material')->where('uid', $uid)->where('id', $id)->find();
+
+        if (!$find) {
+            return json(['code' => 1, 'msg' => '无权限']);
+        }
+        if (($time - $find['push_time'] < 86400) && $find['push_time'] != 0) {
+            return json(['code' => 1, 'msg' => '每天只能发布一次']);
+        }
+
+        $url = '/tools/Sourcematerial/preview?id='.$id;
+
+        Db::name('source_material')->where('uid', $uid)->where('id', $id)->update([
+            'push_time' => $time,
+            'share_msg_id' => 1
+        ]);
+
+        return json(['code' => 0, 'msg' => 'ok', 'data' =>['url'=> $url, 'title' => $find['title']]]);
+
+    }
+
     public function preview()
     {
         $id = (int)input('get.id');

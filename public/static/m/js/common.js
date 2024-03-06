@@ -497,28 +497,6 @@ function comdel(url){
 	// 		}
 	// 	})
 	// }
-
-	function checkMediaType(url) {
-		// 创建URL对象
-		var link = new URL(url);
-	   
-		// 获取路径部分（去除参数）
-		var path = link.href;
-	    var media = {}
-		// 获取路径的最后一个点之后的内容作为文件扩展名
-		var linkArr = path.split('.');
-		var extension = linkArr.pop().toLowerCase();
-		var media_info = path.substring(0, path.lastIndexOf("."));
-		media.media_info = media_info
-		media.media_type = extension
-		var extensions = ['jpg', 'jpeg', 'gif', 'png', 'mp4', 'm3u8'];
-		// 判断文件扩展名是否在图片扩展名数组中
-		if (extensions.includes(extension)) {
-		  return media;
-		}
-
-		return false;
-	  }
 	  
 
 	  // 获取url中需要的数据  type  1: 获取文件名  2：获取后缀  3：获取文件名+后缀  4:获取文件前缀
