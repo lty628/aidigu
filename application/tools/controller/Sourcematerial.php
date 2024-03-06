@@ -8,6 +8,7 @@ class Sourcematerial extends Controller
 {	
     public function list()
     {
+        $this->assign('isMobile', isMobile());
         return $this->fetch();
     }
 
@@ -53,7 +54,10 @@ class Sourcematerial extends Controller
         if (request()->isAjax()) {
             
             $find =  Db::name('source_material')->where('id', $id)->find();
-            if (!$find || $find['share_msg_id'] == 0) return $this->error('未知错误');
+            if (!$find) return $this->error('未知错误');
+            if ($find['uid'] != getLoginUid() || $find['share_msg_id'] == 0) {
+                $this->error('未知错误');
+            }
     
             $relation = Db::name('source_material_relation')->field('id,media_info,media_type')->where('source_material_id', $find['id'])->select();
 
