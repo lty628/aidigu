@@ -45,6 +45,7 @@
 <body>
   <div class="flow-div" id="ID-flow-div-manual"></div>
   <input type="hidden" value="{$id}" id="previewId">
+  <input type="hidden" value="{$staticDomain}" id="staticDomain">
 
   <!-- 请勿在项目正式环境中引用该 layui.js 地址 -->
   <script src="/static/layui/layui.js"></script>
@@ -108,10 +109,11 @@
               var imgStr = ''
               var videoStr = ''
               var otherStr = ''
+              var staticDomain = $("#staticDomain").val()
 
               for (var key in data) {
                 if (imgArray.includes(data[key].media_type)) {
-                  imgStr += '<li><a href="javascript:;"><img onclick="showMessageImg(this)" lay-src="' + data[key].media_info + '.' + data[key].media_type + '"></li>'
+                  imgStr += '<li><a href="javascript:;"><img onclick="showMessageImg(this)" lay-src="' + staticDomain + data[key].media_info + '.' + data[key].media_type + '"></li>'
                 } else if (videoArray.includes(data[key].media_type)) {
                   videoStr += '<li class="showVideo' + data[key].id + '" vid="' + data[key].media_info + '.' + data[key].media_type + '"><video controls=""  name="media"><source src="' + data[key].media_info + '.' + data[key].media_type + '" type="video/mp4"></video></li>'
                 } else {

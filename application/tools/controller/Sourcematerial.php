@@ -51,6 +51,7 @@ class Sourcematerial extends Controller
     public function preview()
     {
         $id = (int)input('get.id');
+        $staticDomain = env('app.staticDomain', '');
         if (request()->isAjax()) {
             
             $find =  Db::name('source_material')->where('id', $id)->find();
@@ -64,6 +65,7 @@ class Sourcematerial extends Controller
             return json(['code' => 0, 'data' => $relation, 'count' => count($relation)]);
         }
         $this->assign('id', $id);
+        $this->assign('staticDomain', $staticDomain);
 
         return $this->fetch();
     }
