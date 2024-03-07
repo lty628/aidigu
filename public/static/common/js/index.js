@@ -210,9 +210,7 @@ function getDateDiff(dateStr) {
 }
 
 function changeFrameHeight(ifm) {
-    ifm.height = document.documentElement.clientHeight - 140;
-}
-window.onresize = function () {
-    changeFrameHeight();
+    // ifm.style.height = (document.documentElement.clientHeight) + 'px';
+    ifm.style.height = ifm.contentWindow.document.body.scrollHeight + 'px';
 }
 
