@@ -209,9 +209,21 @@ function getDateDiff(dateStr) {
     }
 }
 
-function changeFrameHeight(ifm) {
-    ifm.style.height = (document.documentElement.clientHeight) + 'px';
-    // ifm.style.height = ifm.contentWindow.document.body.scrollHeight + 'px';
-    // ifm.style.height = ifm.contentWindow.document.body.clientHeight + 'px';
+function changeFrameHeight(cIframe) {
+    let a = cIframe.contentWindow;
+    let b =
+        a.document.documentElement.scrollHeight ||
+        a.document.body.scrollHeight;
+    let doc = cIframe.contentDocument || cIframe.document;
+    let cHeight = Math.max(
+        doc.body.clientHeight,
+        doc.documentElement.clientHeight
+    );
+    let sHeight = Math.max(
+        doc.body.scrollHeight,
+        doc.documentElement.scrollHeight
+    );
+    let lheight = Math.max(cHeight, sHeight);
+    let finalHeight = Math.max(lheight, b);
+    cIframe.height = finalHeight + "px";
 }
-
