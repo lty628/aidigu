@@ -282,7 +282,12 @@ class AlertMenu extends BtnMenu {
                 $(".tool-up-class").show();
                 $("#mediaVal").val(JSON.stringify(data));
                 if (data.media_title) {
-                    editor.txt.html(data.media_title)
+                    var topicTitle = $("#topicTitle").val()
+					if (topicTitle) {
+						editor.txt.html(topicTitle+"&nbsp;"+data.media_title)
+					} else {
+						editor.txt.html(data.media_title)
+					}
                 }
                 
                 layui.sessionData('sourcematerial', null)
