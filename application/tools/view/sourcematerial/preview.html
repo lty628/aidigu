@@ -146,6 +146,31 @@
               next(imgStr, page < 1);
               next(videoStr, page < 1);
               next(otherStr, page < 1);
+
+              // 获取 ID-flow-div-manual 下li的个数
+              var liList = $('#ID-flow-div-manual').find('li');
+              var liLength = liList.length;
+              var liHeight = liList[0].offsetHeight;
+              // 每三个 li 为一行 获取ID-flow-div-manual的高度
+              var flowDivHeight = $('#ID-flow-div-manual').height();
+              // 当前网页的父集iframe的高度 设置成ID-flow-div-manual的高度
+              parent.document.getElementById('iframe').style.height = flowDivHeight + 'px';
+              for (var i = 0; i < liLength; i++) {
+                var li = liList[i];
+                if (li.getElementsByTagName('video').length > 0) {
+                  var video = li.getElementsByTagName('video')[0];
+                  video.addEventListener('click', function () {
+                    var video = this;
+                    var videoList = $('#ID-flow-div-manual').find('video');
+                    for (var j = 0; j < videoList.length; j++) {
+                      if (videoList[j] !== video) {
+                        videoList[j].pause();
+                      }
+                    }
+                  });
+                }
+              }
+
             }
           });
         }
