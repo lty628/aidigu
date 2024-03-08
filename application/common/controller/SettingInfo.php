@@ -151,7 +151,7 @@ class SettingInfo extends Base
 		$size = 62914561;
 		$file = request()->file('file');
 		// 移动到框架应用根目录/uploads/ 目录下
-		$info = $file->validate(['size'=>$size,'ext'=>'mp4,mp3,jiff,jpg,bmp,jpeg,png,gif,pdf,zip,rar,7z,gz,tar.gz'])->move($path);
+		$info = $file->validate(['size'=>$size,'ext'=>'mp4,mp3,jiff,jpg,bmp,jpeg,png,gif,pdf,zip,rar,7z,gz,tar.gz,xls,xlsx,txt,doc,docx,ppt,pptx'])->move($path);
 		// $info = $file->validate(['size'=>$size,'ext'=>'mp4,jiff,jpg,bmp,jpeg,png,gif'])->move($path);
 		// $info = $this->uploadImage($size, $path);
 		if($info){
