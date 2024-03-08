@@ -60,7 +60,7 @@ class Sourcematerial extends Controller
                 $this->error('未知错误');
             }
     
-            $relation = Db::name('source_material_relation')->field('id,media_info,media_type')->where('source_material_id', $find['id'])->select();
+            $relation = Db::name('source_material_relation')->field('id,media_info,media_type,file_name')->where('source_material_id', $find['id'])->select();
 
             return json(['code' => 0, 'data' => $relation, 'count' => count($relation)]);
         }

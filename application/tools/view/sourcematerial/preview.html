@@ -29,10 +29,23 @@
       width: 100%;
       height: 100%;
     }
+
     .flow-div video {
       width: 100%;
       height: 100%;
       vertical-align: middle !important;
+    }
+
+    .flow-div .showOther {
+      clear: both;
+      margin: 0;
+      font-size: 14px;
+      width: 100%;
+      height: 50px;
+      line-height: 50px;
+      text-align: center;
+      background-color: #eee;
+      overflow: hidden;
     }
 
     /* .flow-div-lazyimg{height: 300px; overflow: auto; text-align: center;}
@@ -139,13 +152,13 @@
                 } else if (videoArray.includes(data[key].media_type)) {
                   videoStr += '<li class="showVideo' + data[key].id + '"><video onclick="showVideoPopup(this)" src="' + staticDomain + data[key].media_info + '.' + data[key].media_type + '" controls="" name="media"><source src="' + staticDomain + data[key].media_info + '.' + data[key].media_type + '" type="video/mp4"></video></li>'
                 } else {
-                  otherStr += '<li><a href="' + staticDomain + data[key].media_info + '.' + data[key].media_type + '">点击下载' + staticDomain + data[key].file_name + '</a></li>'
+                  otherStr += '<li class="showOther"><span><a href="' + staticDomain + data[key].media_info + '.' + data[key].media_type + '" >点击下载' + staticDomain + data[key].file_name + '</a></span></li>'
                   // otherStr += '<li><a href="javascript:;"><img onclick="showMessageImg(this)" lay-src="' + staticDomain + data[key].media_info + '.' + data[key].media_type + '"></li>'
                 }
               }
               next(imgStr, page < 1);
               next(videoStr, page < 1);
-              next(otherStr, page < 1);
+              next('<p>' + otherStr + '</p>', page < 1);
 
               // 获取 ID-flow-div-manual 下li的个数
               var liList = $('#ID-flow-div-manual').find('li');
