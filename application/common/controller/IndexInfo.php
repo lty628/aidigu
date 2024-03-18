@@ -23,7 +23,7 @@ class IndexInfo extends Info
                 ->order('message.ctime desc')
                 ->field('user.uid,user.nickname,user.head_image,user.blog,message.ctime,message.contents,message.repost,message.refrom,message.repostsum,message.media,message.media_info,message.commentsum,message.msg_id')
                 ->where('message.is_delete', 0)
-                ->paginate(30, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
+                ->paginate(20, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
         } else {
             $userMessage = Db::name('message')
                 ->alias('message')
@@ -35,7 +35,7 @@ class IndexInfo extends Info
                 ->where(function ($query) {
                     $query->where('user.invisible', 0)->whereOr('user.uid', $this->siteUserId);
                 })
-                ->paginate(30, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
+                ->paginate(20, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
         }
         
         $this->assign('userMessage', []);
@@ -48,7 +48,7 @@ class IndexInfo extends Info
     public function own()
     {
         if (request()->isAjax()) {
-            $userMessage = $this->getMessage($this->siteUserId, 30);
+            $userMessage = $this->getMessage($this->siteUserId, 20);
             $allwoDelete = 1;
             if ($this->siteUserId != $this->userid) $allwoDelete = 0;
             $userMessage = $userMessage->toArray()['data'];
@@ -63,7 +63,7 @@ class IndexInfo extends Info
     {
         $this->assign('siteUser', $this->siteUserId);
         if (request()->isAjax()) {
-            $userMessage = $this->getMessage('', 30);
+            $userMessage = $this->getMessage('', 20);
             $userMessage = $userMessage->toArray()['data'];
             return json(array('status' =>  1, 'msg' => 'ok', 'data' => ['data' => handleMessage($userMessage), 'allow_delete' => 0]));
         }
@@ -173,7 +173,7 @@ class IndexInfo extends Info
             $page = input('get.page');
             $collect = Db::name('user_collect')->where('delete_time', 0)->where('fromuid', $this->userid)->order('collect_id desc')->limit(30)->page($page)->select();
             $msgIdArr = array_column($collect, 'msg_id');
-            $userMessage = $this->getMessageIdArr($msgIdArr, 30);
+            $userMessage = $this->getMessageIdArr($msgIdArr, 20);
             $userMessage = $userMessage->toArray()['data'];
             $tmp = [];
             foreach ($userMessage as $value) {
