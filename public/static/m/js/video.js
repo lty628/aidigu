@@ -25,6 +25,7 @@ function iniVideo(i)
 				autoplay: false,
 				loop: true,
 				// screenshot: true,
+				preload: 'metadata',
 				// preload: 'auto',
 				mutex: true,
 				chromecast: true,
