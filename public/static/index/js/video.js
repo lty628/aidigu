@@ -39,6 +39,14 @@ function iniVideo(i)
 					document.getElementById(playIngMusicId).pause()
 				}
 			});
+			// DP[index]视频在屏幕中间时自动播放
+			var top = $(this).offset().top;
+			var scrollTop = $(window).scrollTop();
+			var windowHeight = $(window).height();
+			if (top < scrollTop + windowHeight && top > scrollTop) {
+				DP[index].play()
+			}
+
 		}
 	})
 }
