@@ -25,8 +25,12 @@ function iniVideo(i)
 				autoplay: false,
 				loop: true,
 				// screenshot: true,
+				preload: 'auto',
+				mutex: true,
 				chromecast: true,
-				theme: '#d5f3f4',
+				theme: '#FADFA3',
+				volume: 0.7,
+				// theme: '#d5f3f4',
 				lang: 'zh-cn',
 				video: {
 					url: url,
@@ -39,16 +43,27 @@ function iniVideo(i)
 					document.getElementById(playIngMusicId).pause()
 				}
 			});
-			// 滚轮滚动时自动播放
+
+			// 监听滚动条，当DP[index]在可视区域内时，播放视频，不在可视区域内时，暂停视频
+			var flag = true;
 			$(window).scroll(function () {
-				// 计算DP[index]是否在屏幕中间
-				var top = $(this).offset().top;
-				var scrollTop = $(window).scrollTop();
-				var windowHeight = $(window).height();
-				if (top < scrollTop + windowHeight && top > scrollTop) {
-					DP[index].play()
+				var top = $(window).scrollTop();
+				var bottom = top + $(window).height();
+				var videoTop = $(DP[index].container).offset().top;
+				var videoBottom = videoTop + $(DP[index].container).height();
+				if (videoBottom > top && videoTop < bottom) {
+					if (flag) {	
+						DP[index].play();
+						flag = false;
+					}
+				} else {
+					if (!flag) {
+						DP[index].pause();
+						flag = true;
+					}
 				}
-			})
+			});
+
 		}
 	})
 }
