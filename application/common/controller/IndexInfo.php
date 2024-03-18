@@ -77,7 +77,7 @@ class IndexInfo extends Info
         $topicId = input('topic_id');
         $this->assign('siteUser', $this->siteUserId);
         if (request()->isAjax()) {
-            $userMessage = $this->getMessage('', 30, $topicId);
+            $userMessage = $this->getMessage('', 20, $topicId);
             $userMessage = $userMessage->toArray()['data'];
             return json(array('status' =>  1, 'msg' => 'ok', 'data' => ['data' => handleMessage($userMessage), 'allow_delete' => 0]));
         }
@@ -171,7 +171,7 @@ class IndexInfo extends Info
     {
         if (request()->isAjax()) {
             $page = input('get.page');
-            $collect = Db::name('user_collect')->where('delete_time', 0)->where('fromuid', $this->userid)->order('collect_id desc')->limit(30)->page($page)->select();
+            $collect = Db::name('user_collect')->where('delete_time', 0)->where('fromuid', $this->userid)->order('collect_id desc')->limit(20)->page($page)->select();
             $msgIdArr = array_column($collect, 'msg_id');
             $userMessage = $this->getMessageIdArr($msgIdArr, 20);
             $userMessage = $userMessage->toArray()['data'];
