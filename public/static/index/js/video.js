@@ -45,24 +45,24 @@ function iniVideo(i)
 			});
 
 			// 监听滚动条，当DP[index]在可视区域内时，播放视频，不在可视区域内时，暂停视频
-			var flag = true;
-			$(window).scroll(function () {
-				var top = $(window).scrollTop();
-				var bottom = top + $(window).height();
-				var videoTop = $(DP[index].container).offset().top;
-				var videoBottom = videoTop + $(DP[index].container).height();
-				if (videoBottom > top && videoTop < bottom) {
-					if (flag) {	
-						DP[index].play();
-						flag = false;
-					}
-				} else {
-					if (!flag) {
-						DP[index].pause();
-						flag = true;
-					}
-				}
-			});
+			// var flag = true;
+			// $(window).scroll(function () {
+			// 	var top = $(window).scrollTop();
+			// 	var bottom = top + $(window).height();
+			// 	var videoTop = $(DP[index].container).offset().top;
+			// 	var videoBottom = videoTop + $(DP[index].container).height();
+			// 	if (videoBottom > top && videoTop < bottom) {
+			// 		if (flag) {	
+			// 			DP[index].play();
+			// 			flag = false;
+			// 		}
+			// 	} else {
+			// 		if (!flag) {
+			// 			DP[index].pause();
+			// 			flag = true;
+			// 		}
+			// 	}
+			// });
 
 		}
 	})
