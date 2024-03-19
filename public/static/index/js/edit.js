@@ -75,7 +75,8 @@ editor.config.menus = [
     'emoticon',
     'image',
     'video',
-    'link'
+    'link',
+    'code'
 ]
 editor.config.showFullScreen = false
 editor.config.emotions = [
@@ -320,3 +321,32 @@ var topicTitle = $("#topicTitle").val()
 if (topicTitle) {
     editor.txt.html(topicTitle + "&nbsp;")
 }
+
+
+// // 默认情况下，显示所有菜单
+// editor.config.menus = [
+//     'head',
+//     'bold',
+//     'fontSize',
+//     'fontName',
+//     'italic',
+//     'underline',
+//     'strikeThrough',
+//     'indent',
+//     'lineHeight',
+//     'foreColor',
+//     'backColor',
+//     'link',
+//     'list',
+//     'todo',
+//     'justify',
+//     'quote',
+//     'emoticon',
+//     'image',
+//     'video',
+//     'table',
+//     'code',
+//     'splitLine',
+//     'undo',
+//     'redo',
+// ]
