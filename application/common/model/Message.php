@@ -51,9 +51,9 @@ class Message extends Model
 		
 	}
 
-	public static function getMessageIdArr($msgIdArr , $count = 50)
+	public static function getMessageIdArr($msgIdArr)
 	{
-		return self::with('user')->where('msg_id', 'in', $msgIdArr)->where('is_delete', 0)->paginate($count, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
+		return self::with('user')->where('msg_id', 'in', $msgIdArr)->where('is_delete', 0)->select();
 	}
 	
 	public static function getUserMessage($userid = '', $count = 50)

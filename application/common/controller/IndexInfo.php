@@ -173,8 +173,8 @@ class IndexInfo extends Info
             $page = input('get.page');
             $collect = Db::name('user_collect')->where('delete_time', 0)->where('fromuid', $this->userid)->order('collect_id desc')->limit(20)->page($page)->select();
             $msgIdArr = array_column($collect, 'msg_id');
-            $userMessage = $this->getMessageIdArr($msgIdArr, 20);
-            $userMessage = $userMessage->toArray()['data'];
+            $userMessage = $this->getMessageIdArr($msgIdArr);
+            // $userMessage = $userMessage->toArray()['data'];
             $tmp = [];
             foreach ($userMessage as $value) {
                 $tmp[$value['msg_id']] = $value;
