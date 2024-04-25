@@ -75,8 +75,8 @@ class UserInfo extends Controller
 		$redirectUrl = input('get.redirectUrl');
 		if (!$username || !$password) return json(['status' => 0, 'msg' => '账号或密码不能为空']);
 		$result = UserModel::where('blog', $username)->whereOr('nickname', $username)->field('uid,nickname,blog,password')->find();
-		if (!$result) return json(['status' => 0, 'msg' => '输入的账号不存在']);
-		if (encryptionPass($password) != $result['password']) return json(['status' => 0, 'msg' => '密码不正确']);
+		if (!$result || encryptionPass($password) != $result['password']) return json(['status' => 0, 'msg' => '输入的账号不存在,或密码不正确']);
+		// if (encryptionPass($password) != $result['password']) return json(['status' => 0, 'msg' => '输入的账号不存在,或密码不正确']);
 		setLoginUid($result['uid']);
 		// $this->rememberMe(input('get.remember'), $result->toArray());
 		$this->rememberMe(1, $result->toArray());
