@@ -119,7 +119,7 @@ function comdel(url){
 			// jsonData.contents = $("#msgInput").val();
 
 			var text = editor.txt.html();
-			if(text.length > 1400){
+			if(text.length > 2800){
 				alertMsg('超过内容长度限制！');
 				return false;
 			}
@@ -278,7 +278,7 @@ function comdel(url){
 		  skin: 'layui-layer-rim', //加上边框
 		  area: ['100%', '320px'], //宽高
 		  title: "<b>转发：</b>"+repost,
-		  content: '<div class="contents"><div class="post" id="postform"><div class="postad">&nbsp;</div><textarea style="height: 80px" placeholder="请输入转发内容" maxlength="1400" id="repostInput" onkeyup="check_len2()"></textarea><div class="postnow">你还可以发布<em id="leftlen2">1400</em>字</div><div class="tool-class"><i class="layui-icon layui-icon-face-smile-b" onclick="showEmoji(this)" style="margin: 10px;cursor:pointer;color: #ffa700;font-size:20px!important" title="表情"></i><div class="emojiHtml" style="display: none"></div></div></div></div>',
+		  content: '<div class="contents"><div class="post" id="postform"><div class="postad">&nbsp;</div><textarea style="height: 80px" placeholder="请输入转发内容" maxlength="2800" id="repostInput" onkeyup="check_len2()"></textarea><div class="postnow">你还可以发布<em id="leftlen2">2800</em>字</div><div class="tool-class"><i class="layui-icon layui-icon-face-smile-b" onclick="showEmoji(this)" style="margin: 10px;cursor:pointer;color: #ffa700;font-size:20px!important" title="表情"></i><div class="emojiHtml" style="display: none"></div></div></div></div>',
 		  btn: ['转发',"取消"],
 		  yes: function(index, layero){
 		  	var jsonData = {};
@@ -334,7 +334,7 @@ function comdel(url){
 		  skin: 'layui-layer-rim', //加上边框
 		  area: ['100%', '320px'], //宽高
 		  title: "<b>回复：</b>"+replyUser,
-		  content: '<div class="contents"><div class="post" id="commentform"><div class="postad" >&nbsp;</div><textarea style="height: 80px" placeholder="请输入回复内容" maxlength="1400" id="commentInput" onkeyup="check_len3()"></textarea><div class="postnow">你还可以发布<em id="leftlen3">1400</em>字</div><div class="tool-class"><i class="layui-icon layui-icon-face-smile-b" onclick="showEmoji(this)" style="margin: 10px;cursor:pointer;color: #ffa700;font-size:20px!important" title="表情"></i><div class="emojiHtml" style="display: none"></div></div></div></div>',
+		  content: '<div class="contents"><div class="post" id="commentform"><div class="postad" >&nbsp;</div><textarea style="height: 80px" placeholder="请输入回复内容" maxlength="2800" id="commentInput" onkeyup="check_len3()"></textarea><div class="postnow">你还可以发布<em id="leftlen3">2800</em>字</div><div class="tool-class"><i class="layui-icon layui-icon-face-smile-b" onclick="showEmoji(this)" style="margin: 10px;cursor:pointer;color: #ffa700;font-size:20px!important" title="表情"></i><div class="emojiHtml" style="display: none"></div></div></div></div>',
 		  btn: ['回复',"取消"],
 		  yes: function(index, layero){
 		  	var jsonData = {};
