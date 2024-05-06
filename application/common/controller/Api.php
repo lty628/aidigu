@@ -203,7 +203,8 @@ class Api extends Base
 	            if ($findUser) {
 	            	return str_replace('@'.$matches[1], '<a href="/'.$findUser['blog'].'/">@'.$matches[1].'</a>', $matches[0]);
 	            } else {
-	            	return str_replace('@'.$matches[1], '<a href="javascript:;">@'.$matches[1].'</a>', $matches[0]);
+	            	// return str_replace('@'.$matches[1], '<a href="javascript:;">@'.$matches[1].'</a>', $matches[0]);
+                    return $matches[0];
 	            }
 	        },
 	        $contents
