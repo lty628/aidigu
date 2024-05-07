@@ -79,20 +79,11 @@ const E = window.wangEditor
 		}
 	}
 	var isMobile = $("#isMobile").val()
-	if (isMobile) {
-		editor.config.menus = [
-			'emoticon',
-			'image',
-			'video'
-		]
-	} else {
-		editor.config.menus = [
-			'emoticon',
-			'image',
-			'video',
-			'code'
-		]
-	} 
+	editor.config.menus = [
+		'emoticon',
+		'image',
+		'video'
+	]
 	
 	editor.config.showFullScreen = false
 	editor.config.emotions = [
@@ -359,9 +350,9 @@ const E = window.wangEditor
 				shadeClose: true,
 				content: '/tools/sourcematerial/share',
 				zIndex: layer.zIndex, //重点1
-				success: function (layero) {
-					layer.setTop(layero); //重点2
-				},
+				// success: function (layero) {
+				// 	layer.setTop(layero); //重点2
+				// },
 				end: function () {
 					var sourcematerial = layui.sessionData('sourcematerial')
 					if (!sourcematerial.data) {
