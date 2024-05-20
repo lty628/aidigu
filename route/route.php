@@ -23,6 +23,7 @@ Route::get('/cloud/collection/$','upload/Index/collection');
 // 聊天
 Route::get('chat', 'chat/index/index');
 Route::get('chat/private/:uid$', 'chat/index/index')->pattern(['uid'=>'[0-9]+']);
+Route::get('chat/messageChatId/:msgid$', 'chat/index/index')->pattern(['msgid'=>'[0-9]+']);
 
 // Route::get('/tools/$', 'index/index/tools');
 // Route::get('/tools/movie/$', 'tools/movie/index');

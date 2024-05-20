@@ -125,7 +125,7 @@ var chat = {
 		if(!text) return false;
 		chat.data.type = 2; //发送消息标志
 		// console.log(chat.data)
-		var json = {"type": chat.data.type, "listtagid": chat.data.listtagid, "content": text, 'content_type': '', "touid": chat.data.touid, 'head_image': chat.data.head_image, 'nickname': chat.data.nickname, 'fromuid': chat.data.uid, 'groupid': chat.data.groupid};
+		var json = {"type": chat.data.type, "listtagid": chat.data.listtagid, "content": text, 'content_type': '', "touid": chat.data.touid, 'head_image': chat.data.head_image, 'nickname': chat.data.nickname, 'fromuid': chat.data.uid, 'groupid': chat.data.groupid, 'msgid': chat.data.msgid};
 		chat.wsSend(JSON.stringify(json));
 		editor.txt.clear()
 		$("#msgInput").focus();
@@ -155,8 +155,13 @@ var chat = {
 				chat.doLogin( name , email );
 			}
 			*/
+			var messageChatId = $("#messageChatId").val()
 			var privateToUid = $("#privateToUid").val()
-			if (privateToUid) {
+			if (messageChatId) {
+				$("#sub-menu-pannel").hide();
+				$("#menu-pannel").hide();
+				chat.messageChat(messageChatId, privateToUid)
+			} else if (privateToUid) {
 				$("#sub-menu-pannel").hide();
 				$("#menu-pannel").hide();
 				chat.privateChat(privateToUid)
@@ -502,6 +507,20 @@ var chat = {
 		chat.data.fromuid = $("#privateFromUid").val()
 		chat.data.uid = chat.data.fromuid
 		var json = {"type": 3,"touid": touid, 'fromuid': chat.data.uid, "listtagid": listtagid};
+		chat.wsSend(JSON.stringify(json));
+		$(".input-area").show()
+	},
+	messageChat:  function(msgid, touid){
+		
+		var listtagid = 'MessageChat';
+
+		//用户切换房间
+		chat.data.msgid = msgid
+		chat.data.touid = touid
+		chat.data.listtagid = listtagid
+		chat.data.fromuid = $("#privateFromUid").val()
+		chat.data.uid = chat.data.fromuid
+		var json = {"type": 3,"msgid": msgid, "touid": touid, 'fromuid': chat.data.uid, "listtagid": listtagid};
 		chat.wsSend(JSON.stringify(json));
 		$(".input-area").show()
 	},

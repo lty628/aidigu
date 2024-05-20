@@ -25,6 +25,29 @@ class ChatDbHelper
             ->where('groupid', $groupId)
             ->select();
     }
+    
+    // 在线评论信息
+    public static function messageChatOnlineInfo($msgId)
+    {
+        $userIds = Db::name('comment')->where('msg_id', $msgId)->group('fromuid')->limit(300)->order('cid desc')->select();
+        return Db::name('chat_online')
+            ->where('uid', 'in', array_column($userIds, 'fromuid'))
+            ->select();
+    }
+
+    public static function saveComentChatHistory($data)
+    {
+        return Db::name('comment')->insert($data);
+    }
+
+    public static function getMessageChatHistory($data)
+    {
+        $result = Db::name('comment')->alias('comment')->join([getPrefix() . 'user' => 'user'], 'user.uid=comment.fromuid')
+            ->limit(300)
+            ->order('comment.cid', 'desc')
+            ->field('user.head_image,user.nickname,comment.*')->select();
+        return $result;
+    }
 
     public static function updateMessageCount($tableName, $where)
     {
