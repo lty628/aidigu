@@ -35,8 +35,13 @@ if (isMobile()) {
 	$module = 'index';
 }
 Route::get('/tools/$',  $module . '/index/tools');
+
+// 收藏
 Route::get('/collect/$',$module . '/Index/collect');
 Route::get('/collect/:page$', $module . '/Index/collect')->pattern(['page'=>'[0-9]+']);
+Route::get('/:name/collect/$',$module . '/Index/collect');
+Route::get('/:name/collect/:page$', $module . '/Index/collect')->pattern(['page'=>'[0-9]+']);
+
 Route::get('/mytopic/$',$module . '/Index/myTopicList');
 Route::get('/mytopic/:page$', $module . '/Index/myTopicList')->pattern(['page'=>'[0-9]+']);
 Route::get('/topic/$',$module . '/Index/topicList');

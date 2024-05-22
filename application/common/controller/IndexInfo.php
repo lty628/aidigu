@@ -171,7 +171,7 @@ class IndexInfo extends Info
     {
         if (request()->isAjax()) {
             $page = input('get.page');
-            $collect = Db::name('user_collect')->where('delete_time', 0)->where('fromuid', $this->userid)->order('collect_id desc')->limit(20)->page($page)->select();
+            $collect = Db::name('user_collect')->where('delete_time', 0)->where('fromuid', $this->siteUserId)->order('collect_id desc')->limit(20)->page($page)->select();
             $msgIdArr = array_column($collect, 'msg_id');
             $userMessage = $this->getMessageIdArr($msgIdArr);
             // $userMessage = $userMessage->toArray()['data'];
