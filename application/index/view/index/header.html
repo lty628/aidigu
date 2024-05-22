@@ -33,7 +33,7 @@
 				<li><a href="{:url('/'.$loginUserInfo.blog.'/own/')}">我的微博</a></li>
 				<li><a href="/square/">广场</a></li>
 				<li><a href="/topic/">话题</a></li>
-				<li><a href="/collect/">收藏</a></li>
+				<li><a href="{:url('/'.$loginUserInfo.blog.'/collect/')}">我的收藏</a></li>
 				<li>
 					<a href="/tools/">小应用</a>
 					{if $chatRemind}
@@ -48,6 +48,7 @@
 			{else}
 				<li><a href="{:url('/'.$userInfo.blog.'/')}">{$userInfo.sex|getPerson}的首页</a></li>
 				<li><a href="{:url('/'.$userInfo.blog.'/own/')}">{$userInfo.sex|getPerson}的微博</a></li>
+				<li><a href="{:url('/'.$userInfo.blog.'/collect/')}">{$userInfo.sex|getPerson}的收藏</a></li>
 				<li><a href="javascript:;" data-title="私信" data-url="/chat/private/{$userInfo.uid}" onclick="showFrameHtml(this, '60%', '70%')">私信{$userInfo.sex|getPerson}</a></li>
 				<li><a href="{:url('/'.$loginUserInfo.blog.'/')}">我的首页</a></li>
 				<li><a href="/square/">广场</a></li>
