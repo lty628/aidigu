@@ -421,6 +421,9 @@ var chat = {
 		if ($(obj).hasClass("selected")) {
 			return
 		}
+		// if (tagid == 'PrivateLetter') {
+		// 	parent.layer.msg('请注意，私信有效期只有一天，到期将自动清理！');
+		// }
 		$(".list-item").removeClass("selected")
 		$("#listtag-"+tagid).hide()
 		$(".menu-item").removeClass("selected")
@@ -544,9 +547,6 @@ var chat = {
 		var uid = $(obj).attr("uid");
 		var listtagid = $(obj).attr("listtagid");
 
-		if (listtagid == 'PrivateLetter') {
-			parent.layer.msg('请注意，私信有效期只有一天，到期将自动清理！');
-		}
 		// var userObj = $("#conv-lists-"+uid).find('#user-'+this.data.fd);
 		// console.log(userObj)
 		// if(userObj.length > 0){
