@@ -5,6 +5,8 @@ use think\Db;
 
 class PrivateLetter
 {
+    // php index.php task/Private_Letter/del
+    // 每天清理私信计划任务中执行
     public function del()
     {
         while(true) {
