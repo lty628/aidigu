@@ -76,13 +76,18 @@ class Fans extends Model
 
 	public static function isUserFans($fromuid, $touid) 
 	{
-		return self::name('fans')->where([
-			'fromuid' => $fromuid,
-			'touid' => $touid,
-		])->whereOr([
-			'fromuid' => $touid,
-			'touid' => $fromuid,
-		])->find();
+		return self::name('fans')->where(function ($query) use ($fromuid, $touid) {
+			$query->where([
+				'fromuid' => $touid,
+				'touid' => $fromuid,
+			]);
+		})->whereOr(function ($query) use ($fromuid, $touid) {
+			$query->where([
+				'fromuid' => $fromuid,
+				'touid' => $touid,
+			]);
+		})->find();
+		
 	}
 
 }
