@@ -79,6 +79,9 @@ class Fans extends Model
 		return self::name('fans')->where([
 			'fromuid' => $fromuid,
 			'touid' => $touid,
+		])->whereOr([
+			'fromuid' => $touid,
+			'touid' => $fromuid,
 		])->find();
 	}
 
