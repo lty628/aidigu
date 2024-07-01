@@ -283,9 +283,9 @@
 						if (0 != data[i].commentsum) {
 							c2 = '(' + data[i].commentsum + ')'
 						}
-						delStr += '<span><i class="fa fa-user"></i><a href="/' + data[i].blog + '/message/' + data[i].msg_id + '">评论' + c2 + '</a></span>';
+						delStr += '<span><i class="fa fa-user"></i><a href="/' + data[i].blog + '/message/' + data[i].msg_id + '">查看</a></span>';
 						// delStr += '<a href="javascript:void(0);" onclick="repost(this, '+data[i].uid+', '+data[i].msg_id+')">转发'+c1+'</a> |';
-						// delStr += '<span><i class="fa fa-user"></i><a href="javascript:void(0);" onclick="comment(' + data[i].msg_id + ', ' + data[i].uid + ');">评论' + c2 + '</a></span>';
+						delStr += '<span><i class="fa fa-user"></i><a href="javascript:void(0);" onclick="comment(' + data[i].msg_id + ', ' + data[i].uid + ');">评论' + c2 + '</a></span>';
 
 						if (json.data.allow_delete) {
 							delStr += '<span><i class="fa fa-user"></i><a href="/' + data[i].blog + '/del/message/' + data[i].msg_id + '">删除</a></span>';
