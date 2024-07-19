@@ -1,7 +1,9 @@
 <?php
 namespace app\chat\controller;
 use think\Controller;
-use think\Db;
+use app\chat\model\ChatPrivateLetter;
+use app\common\model\Message;
+// use think\Db;
 
 class Index extends Controller
 {
@@ -26,7 +28,8 @@ class Index extends Controller
         }
 
         if ($messageChatId) {
-            $msgInfo = Db::name('message')->field('uid')->where('msg_id', $messageChatId)->find();
+            $messageModel = new Message();
+            $msgInfo = $messageModel->field('uid')->where('msg_id', $messageChatId)->find();
             if (!$msgInfo) {
                 $this->error('消息不存在');
             }
@@ -43,8 +46,8 @@ class Index extends Controller
 
     protected function checkPrivate($touid, $fromuid)
     {
-        // $model = new ChatPrivateLetter();
-        $info = Db::name('chat_private_letter')->where([
+        $model = new ChatPrivateLetter();
+        $info = $model->where([
             'fromuid' => $fromuid,
             'touid' => $touid
         ])->find();

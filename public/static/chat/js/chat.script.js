@@ -175,6 +175,8 @@ var chat = {
 		chat.wsSend(JSON.stringify(json));
 	},
 	initMessage: function(data, isHistory) {
+		// console.log(data);
+		// console.log(isHistory);
 		data.ctime = getDateDiff(new Date(data.create_time).getTime()/1000)
 		if(data.fromuid == chat.data.uid){
 			chat.addChatLine('mymessage',data,data.listtagid);
@@ -341,6 +343,9 @@ var chat = {
 		// this.initRooms( data.listtags );
 		this.initListTag( data.listtags );
 		this.initUsers( data.users );
+		if ($("#messageChatId").val()) {
+			chat.changeMessageChatId()
+		}
 	},
 	/**
 	 * 填充房间用户列表
@@ -407,6 +412,14 @@ var chat = {
 			$("#user-lists").html(userlists.join(''));
 			$("#chat-lists").html(chatlists.join(''));
 		}
+	},
+	changeMessageChatId:function () {
+		// window.parent.$(".layui-layer-title").text(chat.data.title);
+		var tagid = 'MessageChat'
+		$(".conv-lists").css('display',"none");
+		$(".msg-items").css('display',"none");
+		$("#conv-lists-"+tagid).css('display',"block");
+		$("#chatLineHolder-"+tagid).css('display',"block");
 	},
 	changeList: function (obj) {
 

@@ -65,6 +65,9 @@ var cdiv = {
 				];
 				break;
 			case 'listtags':
+				if (params.display == 'none') {
+					break;
+				}
 				arr = [
 					'<li class="menu-item ',params.selected,'" listtagid="',params.listtagid,'" onclick="chat.changeList(this)">',params.listtagname,'<span id="listtag-',params.listtagid,'">...</span></li>'
 				];
