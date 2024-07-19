@@ -43,6 +43,7 @@ class ChatDbHelper
     public static function getMessageChatHistory($data)
     {
         $result = Db::name('comment')->alias('comment')->join([getPrefix() . 'user' => 'user'], 'user.uid=comment.fromuid')
+            ->where('msg_id', $data['msgid'])
             ->limit(300)
             ->order('comment.cid', 'desc')
             ->field('user.head_image,user.nickname,comment.cid as chat_id,comment.fromuid,comment.msg_id as groupid,comment.msg as content,DATE_FORMAT(FROM_UNIXTIME(comment.ctime), "%Y-%m-%d %H:%i:%s") AS create_time')->select();
