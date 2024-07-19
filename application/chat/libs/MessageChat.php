@@ -19,8 +19,9 @@ class MessageChat extends Base
         $data['msg_id'] = $frameData['msgid'];
         // $offLineUser = [];
         \app\chat\libs\ChatDbHelper::saveComentChatHistory($data);
-        $onlineInfo = \app\chat\libs\ChatDbHelper::messageChatOnlineInfo($data['msg_id']);
-
+        $info = \app\chat\libs\ChatDbHelper::messageChatOnlineInfo($data['msg_id']);
+        $onlineInfo = $info['onlineInfo'];
+        $uids = $info['uids'];
         if ($onlineInfo) {
             foreach ($onlineInfo as $isOnline) {
                 if (!$isOnline['fd']) continue;
@@ -34,7 +35,7 @@ class MessageChat extends Base
         // if ($offLineUser) {
         //     \app\chat\libs\ChatDbHelper::updateMessageCount('chat_group_user', [['uid', 'in', $offLineUser], ['groupid', '=', $data['groupid']]]);
         // }
-        // \app\chat\libs\ChatDbHelper::saveComentChat($data);
+        \app\chat\libs\ChatDbHelper::upComentInfo($data, $uids);
     }
 
     public static function chatHistory($server, $frame, $frameData)

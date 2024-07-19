@@ -29,10 +29,14 @@ class ChatDbHelper
     // 在线评论信息
     public static function messageChatOnlineInfo($msgId)
     {
+        $info = [];
         $userIds = Db::name('comment')->where('msg_id', $msgId)->group('fromuid')->limit(300)->order('cid desc')->select();
-        return Db::name('chat_online')
-            ->where('uid', 'in', array_column($userIds, 'fromuid'))
+        $userIds = array_column($userIds, 'fromuid');
+        $onlineInfo = Db::name('chat_online')
+            ->where('uid', 'in', $userIds)
             ->select();
+        $info['uids'] = $userIds;
+        $info['onlineInfo'] = $onlineInfo;
     }
 
     public static function saveComentChatHistory($data)
@@ -48,6 +52,13 @@ class ChatDbHelper
             ->order('comment.cid', 'desc')
             ->field('user.head_image,user.nickname,comment.cid as chat_id,comment.fromuid,comment.msg_id as groupid,comment.msg as content,DATE_FORMAT(FROM_UNIXTIME(comment.ctime), "%Y-%m-%d %H:%i:%s") AS create_time')->select();
         return $result;
+    }
+
+    public static function upComentInfo($data, $uids)
+    {
+        Db::name('message')->where('msg_id',$data['msgid'])->setInc('commentsum',1);
+        if (getLoginUid()!=(int)input('get.uid'))
+            Reminder::saveReminder($data['msg_id'], getLoginUid(), (int)input('get.uid'), 1);
     }
 
     public static function updateMessageCount($tableName, $where)

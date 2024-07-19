@@ -298,9 +298,9 @@
 								c2 = '(' + data[i].commentsum + ')'
 							}
 							delStr += '<a href="/' + data[i].blog + '/message/' + data[i].msg_id + '">查看</a> |';
-							delStr += '<a href="javascript:;" data-title="评论" data-url="/chat/messageChatId/' + data[i].msg_id + '" onclick="showFrameHtml(this, \'60%\', \'70%\')">评论' + c2 + '</a>'
+							// delStr += '<a href="javascript:;" data-title="评论" data-url="/chat/messageChatId/' + data[i].msg_id + '" onclick="showFrameHtml(this, \'60%\', \'70%\')">评论' + c2 + '</a>'
 							// delStr += '<a href="javascript:void(0);" onclick="repost(this, '+data[i].uid+', '+data[i].msg_id+')">转发'+c1+'</a> |';
-							// delStr += '<a href="javascript:void(0);" onclick="comment(' + data[i].msg_id + ', ' + data[i].uid + ');">评论' + c2 + '</a>';
+							delStr += '<a href="javascript:void(0);" onclick="comment(' + data[i].msg_id + ', ' + data[i].uid + ');">评论' + c2 + '</a>';
 
 							if (json.data.allow_delete) {
 								delStr += ' | <a href="/' + data[i].blog + '/del/message/' + data[i].msg_id + '">删除</a>';
