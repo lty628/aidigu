@@ -4,6 +4,15 @@
 {else}
 	{assign name="whichUser" value="$userInfo.nickname" /}
 {/if}
+<style>
+	.avatar > div:hover img {
+		transform: rotate(0deg);
+		transform: scale(1.05);
+		transition: all 200ms linear;
+		opacity: 1;
+		filter: saturate(100%);
+	}
+</style>
 <div class="main">
 	<div class="contents">
 		<div class="top">嘀咕小应用</div>

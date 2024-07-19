@@ -6,15 +6,27 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="/static/layui/css/layui.css" rel="stylesheet">
   <style>
+    * {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+  }
     .flow-div {
-      height: 100%;
+      /* height: 100%;
       overflow: auto;
       font-size: 0;
-      text-align: left;
+      text-align: left; */
+      column-count: 3;
+      width: 100%;
+      margin: 0 auto;
+      column-gap: 15px;
     }
 
     .flow-div li {
-      display: inline-block;
+      /* display: inline-block;
       margin: 5px;
       font-size: 14px;
       width: 30%;
@@ -22,18 +34,33 @@
       height: 200px;
       line-height: 100px;
       text-align: center;
-      background-color: #eee;
+      background-color: #eee; */
+      margin-bottom: 20px;
+      display: block;
+      overflow: hidden;
     }
 
     .flow-div img {
+      /* width: 100%;
+      height: 100%; */
+      display: block;
       width: 100%;
-      height: 100%;
+      /* transform: rotate(4deg); */
+      /* opacity: 0.9; */
+      opacity: 1;
+      filter: saturate(150%);
     }
 
     .flow-div video {
-      width: 100%;
+      /* width: 100%;
       height: 100%;
-      vertical-align: middle !important;
+      vertical-align: middle !important; */
+      display: block;
+      width: 100%;
+      /* transform: rotate(4deg); */
+      /* opacity: 0.9; */
+      opacity: 1;
+      filter: saturate(150%);
     }
 
     .flow-div .showOther {
@@ -46,6 +73,21 @@
       text-align: left;
       background-color: #fff;
       overflow: hidden;
+    }
+
+    .flow-div :hover img {
+      transform: rotate(0deg);
+      transform: scale(1.05);
+      transition: all 200ms linear;
+      opacity: 1;
+      filter: saturate(100%);
+    }
+    .flow-div :hover video {
+      transform: rotate(0deg);
+      transform: scale(1.05);
+      transition: all 200ms linear;
+      opacity: 1;
+      filter: saturate(100%);
     }
 
     /* .flow-div-lazyimg{height: 300px; overflow: auto; text-align: center;}

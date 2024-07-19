@@ -121,7 +121,7 @@ function showFrameCustom(obj, appConfig) {
     layer.open({
         type: 1,
         title: appConfig.title,
-        shade: 0.8,
+        shade: appConfig.shade,
         closeBtn: appConfig.closeBtn,
         shadeClose: appConfig.shadeClose,
         area: appConfig.area,
