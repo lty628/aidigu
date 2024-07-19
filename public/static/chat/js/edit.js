@@ -79,11 +79,18 @@ const E = window.wangEditor
 		}
 	}
 	var isMobile = $("#isMobile").val()
-	editor.config.menus = [
-		'emoticon',
-		'image',
-		'video'
-	]
+	if ($("#messageChatId").val()) {
+		editor.config.menus = [
+			'emoticon'
+		]
+	} else {
+		editor.config.menus = [
+			'emoticon',
+			'image',
+			'video'
+		]
+	}
+	
 	
 	editor.config.showFullScreen = false
 	editor.config.emotions = [
@@ -392,9 +399,12 @@ const E = window.wangEditor
 	// 	}
 	// }
 
-	const menuKey1 = 'AlertCloud' 
-	editor.menus.extend(menuKey1, AlertCloud)
-	editor.config.menus = editor.config.menus.concat(menuKey1)
+	if (!$("#messageChatId").val()) {
+		const menuKey1 = 'AlertCloud' 
+		editor.menus.extend(menuKey1, AlertCloud)
+		editor.config.menus = editor.config.menus.concat(menuKey1)
+	}
+	
 	// const menuKey2 = 'AlertMaterial' 
 	// editor.menus.extend(menuKey2, AlertMaterial)
 	// editor.config.menus = editor.config.menus.concat(menuKey2)
