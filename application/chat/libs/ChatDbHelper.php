@@ -65,18 +65,6 @@ class ChatDbHelper
         // $uids 移除 $data['fromuid']
         $uids = array_diff($uids, [$data['fromuid']]);
 
-        // $type 0: 转发 1: 评论 2: 回复 3: 好友 4: 私信  5: 群聊 【群聊提醒待定】
-        if (!Db::name('reminder')->where('msg_id', $data['msg_id'])->where('touid',$data['fromuid'])->where('fromuid',$data['fromuid'])->find()) {
-            Db::name('reminder')->insert([
-                'touid'	=>	$data['fromuid'],
-                'fromuid'	=>	$data['fromuid'],
-                'msg_id'	=>	$data['msg_id'],
-                'status'	=>	1,
-                'type'	=>	1,
-                'ctime'	=>	time()
-            ]);
-        }
-
         Db::name('reminder')->where('msg_id', $data['msg_id'])->where('touid','in', $uids)->update(['status' => 0]);
         return true;
     }

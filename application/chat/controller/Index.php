@@ -3,7 +3,7 @@ namespace app\chat\controller;
 use think\Controller;
 use app\chat\model\ChatPrivateLetter;
 use app\common\model\Message;
-// use think\Db;
+use think\Db;
 
 class Index extends Controller
 {
@@ -34,6 +34,7 @@ class Index extends Controller
                 $this->error('消息不存在');
             }
             $touid = $msgInfo['uid'];
+            $this->checkReminder($fromuid, $messageChatId);
         }
 
         // $domain = 'https://'.$urlDomainRoot;
@@ -55,5 +56,20 @@ class Index extends Controller
             return $model->addPrivateFriend($touid, $fromuid);
         }
         return true;
+    }
+
+    protected function checkReminder($fromuid, $messageChatId)
+    {
+        // $type 0: 转发 1: 评论 2: 回复 3: 好友 4: 私信  5: 群聊 【群聊提醒待定】
+        if (!Db::name('reminder')->where('msg_id', $messageChatId)->where('touid',$fromuid)->where('fromuid',$fromuid)->find()) {
+            Db::name('reminder')->insert([
+                'touid'	=>	$fromuid,
+                'fromuid'	=>	$fromuid,
+                'msg_id'	=>	$messageChatId,
+                'status'	=>	1,
+                'type'	=>	1,
+                'ctime'	=>	time()
+            ]);
+        }
     }
 }
