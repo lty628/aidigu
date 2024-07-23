@@ -16,7 +16,7 @@
 				{/if}
 				<div class="static">
 <span>
-<a href="javascript:void(0);" onclick="repost(this)">转发{if 0 != $message.repostsum}（{$message.repostsum}）{/if}</a> | 
+<!-- <a href="javascript:void(0);" onclick="repost(this)">转发{if 0 != $message.repostsum}（{$message.repostsum}）{/if}</a> |  -->
 <a href="javascript:void(0);" onclick="comment({$message.msg_id}, {$message.uid});">评论{if 0 != $message.commentsum}（{$message.commentsum}）{/if}</a>
   {if $userInfo.isSiteUser}
  | <a href="{:url('/'.$userInfo.blog.'/'.'del/message/'.$message.msg_id)}">删除</a>
@@ -32,9 +32,9 @@
 					{foreach $messageBlock as $block}
 					<div class="block_body"><div class="repost"><span><a href="{:url('/'.$block.blog.'/')}">{$block.nickname}:</a>{$block.msg|raw}</span></div><div class="block_static">
 					{$block.ctime|date='Y-m-d H:i:s'}
-						{if $block.fromuid!=getLoginUid()}
+						<!-- {if $block.fromuid!=getLoginUid()}
 						<a href="javascript:void(0);" onclick="reply(this,{$block.msg_id}, {$block.fromuid});">回复</a>
-						{/if}
+						{/if} -->
 					</div></div>
 					{/foreach}
 					{$messageBlock|raw}

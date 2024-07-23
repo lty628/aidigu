@@ -30,13 +30,18 @@ class ChatDbHelper
     public static function messageChatOnlineInfo($msgId)
     {
         $info = [];
-        $userIds = Db::name('comment')->where('msg_id', $msgId)->group('fromuid')->limit(300)->order('cid desc')->select();
+        $userIds = Db::name('comment')->where('msg_id', $msgId)->field('fromuid')->group('fromuid')->limit(300)->order('cid desc')->select();
+        // 去重
+        // $userIds = array_unique(array_column($userIds, 'fromuid'));
         $userIds = array_column($userIds, 'fromuid');
+        // dump($userIds);
         $onlineInfo = Db::name('chat_online')
             ->where('uid', 'in', $userIds)
             ->select();
         $info['uids'] = $userIds;
         $info['onlineInfo'] = $onlineInfo;
+        // dump($info);
+        return $info;
     }
 
     public static function saveComentChatHistory($data)
@@ -56,9 +61,24 @@ class ChatDbHelper
 
     public static function upComentInfo($data, $uids)
     {
-        Db::name('message')->where('msg_id',$data['msgid'])->setInc('commentsum',1);
-        if (getLoginUid()!=(int)input('get.uid'))
-            Reminder::saveReminder($data['msg_id'], getLoginUid(), (int)input('get.uid'), 1);
+        Db::name('message')->where('msg_id',$data['msg_id'])->setInc('commentsum',1);
+        // $uids 移除 $data['fromuid']
+        $uids = array_diff($uids, [$data['fromuid']]);
+
+        // $type 0: 转发 1: 评论 2: 回复 3: 好友 4: 私信  5: 群聊 【群聊提醒待定】
+        if (!Db::name('reminder')->where('msg_id', $data['msg_id'])->where('touid',$data['fromuid'])->where('fromuid',$data['fromuid'])->find()) {
+            Db::name('reminder')->insert([
+                'touid'	=>	$data['fromuid'],
+                'fromuid'	=>	$data['fromuid'],
+                'msg_id'	=>	$data['msg_id'],
+                'status'	=>	1,
+                'type'	=>	1,
+                'ctime'	=>	time()
+            ]);
+        }
+
+        Db::name('reminder')->where('msg_id', $data['msg_id'])->where('touid','in', $uids)->update(['status' => 0]);
+        return true;
     }
 
     public static function updateMessageCount($tableName, $where)

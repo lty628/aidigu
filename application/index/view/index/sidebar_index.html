@@ -13,7 +13,8 @@
 			</div>
 			<h2><a href="javascript:;">个人资料</a></h2>
 			<p>{$userInfo.intro|raw|default="暂无个人资料"}</p>
-			<h2><a href="javascript:;">互动</a></h2>
+
+			<!-- <h2><a href="javascript:;">互动</a></h2>
 			<ul class="newReminder">
 				{if $userInfo.reply_sum}
 				<li><a href="{:url('/'.$userInfo.blog.'/newreply/')}">新的回复</a><span>（{$userInfo.reply_sum}）</span></li>
@@ -21,7 +22,8 @@
 				{if !$userInfo.reply_sum}
 					<span>暂无</span>
 				{/if}
-			</ul>
+			</ul> -->
+
 		</div>
 		<div class="box">
 			<h3><span><a href="{:url('/'.$userInfo.blog.'/concern/')}">更多>></a></span><a href="{:url('/'.$userInfo.blog.'/concern/')}">我关注的人</a></h3>

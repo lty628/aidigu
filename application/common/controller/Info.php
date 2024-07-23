@@ -56,7 +56,7 @@ class Info extends Base
 		}
 		// $userInfo['repeat_sum'] = Reminder::where('type', 0)->where('touid', $this->userid)->count();
 		// $userInfo['comment_sum'] = Reminder::where('type', 1)->where('touid', $this->userid)->count();
-		$userInfo['reply_sum'] = Reminder::where('touid', $this->userid)->count();
+		$userInfo['reply_sum'] = Reminder::where('touid', $this->userid)->where('status', 0)->count();
 		// $userInfo['fans_count'] = Fans::where('touid', $userid)->count();
 		// $userInfo['concern_count'] = Fans::where('fromuid', $userid)->count();
 		// $userInfo['fans_count'] = Fans::where('touid', $userid)->where('fromuid','<>',$userid)->count();
@@ -104,7 +104,7 @@ class Info extends Base
 
 	protected function getMessageById($msgId = '')
 	{
-		Reminder::where('touid', $this->userid)->where('msg_id', $msgId)->delete();
+		Reminder::where('touid', $this->userid)->where('msg_id', $msgId)->update(['status' => 1]);
 		$userMessage[0] = Message::getMessageById($msgId);
 		$messageBlock = $userMessage[0]->comments()->where('msg_id',$msgId)->with('User')->order('ctime','desc')->paginate(20);
 		$this->assign('userMessage', handleMessage($userMessage));

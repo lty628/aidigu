@@ -57,6 +57,7 @@ class Fans
             ->field('user.uid,user.nickname,message.media,message.media_info,message.contents,message.msg_id,message.repost,message.refrom,message.repostsum,message.commentsum,message.ctime,user.head_image,user.blog,reminder.type,reminder.touid,reminder.fromuid')
             ->order('reminder.ctime desc')
             ->where('touid', $userid)
+            ->where('reminder.status', 0)
             ->paginate($count, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
     }
 }

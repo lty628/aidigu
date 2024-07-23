@@ -181,6 +181,7 @@ var chat = {
 		if(data.fromuid == chat.data.uid){
 			chat.addChatLine('mymessage',data,data.listtagid);
 		} else {
+			chat.addChatLine('chatLine',data,data.listtagid);
 			if (!isHistory) {
 				if(data.remains){
 					for(var i = 0 ; i < data.remains.length;i++){
@@ -191,9 +192,13 @@ var chat = {
 						}
 					}
 				}
+				
 				chat.chatAudio();
-				blinkingTitle.start('【未读消息】', true);
-				chat.showMsgCount(data.listtagid);
+				if (data.listtagid != 'MessageChat') {
+					blinkingTitle.start('【未读消息】', true);
+					chat.showMsgCount(data.listtagid);
+				}
+
 				if (data.listtagid == 'Group') {
 					if (!$("#group-"+data.listtagid+'-'+data.groupid).hasClass("selected")) {
 						$("#message-"+data.listtagid+'-'+data.groupid).css('display', 'block')
@@ -209,7 +214,6 @@ var chat = {
 				}
 				
 			}
-			chat.addChatLine('chatLine',data,data.listtagid);
 			// $("#user-"+chat.data.fromid).children('.layui-badge').css('display', 'block')
 			// 增加消息
 		}
