@@ -30,7 +30,8 @@ class ChatDbHelper
     public static function messageChatOnlineInfo($msgId)
     {
         // $type 0: 转发 1: 评论 2: 回复 3: 好友 4: 私信  5: 群聊 【群聊提醒待定】
-        $userIds = Db::name('reminder')->where('msg_id', $msgId)->where('type', 1)->where('status', 0)->field('touid')->group('touid')->limit(300)->order('id desc')->select();
+        // ->where('status', 0)
+        $userIds = Db::name('reminder')->where('msg_id', $msgId)->where('type', 1)->field('touid')->group('touid')->limit(300)->order('id desc')->select();
         // 去重
         // $userIds = array_unique(array_column($userIds, 'touid'));
         $userIds = array_column($userIds, 'touid');
@@ -38,7 +39,7 @@ class ChatDbHelper
         $onlineInfo = Db::name('chat_online')
             ->where('uid', 'in', $userIds)
             ->select();
-        $info['uids'] = $userIds;
+        // $info['uids'] = $userIds;
         $info['onlineInfo'] = $onlineInfo;
         // dump($info);
         return $info;

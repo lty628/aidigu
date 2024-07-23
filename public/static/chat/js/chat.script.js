@@ -367,7 +367,7 @@ var chat = {
 							users.unshift(cdiv.render('group',data[item][key]));
 							if (data[item][key].message_count) {
 								chat.showMsgCount(item);
-								blinkingTitle.start('【未读消息】', true);
+								// blinkingTitle.start('【未读消息】', true);
 							}
 						}
 					} else {
@@ -377,7 +377,7 @@ var chat = {
 							users.unshift(cdiv.render('user',data[item][key]));
 							if (data[item][key].message_count) {
 								chat.showMsgCount(item);
-								blinkingTitle.start('【未读消息】', true);
+								// blinkingTitle.start('【未读消息】', true);
 							}
 						}
 					}
