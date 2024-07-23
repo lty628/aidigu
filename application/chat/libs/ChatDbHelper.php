@@ -29,11 +29,11 @@ class ChatDbHelper
     // 在线评论信息
     public static function messageChatOnlineInfo($msgId)
     {
-        $info = [];
-        $userIds = Db::name('comment')->where('msg_id', $msgId)->field('fromuid')->group('fromuid')->limit(300)->order('cid desc')->select();
+        // $type 0: 转发 1: 评论 2: 回复 3: 好友 4: 私信  5: 群聊 【群聊提醒待定】
+        $userIds = Db::name('reminder')->where('msg_id', $msgId)->where('type', 1)->where('status', 0)->field('touid')->group('touid')->limit(300)->order('id desc')->select();
         // 去重
-        // $userIds = array_unique(array_column($userIds, 'fromuid'));
-        $userIds = array_column($userIds, 'fromuid');
+        // $userIds = array_unique(array_column($userIds, 'touid'));
+        $userIds = array_column($userIds, 'touid');
         // dump($userIds);
         $onlineInfo = Db::name('chat_online')
             ->where('uid', 'in', $userIds)
