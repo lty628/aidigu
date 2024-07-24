@@ -349,6 +349,11 @@ var chat = {
 		this.initUsers( data.users );
 		if ($("#messageChatId").val()) {
 			chat.changeMessageChatId()
+			if ($("#isMobile").val()) {
+				// $("#menu-pannel").css('display', 'none')
+				$("#sub-menu-pannel").css('display', 'none')
+				$("#content-pannel").show();
+			}
 		}
 	},
 	/**
