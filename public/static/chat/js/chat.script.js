@@ -549,6 +549,12 @@ var chat = {
 		chat.wsSend(JSON.stringify(json));
 		$(".input-area").show()
 	},
+	clickUser : function(obj){
+		
+		editor.txt.clear()
+		editor.txt.html("@"+$(obj).attr("uname")+"&nbsp")
+		// var text = editor.txt.html();
+	},
 	changeUser : function(obj){
 
 		if ($("#isMobile").val()) {
