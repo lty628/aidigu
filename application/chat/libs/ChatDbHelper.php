@@ -69,7 +69,7 @@ class ChatDbHelper
 
         if (!Db::name('reminder')->where('msg_id', $data['msg_id'])->where('fromuid')->find()) {
             Db::name('reminder')->insert([
-                'touid'	=>	$$data['touid'],
+                'touid'	=>	$data['touid'],
                 'fromuid'	=>	$data['fromuid'],
                 'msg_id'	=>	$data['msg_id'],
                 'status'	=>	1,
@@ -77,7 +77,7 @@ class ChatDbHelper
                 'ctime'	=>	time()
             ]);
         }
-        Db::name('reminder')->where('msg_id', $data['msg_id'])->where('fromuid', 'neq', $data['fromuid'])->update(['status' => 0]);
+        Db::name('reminder')->where('msg_id', $data['msg_id'])->where('touid', 'neq', $data['fromuid'])->where('fromuid', 'neq', $data['fromuid'])->update(['status' => 0]);
         return true;
     }
 
