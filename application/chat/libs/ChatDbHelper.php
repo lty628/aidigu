@@ -67,6 +67,16 @@ class ChatDbHelper
         // // $uids 移除 $data['fromuid']
         // $uids = array_diff($uids, [$data['fromuid']]);
 
+        if (!Db::name('reminder')->where('msg_id', $data['msg_id'])->where('fromuid')->find()) {
+            Db::name('reminder')->insert([
+                'touid'	=>	$$data['touid'],
+                'fromuid'	=>	$data['fromuid'],
+                'msg_id'	=>	$data['msg_id'],
+                'status'	=>	1,
+                'type'	=>	1,
+                'ctime'	=>	time()
+            ]);
+        }
         Db::name('reminder')->where('msg_id', $data['msg_id'])->where('fromuid', 'neq', $data['fromuid'])->update(['status' => 0]);
         return true;
     }
