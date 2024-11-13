@@ -19,14 +19,14 @@ class MessageChat extends Base
         $data['msg_id'] = $frameData['msgid'];
         // $offLineUser = [];
         \app\chat\libs\ChatDbHelper::saveComentChatHistory($data);
-        $info = \app\chat\libs\ChatDbHelper::messageChatOnlineInfo($data['msg_id']);
+        $info = \app\chat\libs\ChatDbHelper::messageChatOnlineInfo($data['msg_id'], $data['fromuid']);
         $onlineInfo = $info['onlineInfo'];
         $uids = [];
 
         if ($onlineInfo) {
             foreach ($onlineInfo as $isOnline) {
                 if (!$isOnline['fd']) {
-                    $uids[] = $isOnline['uid'];
+                    // $uids[] = $isOnline['uid'];
                     continue;
                 };
                 $server->push($isOnline['fd'], json_encode([
@@ -37,7 +37,7 @@ class MessageChat extends Base
             }
         }
 
-        \app\chat\libs\ChatDbHelper::upComentInfo($data, $uids);
+        \app\chat\libs\ChatDbHelper::upComentInfo($data);
 
     }
 

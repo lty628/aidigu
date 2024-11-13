@@ -27,14 +27,15 @@ class ChatDbHelper
     }
     
     // 在线评论信息
-    public static function messageChatOnlineInfo($msgId)
+    public static function messageChatOnlineInfo($msgId, $fromuid)
     {
         // $type 0: 转发 1: 评论 2: 回复 3: 好友 4: 私信  5: 群聊 【群聊提醒待定】
         // ->where('status', 0)
-        $userIds = Db::name('reminder')->where('msg_id', $msgId)->where('type', 1)->field('touid')->group('touid')->limit(300)->order('id desc')->select();
+        $userIds = Db::name('reminder')->where('msg_id', $msgId)->where('type', 1)->field('fromuid')->group('fromuid')->limit(300)->order('id desc')->select();
         // 去重
-        // $userIds = array_unique(array_column($userIds, 'touid'));
-        $userIds = array_column($userIds, 'touid');
+        // $userIds = array_unique(array_column($userIds, 'fromuid'));
+        $userIds = array_column($userIds, 'fromuid');
+        array_push($userIds, $fromuid);
         // dump($userIds);
         $onlineInfo = Db::name('chat_online')
             ->where('uid', 'in', $userIds)
@@ -60,13 +61,13 @@ class ChatDbHelper
         return $result;
     }
 
-    public static function upComentInfo($data, $uids)
+    public static function upComentInfo($data)
     {
         Db::name('message')->where('msg_id',$data['msg_id'])->setInc('commentsum',1);
-        // $uids 移除 $data['fromuid']
-        $uids = array_diff($uids, [$data['fromuid']]);
+        // // $uids 移除 $data['fromuid']
+        // $uids = array_diff($uids, [$data['fromuid']]);
 
-        Db::name('reminder')->where('msg_id', $data['msg_id'])->where('touid','in', $uids)->update(['status' => 0]);
+        Db::name('reminder')->where('msg_id', $data['msg_id'])->where('fromuid', 'neq', $data['fromuid'])->update(['status' => 0]);
         return true;
     }
 
