@@ -34,7 +34,7 @@ class Index extends Controller
                 $this->error('消息不存在');
             }
             $touid = $msgInfo['uid'];
-            $this->checkReminder($fromuid, $messageChatId);
+            $this->checkReminder($fromuid, $touid, $messageChatId);
         }
 
         // $domain = 'https://'.$urlDomainRoot;
@@ -58,12 +58,12 @@ class Index extends Controller
         return true;
     }
 
-    protected function checkReminder($fromuid, $messageChatId)
+    protected function checkReminder($fromuid, $touid, $messageChatId)
     {
         // $type 0: 转发 1: 评论 2: 回复 3: 好友 4: 私信  5: 群聊 【群聊提醒待定】
-        if (!Db::name('reminder')->where('msg_id', $messageChatId)->where('touid',$fromuid)->where('fromuid',$fromuid)->find()) {
+        if (!Db::name('reminder')->where('msg_id', $messageChatId)->where('touid',$touid)->where('fromuid',$fromuid)->find()) {
             Db::name('reminder')->insert([
-                'touid'	=>	$fromuid,
+                'touid'	=>	$touid,
                 'fromuid'	=>	$fromuid,
                 'msg_id'	=>	$messageChatId,
                 'status'	=>	1,
