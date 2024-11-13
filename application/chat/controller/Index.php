@@ -70,6 +70,8 @@ class Index extends Controller
                 'type'	=>	1,
                 'ctime'	=>	time()
             ]);
+        } else {
+            Db::name('reminder')->where('msg_id', $messageChatId)->where('touid',$fromuid)->update(['status' => 1]);
         }
     }
 }
