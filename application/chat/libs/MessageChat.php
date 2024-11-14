@@ -37,7 +37,7 @@ class MessageChat extends Base
             }
         }
 
-        \app\chat\libs\ChatDbHelper::upComentInfo($data);
+        // \app\chat\libs\ChatDbHelper::upComentInfo($data);
 
     }
 

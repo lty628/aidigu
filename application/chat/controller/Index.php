@@ -60,6 +60,9 @@ class Index extends Controller
 
     protected function checkReminder($fromuid, $touid, $messageChatId)
     {
+        if ($fromuid == $touid) {
+            return Db::name('reminder')->where('msg_id', $messageChatId)->where('touid', $touid)->update(['status' => 1]);
+        };
         // $type 0: 转发 1: 评论 2: 回复 3: 好友 4: 私信  5: 群聊 【群聊提醒待定】
         if (!Db::name('reminder')->where('msg_id', $messageChatId)->where('touid',$touid)->where('fromuid',$fromuid)->find()) {
             Db::name('reminder')->insert([
@@ -71,7 +74,7 @@ class Index extends Controller
                 'ctime'	=>	time()
             ]);
         } else {
-            Db::name('reminder')->where('msg_id', $messageChatId)->where('touid',$fromuid)->update(['status' => 1]);
+            Db::name('reminder')->where('msg_id', $messageChatId)->where('touid', $fromuid)->update(['status' => 1]);
         }
     }
 }

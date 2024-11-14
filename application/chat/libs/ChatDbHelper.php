@@ -48,7 +48,35 @@ class ChatDbHelper
 
     public static function saveComentChatHistory($data)
     {
+        $pattern = '/@{1}(\w*[\.0-9]*[\x{4e00}-\x{9fa5}]*)([：:]){0,1}([：:\.;])*/ui';
+        if (preg_match($pattern, $data['msg'], $matches)) {
+            $findUser = Db::name('user')->where('nickname',$matches[1])->field('uid,blog')->find();
+            if ($findUser) {
+                $data['ctype'] = 1;
+                self::upReplayReminder($data, $findUser['uid']);
+            }
+        } else {
+            self::upComentReminder($data);
+        }
         return Db::name('comment')->insert($data);
+    }
+
+    public static function upReplayReminder($data, $touid)
+    {
+        if (!Db::name('reminder')->where('msg_id', $data['msg_id'])->where('fromuid', $data['fromuid'])->where('touid', $touid)->find()) {
+            Db::name('reminder')->insert([
+                'touid'	=>	$touid,
+                'fromuid'	=>	$data['fromuid'],
+                'msg_id'	=>	$data['msg_id'],
+                'status'	=>	0,
+                'type'	=>	2,
+                'ctime'	=>	time()
+            ]);
+        } else {
+            Db::name('reminder')->where('msg_id', $data['msg_id'])->where('fromuid', $data['fromuid'])->where('touid', $touid)->update([
+                'status'	=>	0
+            ]);
+        }
     }
 
     public static function getMessageChatHistory($data)
@@ -61,23 +89,29 @@ class ChatDbHelper
         return $result;
     }
 
-    public static function upComentInfo($data)
+    public static function upComentReminder($data)
     {
         Db::name('message')->where('msg_id',$data['msg_id'])->setInc('commentsum',1);
         // // $uids 移除 $data['fromuid']
         // $uids = array_diff($uids, [$data['fromuid']]);
 
-        if (!Db::name('reminder')->where('msg_id', $data['msg_id'])->where('fromuid')->find()) {
-            Db::name('reminder')->insert([
-                'touid'	=>	$data['touid'],
-                'fromuid'	=>	$data['fromuid'],
-                'msg_id'	=>	$data['msg_id'],
-                'status'	=>	1,
-                'type'	=>	1,
-                'ctime'	=>	time()
-            ]);
-        }
-        Db::name('reminder')->where('msg_id', $data['msg_id'])->where('touid', 'neq', $data['fromuid'])->where('fromuid', 'neq', $data['fromuid'])->update(['status' => 0]);
+        // if (!Db::name('reminder')->where('msg_id', $data['msg_id'])->where('fromuid', $data['fromuid'])->find()) {
+        //     Db::name('reminder')->insert([
+        //         'touid'	=>	$data['touid'],
+        //         'fromuid'	=>	$data['fromuid'],
+        //         'msg_id'	=>	$data['msg_id'],
+        //         'status'	=>	1,
+        //         'type'	=>	1,
+        //         'ctime'	=>	time()
+        //     ]);
+        // }
+        Db::name('reminder')->where('msg_id', $data['msg_id'])->where('fromuid', $data['fromuid'])->where('touid', $data['touid'])->update(['status' => 0]);
+        // if ($data['touid'] == $data['fromuid']) {
+        //     Db::name('reminder')->where('msg_id', $data['msg_id'])->where('fromuid', $data['fromuid'])->where('touid', $data['touid'])->update(['status' => 0]);
+        // } else {
+        //     Db::name('reminder')->where('msg_id', $data['msg_id'])->where('touid', $data['touid'])->update(['status' => 0]);
+        // }
+        
         return true;
     }
 

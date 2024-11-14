@@ -6,7 +6,7 @@
 		<div class="entry">
 			<div class="avatar"><div class="imgborder"><a href="{:url('/'.$message.blog.'/')}"><img src="{$message.head_image}" /></a></div></div>
 			<div class="box">
-				<p><a href="{:url('/'.$message.blog.'/')}" id="nickname">{$message.nickname}：</a>{$message.type|getReminderTypeName}了您的微博</p>
+				<p><a href="{:url('/'.$message.blog.'/')}" id="nickname">{$message.nickname}：</a>{$message.type|getReminderTypeName}了微博： </p>
 				<div class="static">
 				<span>
 				<a href="{:url('/'.$loginUserInfo.blog.'/'.'message/'.$message.msg_id)}">查看</a>
@@ -19,7 +19,12 @@
 					<div class="block_body">
 						<div class="repost">
 							<span>
-								<a href="{:url('/'.$message.blog.'/')}">{$userInfo.nickname}:
+								{if $message.type == 1} 
+									<a href="{:url('/'.$userInfo.blog.'/')}">{$userInfo.nickname}:
+								{else}
+									<a href="{:url('/'.$message.blog.'/')}">{$message.nickname}:
+								{/if}
+								
 							</span>
 						</a>{$message.contents|raw}{$message.repost|raw}
 						{if $message.media}
