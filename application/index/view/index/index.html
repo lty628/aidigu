@@ -301,7 +301,7 @@
 							delStr += '<a href="javascript:;" data-title="评论" data-url="/chat/messageChatId/' + data[i].msg_id + '" onclick="showFrameHtml(this, \'60%\', \'70%\')">评论' + c2 + '</a>'
 							// delStr += '<a href="javascript:void(0);" onclick="repost(this, '+data[i].uid+', '+data[i].msg_id+')">转发'+c1+'</a> |';
 							// delStr += '<a href="javascript:void(0);" onclick="comment(' + data[i].msg_id + ', ' + data[i].uid + ');">评论' + c2 + '</a>';
-							if(json.data.is_collect) {
+							if(!json.data.is_collect) {
 								delStr += ' | <a href="javascript:void(0);" onclick="collectMsg(' + data[i].msg_id + ',0);">收藏</a>';
 							}
 							if (json.data.allow_delete) {
