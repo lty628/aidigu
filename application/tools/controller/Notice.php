@@ -25,7 +25,7 @@ class Notice extends Controller
             ->leftJoin([getPrefix() . 'message' => 'message'], 'message.msg_id=reminder.msg_id')
             ->field('message.msg_id,message.contents,message.media,message.media_info,reminder.id,reminder.ctime,reminder.status')
             // ->where('reminder.status', 0)
-            ->where('reminder.type', 1)
+            // ->where('reminder.type', 1)
             ->where('reminder.touid', $uid)
             ->order('reminder.status asc, reminder.id desc')
             ->limit($limit)->page($page)
