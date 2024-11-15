@@ -6,26 +6,20 @@
 		<div class="entry">
 			<div class="avatar"><div class="imgborder"><a href="{:url('/'.$message.blog.'/')}"><img src="{$message.head_image}" /></a></div></div>
 			<div class="box">
-				<p><a href="{:url('/'.$message.blog.'/')}" id="nickname">{$message.nickname}：</a>{$message.type|getReminderTypeName}了微博： </p>
-				<div class="static">
-				<span>
-				<a href="{:url('/'.$loginUserInfo.blog.'/'.'message/'.$message.msg_id)}">查看</a>
-				<a href="javascript:;" data-title="评论" data-url="/chat/messageChatId/{$message.msg_id}" onclick="showFrameHtml(this, '60%', '70%')">评论({$message.commentsum})</a>
-				</span>
+				<div>
+					<p>
+						<a href="{:url('/'.$message.blog.'/')}" id="nickname">{$message.nickname} </a>{$message.type|getReminderTypeName}了微博： 
+						<span style="float: right;">
+							<a href="{:url('/'.$loginUserInfo.blog.'/'.'message/'.$message.msg_id)}">查看</a>
+							<a href="javascript:;" data-title="评论" data-url="/chat/messageChatId/{$message.msg_id}" onclick="showFrameHtml(this, '60%', '70%')">评论({$message.commentsum})</a>
+						</span>
+					</p>
 				</div>
 				
 				<div class="block">
 					<div class="block_top"></div>
 					<div class="block_body">
 						<div class="repost">
-							<span>
-								{if $message.type == 1} 
-									<a href="{:url('/'.$userInfo.blog.'/')}">{$userInfo.nickname}:
-								{else}
-									<a href="{:url('/'.$message.blog.'/')}">{$message.nickname}:
-								{/if}
-								
-							</span>
 						</a>{$message.contents|raw}{$message.repost|raw}
 						{if $message.media}
 							{if json_decode($message.media_info, true)['media_type'] == 'mp4'}
@@ -36,7 +30,7 @@
 						{/if}
 					</div>
 					<div class="block_static">
-						{$message.ctime|date='Y-m-d H:i:s'} 来自 {$message.refrom}
+						{$message.ctime|date='Y-m-d H:i:s'}
 					</div></div>
 					<div class="block_bottom"></div>
 				

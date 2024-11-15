@@ -11,7 +11,9 @@ class Reminder
     public static function saveReminder($msgId, $fromuid, $touid, $type)
     {
         if (ReminderModel::where(['msg_id'=>$msgId, 'fromuid'=>$fromuid, 'touid'=>$touid, 'type'=>$type])->find()) {
-            return true;
+            return ReminderModel::where(['msg_id'=>$msgId, 'fromuid'=>$fromuid, 'touid'=>$touid, 'type'=>$type])->update([
+                'status' => 0
+            ]);
         }
         return ReminderModel::create(['msg_id'=>$msgId, 'fromuid'=>$fromuid, 'touid'=>$touid, 'type'=>$type]);
     }
