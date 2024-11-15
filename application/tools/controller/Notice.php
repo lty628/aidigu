@@ -23,7 +23,7 @@ class Notice extends Controller
         $list = Db::name('reminder')
             ->alias('reminder')
             ->leftJoin([getPrefix() . 'message' => 'message'], 'message.msg_id=reminder.msg_id')
-            ->field('message.msg_id,message.contents,message.media,message.media_info,reminder.id,reminder.ctime,reminder.status')
+            ->field('message.msg_id,message.contents,message.media,message.media_info,reminder.id,reminder.ctime,reminder.status,reminder.type')
             // ->where('reminder.status', 0)
             // ->where('reminder.type', 1)
             ->where('reminder.touid', $uid)

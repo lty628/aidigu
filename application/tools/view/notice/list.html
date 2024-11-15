@@ -55,7 +55,7 @@
         cellMinWidth: 80,
         page: true,
         cols: [[
-          { field: 'contents', width: '60%', align: 'center', title: '内容',templet: function (d) {
+          { field: 'contents', align: 'center', title: '内容',templet: function (d) {
               if (!d.contents && d.media) {
                 return '<a href="javascript:;" data-url="' + d.media + '" onclick="showMedia(this)" alt="点击查看">点击查看</a>'
               } else if(d.media) {
@@ -64,6 +64,23 @@
                 return d.contents
               }
             } 
+          },
+          {
+            field: 'type', align: 'center', title: '提醒类型', templet: function (d) {
+              if (d.type ==1) {
+                return '评论提醒'
+              } else if (d.type ==2) {
+                return '回复提醒'
+              } else if (d.type ==3) {
+                return '点赞提醒'
+              } else if (d.type ==4) {
+                return '关注提醒'
+              } else if (d.type ==5) {
+                return '系统提醒'
+              } else {
+                return '未知提醒'
+              } 
+            }
           },
           {
             field: 'remind_time', align: 'center', title: '提醒时间', templet: function (d) {
