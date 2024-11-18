@@ -1,5 +1,8 @@
 
 $(function(){
+    if ($("#messageRemind").css('display') == 'block') {
+        return
+    }
     if ($("#checkRemind").css('display') == 'none') {
         // return
         var temindTimer = setInterval(() => {

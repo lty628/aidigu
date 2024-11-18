@@ -44,7 +44,7 @@ class Info extends Base
     	$this->setMyConcern($this->siteUserId);
 		// $this->assign('siteUserId', $this->siteUserId);
 		$this->assign('action', request()->action());
-		$this->assign('chatRemind', \app\common\libs\Remind::check($this->userid));
+		$this->assign('chatRemind', \app\common\libs\Remind::checkAll($this->userid));
 		$this->assign('loginUserInfo', $this->loginUserInfo);
 	}
 	protected function getSiteUserInfo($userid) 
@@ -56,7 +56,7 @@ class Info extends Base
 		}
 		// $userInfo['repeat_sum'] = Reminder::where('type', 0)->where('touid', $this->userid)->count();
 		// $userInfo['comment_sum'] = Reminder::where('type', 1)->where('touid', $this->userid)->count();
-		$userInfo['reply_sum'] = Reminder::where('touid', $this->userid)->where('status', 0)->count();
+		// $userInfo['reply_sum'] = Reminder::where('touid', $this->userid)->where('status', 0)->count();
 		// $userInfo['fans_count'] = Fans::where('touid', $userid)->count();
 		// $userInfo['concern_count'] = Fans::where('fromuid', $userid)->count();
 		// $userInfo['fans_count'] = Fans::where('touid', $userid)->where('fromuid','<>',$userid)->count();

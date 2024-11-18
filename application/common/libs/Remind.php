@@ -10,6 +10,25 @@ class Remind
         return self::$prefix . 'last_request_time_' .$uid;
     }
 
+    public static function checkAll($uid)
+    {
+        $chatRemind = cache(self::getName($uid));
+        $messageRemind = \app\common\model\Reminder::where('touid', $uid)->where('status', 0)->count();
+        $types = [];
+        if ($chatRemind) {
+            array_push($types, 'chat');
+        }
+        if ($messageRemind) {
+            array_push($types, 'message');
+        }
+        
+        return [
+            'chatRemind' => $chatRemind,
+            'messageRemind'=> $messageRemind,
+            'types' => $types
+        ];
+    }
+
     public static function check($uid)
     {
         $result = cache(self::getName($uid));

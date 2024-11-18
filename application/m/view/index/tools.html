@@ -27,7 +27,7 @@
 				<div class="post-content">
 					<li>
 						{$appInfo['app_name']}
-						{if in_array($appInfo['remind_key'], $chatRemind)}
+						{if in_array($appInfo['remind_key'], $chatRemind['types'])}
 						<span class="layui-badge-dot layui-bg-blue"></span>
 						{/if}
 					</li>

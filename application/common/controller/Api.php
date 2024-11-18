@@ -226,10 +226,14 @@ class Api extends Base
 
     public function checkRemind()
     {
-        $remind = \app\common\libs\Remind::check(getLoginUid());
-        if (!$remind) {
+        $uid = getLoginUid();
+        if (!$uid) {
             return json(array('status' =>  0,'msg' => ''));
         }
-        return json(array('status' =>  1,'msg' => 'ok', 'data' => $remind));
+        $data = \app\common\libs\Remind::checkAll($uid);
+        if (!$data['chatRemind'] && !$data['messageRemind']) {
+            return json(array('status' =>  0,'msg' => ''));
+        }
+        return json(array('status' =>  1,'msg' => 'ok', 'data' => $data));
     }
 }
