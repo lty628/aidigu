@@ -83,9 +83,10 @@ class SmartVideo
                 'https://music.163.com/outchain/player?type=2&id={video_id}&auto=0&height=90',
             ),
         );
+        $title = $matches[5] ?? '';
         if (!isset($providers[$site]) || !preg_match_all($providers[$site][0], $matches[0], $match)) {
             // return $matches[0];
-            return '<p><a href="javascript:;">暂不支持的链接</a></p>';
+            return '<p><a href="javascript:;">'.$title.'</a></p>';
         }
         
         $id = $match['video_id'][0] == '' ? $match['video_id2'][0] : $match['video_id'][0];
@@ -102,7 +103,7 @@ class SmartVideo
             $width,
             $height
         );
-        $title = $matches[5] ?? '';
+        
         return '<p>'. $title .'</p><p><div id="typembed">' . $html . '</div></p>';
     }
 

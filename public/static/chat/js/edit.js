@@ -249,7 +249,7 @@ const E = window.wangEditor
 		var media = checkMediaType(link);
 
 		if (media[0]) {
-			$("#mediaVal").val(JSON.stringify(media));
+			$("#mediaVal").val(JSON.stringify(media[1]));
 		}
 		// console.log($("#mediaVal").val())
 		return true;
