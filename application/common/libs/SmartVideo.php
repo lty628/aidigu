@@ -36,6 +36,11 @@ class SmartVideo
                 'https://www.youtube.com/v/{video_id}',
                 'https://www.youtube.com/embed/{video_id}',
             ),
+            'www.douyin.com' => array(
+                '#https?://www\.douyin\.com/discover\?modal_id=(?<video_id>\d+)#i',
+                '',
+                'https:////open.douyin.com/player/video?vid={video_id}&autoplay=0',
+            ),
             'www.bilibili.com' => array(
                 '#https?://www\.bilibili\.com/video/(?:[av|BV]+)(?:(?<video_id1>[a-zA-Z0-9_=\-]+)/(?:index_|\#page=)(?<video_id2>[a-zA-Z0-9_=\-]+)|(?<video_id>[a-zA-Z0-9_=\-]+))#i',
                 '',
