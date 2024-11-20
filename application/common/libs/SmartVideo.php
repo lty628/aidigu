@@ -102,7 +102,8 @@ class SmartVideo
             $width,
             $height
         );
-        return '<p><div id="typembed">' . $html . '</div></p>';
+        $title = $matches[5] ?? '';
+        return '<p>'. $title .'</p><p><div id="typembed">' . $html . '</div></p>';
     }
 
 
