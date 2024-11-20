@@ -248,10 +248,10 @@ const E = window.wangEditor
 		// 以下情况，请三选一
 		var media = checkMediaType(link);
 
-		if (media != false) {
+		if (media[0]) {
 			$("#mediaVal").val(JSON.stringify(media));
 		}
-		console.log($("#mediaVal").val())
+		// console.log($("#mediaVal").val())
 		return true;
 	}
 

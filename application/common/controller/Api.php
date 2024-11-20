@@ -113,6 +113,7 @@ class Api extends Base
     }
     public static function saveMessage($contents, $mediaInfo)
     {
+        $contents = \app\common\libs\SmartVideo::parse($contents);
         if ($mediaInfo) {
             $mediaInfo = json_decode($mediaInfo, true);
             if ($mediaInfo['media_type'] == 'html') {

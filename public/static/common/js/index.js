@@ -16,10 +16,10 @@ function checkMediaType(url) {
     var extensions = ['jpg', 'jpeg', 'gif', 'png', 'mp4', 'm3u8'];
     // 判断文件扩展名是否在图片扩展名数组中
     if (extensions.includes(extension)) {
-        return media;
+        return [1, media];
     }
 
-    return false;
+    return [0, url];
 }
 
 layui.use(function () {
