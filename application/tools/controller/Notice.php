@@ -55,4 +55,16 @@ class Notice extends Controller
         return json(['code' => 0, 'msg' => '取消成功']);
     }
 
+    public function view()
+    {
+        $msgId = input('get.msgId');
+        $info = Db::name('message')
+            ->alias('message')
+            ->leftJoin([getPrefix() . 'user' => 'user'], 'message.uid=user.uid')
+            ->field('user.blog')
+            ->find();
+        // thinkphp5 跳转链接
+        $this->redirect($info['blog'] . '/message/' . $msgId);
+    }
+
 }

@@ -88,11 +88,11 @@
             }
           },
           { fixed: 'right', align: 'center', title: '操作', templet: function(d) {
-            
+            var str = '<a target="__blank" href="/tools/notice/view?msgId='+d.msg_id+'" class="layui-btn layui-btn-xs">查看</a>'
             if (d.status) {
-              return '<a class="layui-btn layui-btn-xs">已读</a>'
+              return str+'<a class="layui-btn layui-btn-xs">已读</a>'
             } else {
-              return '<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="edit">标记已读</a>'
+              return str+'<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="edit">标记已读</a>'
             }
           } }
         ]]
