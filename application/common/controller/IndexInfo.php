@@ -23,7 +23,7 @@ class IndexInfo extends Info
                 ->order('message.ctime desc')
                 ->field('user.uid,user.nickname,user.head_image,user.blog,message.ctime,message.contents,message.repost,message.refrom,message.repostsum,message.media,message.media_info,message.commentsum,message.msg_id')
                 ->where('message.is_delete', 0)
-                ->paginate(20, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
+                ->paginate(8, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
         } else {
             $userMessage = Db::name('message')
                 ->alias('message')
@@ -35,7 +35,7 @@ class IndexInfo extends Info
                 ->where(function ($query) {
                     $query->where('user.invisible', 0)->whereOr('user.uid', $this->siteUserId);
                 })
-                ->paginate(20, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
+                ->paginate(8, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
         }
         
         $this->assign('userMessage', []);
@@ -48,7 +48,7 @@ class IndexInfo extends Info
     public function own()
     {
         if (request()->isAjax()) {
-            $userMessage = $this->getMessage($this->siteUserId, 20);
+            $userMessage = $this->getMessage($this->siteUserId, 8);
             $allwoDelete = 1;
             if ($this->siteUserId != $this->userid) $allwoDelete = 0;
             $userMessage = $userMessage->toArray()['data'];
@@ -63,7 +63,7 @@ class IndexInfo extends Info
     {
         $this->assign('siteUser', $this->siteUserId);
         if (request()->isAjax()) {
-            $userMessage = $this->getMessage('', 20);
+            $userMessage = $this->getMessage('', 8);
             $userMessage = $userMessage->toArray()['data'];
             return json(array('status' =>  1, 'msg' => 'ok', 'data' => ['data' => handleMessage($userMessage), 'allow_delete' => 0]));
         }
