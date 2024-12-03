@@ -44,7 +44,7 @@ class SmartVideo
             'www.bilibili.com' => array(
                 '#https?://www\.bilibili\.com/video/(?:[av|BV]+)(?:(?<video_id1>[a-zA-Z0-9_=\-]+)/(?:index_|\#page=)(?<video_id2>[a-zA-Z0-9_=\-]+)|(?<video_id>[a-zA-Z0-9_=\-]+))#i',
                 '',
-                '//player.bilibili.com/player.html?aid={video_id}&bvid={video_id}&cid=&page=1',
+                '//player.bilibili.com/player.html?aid={video_id}&bvid={video_id}&cid=&page=1&autoplay=0',
             ),
             'v.youku.com' => array(
                 '#https?://v\.youku\.com/v_show/id_(?<video_id>[a-z0-9_=\-]+)#i',
