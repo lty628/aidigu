@@ -143,7 +143,7 @@ class Sourcematerial extends Controller
             return json(['code' => 1, 'msg' => '每天只能推送一次']);
         }
 
-        $frameStr = '<iframe src="/tools/Sourcematerial/preview?id='.$id.'" allowfullscreen="true" allowtransparency="true" width="100%" onload="changeFrameHeight(this)" frameborder="0" scrolling="auto"></iframe>';
+        $frameStr = '<iframe sandbox="allow-same-origin allow-scripts" src="/tools/Sourcematerial/preview?id='.$id.'" allowfullscreen="true" allowtransparency="true" width="100%" onload="changeFrameHeight(this)" frameborder="0" scrolling="auto"></iframe>';
 
         $result = \app\common\controller\Api::saveMessage($frameStr, '');
 
