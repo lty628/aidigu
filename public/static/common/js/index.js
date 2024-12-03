@@ -101,7 +101,7 @@ function showFrameUrl(obj, width, height) {
         maxmin: false,
         // moveOut: true,
         scrollbar: false,
-        content: '<iframe src="' + $(obj).attr('data-url') + '" allowfullscreen="true" allowtransparency="true" width="100%" height="100%" frameborder="0" scrolling="yes"></iframe>',
+        content: '<iframe sandbox="allow-same-origin allow-scripts" src="' + $(obj).attr('data-url') + '" allowfullscreen="true" allowtransparency="true" width="100%" height="100%" frameborder="0" scrolling="yes"></iframe>',
         // zIndex: layer.zIndex, //重点1
         // success: function(layero){
         //     layer.setTop(layero); //重点2
@@ -132,7 +132,7 @@ function showFrameCustom(obj, appConfig) {
         hideOnClose: appConfig.hideOnClose,
         // moveOut: true,
         scrollbar: false,
-        content: '<iframe src="' + $(obj).attr('data-url') + '" allowfullscreen="true" allowtransparency="true" width="100%" height="100%" frameborder="0" scrolling="yes"></iframe>',
+        content: '<iframe sandbox="allow-same-origin allow-scripts" src="' + $(obj).attr('data-url') + '" allowfullscreen="true" allowtransparency="true" width="100%" height="100%" frameborder="0" scrolling="yes"></iframe>',
         // zIndex: layer.zIndex, //重点1
         // success: function(layero){
         //     layer.setTop(layero); //重点2
