@@ -103,7 +103,7 @@ class SmartVideo
     
         $url = str_replace('{video_id}', $id, $providers[$site][2]);
         $html = sprintf(
-            '<iframe sandbox="allow-same-origin allow-scripts" src="%1$s" width="%2$s" height="%3$s" frameborder="0" allowfullscreen="true"></iframe>',
+            '<iframe sandbox="allow-same-origin allow-scripts allow-popups" src="%1$s" width="%2$s" height="%3$s" frameborder="0" allowfullscreen="true"></iframe>',
             $url,
             $width,
             $height
