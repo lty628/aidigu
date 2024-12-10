@@ -36,6 +36,12 @@ class Listener
             file_put_contents('error.txt', json_encode($fileMeta), FILE_APPEND);
             return json(['code'=>0]); 
         }
+
+        \app\common\libs\FileLog::add($uid, 6, $data['file_type'], [
+            'media_info' => $data['file_path'],
+			'media_type' => $data['type'],
+			'media_size' => $fileMeta['size'],
+        ]);
         return json(['code'=>1]); 
     }
 }

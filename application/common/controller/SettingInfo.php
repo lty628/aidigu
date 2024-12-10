@@ -61,9 +61,11 @@ class SettingInfo extends Base
 			$image->thumb(200, 200,Image::THUMB_CENTER)->save($path.'/'.$fileName.'_big.'.$info->getExtension());
 			$data['media_info'] = '/'.$path.'/'.$fileName;
 			$data['media_type'] = $info->getExtension();
+			$data['media_size'] = $info->getSize();
 			$data['small'] = '/'.$path.'/'.$fileName.'_small.'.$info->getExtension();
 			$data['middle'] = '/'.$path.'/'.$fileName.'_middle.'.$info->getExtension();
 			$data['big'] = '/'.$path.'/'.$fileName.'_big.'.$info->getExtension();
+			\app\common\libs\FileLog::add(getLoginUid(), 1, $info->getExtension(), $data);
 			return json(['status'=>1, 'msg'=>'上传成功','data'=>$data]);
 		}else{
 			// 上传失败获取错误信息
@@ -116,6 +118,8 @@ class SettingInfo extends Base
 			$fileName = explode('.', $info->getSaveName())[0];
 			$data['media_info'] = '/'.$path.'/'.$fileName;
 			$data['media_type'] = $info->getExtension();
+			$data['media_size'] = $info->getSize();
+			\app\common\libs\FileLog::add(getLoginUid(), 2, $info->getExtension(), $data);
 			return json(['status'=>1, 'msg'=>'上传成功','data'=>$data]);
 		}else{
 			// 上传失败获取错误信息
@@ -137,6 +141,8 @@ class SettingInfo extends Base
 			$fileName = explode('.', $info->getSaveName())[0];
 			$data['media_info'] = '/'.$path.'/'.$fileName;
 			$data['media_type'] = $info->getExtension();
+			$data['media_size'] = $info->getSize();
+			\app\common\libs\FileLog::add(getLoginUid(), 3, $info->getExtension(), $data);
 			return json(['status'=>1, 'msg'=>'上传成功','data'=>$data]);
 		}else{
 			// 上传失败获取错误信息
@@ -159,6 +165,8 @@ class SettingInfo extends Base
 			$fileName = explode('.', $info->getSaveName())[0];
 			$data['media_info'] = '/'.$path.'/'.$fileName;
 			$data['media_type'] = $info->getExtension();
+			$data['media_size'] = $info->getSize();
+			\app\common\libs\FileLog::add(getLoginUid(), 4, $info->getExtension(), $data);
 			return json(['status'=>1, 'msg'=>'上传成功','data'=>$data]);
 		}else{
 			// 上传失败获取错误信息
@@ -179,7 +187,12 @@ class SettingInfo extends Base
 		if($info){
 			// 成功上传后 获取上传信息
 			$fileFath = $path.'/'.$info->getSaveName();
+			$fileName = explode('.', $info->getSaveName())[0];
 			$data['image_path'] = '/'.$fileFath;
+			$data['media_info'] = '/'.$path.'/'.$fileName;
+			$data['media_type'] = $info->getExtension();
+			$data['media_size'] = $info->getSize();
+			\app\common\libs\FileLog::add(getLoginUid(), 5, $info->getExtension(), $data);
 			return json(['status'=>1, 'msg'=>'上传成功','data'=>$data]);
 		}else{
 			// 上传失败获取错误信息
