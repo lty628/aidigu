@@ -65,6 +65,8 @@ class SettingInfo extends Base
 			$data['small'] = '/'.$path.'/'.$fileName.'_small.'.$info->getExtension();
 			$data['middle'] = '/'.$path.'/'.$fileName.'_middle.'.$info->getExtension();
 			$data['big'] = '/'.$path.'/'.$fileName.'_big.'.$info->getExtension();
+			$data['media_name'] = $info->getInfo()['name'];
+			$data['media_mime'] = $info->getInfo()['type'];
 			\app\common\libs\FileLog::add(getLoginUid(), 1, $info->getExtension(), $data);
 			return json(['status'=>1, 'msg'=>'上传成功','data'=>$data]);
 		}else{
@@ -119,6 +121,8 @@ class SettingInfo extends Base
 			$data['media_info'] = '/'.$path.'/'.$fileName;
 			$data['media_type'] = $info->getExtension();
 			$data['media_size'] = $info->getSize();
+			$data['media_name'] = $info->getInfo()['name'];
+			$data['media_mime'] = $info->getInfo()['type'];
 			\app\common\libs\FileLog::add(getLoginUid(), 2, $info->getExtension(), $data);
 			return json(['status'=>1, 'msg'=>'上传成功','data'=>$data]);
 		}else{
@@ -142,6 +146,8 @@ class SettingInfo extends Base
 			$data['media_info'] = '/'.$path.'/'.$fileName;
 			$data['media_type'] = $info->getExtension();
 			$data['media_size'] = $info->getSize();
+			$data['media_name'] = $info->getInfo()['name'];
+			$data['media_mime'] = $info->getInfo()['type'];
 			\app\common\libs\FileLog::add(getLoginUid(), 3, $info->getExtension(), $data);
 			return json(['status'=>1, 'msg'=>'上传成功','data'=>$data]);
 		}else{
@@ -166,6 +172,8 @@ class SettingInfo extends Base
 			$data['media_info'] = '/'.$path.'/'.$fileName;
 			$data['media_type'] = $info->getExtension();
 			$data['media_size'] = $info->getSize();
+			$data['media_name'] = $info->getInfo()['name'];
+			$data['media_mime'] = $info->getInfo()['type'];
 			\app\common\libs\FileLog::add(getLoginUid(), 4, $info->getExtension(), $data);
 			return json(['status'=>1, 'msg'=>'上传成功','data'=>$data]);
 		}else{
@@ -192,6 +200,8 @@ class SettingInfo extends Base
 			$data['media_info'] = '/'.$path.'/'.$fileName;
 			$data['media_type'] = $info->getExtension();
 			$data['media_size'] = $info->getSize();
+			$data['media_name'] = $info->getInfo()['name'];
+			$data['media_mime'] = $info->getInfo()['type'];
 			\app\common\libs\FileLog::add(getLoginUid(), 5, $info->getExtension(), $data);
 			return json(['status'=>1, 'msg'=>'上传成功','data'=>$data]);
 		}else{

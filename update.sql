@@ -12,15 +12,16 @@ INSERT INTO wb_app
 VALUES('互动提醒', '/tools/notice/list', 1, 2, '/static/tools/common/images/notice.jpg', '', '{"title":"互动提醒","shade":0.8,"closeBtn":true,"shadeClose":false,"area":["100%","100%"],"resize":false,"maxmin":false,"skin":"layui-layer-win10","id":"app_48","hideOnClose":true,"scrollbar":false}', 0, '2024-01-30 11:16:10', '2024-10-10 10:17:48');
 
 
-CREATE TABLE `wb_file_log` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `uid` bigint unsigned NOT NULL DEFAULT '0',
-  `type` tinyint unsigned NOT NULL DEFAULT '0' COMMENT 'type 1头像，2微博，3聊天，4素材，5主题, 6网盘',
-  `media_type` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+CREATE TABLE `wb_file_log`  (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `uid` bigint(20) UNSIGNED NOT NULL DEFAULT 0,
+  `type` tinyint(3) UNSIGNED NOT NULL DEFAULT 0 COMMENT 'type 1头像，2微博，3聊天，4素材，5主题, 6网盘',
+  `media_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `media_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `media_size` double NOT NULL,
-  `mime_info` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `media_info` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `is_del` tinyint unsigned NOT NULL DEFAULT '0',
-  `create_time` bigint NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `media_mime` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `media_info` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `is_del` tinyint(3) UNSIGNED NOT NULL DEFAULT 0,
+  `create_time` bigint(20) NOT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;

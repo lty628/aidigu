@@ -13,8 +13,11 @@ class FileLog
         // 'media_info' = $fileMeta['file_path'],
         // 'media_type' = $fileMeta['type'],
         // 'media_size' = $fileMeta['size'],
+        // $data['media_name'] = $info->getInfo()['name'];
+	    // $data['media_mime'] = $info->getInfo()['type'];
         if ($type != 6) {
-            $mimeInfo = self::getApplication($mediaType);
+            // $mimeInfo = self::getApplication($mediaType);
+            $mimeInfo = $fileInfo['media_mime'];
             $mediaInfo = $fileInfo['media_info'].'.'.$fileInfo['media_type'];
         } else {
             $mimeInfo = $mediaType;
@@ -28,8 +31,9 @@ class FileLog
             'type' => $type,
             'media_type' => $mediaType,
             'media_size' => $fileInfo['media_size'],
-            'mime_info' => $mimeInfo,
+            'media_mime' => $mimeInfo,
             'media_info' => $mediaInfo,
+            'media_name' => $fileInfo['media_name'],
             'create_time' => time()
         ]);
     }
