@@ -41,7 +41,7 @@ class Listener
             'media_info' => $data['file_path'],
 			'media_type' => $data['type'],
 			'media_size' => $fileMeta['size'],
-			'media_name' => $fileMeta['file_name'],
+			'media_name' => $data['file_name'],
         ]);
         return json(['code'=>1]); 
     }
