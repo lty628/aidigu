@@ -44,6 +44,9 @@ function iniVideo(i)
 					document.getElementById(playIngMusicId).pause()
 				}
 			});
+			DP[index].on('loadedmetadata', function() {
+				DP[index].seek(0); // 将视频跳转到第一秒
+			});
 
 			// 监听滚动条，当DP[index]在可视区域内时，播放视频，不在可视区域内时，暂停视频
 			// var flag = true;
