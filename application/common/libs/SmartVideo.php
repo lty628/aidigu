@@ -26,61 +26,66 @@ class SmartVideo
 
         $providers = array(
             // video
-            'www.youtube.com' => array(
-                '#https?://www\.youtube\.com/watch\?v=(?<video_id>[a-z0-9_=\-]+)#i',
-                'https://www.youtube.com/v/{video_id}',
-                'https://www.youtube.com/embed/{video_id}',
-            ),
-            'youtu.be' => array(
-                '#https?://youtu\.be/(?<video_id>[a-z0-9_=\-]+)#i',
-                'https://www.youtube.com/v/{video_id}',
-                'https://www.youtube.com/embed/{video_id}',
-            ),
-            'www.douyin.com' => array(
-                '#https?://www\.douyin\.com/discover\?modal_id=(?<video_id>\d+)#i',
+            // 'www.youtube.com' => array(
+            //     '#https?://www\.youtube\.com/watch\?v=(?<video_id>[a-z0-9_=\-]+)#i',
+            //     'https://www.youtube.com/v/{video_id}',
+            //     'https://www.youtube.com/embed/{video_id}',
+            // ),
+            // 'youtu.be' => array(
+            //     '#https?://youtu\.be/(?<video_id>[a-z0-9_=\-]+)#i',
+            //     'https://www.youtube.com/v/{video_id}',
+            //     'https://www.youtube.com/embed/{video_id}',
+            // ),
+            'www.ixigua.com' => array(
+                '#https?://www\.ixigua\.com/(?<video_id>[0-9]+)\?logTag=.*#i',
                 '',
-                'https:////open.douyin.com/player/video?vid={video_id}&autoplay=0',
+                'https://www.ixigua.com/iframe/{video_id}?autoplay=0',
             ),
             'www.bilibili.com' => array(
                 '#https?://www\.bilibili\.com/video/(?:[av|BV]+)(?:(?<video_id1>[a-zA-Z0-9_=\-]+)/(?:index_|\#page=)(?<video_id2>[a-zA-Z0-9_=\-]+)|(?<video_id>[a-zA-Z0-9_=\-]+))#i',
                 '',
                 '//player.bilibili.com/player.html?aid={video_id}&bvid={video_id}&cid=&page=1&autoplay=0',
             ),
-            'v.youku.com' => array(
-                '#https?://v\.youku\.com/v_show/id_(?<video_id>[a-z0-9_=\-]+)#i',
-                '',
-                'https://player.youku.com/embed/{video_id}?client_id=d0b1b77a17cded3b',
-            ),
-            'v.qq.com' => array(
-                '#https?://v\.qq\.com/(?:[a-z0-9_\./]+\?vid=(?<video_id>[a-z0-9_=\-]+)|(?:[a-z0-9/]+)/(?<video_id2>[a-z0-9_=\-]+))#i',
-                '',
-                'https://v.qq.com/iframe/player.html?vid={video_id}',
-            ),
-            'www.dailymotion.com' => array(
-                '#https?://www\.dailymotion\.com/video/(?<video_id>[a-z0-9_=\-]+)#i',
-                '',
-                'https://www.dailymotion.com/embed/video/{video_id}',
-            ),
+            // 'www.douyin.com' => array(
+            //     '#https?://www\.douyin\.com/discover\?modal_id=(?<video_id>\d+)#i',
+            //     '',
+            //     'https:////open.douyin.com/player/video?vid={video_id}&autoplay=0',
+            // ),
+            // 'v.youku.com' => array(
+            //     '#https?://v\.youku\.com/v_show/id_(?<video_id>[a-z0-9_=\-]+)#i',
+            //     '',
+            //     'https://player.youku.com/embed/{video_id}?client_id=d0b1b77a17cded3b',
+            // ),
+            // 'v.qq.com' => array(
+            //     '#https?://v\.qq\.com/(?:[a-z0-9_\./]+\?vid=(?<video_id>[a-z0-9_=\-]+)|(?:[a-z0-9/]+)/(?<video_id2>[a-z0-9_=\-]+))#i',
+            //     '',
+            //     'https://v.qq.com/iframe/player.html?vid={video_id}',
+            // ),
+            // 'www.dailymotion.com' => array(
+            //     '#https?://www\.dailymotion\.com/video/(?<video_id>[a-z0-9_=\-]+)#i',
+            //     '',
+            //     'https://www.dailymotion.com/embed/video/{video_id}',
+            // ),
             'www.acfun.cn' => array(
                 '#https?://www\.acfun\.cn/v/ac(?<video_id>\d+)#i',
                 '',
                 'https://www.acfun.cn/player/ac{video_id}',
             ),
-            'my.tv.sohu.com' => array(
-                '#https?://my\.tv\.sohu\.com/us/(?:\d+)/(?<video_id>\d+)#i',
-                '',
-                'https://tv.sohu.com/upload/static/share/share_play.html#{video_id}_0_0_9001_0',
-            ),
-            'www.56.com' => array(
-                '#https?://(?:www\.)?56\.com/[a-z0-9]+/(?:play_album\-aid\-[0-9]+_vid\-(?<video_id>[a-z0-9_=\-]+)|v_(?<video_id2>[a-z0-9_=\-]+))#i',
-                '',
-                'https://www.56.com/iframe/{video_id}',
-            ),
-            'www.wasu.cn' => array(
-                '#https?://www\.wasu\.cn/play/show/id/(?<video_id>\d+)#i',
-                '',
-                'https://www.wasu.cn/Play/iframe/id/{video_id}',
-            ),
+            // 'my.tv.sohu.com' => array(
+            //     '#https?://my\.tv\.sohu\.com/us/(?:\d+)/(?<video_id>\d+)#i',
+            //     '',
+            //     'https://tv.sohu.com/upload/static/share/share_play.html#{video_id}_0_0_9001_0',
+            // ),
+            // 'www.56.com' => array(
+            //     '#https?://(?:www\.)?56\.com/[a-z0-9]+/(?:play_album\-aid\-[0-9]+_vid\-(?<video_id>[a-z0-9_=\-]+)|v_(?<video_id2>[a-z0-9_=\-]+))#i',
+            //     '',
+            //     'https://www.56.com/iframe/{video_id}',
+            // ),
+            // 'www.wasu.cn' => array(
+            //     '#https?://www\.wasu\.cn/play/show/id/(?<video_id>\d+)#i',
+            //     '',
+            //     'https://www.wasu.cn/Play/iframe/id/{video_id}',
+            // ),
             // music
             'music.163.com' => array(
                 '#https?://music\.163\.com/\#/song\?id=(?<video_id>\d+)#i',
