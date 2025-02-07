@@ -167,6 +167,26 @@
       }
     }
 
+    function showTextPopup(obj){
+
+      if (parent.layer) {
+        var layer = parent.layer
+      } 
+
+      layer.open({
+          title: $(obj).attr('data-title'),
+          shade: 0.8,
+          closeBtn: 1,
+          shadeClose: true,
+          area: ['100%', '100%'],
+          resize: false,
+          maxmin: true,
+          // moveOut: true,
+          scrollbar: false,
+          content: '<iframe sandbox="allow-same-origin allow-scripts allow-popups" src="' + $(obj).attr('data-url') + '" allowfullscreen="true" allowtransparency="true" width="100%" height="100%" frameborder="0" scrolling="yes"></iframe>'
+        });
+    }
+
     layui.use(function () {
       var flow = layui.flow;
       var id = $("#previewId").val()
@@ -174,6 +194,7 @@
       var imgArray = ['jiff', 'jpg', 'bmp', 'jpeg', 'png', 'gif'];
       var videoArray = ['mp4'];
       var otherArray = ['zip', 'rar', '7z', 'pdf'];
+      var textArray = ['txt'];
 
       // 流加载实例
       flow.load({
@@ -193,6 +214,7 @@
               var imgStr = ''
               var videoStr = ''
               var otherStr = ''
+              var textStr = ''
               var staticDomain = $("#staticDomain").val()
 
               for (var key in data) {
@@ -200,13 +222,16 @@
                   imgStr += '<li><a href="javascript:;"><img onclick="showMessageImg(this)" lay-src="' + staticDomain + data[key].media_info + '.' + data[key].media_type + '"></li>'
                 } else if (videoArray.includes(data[key].media_type)) {
                   videoStr += '<li class="showVideo' + data[key].id + '"><video onclick="showVideoPopup(this)" src="' + staticDomain + data[key].media_info + '.' + data[key].media_type + '" controls="" name="media"><source src="' + staticDomain + data[key].media_info + '.' + data[key].media_type + '" type="video/mp4"></video></li>'
+                } else if (textArray.includes(data[key].media_type)) {
+                  textStr += '<li class="showOther"><span><a href="javascript:;" data-title="'+data[key].file_name+'" data-url="/tools/reader?material_relation_id='+data[key].id +'" date onclick="showTextPopup(this)">点击阅读' + data[key].file_name + '</a></span></li>'
                 } else {
-                  otherStr += '<li class="showOther"><span><a href="' + staticDomain + data[key].media_info + '.' + data[key].media_type + '" >点击下载' + staticDomain + data[key].file_name + '</a></span></li>'
+                  otherStr += '<li class="showOther"><span><a href="' + staticDomain + data[key].media_info + '.' + data[key].media_type + '" >点击下载' + data[key].file_name + '</a></span></li>'
                   // otherStr += '<li><a href="javascript:;"><img onclick="showMessageImg(this)" lay-src="' + staticDomain + data[key].media_info + '.' + data[key].media_type + '"></li>'
                 }
               }
               next(imgStr, page < 1);
               next(videoStr, page < 1);
+              next('<p>' + textStr + '</p>', page < 1);
               next('<p>' + otherStr + '</p>', page < 1);
 
               // 获取 ID-flow-div-manual 下li的个数
