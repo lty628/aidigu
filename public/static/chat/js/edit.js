@@ -308,7 +308,7 @@ const E = window.wangEditor
 					} else if (type == 'image') {
 						htmlStr = '<p>分享图片-' + data.file_name + '</p><p  class="massageImg clear"><img  width="90%" class="massageImgCommon massageImg_'+type+'"  onclick="showMessageImg(this)" src="' + data.file_path + '"></p>'
 					} else if (type == 'text') {
-						htmlStr = '<p>分享文本-点击<a href="javascript:;" data-url="/tools/reader?file_id='+data.file_id+'" data-title="'+ data.file_name +'"  onclick="parent.showFrameHtml(this, \'100%\', \'100%\')">' + data.file_name + '</a>阅读</p>'
+						htmlStr = '<p>分享文本-点击<a href="javascript:;" data-url="/tools/reader?file_id='+data.id+'" data-title="'+ data.file_name +'"  onclick="showFrameHtml(this, \'100%\', \'100%\')">' + data.file_name + '</a>阅读</p>'
 					} else {
 						htmlStr = '<p>分享文件-点击<a href="'+data.file_path+'">《'+data.file_name +'》</a>下载</p>'
 					}

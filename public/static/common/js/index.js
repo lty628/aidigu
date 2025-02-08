@@ -70,6 +70,9 @@ var showFrame = false;
 function showFrameHtml(obj, width, height) {
     if (showFrame) return
     showFrame = true
+    if (parent.layer) {
+        var layer = parent.layer
+    }
     layer.open({
         type: 2,
         title: $(obj).attr('data-title'),
