@@ -2300,6 +2300,9 @@
         });
 
         document.addEventListener('touchend', (e) => {
+
+            return;
+
             const touchEndX = e.changedTouches[0].clientX;
             const touchEndY = e.changedTouches[0].clientY;
             const deltaX = touchEndX - touchStartX;
