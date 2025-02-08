@@ -1412,6 +1412,22 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
+
+        /* 尺寸小于1000px时，隐藏章节跳转功能。 */
+        @media (max-width: 1000px) {
+            .function-buttons {
+                display: none;
+            }
+            .chapters {
+                display: none;
+            }
+            .time-tip {
+                display: none;
+            }
+            .progress-tip {
+                display: none !important;
+            }
+        }
     </style>
 </head>
 
