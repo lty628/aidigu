@@ -9,6 +9,7 @@ class Reader extends Controller
 	public function index()
     {
         $materialRelationId = (int) input('get.material_relation_id');
+        $fileId = (int) input('get.file_id');
         $path = '';
         $contents = '';
         $filename = '';
@@ -20,6 +21,15 @@ class Reader extends Controller
                 $filename = $materialRelation['file_name'];
             }
         }
+
+        if ($fileId) {
+            $fileInfo = Db::name('file')->where('id', $fileId)->find();
+            if ($fileInfo) {
+                $path = $fileInfo['file_path'];
+                $filename = $fileInfo['file_name'];
+            }
+        }
+
         if ($path) {
             $path = env('root_path') . 'public' . $path;
         }

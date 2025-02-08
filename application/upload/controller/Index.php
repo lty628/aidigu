@@ -210,6 +210,8 @@ class Index extends Controller
             ]);
         } elseif ($fileInfo['file_type'] == 'audio/mpeg') {
             $data['content'] = '<p>分享 ' . $fileInfo['file_name'] . '</p><p><audio id="' . 'music_' . $id . '" class="music" controls="controls" loop="loop" onplay="stopOther(this)" preload="none" controlsList="nodownload" οncοntextmenu="return false" name="media"><source src="' . $fileInfo['file_path'] . '" type="audio/mpeg"></audio></p>';
+        } elseif ($type[0] == 'text') {
+            $data['content'] = '<p>阅读文件，点击<a href="javascript:;" data-url="/tools/reader?file_id=' . $fileInfo['id'] . '" data-title="' . $fileInfo['file_name'] . '" onclick="showFrameHtml(this, \'100%\', \'100%\')">' . $fileInfo['file_name'] . '</a>阅读</p>';
         } else {
             $data['content'] = '<p>分享文件，点击<a href="' . $fileInfo['file_path'] . '">' . $fileInfo['file_name'] . '</a>下载</p>';
         }
