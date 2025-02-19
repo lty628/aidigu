@@ -20,6 +20,7 @@ class Base extends Controller
 		$pubIndex = env('app.pubIndex', '');
 		if ($pubIndex && request()->action() == 'index' && !isMobile()) {
 			// 无逻辑处理
+			return true;
 		} else {
 			if (!$uid) {
 				$isRightCookie = checkUserCookie(cookie('rememberMe'));
