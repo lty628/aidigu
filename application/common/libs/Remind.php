@@ -12,6 +12,7 @@ class Remind
 
     public static function checkAll($uid)
     {
+        if (!$uid) return [];
         $chatRemind = cache(self::getName($uid));
         $messageRemind = \app\common\model\Reminder::where('touid', $uid)->where('status', 0)->count();
         $types = [];

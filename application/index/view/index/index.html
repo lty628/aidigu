@@ -107,7 +107,7 @@
 </style>
 <div class="main">
 	<div class="contents">
-		{if $userInfo.isSiteUser}
+		{if $userInfo && $userInfo.isSiteUser}
 		<div class="post" id="postform" style="display:block;">
 			<div class="postad" id="wcontent">&nbsp;</div>
 
@@ -136,7 +136,7 @@
 			<div class="clear"></div>
 		</div>
 		{else}
-		<div class="top"></div>
+		<div class="top" style="background-color: white;"></div>
 		{/if}
 		<input type="hidden" id="userInfo" value="{$userInfo|json_encode}" />
 		<div class="sendMsg"></div>
@@ -201,7 +201,10 @@
 	<!-- <section class="back-to-top">
 		回到顶部
 	</section> -->
-	{if $userInfo.isSiteUser}
+
+	{if !$userInfo}
+	{include file='index/sidebar_nologin' /}
+	{elseif $userInfo.isSiteUser}
 	{include file='index/sidebar_index' /}
 	{else}
 	{include file='index/sidebar_user' /}
@@ -300,20 +303,26 @@
 							if (0 != data[i].commentsum) {
 								c2 = '(' + data[i].commentsum + ')'
 							}
-							delStr += '<a href="/' + data[i].blog + '/message/' + data[i].msg_id + '">查看</a> |';
-							delStr += '<a href="javascript:;" data-title="评论" data-url="/chat/messageChatId/' + data[i].msg_id + '" onclick="showFrameHtml(this, \'60%\', \'70%\')">评论' + c2 + '</a>'
-							// delStr += '<a href="javascript:void(0);" onclick="repost(this, '+data[i].uid+', '+data[i].msg_id+')">转发'+c1+'</a> |';
-							// delStr += '<a href="javascript:void(0);" onclick="comment(' + data[i].msg_id + ', ' + data[i].uid + ');">评论' + c2 + '</a>';
-							if(!json.data.is_collect) {
-								delStr += ' | <a href="javascript:void(0);" onclick="collectMsg(' + data[i].msg_id + ',0);">收藏</a>';
-							}
-							if (json.data.allow_delete) {
-								delStr += ' | <a href="/' + data[i].blog + '/del/message/' + data[i].msg_id + '">删除</a>';
-							} else if(json.data.is_collect) {
-								// delStr += ' | <a href="javascript:void(0);" onclick="collectMsg(' + data[i].msg_id + ',1);">取消收藏</a>';
+							
+							if (json.data.allow_delete != -1) {
+								delStr += '<a href="/' + data[i].blog + '/message/' + data[i].msg_id + '">查看</a> |';
+								delStr += '<a href="javascript:;" data-title="评论" data-url="/chat/messageChatId/' + data[i].msg_id + '" onclick="showFrameHtml(this, \'60%\', \'70%\')">评论' + c2 + '</a>'
+								// delStr += '<a href="javascript:void(0);" onclick="repost(this, '+data[i].uid+', '+data[i].msg_id+')">转发'+c1+'</a> |';
+								// delStr += '<a href="javascript:void(0);" onclick="comment(' + data[i].msg_id + ', ' + data[i].uid + ');">评论' + c2 + '</a>';
+								if(!json.data.is_collect) {
+									delStr += ' | <a href="javascript:void(0);" onclick="collectMsg(' + data[i].msg_id + ',0);">收藏</a>';
+								}
+								if (json.data.allow_delete) {
+									delStr += ' | <a href="/' + data[i].blog + '/del/message/' + data[i].msg_id + '">删除</a>';
+								} else if(json.data.is_collect) {
+									// delStr += ' | <a href="javascript:void(0);" onclick="collectMsg(' + data[i].msg_id + ',1);">取消收藏</a>';
+								} else {
+									// delStr += ' | <a href="javascript:void(0);" onclick="collectMsg(' + data[i].msg_id + ',0);">收藏</a>';
+								}
 							} else {
-								// delStr += ' | <a href="javascript:void(0);" onclick="collectMsg(' + data[i].msg_id + ',0);">收藏</a>';
+								delStr += '<a href="/login/">查看</a>';
 							}
+							
 							str = '<div class="entry"><div class="avatar"><div class="imgborder"><a href="/' + data[i].blog + '/own/"><img src="' + data[i].head_image + '" /></a></div></div><div class="box box-main"><p class="massageText"><a href="/' + data[i].blog + '/own/">' + data[i].nickname + '：</a>' + data[i].contents + data[i].repost + '</p>' + mediaStr + '<div class="static clear"><span>' + delStr + '</span>' + getDateDiff(data[i].ctime) + ' 来自 ' + data[i].refrom + '</div></div><div class="clear"></div></div>';
 							$("#msgContent").append(str);
 							iniVideo(data[i].msg_id)

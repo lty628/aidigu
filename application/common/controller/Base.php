@@ -15,16 +15,23 @@ class Base extends Controller
 		if (!\app\common\libs\Irrigation::check($uid) && request()->isAjax()) {
 			$this->error('超出请求次数限制！');
 		}
-		if (!$uid) {
-			$isRightCookie = checkUserCookie(cookie('rememberMe'));
-			if (!$isRightCookie) {
-				$url = request()->url();
-				if ($url == '' || $url == '/') {
-					$redirectUrl = '';
-				} else {
-					$redirectUrl = '?url='.$url;
+		
+		// 读取配置文件检查是否允许首页不登录访问
+		$pubIndex = env('app.pubIndex', '');
+		if ($pubIndex && request()->action() == 'index' && !isMobile()) {
+			// 无逻辑处理
+		} else {
+			if (!$uid) {
+				$isRightCookie = checkUserCookie(cookie('rememberMe'));
+				if (!$isRightCookie) {
+					$url = request()->url();
+					if ($url == '' || $url == '/') {
+						$redirectUrl = '';
+					} else {
+						$redirectUrl = '?url='.$url;
+					}
+					return $this->redirect('/login/' . $redirectUrl);
 				}
-				return $this->redirect('/login/' . $redirectUrl);
 			}
 			// if (!$isRightCookie) return $this->error('请先登录', '/login/');
 			// return $this->redirect('/'.$isRightCookie['blog'].'/');

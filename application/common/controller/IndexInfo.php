@@ -11,8 +11,21 @@ use app\common\model\Fans;
 
 class IndexInfo extends Info
 {
-    // 个人首页
+    // 首页
     public function index()
+    {
+        if (request()->isAjax()) {
+            $userMessage = $this->getMessage('', 8);
+            $userMessage = $userMessage->toArray()['data'];
+            return json(array('status' =>  1, 'msg' => 'ok', 'data' => ['data' => handleMessage($userMessage), 'allow_delete' => -1]));
+        }
+
+        $this->assign('siteUser', 0);
+        $this->assign('userMessage', []);
+        return $this->fetch('index');
+    }
+    // 个人首页
+    public function home()
     {
         // 我的主页
         if ($this->isSiteUser) {
@@ -43,7 +56,7 @@ class IndexInfo extends Info
             $userMessage = $userMessage->toArray()['data'];
             return json(array('status' =>  1, 'msg' => 'ok', 'data' => ['data' => handleMessage($userMessage), 'allow_delete' => 0]));
         }
-        return $this->fetch();
+        return $this->fetch('index');
     }
     public function own()
     {

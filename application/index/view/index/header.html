@@ -17,7 +17,7 @@
 <script language="javascript" type="text/javascript" src="/static/common/js/common.js?17"></script>
 <script language="javascript" type="text/javascript" src="/static/index/js/video.js?9"></script>
 </head>
-{if $userInfo['theme']}
+{if $userInfo && $userInfo['theme']}
 <body style="background: url({$userInfo['theme']}) no-repeat 0 0;background-attachment:fixed;background-size:100% 100%;height:auto;min-height: 100%">
 {else}
 <body>
@@ -28,37 +28,47 @@
 	<!-- <div class="logo"><a href="/"><img src="/static/index/images/logo.gif" alt="logo"/></a></div> -->
 	<div class="navigation">
 		<ul>
-			{if $userInfo.isSiteUser}
-				<li><a href="{:url('/'.$loginUserInfo.blog.'/')}">我的首页</a></li>
-				<li><a href="{:url('/'.$loginUserInfo.blog.'/own/')}">我的微博</a></li>
-				<li><a href="/collect/">我的收藏</a></li>
-				<li><a href="/square/">广场</a></li>
-				<li><a href="/topic/">话题</a></li>
-				<li>
-					<a href="/tools/">小应用</a>
-					{if $chatRemind['chatRemind']}
-					<span class="layui-badge-dot layui-bg-blue" id="checkRemind"></span>
-					{else} 
-					<span class="layui-badge-dot layui-bg-blue" id="checkRemind" style="display: none;"></span>
-					{/if}
-				</li>
-				<!-- <li><a href="javascript:;" data-title="我的云盘" data-url="/cloud/show/" onclick="showFrameHtml(this, '80%', '80%')">网盘</a></li> -->
-				<!-- <li><a href="javascript:;" data-title="在线影院" data-url="/movie" onclick="showFrameHtml(this, '100%', '100%')">影院</a></li> -->
-				<li><a href="/setting/">个人设置</a></li>
-			{else}
-				<li><a href="{:url('/'.$userInfo.blog.'/')}">{$userInfo.sex|getPerson}的首页</a></li>
-				<li><a href="{:url('/'.$userInfo.blog.'/own/')}">{$userInfo.sex|getPerson}的微博</a></li>
-				<!-- <li><a href="{:url('/'.$userInfo.blog.'/collect/')}">{$userInfo.sex|getPerson}的收藏</a></li> -->
-				<li><a href="javascript:;" data-title="私信" data-url="/chat/private/{$userInfo.uid}" onclick="showFrameHtml(this, '60%', '70%')">私信{$userInfo.sex|getPerson}</a></li>
-				<li><a href="{:url('/'.$loginUserInfo.blog.'/')}">我的首页</a></li>
-				<li><a href="/square/">广场</a></li>
-				<!-- <li><a href="/topic/">话题</a></li> -->
+			{if $userInfo}
+				{if $userInfo.isSiteUser}
+					<li><a href="{:url('/'.$loginUserInfo.blog.'/')}">我的首页</a></li>
+					<li><a href="{:url('/'.$loginUserInfo.blog.'/own/')}">我的微博</a></li>
+					<li><a href="/collect/">我的收藏</a></li>
+					<li><a href="/square/">广场</a></li>
+					<li><a href="/topic/">话题</a></li>
+					<li>
+						<a href="/tools/">小应用</a>
+						{if $chatRemind['chatRemind']}
+						<span class="layui-badge-dot layui-bg-blue" id="checkRemind"></span>
+						{else} 
+						<span class="layui-badge-dot layui-bg-blue" id="checkRemind" style="display: none;"></span>
+						{/if}
+					</li>
+					<!-- <li><a href="javascript:;" data-title="我的云盘" data-url="/cloud/show/" onclick="showFrameHtml(this, '80%', '80%')">网盘</a></li> -->
+					<!-- <li><a href="javascript:;" data-title="在线影院" data-url="/movie" onclick="showFrameHtml(this, '100%', '100%')">影院</a></li> -->
+					<li><a href="/setting/">个人设置</a></li>
+				{else}
+					<li><a href="{:url('/'.$userInfo.blog.'/')}">{$userInfo.sex|getPerson}的首页</a></li>
+					<li><a href="{:url('/'.$userInfo.blog.'/own/')}">{$userInfo.sex|getPerson}的微博</a></li>
+					<!-- <li><a href="{:url('/'.$userInfo.blog.'/collect/')}">{$userInfo.sex|getPerson}的收藏</a></li> -->
+					<li><a href="javascript:;" data-title="私信" data-url="/chat/private/{$userInfo.uid}" onclick="showFrameHtml(this, '60%', '70%')">私信{$userInfo.sex|getPerson}</a></li>
+					<li><a href="{:url('/'.$loginUserInfo.blog.'/')}">我的首页</a></li>
+					<li><a href="/square/">广场</a></li>
+					<!-- <li><a href="/topic/">话题</a></li> -->
+				{/if}
+				{if "WINADMIN" == 111}
+				<li><a href="">站点管理</a></li>
+				{/if}
+				<li><a href="{:url('/logout/')}">退出</a></li>
+			{else} 
+				<li><a href="/">首页</a></li>
+				<li><a href="/tools/Onlinecar">小汽车游戏</a></li>
+				<li><a href="/tools/bmi">体重计算器</a></li>
+				<li><a href="/tools/reader">文本阅读器</a></li>
+				<li><a href="{:url('/login/')}">登录</a></li>
+
 			{/if}
-			{if "WINADMIN" == 111}
-			<li><a href="">站点管理</a></li>
-			{/if}
-			<li><a href="{:url('/logout/')}">退出</a></li>
-		</ul>
+ 		</ul>
+		
 	</div>
 	<div class="clear"></div>
 </div>

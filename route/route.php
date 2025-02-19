@@ -50,8 +50,8 @@ Route::get('/topic/:page$', $module . '/Index/topicList')->pattern(['page'=>'[0-
 Route::get('/topic/:topic_id/$',$module . '/Index/topic')->pattern(['topic_id' => '[0-9]+']);
 Route::get('/square/$',$module . '/Index/blog');
 Route::get('/square/:page$',$module . '/Index/blog')->pattern(['page'=>'[0-9]+']);
-Route::get('/$',$module . '/Index/blog');
-Route::get('/:page$',$module . '/Index/blog')->pattern(['page'=>'[0-9]+']);
+Route::get('/$',$module . '/Index/index');
+Route::get('/:page$',$module . '/Index/index')->pattern(['page'=>'[0-9]+']);
 // Route::get('ajax', '/index/ajax/ajax/');
 // Route::get(':name',$module . '/Ajax')->pattern(['name' => 'ajax']);
 // Route::get('/:name/$', $module . '/Index')->pattern(['name' => '\w+(?!ajax)']);
@@ -69,8 +69,8 @@ Route::get('/setting/background/$', $module . '/Index/background')->pattern(['na
 
 Route::get('/:name/info/$', $module . '/Index/info')->pattern(['name' => '\w+']);
 
-Route::get('/:name/$', $module . '/Index/index')->pattern(['name' => '\w+']);
-Route::get('/:name/:page$', $module . '/Index/index')->pattern(['name' => '\w+', 'page'=>'[0-9]+']);
+Route::get('/:name/$', $module . '/Index/home')->pattern(['name' => '\w+']);
+Route::get('/:name/:page$', $module . '/Index/home')->pattern(['name' => '\w+', 'page'=>'[0-9]+']);
 
 Route::get('/:name/fans/$', $module . '/Index/fans')->pattern(['name' => '\w+']);
 Route::get('/:name/fans/:page$', $module . '/Index/fans')->pattern(['name' => '\w+', 'page'=>'[0-9]+']);

@@ -49,11 +49,19 @@ class Info extends Base
 	}
 	protected function getSiteUserInfo($userid) 
 	{
-		if (request()->action() == 'setting') {
-			$userInfo = User::getUserSetting($userid);
+		if ($userid) {
+			if (request()->action() == 'setting') {
+				$userInfo = User::getUserSetting($userid);
+				
+			} else {
+				$userInfo = User::getUserInfo($userid);
+			}
+			$userInfo['is_concern'] = Fans::where('touid', $userid)->where('fromuid',$this->userid)->find();
+			$userInfo['isSiteUser'] = $this->isSiteUser;
 		} else {
-			$userInfo = User::getUserInfo($userid);
+			$userInfo = [];
 		}
+		
 		// $userInfo['repeat_sum'] = Reminder::where('type', 0)->where('touid', $this->userid)->count();
 		// $userInfo['comment_sum'] = Reminder::where('type', 1)->where('touid', $this->userid)->count();
 		// $userInfo['reply_sum'] = Reminder::where('touid', $this->userid)->where('status', 0)->count();
@@ -62,8 +70,7 @@ class Info extends Base
 		// $userInfo['fans_count'] = Fans::where('touid', $userid)->where('fromuid','<>',$userid)->count();
 		// $userInfo['concern_count'] = Fans::where('fromuid', $userid)->where('touid','<>',$userid)->count();
 		// $userInfo['message_count'] = Message::where('uid', $userid)->count();
-		$userInfo['is_concern'] = Fans::where('touid', $userid)->where('fromuid',$this->userid)->find();
-		$userInfo['isSiteUser'] = $this->isSiteUser;
+		
 		$this->assign('userInfo', $userInfo);
 	}
 	protected function setMyFans($userid)
