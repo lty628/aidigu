@@ -6,6 +6,18 @@ use think\Db;
 
 class Sourcematerial extends Controller
 {	
+    public function initialize()
+    {
+        if (!getLoginUid()) {
+            $pubIndex = env('app.pubIndex', '');
+            if (!$pubIndex || isMobile()) {
+                // 无逻辑处理
+                $this->error('未登录', '/login/');
+            }
+        }
+        
+    }
+
     public function list()
     {
         $this->assign('isMobile', isMobile());
