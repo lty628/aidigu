@@ -117,7 +117,8 @@ class Api extends Base
         if ($mediaInfo) {
             $mediaInfo = json_decode($mediaInfo, true);
             if ($mediaInfo['media_type'] == 'html') {
-                $frameStr = '<iframe sandbox="allow-same-origin allow-scripts allow-popups" src="'.$mediaInfo['media_info'].'" allowfullscreen="true" allowtransparency="true" width="100%" onload="changeFrameHeight(this)" frameborder="0" scrolling="auto"></iframe>';
+                // $frameStr = '<iframe id="'.$mediaInfo['iframe_id'].'" sandbox="allow-same-origin allow-scripts allow-popups" src="'.$mediaInfo['media_info'].'" allowfullscreen="true" allowtransparency="true" width="100%" onload="changeFrameHeight(this)" frameborder="0" scrolling="auto"></iframe>';
+                $frameStr = '<iframe id="'.$mediaInfo['iframe_id'].'" sandbox="allow-same-origin allow-scripts allow-popups" src="'.$mediaInfo['media_info'].'" allowfullscreen="true" allowtransparency="true" width="100%" frameborder="0" scrolling="auto"></iframe>';
                 $contents = $contents . '<p>'.$frameStr.'</p>';
             } else {
                 $info['media_info'] = $mediaInfo['media_info'];

@@ -154,6 +154,8 @@
                 sessionData.media_info = res.data.url
                 sessionData.media_type = 'html'
                 sessionData.media_title = res.data.title
+                sessionData.iframe_id = 'iframe-sourcematerial-'+data.id
+                sessionData.id = data.id
                 layui.sessionData('sourcematerial', null)
                 layui.sessionData('sourcematerial', {
                   key: 'data',
