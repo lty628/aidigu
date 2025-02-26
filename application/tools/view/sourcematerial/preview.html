@@ -6,26 +6,31 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="/static/layui/css/layui.css" rel="stylesheet">
   <style>
-    * {
-    margin: 0;
+    /* * { */
+    /* margin: 0;
     padding: 0;
     border: 0;
     font-size: 100%;
     font: inherit;
-    vertical-align: baseline;
-  }
+    vertical-align: baseline; */
+  /* } */
     .flow-div {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px,1fr));
+      gap: 1%;
       /* height: 100%;
       overflow: auto;
       font-size: 0;
       text-align: left; */
-      column-count: 3;
+      /* column-count: 3;
       width: 100%;
       margin: 0 auto;
-      column-gap: 15px;
+      column-gap: 15px; */
     }
 
     .flow-div li {
+      /* height: 220px; */
+      overflow: hidden;
       /* display: inline-block;
       margin: 5px;
       font-size: 14px;
@@ -35,20 +40,21 @@
       line-height: 100px;
       text-align: center;
       background-color: #eee; */
-      margin-bottom: 20px;
+      /* margin-bottom: 20px;
       display: block;
-      overflow: hidden;
+      overflow: hidden; */
     }
 
     .flow-div img {
-      /* width: 100%;
-      height: 100%; */
-      display: block;
       width: 100%;
+      height: 100%;
+      /* display: block;
+      width: 100%; */
       /* transform: rotate(4deg); */
       /* opacity: 0.9; */
-      opacity: 1;
-      filter: saturate(150%);
+      /* opacity: 1;
+      filter: saturate(150%); */
+      object-fit: cover;
     }
 
     .flow-div video {
@@ -232,8 +238,16 @@
               }
               next(imgStr, page < 1);
               next(videoStr, page < 1);
-              next('<p>' + textStr + '</p>', page < 1);
-              next('<p>' + otherStr + '</p>', page < 1);
+              // next(textStr, page < 1);
+              // next(otherStr, page < 1);
+              if (textStr != '') {
+                next(textStr, page < 1);
+              }
+              if (otherStr != '') {
+                next(otherStr, page < 1);
+              }
+              // next('<p>' + textStr + '</p>', page < 1);
+              // next('<p>' + otherStr + '</p>', page < 1);
 
               // 获取 ID-flow-div-manual 下li的个数
               var liList = $('#ID-flow-div-manual').find('li');
