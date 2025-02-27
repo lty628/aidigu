@@ -199,10 +199,9 @@
       var id = $("#previewId").val()
 
       var imgArray = ['jiff', 'jpg', 'bmp', 'jpeg', 'png', 'gif'];
-      var videoArray = ['mp4'];
-      var otherArray = ['zip', 'rar', '7z', 'pdf'];
-      var textArray = ['txt'];
-
+      const videoArray = ['mp4'];
+      const otherArray = ['zip', 'rar', '7z', 'pdf'];
+      const textArray = ['txt'];
       // 流加载实例
       flow.load({
         elem: '#ID-flow-div-manual', // 流加载容器
@@ -210,62 +209,56 @@
         isAuto: true,
         isLazyimg: true,
         end: ' ',
-        done: function (page, next) { // 加载下一页
+        done: (page, next) => { // 加载下一页
           $.ajax({
             type: "GET",
             url: "/tools/sourcematerial/preview",
             data: { id: id },
             dataType: "json",
-            success: function (response) {
-              var data = response.data
-              var imgStr = ''
-              var videoStr = ''
-              var otherStr = ''
-              var textStr = ''
-              var staticDomain = $("#staticDomain").val()
-
-              for (var key in data) {
-                if (imgArray.includes(data[key].media_type)) {
-                  imgStr += '<li><a href="javascript:;"><img onclick="showMessageImg(this)" lay-src="' + staticDomain + data[key].media_info + '.' + data[key].media_type + '"></li>'
-                } else if (videoArray.includes(data[key].media_type)) {
-                  videoStr += '<li class="showVideo' + data[key].id + '"><video onclick="showVideoPopup(this)" src="' + staticDomain + data[key].media_info + '.' + data[key].media_type + '" controls="" name="media"><source src="' + staticDomain + data[key].media_info + '.' + data[key].media_type + '" type="video/mp4"></video></li>'
-                } else if (textArray.includes(data[key].media_type)) {
-                  textStr += '<li class="showOther"><span><a href="javascript:;" data-title="'+data[key].file_name+'" data-url="/tools/reader?material_relation_id='+data[key].id +'" date onclick="showTextPopup(this)">点击阅读' + data[key].file_name + '</a></span></li>'
+            success: (response) => {
+              const data = response.data;
+              const staticDomain = $("#staticDomain").val();
+              // 初始化不同类型的 HTML 字符串
+              let imgStr = '';
+              let videoStr = '';
+              let otherStr = '';
+              let textStr = '';
+              // 生成不同类型的 HTML 字符串
+              const generateHtml = (item) => {
+                const mediaUrl = `${staticDomain}${item.media_info}.${item.media_type}`;
+                if (imgArray.includes(item.media_type)) {
+                  imgStr += `<li><a href="javascript:;"><img onclick="showMessageImg(this)" src="${mediaUrl}"></li>`;
+                } else if (videoArray.includes(item.media_type)) {
+                  videoStr += `<li class="showVideo${item.id}"><video onclick="showVideoPopup(this)" src="${mediaUrl}" controls="" name="media"><source src="${mediaUrl}" type="video/mp4"></video></li>`;
+                } else if (textArray.includes(item.media_type)) {
+                  textStr += `<li class="showOther"><span><a href="javascript:;" data-title="${item.file_name}" data-url="/tools/reader?material_relation_id=${item.id}" onclick="showTextPopup(this)">点击阅读 ${item.file_name}</a></span></li>`;
                 } else {
-                  otherStr += '<li class="showOther"><span><a href="' + staticDomain + data[key].media_info + '.' + data[key].media_type + '" >点击下载' + data[key].file_name + '</a></span></li>'
-                  // otherStr += '<li><a href="javascript:;"><img onclick="showMessageImg(this)" lay-src="' + staticDomain + data[key].media_info + '.' + data[key].media_type + '"></li>'
+                  otherStr += `<li class="showOther"><span><a href="${mediaUrl}">点击下载 ${item.file_name}</a></span></li>`;
                 }
-              }
-              next(imgStr, page < 1);
-              next(videoStr, page < 1);
-              // next(textStr, page < 1);
-              // next(otherStr, page < 1);
-              if (textStr != '') {
-                next(textStr, page < 1);
-              }
-              if (otherStr != '') {
-                next(otherStr, page < 1);
-              }
-              // next('<p>' + textStr + '</p>', page < 1);
-              // next('<p>' + otherStr + '</p>', page < 1);
+              };
+              data.forEach(generateHtml);
+              // 调用 next 函数加载内容
+              const loadContent = (content) => {
+                if (content) {
+                  next(content, page < 1);
+                }
+              };
+              loadContent(imgStr);
+              loadContent(videoStr);
+              loadContent(textStr);
+              loadContent(otherStr);
 
               // 获取 ID-flow-div-manual 下li的个数
               var liList = $('#ID-flow-div-manual').find('li');
               var liLength = liList.length;
-              // var liHeight = liList[0].offsetHeight;
-              // 每三个 li 为一行 获取ID-flow-div-manual的高度
-              var flowDivHeight = $('body').height();
-              // 当前网页的父集iframe的高度 设置成ID-flow-div-manual的高度
-              // if (parent.$('#iframe-sourcematerial-'+id).length > 0) {
-              //   parent.$('#iframe-sourcematerial-'+id).height(flowDivHeight);
-              // }
-              if (flowDivHeight > 200) {
-                parent.$('#iframe-sourcematerial-'+id).height(flowDivHeight+150);
-              } else {
-                parent.$('#iframe-sourcematerial-'+id).height(flowDivHeight);
-              }
-              
+              // 获取当前页面 body 的高度
+              const flowDivHeight = $('body').height();
 
+              // 检查父窗口和 jQuery 是否可用
+              if (parent && parent.$) {
+                // 设置父窗口中指定 id 的 iframe 的高度
+                parent.$('#iframe-sourcematerial-' + id).height(flowDivHeight);
+              }
               for (var i = 0; i < liLength; i++) {
                 var li = liList[i];
                 if (li.getElementsByTagName('video').length > 0) {
@@ -281,7 +274,6 @@
                   });
                 }
               }
-
             }
           });
         }

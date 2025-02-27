@@ -61,12 +61,13 @@ a img {
 
 .container {
     text-align: left;
-    width: 80rem; /* Use rem for width */
+    width: 100%; /* Use rem for width */
     margin: auto;
 }
 
 .header {
     height: 8rem; /* Use rem for height */
+    margin-right: 25%;
 }
 
 .logo {
@@ -87,361 +88,56 @@ a img {
 }
 
 .main {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 20px;
     /* background: #d5f3f4; */
+}
+
+.main .box .massageText {
+    float: left;
 }
 
 .main .box .massageText iframe {
     width: 130%; /* This value is not responsive, consider changing it */
 }
 
-.contents {
-    float: left;
-    width: 60rem; /* Use rem for width */
-}
-
-html {
-    font-size: 62.5%; /* Set base font size to 10px */
-}
-
-ul, li, p, h1, h2, h3, h4, form, ol, table {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-}
-
-body {
-    background: url(../images/bg4.svg) no-repeat 0 0;
-    background-attachment: fixed;
-    background-size: 100% 100%;
-    height: auto;
-    min-height: 100%;
-    text-align: center;
-    font: 1.2rem/1.5 Arial, Helvetica; /* Use rem for font size */
-    color: #393939;
-    margin: 0;
-    padding: 0;
-}
-
-a {
-    text-decoration: none;
-    color: #3B5999;
-}
-
-.users .users-nickname {
-    margin-top: 0.5rem; /* Use rem for margin */
-    display: block;
-    overflow: hidden;
-    word-break: keep-all;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-}
-
-a:hover {
-    text-decoration: underline;
-    padding-bottom: 0.2rem; /* Use rem for padding */
-}
-
-.users .users-nickname:hover {
-    text-decoration: underline;
-    padding-bottom: 0;
-}
-
-a img {
-    border: 0;
-    border-radius: 1rem; /* Use rem for border radius */
-}
-
-.clear {
-    clear: both;
-}
-
-.clearall {
-    clear: both;
-    height: 0.1rem; /* Use rem for height */
-}
-
-.container {
-    text-align: left;
-    width: 80rem; /* Use rem for width */
-    margin: auto;
-}
-
-.header {
-    height: 8rem; /* Use rem for height */
-}
-
-.logo {
-    float: left;
-    margin: 0.5rem 0 0 0.5rem; /* Use rem for margin */
-}
-
-.navigation {
-    float: right;
-    margin: 2rem 0.5rem 0 0; /* Use rem for margin */
-    background-color: #FFF;
-    padding: 0.8rem; /* Use rem for padding */
-}
-
-.navigation li {
-    display: inline;
-    padding: 0 1rem; /* Use rem for padding */
-}
-
-.main {
-    /* background: #d5f3f4; */
-}
-
-.main .box .massageText iframe {
-    width: 130%; /* This value is not responsive, consider changing it */
-}
 
 .contents {
     float: left;
     width: 60rem; /* Use rem for width */
     min-height: 130rem; /* Use rem for min-height */
     background-color: #FFF;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
 }
 
-ul, li, p, h1, h2, h3, h4, form, ol, table {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-}
-
-body {
-    background: url(../images/bg4.svg) no-repeat 0 0;
-    background-attachment: fixed;
-    background-size: 100% 100%;
-    height: auto;
-    min-height: 100%;
-    text-align: center;
-    font: 12px/1.5 Arial, Helvetica;
-    color: #393939;
-    margin: 0;
-    padding: 0;
-}
-
-a {
-    text-decoration: none;
-    color: #3B5999;
-}
-
-.users .users-nickname {
-    margin-top: 5px;
-    display: block;
-    overflow: hidden;
-    word-break: keep-all;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-}
-
-a:hover {
-    text-decoration: underline;
-    padding-bottom: 2px;
-}
-
-.users .users-nickname:hover {
-    text-decoration: underline;
-    padding-bottom: 0;
-}
-
-a img {
-    border: 0;
-    border-radius: 10px;
-}
-
-.clear {
-    clear: both;
-}
-
-.clearall {
-    clear: both;
-    height: 1px;
-}
-
-.container {
-    text-align: left;
-    width: 950px;
-    margin: auto;
-}
-
-.header {
-    height: 80px;
-}
-
-.logo {
-    float: left;
-    margin: 5px 0 0 5px;
-}
-
-.navigation {
-    float: right;
-    margin: 20px 5px 0 0;
-    background-color: #FFF;
-    padding: 8px;
-}
-
-.navigation li {
-    display: inline;
-    padding: 0 10px;
-}
-
-.main {
-    /* background: #d5f3f4; */
-}
-
-.main .box .massageText iframe {
-    width: 130%;
-}
-
-.contents {
-    float: left;
-    width: 600px;
-    min-height: 1300px;
-    background-color: #FFF;
-}
-
-.sidebar {
-    float: right;
-    width: 220px;
-    background-color: #D5F3F4;
-}
-
-.top {
-    padding: 8px 12px;
-    background-color: #EEE;
-}
-
-.sidebar h2 {
-    background: url(../images/rightnavbg.gif) 0 0 no-repeat;
-    font-size: 14px;
-    line-height: 30px;
-    font-weight: normal;
-    padding: 0 10px;
-}
-
-.sidebar h2 a {
-    color: #FFF;
-}
-
-.sidebar .box {
-    margin: 0 0 20px 0;
-}
-
-.sidebar h3 {
-    font-size: 14px;
-    line-height: 30px;
-    font-weight: normal;
-    padding: 0 10px;
-    background: url(../images/rightnavbg.gif) 0 -30px no-repeat;
-}
-
-.sidebar h3 span {
-    float: right;
-    font-size: 12px;
-}
-
-.sidebar p,
-.sidebar .info,
-.sidebar .counter,
-.sidebar .users,
-.sidebar .more,
-.sidebar ul,
-.sidebar ol {
-    margin: 5px 10px;
-}
-
-.sidebar ul li {
-    background: url(../images/dot.gif) 3px 8px no-repeat;
-    padding-left: 15px;
-}
-
-.sidebar ol li {
-    padding: 3px 0;
-    margin: 0px;
-}
-
-.sidebar .info {
-    margin: 15px;
-}
-
-.sidebar .info li,
-.sidebar .users li {
-    background: none;
-    padding: 0px;
-}
-
-.sidebar .info .avatar {
-    float: left;
-    width: 52px;
-}
-
-.sidebar .info .avatar img {
-    width: 48px;
-    height: 48px;
-}
-
-.sidebar .info .detail {
-    float: right;
-    width: 115px;
-}
-
-.sidebar .info .detail p {
-    margin: 3px 10px;
-}
-
-.sidebar .counter {
-    background: url(../images/rightnavbg.gif) 0 -90px no-repeat;
-    height: 50px;
-}
-
-.sidebar .counter .counterbox {
-    float: left;
-    width: 60px;
-    text-align: center;
-    line-height: 25px;
-}
-
-.sidebar .users li {
-    float: left;
-    width: 60px;
-    text-align: center;
-    padding: 10px 0;
-}
-
-.sidebar .users li img {
-    width: 48px;
-    height: 48px;
-}
-
-.sidebar .users li span a {
-    color: #7892CB;
-}
-
-.sidebar .more {
-    text-align: right;
-}
-
-.sidebar .input {
-    width: 160px;
-}
-
-.contents .post {
-    padding: 15px 30px;
-}
-
-.contents .post textarea {
+.contents .post { 
     width: 534px;
     height: 100px;
+
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
 }
 
-.contents .mywii {
-    width: 334px;
-    height: 130px;
+
+.contents .post .text {
+    width: 534px;
+    height: 100px;
+    border: 1px solid #e0e0e0;
+    min-height: 100px;
+    padding: 10px;
+    border-radius: 4px;
+}
+
+.contents .post .postnow {
+    width: 557px;
+    margin-top: 10px;
 }
 
 .contents .post .postnow span {
-    margin-top: 10px;
     float: right;
 }
 
@@ -469,37 +165,36 @@ a img {
 
 .contents .entry {
     clear: both;
-    background: url(../images/linedot.gif) bottom left repeat-x;
+    /* background: url(../images/linedot.gif) bottom left repeat-x; */
     margin: 15px 20px 20px 20px;
     font-size: 14px;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 20px 0;
 }
 
 .contents .entry .avatar {
     float: left;
-    width: 60px;
     text-align: center;
-}
-
-.contents .entry .avatarhtml {
-    text-align: center;
+    margin-right: 20px;
 }
 
 .contents .entry .avatar img {
     width: 48px;
     height: 48px;
     border: 2px solid #FFF;
+    border-radius: 50%;
 }
 
 .contents .entry .avatar .imgborder {
     width: 52px;
     height: 52px;
     background-color: #FFF;
-    border: 1px solid #EEE;
+    /* border: 1px solid #EEE; */
 }
 
 .contents .entry .box {
     float: right;
-    width: 485px;
+    width: 480px;
     white-space: normal;
     word-break: break-all;
     word-wrap: break-word;
@@ -569,6 +264,10 @@ a img {
     margin: 5px 0;
 }
 
+.entry .massageImg .massageImgCommon {
+    width: 60%; /* This value is not responsive, consider changing it */
+}
+
 .contents .fansbar {
     background-color: #FFFFEA;
     border: 1px solid #D0D0D0;
@@ -576,10 +275,148 @@ a img {
     padding: 15px;
 }
 
+/* 侧边栏样式 */
+.sidebar {
+    float: right;
+    width: 220px;
+    background-color: #D5F3F4;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    /* margin-top: 20px; */
+}
+
+.sidebar h2 {
+    /* background: url(../images/rightnavbg.gif) 0 0 no-repeat; */
+    background-color: #1899c9;
+    font-size: 14px;
+    line-height: 30px;
+    font-weight: normal;
+    padding: 0 10px;
+}
+
+.sidebar h2 a {
+    color: #FFF;
+}
+
+.sidebar .box {
+    margin: 0 0 20px 0;
+}
+
+.sidebar h3 {
+    font-size: 14px;
+    line-height: 30px;
+    font-weight: normal;
+    padding: 0 10px;
+    background: url(../images/rightnavbg.gif) 0 -30px no-repeat;
+}
+
+.sidebar h3 span {
+    float: right;
+    font-size: 12px;
+}
+
+.sidebar p,
+.sidebar .info,
+.sidebar .counter,
+.sidebar .users,
+.sidebar .more,
+.sidebar ul,
+.sidebar ol {
+    margin: 5px 10px;
+}
+
+.sidebar ul li {
+    background: url(../images/dot.gif) 3px 8px no-repeat;
+    padding-left: 15px;
+}
+
+.sidebar ol li {
+    padding: 3px 0;
+    margin: 0px;
+}
+
+.sidebar .info {
+    margin: 15px;
+}
+
+.sidebar .info li,
+.sidebar .users li {
+    background: none;
+    padding: 0px;
+}
+
+/* 屏幕小于1000px时的样式 */
+@media screen and (max-width: 1000px) {
+    .sidebar {
+        display: none;
+    }
+}
+
+.sidebar .info .avatar {
+    float: left;
+    width: 52px;
+}
+
+.sidebar .info .avatar img {
+    width: 48px;
+    height: 48px;
+}
+
+.sidebar .info .detail {
+    float: right;
+    width: 115px;
+}
+
+.sidebar .info .detail p {
+    margin: 3px 10px;
+}
+
+.sidebar .counter {
+    background: url(../images/rightnavbg.gif) 0 -90px no-repeat;
+    height: 50px;
+}
+
+.sidebar .counter .counterbox {
+    float: left;
+    width: 65px;
+    text-align: center;
+    line-height: 25px;
+}
+
+.sidebar .users li {
+    float: left;
+    width: 60px;
+    text-align: center;
+    padding: 10px 0;
+}
+
+.sidebar .users li img {
+    width: 48px;
+    height: 48px;
+}
+
+.sidebar .users li span a {
+    color: #7892CB;
+}
+
+.sidebar .more {
+    text-align: right;
+}
+
+.sidebar .input {
+    width: 160px;
+}
+
+/* 底部样式 */
 .footer {
     margin: 20px 0 10px 0;
     font-size: 10px;
     height: 30px;
+    text-align: center;
+    padding: 20px;
+    color: #777;
 }
 
 .footer p {
@@ -595,6 +432,7 @@ a img {
     text-align: right;
 }
 
+/* 表格样式 */
 .contents table {
     width: 550px;
 }
@@ -702,6 +540,7 @@ i.warning {
     padding-right: 10px;
 }
 
+/* 分页样式 */
 .pagination {
     padding-right: 3px;
     padding-left: 3px;
@@ -837,7 +676,7 @@ i.warning {
 
 .dplayer {
     border-radius: 8px;
-    width: 400px;
+    width: 360px;
 }
 
 .info .detail p:nth-child(3) {
@@ -853,6 +692,44 @@ i.warning {
 .newReminder li span {
     color: red;
 }
-/* .repost span p {
-    display: inline;
-} */
+/* 帖子按钮样式 */
+.button {
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.button:hover {
+    background-color: #0056b3;
+}
+
+/* 加载更多样式 */
+.showMore {
+    text-align: center;
+    padding: 20px;
+}
+
+.loading {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #999;
+    border-bottom-color: transparent;
+    border-radius: 50%;
+    animation: loading 0.75s linear infinite;
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
+@keyframes loading {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}

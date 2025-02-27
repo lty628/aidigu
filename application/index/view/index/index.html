@@ -1,147 +1,4 @@
 {include file='index/header' /}
-    <style>
-        /* 全局样式 */
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f4f9;
-            color: #333;
-            margin: 0;
-            padding: 0;
-        }
-
-        /* 主容器样式 */
-        .main {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        /* 内容区域样式 */
-        .contents {
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-        }
-
-        /* 帖子表单样式 */
-        .post {
-            /* border: 1px solid #e0e0e0; */
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-
-        .text {
-            border: 1px solid #e0e0e0;
-            min-height: 100px;
-            padding: 10px;
-            border-radius: 4px;
-        }
-
-        .postnow {
-            margin-top: 10px;
-        }
-
-        .button {
-            background-color: #007BFF;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            padding: 10px 20px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .button:hover {
-            background-color: #0056b3;
-        }
-
-        /* 消息内容样式 */
-        .entry {
-            border-bottom: 1px solid #e0e0e0;
-            padding: 20px 0;
-        }
-
-        .avatar {
-            float: left;
-            margin-right: 20px;
-        }
-
-        .imgborder img {
-            border-radius: 50%;
-        }
-
-        .box-main {
-            overflow: hidden;
-        }
-
-        .massageText {
-            margin-bottom: 10px;
-        }
-
-        .massageImg img {
-            max-width: 100%;
-            border-radius: 4px;
-        }
-
-        .static {
-            color: #777;
-        }
-
-        .static a {
-            color: #007BFF;
-            text-decoration: none;
-        }
-
-        .static a:hover {
-            text-decoration: underline;
-        }
-
-        /* 加载更多样式 */
-        .showMore {
-            text-align: center;
-            padding: 20px;
-        }
-
-        .loading {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 2px solid #999;
-            border-bottom-color: transparent;
-            border-radius: 50%;
-            animation: loading 0.75s linear infinite;
-            margin-right: 10px;
-            vertical-align: middle;
-        }
-
-        @keyframes loading {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-
-        /* 侧边栏样式 */
-        .sidebar {
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            /* margin-top: 20px; */
-        }
-
-        /* 底部样式 */
-        .footer {
-            text-align: center;
-            padding: 20px;
-            color: #777;
-        }
-    </style>
 </head>
 
 <body>
@@ -160,7 +17,7 @@
                     </span>
                     你还可以发布<em id="leftlen1">2800</em>字
                 </div>
-                <div id="msgToolBar" class="toolbar"></div>
+                <div id="msgToolBar" class="toolbar" style="float: left;"></div>
                 <div class="tool-up-class" style="display: none;">
                     <div class="imgHtml" style="display: block;border-radius: 3px;">
                         <!-- <img src="" width="70px" alt=""> -->
@@ -307,7 +164,7 @@
                 })
                    .done(function (json) {
                         var data = json.data.data
-                        if (data.length < 20) {
+                        if (!data.length) {
                             $("#showMore").hide()
                         }
                         if (!data.length) {
