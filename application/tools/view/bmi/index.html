@@ -1,48 +1,318 @@
-<html>
+<!DOCTYPE html>
+<html lang="zh-CN">
+
 <head>
-	<title>BMI Calculator</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-	<link rel="stylesheet" type="text/css" href="/static/tools/bmi/stylesheet.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>BMI Calculator</title>
+    <style>
+        /* 全局样式 */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* 容器样式 */
+        .container {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 标题样式 */
+        h2.text-center {
+            color: #2d3748;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        /* 介绍文本样式 */
+        p.text-center {
+            color: #718096;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        /* 输入框样式 */
+        input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #4299e1;
+            box-shadow: 0 0 0 2px rgba(66, 153, 225, 0.2);
+        }
+
+        /* 按钮样式 */
+        .btn {
+            background-color: #4299e1;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #3182ce;
+        }
+
+        /* 结果区域样式 */
+        #results {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #2d3748;
+        }
+
+        /* 表格样式 */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        th {
+            background-color: #edf2f7;
+            color: #4a5568;
+        }
+
+        /* 定义不同热量区间的颜色 */
+        .low-calorie {
+            background-color: #ebf8ff;
+        }
+
+        .medium-calorie {
+            background-color: #fffaf0;
+        }
+
+        .high-calorie {
+            background-color: #fff5f5;
+        }
+
+        /* 减肥建议列表样式 */
+        .container ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .container ul li {
+            background-color: #f7fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            padding: 15px;
+            transition: background-color 0.3s ease;
+        }
+
+        .container ul li:hover {
+            background-color: #edf2f7;
+        }
+    </style>
 </head>
+
 <body>
     <div class="container">
-    	<div class="panel">
-    		<h2 class="text-center">体脂BMI计算器</h2>
-    		
-    			<p id="introText" class="text-center">输入身高体重计算结果</p>
-    			
-    			<form>
-    				<div id="weightInput">
-    					<p>体重 (KG)</p>
-    		     		<input id="weight" type="number" pattern="[0-9]*" name="a" />
-    				</div>
-    				<div id="heightInput">
-    					<p>身高 (CM)</p>
-	    				 <input id="height" type="number" pattern="[0-9]*" name="b"/> 
-    				</div>
-    		     <button type="button" class="btn" onclick="calculate()">计算 BMI</button>
-    		</form>
-    		<div id="results" class="text-center">结果</div>
-    	</div>
+        <div class="panel">
+            <h2 class="text-center">体脂BMI计算器</h2>
+            <p id="introText" class="text-center">输入身高体重计算结果</p>
+            <form>
+                <div id="weightInput">
+                    <p>体重 (KG)</p>
+                    <input id="weight" type="number" pattern="[0-9]*" name="a" />
+                </div>
+                <div id="heightInput">
+                    <p>身高 (CM)</p>
+                    <input id="height" type="number" pattern="[0-9]*" name="b" />
+                </div>
+                <button type="button" class="btn" onclick="calculate()">计算 BMI</button>
+            </form>
+            <div id="results" class="text-center">结果</div>
+        </div>
     </div>
-	<div id="table">
-		<table>
-			<caption>BMI 结果:</caption>
-			<tr>
-				<th>体重不足</th>
-				<th>健康</th>
-				<th>超重</th>
-				<th>肥胖</th>
-			</tr>
-			<tr>
-				<td>低于 18.5</td>
-				<td>18.5 - 24.9</td>
-				<td>25.0 - 29.9 </td>
-				<td>30.0以上</td>
-
-			</tr>
-		</table>
-	</div>
-	<script src="/static/tools/bmi/main.js"></script>
+    <div class="container">
+        <table>
+            <caption>BMI 结果:</caption>
+            <tr>
+                <th>体重不足</th>
+                <th>健康</th>
+                <th>超重</th>
+                <th>肥胖</th>
+            </tr>
+            <tr>
+                <td>低于 18.5</td>
+                <td>18.5 - 24.9</td>
+                <td>25.0 - 29.9 </td>
+                <td>30.0以上</td>
+            </tr>
+        </table>
+    </div>
+    <div class="container">
+        <h2 class="text-center">减肥建议</h2>
+        <ul>
+            <li>均衡饮食：多摄入蔬菜、水果、全谷物和优质蛋白质，减少高热量、高脂肪和高糖的食物。</li>
+            <li>控制食量：注意饮食分量，避免过度进食。可以使用较小的餐盘和餐具来帮助控制食量。</li>
+            <li>规律运动：每周进行至少 150 分钟的中等强度有氧运动，如快走、跑步、游泳等，也可以结合力量训练增加肌肉量。</li>
+            <li>保持充足睡眠：每晚保证 7 - 9 小时的高质量睡眠，有助于调节新陈代谢和激素水平。</li>
+            <li>减少压力：长期高压力状态可能导致激素失衡，增加食欲。可以通过冥想、瑜伽或其他放松技巧来减轻压力。</li>
+        </ul>
+    </div>
+    <div class="container">
+        <h2 class="text-center">日常食物热量表</h2>
+        <table id="food-calories-table">
+            <thead>
+                <tr>
+                    <th>食物名称</th>
+                    <th>热量 (每100克)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="medium-calorie">
+                    <td>牛肉</td>
+                    <td>220</td>
+                </tr>
+                <tr class="low-calorie">
+                    <td>鸡肉</td>
+                    <td>117</td>
+                </tr>
+                <tr class="low-calorie">
+                    <td>鱼肉</td>
+                    <td>113</td>
+                </tr>
+                <tr class="medium-calorie">
+                    <td>鸡蛋</td>
+                    <td>144</td>
+                </tr>
+                <tr class="low-calorie">
+                    <td>苹果</td>
+                    <td>53</td>
+                </tr>
+                <tr class="low-calorie">
+                    <td>香蕉</td>
+                    <td>93</td>
+                </tr>
+                <tr class="low-calorie">
+                    <td>米饭</td>
+                    <td>116</td>
+                </tr>
+                <tr class="high-calorie">
+                    <td>面条</td>
+                    <td>286</td>
+                </tr>
+                <tr class="low-calorie">
+                    <td>土豆</td>
+                    <td>77</td>
+                </tr>
+                <tr class="low-calorie">
+                    <td>黄瓜</td>
+                    <td>16</td>
+                </tr>
+                <tr class="low-calorie">
+                    <td>西红柿</td>
+                    <td>20</td>
+                </tr>
+                <tr class="low-calorie">
+                    <td>西兰花</td>
+                    <td>36</td>
+                </tr>
+                <tr class="low-calorie">
+                    <td>胡萝卜</td>
+                    <td>41</td>
+                </tr>
+                <tr class="low-calorie">
+                    <td>牛奶</td>
+                    <td>54</td>
+                </tr>
+                <tr class="high-calorie">
+                    <td>面包</td>
+                    <td>312</td>
+                </tr>
+                <tr class="high-calorie">
+                    <td>巧克力</td>
+                    <td>586</td>
+                </tr>
+                <tr class="high-calorie">
+                    <td>薯片</td>
+                    <td>548</td>
+                </tr>
+                <tr class="low-calorie">
+                    <td>草莓</td>
+                    <td>32</td>
+                </tr>
+                <tr class="low-calorie">
+                    <td>葡萄</td>
+                    <td>43</td>
+                </tr>
+                <tr class="low-calorie">
+                    <td>橙子</td>
+                    <td>48</td>
+                </tr>
+                <tr class="low-calorie">
+                    <td>菠菜</td>
+                    <td>28</td>
+                </tr>
+                <tr class="low-calorie">
+                    <td>生菜</td>
+                    <td>16</td>
+                </tr>
+                <tr class="medium-calorie">
+                    <td>玉米</td>
+                    <td>106</td>
+                </tr>
+                <tr class="medium-calorie">
+                    <td>红薯</td>
+                    <td>106</td>
+                </tr>
+                <tr class="low-calorie">
+                    <td>虾</td>
+                    <td>99</td>
+                </tr>
+                <tr class="medium-calorie">
+                    <td>螃蟹</td>
+                    <td>103</td>
+                </tr>
+                <tr class="low-calorie">
+                    <td>酸奶</td>
+                    <td>72</td>
+                </tr>
+                <tr class="high-calorie">
+                    <td>饼干</td>
+                    <td>433</td>
+                </tr>
+                <tr class="high-calorie">
+                    <td>爆米花</td>
+                    <td>387</td>
+                </tr>
+                <tr class="high-calorie">
+                    <td>冰淇淋</td>
+                    <td>207</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <script src="/static/tools/bmi/main.js"></script>
 </body>
+
 </html>
