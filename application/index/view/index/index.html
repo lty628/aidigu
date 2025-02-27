@@ -1,348 +1,383 @@
 {include file='index/header' /}
-<style>
-	.toolbar {
-		margin-left: -6px;
-		/* width: 55%; */
-		float: left;
-		/* border: 1px solid #ccc; */
-	}
+    <style>
+        /* 全局样式 */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
 
-	.text {
-		border: 1px solid #ccc;
-		min-height: 100px;
-	}
+        /* 主容器样式 */
+        .main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
 
-	.box-main .massageText {
-		float: left;
-	}
-	.box-main pre code{
-		background: black;
-		color: wheat;
-		border-radius: 5px;
-		display: flex;
-		clear: both;
-		width: 90%;
-		padding: 5px 0 10px 0;
-	}
+        /* 内容区域样式 */
+        .contents {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
 
-	.w-e-panel-tab-content {
-		height: 249px;
-	}
+        /* 帖子表单样式 */
+        .post {
+            /* border: 1px solid #e0e0e0; */
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
 
-	.music {
-		background: #f1f3f4;
-	}
+        .text {
+            border: 1px solid #e0e0e0;
+            min-height: 100px;
+            padding: 10px;
+            border-radius: 4px;
+        }
 
-	.loading {
-		display: inline-block;
-		height: 10px;
-		width: 10px;
-		border-radius: 50%;
-		border: 2px solid #999;
-		border-bottom-color: transparent;
-		-webkit-animation: loading 0.75s linear infinite;
-		animation: loading 0.75s linear infinite;
-		margin: 6px;
-		vertical-align: middle;
-	}
+        .postnow {
+            margin-top: 10px;
+        }
 
-	@-webkit-keyframes loading {
-		0% {
-			-webkit-transform: rotate(0deg);
-		}
+        .button {
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
 
-		50% {
-			-webkit-transform: rotate(180deg);
-		}
+        .button:hover {
+            background-color: #0056b3;
+        }
 
-		100% {
-			-webkit-transform: rotate(360deg);
-		}
-	}
+        /* 消息内容样式 */
+        .entry {
+            border-bottom: 1px solid #e0e0e0;
+            padding: 20px 0;
+        }
 
-	@keyframes loading {
-		0% {
-			-webkit-transform: rotate(0deg);
-		}
+        .avatar {
+            float: left;
+            margin-right: 20px;
+        }
 
-		50% {
-			-webkit-transform: rotate(180deg);
-		}
+        .imgborder img {
+            border-radius: 50%;
+        }
 
-		100% {
-			-webkit-transform: rotate(360deg);
-		}
-	}
+        .box-main {
+            overflow: hidden;
+        }
 
-	.showMore {
-		text-align: center;
-		font-size: 20px;
-		color: #999999;
-	}
+        .massageText {
+            margin-bottom: 10px;
+        }
 
-	/* .back-to-top {
-		width: 14px;
-		padding: 6px;
-		border: 1px solid #ccc;
-		box-shadow: 0 0 2px #333;
-		position: fixed;
-		right: 20px;
-		bottom: 40px;
-	} */
-/* 
-	.back-to-top:hover {
-		cursor: pointer;
-	} */
-	.massageImg .massageImgCommon{
-		width: 60%;
-	}
-	.massageImg .massageImg_gif{
-		width: 35%;
-	}
-	.contents .entry .box table {
-		width: 95%;
-	}
-	/* .dplayer-menu-show{display: none;}
-	.dplayer ::v-deep .dplayer-menu-show{display: none;} */
-</style>
-<div class="main">
-	<div class="contents">
-		{if $userInfo && $userInfo.isSiteUser}
-		<div class="post" id="postform" style="display:block;">
-			<div class="postad" id="wcontent">&nbsp;</div>
+        .massageImg img {
+            max-width: 100%;
+            border-radius: 4px;
+        }
 
-			<div id="msgInput" class="text" maxlength="2800" onkeyup="check_len1()">
-				<!-- <p>你在做什么呢</p> -->
-			</div>
-			<input type="hidden" id="topicTitle" value="{$topicTitle | default=''}">
-			<div class="postnow">
-				<span>
-					<input type="button" value="发布" class="button layui-btn layui-btn" id="sendButton" />
-				</span>
-				你还可以发布<em id="leftlen1">2800</em>字
-			</div>
+        .static {
+            color: #777;
+        }
 
-			<!-- 表情等 -->
-			<div id="msgToolBar" class="toolbar"></div>
-			<div class="tool-up-class" style="display: none;">
-				<div class="imgHtml" style="display: block;border-radius: 3px;">
-					<!-- <img src="" width="70px" alt=""> -->
-					上传成功！
-					<i class="layui-icon layui-icon-close-fill" onclick="removeImg(this)"
-						style="color: red;cursor:pointer;font-size:20px!important"></i>
-				</div>
-				<input type="hidden" id="mediaVal">
-			</div>
-			<div class="clear"></div>
-		</div>
-		{else}
-		<div class="top" style="background-color: white;"></div>
-		{/if}
-		<input type="hidden" id="userInfo" value="{$userInfo|json_encode}" />
-		<div class="sendMsg"></div>
-		<div id="msgContent">
-			{if isset($userMessage[0])}
-			{foreach $userMessage as $message}
-			<div class="entry">
-				<div class="avatar">
-					<div class="imgborder"><a href="{:url('/'.$message.blog.'/')}"><img
-								src="{$message.head_image}" /></a></div>
-				</div>
-				<div class="box box-main">
-					<p class="massageText">
-						<a href="{:url('/'.$message.blog.'/own/')}" id="nickname">{$message.nickname}：
-						</a>
-						{$message.contents|raw}{$message.repost|raw}
-					</p>
-					{if $message.media}
-					{if json_decode($message.media_info, true)['media_type'] == 'mp4'}
-					<p class="massageImg clear" vid="{$message.media}"><video width="400px" controls="" name="media">
-							<source src="{$message.media}" type="video/mp4">
-						</video></p>
-					{else}
-					<p class="massageImg clear"><img width="75%" , src="{:getTypeImg($message.media_info)}"
-							onclick="showMessageImg(this)" style="cursor:pointer;"></p>
-					{/if}
-					{/if}
-					<div class="static clear">
-						<span>
-							<a href="{:url('/'.$message.blog.'/'.'message/'.$message.msg_id)}">查看</a> |
-							<a href="javascript:void(0);"
-								onclick="repost(this, {$message.uid}, {$message.msg_id})">转发{if 0 !=
-								$message.repostsum}（{$message.repostsum}）{/if}</a> |
-							<a href="javascript:void(0);" onclick="comment({$message.msg_id}, {$message.uid});">评论{if 0
-								!=
-								$message.commentsum}（{$message.commentsum}）{/if}</a>
-							{if $userInfo.isSiteUser && request()->action()=='own'}
-							| <a href="{:url('/'.$message.blog.'/'.'del/message/'.$message.msg_id)}">删除</a>
-							{/if}
-						</span>
-						{$message.ctime|setMessageTime} 来自 {$message.refrom}
-					</div>
-				</div>
-				<div class="clear"></div>
-			</div>
-			{/foreach}
-			{else}
-			<!-- <div class="entry">
-				<div class="box">
-					<p>暂无微博...</p>
-				</div>
-				<div class="clear"></div>
-			</div> -->
-			{/if}
-		</div>
-		<div id="showMore" class="showMore">
-			<span class="loading"></span>
-			加载中...
-		</div>
-	</div>
-	<!-- 回到顶部 -->
-	<!-- <section class="back-to-top">
-		回到顶部
-	</section> -->
+        .static a {
+            color: #007BFF;
+            text-decoration: none;
+        }
 
-	{if !$userInfo}
-	{include file='index/sidebar_nologin' /}
-	{elseif $userInfo.isSiteUser}
-	{include file='index/sidebar_index' /}
-	{else}
-	{include file='index/sidebar_user' /}
-	{/if}
+        .static a:hover {
+            text-decoration: underline;
+        }
 
-	{include file='index/footer' /}
-	<script>
-		/**
-		* 缓冲函数
-		* @param {Number} position 当前滚动位置
-		* @param {Number} destination 目标位置
-		* @param {Number} rate 缓动率
-		* @param {Function} callback 缓动结束回调函数 两个参数分别是当前位置和是否结束
-		*/
-		var easeout = function (position, destination, rate, callback) {
-			if (position === destination || typeof destination !== 'number') {
-				return false;
-			}
-			destination = destination || 0;
-			rate = rate || 2;
+        /* 加载更多样式 */
+        .showMore {
+            text-align: center;
+            padding: 20px;
+        }
 
-			// 不存在原生`requestAnimationFrame`，用`setTimeout`模拟替代
-			if (!window.requestAnimationFrame) {
-				window.requestAnimationFrame = function (fn) {
-					return setTimeout(fn, 17);
-				}
-			}
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #999;
+            border-bottom-color: transparent;
+            border-radius: 50%;
+            animation: loading 0.75s linear infinite;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
 
-			var step = function () {
-				position = position + (destination - position) / rate;
-				if (Math.abs(destination - position) < 1) {
-					callback(destination, true);
-					return;
-				}
-				callback(position, false);
-				requestAnimationFrame(step);
-			};
-			step();
-		}
+        @keyframes loading {
+            0% {
+                transform: rotate(0deg);
+            }
 
-		var scrollTopSmooth = function (position) {
-			// 当前滚动高度
-			var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-			easeout(scrollTop, position, 5, function (val) {
-				window.scrollTo(0, val);
-			});
-		}
+            100% {
+                transform: rotate(360deg);
+            }
+        }
 
-		// $backToTop = document.querySelector('.back-to-top')
-		// $backToTop.addEventListener('click', function () {
-		// 	scrollTopSmooth(0);
-		// }, false);
-	</script>
-	<script>
-		var page = 0;
-		$(function () {
-			var canLoad = true
-			function initNextPage(url) {
-				if (!canLoad) return
-				page++
-				canLoad = false
-				var url = window.location.pathname
-				$.ajax({
-					type: "get",
-					url: url,
-					data: { page: page },
-					dataType: "json",
-				})
-					.done(function (json) {
-						var data = json.data.data
-						if (data.length < 20) {
-							$("#showMore").hide()
-						}
-						if (!data.length) {
-							return
-						}
-						for (var i = 0; i < data.length; i++) {
-							var mediaStr = '';
-							var str = '';
-							var delStr = '';
-							var c1 = '';
-							var c2 = '';
-							if (data[i].media) {
-								data[i].media_info = $.parseJSON(data[i].media_info)
-								if (data[i].media_info.media_type == 'mp4' || data[i].media_info.media_type == 'm3u8') {
-									mediaStr = '<p class="massageImg clear showVideo' + data[i].msg_id + '" vid="' + data[i].media + '"><video width="400px"  controls=""  name="media"><source src="" type="video/mp4"></video></p>';
-								} else if (data[i].media_info.media_type == 'mp3') {
-									mediaStr = '<p class="massageImg clear"><audio id="music_'+data[i].msg_id+'" class="music" controls="controls" loop="loop" onplay="stopOther(this)" preload="none" controlsList="nodownload" οncοntextmenu="return false" name="media"><source src="'+data[i].media+'" type="audio/mpeg"></audio></p>';
-								} else {
-									mediaStr = '<p  class="massageImg clear"><img class="massageImgCommon massageImg_'+data[i].media_info.media_type+'"  onclick="showMessageImg(this)" src="' + data[i].media + '"></p>';
-								}
-							}
-							// if (0 != data[i].repostsum) {
-							// 	c1 = '('+data[i].repostsum+')'
-							// }
-							if (0 != data[i].commentsum) {
-								c2 = '(' + data[i].commentsum + ')'
-							}
-							
-							if (json.data.allow_delete != -1) {
-								delStr += '<a href="/' + data[i].blog + '/message/' + data[i].msg_id + '">查看</a> |';
-								delStr += '<a href="javascript:;" data-title="评论" data-url="/chat/messageChatId/' + data[i].msg_id + '" onclick="showFrameHtml(this, \'60%\', \'70%\')">评论' + c2 + '</a>'
-								// delStr += '<a href="javascript:void(0);" onclick="repost(this, '+data[i].uid+', '+data[i].msg_id+')">转发'+c1+'</a> |';
-								// delStr += '<a href="javascript:void(0);" onclick="comment(' + data[i].msg_id + ', ' + data[i].uid + ');">评论' + c2 + '</a>';
-								if(!json.data.is_collect) {
-									delStr += ' | <a href="javascript:void(0);" onclick="collectMsg(' + data[i].msg_id + ',0);">收藏</a>';
-								}
-								if (json.data.allow_delete) {
-									delStr += ' | <a href="/' + data[i].blog + '/del/message/' + data[i].msg_id + '">删除</a>';
-								} else if(json.data.is_collect) {
-									// delStr += ' | <a href="javascript:void(0);" onclick="collectMsg(' + data[i].msg_id + ',1);">取消收藏</a>';
-								} else {
-									// delStr += ' | <a href="javascript:void(0);" onclick="collectMsg(' + data[i].msg_id + ',0);">收藏</a>';
-								}
-							} else {
-								delStr += '<a href="/login/">查看</a>';
-							}
-							
-							str = '<div class="entry"><div class="avatar"><div class="imgborder"><a href="/' + data[i].blog + '/own/"><img src="' + data[i].head_image + '" /></a></div></div><div class="box box-main"><p class="massageText"><a href="/' + data[i].blog + '/own/">' + data[i].nickname + '：</a>' + data[i].contents + data[i].repost + '</p>' + mediaStr + '<div class="static clear"><span>' + delStr + '</span>' + getDateDiff(data[i].ctime) + ' 来自 ' + data[i].refrom + '</div></div><div class="clear"></div></div>';
-							$("#msgContent").append(str);
-							iniVideo(data[i].msg_id)
-						}
-						canLoad = true
-					})
-					.always(function () {
-					})
-					.fail(function () {
-					});
-			}
-			$(window).scroll(function () {
-				var top = $(window).scrollTop();
-				var winH = $(window).height();
-				var docH = $(document).height();
-				if (docH <= (top + winH + 200)) {
-					initNextPage(page)
-				}
-			});
-			initNextPage(page)
-		})
+        /* 侧边栏样式 */
+        .sidebar {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            /* margin-top: 20px; */
+        }
 
-	</script>
+        /* 底部样式 */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #777;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="main">
+        <div class="contents">
+            {if $userInfo && $userInfo.isSiteUser}
+            <div class="post" id="postform" style="display:block;">
+                <div class="postad" id="wcontent">&nbsp;</div>
+                <div id="msgInput" class="text" maxlength="2800" onkeyup="check_len1()">
+                    <!-- <p>你在做什么呢</p> -->
+                </div>
+                <input type="hidden" id="topicTitle" value="{$topicTitle | default=''}">
+                <div class="postnow">
+                    <span>
+                        <input type="button" value="发布" class="layui-btn layui-btn" id="sendButton" />
+                    </span>
+                    你还可以发布<em id="leftlen1">2800</em>字
+                </div>
+                <div id="msgToolBar" class="toolbar"></div>
+                <div class="tool-up-class" style="display: none;">
+                    <div class="imgHtml" style="display: block;border-radius: 3px;">
+                        <!-- <img src="" width="70px" alt=""> -->
+                        上传成功！
+                        <i class="layui-icon layui-icon-close-fill" onclick="removeImg(this)"
+                            style="color: red;cursor:pointer;font-size:20px!important"></i>
+                    </div>
+                    <input type="hidden" id="mediaVal">
+                </div>
+                <div class="clear"></div>
+            </div>
+            {else}
+            <div class="top" style="background-color: white;"></div>
+            {/if}
+            <input type="hidden" id="userInfo" value="{$userInfo|json_encode}" />
+            <div class="sendMsg"></div>
+            <div id="msgContent">
+                {if isset($userMessage[0])}
+                {foreach $userMessage as $message}
+                <div class="entry">
+                    <div class="avatar">
+                        <div class="imgborder"><a href="{:url('/'.$message.blog.'/')}"><img
+                                    src="{$message.head_image}" /></a></div>
+                    </div>
+                    <div class="box box-main">
+                        <p class="massageText">
+                            <a href="{:url('/'.$message.blog.'/own/')}" id="nickname">{$message.nickname}：
+                            </a>
+                            {$message.contents|raw}{$message.repost|raw}
+                        </p>
+                        {if $message.media}
+                        {if json_decode($message.media_info, true)['media_type'] == 'mp4'}
+                        <p class="massageImg clear" vid="{$message.media}"><video width="400px" controls="" name="media">
+                                <source src="{$message.media}" type="video/mp4">
+                            </video></p>
+                        {else}
+                        <p class="massageImg clear"><img width="75%" , src="{:getTypeImg($message.media_info)}"
+                                onclick="showMessageImg(this)" style="cursor:pointer;"></p>
+                        {/if}
+                        {/if}
+                        <div class="static clear">
+                            <span>
+                                <a href="{:url('/'.$message.blog.'/'.'message/'.$message.msg_id)}">查看</a> |
+                                <a href="javascript:void(0);"
+                                    onclick="repost(this, {$message.uid}, {$message.msg_id})">转发{if 0 !=
+                                    $message.repostsum}（{$message.repostsum}）{/if}</a> |
+                                <a href="javascript:void(0);" onclick="comment({$message.msg_id}, {$message.uid});">评论{if 0
+                                    !=
+                                    $message.commentsum}（{$message.commentsum}）{/if}</a>
+                                {if $userInfo.isSiteUser && request()->action()=='own'}
+                                | <a href="{:url('/'.$message.blog.'/'.'del/message/'.$message.msg_id)}">删除</a>
+                                {/if}
+                            </span>
+                            {$message.ctime|setMessageTime} 来自 {$message.refrom}
+                        </div>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                {/foreach}
+                {else}
+                <!-- <div class="entry">
+                    <div class="box">
+                        <p>暂无微博...</p>
+                    </div>
+                    <div class="clear"></div>
+                </div> -->
+                {/if}
+            </div>
+            <div id="showMore" class="showMore">
+                <span class="loading"></span>
+                加载中...
+            </div>
+        </div>
+        {if !$userInfo}
+        {include file='index/sidebar_nologin' /}
+        {elseif $userInfo.isSiteUser}
+        {include file='index/sidebar_index' /}
+        {else}
+        {include file='index/sidebar_user' /}
+        {/if}
+        {include file='index/footer' /}
+    </div>
+    <script>
+        /**
+         * 缓冲函数
+         * @param {Number} position 当前滚动位置
+         * @param {Number} destination 目标位置
+         * @param {Number} rate 缓动率
+         * @param {Function} callback 缓动结束回调函数 两个参数分别是当前位置和是否结束
+         */
+        var easeout = function (position, destination, rate, callback) {
+            if (position === destination || typeof destination !== 'number') {
+                return false;
+            }
+            destination = destination || 0;
+            rate = rate || 2;
+
+            // 不存在原生`requestAnimationFrame`，用`setTimeout`模拟替代
+            if (!window.requestAnimationFrame) {
+                window.requestAnimationFrame = function (fn) {
+                    return setTimeout(fn, 17);
+                }
+            }
+
+            var step = function () {
+                position = position + (destination - position) / rate;
+                if (Math.abs(destination - position) < 1) {
+                    callback(destination, true);
+                    return;
+                }
+                callback(position, false);
+                requestAnimationFrame(step);
+            };
+            step();
+        }
+
+        var scrollTopSmooth = function (position) {
+            // 当前滚动高度
+            var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+            easeout(scrollTop, position, 5, function (val) {
+                window.scrollTo(0, val);
+            });
+        }
+
+        // $backToTop = document.querySelector('.back-to-top')
+        // $backToTop.addEventListener('click', function () {
+        // 	scrollTopSmooth(0);
+        // }, false);
+    </script>
+    <script>
+        var page = 0;
+        $(function () {
+            var canLoad = true
+            function initNextPage(url) {
+                if (!canLoad) return
+                page++
+                canLoad = false
+                var url = window.location.pathname
+                $.ajax({
+                    type: "get",
+                    url: url,
+                    data: { page: page },
+                    dataType: "json",
+                })
+                   .done(function (json) {
+                        var data = json.data.data
+                        if (data.length < 20) {
+                            $("#showMore").hide()
+                        }
+                        if (!data.length) {
+                            return
+                        }
+                        for (var i = 0; i < data.length; i++) {
+                            var mediaStr = '';
+                            var str = '';
+                            var delStr = '';
+                            var c1 = '';
+                            var c2 = '';
+                            if (data[i].media) {
+                                data[i].media_info = $.parseJSON(data[i].media_info)
+                                if (data[i].media_info.media_type == 'mp4' || data[i].media_info.media_type == 'm3u8') {
+                                    mediaStr = '<p class="massageImg clear showVideo' + data[i].msg_id + '" vid="' + data[i].media + '"><video width="400px"  controls=""  name="media"><source src="" type="video/mp4"></video></p>';
+                                } else if (data[i].media_info.media_type == 'mp3') {
+                                    mediaStr = '<p class="massageImg clear"><audio id="music_' + data[i].msg_id + '" class="music" controls="controls" loop="loop" onplay="stopOther(this)" preload="none" controlsList="nodownload" οncοntextmenu="return false" name="media"><source src="' + data[i].media + '" type="audio/mpeg"></audio></p>';
+                                } else {
+                                    mediaStr = '<p  class="massageImg clear"><img class="massageImgCommon massageImg_' + data[i].media_info.media_type + '"  onclick="showMessageImg(this)" src="' + data[i].media + '"></p>';
+                                }
+                            }
+                            // if (0 != data[i].repostsum) {
+                            // 	c1 = '('+data[i].repostsum+')'
+                            // }
+                            if (0 != data[i].commentsum) {
+                                c2 = '(' + data[i].commentsum + ')'
+                            }
+
+                            if (json.data.allow_delete != -1) {
+                                delStr += '<a href="/' + data[i].blog + '/message/' + data[i].msg_id + '">查看</a> |';
+                                delStr += '<a href="javascript:;" data-title="评论" data-url="/chat/messageChatId/' + data[i].msg_id + '" onclick="showFrameHtml(this, \'60%\', \'70%\')">评论' + c2 + '</a>'
+                                // delStr += '<a href="javascript:void(0);" onclick="repost(this, '+data[i].uid+', '+data[i].msg_id+')">转发'+c1+'</a> |';
+                                // delStr += '<a href="javascript:void(0);" onclick="comment(' + data[i].msg_id + ', ' + data[i].uid + ');">评论' + c2 + '</a>';
+                                if (!json.data.is_collect) {
+                                    delStr += ' | <a href="javascript:void(0);" onclick="collectMsg(' + data[i].msg_id + ',0);">收藏</a>';
+                                }
+                                if (json.data.allow_delete) {
+                                    delStr += ' | <a href="/' + data[i].blog + '/del/message/' + data[i].msg_id + '">删除</a>';
+                                } else if (json.data.is_collect) {
+                                    // delStr += ' | <a href="javascript:void(0);" onclick="collectMsg(' + data[i].msg_id + ',1);">取消收藏</a>';
+                                } else {
+                                    // delStr += ' | <a href="javascript:void(0);" onclick="collectMsg(' + data[i].msg_id + ',0);">收藏</a>';
+                                }
+                            } else {
+                                delStr += '<a href="/login/">查看</a>';
+                            }
+
+                            str = '<div class="entry"><div class="avatar"><div class="imgborder"><a href="/' + data[i].blog + '/own/"><img src="' + data[i].head_image + '" /></a></div></div><div class="box box-main"><p class="massageText"><a href="/' + data[i].blog + '/own/">' + data[i].nickname + '：</a>' + data[i].contents + data[i].repost + '</p>' + mediaStr + '<div class="static clear"><span>' + delStr + '</span>' + getDateDiff(data[i].ctime) + ' 来自 ' + data[i].refrom + '</div></div><div class="clear"></div></div>';
+                            $("#msgContent").append(str);
+                            iniVideo(data[i].msg_id)
+                        }
+                        canLoad = true
+                    })
+                   .always(function () {
+                    })
+                   .fail(function () {
+                    });
+            }
+            $(window).scroll(function () {
+                var top = $(window).scrollTop();
+                var winH = $(window).height();
+                var docH = $(document).height();
+                if (docH <= (top + winH + 200)) {
+                    initNextPage(page)
+                }
+            });
+            initNextPage(page)
+        })
+
+    </script>
+</body>
+
+</html>
