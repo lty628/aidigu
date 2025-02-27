@@ -16,6 +16,7 @@ class UserInfo extends Controller
 	public function initialize()
 	{
 		$this->assign('beian', env('app.beian', ''));
+		$this->assign('noRegister', env('app.noRegister', ''));
 	}
 	
 	public function login()
