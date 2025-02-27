@@ -168,6 +168,30 @@ class Index extends Controller
         return $this->success('永久删除成功');
     }
 
+    // 影院分享，已取消
+    // $(function () {
+    //     $("#siteShare").click(function () {
+    //         var url = $("#url").val()
+    //         var jk = $("#jk").val()
+    //         if (!url || !jk) {
+    //             return false
+    //         }
+    //         layer.prompt({title: '请输入分享标题'}, function(value, index, elem){
+    //             if(value === '') return elem.focus();
+    //             $.ajax({
+    //                 type: "GET",
+    //                 url: "/upload/index/siteUrlShare",
+    //                 data: {'url': jk+url, 'title': value},
+    //                 dataType: "json",
+    //                 success: function (response) {
+    //                     layer.msg(response.msg);
+    //                 }
+    //             });
+    //             // 关闭 prompt
+    //             layer.close(index);
+    //         });
+    //     })
+    // })
     public function siteUrlShare()
     {
         $url = input('param.url');
