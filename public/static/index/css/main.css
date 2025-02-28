@@ -182,7 +182,7 @@ a img {
     width: 48px;
     height: 48px;
     border: 2px solid #FFF;
-    border-radius: 50%;
+    border-radius: 10px;
 }
 
 .contents .entry .avatar .imgborder {
@@ -434,7 +434,7 @@ a img {
 
 /* 表格样式 */
 .contents table {
-    width: 550px;
+    width: 95%;
 }
 
 .contents .formsetting {
