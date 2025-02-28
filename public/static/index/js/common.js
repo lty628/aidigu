@@ -163,8 +163,9 @@ function comdel(url){
 			.done(function(data) {
 				flag = false;
 				if (action == 'index') {
-					$(".sendMsg").text(data.msg);
-					$(".sendMsg").slideDown().delay(800).slideUp();
+					alertMsg(data.msg);
+					// $(".sendMsg").text(data.msg);
+					// $(".sendMsg").slideDown().delay(800).slideUp();
 				} else {
 					alertMsg(data.msg, 0, flush);
 				}

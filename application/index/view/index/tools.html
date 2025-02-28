@@ -19,8 +19,8 @@
 
 		{foreach $list as $appInfo}
 		{if $appInfo['app_type'] == 0 || $appInfo['app_type'] == 1}
-			<div class="entry" style="float: left;clear: unset;background: center;border-bottom:unset;margin: unset;margin-right: 15px;">
-				<div class="avatar" style="width: 100px;">
+			<div class="entry" style="float: left;clear: unset;background: center;border-bottom:unset;margin: unset;width: 135px;">
+				<div class="avatar" style="width: 135px;margin-right: unset;">
 					<div>
 						{if $appInfo['open_type'] == 0}
 						<a href="javascript:;" data-title="{$appInfo['app_name']}" data-url="{$appInfo['app_url']}" onclick="showFrameCustom(this, '{$appInfo[\'app_config\']}')">
@@ -36,7 +36,7 @@
 						</a>
 						{/if}
 					</div>
-					<p>
+					<p style="margin-top: 10px;">
 						{if $appInfo['open_type'] == 0}
 						<a href="javascript:;" data-title="{$appInfo['app_name']}" data-url="{$appInfo['app_url']}" onclick="showFrameCustom(this, '{$appInfo[\'app_config\']}')">
 							{$appInfo['app_name']}
