@@ -66,8 +66,11 @@ a img {
 }
 
 .header {
-    height: 8rem; /* Use rem for height */
-    margin-right: 25%;
+    height: 8rem;
+    /* margin-right: 25%; */
+    /* background-color: aliceblue; */
+    /* margin-top: 20px; */
+    
 }
 
 .logo {
@@ -76,19 +79,29 @@ a img {
 }
 
 .navigation {
-    float: right;
-    margin: 2rem 0.5rem 0 0; /* Use rem for margin */
-    background-color: #FFF;
+    width: 1060px;
+    margin: auto;
+    /* float: left; */
+    /* margin: 2rem 0.5rem 0 0;  */
+    /* background-color: #FFF; */
     padding: 0.8rem; /* Use rem for padding */
+    font-size: 16px;
+}
+
+.navigation ul {
+    background-color: white;
+    line-height: 50px;
+    float: right;
 }
 
 .navigation li {
     display: inline;
     padding: 0 1rem; /* Use rem for padding */
+    margin-left: 10px;
 }
 
 .main {
-    max-width: 920px;
+    max-width: 1060px;
     margin: 0 auto;
     padding: 20px;
     /* background: #d5f3f4; */
@@ -105,12 +118,13 @@ a img {
 
 .contents {
     float: left;
-    width: 60rem; /* Use rem for width */
+    width: 70rem; /* Use rem for width */
     min-height: 130rem; /* Use rem for min-height */
     background-color: #FFF;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     padding: 20px;
+    padding-top: 0;
 }
 
 .contents .post { 
@@ -124,7 +138,7 @@ a img {
 
 
 .contents .post .text {
-    width: 534px;
+    width: 640px;
     height: 100px;
     border: 1px solid #e0e0e0;
     min-height: 100px;
@@ -133,7 +147,7 @@ a img {
 }
 
 .contents .post .postnow {
-    width: 557px;
+    width: 663px;
     margin-top: 10px;
 }
 
@@ -167,7 +181,7 @@ a img {
     clear: both;
     /* background: url(../images/linedot.gif) bottom left repeat-x; */
     margin: 15px 20px 20px 20px;
-    font-size: 14px;
+    font-size: 16px;
     border-bottom: 1px solid #e0e0e0;
     padding: 20px 0;
 }
@@ -179,10 +193,10 @@ a img {
 }
 
 .contents .entry .avatar img {
-    width: 48px;
-    height: 48px;
-    border: 2px solid #FFF;
-    border-radius: 10px;
+    width: 50px;
+    height: 50px;
+    /* border: 2px solid #FFF; */
+    border-radius: 50%;
 }
 
 .contents .entry .avatar .imgborder {
@@ -193,8 +207,8 @@ a img {
 }
 
 .contents .entry .box {
-    float: right;
-    width: 480px;
+    float: left;
+    width: 550px;
     white-space: normal;
     word-break: break-all;
     word-wrap: break-word;
@@ -213,7 +227,7 @@ a img {
 .contents .entry .box .static {
     font-size: 12px;
     color: #B6B6B6;
-    padding: 10px 0;
+    padding: 20px 0;
 }
 
 .contents .entry .box .static span {
@@ -278,7 +292,7 @@ a img {
 /* 侧边栏样式 */
 .sidebar {
     float: right;
-    width: 220px;
+    width: 260px;
     background-color: #D5F3F4;
     background-color: #fff;
     border-radius: 8px;
@@ -294,6 +308,7 @@ a img {
     line-height: 30px;
     font-weight: normal;
     padding: 0 10px;
+    margin-top: 15px;
 }
 
 .sidebar h2 a {
@@ -324,7 +339,7 @@ a img {
 .sidebar .more,
 .sidebar ul,
 .sidebar ol {
-    margin: 5px 10px;
+    margin: 15px 10px;
 }
 
 .sidebar ul li {
@@ -366,7 +381,7 @@ a img {
 
 .sidebar .info .detail {
     float: right;
-    width: 115px;
+    width: 165px;
 }
 
 .sidebar .info .detail p {
@@ -380,14 +395,14 @@ a img {
 
 .sidebar .counter .counterbox {
     float: left;
-    width: 65px;
+    width: 80px;
     text-align: center;
     line-height: 25px;
 }
 
 .sidebar .users li {
     float: left;
-    width: 65px;
+    width: 80px;
     text-align: center;
     padding: 10px 0;
 }
