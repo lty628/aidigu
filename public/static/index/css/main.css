@@ -114,6 +114,12 @@ a img {
 .main .box .massageText iframe {
     width: 130%; /* This value is not responsive, consider changing it */
 }
+.main .contents .top {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    font-size: 20px;
+    text-align: center;
+}
 
 
 .contents {
