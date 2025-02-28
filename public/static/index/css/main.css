@@ -66,10 +66,10 @@ a img {
 }
 
 .header {
-    height: 8rem;
+    height: 6rem;
     /* margin-right: 25%; */
     /* background-color: aliceblue; */
-    margin-top: 10px;
+    margin-top: 16px;
     
 }
 
@@ -131,6 +131,7 @@ a img {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     padding: 20px;
     padding-top: 0;
+    opacity: 0.95;
 }
 
 .contents .post { 
@@ -305,6 +306,7 @@ a img {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     padding: 20px;
     min-height: 600px;
+    opacity: 0.95;
     /* margin-top: 20px; */
 }
 
