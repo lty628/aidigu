@@ -14,10 +14,15 @@ class IndexInfo extends Info
     // 首页
     public function index()
     {
+        if ($this->userid) {
+            $allowDelete = 0;
+        } else {
+            $allowDelete = -1;
+        }
         if (request()->isAjax()) {
             $userMessage = $this->getMessage('', 8);
             $userMessage = $userMessage->toArray()['data'];
-            return json(array('status' =>  1, 'msg' => 'ok', 'data' => ['data' => handleMessage($userMessage), 'allow_delete' => -1]));
+            return json(array('status' =>  1, 'msg' => 'ok', 'data' => ['data' => handleMessage($userMessage), 'allow_delete' => $allowDelete]));
         }
 
         $this->assign('siteUser', 0);
