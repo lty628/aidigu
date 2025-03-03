@@ -1,18 +1,127 @@
 {include file='index/header' /}
-
+<style>
+	.formitem {
+		display: flex;
+		align-items: center;
+		margin-bottom: 15px;
+	}
+	.formitem span {
+		width: 100px;
+		font-weight: bold;
+	}
+	.formitem input,
+	.formitem select,
+	.formitem textarea {
+		padding: 8px;
+		border: 1px solid #ccc;
+		border-radius: 3px;
+		flex: 1;
+	}
+	/* 修改单选框的flex样式 */
+	.formitem input[type="radio"] {
+		flex: 0.1;
+	}
+	.formitem u {
+		margin-left: 5px;
+		color: #999;
+	}
+	.formhr {
+		border-top: 1px solid #ddd;
+		margin: 20px 0;
+	}
+	.formsubmit {
+		text-align: center;
+	}
+	.formsubmit input {
+		padding: 10px 20px;
+		background-color: #007BFF;
+		color: white;
+		border: none;
+		border-radius: 5px; /* 增加圆角 */
+		cursor: pointer;
+		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 增加阴影效果 */
+		transition: background-color 0.3s ease; /* 增加过渡效果 */
+	}
+	.formsubmit input:hover {
+		background-color: #0056b3;
+		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 鼠标悬停时增加阴影效果 */
+	}
+	/* 输入框样式优化 */
+	.formitem input,
+	.formitem select,
+	.formitem textarea {
+		padding: 10px; /* 增加内边距 */
+		border: 1px solid #ccc;
+		border-radius: 5px; /* 增加圆角 */
+		box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1); /* 增加内阴影效果 */
+		transition: border-color 0.3s ease; /* 增加过渡效果 */
+	}
+	.formitem input:focus,
+	.formitem select:focus,
+	.formitem textarea:focus {
+		border-color: #007BFF; /* 聚焦时改变边框颜色 */
+		outline: none; /* 去除默认聚焦边框 */
+		box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* 聚焦时增加外阴影效果 */
+	}
+	/* 单选框和复选框样式优化 */
+	.formitem input[type="radio"] {
+		/* width: 16px;
+		height: 16px;
+		border: 2px solid #ccc;
+		border-radius: 50%; */
+		margin-right: 5px;
+		position: relative;
+		top: 2px;
+		transition: border-color 0.3s ease; /* 增加过渡效果 */
+	}
+	.formitem input[type="radio"]:checked {
+		border-color: #007BFF;
+	}
+	.formitem input[type="radio"]:checked::before {
+		content: '';
+		display: block;
+		width: 8px;
+		height: 8px;
+		background-color: #007BFF;
+		border-radius: 50%;
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+	}
+	/* 顶部导航链接样式优化 */
+	/* .top {
+		font-size: 24px;
+		font-weight: bold;
+		color: #333;
+		margin-bottom: 10px;
+	} */
+	h2 a {
+		color: #007BFF;
+		text-decoration: none;
+		transition: color 0.3s ease;
+	}
+	h2 a:hover {
+		color: #0056b3;
+	}
+	h2 span {
+		margin: 0 5px;
+		color: #333;
+	}
+</style>
 <div class="main">
 	<div class="contents">
 		<div class="top">修改密码</div>
 		<h2><a href="/setting/">个人资料 | </a><span><a href="/setting/avatar/">修改头像 | </a><span><a href="/setting/background/">修改背景 | </a></span><span><a href="/setting/passwd/">修改密码</a></span></h2>
-		<h3>请验证你的旧密码：</h3>
+		<!-- <h3>请验证你的旧密码：</h3> -->
 		<div class="entry" style="border-bottom: unset">
 			<div class="box">
 				<form action="" class="postform" method="POST">
 					<p  class="formitem"><span>旧密码：</span><input type="password" name="oldpw" class="input" id="oldpw" /></p>
 					<p  class="formitem"><span>新密码：</span><input type="password" name="newpw" class="input" id="newpw" /></p>
 					<p  class="formitem"><span>确认密码：</span><input type="password" name="compw" class="input" id="compw" /></p>
-					<div class="formhr"></div>
-					<p  class="formsubmit"><input type="button" value="提交" id="passwd" class="button" /></p>
+					<!-- <div class="formhr"></div> -->
+					<p  class="formsubmit"><input type="button" class="layui-bg-blue" value="提交" id="passwd" class="button" /></p>
 				</form>
 			</div>
 		</div>

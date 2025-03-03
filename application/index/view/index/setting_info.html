@@ -90,12 +90,12 @@
 		transform: translate(-50%, -50%);
 	}
 	/* 顶部导航链接样式优化 */
-	.top {
+	/* .top {
 		font-size: 24px;
 		font-weight: bold;
 		color: #333;
 		margin-bottom: 10px;
-	}
+	} */
 	h2 a {
 		color: #007BFF;
 		text-decoration: none;
@@ -132,7 +132,7 @@
 					<input name="invisible" type="radio" value="0" {if $userInfo.invisible==0}checked{/if}>否
 					<input name="invisible" type="radio" value="1" {if $userInfo.invisible==1}checked{/if}>是
 				</p>
-				<div class="formhr"></div>
+				<!-- <div class="formhr"></div> -->
 				<script language=javascript src="/static/index/js/city.js"></script>
 				<p class="formitem"><span>所在省份：</span>
 				<select name="province" id="selProvince" onChange = "getCity(this.options[this.selectedIndex].value)"> 
@@ -196,8 +196,8 @@
 					
 				</script>
     			<p class="formitem"><span>自我介绍：</span><br /><textarea class="formintro" id="formintro" name="intro">{$userInfo.intro}</textarea><u>(选填)</u></p>
-    			<div class="formhr"></div>
-				<p class="formsubmit"><input type="button" id="changeInfo" value="提交"></p>
+    			<!-- <div class="formhr"></div> -->
+				<p class="formsubmit"><input type="button" class="layui-bg-blue" id="changeInfo" value="提交"></p>
 			</form>
 			</div>
 		</div>
