@@ -66,37 +66,69 @@
         /* 移除不必要的阴影效果以实现扁平化 */
     }
 </style>
+<style>
+    /* 新增按钮样式 */
+    #open_comment_form_btn {
+        position: fixed;
+        bottom: 80px; /* 保证与之前的悬浮按钮有一定间距 */
+        right: 20px;
+        z-index: 999;
+    }
+</style>
 {if $userInfo.isSiteUser}
-<div>
-	<div method="post" class="post" action="" id="comment_form">
-			<!-- <small></small> -->
-			<div id="msgInput" class="text" maxlength="2800" onkeyup="check_len1()">
-				<!-- <p>你在做什么呢</p> -->
-			</div>
-			<input type="hidden" id="topicTitle" value="{$topicTitle | default=''}">
-			<div class="postnow" style="display: none;">
-				<!-- <span>
-					<input type="button" value="发布" class="button layui-btn layui-btn" id="sendButton" />
-				</span> -->
-				<span style="margin-left: 3%;">你还可以发布<em id="leftlen1">2800</em>字</span>
-			</div>
+    <!-- 新增悬浮固定发布按钮 -->
+    <div id="floating_publish_button" style="position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 999;">
+        <!-- 修改按钮样式 -->
+        <button class="button layui-btn layui-btn-danger" style="background-color: orange; color: white; border: none; border-radius: 50%; width: 50px; height: 50px; font-size: 14px; display: flex; align-items: center; justify-content: center;" onclick="openCommentFormModal()">+</button>
+    </div>
+    <!-- 新增一个容器用于包裹评论表单，并默认隐藏 -->
+    <div id="comment_form_container" style="display: none;">
+        <div method="post" class="post" action="" id="comment_form">
+            <!-- <small></small> -->
+            <div id="msgInput" class="text" maxlength="2800" onkeyup="check_len1()">
+                <!-- <p>你在做什么呢</p> -->
+            </div>
+            <input type="hidden" id="topicTitle" value="{$topicTitle | default=''}">
+            <div class="postnow" style="display: none;">
+                <!-- <span>
+                    <input type="button" value="发布" class="button layui-btn layui-btn" id="sendButton" />
+                </span> -->
+                <span style="margin-left: 3%;">你还可以发布<em id="leftlen1">2800</em>字</span>
+            </div>
 
-			<!-- 表情等 -->
-			<div id="msgToolBar" class="toolbar"></div>
-			<div class="tool-up-class" style="display: none;">
-				<div class="imgHtml" style="display: block;border-radius: 3px;">
-					<!-- <img src="" width="70px" alt=""> -->
-					上传成功！
-					<i class="layui-icon layui-icon-close-fill" onclick="removeImg(this)"
-						style="color: red;cursor:pointer;font-size:20px!important"></i>
-				</div>
-				<input type="hidden" id="mediaVal">
-			</div>
-			<br />
-			
-			 <p><input type="submit" id="sendButton" value="嘀咕~" class="form_submit" /></p>
-		</div>
-</div>
+            <!-- 表情等 -->
+            <div id="msgToolBar" class="toolbar"></div>
+            <div class="tool-up-class" style="display: none;">
+                <div class="imgHtml" style="display: block;border-radius: 3px;">
+                    <!-- <img src="" width="70px" alt=""> -->
+                    上传成功！
+                    <i class="layui-icon layui-icon-close-fill" onclick="removeImg(this)"
+                        style="color: red;cursor:pointer;font-size:20px!important"></i>
+                </div>
+                <input type="hidden" id="mediaVal">
+            </div>
+            <br />
+
+            <p><input type="submit" id="sendButton" value="嘀咕~" class="form_submit" /></p>
+        </div>
+    </div>
+    <script>
+        // 引入 layer 插件（如果未引入，需要先引入）
+        // layui.use('layer', function(){
+        //     var layer = layui.layer;
+        // });
+
+        // 打开评论表单弹框的函数
+        function openCommentFormModal() {
+            layer.open({
+                type: 1,
+                title: '评论表单',
+                content: $('#comment_form_container'),
+                area: ['100%','400px'],
+                shadeClose: true
+            });
+        }
+    </script>
 {/if}
 <input type="hidden" id="userInfo" value="{$userInfo|json_encode}" />
 <div id="msgContent">
@@ -243,19 +275,18 @@
 						if (0 != data[i].commentsum) {
 							c2 = '(' + data[i].commentsum + ')'
 						}
-						delStr += '<span><i class="fa fa-user"></i><a href="/' + data[i].blog + '/message/' + data[i].msg_id + '">查看</a></span>';
-						// delStr += '<a href="javascript:void(0);" onclick="repost(this, '+data[i].uid+', '+data[i].msg_id+')">转发'+c1+'</a> |';
-						// delStr += '<span><i class="fa fa-user"></i><a href="javascript:void(0);" onclick="comment(' + data[i].msg_id + ', ' + data[i].uid + ');">评论' + c2 + '</a></span>';
-						delStr += '<span><i class="fa fa-user"></i><a href="javascript:;" data-title="评论" data-url="/chat/messageChatId/' + data[i].msg_id + '" onclick="showFrameHtml(this, \'100%\', \'100%\')">评论' + c2 + '</a></span>';
-
+						// 添加样式类以实现右侧对齐和样式美化
+						delStr += '<div class="post-meta-icons" style="text-align: right;">'; 
+						delStr += '<span><a href="/' + data[i].blog + '/message/' + data[i].msg_id + '"><i class="layui-icon layui-icon-eye"></i> 查看</a></span>';
+						delStr += '<span><a href="javascript:;" data-title="评论" data-url="/chat/messageChatId/' + data[i].msg_id + '" onclick="showFrameHtml(this, \'100%\', \'100%\')"><i class="layui-icon layui-icon-reply-fill"></i> 评论' + c2 + '</a></span>';
 						if (json.data.allow_delete) {
-							delStr += '<span><i class="fa fa-user"></i><a href="/' + data[i].blog + '/del/message/' + data[i].msg_id + '">删除</a></span>';
+							delStr += '<span><a href="/' + data[i].blog + '/del/message/' + data[i].msg_id + '"><i class="layui-icon layui-icon-delete"></i> 删除</a></span>';
 						} else if(json.data.is_collect) {
-							// delStr += '<span><i class="fa fa-user"></i><a href="javascript:void(0);" onclick="collectMsg(' + data[i].msg_id + ',1);">取消收藏</a></span>';
+							delStr += '<span><a href="javascript:void(0);" onclick="collectMsg(' + data[i].msg_id + ',1);"><i class="layui-icon layui-icon-star-fill"></i> 取消收藏</a></span>';
 						} else {
-							delStr += '<span><i class="fa fa-user"></i><a href="javascript:void(0);" onclick="collectMsg(' + data[i].msg_id + ',0);">收藏</a></span>';
+							delStr += '<span><a href="javascript:void(0);" onclick="collectMsg(' + data[i].msg_id + ',0);"><i class="layui-icon layui-icon-star"></i> 收藏</a></span>';
 						}
-
+						delStr += '</div>'; // 关闭样式类
 						str = '<div class="post"><img class="post-head" src="' + data[i].head_image + '" />'
 							+ '<div class="post-article">'
 							+ '<div class="post-info-i">'

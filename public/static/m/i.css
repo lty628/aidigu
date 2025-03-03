@@ -95,10 +95,11 @@ p.more{margin:5px 0 0 0;padding: 0;float:right}
 .post-info-i small{display:block;color:grey;margin:4px 2px}
 .comment-meta small{color:grey}
 .comment-author{margin-bottom: 10px}
-.post-meta{background-color:#fff;border-top:1px solid #f3f3f3;margin-top:15px;color:grey;padding:10px 15px}
+/* .post-meta{background-color:#fff;border-top:1px solid #f3f3f3;margin-top:15px;color:grey;padding:10px 15px} */
+.post-meta{background-color:#fff;color:grey;margin-top:15px;}
 .post-meta i{margin-right:4px}
 .post-meta span{display:block;width:33.33333333333%;float:left;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:0 8px}
-.post-meta span+span{border-left:1px solid #d9d9d9}
+/* .post-meta span+span{border-left:1px solid #d9d9d9} */
 #comment_form,.post-near{padding-bottom:15px}
 #comment_form{margin-top:10px;max-width:100%;margin-bottom:10px}
 .input-g{position: relative}
