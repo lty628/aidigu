@@ -1,14 +1,6 @@
 
 {include file='index/header' /}
 <style>
-    /* 整体样式重置 */
-    body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        margin: 0;
-        padding: 0;
-        background-color: #f4f4f9;
-        color: #333;
-    }
 
     /* 工具栏样式 */
     .toolbar {
@@ -16,10 +8,7 @@
         display: flex;
         gap: 10px;
         align-items: center;
-        padding: 10px;
-        background-color: #fff;
-        border-radius: 5px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+		float: left;
     }
 
     /* 文本输入框样式 */
@@ -58,15 +47,13 @@
 
     /* 修改 .post 样式 */
     .post {
-        margin-bottom: 20px; /* 增加底部间距 */
+        margin-bottom: 10px; /* 增加底部间距 */
         padding: 15px; /* 调整内边距 */
         background-color: #fff; /* 背景颜色 */
         border-radius: 5px; /* 圆角 */
         border: 1px solid #e0e0e0; /* 边框 */
         /* 移除不必要的阴影效果以实现扁平化 */
     }
-</style>
-<style>
     /* 新增按钮样式 */
     #open_comment_form_btn {
         position: fixed;
@@ -74,22 +61,28 @@
         right: 20px;
         z-index: 999;
     }
+	.postnow {
+		margin-top: 5px;
+		font-size: 12px;
+	}
+	.post-meta-icons {
+		font-size: 12px;
+	}
 </style>
 {if $userInfo.isSiteUser}
     <!-- 新增悬浮固定发布按钮 -->
-    <div id="floating_publish_button" style="position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 999;">
-        <!-- 修改按钮样式 -->
+    <!-- <div id="floating_publish_button" style="position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 999;">
         <button class="button layui-btn layui-btn-danger" style="background-color: orange; color: white; border: none; border-radius: 50%; width: 50px; height: 50px; font-size: 14px; display: flex; align-items: center; justify-content: center;" onclick="openCommentFormModal()">+</button>
-    </div>
+    </div> -->
     <!-- 新增一个容器用于包裹评论表单，并默认隐藏 -->
-    <div id="comment_form_container" style="display: none;">
+    <div id="comment_form_container" >
         <div method="post" class="post" action="" id="comment_form">
             <!-- <small></small> -->
             <div id="msgInput" class="text" maxlength="2800" onkeyup="check_len1()">
                 <!-- <p>你在做什么呢</p> -->
             </div>
             <input type="hidden" id="topicTitle" value="{$topicTitle | default=''}">
-            <div class="postnow" style="display: none;">
+            <div class="postnow" >
                 <!-- <span>
                     <input type="button" value="发布" class="button layui-btn layui-btn" id="sendButton" />
                 </span> -->
