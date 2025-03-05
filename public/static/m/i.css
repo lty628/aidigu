@@ -80,7 +80,8 @@ p.more{margin:5px 0 0 0;padding: 0;float:right}
 .a-l-fc form .is{position:absolute;right:0;top:0;padding:11px 15px;cursor:pointer}
 .post-head{width:50px;height:50px;border-radius:50%;position:absolute;left:15px;top:15px}
 .post-article{margin-left:60px}
-.post-article img{margin:5px 0;border:1px solid #f2f2f5;cursor:zoom-in}
+/* .post-article img{margin:5px 0;border:1px solid #f2f2f5;cursor:zoom-in} */
+.post-article img{border:1px solid #f2f2f5;cursor:zoom-in}
 .post-article img.tbbq, .comment-list .tbbq{border:none;cursor:default;vertical-align:middle;margin: 0 2px}
 .post-article h1,.post-article h2,.post-article h3,.post-article h4,.post-article h5,.post-article h6{color:#444}
 .post-article h1:before,.post-article h2:before,.post-article h3:before,.post-article h4:before,.post-article h5:before,.post-article h6:before{font-weight:800;font-style:italic;color:#ee6583}
