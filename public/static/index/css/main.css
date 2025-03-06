@@ -260,7 +260,7 @@ a img {
 
 .contents .entry .box .block .block_top {
     /* background: url(../images/block_top.gif) top left no-repeat; */
-    height: 17px;
+    /* height: 17px; */
 }
 
 .contents .entry .box .block .block_bottom {
@@ -270,8 +270,8 @@ a img {
 
 .contents .entry .box .block .block_body {
     /* background: url(../images/block_body.gif) top left repeat-y; */
-    /* padding: 5px 15px; */
-    background-color: #eeeeee;
+    padding: 15px 15px;
+    background-color: #f1f1f2;
     border-radius: 5px;
 }
 
