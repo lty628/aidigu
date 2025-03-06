@@ -9,9 +9,9 @@
 				<p class="massageText"><a href="{:url('/'.$userInfo.blog.'/')}" id="nickname">{$message.nickname}：</a>{$message.contents|raw}{$message.repost|raw}</p>
 				{if $message.media}
 						{if json_decode($message.media_info, true)['media_type'] == 'mp4'}
-						<p  class="massageImg"><video width="400px"  controls=""  name="media"><source src="{$message.media}" type="video/mp4"></video></p>
+						<p  class="massageImg clear"><video width="400px"  controls=""  name="media"><source src="{$message.media}" type="video/mp4"></video></p>
 						{else}
-						<p class="massageImg"><img width="75%" src="{$message.media}" onclick="showMessageImg(this)" style="cursor:pointer;"></p>
+						<p class="massageImg clear"><img width="75%" src="{$message.media}" onclick="showMessageImg(this)" style="cursor:pointer;"></p>
 						{/if}
 				{/if}
 				<div class="static">
