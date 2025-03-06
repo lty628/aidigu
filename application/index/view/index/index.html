@@ -165,8 +165,8 @@
                    .done(function (json) {
                         var data = json.data.data
                         if (data.length < 8) {
-                            // $("#showMore").hide()
-                            $("#showMore").html('没有了')
+                            $("#showMore").hide()
+                            // $("#showMore").html('没有了')
                         }
                         if (!data.length) {
                             return
