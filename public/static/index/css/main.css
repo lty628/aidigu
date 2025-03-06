@@ -97,7 +97,8 @@ a img {
 .navigation li {
     display: inline;
     padding: 0 1rem; /* Use rem for padding */
-    margin-left: 10px;
+    margin-left: 5px;
+    margin-right: 5px;
 }
 
 .main {
@@ -392,7 +393,7 @@ a img {
 
 .sidebar .info .detail {
     float: right;
-    width: 165px;
+    width: 175px;
 }
 
 .sidebar .info .detail p {
