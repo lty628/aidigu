@@ -125,7 +125,7 @@ a img {
 .contents {
     float: left;
     width: 70rem; /* Use rem for width */
-    min-height: 65rem; /* Use rem for min-height */
+    min-height: 97rem; /* Use rem for min-height */
     background-color: #FFF;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
