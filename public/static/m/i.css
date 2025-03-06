@@ -38,7 +38,7 @@ button.sm{padding: 2px 5px;font-size: 13px;color: #888;border: 1px solid #ddd;ba
 .body-gravatar{width:100px;height:100px;margin:5px auto;border-radius:50%;border:5px solid rgba(255,255,255,.51)}
 .clear{clear:both}
 /* .top-bar-body{box-shadow:0 0 2px rgba(0,0,0,.2);padding:10px 0 0 0;margin:0 0 20px 0;text-align:center;background-color:#fff} */
-.top-bar-body{padding:10px 0 0 0;margin:0 0 20px 0;text-align:center;background-color:#fff}
+.top-bar-body{padding:10px 0 0 0;margin:0 0 10px 0;text-align:center;background-color:#fff}
 .top-bar-body .current{border-bottom-color:#fa7d3c}
 .top-bar-body li{display:inline-block;padding:0 10px 6px 10px;border-bottom:3px solid #fff;margin:0 10px}
 .sidebar{float:left;width:300px;margin-right:20px;font-size: 12px}
