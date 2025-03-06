@@ -73,6 +73,14 @@
 		width: 60%;
 		margin-left: 2%;
 	}
+	.post-text {
+		margin-left: 2%;
+		margin-top: 5px;
+		margin-bottom: 1px;
+	}
+	.post-text p:first-child{
+		/* text-indent: 2em; */
+	}
 </style>
 {if $userInfo.isSiteUser}
     <!-- 新增悬浮固定发布按钮 -->
@@ -290,7 +298,7 @@
 							+ '<div class="post-info-i">'
 							+ '<h2><a href="/' + data[i].blog + '/own/">' + data[i].nickname + '</a></h2><small><i class="fa fa-clock-o"></i>'+getDateDiff(data[i].ctime)+'<i class="fa fa-eye"></i>'+' 来自' + data[i].refrom+'</small>'
 							+ '</div>'
-							+ '<div class="post-content">' + data[i].contents + data[i].repost + mediaStr + '</div>'
+							+ '<div class="post-content"><div class="post-text">' + data[i].contents + data[i].repost + '</div>'  + mediaStr + '</div>'
 							+ '</div>'
 							+ '<div class="clear"></div>'
 							+ '<div class="post-meta">'+delStr+'</div>'
