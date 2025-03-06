@@ -90,7 +90,7 @@ p.more{margin:5px 0 0 0;padding: 0;float:right}
 .post-content a{color:#ee6583;border-bottom:1px solid #f2f2f5}
 .post-content a:hover{border-bottom:1px solid #ee6583}
 .post-content h1,.post-content h2,.post-content h3,.post-content h4,.post-content h5,.post-content h6{margin: 15px 0 10px 0;}
-.post-info-i{white-space:normal;word-wrap:break-word;word-break:break-all}
+.post-info-i{white-space:normal;word-wrap:break-word;word-break:break-all;margin-bottom: 10px;}
 .post-thumb{margin-top:10px}
 #randomarticle{max-height:750px;overflow:hidden}
 #randomarticle li+li{border-top:1px solid #f2f2f5;margin-top:10px;padding-top:10px}
@@ -149,7 +149,7 @@ blockquote{margin-left:-55px;padding-left:55px}
 .article-list{width:100%;margin-top:-10px}
 .sidebar-mb-show{display:block}
 /* .sidebar-pc-show{display:none} */
-.post-head{position:static;float:left;margin:0 5px 5px 0}
+.post-head{position:static;float:left;margin:0 10px 5px 0}
 .post-article{margin-left:0}
 /* .post-info-i h2{margin-top:10px} */
 .body{margin-top:10px}
