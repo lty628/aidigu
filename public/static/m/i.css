@@ -69,7 +69,7 @@ button.sm{padding: 2px 5px;font-size: 13px;color: #888;border: 1px solid #ddd;ba
 .li-haf-border li+li{border-top:1px solid #f2f2f5}
 .box ul li:nth-last-child(1){padding-bottom:0}
 /* .post{box-shadow:0 0 2px rgba(0,0,0,.2);padding:15px 15px 5px 15px;background-color:#fff;position:relative;word-break:break-all;word-wrap:break-word;white-space:normal} */
-.post{padding:15px 15px 5px 15px;background-color:#fff;position:relative;word-break:break-all;word-wrap:break-word;white-space:normal}
+.post{padding:20px 15px 5px 15px;background-color:#fff;position:relative;word-break:break-all;word-wrap:break-word;white-space:normal}
 p.more{margin:5px 0 0 0;padding: 0;float:right}
 .post+.post{margin-top:5px}
 .a-l-fc{margin-bottom:-5px;background-color:#f2f2f5;padding:0}
