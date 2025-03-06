@@ -259,18 +259,20 @@ a img {
 }
 
 .contents .entry .box .block .block_top {
-    background: url(../images/block_top.gif) top left no-repeat;
+    /* background: url(../images/block_top.gif) top left no-repeat; */
     height: 17px;
 }
 
 .contents .entry .box .block .block_bottom {
-    background: url(../images/block_bottom.gif) top left no-repeat;
-    height: 5px;
+    /* background: url(../images/block_bottom.gif) top left no-repeat;
+    height: 5px; */
 }
 
 .contents .entry .box .block .block_body {
-    background: url(../images/block_body.gif) top left repeat-y;
-    padding: 5px 15px;
+    /* background: url(../images/block_body.gif) top left repeat-y; */
+    /* padding: 5px 15px; */
+    background-color: #eeeeee;
+    border-radius: 5px;
 }
 
 .contents .entry .box .block .block_body span {
