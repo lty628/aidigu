@@ -783,4 +783,5 @@ pre code {
     overflow-x: auto;
     font-family: 'Courier New', Courier, monospace;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    clear: both;
 }
