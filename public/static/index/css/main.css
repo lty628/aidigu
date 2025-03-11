@@ -291,6 +291,7 @@ a img {
 .entry .massageImg .massageImgCommon {
     max-width: 75%; /* This value is not responsive, consider changing it */
     min-width: 5%;
+    max-height: 360px;
 }
 
 .contents .fansbar {
