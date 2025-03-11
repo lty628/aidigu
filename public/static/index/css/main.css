@@ -386,7 +386,7 @@ a img {
         margin: auto;
     }
     .navigation {
-        max-width: 1120px;
+        max-width: 74rem;
         width: unset;
         float: unset;
         /* margin-right: 5%; */
