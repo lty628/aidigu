@@ -104,7 +104,7 @@ a img {
 .main {
     max-width: 1060px;
     margin: 0 auto;
-    padding: 20px;
+    padding-top: 20px;
     /* background: #d5f3f4; */
 }
 
