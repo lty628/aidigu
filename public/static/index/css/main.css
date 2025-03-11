@@ -377,9 +377,13 @@ a img {
 }
 
 /* 屏幕小于1000px时的样式 */
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 1080px) {
     .sidebar {
         display: none;
+    }
+    .contents {
+        float: unset;
+        margin: auto;
     }
 }
 
