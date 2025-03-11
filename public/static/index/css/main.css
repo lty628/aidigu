@@ -386,10 +386,10 @@ a img {
         margin: auto;
     }
     .navigation {
-        min-width: 1120px;
+        max-width: 1120px;
         width: unset;
         float: unset;
-        margin-right: 5%;
+        /* margin-right: 5%; */
     }
 }
 
