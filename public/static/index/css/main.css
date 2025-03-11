@@ -773,3 +773,14 @@ i.warning {
         transform: rotate(360deg);
     }
 }
+
+pre code {
+    background: #2d2d2d;
+    color: #e0e0e0;
+    border-radius: 5px;
+    display: block;
+    padding: 15px;
+    overflow-x: auto;
+    font-family: 'Courier New', Courier, monospace;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
