@@ -131,7 +131,7 @@ a img {
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     padding: 20px;
-    padding-top: 0;
+    padding-top: 5px;
     opacity: 0.95;
 }
 
