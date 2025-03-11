@@ -385,6 +385,12 @@ a img {
         float: unset;
         margin: auto;
     }
+    .navigation {
+        min-width: 1120px;
+        width: unset;
+        float: unset;
+        margin-right: 5%;
+    }
 }
 
 .sidebar .info .avatar {
