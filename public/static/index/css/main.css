@@ -289,7 +289,8 @@ a img {
 }
 
 .entry .massageImg .massageImgCommon {
-    width: 60%; /* This value is not responsive, consider changing it */
+    max-width: 75%; /* This value is not responsive, consider changing it */
+    min-width: 5%;
 }
 
 .contents .fansbar {
