@@ -97,13 +97,14 @@ a img {
 .navigation li {
     display: inline;
     padding: 0 1rem; /* Use rem for padding */
-    margin-left: 10px;
+    margin-left: 5px;
+    margin-right: 5px;
 }
 
 .main {
     max-width: 1060px;
     margin: 0 auto;
-    padding: 20px;
+    padding-top: 20px;
     /* background: #d5f3f4; */
 }
 
@@ -125,12 +126,12 @@ a img {
 .contents {
     float: left;
     width: 70rem; /* Use rem for width */
-    min-height: 130rem; /* Use rem for min-height */
+    min-height: 97rem; /* Use rem for min-height */
     background-color: #FFF;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     padding: 20px;
-    padding-top: 0;
+    padding-top: 5px;
     opacity: 0.95;
 }
 
@@ -140,7 +141,7 @@ a img {
 
     border-radius: 8px;
     padding: 20px;
-    margin-bottom: 20px;
+    margin-bottom: 100px;
 }
 
 
@@ -259,18 +260,20 @@ a img {
 }
 
 .contents .entry .box .block .block_top {
-    background: url(../images/block_top.gif) top left no-repeat;
-    height: 17px;
+    /* background: url(../images/block_top.gif) top left no-repeat; */
+    /* height: 17px; */
 }
 
 .contents .entry .box .block .block_bottom {
-    background: url(../images/block_bottom.gif) top left no-repeat;
-    height: 5px;
+    /* background: url(../images/block_bottom.gif) top left no-repeat;
+    height: 5px; */
 }
 
 .contents .entry .box .block .block_body {
-    background: url(../images/block_body.gif) top left repeat-y;
-    padding: 5px 15px;
+    /* background: url(../images/block_body.gif) top left repeat-y; */
+    padding: 15px 15px;
+    background-color: #f1f1f2;
+    border-radius: 5px;
 }
 
 .contents .entry .box .block .block_body span {
@@ -286,7 +289,9 @@ a img {
 }
 
 .entry .massageImg .massageImgCommon {
-    width: 60%; /* This value is not responsive, consider changing it */
+    max-width: 75%; /* This value is not responsive, consider changing it */
+    min-width: 5%;
+    max-height: 360px;
 }
 
 .contents .fansbar {
@@ -372,9 +377,19 @@ a img {
 }
 
 /* 屏幕小于1000px时的样式 */
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 1080px) {
     .sidebar {
         display: none;
+    }
+    .contents {
+        float: unset;
+        margin: auto;
+    }
+    .navigation {
+        max-width: 74rem;
+        width: unset;
+        float: unset;
+        /* margin-right: 5%; */
     }
 }
 
@@ -390,7 +405,7 @@ a img {
 
 .sidebar .info .detail {
     float: right;
-    width: 165px;
+    width: 175px;
 }
 
 .sidebar .info .detail p {
@@ -701,6 +716,7 @@ i.warning {
 .dplayer {
     border-radius: 8px;
     width: 360px;
+    /* max-height: 360px; */
 }
 
 .info .detail p:nth-child(3) {
@@ -756,4 +772,16 @@ i.warning {
     100% {
         transform: rotate(360deg);
     }
+}
+
+pre code {
+    background: #2d2d2d;
+    color: #e0e0e0;
+    border-radius: 5px;
+    display: block;
+    padding: 15px;
+    overflow-x: auto;
+    font-family: 'Courier New', Courier, monospace;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    clear: both;
 }
