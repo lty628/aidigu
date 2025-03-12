@@ -2,10 +2,7 @@
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!-->
-<html class="no-js">
-<!--<![endif]-->
-
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -28,29 +25,28 @@
     <script src="/static/user/js/modernizr-2.6.2.min.js"></script>
     <!-- FOR IE9 below -->
     <!--[if lt IE 9]>
-	<script src="/static/user/js/respond.min.js"></script>
-	<![endif]-->
-
+    <script src="/static/user/js/respond.min.js"></script>
+    <![endif]-->
 </head>
-
-<body class="style-3">
-
+<body class="tech-flat-bg">
     <div class="container">
         <div class="row">
             <div class="col-md-12 text-center">
                 <ul class="menu">
-                    <!-- <li><a href="javascript:;">注册爱嘀咕</a></li> -->
+                    <!-- <li><a href="javascript:;">邀请码注册</a></li> -->
                 </ul>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-4 col-md-push-9 user-top">
-                <form action="#" class="fh5co-form animate-box" data-animate-effect="fadeInRight">
-                    <h2>邀请码注册</h2>
+        <div class="row align-items-center">
+            <!-- 原有的表单部分 -->
+            <div class="col-md-6">
+                <form action="#" class="fh5co-form animate-box tech-flat-form p-4" data-animate-effect="fadeInRight">
+                    <h2 class="tech-flat-title">邀请码注册</h2>
+                    <p class="form-description">请填写以下信息完成邀请码注册</p>
                     <div class="form-group">
-                        <div class="alert alert-danger"></div>
+                        <div class="alert alert-danger tech-flat-alert"></div>
                         <!-- <div class="alert alert-warning"></div> -->
-                        <div class="alert alert-success"></div>
+                        <div class="alert alert-success tech-flat-alert"></div>
                     </div>
                     <div class="form-group">
                         <label for="name" class="sr-only">账号</label>
@@ -73,6 +69,19 @@
                         <input type="button" value="注册" id="register" class="btn btn-primary">
                     </div>
                 </form>
+            </div>
+            <!-- 添加网站介绍部分 -->
+            <div class="col-md-6">
+                <div class="site-introduction p-4">
+                    <h2 class="tech-flat-title fadeInUp">爱嘀咕，开启精彩之旅</h2>
+                    <p class="fadeInUp" style="animation-delay: 0.2s;">爱嘀咕是一个充满乐趣和惊喜的平台，在这里你可以：</p>
+                    <ul>
+                        <li class="fadeInUp" style="animation-delay: 0.4s;">与全球的朋友交流互动</li>
+                        <li class="fadeInUp" style="animation-delay: 0.6s;">发现更多有趣的内容和活动</li>
+                        <li class="fadeInUp" style="animation-delay: 0.8s;">分享自己的生活和故事</li>
+                    </ul>
+                    <p class="fadeInUp" style="animation-delay: 1s;">快来邀请朋友，一起在爱嘀咕的世界里畅玩吧！</p>
+                </div>
             </div>
         </div>
         {if $beian}
@@ -98,7 +107,5 @@
     <!-- Main JS -->
     <script src="/static/user/js/main.js"></script>
     <script src="/static/user/js/common.js?1"></script>
-
 </body>
-
 </html>

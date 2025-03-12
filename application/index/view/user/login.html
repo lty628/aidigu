@@ -14,33 +14,38 @@
     <meta name="description" content="登录爱嘀咕" />
     <meta name="keywords" content="登录爱嘀咕" />
 
-
     <!-- Facebook and Twitter integration -->
-    <meta property="og:title" content="" />
-    <meta property="og:image" content="" />
-    <meta property="og:url" content="" />
-    <meta property="og:site_name" content="" />
-    <meta property="og:description" content="" />
-    <meta name="twitter:title" content="" />
-    <meta name="twitter:image" content="" />
-    <meta name="twitter:url" content="" />
-    <meta name="twitter:card" content="" />
+    <meta property="og:title" content="登录爱嘀咕" />
+    <meta property="og:image" content="/static/user/img/login_og_image.png" /> <!-- 替换为实际的图片路径 -->
+    <meta property="og:url" content="https://yourdomain.com/login" /> <!-- 替换为实际的URL -->
+    <meta property="og:site_name" content="爱嘀咕" />
+    <meta property="og:description" content="登录爱嘀咕，开启精彩之旅！" />
+    <meta name="twitter:title" content="登录爱嘀咕" />
+    <meta name="twitter:image" content="/static/user/img/login_twitter_image.png" /> <!-- 替换为实际的图片路径 -->
+    <meta name="twitter:url" content="https://yourdomain.com/login" /> <!-- 替换为实际的URL -->
+    <meta name="twitter:card" content="summary_large_image" />
 
     <link rel="stylesheet" href="/static/user/css/bootstrap.min.css">
     <link rel="stylesheet" href="/static/user/css/animate.css">
     <link rel="stylesheet" href="/static/user/css/style.css">
 
-
     <!-- Modernizr JS -->
     <script src="/static/user/js/modernizr-2.6.2.min.js"></script>
     <!-- FOR IE9 below -->
     <!--[if lt IE 9]>
-	<script src="/static/user/js/respond.min.js"></script>
-	<![endif]-->
+    <script src="/static/user/js/respond.min.js"></script>
+    <![endif]-->
 </head>
 
-<body class="style-3">
-
+<body class="style-3 tech-flat-bg">
+    <!-- 添加 canvas 元素 -->
+    <canvas id="bgCanvas"></canvas>
+    <!-- 添加背景元素 -->
+    <div class="tech-bg-element"></div>
+    <!-- 添加背景装饰元素 -->
+    <div class="bg-decoration"></div>
+    <div class="bg-decoration"></div>
+    <div class="bg-decoration"></div>
     <div class="container">
         <div class="row">
             <div class="col-md-12 text-center">
@@ -49,14 +54,32 @@
                 </ul>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-4 col-md-push-9 user-top">
-
-                <form action="#" class="fh5co-form animate-box" data-animate-effect="fadeInRight">
-                    <h2>登录</h2>
+        <div class="row align-items-center">
+            <!-- 添加网站介绍部分 -->
+            <div class="col-md-6">
+                <div class="site-introduction p-4">
+                    <h2 class="tech-flat-title fadeInUp">爱嘀咕，开启精彩之旅</h2>
+                    <p class="fadeInUp" style="animation-delay: 0.2s;">爱嘀咕是一个充满乐趣和惊喜的平台，在这里你可以：</p>
+                    <ul>
+                        <li class="fadeInUp" style="animation-delay: 0.4s;">与全球的朋友交流互动</li>
+                        <li class="fadeInUp" style="animation-delay: 0.6s;">发现更多有趣的内容和活动</li>
+                        <li class="fadeInUp" style="animation-delay: 0.8s;">分享自己的生活和故事</li>
+                    </ul>
+                    <p class="fadeInUp" style="animation-delay: 1s;">快来加入我们，一起在爱嘀咕的世界里畅玩吧！</p>
+                </div>
+            </div>
+            <!-- 原有的表单部分 -->
+            <div class="col-md-6">
+                <!-- 应用扁平风格的表单 -->
+                <form action="#" class="fh5co-form animate-box tech-flat-form p-4" data-animate-effect="fadeInRight">
+                    <!-- 应用扁平风格的标题 -->
+                    <h2 class="tech-flat-title">登录</h2>
+                    <!-- 表单描述文字 -->
+                    <p class="form-description">欢迎登录爱嘀咕，开启精彩之旅！</p>
                     <div class="form-group">
-                        <div class="alert alert-danger"></div>
-                        <div class="alert alert-success"></div>
+                        <!-- 应用扁平风格的警告框 -->
+                        <div class="alert alert-danger tech-flat-alert"></div>
+                        <div class="alert alert-success tech-flat-alert"></div>
                     </div>
                     <div class="form-group">
                         <label for="username" class="sr-only">账号</label>
@@ -64,13 +87,14 @@
                     </div>
                     <div class="form-group">
                         <label for="password" class="sr-only">密码</label>
-                        <input type="password" class="form-control" id="password" placeholder="请输入密码" autocomplete="off">
+                        <input type="password" class="form-control" id="password" placeholder="请输入密码"
+                            autocomplete="off">
                     </div>
                     <input type="hidden" id="redirectUrl" value="{$redirectUrl}">
                     <div class="form-group">
                         {if !$noRegister}
-                        <p>没有注册? <a href="/register/">点击注册</a>
-                             <!-- | <a href="/forgot/">忘记密码?</a> -->
+                        <p>没有注册? <a href="/register/" style="color: #fdbb2d;">点击注册</a>
+                            <!-- | <a href="/forgot/">忘记密码?</a> -->
                         </p>
                         {/if}
                     </div>
@@ -79,8 +103,6 @@
                     </div>
                 </form>
                 <!-- END Sign In Form -->
-
-
             </div>
         </div>
         {if $beian}
@@ -88,7 +110,8 @@
             <div class="col-md-12 text-center">
                 <p>
                     <small>
-                        &copy; All Rights Reserved. - <a href="https://beian.miit.gov.cn/" title="{$beian}" target="_blank">{$beian}</a>
+                        &copy; All Rights Reserved. - <a href="https://beian.miit.gov.cn/" title="{$beian}"
+                            target="_blank" style="color: #fff;">{$beian}</a>
                     </small>
                 </p>
             </div>
@@ -108,6 +131,125 @@
     <script src="/static/user/js/main.js"></script>
     <script src="/static/user/js/common.js?1"></script>
 
+    <script>
+        const canvas = document.getElementById('bgCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // 调整 canvas 大小以适应窗口
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        // 绘制太阳
+        function drawSun() {
+            ctx.beginPath();
+            ctx.arc(canvas.width * 0.8, canvas.height * 0.2, 50, 0, 2 * Math.PI);
+            // 修改太阳颜色为更清新的黄色
+            ctx.fillStyle = '#FFEB3B';
+            ctx.fill();
+        }
+
+        // 绘制云朵
+        function drawCloud(x, y) {
+            ctx.beginPath();
+            ctx.arc(x, y, 30, 0, 2 * Math.PI);
+            ctx.arc(x + 30, y - 20, 30, 0, 2 * Math.PI);
+            ctx.arc(x + 60, y, 30, 0, 2 * Math.PI);
+            // 修改云朵颜色为更柔和的白色
+            ctx.fillStyle = '#FFFFFF';
+            ctx.fill();
+        }
+
+        // 绘制星星
+        function drawStar(x, y, size) {
+            ctx.beginPath();
+            for (let i = 0; i < 5; i++) {
+                const angle = (i * 2 * Math.PI) / 5 - Math.PI / 2;
+                const innerAngle = ((i + 0.5) * 2 * Math.PI) / 5 - Math.PI / 2;
+                const outerX = x + size * Math.cos(angle);
+                const outerY = y + size * Math.sin(angle);
+                const innerX = x + (size / 2) * Math.cos(innerAngle);
+                const innerY = y + (size / 2) * Math.sin(innerAngle);
+                if (i === 0) {
+                    ctx.moveTo(outerX, outerY);
+                } else {
+                    ctx.lineTo(innerX, innerY);
+                    ctx.lineTo(outerX, outerY);
+                }
+            }
+            ctx.closePath();
+            // 修改星星颜色为更清新的黄色
+            ctx.fillStyle = '#FFEB3B';
+            ctx.fill();
+        }
+
+        // 绘制冰淇淋
+        function drawIceCream(x, y, size) {
+            // 绘制冰淇淋球
+            ctx.beginPath();
+            ctx.arc(x, y, size, 0, 2 * Math.PI);
+            // 修改冰淇淋球颜色为更清新的粉色
+            ctx.fillStyle = '#FF8A80';
+            ctx.fill();
+            // 绘制蛋筒
+            ctx.beginPath();
+            ctx.moveTo(x - size / 2, y);
+            ctx.lineTo(x, y + size * 2);
+            ctx.lineTo(x + size / 2, y);
+            ctx.closePath();
+            // 修改蛋筒颜色为更柔和的黄色
+            ctx.fillStyle = '#FFF9C4';
+            ctx.fill();
+        }
+
+        // 绘制糖果
+        function drawCandy(x, y, size) {
+            ctx.beginPath();
+            ctx.ellipse(x, y, size, size * 0.7, 0, 0, 2 * Math.PI);
+            // 修改糖果颜色为更清新的紫色
+            ctx.fillStyle = '#B39DDB';
+            ctx.fill();
+        }
+
+        // 主绘制函数
+        function draw() {
+            resizeCanvas();
+            drawSun();
+            drawCloud(canvas.width * 0.2, canvas.height * 0.1);
+            drawCloud(canvas.width * 0.5, canvas.height * 0.3);
+
+            // 绘制星星
+            for (let i = 0; i < 10; i++) {
+                const x = Math.random() * canvas.width;
+                const y = Math.random() * canvas.height;
+                const size = Math.random() * 20 + 10;
+                drawStar(x, y, size);
+            }
+
+            // 绘制冰淇淋
+            for (let i = 0; i < 5; i++) {
+                const x = Math.random() * canvas.width;
+                const y = Math.random() * canvas.height;
+                const size = Math.random() * 30 + 20;
+                drawIceCream(x, y, size);
+            }
+
+            // 绘制糖果
+            for (let i = 0; i < 5; i++) {
+                const x = Math.random() * canvas.width;
+                const y = Math.random() * canvas.height;
+                const size = Math.random() * 20 + 10;
+                drawCandy(x, y, size);
+            }
+        }
+
+        // 初始化绘制
+        draw();
+
+        // 监听窗口大小变化
+        window.addEventListener('resize', draw);
+    </script>
 </body>
 
 </html>

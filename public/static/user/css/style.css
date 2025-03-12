@@ -24,6 +24,170 @@ body.style-3 {
   background: #ffffff url(../images/bg.svg) no-repeat 0 0;
   background-attachment:fixed;background-size:60% 100%;height:auto;min-height: 100%
 }
+    /* 全局样式 */
+    body.tech-flat-bg {
+        background: linear-gradient(135deg, rgba(137, 247, 254, 0.5) 0%, rgba(102, 166, 255, 0.5) 100%);
+        color: #555;
+        /* 这里的样式内容也会被移除 */
+    }
+
+font-family: 'Poppins', sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+  animation: gradient 15s ease infinite;
+  background-size: 400% 400%;
+  position: relative;
+  overflow: hidden;
+}
+
+/* 设置 canvas 样式 */
+#bgCanvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* 背景渐变元素 */
+.tech-bg-element {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.1);
+  z-index: -1;
+}
+
+/* 背景装饰元素 */
+.bg-decoration {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.3;
+  animation: float 6s ease-in-out infinite;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+}
+
+.bg-decoration:nth-child(1) {
+  width: 250px;
+  height: 250px;
+  background: linear-gradient(45deg, #0074D9, #7FDBFF);
+  top: 5%;
+  left: 5%;
+}
+
+.bg-decoration:nth-child(2) {
+  width: 200px;
+  height: 200px;
+  background: linear-gradient(45deg, #2ECC40, #3D9970);
+  top: 15%;
+  right: 15%;
+}
+
+.bg-decoration:nth-child(3) {
+  width: 150px;
+  height: 150px;
+  background: linear-gradient(45deg, #0074D9, #7FDBFF);
+  bottom: 5%;
+  left: 15%;
+}
+
+@keyframes float {
+  0% {
+    transform: translatey(0px);
+  }
+
+  50% {
+    transform: translatey(-30px);
+  }
+
+  100% {
+    transform: translatey(0px);
+  }
+}
+
+/* 扁平风格表单 */
+.tech-flat-form {
+  background-color: rgba(255, 255, 255, 0.2);
+  border: none;
+  border-radius: 30px;
+  padding: 50px;
+}
+
+.tech-flat-form input[type="button"] {
+  /* 修改为与主题搭配的科技蓝色 */
+  border: none;
+  border-radius: 20px;
+  color: #fff;
+  padding: 20px 25px;
+  font-size: 20px;
+  font-weight: 800;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.tech-flat-form input[type="button"]:hover {
+  background-color: #007bff;
+  /* 悬停时颜色变深 */
+  cursor: pointer;
+  transform: scale(1.08);
+}
+
+/* 扁平风格警告框 */
+.tech-flat-alert {
+  border-radius: 15px;
+  border: none;
+  color: #fff;
+  padding: 20px;
+  margin-bottom: 30px;
+  text-align: center;
+  font-size: 18px;
+}
+
+.tech-flat-alert.alert-danger {
+  background-color: rgba(255, 0, 0, 0.6);
+}
+
+.tech-flat-alert.alert-success {
+  background-color: rgba(0, 255, 0, 0.6);
+}
+
+/* 定义淡入上移动画 */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 应用动画到指定类 */
+.fadeInUp {
+  animation: fadeInUp 1.2s ease-out forwards;
+}
 
 a {
   color: #33cccc;
@@ -134,11 +298,11 @@ a:hover {
   text-transform: uppercase;
 }
 .copyrights{
-	text-indent:-9999px;
-	height:0;
-	line-height:0;
-	font-size:0;
-	overflow:hidden;
+  text-indent:-9999px;
+  height:0;
+  line-height:0;
+  font-size:0;
+  overflow:hidden;
 }
 .fh5co-form .form-control:-moz-placeholder {
   color: rgba(0, 0, 0, 0.3);
@@ -188,4 +352,225 @@ input, textarea {
 }
 .user-top {
   min-height: 10px;
+}
+
+ /* 全局样式 */
+ body.tech-flat-bg {
+  /* 修改为清新海洋风格的渐变，降低透明度使色调更淡 */
+  background: linear-gradient(135deg, rgba(137, 247, 254, 0.5) 0%, rgba(102, 166, 255, 0.5) 100%);
+  color: #555;
+  font-family: 'Poppins', sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+  animation: gradient 15s ease infinite;
+  background-size: 400% 400%;
+  position: relative;
+  overflow: hidden;
+}
+
+/* 设置 canvas 样式 */
+#bgCanvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+
+@keyframes gradient {
+  0% {
+      background-position: 0% 50%;
+  }
+
+  50% {
+      background-position: 100% 50%;
+  }
+
+  100% {
+      background-position: 0% 50%;
+  }
+}
+
+/* 背景渐变元素 */
+.tech-bg-element {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.1);
+  z-index: -1;
+}
+
+/* 背景装饰元素 */
+.bg-decoration {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.3;
+  animation: float 6s ease-in-out infinite;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+}
+
+.bg-decoration:nth-child(1) {
+  width: 250px;
+  height: 250px;
+  background: linear-gradient(45deg, #0074D9, #7FDBFF);
+  top: 5%;
+  left: 5%;
+}
+
+.bg-decoration:nth-child(2) {
+  width: 200px;
+  height: 200px;
+  background: linear-gradient(45deg, #2ECC40, #3D9970);
+  top: 15%;
+  right: 15%;
+}
+
+.bg-decoration:nth-child(3) {
+  width: 150px;
+  height: 150px;
+  background: linear-gradient(45deg, #0074D9, #7FDBFF);
+  bottom: 5%;
+  left: 15%;
+}
+
+@keyframes float {
+  0% {
+      transform: translatey(0px);
+  }
+
+  50% {
+      transform: translatey(-30px);
+  }
+
+  100% {
+      transform: translatey(0px);
+  }
+}
+
+/* 扁平风格表单 */
+.tech-flat-form {
+  background-color: rgba(255, 255, 255, 0.2);
+  border: none;
+  border-radius: 30px;
+  padding: 50px;
+  box-shadow: 0 12px 48px 0 rgba(31, 38, 135, 0.4);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  z-index: 1;
+  transition: all 0.3s ease;
+}
+
+.tech-flat-form:hover {
+  box-shadow: 0 16px 64px 0 rgba(31, 38, 135, 0.5);
+}
+
+/* 扁平风格标题 */
+.tech-flat-title {
+  color: #7FDBFF;
+  text-align: center;
+  margin-bottom: 40px;
+  font-size: 36px;
+  font-weight: 800;
+  text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.6);
+}
+
+/* 表单描述文字 */
+.form-description {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #fff;
+  opacity: 0.9;
+  font-size: 18px;
+}
+
+/* 扁平风格输入框 */
+.tech-flat-form input.form-control {
+  background-color: rgba(255, 255, 255, 0.3);
+  border: none;
+  color: #fff;
+  border-radius: 20px;
+  padding: 20px 25px;
+  margin-bottom: 30px;
+  transition: all 0.3s ease;
+}
+
+.tech-flat-form input.form-control:focus {
+  background-color: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 0 15px rgba(127, 219, 255, 0.6);
+  outline: none;
+}
+
+/* 扁平风格按钮 */
+.tech-flat-form input[type="button"] {
+  background-color: #00c4ff;
+  /* 修改为与主题搭配的科技蓝色 */
+  border: none;
+  border-radius: 20px;
+  color: #fff;
+  padding: 20px 25px;
+  font-size: 20px;
+  font-weight: 800;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.tech-flat-form input[type="button"]:hover {
+  background-color: #007bff;
+  /* 悬停时颜色变深 */
+  cursor: pointer;
+  transform: scale(1.08);
+}
+
+/* 扁平风格警告框 */
+.tech-flat-alert {
+  border-radius: 15px;
+  border: none;
+  color: #fff;
+  padding: 20px;
+  margin-bottom: 30px;
+  text-align: center;
+  font-size: 18px;
+}
+
+.tech-flat-alert.alert-danger {
+  background-color: rgba(255, 0, 0, 0.6);
+}
+
+.tech-flat-alert.alert-success {
+  background-color: rgba(0, 255, 0, 0.6);
+}
+
+/* 定义淡入上移动画 */
+@keyframes fadeInUp {
+  from {
+      opacity: 0;
+      transform: translateY(30px);
+  }
+
+  to {
+      opacity: 1;
+      transform: translateY(0);
+  }
+}
+
+/* 应用动画到指定类 */
+.fadeInUp {
+  animation: fadeInUp 1.2s ease-out forwards;
+}
+
+/* 媒体查询，调整小屏幕布局 */
+@media (max-width: 768px) {
+  .col-md-6 {
+      width: 100%;
+  }
+
+  .site-introduction {
+      margin-bottom: 30px;
+  }
 }

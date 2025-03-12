@@ -2,71 +2,68 @@
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!-->
-<html class="no-js">
-<!--<![endif]-->
-
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>注册爱嘀咕</title>
+    <title>注册页面</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="注册爱嘀咕" />
-    <meta name="keywords" content="注册爱嘀咕" />
-    <meta property="og:title" content="" />
-    <meta property="og:image" content="" />
-    <meta property="og:url" content="" />
-    <meta property="og:site_name" content="" />
-    <meta property="og:description" content="" />
+    <meta name="description" content="注册页面" />
+    <meta name="keywords" content="注册页面" />
+
+    <!-- Facebook and Twitter integration -->
+    <meta property="og:title" content=""/>
+    <meta property="og:image" content=""/>
+    <meta property="og:url" content=""/>
+    <meta property="og:site_name" content=""/>
+    <meta property="og:description" content=""/>
     <meta name="twitter:title" content="" />
     <meta name="twitter:image" content="" />
     <meta name="twitter:url" content="" />
     <meta name="twitter:card" content="" />
+
     <link rel="stylesheet" href="/static/user/css/bootstrap.min.css">
     <link rel="stylesheet" href="/static/user/css/animate.css">
     <link rel="stylesheet" href="/static/user/css/style.css">
+    <!-- Modernizr JS -->
     <script src="/static/user/js/modernizr-2.6.2.min.js"></script>
     <!-- FOR IE9 below -->
     <!--[if lt IE 9]>
-	<script src="/static/user/js/respond.min.js"></script>
-	<![endif]-->
-
+    <script src="/static/user/js/respond.min.js"></script>
+    <![endif]-->
 </head>
-
-<body class="style-3">
-
+<body class="style-3 tech-flat-bg">
+    <!-- 添加背景元素 -->
+    <div class="tech-bg-element"></div>
+    <!-- 添加背景装饰元素 -->
+    <div class="bg-decoration"></div>
+    <div class="bg-decoration"></div>
+    <div class="bg-decoration"></div>
     <div class="container">
         <div class="row">
             <div class="col-md-12 text-center">
                 <ul class="menu">
-                    <!-- <li><a href="javascript:;">注册爱嘀咕</a></li> -->
+                    <!-- <li><a href="javascript:;">注册页面</a></li> -->
                 </ul>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-4 col-md-push-9 user-top">
-                <form action="#" class="fh5co-form animate-box" data-animate-effect="fadeInRight">
-                    <h2>注册</h2>
+        <div class="row align-items-center">
+            <!-- 原有的表单部分 -->
+            <div class="col-md-6">
+                <form action="#" class="fh5co-form animate-box tech-flat-form p-4" data-animate-effect="fadeInRight">
+                    <h2 class="tech-flat-title">注册</h2>
+                    <p class="form-description">加入我们开启精彩之旅！</p>
                     <div class="form-group">
-                        <div class="alert alert-danger"></div>
-                        <!-- <div class="alert alert-warning"></div> -->
-                        <div class="alert alert-success"></div>
-                    </div>
-                    <div class="form-group">
-                        <label for="name" class="sr-only">账号</label>
-                        <input type="text" class="form-control" id="account" onfocusout="checkInfo(this, 1)" placeholder="专属账号（英文）" autocomplete="off">
-                    </div>
-                    <div class="form-group">
-                        <label for="email" class="sr-only">昵称</label>
-                        <input type="email" class="form-control" id="nickname" onfocusout="checkInfo(this, 2)" placeholder="请输入昵称" autocomplete="off">
+                        <label for="username" class="sr-only">用户名</label>
+                        <input type="text" class="form-control" id="username" placeholder="请输入用户名" autocomplete="off">
                     </div>
                     <div class="form-group">
                         <label for="password" class="sr-only">密码</label>
-                        <input type="password" class="form-control" id="password" placeholder="密码" autocomplete="off">
+                        <input type="password" class="form-control" id="password" placeholder="请输入密码" autocomplete="off">
                     </div>
                     <div class="form-group">
-                        <label for="re-password" class="sr-only">确认密码</label>
-                        <input type="password" class="form-control" id="re-password" placeholder="确认密码" autocomplete="off">
+                        <label for="email" class="sr-only">邮箱</label>
+                        <input type="email" class="form-control" id="email" placeholder="请输入邮箱" autocomplete="off">
                     </div>
                     <div class="form-group">
                         <p>已经注册了? <a href="/login/">点击登录</a></p>
@@ -75,6 +72,19 @@
                         <input type="button" value="注册" id="register" class="btn btn-primary">
                     </div>
                 </form>
+            </div>
+            <!-- 添加网站介绍部分 -->
+            <div class="col-md-6">
+                <div class="site-introduction p-4">
+                    <h2 class="tech-flat-title fadeInUp">爱嘀咕，开启精彩之旅</h2>
+                    <p class="fadeInUp" style="animation-delay: 0.2s;">爱嘀咕是一个充满乐趣和惊喜的平台，在这里你可以：</p>
+                    <ul>
+                        <li class="fadeInUp" style="animation-delay: 0.4s;">与全球的朋友交流互动</li>
+                        <li class="fadeInUp" style="animation-delay: 0.6s;">发现更多有趣的内容和活动</li>
+                        <li class="fadeInUp" style="animation-delay: 0.8s;">分享自己的生活和故事</li>
+                    </ul>
+                    <p class="fadeInUp" style="animation-delay: 1s;">快来加入我们，一起在爱嘀咕的世界里畅玩吧！</p>
+                </div>
             </div>
         </div>
         {if $beian}
@@ -89,6 +99,7 @@
         </div>
         {/if}
     </div>
+
     <!-- jQuery -->
     <script src="/static/user/js/jquery.min.js"></script>
     <!-- Bootstrap -->
@@ -99,8 +110,5 @@
     <script src="/static/user/js/jquery.waypoints.min.js"></script>
     <!-- Main JS -->
     <script src="/static/user/js/main.js"></script>
-    <script src="/static/user/js/common.js"></script>
-
 </body>
-
 </html>
