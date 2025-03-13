@@ -1,8 +1,5 @@
 <!DOCTYPE html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<html class="no-js">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,21 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="忘记密码" />
     <meta name="keywords" content="忘记密码" />
-
-    <!-- Facebook and Twitter integration -->
-    <meta property="og:title" content=""/>
-    <meta property="og:image" content=""/>
-    <meta property="og:url" content=""/>
-    <meta property="og:site_name" content=""/>
-    <meta property="og:description" content=""/>
-    <meta name="twitter:title" content="" />
-    <meta name="twitter:image" content="" />
-    <meta name="twitter:url" content="" />
-    <meta name="twitter:card" content="" />
-
     <link rel="stylesheet" href="/static/user/css/bootstrap.min.css">
     <link rel="stylesheet" href="/static/user/css/animate.css">
-    <link rel="stylesheet" href="/static/user/css/style.css">
+    <link rel="stylesheet" href="/static/user/css/style.css?1">
 
     <!-- Modernizr JS -->
     <script src="/static/user/js/modernizr-2.6.2.min.js"></script>
@@ -44,66 +29,46 @@
         <div class="row">
             <div class="col-md-12 text-center">
                 <ul class="menu">
-                    <!-- <li><a href="javascript:;">忘记密码</a></li> -->
+                    <!-- 这里可以根据需求添加导航链接 -->
                 </ul>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-4 col-md-push-9 user-top">
-                <!-- Start Sign In Form -->
-                <div class="row align-items-center">
-                    <!-- 原有的表单部分 -->
-                    <div class="col-md-6">
-                        <!-- 这里是忘记密码相关表单 -->
-                        <form action="#" class="fh5co-form animate-box tech-flat-form p-4" data-animate-effect="fadeInRight">
-                            <h2 class="tech-flat-title">忘记密码</h2>
-                            <p class="form-description">找回你的账户密码！</p>
-                            <!-- 表单元素 -->
-                            <div class="form-group">
-                                <div class="alert alert-success tech-flat-alert" role="alert">邮件已被发送</div>
-                            </div>
-                            <div class="form-group">
-                                <label for="email" class="sr-only">邮箱地址</label>
-                                <input type="email" class="form-control" id="email" placeholder="请输入邮箱" autocomplete="off">
-                            </div>
-                            <div class="form-group">
-                                <p><a href="/register/">注册</a> 或 <a href="/login/">登录</a></p>
-                            </div>
-                            <div class="form-group">
-                                <input type="button" value="发送邮件" class="btn btn-primary">
-                            </div>
-                        </form>
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <form action="#" class="fh5co-form animate-box tech-flat-form p-4" data-animate-effect="fadeInRight">
+                    <h2 class="tech-flat-title">忘记密码</h2>
+                    <p class="form-description">输入您的邮箱地址，我们将发送重置密码的链接到您的邮箱。</p>
+                    <div class="form-group">
+                        <div class="alert alert-success tech-flat-alert" role="alert" style="display: none;">邮件已被发送</div>
+                        <div class="alert alert-danger tech-flat-alert" role="alert" style="display: none;"></div>
                     </div>
-                    <!-- 添加网站介绍部分 -->
-                    <div class="col-md-6">
-                        <div class="site-introduction p-4">
-                            <h2 class="tech-flat-title fadeInUp">爱嘀咕，开启精彩之旅</h2>
-                            <p class="fadeInUp" style="animation-delay: 0.2s;">爱嘀咕是一个充满乐趣和惊喜的平台，在这里你可以：</p>
-                            <ul>
-                                <li class="fadeInUp" style="animation-delay: 0.4s;">与全球的朋友交流互动</li>
-                                <li class="fadeInUp" style="animation-delay: 0.6s;">发现更多有趣的内容和活动</li>
-                                <li class="fadeInUp" style="animation-delay: 0.8s;">分享自己的生活和故事</li>
-                            </ul>
-                            <p class="fadeInUp" style="animation-delay: 1s;">找回密码后，一起在爱嘀咕的世界里畅玩吧！</p>
-                        </div>
+                    <div class="form-group">
+                        <label for="email" class="sr-only">邮箱地址</label>
+                        <input type="email" class="form-control" id="email" placeholder="请输入邮箱" autocomplete="off">
                     </div>
+                    <div class="form-group">
+                        <p><a href="/register/">注册</a> 或 <a href="/login/">登录</a></p>
+                    </div>
+                    <div class="form-group">
+                        <input type="button" value="发送邮件" class="btn btn-primary">
+                    </div>
+                </form>
+            </div>
+            <!-- 添加右侧文字说明部分 -->
+            <div class="col-md-6">
+                <div class="site-introduction p-4">
+                    <h2 class="tech-flat-title fadeInUp">重置密码说明</h2>
+                    <p class="fadeInUp" style="animation-delay: 0.2s;">忘记密码不用着急，我们为您提供简单快捷的重置方式：</p>
+                    <ul>
+                        <li class="fadeInUp" style="animation-delay: 0.4s;">输入您注册时使用的邮箱地址。</li>
+                        <li class="fadeInUp" style="animation-delay: 0.6s;">我们会立即发送重置密码的链接到您的邮箱。</li>
+                        <li class="fadeInUp" style="animation-delay: 0.8s;">点击邮件中的链接，即可重新设置您的密码。</li>
+                    </ul>
+                    <p class="fadeInUp" style="animation-delay: 1s;">请确保您输入的邮箱地址正确，如有任何问题，欢迎联系我们的客服。</p>
                 </div>
-                <!-- END Sign In Form -->
             </div>
         </div>
-        {if $beian}
-        <div class="row" style="position: fixed; bottom: 0;">
-            <div class="col-md-12 text-center">
-                <p>
-                    <small>
-                        &copy; All Rights Reserved. - <a href="https://beian.miit.gov.cn/" title="{$beian}" target="_blank">{$beian}</a>
-                    </small>
-                </p>
-            </div>
-        </div>
-        {/if}
     </div>
-
     <!-- jQuery -->
     <script src="/static/user/js/jquery.min.js"></script>
     <!-- Bootstrap -->

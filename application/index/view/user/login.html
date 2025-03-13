@@ -1,10 +1,5 @@
 <!DOCTYPE html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!-->
 <html class="no-js">
-<!--<![endif]-->
 
 <head>
     <meta charset="utf-8">
@@ -13,21 +8,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="登录爱嘀咕" />
     <meta name="keywords" content="登录爱嘀咕" />
-
-    <!-- Facebook and Twitter integration -->
-    <meta property="og:title" content="登录爱嘀咕" />
-    <meta property="og:image" content="/static/user/img/login_og_image.png" /> <!-- 替换为实际的图片路径 -->
-    <meta property="og:url" content="https://yourdomain.com/login" /> <!-- 替换为实际的URL -->
-    <meta property="og:site_name" content="爱嘀咕" />
-    <meta property="og:description" content="登录爱嘀咕，开启精彩之旅！" />
-    <meta name="twitter:title" content="登录爱嘀咕" />
-    <meta name="twitter:image" content="/static/user/img/login_twitter_image.png" /> <!-- 替换为实际的图片路径 -->
-    <meta name="twitter:url" content="https://yourdomain.com/login" /> <!-- 替换为实际的URL -->
-    <meta name="twitter:card" content="summary_large_image" />
-
     <link rel="stylesheet" href="/static/user/css/bootstrap.min.css">
     <link rel="stylesheet" href="/static/user/css/animate.css">
-    <link rel="stylesheet" href="/static/user/css/style.css">
+    <link rel="stylesheet" href="/static/user/css/style.css?1">
 
     <!-- Modernizr JS -->
     <script src="/static/user/js/modernizr-2.6.2.min.js"></script>
@@ -93,7 +76,7 @@
                     <input type="hidden" id="redirectUrl" value="{$redirectUrl}">
                     <div class="form-group">
                         {if !$noRegister}
-                        <p>没有注册? <a href="/register/" style="color: #fdbb2d;">点击注册</a>
+                        <p>没有注册? <a href="/register/">点击注册</a>
                             <!-- | <a href="/forgot/">忘记密码?</a> -->
                         </p>
                         {/if}
