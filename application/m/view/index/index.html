@@ -1,101 +1,14 @@
 
 {include file='index/header' /}
-<style>
 
-    /* 工具栏样式 */
-    .toolbar {
-        margin-left: -6px;
-        display: flex;
-        gap: 10px;
-        align-items: center;
-		float: left;
-    }
-
-    /* 文本输入框样式 */
-    .text {
-        border: 1px solid #ccc;
-        min-height: 100px;
-        padding: 10px;
-        border-radius: 5px;
-        background-color: #fff;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        transition: border-color 0.3s ease;
-    }
-
-    .text:hover {
-        border-color: #007bff;
-    }
-
-    /* 消息文本样式 */
-    .box-main .massageText {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-    }
-
-    /* 代码块样式 */
-    .post-content pre code {
-        background: #2d2d2d;
-        color: #e0e0e0;
-        border-radius: 5px;
-        display: block;
-        padding: 15px;
-        overflow-x: auto;
-        font-family: 'Courier New', Courier, monospace;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    }
-
-    /* 修改 .post 样式 */
-    .post {
-        margin-bottom: 10px; /* 增加底部间距 */
-        padding: 15px; /* 调整内边距 */
-        background-color: #fff; /* 背景颜色 */
-		border-bottom: 1px solid #e0e0e0;
-        /* border-radius: 5px; 圆角 */
-        /* border: 1px solid #e0e0e0; 边框 */
-        /* 移除不必要的阴影效果以实现扁平化 */
-    }
-    /* 新增按钮样式 */
-    #open_comment_form_btn {
-        position: fixed;
-        bottom: 80px; /* 保证与之前的悬浮按钮有一定间距 */
-        right: 20px;
-        z-index: 999;
-    }
-	.postnow {
-		margin-top: 10px;
-		font-size: 12px;
-	}
-	.post-meta-icons {
-		font-size: 12px;
-	}
-	.massageImgCommon {
-		max-width: 75%;
-		min-width: 5%;
-		margin-left: 2%;
-		max-height: 360px;
-	}
-	.post-text {
-		margin-left: 2%;
-		margin-top: 5px;
-		margin-bottom: 1px;
-	}
-	.post-text p:first-child{
-		/* text-indent: 2em; */
-	}
-	.dplayer {
-		border-radius: 8px;
-		width: 360px;
-		/* max-height: 360px; */
-	}
-</style>
 {if $userInfo.isSiteUser}
     <!-- 新增悬浮固定发布按钮 -->
     <!-- <div id="floating_publish_button" style="position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 999;">
         <button class="button layui-btn layui-btn-danger" style="background-color: orange; color: white; border: none; border-radius: 50%; width: 50px; height: 50px; font-size: 14px; display: flex; align-items: center; justify-content: center;" onclick="openCommentFormModal()">+</button>
     </div> -->
     <!-- 新增一个容器用于包裹评论表单，并默认隐藏 -->
-    <div id="comment_form_container" >
+    <!-- 示例：为评论表单添加类名 -->
+    <div id="comment_form_container">
         <div method="post" class="post" action="" id="comment_form">
             <!-- <small></small> -->
             <div id="msgInput" class="text" maxlength="2800" onkeyup="check_len1()">
@@ -122,7 +35,7 @@
             </div>
             <br />
 
-            <p><input type="submit" id="sendButton" value="嘀咕~" class="form_submit" /></p>
+            <p class="sendButton"><input type="submit" id="sendButton" value="发表" class="form_submit" /></p>
         </div>
     </div>
     <script>
