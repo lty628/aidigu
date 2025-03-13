@@ -280,7 +280,8 @@ a:hover {
 }
 @media screen and (max-width: 768px) {
   .fh5co-form {
-    padding: 15px;
+    /* padding: 15px; */
+    margin-top: -150px;
   }
 }
 .fh5co-form h2 {
