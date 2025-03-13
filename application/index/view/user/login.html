@@ -10,7 +10,7 @@
     <meta name="keywords" content="登录爱嘀咕" />
     <link rel="stylesheet" href="/static/user/css/bootstrap.min.css">
     <link rel="stylesheet" href="/static/user/css/animate.css">
-    <link rel="stylesheet" href="/static/user/css/style.css?1">
+    <link rel="stylesheet" href="/static/user/css/style.css?2">
 
     <!-- Modernizr JS -->
     <script src="/static/user/js/modernizr-2.6.2.min.js"></script>
@@ -60,11 +60,6 @@
                     <!-- 表单描述文字 -->
                     <!-- <p class="form-description">登录爱嘀咕！</p> -->
                     <div class="form-group">
-                        <!-- 应用扁平风格的警告框 -->
-                        <div class="alert alert-danger tech-flat-alert"></div>
-                        <div class="alert alert-success tech-flat-alert"></div>
-                    </div>
-                    <div class="form-group">
                         <label for="username" class="sr-only">账号</label>
                         <input type="text" class="form-control" id="username" placeholder="账号或昵称" autocomplete="off">
                     </div>
@@ -100,6 +95,12 @@
             </div>
         </div>
         {/if}
+    </div>
+
+    <div class="row" style="height: 25px;position: fixed;top: 0px;width:100%">
+        <!-- 应用扁平风格的警告框 -->
+        <div class="alert alert-danger tech-flat-alert"></div>
+        <div class="alert alert-success tech-flat-alert"></div>
     </div>
 
     <!-- jQuery -->

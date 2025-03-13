@@ -198,21 +198,21 @@ body.style-3 {
 
 /* 扁平风格警告框 */
 .tech-flat-alert {
-  border-radius: 15px;
+  /* border-radius: 15px; */
   border: none;
-  color: #fff;
-  padding: 20px;
-  margin-bottom: 30px;
+  /* color: #fff; */
+  /* padding: 20px; */
+  /* margin-bottom: 30px; */
   text-align: center;
-  font-size: 18px;
+  /* font-size: 18px; */
 }
 
 .tech-flat-alert.alert-danger {
-  background-color: rgba(255, 0, 0, 0.6);
+  background-color: rgb(229 124 116)
 }
 
 .tech-flat-alert.alert-success {
-  background-color: rgba(0, 255, 0, 0.6);
+  background-color: #b3eae9;
 }
 
 /* 定义淡入上移动画 */
@@ -286,9 +286,9 @@ a:hover {
 .fh5co-form h2 {
   text-transform: uppercase;
   letter-spacing: 2px;
-  font-size: 20px;
-  margin: 0 0 30px 0;
-  color: #000000;
+  /* font-size: 20px; */
+  margin: 0 0 45px 0;
+  /* color: #000000; */
 }
 .fh5co-form .form-group {
   margin-bottom: 30px;

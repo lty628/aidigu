@@ -9,7 +9,7 @@
     <meta name="keywords" content="注册爱嘀咕" />
     <link rel="stylesheet" href="/static/user/css/bootstrap.min.css">
     <link rel="stylesheet" href="/static/user/css/animate.css">
-    <link rel="stylesheet" href="/static/user/css/style.css?1">
+    <link rel="stylesheet" href="/static/user/css/style.css?2">
     <script src="/static/user/js/modernizr-2.6.2.min.js"></script>
     <!-- FOR IE9 below -->
     <!--[if lt IE 9]>
@@ -31,11 +31,6 @@
                 <form action="#" class="fh5co-form animate-box tech-flat-form p-4" data-animate-effect="fadeInRight">
                     <h2 class="tech-flat-title">邀请码注册</h2>
                     <p class="form-description">请填写以下信息完成邀请码注册</p>
-                    <div class="form-group">
-                        <div class="alert alert-danger tech-flat-alert"></div>
-                        <!-- <div class="alert alert-warning"></div> -->
-                        <div class="alert alert-success tech-flat-alert"></div>
-                    </div>
                     <div class="form-group">
                         <label for="name" class="sr-only">账号</label>
                         <input type="text" class="form-control" id="account" onfocusout="checkInfo(this, 1)" placeholder="专属账号（英文）" autocomplete="off">
@@ -72,6 +67,11 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div class="row" style="height: 25px;position: fixed;top: 0px;width:100%">
+        <!-- 应用扁平风格的警告框 -->
+        <div class="alert alert-danger tech-flat-alert"></div>
+        <div class="alert alert-success tech-flat-alert"></div>
     </div>
     <!-- jQuery -->
     <script src="/static/user/js/jquery.min.js"></script>
