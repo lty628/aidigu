@@ -124,13 +124,13 @@ class IndexInfo extends Info
 
     public function fans()
     {
-        $userFans = $this->getMyFans($this->siteUserId, 20);
+        $userFans = $this->getMyFans($this->siteUserId, $this->userid, 20);
         $this->assign('userFans', $userFans);
         return $this->fetch('fansInfo');
     }
     public function concern()
     {
-        $userFans = $this->getMyConcern($this->siteUserId, 20);
+        $userFans = $this->getMyConcern($this->siteUserId, $this->userid, 20);
         $this->assign('userFans', $userFans);
         return $this->fetch('fansInfo');
     }

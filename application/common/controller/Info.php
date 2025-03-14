@@ -40,8 +40,8 @@ class Info extends Base
 		}
 
     	$this->getSiteUserInfo($this->siteUserId);
-    	$this->setMyFans($this->siteUserId);
-    	$this->setMyConcern($this->siteUserId);
+    	$this->setMyFans($this->siteUserId, $this->userid);
+    	$this->setMyConcern($this->siteUserId, $this->userid);
 		// $this->assign('siteUserId', $this->siteUserId);
 		$this->assign('action', request()->action());
 		$this->assign('chatRemind', \app\common\libs\Remind::checkAll($this->userid));
@@ -73,26 +73,26 @@ class Info extends Base
 		
 		$this->assign('userInfo', $userInfo);
 	}
-	protected function setMyFans($userid)
+	protected function setMyFans($userid, $loginUid)
 	{
-		$fansInfo = \app\common\helper\Fans::setMyFans($userid);
+		$fansInfo = \app\common\helper\Fans::setMyFans($userid, $loginUid);
 		$this->assign('fansInfo', $fansInfo);
 	}
-	protected function setMyConcern($userid)
+	protected function setMyConcern($userid, $loginUid)
 	{
-		$getConcern = \app\common\helper\Fans::setMyConcern($userid);
+		$getConcern = \app\common\helper\Fans::setMyConcern($userid, $loginUid);
 		$this->assign('getMyConcern', $getConcern);
 	}
 	//关注我的
-	protected function getMyFans($userid, $count = 9)
+	protected function getMyFans($userid, $loginUid, $count = 9)
 	{
-		$fansInfo = \app\common\helper\Fans::getMyFans($userid, $count);
+		$fansInfo = \app\common\helper\Fans::getMyFans($userid, $loginUid, $count);
 		return $fansInfo;
 	}
 	//我关注的
-	protected function getMyConcern($userid, $count = 9)
+	protected function getMyConcern($userid, $loginUid, $count = 9)
 	{
-		$getConcern = \app\common\helper\Fans::getMyConcern($userid, $count);
+		$getConcern = \app\common\helper\Fans::getMyConcern($userid, $loginUid, $count);
 		return $getConcern;	
 	}
 	protected function getMessage($userid, $count = 50, $topicId = 0) 
