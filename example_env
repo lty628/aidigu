@@ -9,6 +9,8 @@
     beian=xxxxxxx        #填入备案号
     noRegister = false        #禁止注册 
     pubIndex = false # 首页不登录
+    picUploadSize = 4194304
+    fileUploadSize = 62914561
 [database]
     type = mysql
     hostname = 127.0.0.1
