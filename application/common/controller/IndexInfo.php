@@ -223,19 +223,23 @@ class IndexInfo extends Info
                 Db::name('search')->insert($keywordData);
             }
 
-            $userMessage = Db::name('message')
-            ->alias('message')
-            ->join([$this->prefix . 'user' => 'user'], 'user.uid=message.uid')
-            ->order('message.ctime desc')
-            ->field('user.uid,user.nickname,user.head_image,user.blog,message.ctime,message.contents,message.repost,message.refrom,message.repostsum,message.media,message.media_info,message.commentsum,message.msg_id')
-            ->where('message.is_delete', 0)
-            ->where('message.contents', 'like', '%'.$keyword.'%')
-            ->where(function ($query) {
-                $query->where('user.invisible', 0)->whereOr('user.uid', $this->siteUserId);
-            })
-            ->paginate(8, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
+            $userMessage = cache('search_'.$keyword);
+            if (!$userMessage) {
+                $userMessage = Db::name('message')
+                ->alias('message')
+                ->join([$this->prefix . 'user' => 'user'], 'user.uid=message.uid')
+                ->order('message.ctime desc')
+                ->field('user.uid,user.nickname,user.head_image,user.blog,message.ctime,message.contents,message.repost,message.refrom,message.repostsum,message.media,message.media_info,message.commentsum,message.msg_id')
+                ->where('message.is_delete', 0)
+                ->where('message.contents', 'like', '%'.$keyword.'%')
+                ->where(function ($query) {
+                    $query->where('user.invisible', 0)->whereOr('user.uid', $this->siteUserId);
+                })
+                ->paginate(8, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
+                $userMessage = $userMessage->toArray()['data'];
+                cache('search_'.$keyword, $userMessage, 3600);
+            }
 
-            $userMessage = $userMessage->toArray()['data'];
             return json(array('status' =>  1, 'msg' => 'ok', 'data' => ['data' => handleMessage($userMessage), 'allow_delete' => 0]));
         }
         
