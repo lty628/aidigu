@@ -37,7 +37,7 @@ if (isMobile()) {
 }
 Route::get('/tools/$',  $module . '/index/tools');
 Route::get('/search/$',  $module . '/index/search');
-Route::get('/search/:keyword/$',  $module . '/index/search');
+Route::get('/search/:keyword/$',  $module . '/index/search')->pattern(['keyword'=>'.+']);
 Route::get('/tools/in/$',  $module . '/index/tools?appType=1');
 Route::get('/tools/out/$',  $module . '/index/tools?appType=2');
 

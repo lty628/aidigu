@@ -51,7 +51,18 @@
 		<div class="search-container">
 				<p class="search-formitem">
 					<input type="text" autocomplete="off" name="keyword" class="input" id="keyword" placeholder="输入搜索关键词">
-					<button type="button" onclick="const keyword = document.getElementById('keyword').value; if (keyword) { window.location.href = '/search/' + encodeURIComponent(keyword) + '/'; }">搜索</button>
+					<button type="button" onclick="
+                        const keyword = document.getElementById('keyword').value; 
+                        if (keyword) { 
+                            // 将字符串转换为 UTF-8 编码的 ASCII 字符串
+                            const utf8Encoded = encodeURIComponent(keyword).replace(/%([0-9A-F]{2})/g, (match, p1) => {
+                                return String.fromCharCode('0x' + p1);
+                            });
+                            const base64Encoded = btoa(utf8Encoded);
+                            const finalEncoded = encodeURIComponent(base64Encoded);
+                            window.location.href = '/search/' + finalEncoded + '/'; 
+                        }
+                    ">搜索</button>
 				</p>
 		</div>
 		<div class="sendMsg"></div>

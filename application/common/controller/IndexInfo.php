@@ -199,23 +199,28 @@ class IndexInfo extends Info
         if (request()->isAjax()) {
             if (!$keyword) return json(array('status' =>  1,'msg' => 'ok', 'data' => ['data' => [], 'allow_delete' => 0]));
 
-            if ($keyword) {
-                $findUserSearch = Db::name('search')->where('keyword', $keyword)->cache(60)->find();
-                if ($findUserSearch && $findUserSearch['uid'] == $this->userid) {
-                    if (time() - strtotime($findUserSearch['create_time']) >= 120) {
-                        Db::name('search')->where('search_id', $findUserSearch['search_id'])->setInc('count',1);
-                    }
-                } else {
-                    $keywordData = [
-                        'keyword' => $keyword,
-                        'uid' => $this->userid,
-                        'create_time' => date('Y-m-d H:i:s'),
-                        'count' => 1
-                    ];
-        
-                    Db::name('search')->insert($keywordData);
+            $keyword = base64_decode($keyword);
+            // 移除html标记
+            $keyword = strip_tags($keyword);
+            // 输入过滤
+            $keyword = htmlspecialchars($keyword);
+            // 移除空格
+            $keyword = trim($keyword);
+
+            $findUserSearch = Db::name('search')->where('keyword', $keyword)->cache(60)->find();
+            if ($findUserSearch && $findUserSearch['uid'] == $this->userid) {
+                if (time() - strtotime($findUserSearch['create_time']) >= 120) {
+                    Db::name('search')->where('search_id', $findUserSearch['search_id'])->setInc('count',1);
                 }
-               
+            } else {
+                $keywordData = [
+                    'keyword' => $keyword,
+                    'uid' => $this->userid,
+                    'create_time' => date('Y-m-d H:i:s'),
+                    'count' => 1
+                ];
+    
+                Db::name('search')->insert($keywordData);
             }
 
             $userMessage = Db::name('message')
