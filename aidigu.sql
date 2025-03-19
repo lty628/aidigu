@@ -10,7 +10,7 @@ CREATE TABLE `wb_app`  (
   `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `app_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '应用名称',
   `app_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '链接',
-  `app_status` tinyint(3) UNSIGNED NOT NULL DEFAULT 1 COMMENT '0关闭，1开启（默认）',
+  `app_status` tinyint(3) UNSIGNED NOT NULL DEFAULT 1 COMMENT '0关闭，1站内，2站外）',
   `app_type` tinyint(3) UNSIGNED NOT NULL DEFAULT 0 COMMENT '0全部，1pc,2手机',
   `app_image` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '图片地址',
   `remind_key` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '提醒key',
