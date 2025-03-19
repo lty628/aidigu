@@ -391,6 +391,16 @@ CREATE TABLE `wb_topic`  (
   PRIMARY KEY (`topic_id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = DYNAMIC;
 
+DROP TABLE IF EXISTS `wb_search`;
+CREATE TABLE `wb_search`  (
+  `search_id` int(11) NOT NULL AUTO_INCREMENT,
+  `keyword` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '关键词',
+  `uid` bigint(20) UNSIGNED NOT NULL DEFAULT 0 COMMENT '创建人，默认0',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  `count` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '搜索数量',
+  PRIMARY KEY (`search_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = DYNAMIC;
+
 -- ----------------------------
 -- Records of wb_topic
 -- ----------------------------

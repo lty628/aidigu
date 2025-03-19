@@ -191,6 +191,54 @@ class IndexInfo extends Info
         return $this->fetch();
     }
 
+    public function search()
+    {
+        $keyword = input('keyword');
+
+        $userMessage = [];
+        if (request()->isAjax()) {
+            if (!$keyword) return json(array('status' =>  1,'msg' => 'ok', 'data' => ['data' => [], 'allow_delete' => 0]));
+
+            if ($keyword) {
+                $findUserSearch = Db::name('search')->where('keyword', $keyword)->cache(60)->find();
+                if ($findUserSearch && $findUserSearch['uid'] == $this->userid) {
+                    if (time() - strtotime($findUserSearch['create_time']) >= 120) {
+                        Db::name('search')->where('search_id', $findUserSearch['search_id'])->setInc('count',1);
+                    }
+                } else {
+                    $keywordData = [
+                        'keyword' => $keyword,
+                        'uid' => $this->userid,
+                        'create_time' => date('Y-m-d H:i:s'),
+                        'count' => 1
+                    ];
+        
+                    Db::name('search')->insert($keywordData);
+                }
+               
+            }
+
+            $userMessage = Db::name('message')
+            ->alias('message')
+            ->join([$this->prefix . 'user' => 'user'], 'user.uid=message.uid')
+            ->order('message.ctime desc')
+            ->field('user.uid,user.nickname,user.head_image,user.blog,message.ctime,message.contents,message.repost,message.refrom,message.repostsum,message.media,message.media_info,message.commentsum,message.msg_id')
+            ->where('message.is_delete', 0)
+            ->where('message.contents', 'like', '%'.$keyword.'%')
+            ->where(function ($query) {
+                $query->where('user.invisible', 0)->whereOr('user.uid', $this->siteUserId);
+            })
+            ->paginate(8, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
+
+            $userMessage = $userMessage->toArray()['data'];
+            return json(array('status' =>  1, 'msg' => 'ok', 'data' => ['data' => handleMessage($userMessage), 'allow_delete' => 0]));
+        }
+        
+        $this->assign('userMessage', []);
+        $this->assign('keyword', $keyword);
+        return $this->fetch();
+    }
+
     public function info()
     {
         return $this->fetch();

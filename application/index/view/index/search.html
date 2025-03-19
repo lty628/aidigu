@@ -1,0 +1,65 @@
+{include file='index/header' /}
+<style>
+    /* 新增搜索框样式 */
+    .search-container {
+        background-color: #f9f9f9; /* 设置背景颜色 */
+        border: 1px solid #ddd; /* 添加边框 */
+        border-radius: 5px; /* 圆角 */
+        padding: 20px; /* 内边距 */
+        margin: 20px auto; /* 外边距，水平居中 */
+        max-width: 600px; /* 最大宽度 */
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 阴影效果 */
+    }
+    .search-formitem {
+        display: flex;
+        align-items: center;
+        margin-bottom: 0; /* 去掉底部边距 */
+    }
+    .search-formitem input {
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+        transition: border-color 0.3s ease;
+        flex: 1;
+    }
+    .search-formitem input:focus {
+        border-color: #007BFF;
+        outline: none;
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    }
+    .search-formitem button {
+        padding: 10px 20px;
+        background-color: #007BFF;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: background-color 0.3s ease;
+        margin-left: 10px;
+    }
+    .search-formitem button:hover {
+        background-color: #0056b3;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+</style>
+<div class="main">
+	<div class="contents">
+		<div class="top">站内搜索</div>
+		<div class="search-container">
+				<p class="search-formitem">
+					<input type="text" autocomplete="off" name="keyword" class="input" id="keyword" placeholder="输入搜索关键词">
+					<button type="button" onclick="const keyword = document.getElementById('keyword').value; if (keyword) { window.location.href = '/search/' + encodeURIComponent(keyword) + '/'; }">搜索</button>
+				</p>
+		</div>
+		<div class="sendMsg"></div>
+		{if $keyword}
+		{include file='index/contents' /}
+		{/if}
+	</div>
+
+<script src="/static/index/js/setting.js"></script>
+{include file='index/sidebar_index' /}
+{include file='index/footer' /}
