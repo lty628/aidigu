@@ -11,6 +11,7 @@
     pubIndex = false # 首页不登录
     picUploadSize = 4194304
     fileUploadSize = 62914561
+    openToolType = false # 打开工具类型
 [database]
     type = mysql
     hostname = 127.0.0.1
