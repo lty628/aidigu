@@ -14,7 +14,7 @@
     font: inherit;
     vertical-align: baseline; */
   /* } */
-    .flow-div {
+    .flow-div .flow-div-img {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(150px,1fr));
       gap: 1%;
@@ -28,8 +28,8 @@
       column-gap: 15px; */
     }
 
-    .flow-div li {
-      /* height: 220px; */
+    .flow-div .flow-div .flow-div-img li {
+      height: 220px;
       overflow: hidden;
       /* display: inline-block;
       margin: 5px;
@@ -45,7 +45,7 @@
       overflow: hidden; */
     }
 
-    .flow-div img {
+    .flow-div .flow-div-img li img {
       width: 100%;
       height: 100%;
       /* display: block;
@@ -55,6 +55,13 @@
       /* opacity: 1;
       filter: saturate(150%); */
       object-fit: cover;
+    }
+
+    .flow-div .flow-div-video {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px,1fr));
+      gap: 1%;
+      margin-top: 5px;
     }
 
     .flow-div video {
@@ -69,6 +76,13 @@
       filter: saturate(150%);
     }
 
+    .flow-div .flow-div-other {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px,1fr));
+      gap: 1%;
+    }
+
+
     .flow-div .showOther {
       clear: both;
       margin: 0;
@@ -81,7 +95,7 @@
       overflow: hidden;
     }
 
-    .flow-div :hover img {
+    /* .flow-div :hover img {
       transform: rotate(0deg);
       transform: scale(1.05);
       transition: all 200ms linear;
@@ -94,7 +108,7 @@
       transition: all 200ms linear;
       opacity: 1;
       filter: saturate(100%);
-    }
+    } */
 
     /* .flow-div-lazyimg{height: 300px; overflow: auto; text-align: center;}
     .flow-div-lazyimg img{width: 40%; height: 200px; margin: 0 3px 5px 0; border: none;} */
@@ -229,11 +243,11 @@
                 if (imgArray.includes(item.media_type)) {
                   imgStr += `<li><a href="javascript:;"><img onclick="showMessageImg(this)" src="${mediaUrl}"></li>`;
                 } else if (videoArray.includes(item.media_type)) {
-                  videoStr += `<li class="showVideo${item.id}"><video onclick="showVideoPopup(this)" src="${mediaUrl}" controls="" name="media"><source src="${mediaUrl}" type="video/mp4"></video></li>`;
+                  videoStr += `<li class="flow-div-video showVideo${item.id}"><video onclick="showVideoPopup(this)" src="${mediaUrl}" controls="" name="media"><source src="${mediaUrl}" type="video/mp4"></video></li>`;
                 } else if (textArray.includes(item.media_type)) {
-                  textStr += `<li class="showOther"><span><a href="javascript:;" data-title="${item.file_name}" data-url="/tools/reader?material_relation_id=${item.id}" onclick="showTextPopup(this)">点击阅读 ${item.file_name}</a></span></li>`;
+                  textStr += `<li class="flow-div-other showOther"><span><a href="javascript:;" data-title="${item.file_name}" data-url="/tools/reader?material_relation_id=${item.id}" onclick="showTextPopup(this)">点击阅读 ${item.file_name}</a></span></li>`;
                 } else {
-                  otherStr += `<li class="showOther"><span><a href="${mediaUrl}">点击下载 ${item.file_name}</a></span></li>`;
+                  otherStr += `<li class="flow-div-other showOther"><span><a href="${mediaUrl}">点击下载 ${item.file_name}</a></span></li>`;
                 }
               };
               data.forEach(generateHtml);
@@ -243,21 +257,45 @@
                   next(content, page < 1);
                 }
               };
-              loadContent(imgStr);
-              loadContent(videoStr);
-              loadContent(textStr);
-              loadContent(otherStr);
+
+              if (imgStr) {
+                imgStr = '<div class="flow-div-img">'+imgStr+'</div>'
+                loadContent(imgStr);
+              }
+
+              if (videoStr) {
+                videoStr = '<div class="flow-div-video">'+videoStr+'</div>'
+                loadContent(videoStr); 
+              }
+
+              if (textStr) {
+                textStr = '<div class="flow-div-other">'+textStr+'</div>'
+                loadContent(textStr); 
+              }
+
+              if (otherStr) {
+                otherStr = '<div class="flow-div-other">'+otherStr+'</div>'
+                loadContent(otherStr); 
+              }
+              
 
               // 获取 ID-flow-div-manual 下li的个数
               var liList = $('#ID-flow-div-manual').find('li');
               var liLength = liList.length;
               // 获取当前页面 body 的高度
-              const flowDivHeight = $('body').height();
-
+              
               // 检查父窗口和 jQuery 是否可用
               if (parent && parent.$) {
-                // 设置父窗口中指定 id 的 iframe 的高度
-                parent.$('#iframe-sourcematerial-' + id).height(flowDivHeight);
+                // 本页面onload结束后执行下面的代码
+                window.onload = function () {
+                  const flowDivHeight = $('body').height() + 15;
+                  console.log('#iframe-sourcematerial-' + id);
+                  console.log(flowDivHeight)
+                  // 设置父窗口中指定 id 的 iframe 的高度
+                  parent.$('#iframe-sourcematerial-' + id).height(flowDivHeight);
+                }
+
+                
               }
               for (var i = 0; i < liLength; i++) {
                 var li = liList[i];
