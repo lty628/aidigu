@@ -223,7 +223,9 @@ class IndexInfo extends Info
                 Db::name('search')->insert($keywordData);
             }
 
-            $userMessage = cache('search_'.$keyword);
+            $page = request()->param('page/d', 1);
+
+            $userMessage = cache('search_'.$keyword.'_'.$page);
             if (!$userMessage) {
                 $userMessage = Db::name('message')
                 ->alias('message')
@@ -235,9 +237,9 @@ class IndexInfo extends Info
                 ->where(function ($query) {
                     $query->where('user.invisible', 0)->whereOr('user.uid', $this->siteUserId);
                 })
-                ->paginate(8, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
+                ->paginate(8, false, ['page' => $page, 'path' => '[PAGE].html']);
                 $userMessage = $userMessage->toArray()['data'];
-                cache('search_'.$keyword, $userMessage, 3600);
+                cache('search_'.$keyword.'_'.$page, $userMessage, 3600);
             }
 
             return json(array('status' =>  1, 'msg' => 'ok', 'data' => ['data' => handleMessage($userMessage), 'allow_delete' => 0]));
