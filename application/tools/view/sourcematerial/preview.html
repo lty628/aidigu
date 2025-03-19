@@ -280,8 +280,8 @@
               
 
               // 获取 ID-flow-div-manual 下li的个数
-              var liList = $('#ID-flow-div-manual').find('li');
-              var liLength = liList.length;
+              // var liList = $('#ID-flow-div-manual').find('li');
+              // var liLength = liList.length;
               // 获取当前页面 body 的高度
               
               // 检查父窗口和 jQuery 是否可用
@@ -294,24 +294,23 @@
                   // 设置父窗口中指定 id 的 iframe 的高度
                   parent.$('#iframe-sourcematerial-' + id).height(flowDivHeight);
                 }
-
                 
               }
-              for (var i = 0; i < liLength; i++) {
-                var li = liList[i];
-                if (li.getElementsByTagName('video').length > 0) {
-                  var video = li.getElementsByTagName('video')[0];
-                  video.addEventListener('click', function () {
-                    var video = this;
-                    var videoList = $('#ID-flow-div-manual').find('video');
-                    for (var j = 0; j < videoList.length; j++) {
-                      if (videoList[j] !== video) {
-                        videoList[j].pause();
-                      }
-                    }
-                  });
-                }
-              }
+              // for (var i = 0; i < liLength; i++) {
+              //   var li = liList[i];
+              //   if (li.getElementsByTagName('video').length > 0) {
+              //     var video = li.getElementsByTagName('video')[0];
+              //     video.addEventListener('click', function () {
+              //       var video = this;
+              //       var videoList = $('#ID-flow-div-manual').find('video');
+              //       for (var j = 0; j < videoList.length; j++) {
+              //         if (videoList[j] !== video) {
+              //           videoList[j].pause();
+              //         }
+              //       }
+              //     });
+              //   }
+              // }
             }
           });
         }
