@@ -36,6 +36,8 @@ if (isMobile()) {
 	$module = 'index';
 }
 Route::get('/tools/$',  $module . '/index/tools');
+Route::get('/tools/in/$',  $module . '/index/tools?appType=1');
+Route::get('/tools/out/$',  $module . '/index/tools?appType=2');
 
 // 收藏
 Route::get('/collect/$',$module . '/Index/collect');

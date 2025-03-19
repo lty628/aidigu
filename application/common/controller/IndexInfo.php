@@ -174,7 +174,19 @@ class IndexInfo extends Info
 
     public function tools()
     {
-        $list = Db::name('app')->where('app_status', 1)->select();
+        $appType = input('param.appType');
+        if ($appType == 1) {
+            $where = ['app_status' => 1];
+            $cacheKey = 'app_status_1';
+        } elseif ($appType == 2) {
+            $where = ['app_status' => 2];
+            $cacheKey = 'app_status_2';
+        } else {
+            $where = [['app_status', '>', 0]];
+            $cacheKey = 'app_status_all';
+        }
+
+        $list = Db::name('app')->where($where)->cache($cacheKey, 1)->select();
         $this->assign('list', $list);
         return $this->fetch();
     }
