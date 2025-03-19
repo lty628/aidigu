@@ -186,7 +186,7 @@ class IndexInfo extends Info
             $cacheKey = 'app_status_all';
         }
 
-        $list = Db::name('app')->where($where)->cache($cacheKey, 1)->select();
+        $list = Db::name('app')->where($where)->cache($cacheKey, 120)->select();
         $this->assign('list', $list);
         return $this->fetch();
     }
