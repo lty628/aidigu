@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="/static/layui/css/layui.css" rel="stylesheet">
   <style>
-    
+
     .flow-div .flow-div-img {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
@@ -170,12 +170,13 @@
       // 本页面onload结束后执行下面的代码
       window.onload = function () {
         var flowDivHeight = Math.max($('html').height(), $('body').height()) + 15;
-        var flowDivHeight = $("#ID-flow-div-manual").height();
         var id = $('#previewId').val();
         console.log('#iframe-sourcematerial-' + id);
         console.log(flowDivHeight)
         // 设置父窗口中指定 id 的 iframe 的高度
         parent.$('#iframe-sourcematerial-' + id).height(flowDivHeight);
+        // 父集的overflow hidden
+        parent.$('#iframe-sourcematerial-' + id).parent().css('overflow', 'hidden');
       }
 
     }
