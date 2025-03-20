@@ -85,6 +85,9 @@
         background: transparent !important;
         box-shadow: none !important;
     }
+    /* .layui-layer{
+      box-shadow: unset!important;
+    } */
 
   </style>
 </head>
@@ -191,9 +194,10 @@
           type: 2,
           title: false,
           closeBtn: 0,
+          shade: 1,
           // 优化弹层按钮样式
           // btnStyle: ['background-color: #007BFF; color: white; border: none; border-radius: 4px;'],
-          area: ['100%', '800px'],
+          area: ['auto', '800px'],
           // 修改为透明背景
           skin: 'layui-layer-transparent', 
           shadeClose: true,
@@ -203,20 +207,23 @@
           success: function(layero, index) {
             // 弹层打开后添加过渡效果
             layero.css({
-              'opacity': 0,
-              'transform': 'scale(0.8)'
-            }).animate({
-              'opacity': 1,
-              'transform': 'scale(1)'
-            }, 300);
+              // 'opacity': 0,
+              // 'transform': 'scale(0.8)',
+              'box-show': 'none !important'
+            })
+            // .animate({
+            //   'opacity': 1,
+            //   'transform': 'scale(1)'
+            // }, 300);
           },
-          end: function() {
+          // end: function() {
             // 弹层关闭时添加过渡效果
-            $('.layui-layer').animate({
-              'opacity': 0,
-              'transform': 'scale(0.8)'
-            }, 300);
-          }
+            // $('.layui-layer').animate({
+            //   'opacity': 0,
+            //   'transform': 'scale(0.8)',
+            //   'box-show': 'none'
+            // }, 300);
+          // }
       });
     }
 
