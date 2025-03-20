@@ -194,19 +194,19 @@
           shade: 1,
           // 优化弹层按钮样式
           // btnStyle: ['background-color: #007BFF; color: white; border: none; border-radius: 4px;'],
-          area: ['auto', '60%'],
+          area: ['50%', '80%'],
           // 修改为透明背景
           skin: 'layui-layer-transparent', 
           shadeClose: true,
           content: videoUrl,
           // 添加动画效果
-          // anim: 2, 
+          anim: 2, 
           success: function(layero, index) {
             // 弹层打开后添加过渡效果
             layero.css({
               // 'opacity': 0,
               // 'transform': 'scale(0.8)',
-              'box-show': 'none !important',
+              // 'box-show': 'none !important',
               'background-color': 'transparent',
             })
             // .animate({
