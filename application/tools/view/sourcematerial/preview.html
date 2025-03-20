@@ -6,79 +6,41 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="/static/layui/css/layui.css" rel="stylesheet">
   <style>
-    /* * { */
-    /* margin: 0;
-    padding: 0;
-    border: 0;
-    font-size: 100%;
-    font: inherit;
-    vertical-align: baseline; */
-  /* } */
+    
     .flow-div .flow-div-img {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(150px,1fr));
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
       gap: 1%;
-      /* height: 100%;
-      overflow: auto;
-      font-size: 0;
-      text-align: left; */
-      /* column-count: 3;
-      width: 100%;
-      margin: 0 auto;
-      column-gap: 15px; */
     }
 
     .flow-div .flow-div .flow-div-img li {
       height: 220px;
       overflow: hidden;
-      /* display: inline-block;
-      margin: 5px;
-      font-size: 14px;
-      width: 30%;
-      margin-bottom: 10px;
-      height: 200px;
-      line-height: 100px;
-      text-align: center;
-      background-color: #eee; */
-      /* margin-bottom: 20px;
-      display: block;
-      overflow: hidden; */
     }
 
     .flow-div .flow-div-img li img {
       width: 100%;
       height: 150px;
-      /* display: block;
-      width: 100%; */
-      /* transform: rotate(4deg); */
-      /* opacity: 0.9; */
-      /* opacity: 1;
-      filter: saturate(150%); */
       object-fit: cover;
     }
 
     .flow-div .flow-div-video {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px,1fr));
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
       gap: 1%;
       margin-top: 5px;
     }
 
     .flow-div video {
-      /* width: 100%;
-      height: 100%;
-      vertical-align: middle !important; */
       display: block;
       width: 100%;
-      /* transform: rotate(4deg); */
-      /* opacity: 0.9; */
       opacity: 1;
       filter: saturate(150%);
     }
 
     .flow-div .flow-div-other {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px,1fr));
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
       gap: 1%;
     }
 
@@ -94,48 +56,43 @@
       background-color: #fff;
       overflow: hidden;
     }
-
-    /* .flow-div :hover img {
-      transform: rotate(0deg);
-      transform: scale(1.05);
-      transition: all 200ms linear;
-      opacity: 1;
-      filter: saturate(100%);
-    }
-    .flow-div :hover video {
-      transform: rotate(0deg);
-      transform: scale(1.05);
-      transition: all 200ms linear;
-      opacity: 1;
-      filter: saturate(100%);
-    } */
-
-    /* .flow-div-lazyimg{height: 300px; overflow: auto; text-align: center;}
-    .flow-div-lazyimg img{width: 40%; height: 200px; margin: 0 3px 5px 0; border: none;} */
   </style>
 </head>
 
 <body>
-  <div class="flow-div" id="ID-flow-div-manual"></div>
-  <input type="hidden" value="{$id}" id="previewId">
-  <input type="hidden" value="{$staticDomain}" id="staticDomain">
+  <div class="flow-div" id="ID-flow-div-manual">
+
+    {if $data['imgStr']}
+    <div class="flow-div-img">{$data['imgStr'] | raw}</div>
+    {/if}
+    {if $data['videoStr']}
+    <div class="flow-div-video">{$data['videoStr'] | raw}</div>
+    {/if}
+    {if $data['textStr']}
+    <div class="flow-div-other">{$data['textStr'] | raw}</div>
+    {/if}
+    {if $data['otherStr']}
+    <div class="flow-div-other">{$data['otherStr'] | raw}</div>
+    {/if}
+    <input type="hidden" value="{$id}" id="previewId">
+  </div>
 
   <!-- 请勿在项目正式环境中引用该 layui.js 地址 -->
   <script src="/static/layui/layui.js"></script>
   <script>
     var $ = layui.$
     function showMessageImg(obj) {
-      var imgList = $('li').find('img').map(function() {
+      var imgList = $('li').find('img').map(function () {
         return $(this).attr('src');
       }).get();
 
       var imgArray = [];
       for (var i = 0; i < imgList.length; i++) {
         imgArray.push({
-            "alt": "",
-            "pid": i, //图片id
-            "src": imgList[i], //原图地址
-            "thumb": "" //缩略图地址})
+          "alt": "",
+          "pid": i, //图片id
+          "src": imgList[i], //原图地址
+          "thumb": "" //缩略图地址})
         })
       }
       // console.log(imgArray)
@@ -187,135 +144,41 @@
       }
     }
 
-    function showTextPopup(obj){
+    function showTextPopup(obj) {
 
       if (parent.layer) {
         var layer = parent.layer
-      } 
+      }
 
       layer.open({
-          type: 1,
-          title: $(obj).attr('data-title'),
-          shade: 0.8,
-          closeBtn: 1,
-          shadeClose: false,
-          area: ['100%', '100%'],
-          resize: false,
-          maxmin: false,
-          // moveOut: true,
-          scrollbar: true,
-          content: '<iframe sandbox="allow-same-origin allow-scripts allow-popups" src="' + $(obj).attr('data-url') + '" allowfullscreen="true" allowtransparency="true" width="100%" height="100%" frameborder="0" scrolling="yes"></iframe>'
-        });
+        type: 1,
+        title: $(obj).attr('data-title'),
+        shade: 0.8,
+        closeBtn: 1,
+        shadeClose: false,
+        area: ['100%', '100%'],
+        resize: false,
+        maxmin: false,
+        // moveOut: true,
+        scrollbar: true,
+        content: '<iframe sandbox="allow-same-origin allow-scripts allow-popups" src="' + $(obj).attr('data-url') + '" allowfullscreen="true" allowtransparency="true" width="100%" height="100%" frameborder="0" scrolling="yes"></iframe>'
+      });
     }
 
-    layui.use(function () {
-      var flow = layui.flow;
-      var id = $("#previewId").val()
+    // 检查父窗口和 jQuery 是否可用
+    if (parent && parent.$) {
+      // 本页面onload结束后执行下面的代码
+      window.onload = function () {
+        var flowDivHeight = Math.max($('html').height(), $('body').height()) + 15;
+        var flowDivHeight = $("#ID-flow-div-manual").height();
+        var id = $('#previewId').val();
+        console.log('#iframe-sourcematerial-' + id);
+        console.log(flowDivHeight)
+        // 设置父窗口中指定 id 的 iframe 的高度
+        parent.$('#iframe-sourcematerial-' + id).height(flowDivHeight);
+      }
 
-      var imgArray = ['jiff', 'jpg', 'bmp', 'jpeg', 'png', 'gif'];
-      const videoArray = ['mp4'];
-      const otherArray = ['zip', 'rar', '7z', 'pdf'];
-      const textArray = ['txt'];
-      // 流加载实例
-      flow.load({
-        elem: '#ID-flow-div-manual', // 流加载容器
-        scrollElem: '#ID-flow-div-manual', // 滚动条所在元素，一般不用填，此处只是演示需要。
-        isAuto: true,
-        isLazyimg: true,
-        end: ' ',
-        done: (page, next) => { // 加载下一页
-          $.ajax({
-            type: "GET",
-            url: "/tools/sourcematerial/preview",
-            data: { id: id },
-            dataType: "json",
-            success: (response) => {
-              const data = response.data;
-              const staticDomain = $("#staticDomain").val();
-              // 初始化不同类型的 HTML 字符串
-              let imgStr = '';
-              let videoStr = '';
-              let otherStr = '';
-              let textStr = '';
-              // 生成不同类型的 HTML 字符串
-              const generateHtml = (item) => {
-                const mediaUrl = `${staticDomain}${item.media_info}.${item.media_type}`;
-                if (imgArray.includes(item.media_type)) {
-                  imgStr += `<li><a href="javascript:;"><img onclick="showMessageImg(this)" src="${mediaUrl}"></li>`;
-                } else if (videoArray.includes(item.media_type)) {
-                  videoStr += `<li class="flow-div-video showVideo${item.id}"><video onclick="showVideoPopup(this)" src="${mediaUrl}" controls="" name="media"><source src="${mediaUrl}" type="video/mp4"></video></li>`;
-                } else if (textArray.includes(item.media_type)) {
-                  textStr += `<li class="flow-div-other showOther"><span><a href="javascript:;" data-title="${item.file_name}" data-url="/tools/reader?material_relation_id=${item.id}" onclick="showTextPopup(this)">点击阅读 ${item.file_name}</a></span></li>`;
-                } else {
-                  otherStr += `<li class="flow-div-other showOther"><span><a href="${mediaUrl}">点击下载 ${item.file_name}</a></span></li>`;
-                }
-              };
-              data.forEach(generateHtml);
-              // 调用 next 函数加载内容
-              const loadContent = (content) => {
-                if (content) {
-                  next(content, page < 1);
-                }
-              };
-
-              if (imgStr) {
-                imgStr = '<div class="flow-div-img">'+imgStr+'</div>'
-                loadContent(imgStr);
-              }
-
-              if (videoStr) {
-                videoStr = '<div class="flow-div-video">'+videoStr+'</div>'
-                loadContent(videoStr); 
-              }
-
-              if (textStr) {
-                textStr = '<div class="flow-div-other">'+textStr+'</div>'
-                loadContent(textStr); 
-              }
-
-              if (otherStr) {
-                otherStr = '<div class="flow-div-other">'+otherStr+'</div>'
-                loadContent(otherStr); 
-              }
-              
-
-              // 获取 ID-flow-div-manual 下li的个数
-              // var liList = $('#ID-flow-div-manual').find('li');
-              // var liLength = liList.length;
-              // 获取当前页面 body 的高度
-              
-              // 检查父窗口和 jQuery 是否可用
-              if (parent && parent.$) {
-                // 本页面onload结束后执行下面的代码
-                window.onload = function () {
-                  const flowDivHeight = $('body').height() + 15;
-                  console.log('#iframe-sourcematerial-' + id);
-                  console.log(flowDivHeight)
-                  // 设置父窗口中指定 id 的 iframe 的高度
-                  parent.$('#iframe-sourcematerial-' + id).height(flowDivHeight);
-                }
-                
-              }
-              // for (var i = 0; i < liLength; i++) {
-              //   var li = liList[i];
-              //   if (li.getElementsByTagName('video').length > 0) {
-              //     var video = li.getElementsByTagName('video')[0];
-              //     video.addEventListener('click', function () {
-              //       var video = this;
-              //       var videoList = $('#ID-flow-div-manual').find('video');
-              //       for (var j = 0; j < videoList.length; j++) {
-              //         if (videoList[j] !== video) {
-              //           videoList[j].pause();
-              //         }
-              //       }
-              //     });
-              //   }
-              // }
-            }
-          });
-        }
-      });
-    });
+    }
   </script>
 
 </body>

@@ -64,20 +64,53 @@ class Sourcematerial extends Controller
     {
         $id = (int)input('get.id');
         $staticDomain = env('app.staticDomain', '');
-        if (request()->isAjax()) {
+        // if (request()->isAjax()) {
             
-            $find =  Db::name('source_material')->where('id', $id)->find();
-            if (!$find) return $this->error('未知错误');
-            if ($find['uid'] != getLoginUid() && $find['share_msg_id'] == 0) {
-                $this->error('未知错误');
-            }
+        //     $find =  Db::name('source_material')->where('id', $id)->find();
+        //     if (!$find) return $this->error('未知错误');
+        //     if ($find['uid'] != getLoginUid() && $find['share_msg_id'] == 0) {
+        //         $this->error('未知错误');
+        //     }
     
-            $relation = Db::name('source_material_relation')->field('id,media_info,media_type,file_name')->where('source_material_id', $find['id'])->select();
+        //     $relation = Db::name('source_material_relation')->field('id,media_info,media_type,file_name')->where('source_material_id', $find['id'])->select();
 
-            return json(['code' => 0, 'data' => $relation, 'count' => count($relation)]);
+        //     return json(['code' => 0, 'data' => $relation, 'count' => count($relation)]);
+        // }
+
+        $find =  Db::name('source_material')->where('id', $id)->find();
+        if (!$find) {
+            $relation = [];
+        } elseif ($find['uid'] != getLoginUid() && $find['share_msg_id'] == 0) {
+            $relation = [];
+        } else {
+            $relation = Db::name('source_material_relation')->field('id,media_info,media_type,file_name')->where('source_material_id', $find['id'])->select();
         }
+
+        $imgArray = ['jiff', 'jpg', 'bmp', 'jpeg', 'png', 'gif'];
+        $videoArray = ['mp4'];
+        $otherArray = ['zip', 'rar', '7z', 'pdf'];
+        $textArray = ['txt'];
+        $data = [];
+        $data['imgStr'] = '';
+        $data['videoStr'] = '';
+        $data['otherStr'] = '';
+        $data['textStr'] = '';
+        foreach ($relation as $key => $value) {
+            $mediaUrl = $staticDomain . $value['media_info'] . '.' . $value['media_type'];
+        	if (in_array($value['media_type'], $imgArray)) {
+        		$data['imgStr'] .= '<li><a href="javascript:;"><img onclick="showMessageImg(this)" src="'.$mediaUrl.'"></li>';
+        	} elseif (in_array($value['media_type'], $videoArray)) {
+        		$data['videoStr'].= '<li class="flow-div-video showVideo'.$value['id'].'"><video onclick="showVideoPopup(this)" src="'.$mediaUrl.'" controls="" name="media"><source src="'.$mediaUrl.'" type="video/mp4"></video></li>';
+        	} elseif (in_array($value['media_type'], $otherArray)) {
+        		$data['otherStr'].= '<li class="flow-div-other showOther"><span><a href="'.$mediaUrl.'">点击下载 '.$value['file_name'].'</a></span></li>';
+        	}  elseif (in_array($value['media_type'], $textArray)) {
+        		$data['textStr'].= '<li class="flow-div-other showOther"><span><a href="javascript:;" data-title="'.$value['file_name'].'" data-url="/tools/reader?material_relation_id='.$value['id'].'" onclick="showTextPopup(this)">点击阅读 '.$value['file_name'].'</a></span></li>';
+        	}
+        }
+
+        $this->assign('data', $data);
         $this->assign('id', $id);
-        $this->assign('staticDomain', $staticDomain);
+        // $this->assign('staticDomain', $staticDomain);
 
         return $this->fetch();
     }
