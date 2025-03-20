@@ -74,8 +74,10 @@
     {if $data['otherStr']}
     <div class="flow-div-other">{$data['otherStr'] | raw}</div>
     {/if}
-    <input type="hidden" value="{$id}" id="previewId">
+    
   </div>
+
+  <input type="hidden" value="{$id}" id="previewId">
 
   <!-- 请勿在项目正式环境中引用该 layui.js 地址 -->
   <script src="/static/layui/layui.js"></script>
@@ -176,7 +178,7 @@
         // 设置父窗口中指定 id 的 iframe 的高度
         parent.$('#iframe-sourcematerial-' + id).height(flowDivHeight);
         // 父集的overflow hidden
-        parent.$('#iframe-sourcematerial-' + id).parent().css('overflow', 'hidden');
+        // parent.$('#iframe-sourcematerial-' + id).parent().css('overflow', 'hidden');
       }
 
     }
