@@ -101,11 +101,11 @@ class Sourcematerial extends Controller
         		$data['imgStr'] .= '<li><a href="javascript:;"><img onclick="showMessageImg(this)" src="'.$mediaUrl.'"></li>';
         	} elseif (in_array($value['media_type'], $videoArray)) {
         		$data['videoStr'].= '<li class="flow-div-video showVideo'.$value['id'].'"><video onclick="showVideoPopup(this)" src="'.$mediaUrl.'" controls="" name="media"><source src="'.$mediaUrl.'" type="video/mp4"></video></li>';
-        	} elseif (in_array($value['media_type'], $otherArray)) {
-        		$data['otherStr'].= '<li class="flow-div-other showOther"><span><a href="'.$mediaUrl.'">点击下载 '.$value['file_name'].'</a></span></li>';
-        	}  elseif (in_array($value['media_type'], $textArray)) {
+        	} elseif (in_array($value['media_type'], $textArray)) {
         		$data['textStr'].= '<li class="flow-div-other showOther"><span><a href="javascript:;" data-title="'.$value['file_name'].'" data-url="/tools/reader?material_relation_id='.$value['id'].'" onclick="showTextPopup(this)">点击阅读 '.$value['file_name'].'</a></span></li>';
-        	}
+        	} else {
+                $data['otherStr'].= '<li class="flow-div-other showOther"><span><a href="'.$mediaUrl.'">点击下载 '.$value['file_name'].'</a></span></li>';
+            }
         }
 
         $this->assign('data', $data);
