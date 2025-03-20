@@ -95,10 +95,12 @@ class Sourcematerial extends Controller
         $data['videoStr'] = '';
         $data['otherStr'] = '';
         $data['textStr'] = '';
+        $imgIndex = 0;
         foreach ($relation as $key => $value) {
             $mediaUrl = $staticDomain . $value['media_info'] . '.' . $value['media_type'];
         	if (in_array($value['media_type'], $imgArray)) {
-        		$data['imgStr'] .= '<li><a href="javascript:;"><img onclick="showMessageImg(this)" src="'.$mediaUrl.'"></li>';
+        		$data['imgStr'] .= '<li><a href="javascript:;"><img data-index="'.$imgIndex.'" onclick="showMessageImg(this)" src="'.$mediaUrl.'"></li>';
+                $imgIndex++;
         	} elseif (in_array($value['media_type'], $videoArray)) {
         		$data['videoStr'].= '<li class="flow-div-video showVideo'.$value['id'].'"><video onclick="showVideoPopup(this)" src="'.$mediaUrl.'" controls="" name="media"><source src="'.$mediaUrl.'" type="video/mp4"></video></li>';
         	} elseif (in_array($value['media_type'], $textArray)) {

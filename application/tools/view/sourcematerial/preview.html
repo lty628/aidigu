@@ -6,7 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="/static/layui/css/layui.css" rel="stylesheet">
   <style>
-
     .flow-div .flow-div-img {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
@@ -74,7 +73,7 @@
     {if $data['otherStr']}
     <div class="flow-div-other">{$data['otherStr'] | raw}</div>
     {/if}
-    
+
   </div>
 
   <input type="hidden" value="{$id}" id="previewId">
@@ -102,21 +101,19 @@
       var json = {
         "title": "", //相册标题
         "id": 0, //相册id
-        "start": 0, //初始显示的图片序号，默认0
+        "start": $(obj).attr('data-index'), //初始显示的图片序号，默认0
         "data": imgArray
       }
 
       if (parent.layer) {
-        parent.layer.photos({
-          photos: json,
-          anim: 5
-        });
-      } else {
-        layer.photos({
-          photos: json,
-          anim: 5
-        });
+        var layer = parent.layer
       }
+
+      layer.photos({
+          photos: json,
+          anim: 5
+        });
+
     }
 
     function showVideoPopup(obj) {
