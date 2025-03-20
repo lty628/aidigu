@@ -179,25 +179,25 @@
       var videoUrl = $(obj).attr('data-src');
       // 修改视频标签样式，让高度达到 100% 并保持比例
       // 调整视频样式，让视频根据高度缩放并居中
-      var videoHtml = '<video autoplay controls name="media" style="max-height: 90vh; max-width: 90vw; margin: auto; display: block;"><source src="' + videoUrl + '" type="video/mp4"></video>';
+      // var videoHtml = '<video autoplay controls name="media" style="max-height: 90vh; max-width: 90vw; margin: auto; display: block;"><source src="' + videoUrl + '" type="video/mp4"></video>';
       // 保持容器样式不变，限制最大和最小宽高，并添加居中样式
-      var centerDiv = '<div style="display: flex; justify-content: center; align-items: center; height: 100vh;">' + videoHtml + '</div>';
+      // var centerDiv = '<div style="display: flex; justify-content: center; align-items: center; height: 100vh;">' + videoHtml + '</div>';
   
       if (parent.layer) {
         var layer = parent.layer
       }
   
       layer.open({
-          type: 1,
+          type: 2,
           title: false,
           closeBtn: 0,
           // 优化弹层按钮样式
           // btnStyle: ['background-color: #007BFF; color: white; border: none; border-radius: 4px;'],
-          area: ['auto', 'auto'],
+          area: ['100%', '800px'],
           // 修改为透明背景
           skin: 'layui-layer-transparent', 
           shadeClose: true,
-          content: centerDiv,
+          content: videoUrl,
           // 添加动画效果
           anim: 2, 
           success: function(layero, index) {
