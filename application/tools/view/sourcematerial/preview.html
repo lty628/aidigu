@@ -12,6 +12,30 @@
       gap: 1%;
     }
 
+    /* 添加以下样式 */
+    .showVideo {
+      position: relative;
+    }
+
+    .play-btn {
+      cursor: pointer;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 50px;
+      height: 50px;
+      background: rgba(0, 0, 0, 0.5);
+      border: none;
+      border-radius: 50%;
+      color: white;
+      font-size: 20px;
+    }
+
+    .play-btn:hover {
+      background: rgba(0, 0, 0, 0.7);
+    }
+
     .flow-div .flow-div .flow-div-img li {
       height: 220px;
       overflow: hidden;
@@ -34,6 +58,8 @@
       display: block;
       width: 100%;
       opacity: 1;
+      height: 150px;
+      object-fit: cover;
       filter: saturate(150%);
     }
 
@@ -61,17 +87,45 @@
 <body>
   <div class="flow-div" id="ID-flow-div-manual">
 
-    {if $data['imgStr']}
-    <div class="flow-div-img">{$data['imgStr'] | raw}</div>
+    {if $data['img']}
+    <div class="flow-div-img">
+      {foreach $data['img'] as $key => $value}
+      <li><a href="javascript:;"><img data-index="{$key}" onclick="showMessageImg(this)" src="{$value['mediaUrl']}"></a>
+      </li>
+      {/foreach}
+    </div>
     {/if}
-    {if $data['videoStr']}
-    <div class="flow-div-video">{$data['videoStr'] | raw}</div>
+    {if $data['video']}
+    <div class="flow-div-video">
+      {foreach $data['video'] as $key => $value}
+      <li class="showVideo">
+        <!-- 移除 controls 属性以去掉播放控制 -->
+        <video onclick="return false;" src="{$value['mediaUrl']}" name="media">
+          <source src="{$value['mediaUrl']}" type="video/mp4">
+        </video>
+        <!-- 添加播放按钮 -->
+        <button class="play-btn" onclick="showVideoPopup(this)" data-src="{$value['mediaUrl']}">▶</button>
+      </li>
+      {/foreach}
+    </div>
     {/if}
-    {if $data['textStr']}
-    <div class="flow-div-other">{$data['textStr'] | raw}</div>
+    {if $data['text']}
+    <div class="flow-div-other">
+      {foreach $data['text'] as $key => $value}
+      <li class="showOther">
+        <span><a href="javascript:;" data-title="{$value['file_name']}"
+            data-url="/tools/reader?material_relation_id={$value['id']}" onclick="showTextPopup(this)">点击阅读
+            {$value['file_name']}</a></span>
+      </li>
+      {/foreach}
+    </div>
     {/if}
-    {if $data['otherStr']}
-    <div class="flow-div-other">{$data['otherStr'] | raw}</div>
+    {if $data['other']}
+    <div class="flow-div-other">
+      {foreach $data['otherList'] as $key => $value}
+      <li class="showOther"><span><a href="{$value['mediaUrl']}">点击下载 {$value['file_name']}</a></span></li>
+      {/foreach}
+    </div>
     {/if}
 
   </div>
@@ -110,37 +164,54 @@
       }
 
       layer.photos({
-          photos: json,
-          anim: 5
-        });
+        photos: json,
+        anim: 5
+      });
 
     }
 
     function showVideoPopup(obj) {
-      var videoUrl = $(obj).attr('src');
-      var videoHtml = '<video controls="" name="media"><source src="' + videoUrl + '" type="video/mp4"></video>';
-
+      var videoUrl = $(obj).attr('data-src');
+      // 修改视频标签样式，让高度达到 100% 并保持比例
+      // 调整视频样式，让视频根据高度缩放并居中
+      var videoHtml = '<video autoplay controls name="media" style="max-height: 90vh; max-width: 90vw; margin: auto; display: block;"><source src="' + videoUrl + '" type="video/mp4"></video>';
+      // 保持容器样式不变，限制最大和最小宽高，并添加居中样式
+      var centerDiv = '<div style="display: flex; justify-content: center; align-items: center; height: 100vh;">' + videoHtml + '</div>';
+  
       if (parent.layer) {
-        parent.layer.open({
-          type: 1,
-          title: false,
-          closeBtn: 1,
-          area: ['auto', 'auto'],
-          skin: 'layui-layer-nobg', //没有背景色
-          shadeClose: true,
-          content: videoHtml
-        });
-      } else {
-        layer.open({
-          type: 1,
-          title: false,
-          closeBtn: 1,
-          area: ['auto', 'auto'],
-          skin: 'layui-layer-nobg', //没有背景色
-          shadeClose: true,
-          content: videoHtml
-        });
+        var layer = parent.layer
       }
+  
+      layer.open({
+          type: 1,
+          title: false,
+          closeBtn: 0,
+          // 优化弹层按钮样式
+          btnStyle: ['background-color: #007BFF; color: white; border: none; border-radius: 4px;'],
+          area: ['auto', 'auto'],
+          skin: 'layui-layer-nobg', // 没有背景色
+          shadeClose: true,
+          content: centerDiv,
+          // 添加动画效果
+          anim: 2, 
+          success: function(layero, index) {
+            // 弹层打开后添加过渡效果
+            layero.css({
+              'opacity': 0,
+              'transform': 'scale(0.8)'
+            }).animate({
+              'opacity': 1,
+              'transform': 'scale(1)'
+            }, 300);
+          },
+          end: function() {
+            // 弹层关闭时添加过渡效果
+            $('.layui-layer').animate({
+              'opacity': 0,
+              'transform': 'scale(0.8)'
+            }, 300);
+          }
+      });
     }
 
     function showTextPopup(obj) {

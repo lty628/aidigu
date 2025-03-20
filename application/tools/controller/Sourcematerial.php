@@ -64,6 +64,7 @@ class Sourcematerial extends Controller
     {
         $id = (int)input('get.id');
         $staticDomain = env('app.staticDomain', '');
+
         // if (request()->isAjax()) {
             
         //     $find =  Db::name('source_material')->where('id', $id)->find();
@@ -88,25 +89,36 @@ class Sourcematerial extends Controller
 
         $imgArray = ['jiff', 'jpg', 'bmp', 'jpeg', 'png', 'gif'];
         $videoArray = ['mp4'];
-        $otherArray = ['zip', 'rar', '7z', 'pdf'];
+        // $otherArray = ['zip', 'rar', '7z', 'pdf'];
         $textArray = ['txt'];
         $data = [];
-        $data['imgStr'] = '';
-        $data['videoStr'] = '';
-        $data['otherStr'] = '';
-        $data['textStr'] = '';
+        $data['img'] = [];
+        $data['video'] = [];
+        $data['other'] = [];
+        $data['text'] = [];
         $imgIndex = 0;
-        foreach ($relation as $key => $value) {
+        $videoIndex = 0;
+        $otherIndex = 0;
+        $textIndex = 0;
+        foreach ($relation as $value) {
             $mediaUrl = $staticDomain . $value['media_info'] . '.' . $value['media_type'];
+            $value['mediaUrl'] = $mediaUrl;
         	if (in_array($value['media_type'], $imgArray)) {
-        		$data['imgStr'] .= '<li><a href="javascript:;"><img data-index="'.$imgIndex.'" onclick="showMessageImg(this)" src="'.$mediaUrl.'"></li>';
+        		// $data['imgStr'] .= '<li><a href="javascript:;"><img data-index="'.$imgIndex.'" onclick="showMessageImg(this)" src="'.$mediaUrl.'"></li>';
+                $data['img'][$imgIndex] = $value;
                 $imgIndex++;
         	} elseif (in_array($value['media_type'], $videoArray)) {
-        		$data['videoStr'].= '<li class="flow-div-video showVideo'.$value['id'].'"><video onclick="showVideoPopup(this)" src="'.$mediaUrl.'" controls="" name="media"><source src="'.$mediaUrl.'" type="video/mp4"></video></li>';
+        		// $data['videoStr'].= '<li class="flow-div-video showVideo'.$value['id'].'"><video onclick="showVideoPopup(this)" src="'.$mediaUrl.'" controls="" name="media"><source src="'.$mediaUrl.'" type="video/mp4"></video></li>';
+                $data['video'][$videoIndex] = $value;
+                $videoIndex++;
         	} elseif (in_array($value['media_type'], $textArray)) {
-        		$data['textStr'].= '<li class="flow-div-other showOther"><span><a href="javascript:;" data-title="'.$value['file_name'].'" data-url="/tools/reader?material_relation_id='.$value['id'].'" onclick="showTextPopup(this)">点击阅读 '.$value['file_name'].'</a></span></li>';
+        		// $data['textStr'].= '<li class="flow-div-other showOther"><span><a href="javascript:;" data-title="'.$value['file_name'].'" data-url="/tools/reader?material_relation_id='.$value['id'].'" onclick="showTextPopup(this)">点击阅读 '.$value['file_name'].'</a></span></li>';
+                $data['text'][$textIndex] = $value;
+                $textIndex++;
         	} else {
-                $data['otherStr'].= '<li class="flow-div-other showOther"><span><a href="'.$mediaUrl.'">点击下载 '.$value['file_name'].'</a></span></li>';
+                // $data['otherStr'].= '<li class="flow-div-other showOther"><span><a href="'.$mediaUrl.'">点击下载 '.$value['file_name'].'</a></span></li>';
+                $data['other'][$otherIndex] = $value;
+                $otherIndex++;
             }
         }
 
