@@ -81,6 +81,11 @@
       background-color: #fff;
       overflow: hidden;
     }
+    .layui-layer-transparent {
+        background: transparent !important;
+        box-shadow: none !important;
+    }
+
   </style>
 </head>
 
@@ -187,9 +192,10 @@
           title: false,
           closeBtn: 0,
           // 优化弹层按钮样式
-          btnStyle: ['background-color: #007BFF; color: white; border: none; border-radius: 4px;'],
+          // btnStyle: ['background-color: #007BFF; color: white; border: none; border-radius: 4px;'],
           area: ['auto', 'auto'],
-          skin: 'layui-layer-nobg', // 没有背景色
+          // 修改为透明背景
+          skin: 'layui-layer-transparent', 
           shadeClose: true,
           content: centerDiv,
           // 添加动画效果
