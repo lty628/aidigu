@@ -7,7 +7,7 @@ class Nav extends Controller
 {	
 	public function index()
     {
-        $list = Db::name('app')->where('app_type', 1)->select();
+        $list = Db::name('app')->where('app_type', 1)->limit(12)->select();
         $this->assign('list', $list);
         return $this->fetch();
     }
