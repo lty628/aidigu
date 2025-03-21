@@ -274,7 +274,7 @@
             <img class="dock-icon" src="https://cdn-icons-png.flaticon.com/512/1077/1077063.png" alt="登录">
         </a>
         {foreach $list as $appInfo}
-        {if $appInfo['app_type'] == 0 || $appInfo['app_type'] == 1}
+        {if $appInfo['app_status'] == 2 && ($appInfo['app_type'] == 0 || $appInfo['app_type'] == 1)}
         <a href="javascript:;" data-url="{$appInfo['app_url']}" onclick="showFrameCustom(this, '{$appInfo[\'app_config\']}')">
             <img class="dock-icon" src="{$appInfo['app_image']}" alt="{$appInfo['app_name']}">
         </a>
