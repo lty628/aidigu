@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>嘀咕导航</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            /* 定义背景渐变 */
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            background-size: 400% 400%;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            /* 应用动画 */
+            animation: gradient 15s ease infinite;
+        }
+
+        /* 定义动画 */
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .desktop {
+            display: grid;
+            /* 调整列模板，使图标分布更合理 */
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            /* 适当增大间距 */
+            gap: 40px;
+            padding: 50px;
+        }
+
+        .icon {
+            width: 100px;
+            text-align: center;
+            cursor: pointer;
+            padding: 20px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            /* 使用 flexbox 布局，让内容垂直居中 */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .icon:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .icon img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin-bottom: 10px;
+            filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+        }
+
+        .icon a {
+            text-decoration: none;
+        }
+
+
+        .icon span {
+            font-size: 14px;
+            color: #555;
+            text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
+        }
+
+        /* 新增底部导航样式 */
+        .dock {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 10px 20px;
+            display: flex;
+            gap: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .dock-icon {
+            width: 48px;
+            height: 48px;
+            transition: transform 0.2s ease;
+        }
+
+        .dock-icon:hover {
+            transform: scale(1.2);
+        }
+        /* 添加新样式 */
+        #searchEngine {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            margin-right: 10px;
+            outline: none;
+        }
+
+        #searchForm input[type="text"] {
+            width: 300px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            outline: none;
+        }
+
+        #searchForm button[type="submit"] {
+            padding: 10px 20px;
+            border: none;
+            background-color: #0078d4;
+            color: white;
+            border-radius: 20px;
+            margin-left: 10px;
+        }
+
+        .search-container {
+            text-align: center;
+            margin: 20px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+    <link rel="stylesheet" href="/static/layui/css/layui.css?t=1" type="text/css" media="screen" />
+    <script src="/static/index/js/jquery-1.8.3.min.js"></script>
+    <script src="/static/layui/layui.js?4"></script>
+    <script language="javascript" type="text/javascript" src="/static/common/js/index.js"></script>
+</head>
+
+<body>
+    <!-- 修改为使用类名 -->
+    <div class="search-container">
+        <select id="searchEngine">
+            <option value="https://www.bing.com/search">必应</option>
+            <option value="https://www.baidu.com/s">百度</option>
+            <option value="https://www.google.com/search">谷歌</option>
+            <option value="https://www.so.com/s">360</option>
+        </select>
+        <form id="searchForm" action="https://www.bing.com/search" method="get" target="_blank">
+            <input type="text" autocomplete="off" id="searchInput" name="q" placeholder="在搜索引擎中搜索...">
+            <button type="submit">搜索</button>
+        </form>
+        <script>
+            const searchEngineSelect = document.getElementById('searchEngine');
+            const searchForm = document.getElementById('searchForm');
+            const searchInput = document.getElementById('searchInput');
+        
+            searchEngineSelect.addEventListener('change', function () {
+                searchForm.action = this.value;
+                // 根据不同搜索引擎修改参数名
+                if (this.value === 'https://www.baidu.com/s') {
+                    searchInput.name = 'wd';
+                } else {
+                    searchInput.name = 'q';
+                }
+            });
+        </script>
+    </div>
+
+    <div class="desktop">
+        <div class="icon">
+            <img src="https://cdn-icons-png.flaticon.com/512/732/732230.png" alt="Safari">
+            <span>Safari</span>
+        </div>
+        <div class="icon">
+            <img src="https://cdn-icons-png.flaticon.com/512/5968/5968764.png" alt="邮件">
+            <span>邮件</span>
+        </div>
+        <!-- 新增图标 -->
+        <div class="icon">
+            <img src="https://cdn-icons-png.flaticon.com/512/179/179329.png" alt="日历">
+            <span>日历</span>
+        </div>
+
+        {foreach $list as $appInfo}
+        {if $appInfo['app_type'] == 0 || $appInfo['app_type'] == 1}
+            <!-- 原代码已有链接，保持不变 -->
+            {if $appInfo['open_type'] == 0}
+            <div class="icon">
+                <a href="javascript:;"  data-url="{$appInfo['app_url']}" onclick="showFrameCustom(this, '{$appInfo[\'app_config\']}')">
+                    <img src="{$appInfo['app_image']}" alt="{$appInfo['app_name']}">
+                </a>
+                <a href="javascript:;"  data-url="{$appInfo['app_url']}" onclick="showFrameCustom(this, '{$appInfo[\'app_config\']}')">
+                    <span>{$appInfo['app_name']}</span>
+                </a> 
+            </div>
+            {elseif condition="$appInfo['open_type'] eq 1" /}
+            <div class="icon">
+                <a href="{$appInfo['app_url']}">
+                    <img src="{$appInfo['app_image']}" alt="{$appInfo['app_name']}">
+                </a>
+                <a href="{$appInfo['app_url']}">
+                    <span>{$appInfo['app_name']}</span>
+                </a> 
+            </div>
+            {else /}
+            <div class="icon">
+                <a href="{$appInfo['app_url']}" target="_blank">
+                    <img src="{$appInfo['app_image']}" alt="{$appInfo['app_name']}">
+                </a>
+                <a href="{$appInfo['app_url']}" target="_blank">
+                    <span>{$appInfo['app_name']}</span>
+                </a> 
+            </div>
+            {/if}
+        {/if}
+        {/foreach}
+
+    </div>
+    <!-- 底部导航 -->
+    <div class="dock">
+        <a href="/">
+            <img class="dock-icon" src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt="首页">
+        </a>
+        <a href="/login/">
+            <img class="dock-icon" src="https://cdn-icons-png.flaticon.com/512/1077/1077063.png" alt="登录">
+        </a>
+    </div>
+</body>
+
+</html>
