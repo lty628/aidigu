@@ -98,7 +98,18 @@
         height: 80px;
         border-radius: 20px;
         margin-bottom: 10px;
-        filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+        /* 增强 drop-shadow 效果，模拟 3D 阴影 */
+        filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.3));
+        /* 也可以使用 box-shadow，不过需要图片背景为透明 */
+        box-shadow: 0 8px 12px rgba(0, 0, 0, 0.3);
+        transition: all 0.3s ease; /* 添加过渡效果，使悬停变化更平滑 */
+    }
+
+    .desktop .icon:hover img {
+        /* 悬停时阴影变化，增强 3D 效果 */
+        filter: drop-shadow(0 12px 18px rgba(0, 0, 0, 0.4));
+        box-shadow: 0 12px 18px rgba(0, 0, 0, 0.4);
+        transform: translateY(-5px); /* 悬停时图片上移 */
     }
 
     .icon a {
