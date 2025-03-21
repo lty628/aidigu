@@ -132,7 +132,7 @@
         var data = obj.data; // 获得当前行数据
         // console.log(data)
         if (obj.event === 'edit') {
-          layer.confirm('群定删除 [' + data.invite_code + '] 么', function (index) {
+          layer.confirm('确定删除 [' + data.invite_code + '] 么', function (index) {
             $.ajax({
               type: "post",
               url: "/tools/userinvite/delInviteCode",

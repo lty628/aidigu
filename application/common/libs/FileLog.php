@@ -5,7 +5,7 @@ use think\Db;
 
 class FileLog
 {
-    // type 1头像，2微博，3聊天，4素材，5主题, 6网盘
+    // type 1头像，2微博，3聊天，4素材，5主题, 6网盘, 7icon
     // media_type 1图片，2视频，3音频，4其他
     // \app\common\model\FileLog::add();
     public static function add($uid, $type, $mediaType, $fileInfo)

@@ -16,6 +16,7 @@
         }
     
         /* 毛玻璃背景 */
+        /* https://picsum.photos/1920/1080 */
         body::before {
             content: "";
             position: fixed;
@@ -23,7 +24,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: url('https://picsum.photos/1920/1080') no-repeat center center fixed; 
+            background: url('{$bg}') no-repeat center center fixed; 
             background-size: cover;
             /* 减小模糊半径 */
             filter: blur(5px);
@@ -227,19 +228,6 @@
     </div>
 
     <div class="desktop">
-        <div class="icon">
-            <img src="https://cdn-icons-png.flaticon.com/512/732/732230.png" alt="Safari">
-            <span>Safari</span>
-        </div>
-        <div class="icon">
-            <img src="https://cdn-icons-png.flaticon.com/512/5968/5968764.png" alt="邮件">
-            <span>邮件</span>
-        </div>
-        <!-- 新增图标 -->
-        <div class="icon">
-            <img src="https://cdn-icons-png.flaticon.com/512/179/179329.png" alt="日历">
-            <span>日历</span>
-        </div>
 
         {foreach $list as $appInfo}
         {if $appInfo['app_type'] == 0 || $appInfo['app_type'] == 1}
@@ -278,19 +266,38 @@
     </div>
     <!-- 底部导航 -->
     <div class="dock">
-        <a href="/">
-            <img class="dock-icon" src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt="首页">
+        <a href="/tools/nav/">
+            <img class="dock-icon" src="/static/tools/common/images/nav.jpg" alt="导航">
         </a>
+
+        <a href="javascript:;">
+            <img class="dock-icon" src="/static/tools/common/images/chat.jpg" data-url="/chat" alt="聊天" onclick="showFrameCustom(this, '{&quot;title&quot;:&quot;嘀友聊天&quot;,&quot;shade&quot;:0.8,&quot;closeBtn&quot;:true,&quot;shadeClose&quot;:false,&quot;area&quot;:[&quot;60%&quot;,&quot;70%&quot;],&quot;resize&quot;:true,&quot;maxmin&quot;:true,&quot;id&quot;:&quot;app_3&quot;,&quot;hideOnClose&quot;:true,&quot;scrollbar&quot;:false}')">
+        </a>
+
+        <a href="javascript:;">
+            <img class="dock-icon" src="/static/tools/common/images/weibo.jpg" data-url="/square/" alt="广场" onclick="showFrameCustom(this, '{&quot;title&quot;:&quot;广场&quot;,&quot;shade&quot;:0.8,&quot;closeBtn&quot;:true,&quot;shadeClose&quot;:false,&quot;area&quot;:[&quot;80%&quot;,&quot;90%&quot;],&quot;resize&quot;:true,&quot;maxmin&quot;:true,&quot;skin&quot;:&quot;layui-layer-win10&quot;,&quot;id&quot;:&quot;app_1&quot;,&quot;hideOnClose&quot;:false,&quot;scrollbar&quot;:false}')">
+        </a>
+
+        <a href="javascript:;">
+            <img class="dock-icon" src="/static/tools/common/images/cloud.jpg" data-url="/tools/movie" alt="我的云盘" onclick="showFrameCustom(this, '{&quot;title&quot;:&quot;我的云盘&quot;,&quot;shade&quot;:0.8,&quot;closeBtn&quot;:true,&quot;shadeClose&quot;:false,&quot;area&quot;:[&quot;80%&quot;,&quot;80%&quot;],&quot;resize&quot;:true,&quot;maxmin&quot;:true,&quot;skin&quot;:&quot;layui-layer-win10&quot;,&quot;id&quot;:&quot;app_5&quot;,&quot;hideOnClose&quot;:true,&quot;scrollbar&quot;:false}')">
+        </a>
+
+        <a href="javascript:;">
+            <img class="dock-icon" src="/static/tools/common/images/movie.jpg" data-url="/tools/movie" alt="影院" onclick="showFrameCustom(this, '{&quot;title&quot;:&quot;嘀咕影院&quot;,&quot;shade&quot;:0.8,&quot;closeBtn&quot;:true,&quot;shadeClose&quot;:false,&quot;area&quot;:[&quot;80%&quot;,&quot;80%&quot;],&quot;resize&quot;:true,&quot;maxmin&quot;:true,&quot;skin&quot;:&quot;layui-layer-win10&quot;,&quot;id&quot;:&quot;app_4&quot;,&quot;hideOnClose&quot;:false,&quot;scrollbar&quot;:false}')">
+        </a>
+
+        <a href="javascript:;">
+            <img class="dock-icon" src="/static/tools/common/images/nav-setting.jpg" data-url="/tools/nav/list" alt="导航设置" onclick="showFrameCustom(this, '{&quot;title&quot;:&quot;导航设置&quot;,&quot;shade&quot;:0.8,&quot;closeBtn&quot;:true,&quot;shadeClose&quot;:false,&quot;area&quot;:[&quot;70%&quot;,&quot;80%&quot;],&quot;resize&quot;:true,&quot;maxmin&quot;:true,&quot;skin&quot;:&quot;layui-layer-win10&quot;,&quot;id&quot;:&quot;app_2&quot;,&quot;hideOnClose&quot;:false,&quot;scrollbar&quot;:false}')">
+        </a>
+        {if $uid}
+        <a href="/logout/">
+            <img class="dock-icon" src="/static/tools/common/images/nav-logout.jpg" alt="退出">
+        </a>
+        {else}
         <a href="/login/">
-            <img class="dock-icon" src="https://cdn-icons-png.flaticon.com/512/1077/1077063.png" alt="登录">
-        </a>
-        {foreach $list as $appInfo}
-        {if $appInfo['app_status'] == 1 && ($appInfo['app_type'] == 0 || $appInfo['app_type'] == 1)}
-        <a href="javascript:;" data-url="{$appInfo['app_url']}" onclick="showFrameCustom(this, '{$appInfo[\'app_config\']}')">
-            <img class="dock-icon" src="{$appInfo['app_image']}" alt="{$appInfo['app_name']}">
+            <img class="dock-icon" src="/static/tools/common/images/nav-login.jpg" alt="登录">
         </a>
         {/if}
-        {/foreach}
     </div>
 </body>
 

@@ -225,4 +225,30 @@ class SettingInfo extends Base
 		if (!$result) return json(['status'=>0, 'msg'=>'修改密码失败']);
 		return json(['status'=>1, 'msg'=>'修改密码成功']);
 	}
+
+	public function upNavIcon()
+	{
+		$path = 'uploads/'.getLoginMd5Uid().'/icon';
+		// 4m
+		$size = 1194304;
+		$file = request()->file('file');
+		// 移动到框架应用根目录/uploads/ 目录下
+		$info = $file->validate(['size'=>$size,'ext'=>'jpg,jiff,bmp,jpeg,png,gif'])->move($path);
+		// $info = $this->uploadImage($size, $path);
+		if($info){
+			// 成功上传后 获取上传信息
+			$fileName = explode('.', $info->getSaveName())[0];
+			$data['media_info'] = '/'.$path.'/'.$fileName;
+			$data['media_type'] = $info->getExtension();
+			$data['media_size'] = $info->getSize();
+			$data['media_name'] = $info->getInfo()['name'];
+			$data['media_mime'] = $info->getInfo()['type'];
+			\app\common\libs\FileLog::add(getLoginUid(), 7, $info->getExtension(), $data);
+			return json(['status'=>1, 'msg'=>'上传成功','data'=>$data]);
+		}else{
+			// 上传失败获取错误信息
+			return json(['status'=>0, 'msg'=>$file->getError()]);
+		}
+	}
+
 }
