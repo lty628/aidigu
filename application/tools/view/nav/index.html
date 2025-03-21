@@ -9,137 +9,180 @@
         body {
             margin: 0;
             padding: 0;
-            /* 定义背景渐变 */
-            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
-            background-size: 400% 400%;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            /* 应用动画 */
-            animation: gradient 15s ease infinite;
+            color: #fff; /* 文字颜色改为白色以适配深色背景 */
+            position: relative;
+            overflow: hidden;
         }
-
-        /* 定义动画 */
-        @keyframes gradient {
-            0% {
-                background-position: 0% 50%;
-            }
-
-            50% {
-                background-position: 100% 50%;
-            }
-
-            100% {
-                background-position: 0% 50%;
-            }
-        }
-
-        .desktop {
-            display: grid;
-            /* 调整列模板，使图标分布更合理 */
-            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-            /* 适当增大间距 */
-            gap: 40px;
-            padding: 50px;
-        }
-
-        .icon {
-            width: 100px;
-            text-align: center;
-            cursor: pointer;
-            padding: 20px;
-            border-radius: 12px;
-            transition: all 0.3s ease;
-            /* 使用 flexbox 布局，让内容垂直居中 */
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .icon:hover {
-            background-color: rgba(255, 255, 255, 0.3);
-        }
-
-        .icon img {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            margin-bottom: 10px;
-            filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
-        }
-
-        .icon a {
-            text-decoration: none;
-        }
-
-
-        .icon span {
-            font-size: 14px;
-            color: #555;
-            text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
-        }
-
-        /* 新增底部导航样式 */
-        .dock {
+    
+        /* 毛玻璃背景 */
+        body::before {
+            content: "";
             position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(10px);
-            border-radius: 24px;
-            padding: 10px 20px;
-            display: flex;
-            gap: 20px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://picsum.photos/1920/1080') no-repeat center center fixed; 
+            background-size: cover;
+            /* 减小模糊半径 */
+            filter: blur(5px);
+            z-index: -2;
+        }
+    
+        @keyframes drip {
+            0% {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) scale(0);
+                opacity: 0;
+            }
+        }
+    
+        /* 原有的 gradient 动画可以移除 */
+        /* 修改为科技风格背景渐变 */
+        background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+        background-size: 400% 400%;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        /* 应用动画 */
+        animation: gradient 15s ease infinite;
+        color: #fff; /* 文字颜色改为白色以适配深色背景 */
+    }
+
+    /* 定义动画 */
+    @keyframes gradient {
+        0% {
+            background-position: 0% 50%;
         }
 
-        .dock-icon {
-            width: 48px;
-            height: 48px;
-            transition: transform 0.2s ease;
+        50% {
+            background-position: 100% 50%;
         }
 
-        .dock-icon:hover {
-            transform: scale(1.2);
+        100% {
+            background-position: 0% 50%;
         }
-        /* 添加新样式 */
-        #searchEngine {
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 20px;
-            margin-right: 10px;
-            outline: none;
-        }
+    }
 
-        #searchForm input[type="text"] {
-            width: 300px;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 20px;
-            outline: none;
-        }
+    .desktop {
+        display: grid;
+        /* 调整列模板，使图标分布更合理 */
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        /* 适当增大间距 */
+        gap: 40px;
+        padding: 50px;
+    }
 
-        #searchForm button[type="submit"] {
-            padding: 10px 20px;
-            border: none;
-            background-color: #0078d4;
-            color: white;
-            border-radius: 20px;
-            margin-left: 10px;
-        }
+    .icon {
+        width: 100px;
+        text-align: center;
+        cursor: pointer;
+        padding: 20px;
+        border-radius: 12px;
+        transition: all 0.3s ease;
+        /* 使用 flexbox 布局，让内容垂直居中 */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
 
+    .icon:hover {
+        background-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .icon img {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        margin-bottom: 10px;
+        filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+    }
+
+    .icon a {
+        text-decoration: none;
+    }
+
+
+    .icon span {
+        font-size: 14px;
+        color: #fff; /* 图标文字颜色改为白色 */
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+    }
+
+    /* 新增底部导航样式 */
+    .dock {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(10px);
+        border-radius: 24px;
+        padding: 10px 20px;
+        display: flex;
+        gap: 20px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    .dock img {
+        width: 48px;
+        height: 48px;
+        border-radius: 10px;
+        transition: transform 0.2s ease;
+    }
+
+    .dock-icon {
+        width: 48px;
+        height: 48px;
+        transition: transform 0.2s ease;
+    }
+
+    .dock-icon:hover {
+        transform: scale(1.2);
+    }
+    /* 添加新样式 */
+    #searchEngine {
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 20px;
+        margin-right: 10px;
+        outline: none;
+    }
+
+    #searchForm input[type="text"] {
+        width: 300px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 20px;
+        outline: none;
+    }
+
+    #searchForm button[type="submit"] {
+        padding: 10px 20px;
+        border: none;
+        background-color: #0078d4;
+        color: white;
+        border-radius: 20px;
+        margin-left: 10px;
+    }
+
+        /* ... 已有样式 ... */
         .search-container {
             text-align: center;
-            margin: 20px 0;
+            /* 增加 margin-top 值，将搜索框向下移动 */
+            margin: 60px 0 20px 0; 
             display: flex;
             justify-content: center;
             align-items: center;
         }
     </style>
-    <link rel="stylesheet" href="/static/layui/css/layui.css?t=1" type="text/css" media="screen" />
-    <script src="/static/index/js/jquery-1.8.3.min.js"></script>
-    <script src="/static/layui/layui.js?4"></script>
-    <script language="javascript" type="text/javascript" src="/static/common/js/index.js"></script>
+</style>
+<link rel="stylesheet" href="/static/layui/css/layui.css?t=1" type="text/css" media="screen" />
+<script src="/static/index/js/jquery-1.8.3.min.js"></script>
+<script src="/static/layui/layui.js?4"></script>
+<script language="javascript" type="text/javascript" src="/static/common/js/index.js"></script>
 </head>
 
 <body>
@@ -230,7 +273,36 @@
         <a href="/login/">
             <img class="dock-icon" src="https://cdn-icons-png.flaticon.com/512/1077/1077063.png" alt="登录">
         </a>
+        {foreach $list as $appInfo}
+        {if $appInfo['app_type'] == 0 || $appInfo['app_type'] == 1}
+        <a href="javascript:;" data-url="{$appInfo['app_url']}" onclick="showFrameCustom(this, '{$appInfo[\'app_config\']}')">
+            <img class="dock-icon" src="{$appInfo['app_image']}" alt="{$appInfo['app_name']}">
+        </a>
+        {/if}
+        {/foreach}
     </div>
 </body>
 
 </html>
+
+
+    <!-- 动态添加滴水元素 -->
+    <!-- 移除以下代码 -->
+    <!--
+    <script>
+        function createDrip() {
+            const drip = document.createElement('div');
+            drip.className = 'drip';
+            drip.style.left = Math.random() * 100 + '%';
+            document.body.appendChild(drip);
+
+            // 一段时间后移除元素
+            setTimeout(() => {
+                drip.remove();
+            }, 3000);
+        }
+
+        // 每隔一段时间创建一个滴水元素
+        setInterval(createDrip, 500);
+    </script>
+    -->
