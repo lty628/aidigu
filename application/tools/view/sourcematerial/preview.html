@@ -127,7 +127,7 @@
     {/if}
     {if $data['other']}
     <div class="flow-div-other">
-      {foreach $data['otherList'] as $key => $value}
+      {foreach $data['other'] as $key => $value}
       <li class="showOther"><span><a href="{$value['mediaUrl']}">点击下载 {$value['file_name']}</a></span></li>
       {/foreach}
     </div>
