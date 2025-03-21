@@ -3,6 +3,19 @@ var playIngMusicId = '';
 var playIngVideoId = -1;
 var DP = [];
 function stopOther(obj) {
+
+	if (typeof BroadcastChannel !== 'undefined') {
+	    var broadcastChannel = new BroadcastChannel('channel');
+	    broadcastChannel.postMessage('stop');
+	    // 可以延迟关闭频道，确保消息有足够时间被接收
+	    setTimeout(() => {
+	        broadcastChannel.close();
+	    }, 100); 
+		return
+	} else {
+	    console.warn('BroadcastChannel is not supported in this browser.');
+	}
+
 	var id = $(obj).attr("id")
 	if (playIngMusicId != '' && id != playIngMusicId) {
 		document.getElementById(playIngMusicId).pause()
