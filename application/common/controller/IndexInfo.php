@@ -14,6 +14,13 @@ class IndexInfo extends Info
     // 首页
     public function index()
     {
+        // 修改自定义首页
+        $defaultIndex = env('app.defaultIndex');
+        if ($defaultIndex != '/') {
+            $defaultIndex = explode('@', $defaultIndex);
+            return app($defaultIndex[0])->{$defaultIndex[1]}();
+        }
+
         if ($this->userid) {
             $allowDelete = 0;
         } else {

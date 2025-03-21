@@ -9,6 +9,7 @@
     beian=xxxxxxx        #填入备案号
     noRegister = false        #禁止注册 
     pubIndex = false # 首页不登录
+    defaultIndex = app\tools\controller\Nav@index # 默认首页 不填 为 /
     picUploadSize = 4194304
     fileUploadSize = 62914561
     openToolType = false # 打开工具类型

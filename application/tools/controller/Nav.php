@@ -9,6 +9,6 @@ class Nav extends Controller
     {
         $list = Db::name('app')->where('app_type', 1)->limit(12)->select();
         $this->assign('list', $list);
-        return $this->fetch();
+        return $this->fetch('tools@nav/index');
     }
 }
