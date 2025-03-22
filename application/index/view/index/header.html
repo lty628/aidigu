@@ -47,9 +47,7 @@
 					<!-- <li><a href="javascript:;" data-title="在线影院" data-url="/movie" onclick="showFrameHtml(this, '100%', '100%')">影院</a></li> -->
 					<li><a href="/setting/">个人设置</a></li>
 					<li><a href="/search/">搜索</a></li>
-					{if env('app.defaultIndex')}
 					<li><a href="/tools/nav/">导航</a></li>
-					{/if}
 				{else}
 					<li><a href="{:url('/'.$userInfo.blog.'/')}">{$userInfo.sex|getPerson}的首页</a></li>
 					<li><a href="{:url('/'.$userInfo.blog.'/own/')}">{$userInfo.sex|getPerson}的微博</a></li>
