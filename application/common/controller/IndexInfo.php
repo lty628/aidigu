@@ -16,7 +16,7 @@ class IndexInfo extends Info
     {
         // 修改自定义首页
         $defaultIndex = env('app.defaultIndex');
-        if ($defaultIndex && $defaultIndex != '/') {
+        if ($defaultIndex && $defaultIndex != '/' && !isMobile()) {
             $defaultIndex = explode('@', $defaultIndex);
             return app($defaultIndex[0])->{$defaultIndex[1]}();
         }
