@@ -97,8 +97,8 @@ a img {
 .navigation li {
     display: inline;
     padding: 0 1rem; /* Use rem for padding */
-    margin-left: 5px;
-    margin-right: 5px;
+    /* margin-left: 5px;
+    margin-right: 5px; */
 }
 
 .main {
