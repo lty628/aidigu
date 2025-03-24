@@ -20,9 +20,11 @@ class Nav extends Controller
     {
         $list = Db::name('app')->where(function ($query) {
             $query->where('app_status', '>', 0)->where('fromuid', $this->uid);
-        })->whereOr(function ($query) {
-            $query->where('app_status', 2)->where('fromuid', 0);
-        })->select();
+        })
+        // ->whereOr(function ($query) {
+        //     $query->where('app_status', 2)->where('fromuid', 0);
+        // })
+        ->select();
 
         $bg = cache('bg_nav'.$this->uid);
         if (!$bg) {
