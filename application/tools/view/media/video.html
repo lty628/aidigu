@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <title></title>
+    <style>
+        * {
+            border: 0;
+            margin: 0;
+            padding: 0;
+            outline: none;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0d0d0e;
+            /* 浅灰色背景，更柔和 */
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #main {
+            height: calc(100vh - 60px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #player {
+            width: 100%;
+            height: auto;
+            max-height: 100%;
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <section id="main">
+        <video id="player" src="{$videoUrl}" controls autoplay webkit-playsinline playsinline></video>
+    </section>
+
+</body>
+
+</html>
