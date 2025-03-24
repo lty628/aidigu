@@ -29,7 +29,7 @@ class Nav extends Controller
         $bg = cache('bg_nav'.$this->uid);
         if (!$bg) {
             $bg = '/static/tools/common/images/bg'.mt_rand(1, 10).'.jpg';
-            cache('bg_nav'.$this->uid, $bg, 60);
+            cache('bg_nav'.$this->uid, $bg, 600);
         }
 
         $this->assign('bg', $bg);
