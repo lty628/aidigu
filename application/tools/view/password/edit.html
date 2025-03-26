@@ -9,44 +9,46 @@
 </head>
 
 <body>
-    <div class="layui-container">
-        <form class="layui-form" id="passwordForm">
-            <input type="hidden" name="id" value="{$data['id']}">
-            <div class="layui-form-item">
-                <label class="layui-form-label">网站名称</label>
-                <div class="layui-input-block">
-                    <input type="text" name="name" value="{$data['name']}" required lay-verify="required"
-                        placeholder="请输入网站名称" autocomplete="off" class="layui-input">
+    <div class="layui-layout">
+        <div style="padding: 16px;">
+            <form class="layui-form" id="passwordForm">
+                <input type="hidden" name="id" value="{$data['id']}">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">网站名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="name" value="{$data['name']}" required lay-verify="required"
+                            placeholder="请输入网站名称" autocomplete="off" class="layui-input">
+                    </div>
                 </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">网站地址</label>
-                <div class="layui-input-block">
-                    <input type="text" name="url" value="{$data['url']}" required lay-verify="required|url"
-                        placeholder="请输入网站地址" autocomplete="off" class="layui-input">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">网站地址</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="url" value="{$data['url']}" required lay-verify="required|url"
+                            placeholder="请输入网站地址" autocomplete="off" class="layui-input">
+                    </div>
                 </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">用户名</label>
-                <div class="layui-input-block">
-                    <input type="text" name="username" value="{$data['username']}" required lay-verify="required"
-                        placeholder="请输入用户名" autocomplete="off" class="layui-input">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">用户名</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="username" value="{$data['username']}" required lay-verify="required"
+                            placeholder="请输入用户名" autocomplete="off" class="layui-input">
+                    </div>
                 </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">密码</label>
-                <div class="layui-input-block">
-                    <input type="password" name="password" placeholder="请输入新密码（留空则不修改）"
-                        autocomplete="off" class="layui-input">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">密码</label>
+                    <div class="layui-input-block">
+                        <input type="password" name="password" placeholder="请输入新密码（留空则不修改）"
+                            autocomplete="off" class="layui-input">
+                    </div>
                 </div>
-            </div>
-            <div class="layui-form-item">
-                <div class="layui-input-block">
-                    <button class="layui-btn" lay-submit lay-filter="submitPassword">提交</button>
-                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" lay-submit lay-filter="submitPassword">提交</button>
+                        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                    </div>
                 </div>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
 
     <script src="/static/layui/layui.js"></script>
