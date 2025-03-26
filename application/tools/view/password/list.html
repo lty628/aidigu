@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>密码列表</title>
+    <link rel="stylesheet" href="/static/layui/css/layui.css">
+</head>
+
+<body>
+    <div class="layui-container">
+        <div class="layui-row">
+            <div class="layui-col-md12">
+                <button class="layui-btn layui-btn-normal" id="addPassword">添加密码</button>
+            </div>
+        </div>
+        <div class="layui-row">
+            <div class="layui-col-md12">
+                <table id="passwordList" lay-filter="passwordList"></table>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/layui/layui.js"></script>
+    <script>
+        layui.use(['table', 'layer'], function () {
+            var table = layui.table;
+            var layer = layui.layer;
+
+            // 渲染表格
+            table.render({
+                elem: '#passwordList',
+                url: '/tools/Password/list',
+                page: true,
+                cols: [[
+                    { field: 'name', title: '网站名称', width: 150 },
+                    { field: 'url', title: '网站地址', width: 250 },
+                    { field: 'username', title: '用户名', width: 150 },
+                    { field: 'password', title: '密码', templet: function (d) {
+                        return '<a href="javascript:;" class="show-password" data-id="' + d.id + '">显示密码</a>';
+                    }, width: 120 },
+                    { title: '操作', toolbar: '#passwordBar', width: 180 }
+                ]],
+                done: function () {
+                    // 绑定显示密码事件
+                    $('.show-password').on('click', function () {
+                        var id = $(this).data('id');
+                        layer.prompt({
+                            formType: 1,
+                            title: '请输入主密码'
+                        }, function (pass, index) {
+                            layer.close(index);
+                            // 这里需要实现验证主密码并获取明文密码的逻辑
+                            // 示例代码，需替换为实际接口
+                            layer.msg('实际开发中需调用后端接口验证主密码并获取明文密码');
+                        });
+                    });
+                }
+            });
+
+            // 监听工具条
+            table.on('tool(passwordList)', function (obj) {
+                var data = obj.data;
+                if (obj.event === 'edit') {
+                    layer.open({
+                        title: '编辑密码',
+                        type: 2,
+                        area: ['80%', '80%'],
+                        content: '/tools/Password/addOrEdit?id=' + data.id,
+                        end: function () {
+                            table.reload('passwordList');
+                        }
+                    });
+                } else if (obj.event === 'del') {
+                    layer.confirm('确定要删除该记录吗？', function (index) {
+                        $.post('/tools/Password/del', { id: data.id }, function (res) {
+                            if (res.code === 0) {
+                                layer.msg('删除成功');
+                                obj.del();
+                            } else {
+                                layer.msg(res.msg);
+                            }
+                        });
+                        layer.close(index);
+                    });
+                }
+            });
+
+            // 添加密码按钮点击事件
+            $('#addPassword').on('click', function () {
+                layer.open({
+                    title: '添加密码',
+                    type: 2,
+                    area: ['80%', '80%'],
+                    content: '/tools/Password/addOrEdit',
+                    end: function () {
+                        table.reload('passwordList');
+                    }
+                });
+            });
+        });
+    </script>
+
+    <!-- 表格操作列模板 -->
+    <script type="text/html" id="passwordBar">
+        <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    </script>
+</body>
+
+</html>
