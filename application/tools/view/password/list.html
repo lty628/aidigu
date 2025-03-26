@@ -8,17 +8,21 @@
   <link rel="stylesheet" href="/static/layui/css/layui.css">
 </head>
 
-<body>
-  <div class="layui-container">
-    <div class="layui-row">
-      <div class="layui-col-md12">
-        <button class="layui-btn layui-btn-normal" id="addPassword">添加密码</button>
+<body class="main_body white">
+
+  <div class="layui-table-tool">
+    <div class="layui-table-tool-temp">
+      <div class="layui-btn-container"> 
+        <button class="layui-btn layui-btn-normal" id="addPassword">添加密码</button>  
       </div>
     </div>
-    <div class="layui-row">
-      <div class="layui-col-md12">
-        <table id="passwordList" lay-filter="passwordList"></table>
-      </div>
+    <div class="layui-table-tool-self"></div>
+  </div>
+
+
+  <div class="layui-layout">
+    <div style="padding: 16px;">
+      <table id="passwordList" lay-filter="passwordList"></table>
     </div>
   </div>
 
@@ -33,6 +37,12 @@
         elem: '#passwordList',
         url: '/tools/Password/list',
         page: true,
+        height: 'full-35', // 最大高度减去其他容器已占有的高度差
+        lineStyle: 'height: 70px;',
+        css: [ // 重设当前表格样式
+          '.layui-table-tool-temp{padding-right: 145px;}'
+        ].join(''),
+        cellMinWidth: 80,
         cols: [[
           { field: 'name', title: '网站名称', width: 150 },
           { field: 'url', title: '网站地址' },
