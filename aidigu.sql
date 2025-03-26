@@ -10,7 +10,8 @@ CREATE TABLE `wb_app`  (
   `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `app_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '应用名称',
   `app_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '链接',
-  `app_status` tinyint(3) UNSIGNED NOT NULL DEFAULT 1 COMMENT '0关闭，1站内，2站外）',
+  `fromuid` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '创建用户',
+  `app_status` tinyint(4) NOT NULL DEFAULT 1 COMMENT '0关闭，1开启（默认）',
   `app_type` tinyint(3) UNSIGNED NOT NULL DEFAULT 0 COMMENT '0全部，1pc,2手机',
   `app_image` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '图片地址',
   `remind_key` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '提醒key',
@@ -19,31 +20,36 @@ CREATE TABLE `wb_app`  (
   `create_time` datetime NOT NULL COMMENT '创建时间',
   `update_time` datetime NOT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 49 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 55 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of wb_app
 -- ----------------------------
-INSERT INTO `wb_app` VALUES (1, '我的云盘', '/cloud/show/', 1, 1, '/static/tools/common/images/cloud.jpg', '', '{\"title\":\"我的云盘\",\"shade\":0.8,\"closeBtn\":true,\"shadeClose\":false,\"area\":[\"80%\",\"80%\"],\"resize\":true,\"maxmin\":true,\"skin\":\"layui-layer-win10\",\"id\":\"app_1\",\"hideOnClose\":true,\"scrollbar\":false}', 0, '2024-01-16 11:31:53', '2024-02-06 16:35:23');
-INSERT INTO `wb_app` VALUES (2, '嘀友聊天', '/chat', 1, 1, '/static/tools/common/images/chat.jpg', 'chat', '{\"title\":\"嘀友聊天\",\"shade\":0,\"closeBtn\":true,\"shadeClose\":false,\"area\":[\"60%\",\"70%\"],\"resize\":true,\"maxmin\":true,\"id\":\"app_2\",\"hideOnClose\":true,\"scrollbar\":false}', 0, '2024-01-16 11:31:53', '2024-07-03 15:16:00');
-INSERT INTO `wb_app` VALUES (3, '嘀咕影院', '/tools/movie', 1, 1, '/static/tools/common/images/movie.jpg', '', '{\"title\":\"嘀咕影院\",\"shade\":0.8,\"closeBtn\":true,\"shadeClose\":false,\"area\":[\"80%\",\"80%\"],\"resize\":true,\"maxmin\":true,\"skin\":\"layui-layer-win10\",\"id\":\"app_3\",\"hideOnClose\":false,\"scrollbar\":false}', 0, '2024-01-16 11:31:53', '2024-01-22 18:33:56');
-INSERT INTO `wb_app` VALUES (5, 'BMI体重计算', '/tools/bmi', 1, 1, '/static/tools/common/images/bmi.jpg', '', '{\"title\":\"BMI体重计算\",\"shade\":0.8,\"closeBtn\":true,\"shadeClose\":false,\"area\":[\"80%\",\"80%\"],\"resize\":true,\"maxmin\":true,\"skin\":\"layui-layer-win10\",\"id\":\"app_5\",\"hideOnClose\":true,\"scrollbar\":false}', 0, '2024-01-16 11:31:53', '2024-01-22 18:33:56');
-INSERT INTO `wb_app` VALUES (9, '我的云盘', '/cloud/show/', 1, 2, '/static/tools/common/images/cloud.jpg', '', '{\"title\":\"我的云盘\",\"shade\":0.8,\"closeBtn\":true,\"shadeClose\":false,\"area\":[\"100%\",\"100%\"],\"resize\":false,\"maxmin\":false,\"skin\":\"layui-layer-win10\",\"id\":\"app_8\",\"hideOnClose\":true,\"scrollbar\":false}', 0, '2024-01-16 11:31:53', '2024-01-22 18:46:07');
-INSERT INTO `wb_app` VALUES (10, '嘀友聊天', '/chat', 1, 2, '/static/tools/common/images/chat.jpg', 'chat', '{\"title\":\"嘀友聊天\",\"shade\":0,\"closeBtn\":true,\"shadeClose\":false,\"area\":[\"100%\",\"100%\"],\"resize\":false,\"maxmin\":false,\"id\":\"app_9\",\"hideOnClose\":true,\"scrollbar\":false}', 0, '2024-01-16 11:31:53', '2024-07-03 15:16:04');
-INSERT INTO `wb_app` VALUES (11, '嘀咕影院', '/tools/movie', 1, 2, '/static/tools/common/images/movie.jpg', '', '{\"title\":\"嘀咕影院\",\"shade\":0.8,\"closeBtn\":true,\"shadeClose\":false,\"area\":[\"100%\",\"100%\"],\"resize\":false,\"maxmin\":false,\"skin\":\"layui-layer-win10\",\"id\":\"app_10\",\"hideOnClose\":false,\"scrollbar\":false}', 0, '2024-01-16 11:31:53', '2024-01-22 18:46:07');
-INSERT INTO `wb_app` VALUES (13, 'BMI体重计算', '/tools/bmi', 1, 2, '/static/tools/common/images/bmi.jpg', '', '{\"title\":\"BMI体重计算\",\"shade\":0.8,\"closeBtn\":true,\"shadeClose\":false,\"area\":[\"100%\",\"100%\"],\"resize\":false,\"maxmin\":false,\"skin\":\"layui-layer-win10\",\"id\":\"app_12\",\"hideOnClose\":true,\"scrollbar\":false}', 0, '2024-01-16 11:31:53', '2024-01-22 18:46:07');
-INSERT INTO `wb_app` VALUES (16, '话题', '/topic/', 1, 2, '/static/tools/common/images/topic.jpeg', '', '{}', 1, '2024-01-16 11:31:53', '2024-01-23 16:15:21');
-INSERT INTO `wb_app` VALUES (17, '群管理', '/tools/chat/list', 1, 1, '/static/tools/common/images/chatgroup.jpeg', '', '{\"title\":\"群管理\",\"shade\":0.8,\"closeBtn\":true,\"shadeClose\":false,\"area\":[\"70%\",\"80%\"],\"resize\":true,\"maxmin\":true,\"skin\":\"layui-layer-win10\",\"id\":\"app_11\",\"hideOnClose\":false,\"scrollbar\":false}', 0, '2024-01-30 11:16:10', '2024-02-06 11:28:44');
-INSERT INTO `wb_app` VALUES (18, '群管理', '/tools/chat/list', 1, 2, '/static/tools/common/images/chatgroup.jpeg', '', '{\"title\":\"群管理\",\"shade\":0.8,\"closeBtn\":true,\"shadeClose\":false,\"area\":[\"100%\",\"100%\"],\"resize\":false,\"maxmin\":false,\"skin\":\"layui-layer-win10\",\"id\":\"app_12\",\"hideOnClose\":false,\"scrollbar\":false}', 0, '2024-01-30 11:16:10', '2024-02-05 23:35:29');
-INSERT INTO `wb_app` VALUES (19, '邀请码', '/tools/userinvite/list', 1, 1, '/static/tools/common/images/userinvite.jpeg', '', '{\"title\":\"邀请码\",\"shade\":0.8,\"closeBtn\":true,\"shadeClose\":false,\"area\":[\"70%\",\"80%\"],\"resize\":true,\"maxmin\":true,\"skin\":\"layui-layer-win10\",\"id\":\"app_13\",\"hideOnClose\":false,\"scrollbar\":false}', 0, '2024-01-30 11:16:10', '2024-02-06 11:28:47');
-INSERT INTO `wb_app` VALUES (20, '邀请码', '/tools/userinvite/list', 1, 2, '/static/tools/common/images/userinvite.jpeg', '', '{\"title\":\"邀请码\",\"shade\":0.8,\"closeBtn\":true,\"shadeClose\":false,\"area\":[\"100%\",\"100%\"],\"resize\":false,\"maxmin\":false,\"skin\":\"layui-layer-win10\",\"id\":\"app_14\",\"hideOnClose\":false,\"scrollbar\":false}', 0, '2024-01-30 11:16:10', '2024-02-05 23:35:41');
-INSERT INTO `wb_app` VALUES (21, '收藏管理', '/tools/collect/list', 1, 1, '/static/tools/common/images/collect.jpeg', '', '{\"title\":\"收藏管理\",\"shade\":0.8,\"closeBtn\":true,\"shadeClose\":false,\"area\":[\"70%\",\"80%\"],\"resize\":true,\"maxmin\":true,\"skin\":\"layui-layer-win10\",\"id\":\"app_15\",\"hideOnClose\":false,\"scrollbar\":false}', 0, '2024-01-30 11:16:10', '2024-02-06 11:29:54');
-INSERT INTO `wb_app` VALUES (22, '收藏管理', '/tools/collect/list', 1, 2, '/static/tools/common/images/collect.jpeg', '', '{\"title\":\"收藏管理\",\"shade\":0.8,\"closeBtn\":true,\"shadeClose\":false,\"area\":[\"100%\",\"100%\"],\"resize\":false,\"maxmin\":false,\"skin\":\"layui-layer-win10\",\"id\":\"app_16\",\"hideOnClose\":false,\"scrollbar\":false}', 0, '2024-01-30 11:16:10', '2024-02-06 11:29:54');
-INSERT INTO `wb_app` VALUES (23, '素材管理', '/tools/sourcematerial/list', 1, 1, '/static/tools/common/images/sourcematerial.jpeg', '', '{\"title\":\"素材管理\",\"shade\":0.8,\"closeBtn\":true,\"shadeClose\":false,\"area\":[\"70%\",\"80%\"],\"resize\":true,\"maxmin\":true,\"skin\":\"layui-layer-win10\",\"id\":\"app_18\",\"hideOnClose\":false,\"scrollbar\":false}', 0, '2024-01-30 11:16:10', '2024-03-06 14:59:48');
-INSERT INTO `wb_app` VALUES (24, '素材管理', '/tools/sourcematerial/list', 1, 2, '/static/tools/common/images/sourcematerial.jpeg', '', '{\"title\":\"素材管理\",\"shade\":0.8,\"closeBtn\":true,\"shadeClose\":false,\"area\":[\"100%\",\"100%\"],\"resize\":false,\"maxmin\":false,\"skin\":\"layui-layer-win10\",\"id\":\"app_19\",\"hideOnClose\":false,\"scrollbar\":false}', 0, '2024-01-30 11:16:10', '2024-02-06 11:29:54');
-INSERT INTO `wb_app` VALUES (25, '鉴宝', 'http://jb.96xy.cn/', 0, 0, '/static/tools/common/images/chat2.jpg', '', '{\"title\":\"鉴宝\",\"shade\":0.8,\"closeBtn\":true,\"shadeClose\":false,\"area\":[\"100%\",\"100%\"],\"resize\":true,\"maxmin\":true,\"skin\":\"layui-layer-win10\",\"id\":\"app_25\",\"hideOnClose\":false,\"scrollbar\":false}', 2, '2024-01-16 11:31:53', '2024-07-01 19:58:48');
-INSERT INTO `wb_app` VALUES (47, '互动提醒', '/tools/notice/list', 1, 1, '/static/tools/common/images/notice.jpg', 'message', '{\"title\":\"互动提醒\",\"shade\":0.8,\"closeBtn\":true,\"shadeClose\":true,\"area\":[\"80%\",\"90%\"],\"resize\":true,\"maxmin\":true,\"skin\":\"layui-layer-win10\",\"id\":\"app_47\",\"hideOnClose\":false,\"scrollbar\":false}', 0, '2024-01-30 11:16:10', '2024-11-18 22:04:20');
-INSERT INTO `wb_app` VALUES (48, '互动提醒', '/tools/notice/list', 1, 2, '/static/tools/common/images/notice.jpg', 'message', '{\"title\":\"互动提醒\",\"shade\":0.8,\"closeBtn\":true,\"shadeClose\":false,\"area\":[\"100%\",\"100%\"],\"resize\":false,\"maxmin\":false,\"skin\":\"layui-layer-win10\",\"id\":\"app_48\",\"hideOnClose\":false,\"scrollbar\":false}', 0, '2024-01-30 11:16:10', '2024-11-18 22:04:21');
+INSERT INTO `wb_app` VALUES (1, '我的云盘', '/cloud/show/', 0, 1, 1, '/static/tools/common/images/cloud.jpg', '', '{\"title\":\"我的云盘\",\"shade\":0.8,\"closeBtn\":true,\"shadeClose\":false,\"area\":[\"80%\",\"80%\"],\"resize\":true,\"maxmin\":true,\"skin\":\"layui-layer-win10\",\"id\":\"app_1\",\"hideOnClose\":true,\"scrollbar\":false}', 0, '2024-01-16 11:31:53', '2024-02-06 16:35:23');
+INSERT INTO `wb_app` VALUES (2, '嘀友聊天', '/chat', 0, 1, 1, '/static/tools/common/images/chat.jpg', 'chat', '{\"title\":\"嘀友聊天\",\"shade\":0,\"closeBtn\":true,\"shadeClose\":false,\"area\":[\"60%\",\"70%\"],\"resize\":true,\"maxmin\":true,\"id\":\"app_2\",\"hideOnClose\":true,\"scrollbar\":false}', 0, '2024-01-16 11:31:53', '2024-07-03 15:16:00');
+INSERT INTO `wb_app` VALUES (3, '嘀咕影院', '/tools/movie', 0, 1, 1, '/static/tools/common/images/movie.jpg', '', '{\"title\":\"嘀咕影院\",\"shade\":0.8,\"closeBtn\":true,\"shadeClose\":false,\"area\":[\"80%\",\"80%\"],\"resize\":true,\"maxmin\":true,\"skin\":\"layui-layer-win10\",\"id\":\"app_3\",\"hideOnClose\":false,\"scrollbar\":false}', 0, '2024-01-16 11:31:53', '2024-01-22 18:33:56');
+INSERT INTO `wb_app` VALUES (5, 'BMI体重计算', '/tools/bmi', 0, 1, 1, '/static/tools/common/images/bmi.jpg', '', '{\"title\":\"BMI体重计算\",\"shade\":0.8,\"closeBtn\":true,\"shadeClose\":false,\"area\":[\"80%\",\"80%\"],\"resize\":true,\"maxmin\":true,\"skin\":\"layui-layer-win10\",\"id\":\"app_5\",\"hideOnClose\":true,\"scrollbar\":false}', 0, '2024-01-16 11:31:53', '2024-01-22 18:33:56');
+INSERT INTO `wb_app` VALUES (9, '我的云盘', '/cloud/show/', 0, 1, 2, '/static/tools/common/images/cloud.jpg', '', '{\"title\":\"我的云盘\",\"shade\":0.8,\"closeBtn\":true,\"shadeClose\":false,\"area\":[\"100%\",\"100%\"],\"resize\":false,\"maxmin\":false,\"skin\":\"layui-layer-win10\",\"id\":\"app_8\",\"hideOnClose\":true,\"scrollbar\":false}', 0, '2024-01-16 11:31:53', '2024-01-22 18:46:07');
+INSERT INTO `wb_app` VALUES (10, '嘀友聊天', '/chat', 0, 1, 2, '/static/tools/common/images/chat.jpg', 'chat', '{\"title\":\"嘀友聊天\",\"shade\":0,\"closeBtn\":true,\"shadeClose\":false,\"area\":[\"100%\",\"100%\"],\"resize\":false,\"maxmin\":false,\"id\":\"app_9\",\"hideOnClose\":true,\"scrollbar\":false}', 0, '2024-01-16 11:31:53', '2024-07-03 15:16:04');
+INSERT INTO `wb_app` VALUES (11, '嘀咕影院', '/tools/movie', 0, 1, 2, '/static/tools/common/images/movie.jpg', '', '{\"title\":\"嘀咕影院\",\"shade\":0.8,\"closeBtn\":true,\"shadeClose\":false,\"area\":[\"100%\",\"100%\"],\"resize\":false,\"maxmin\":false,\"skin\":\"layui-layer-win10\",\"id\":\"app_10\",\"hideOnClose\":false,\"scrollbar\":false}', 0, '2024-01-16 11:31:53', '2024-01-22 18:46:07');
+INSERT INTO `wb_app` VALUES (13, 'BMI体重计算', '/tools/bmi', 0, 1, 2, '/static/tools/common/images/bmi.jpg', '', '{\"title\":\"BMI体重计算\",\"shade\":0.8,\"closeBtn\":true,\"shadeClose\":false,\"area\":[\"100%\",\"100%\"],\"resize\":false,\"maxmin\":false,\"skin\":\"layui-layer-win10\",\"id\":\"app_12\",\"hideOnClose\":true,\"scrollbar\":false}', 0, '2024-01-16 11:31:53', '2024-01-22 18:46:07');
+INSERT INTO `wb_app` VALUES (16, '话题', '/topic/', 0, 1, 2, '/static/tools/common/images/topic.jpeg', '', '{}', 1, '2024-01-16 11:31:53', '2024-01-23 16:15:21');
+INSERT INTO `wb_app` VALUES (17, '群管理', '/tools/chat/list', 0, 1, 1, '/static/tools/common/images/chatgroup.jpeg', '', '{\"title\":\"群管理\",\"shade\":0.8,\"closeBtn\":true,\"shadeClose\":false,\"area\":[\"70%\",\"80%\"],\"resize\":true,\"maxmin\":true,\"skin\":\"layui-layer-win10\",\"id\":\"app_11\",\"hideOnClose\":false,\"scrollbar\":false}', 0, '2024-01-30 11:16:10', '2024-02-06 11:28:44');
+INSERT INTO `wb_app` VALUES (18, '群管理', '/tools/chat/list', 0, 1, 2, '/static/tools/common/images/chatgroup.jpeg', '', '{\"title\":\"群管理\",\"shade\":0.8,\"closeBtn\":true,\"shadeClose\":false,\"area\":[\"100%\",\"100%\"],\"resize\":false,\"maxmin\":false,\"skin\":\"layui-layer-win10\",\"id\":\"app_12\",\"hideOnClose\":false,\"scrollbar\":false}', 0, '2024-01-30 11:16:10', '2024-02-05 23:35:29');
+INSERT INTO `wb_app` VALUES (19, '邀请码', '/tools/userinvite/list', 0, 1, 1, '/static/tools/common/images/userinvite.jpeg', '', '{\"title\":\"邀请码\",\"shade\":0.8,\"closeBtn\":true,\"shadeClose\":false,\"area\":[\"70%\",\"80%\"],\"resize\":true,\"maxmin\":true,\"skin\":\"layui-layer-win10\",\"id\":\"app_13\",\"hideOnClose\":false,\"scrollbar\":false}', 0, '2024-01-30 11:16:10', '2024-02-06 11:28:47');
+INSERT INTO `wb_app` VALUES (20, '邀请码', '/tools/userinvite/list', 0, 1, 2, '/static/tools/common/images/userinvite.jpeg', '', '{\"title\":\"邀请码\",\"shade\":0.8,\"closeBtn\":true,\"shadeClose\":false,\"area\":[\"100%\",\"100%\"],\"resize\":false,\"maxmin\":false,\"skin\":\"layui-layer-win10\",\"id\":\"app_14\",\"hideOnClose\":false,\"scrollbar\":false}', 0, '2024-01-30 11:16:10', '2024-02-05 23:35:41');
+INSERT INTO `wb_app` VALUES (21, '收藏管理', '/tools/collect/list', 0, 1, 1, '/static/tools/common/images/collect.jpeg', '', '{\"title\":\"收藏管理\",\"shade\":0.8,\"closeBtn\":true,\"shadeClose\":false,\"area\":[\"70%\",\"80%\"],\"resize\":true,\"maxmin\":true,\"skin\":\"layui-layer-win10\",\"id\":\"app_15\",\"hideOnClose\":false,\"scrollbar\":false}', 0, '2024-01-30 11:16:10', '2024-02-06 11:29:54');
+INSERT INTO `wb_app` VALUES (22, '收藏管理', '/tools/collect/list', 0, 1, 2, '/static/tools/common/images/collect.jpeg', '', '{\"title\":\"收藏管理\",\"shade\":0.8,\"closeBtn\":true,\"shadeClose\":false,\"area\":[\"100%\",\"100%\"],\"resize\":false,\"maxmin\":false,\"skin\":\"layui-layer-win10\",\"id\":\"app_16\",\"hideOnClose\":false,\"scrollbar\":false}', 0, '2024-01-30 11:16:10', '2024-02-06 11:29:54');
+INSERT INTO `wb_app` VALUES (23, '素材管理', '/tools/sourcematerial/list', 0, 1, 1, '/static/tools/common/images/sourcematerial.jpeg', '', '{\"title\":\"素材管理\",\"shade\":0.8,\"closeBtn\":true,\"shadeClose\":false,\"area\":[\"70%\",\"80%\"],\"resize\":true,\"maxmin\":true,\"skin\":\"layui-layer-win10\",\"id\":\"app_18\",\"hideOnClose\":false,\"scrollbar\":false}', 0, '2024-01-30 11:16:10', '2024-03-06 14:59:48');
+INSERT INTO `wb_app` VALUES (24, '素材管理', '/tools/sourcematerial/list', 0, 1, 2, '/static/tools/common/images/sourcematerial.jpeg', '', '{\"title\":\"素材管理\",\"shade\":0.8,\"closeBtn\":true,\"shadeClose\":false,\"area\":[\"100%\",\"100%\"],\"resize\":false,\"maxmin\":false,\"skin\":\"layui-layer-win10\",\"id\":\"app_19\",\"hideOnClose\":false,\"scrollbar\":false}', 0, '2024-01-30 11:16:10', '2024-02-06 11:29:54');
+INSERT INTO `wb_app` VALUES (27, '人生重开模拟器', 'https://game.aidigu.cn/lifeRestart/', 0, 2, 1, 'https://game.aidigu.cn/lifeRestart/favicon.png', '', '{\"title\":\"人生重开模拟器\",\"shade\":0,\"closeBtn\":true,\"shadeClose\":false,\"area\":[\"70%\",\"80%\"],\"resize\":true,\"maxmin\":true,\"skin\":\"layui-layer-win10\",\"id\":\"app_27\",\"hideOnClose\":false,\"scrollbar\":false}', 0, '2024-01-30 11:16:10', '2025-03-22 02:09:14');
+INSERT INTO `wb_app` VALUES (28, '人生重开模拟器', 'https://game.aidigu.cn/lifeRestart/', 0, 2, 2, 'https://game.aidigu.cn/lifeRestart/favicon.png', '', '{\"title\":\"人生重开模拟器\",\"shade\":0,\"closeBtn\":true,\"shadeClose\":false,\"area\":[\"100%\",\"100%\"],\"resize\":false,\"maxmin\":false,\"skin\":\"layui-layer-win10\",\"id\":\"app_28\",\"hideOnClose\":false,\"scrollbar\":false}', 0, '2024-01-30 11:16:10', '2025-03-22 02:09:14');
+INSERT INTO `wb_app` VALUES (35, '今日热榜', 'https://hot.imsyy.top/#/', 0, 2, 1, 'https://game.aidigu.cn/static/app/images/jrrb.png', '', '{\"title\":\"今日热榜\",\"shade\":0.8,\"closeBtn\":true,\"shadeClose\":true,\"area\":[\"80%\",\"90%\"],\"resize\":true,\"maxmin\":true,\"skin\":\"layui-layer-win10\",\"id\":\"app_35\",\"hideOnClose\":false,\"scrollbar\":false}', 0, '2024-01-30 11:16:10', '2025-03-22 02:07:57');
+INSERT INTO `wb_app` VALUES (36, '今日热榜', 'https://hot.imsyy.top/#/', 0, 2, 2, 'https://game.aidigu.cn/static/app/images/jrrb.png', '', '{\"title\":\"今日热榜\",\"shade\":0.8,\"closeBtn\":true,\"shadeClose\":false,\"area\":[\"100%\",\"100%\"],\"resize\":false,\"maxmin\":false,\"skin\":\"layui-layer-win10\",\"id\":\"app_36\",\"hideOnClose\":false,\"scrollbar\":false}', 0, '2024-01-30 11:16:10', '2025-03-22 02:07:57');
+INSERT INTO `wb_app` VALUES (47, '互动提醒', '/tools/notice/list', 0, 1, 1, '/static/tools/common/images/notice.jpg', 'message', '{\"title\":\"互动提醒\",\"shade\":0.8,\"closeBtn\":true,\"shadeClose\":true,\"area\":[\"80%\",\"90%\"],\"resize\":true,\"maxmin\":true,\"skin\":\"layui-layer-win10\",\"id\":\"app_47\",\"hideOnClose\":false,\"scrollbar\":false}', 0, '2024-01-30 11:16:10', '2024-11-18 22:04:20');
+INSERT INTO `wb_app` VALUES (48, '互动提醒', '/tools/notice/list', 0, 1, 2, '/static/tools/common/images/notice.jpg', 'message', '{\"title\":\"互动提醒\",\"shade\":0.8,\"closeBtn\":true,\"shadeClose\":false,\"area\":[\"100%\",\"100%\"],\"resize\":false,\"maxmin\":false,\"skin\":\"layui-layer-win10\",\"id\":\"app_48\",\"hideOnClose\":false,\"scrollbar\":false}', 0, '2024-01-30 11:16:10', '2024-11-18 22:04:21');
+INSERT INTO `wb_app` VALUES (53, '密码工具', '/tools/password/list', 0, 1, 1, '/static/tools/common/images/password.jpg', '', '{\"title\":\"密码工具\",\"shade\":0.8,\"closeBtn\":true,\"shadeClose\":true,\"area\":[\"60%\",\"80%\"],\"resize\":true,\"maxmin\":true,\"skin\":\"layui-layer-win10\",\"id\":\"app_53\",\"hideOnClose\":false,\"scrollbar\":false}', 0, '2024-01-30 11:16:10', '2025-03-26 21:05:36');
+INSERT INTO `wb_app` VALUES (54, '密码工具', '/tools/password/list', 0, 1, 2, '/static/tools/common/images/password.jpg', '', '{\"title\":\"密码工具\",\"shade\":0.8,\"closeBtn\":true,\"shadeClose\":false,\"area\":[\"100%\",\"100%\"],\"resize\":false,\"maxmin\":false,\"skin\":\"layui-layer-win10\",\"id\":\"app_54\",\"hideOnClose\":false,\"scrollbar\":false}', 0, '2024-01-30 11:16:10', '2025-03-26 21:05:36');
 
 -- ----------------------------
 -- Table structure for wb_badword
@@ -321,6 +327,27 @@ CREATE TABLE `wb_message`  (
 -- ----------------------------
 
 -- ----------------------------
+-- Table structure for wb_password
+-- ----------------------------
+DROP TABLE IF EXISTS `wb_password`;
+CREATE TABLE `wb_password`  (
+  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `uid` int(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '创建用户',
+  `url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '网站地址',
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '网站名称',
+  `username` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '用户名',
+  `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '密码',
+  `salt` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '盐',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '密码表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of wb_password
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for wb_reminder
 -- ----------------------------
 DROP TABLE IF EXISTS `wb_reminder`;
@@ -337,6 +364,23 @@ CREATE TABLE `wb_reminder`  (
 
 -- ----------------------------
 -- Records of wb_reminder
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for wb_search
+-- ----------------------------
+DROP TABLE IF EXISTS `wb_search`;
+CREATE TABLE `wb_search`  (
+  `search_id` int(11) NOT NULL AUTO_INCREMENT,
+  `keyword` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '关键词',
+  `uid` bigint(20) UNSIGNED NOT NULL DEFAULT 0 COMMENT '创建人，默认0',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  `count` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '搜索数量',
+  PRIMARY KEY (`search_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of wb_search
 -- ----------------------------
 
 -- ----------------------------
@@ -389,21 +433,50 @@ CREATE TABLE `wb_topic`  (
   `create_time` datetime NOT NULL COMMENT '创建时间',
   `count` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '话题数量',
   PRIMARY KEY (`topic_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = DYNAMIC;
-
-DROP TABLE IF EXISTS `wb_search`;
-CREATE TABLE `wb_search`  (
-  `search_id` int(11) NOT NULL AUTO_INCREMENT,
-  `keyword` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '关键词',
-  `uid` bigint(20) UNSIGNED NOT NULL DEFAULT 0 COMMENT '创建人，默认0',
-  `create_time` datetime NOT NULL COMMENT '创建时间',
-  `count` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '搜索数量',
-  PRIMARY KEY (`search_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 40 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of wb_topic
 -- ----------------------------
+INSERT INTO `wb_topic` VALUES (1, '#你喜欢什么类型的电影、电视?#', 0, '2023-10-12 11:55:13', 1);
+INSERT INTO `wb_topic` VALUES (2, '#你平时喜欢什么类型的穿着打扮#', 0, '2023-10-12 11:55:30', 0);
+INSERT INTO `wb_topic` VALUES (3, '#你最喜欢的颜色#', 0, '2023-10-12 11:55:55', 0);
+INSERT INTO `wb_topic` VALUES (4, '#你听过最好听的音乐#', 0, '2023-10-12 11:56:37', 0);
+INSERT INTO `wb_topic` VALUES (5, '#你喜欢游泳吗#', 0, '2023-10-12 11:56:50', 0);
+INSERT INTO `wb_topic` VALUES (6, '#你最喜欢什么牌子的衣服#', 0, '2023-10-12 11:57:04', 0);
+INSERT INTO `wb_topic` VALUES (7, '#你喜欢养花吗？#', 0, '2023-10-12 11:58:43', 0);
+INSERT INTO `wb_topic` VALUES (8, '#你周末一般都喜欢干嘛？#', 0, '2023-10-12 11:59:25', 0);
+INSERT INTO `wb_topic` VALUES (9, '#你最喜欢的一项运动#', 0, '2023-10-12 12:00:22', 0);
+INSERT INTO `wb_topic` VALUES (10, '#如果这个时候变成超人，你最想做什么？#', 0, '2023-10-12 12:11:09', 0);
+INSERT INTO `wb_topic` VALUES (11, '#你最喜欢哪种食物，你最喜欢哪种口味？#', 0, '2023-10-12 12:11:29', 0);
+INSERT INTO `wb_topic` VALUES (12, '#你玩过最好玩的游戏#', 0, '2023-10-12 12:11:43', 0);
+INSERT INTO `wb_topic` VALUES (13, '#你知道今年的流行语有什么？#', 0, '2023-10-12 12:14:05', 0);
+INSERT INTO `wb_topic` VALUES (14, '#你最近去过的景点或旅游城市#', 0, '2023-10-12 12:15:11', 0);
+INSERT INTO `wb_topic` VALUES (15, '#你最近尝试过的美食或饮料#', 0, '2023-10-12 12:15:23', 0);
+INSERT INTO `wb_topic` VALUES (16, '#你最近遇到的有趣的人或事#', 0, '2023-10-12 12:15:32', 0);
+INSERT INTO `wb_topic` VALUES (17, '#你最近追的电视剧或综艺节目#', 0, '2023-10-12 12:15:58', 0);
+INSERT INTO `wb_topic` VALUES (18, '#你最近参加过的文化活动或体育比赛#', 0, '2023-10-12 12:16:46', 0);
+INSERT INTO `wb_topic` VALUES (19, '#你最喜欢的旅游目的地是哪里#', 0, '2023-10-12 12:17:26', 0);
+INSERT INTO `wb_topic` VALUES (20, '#你最喜欢的明星是谁#', 0, '2023-10-12 12:18:26', 0);
+INSERT INTO `wb_topic` VALUES (21, '#女生喜欢你的暗示有什么#', 0, '2023-10-12 16:46:19', 0);
+INSERT INTO `wb_topic` VALUES (22, '#致回不去的青春#', 0, '2023-10-12 16:49:57', 0);
+INSERT INTO `wb_topic` VALUES (23, '#你的头像有特殊含义吗？#', 0, '2023-11-01 17:51:50', 0);
+INSERT INTO `wb_topic` VALUES (24, '#我爱说实话#', 0, '2023-12-20 15:24:26', 0);
+INSERT INTO `wb_topic` VALUES (25, '#又要到饭了#', 0, '2023-12-21 09:24:47', 0);
+INSERT INTO `wb_topic` VALUES (26, '#圣诞故事#', 0, '2023-12-22 18:07:07', 0);
+INSERT INTO `wb_topic` VALUES (27, '#2024新年目标#', 0, '2024-01-03 14:09:06', 0);
+INSERT INTO `wb_topic` VALUES (28, '#舔狗日记#', 0, '2024-01-12 16:27:28', 0);
+INSERT INTO `wb_topic` VALUES (29, '#观影分享#', 0, '2024-01-16 23:20:17', 0);
+INSERT INTO `wb_topic` VALUES (30, '#每天睡多久#', 1, '2024-03-21 10:28:51', 0);
+INSERT INTO `wb_topic` VALUES (31, '#以后还能干些什么呢#', 1, '2024-03-28 11:09:51', 0);
+INSERT INTO `wb_topic` VALUES (32, '#Rust默写#', 45, '2024-04-09 11:48:05', 0);
+INSERT INTO `wb_topic` VALUES (33, '#中午吃什么#', 1, '2024-06-18 10:45:33', 0);
+INSERT INTO `wb_topic` VALUES (34, '#音乐分享#', 31, '2024-07-01 15:25:52', 0);
+INSERT INTO `wb_topic` VALUES (35, '#2025新年目标#', 1, '2024-12-12 16:15:45', 0);
+INSERT INTO `wb_topic` VALUES (36, '#AI 教学#', 40, '2025-01-02 11:09:29', 0);
+INSERT INTO `wb_topic` VALUES (37, '#rust学习 AI 语录#', 40, '2025-01-02 11:10:27', 0);
+INSERT INTO `wb_topic` VALUES (38, '#你们还有爱好吗#', 1, '2025-01-03 08:58:05', 0);
+INSERT INTO `wb_topic` VALUES (39, '##', 1, '2025-02-07 09:41:20', 0);
 
 -- ----------------------------
 -- Table structure for wb_user

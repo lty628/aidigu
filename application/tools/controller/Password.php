@@ -15,30 +15,30 @@ class Password extends Controller
     }
 
     // 密码保存工具
-    public function createTable()
-    {
-        try {
-            // 自增id, uid, 网站地址， 网站名称， 用户名， 密码， 盐， 创建时间， 更新时间
-            $sql = "CREATE TABLE IF NOT EXISTS `wb_password` (
-                `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-                `uid` int(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '创建用户',
-                `url` varchar(255) NOT NULL DEFAULT '' COMMENT '网站地址',
-                `name` varchar(255) NOT NULL DEFAULT '' COMMENT '网站名称',
-                `username` varchar(255) NOT NULL DEFAULT '' COMMENT '用户名',
-                `password` varchar(255) NOT NULL DEFAULT '' COMMENT '密码',
-                `salt` varchar(255) NOT NULL DEFAULT '' COMMENT '盐',
-                `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-                `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-                PRIMARY KEY (`id`)
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='密码表';";
-            Db::execute($sql);
-            return json(['code' => 0, 'msg' => '表创建成功']);
-        } catch (\Exception $e) {
-            // 记录错误日志
-            \think\facade\Log::error('创建表失败: ' . $e->getMessage());
-            return json(['code' => -1, 'msg' => '表创建失败，请稍后重试']);
-        }
-    }
+    // public function createTable()
+    // {
+    //     try {
+    //         // 自增id, uid, 网站地址， 网站名称， 用户名， 密码， 盐， 创建时间， 更新时间
+    //         $sql = "CREATE TABLE IF NOT EXISTS `wb_password` (
+    //             `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+    //             `uid` int(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '创建用户',
+    //             `url` varchar(255) NOT NULL DEFAULT '' COMMENT '网站地址',
+    //             `name` varchar(255) NOT NULL DEFAULT '' COMMENT '网站名称',
+    //             `username` varchar(255) NOT NULL DEFAULT '' COMMENT '用户名',
+    //             `password` varchar(255) NOT NULL DEFAULT '' COMMENT '密码',
+    //             `salt` varchar(255) NOT NULL DEFAULT '' COMMENT '盐',
+    //             `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    //             `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    //             PRIMARY KEY (`id`)
+    //         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='密码表';";
+    //         Db::execute($sql);
+    //         return json(['code' => 0, 'msg' => '表创建成功']);
+    //     } catch (\Exception $e) {
+    //         // 记录错误日志
+    //         \think\facade\Log::error('创建表失败: ' . $e->getMessage());
+    //         return json(['code' => -1, 'msg' => '表创建失败，请稍后重试']);
+    //     }
+    // }
 
     public function list()
     {
