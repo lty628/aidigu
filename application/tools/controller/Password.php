@@ -51,7 +51,7 @@ class Password extends Controller
                 if (!is_numeric($page) || !is_numeric($limit)) {
                     return json(['code' => -1, 'msg' => '页码和每页数量必须为数字']);
                 }
-                $list = Db::name('password')->where('uid', $this->uid)->limit($limit)->page($page)
+                $list = Db::name('password')->field('id,url,name,username,create_time,update_time')->where('uid', $this->uid)->limit($limit)->page($page)
                     ->select();
                 $count = Db::name('password')->where('uid', $this->uid)->count();
                 return json(['code' => 0, 'data' => $list, 'count' => $count]);
@@ -70,31 +70,52 @@ class Password extends Controller
     {
         try {
             $data = input('post.');
-            // 数据验证
-            $validate = new \think\Validate([
-                'url' => 'require|url',
-                'name' => 'require',
-                'username' => 'require',
-                'password' => 'require'
-            ]);
+
+            if (isset($data['id'])) {
+                // 验证记录是否属于当前用户
+                $count = Db::name('password')->where('id', $data['id'])->where('uid', $this->uid)->count();
+                
+                if ($count == 0) {
+                    return json(['code' => -1,'msg' => '您无权编辑该记录']);
+                }
+
+                $validate = new \think\Validate([
+                    'url' =>'url',
+                    'name' =>'require',
+                    'username' =>'require',
+                ]);
+            } else {
+                // 数据验证
+                $validate = new \think\Validate([
+                    'url' => 'require|url',
+                    'name' => 'require',
+                    'username' => 'require',
+                    'password' => 'require'
+                ]);
+            }
+            
 
             if (!$validate->check($data)) {
                 return json(['code' => -1, 'msg' => $validate->getError()]);
             }
-
-            // 密码加密
-            $salt = md5(uniqid(mt_rand(), true));
-            $encryptedPassword = password_hash($data['password'] . $salt, PASSWORD_DEFAULT);
 
             $saveData = [
                 'uid' => $this->uid,
                 'url' => $data['url'],
                 'name' => $data['name'],
                 'username' => $data['username'],
-                'password' => $encryptedPassword,
-                'salt' => $salt
             ];
 
+            
+
+            if (isset($data['password']) && $data['password']) {
+                $salt = md5(uniqid(mt_rand(), true));
+                $encryptedPassword = $this->encryptPassword($data['password'], $salt);
+                $saveData['password'] = $encryptedPassword;
+                $saveData['salt'] = $salt;
+            }
+
+            // 密码加密
             if (isset($data['id'])) {
                 // 更新操作
                 Db::name('password')->where('id', $data['id'])->update($saveData);
@@ -138,5 +159,46 @@ class Password extends Controller
         // $count = Db::name('app')->where('fromuid', $this->uid)->count();
         // if ($count >= 10) $this->error('创建群数量不能多余10个');
         return $this->fetch();
+    }
+
+    public function edit()
+    {
+        $id = input('get.id');
+        $data = Db::name('password')->where('uid', $this->uid)->where('id', $id)->find();
+        if (!$data) $this->error('参数错误');
+        $this->assign('data', $data);
+        return $this->fetch('edit');
+    }
+
+    public function getPassword()
+    {
+        $id = input('post.id');
+        $data = Db::name('password')->field('password,salt')->where('uid', $this->uid)->where('id', $id)->find();
+        if (!$data) return json(['code' => -1,'msg' => '参数错误']);
+        // password_hash 解码
+        $returnData['password'] = $this->decryptPassword($data['password'], $data['salt']);
+        return json(['code' => 0,'msg' => '获取成功', 'data' => $returnData]);
+    }
+
+    protected function encryptPassword($password, $salt)
+    {
+       // aes 加密
+       $cipher = "AES-256-CBC";
+       $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length($cipher));
+       $encryptedData = openssl_encrypt($password, $cipher, $salt, 0, $iv);
+       // 将 IV 和加密数据拼接，使用分隔符分隔，这里用冒号
+       $encryptedPassword = base64_encode($iv) . ':' . $encryptedData;
+       return $encryptedPassword;
+    }
+
+    protected function decryptPassword($encryptedPassword, $salt)
+    {
+        // aes 解密
+        $cipher = "AES-256-CBC";
+        // 分离 IV 和加密数据
+        list($base64Iv, $encryptedData) = explode(':', $encryptedPassword, 2);
+        $iv = base64_decode($base64Iv);
+        $decryptedPassword = openssl_decrypt($encryptedData, $cipher, $salt, 0, $iv);
+        return $decryptedPassword;
     }
 }

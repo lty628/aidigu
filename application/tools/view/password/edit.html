@@ -11,25 +11,25 @@
 <body>
     <div class="layui-container">
         <form class="layui-form" id="passwordForm">
-            <input type="hidden" name="id" value="{$id}">
+            <input type="hidden" name="id" value="{$data['id']}">
             <div class="layui-form-item">
                 <label class="layui-form-label">网站名称</label>
                 <div class="layui-input-block">
-                    <input type="text" name="name" value="{$name}" required lay-verify="required"
+                    <input type="text" name="name" value="{$data['name']}" required lay-verify="required"
                         placeholder="请输入网站名称" autocomplete="off" class="layui-input">
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">网站地址</label>
                 <div class="layui-input-block">
-                    <input type="text" name="url" value="{$url}" required lay-verify="required|url"
+                    <input type="text" name="url" value="{$data['url']}" required lay-verify="required|url"
                         placeholder="请输入网站地址" autocomplete="off" class="layui-input">
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">用户名</label>
                 <div class="layui-input-block">
-                    <input type="text" name="username" value="{$username}" required lay-verify="required"
+                    <input type="text" name="username" value="{$data['username']}" required lay-verify="required"
                         placeholder="请输入用户名" autocomplete="off" class="layui-input">
                 </div>
             </div>
@@ -54,6 +54,7 @@
         layui.use(['form', 'layer'], function () {
             var form = layui.form;
             var layer = layui.layer;
+            var $ = layui.$;
 
             // 监听表单提交
             form.on('submit(submitPassword)', function (data) {
