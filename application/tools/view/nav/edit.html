@@ -162,8 +162,10 @@
                 },
                 done: function (res) {
                     // 若上传失败
-                    if (res.code > 0) {
-                        return layer.msg('上传失败');
+                    if (res.status != 1) {
+                        $('#ID-upload-img').attr('src', '');
+                        element.progress('filter-progress', '0%'); // 可配合 layui 进度条元素使用
+                        return layer.msg(res.msg);
                     }
                     if (res.status == 1) {
                         var app_image = res.data.media_info + '.' + res.data.media_type
