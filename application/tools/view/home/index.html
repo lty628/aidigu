@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>爱嘀咕开源项目介绍</title>
+    <!-- 引入 Google Fonts 的 Inter 字体 -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- 引入 Font Awesome 图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        :root {
+            /* 从环境变量获取的颜色参数 */
+            --primary-color: #009688;
+            /* 主色调，可在 example_env 中修改 PRIMARY_COLOR 进行调整 */
+            --secondary-color: #607D8B;
+            /* 次色调，可在 example_env 中修改 SECONDARY_COLOR 进行调整 */
+            --background-color: #ffffff;
+            --text-color: #212121;
+            --light-background: #f5f5f5;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --hover-shadow: rgba(0, 150, 136, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--text-color);
+            background-color: var(--background-color);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* 导航栏样式 */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 1rem 2rem;
+            background: var(--background-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px var(--shadow-color);
+            z-index: 1000;
+        }
+
+        .navbar-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .navbar-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .navbar-links a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .navbar-links a:hover {
+            color: var(--primary-color);
+        }
+
+        /* 通用容器样式 */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 7rem 2rem 4rem;
+        }
+
+        h2 {
+            font-size: 2.8rem;
+            margin-bottom: 2.5rem;
+            text-align: center;
+            color: var(--text-color);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        /* 英雄部分样式 */
+        .hero {
+            height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: url('https://via.placeholder.com/1920x1080?text=Aidigu+Background') no-repeat center center/cover;
+            position: relative;
+        }
+
+        .hero::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .hero-content {
+            text-align: center;
+            color: white;
+            z-index: 1;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero-content p {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 2rem;
+            background: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #00796b;
+        }
+
+        /* 功能介绍样式 */
+        .feature-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2.5rem;
+            margin-top: 4rem;
+        }
+
+        .feature-item {
+            background-color: var(--light-background);
+            padding: 2.5rem;
+            border-radius: 20px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 6px -1px var(--shadow-color), 0 2px 4px -1px var(--shadow-color);
+        }
+
+        .feature-item:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 15px -3px var(--hover-shadow), 0 4px 6px -2px var(--hover-shadow);
+        }
+
+        .feature-item i {
+            font-size: 3.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-item h3 {
+            font-size: 1.7rem;
+            margin-bottom: 1rem;
+            color: var(--text-color);
+            font-weight: 600;
+        }
+
+        .feature-item p {
+            font-size: 1rem;
+            color: var(--secondary-color);
+        }
+
+        /* 地址块样式 */
+        .address-container {
+            margin-top: 4rem;
+        }
+
+        .address-block {
+            background-color: var(--light-background);
+            padding: 2rem;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.8rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px -1px var(--shadow-color);
+        }
+
+        .address-block:last-child {
+            margin-bottom: 0;
+        }
+
+        .address-block:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px -3px var(--hover-shadow), 0 4px 6px -2px var(--hover-shadow);
+        }
+
+        .address-block i {
+            font-size: 2.2rem;
+            margin-right: 1.8rem;
+            color: var(--primary-color);
+            transition: transform 0.3s ease;
+        }
+
+        .address-block:hover i {
+            transform: scale(1.1);
+        }
+
+        .address-block a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-size: 1.4rem;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .address-block a:hover {
+            color: #0056b3;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 1rem;
+            }
+
+            .navbar-links {
+                gap: 1.2rem;
+            }
+
+            .container {
+                padding: 5rem 1rem 3rem;
+            }
+
+            h2 {
+                font-size: 2.2rem;
+            }
+
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-content p {
+                font-size: 1.2rem;
+            }
+
+            .feature-container {
+                grid-template-columns: 1fr;
+            }
+
+            .address-block {
+                padding: 1.5rem;
+            }
+
+            .address-block i {
+                font-size: 1.8rem;
+            }
+
+            .address-block a {
+                font-size: 1.2rem;
+            }
+        }
+
+        .footer {
+            background-color: var(--light-background);
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 4rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-links a {
+            color: var(--text-color);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .footer p {
+            color: var(--secondary-color);
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 顶部导航 -->
+    <div class="navbar">
+        <a href="#" class="navbar-logo">爱嘀咕</a>
+        <div class="navbar-links">
+            <a href="#open-source">开源地址</a>
+            <a href="#features">功能介绍</a>
+            <a href="#home">首页</a>
+        </div>
+    </div>
+
+    <!-- 英雄部分 -->
+    <div id="home" class="hero">
+        <div class="hero-content">
+            <h1>爱嘀咕开源项目</h1>
+            <p>探索全新开源世界，满足您的多样需求</p>
+            <a href="#" class="btn">了解更多</a>
+        </div>
+    </div>
+
+    <!-- 开源地址和项目地址 -->
+    <div id="open-source" class="container">
+        <h2>开源地址和项目地址</h2>
+        <div class="address-container">
+            <div class="address-block">
+                <i class="fab fa-github"></i>
+                <a href="https://github.com/your-repo">https://github.com/your-repo</a>
+            </div>
+            <div class="address-block">
+                <i class="fas fa-link"></i>
+                <a href="https://aidigu.com">https://aidigu.com</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 网站预览图 -->
+    <div class="preview-image">
+        <img src="https://via.placeholder.com/1200x600?text=Aidigu+Preview" alt="爱嘀咕网站预览图">
+    </div>
+    <!-- 功能介绍 -->
+    <div id="features" class="container">
+        <h2>爱嘀咕功能介绍</h2>
+        <div class="feature-container">
+            <div class="feature-item">
+                <i class="fas fa-comments"></i>
+                <h3>私信</h3>
+                <p>用户可以与其他用户进行一对一的私密交流。</p>
+            </div>
+            <div class="feature-item">
+                <i class="fas fa-hashtag"></i>
+                <h3>话题</h3>
+                <p>用户可以创建和参与各种话题讨论，分享自己的观点和经验。</p>
+            </div>
+            <div class="feature-item">
+                <i class="fas fa-cloud"></i>
+                <h3>网盘</h3>
+                <p>提供安全可靠的云存储服务，方便用户存储和分享文件。</p>
+            </div>
+            <div class="feature-item">
+                <i class="fas fa-star"></i>
+                <h3>收藏</h3>
+                <p>用户可以收藏感兴趣的内容，方便后续查看。</p>
+            </div>
+            <div class="feature-item">
+                <i class="fas fa-compass"></i>
+                <h3>导航</h3>
+                <p>提供便捷的导航功能，帮助用户快速找到所需的服务和内容。</p>
+            </div>
+            <!-- 新增搜索功能介绍 -->
+            <div class="feature-item">
+                <i class="fas fa-search"></i>
+                <h3>搜索</h3>
+                <p>支持多种搜索方式，可快速找到用户、话题、内容等信息。</p>
+            </div>
+            <!-- 新增关注功能介绍 -->
+            <div class="feature-item">
+                <i class="fas fa-user-plus"></i>
+                <h3>关注</h3>
+                <p>用户可以关注感兴趣的人，及时获取他们的最新动态。</p>
+            </div>
+            <!-- 新增隐身功能介绍 -->
+            <div class="feature-item">
+                <i class="fas fa-eye-slash"></i>
+                <h3>隐身</h3>
+                <p>开启隐身模式后，用户的在线状态将对其他用户隐藏。</p>
+            </div>
+            <!-- 新增广场功能介绍 -->
+            <div class="feature-item">
+                <i class="fas fa-globe"></i>
+                <h3>广场</h3>
+                <p>汇聚各类热门话题和动态，用户可以浏览和参与讨论。</p>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <!-- 新增友情链接 -->
+        <div class="footer-links">
+            <a href="#">关于我们</a>
+            <a href="#">联系我们</a>
+            <a href="#">隐私政策</a>
+            <a href="#">服务条款</a>
+        </div>
+        <!-- 新增友情链接部分 -->
+        <div class="footer-links">
+            <h4>友情链接</h4>
+            <a href="https://example1.com">示例网站1</a>
+            <a href="https://example2.com">示例网站2</a>
+        </div>
+        <p>备案号：<a href="https://beian.miit.gov.cn/" target="_blank">粤 ICP 备 12345678 号</a></p>
+        <p>&copy; 2025 爱嘀咕. 保留所有权利。</p>
+    </footer>
+</body>
+
+</html>
