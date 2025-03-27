@@ -98,6 +98,9 @@ class SettingInfo extends Base
 		$saveUpload = input('get.backgroundVal');
 		// dump($saveUpload);die;
 		$saveUpload = json_decode($saveUpload, true);	
+		if (!$saveUpload || !isset($saveUpload['image_path'])) {
+			$saveUpload['image_path'] = '';
+		}
 		$userid = getLoginUid();
 		$result = UserModel::where('uid', $userid)->update([
 			'theme'=>$saveUpload['image_path'],

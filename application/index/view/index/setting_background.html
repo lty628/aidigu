@@ -120,10 +120,14 @@
 			</div>
 			<div class="uploadhtml formsubmit">
 				<button type="button" class="layui-btn layui-bg-blue" id="uploadImage">
-				  <i class="layui-icon">&#xe67c;</i>上传图片
+				  <i class="layui-icon">&#xe67c;</i>上传
 				</button>
 				<button type="button" class="layui-btn layui-bg-blue" id="saveUpload">
 				  保存
+				</button>
+				<!-- 红色按钮 -->
+				<button type="reset" value="重置" class="layui-btn layui-bg-blue" id="resetImage">
+					重置
 				</button>
 			</div>
 		</div>
@@ -146,6 +150,8 @@
 			      		var data = res.data;
 			      		$(".backgroundhtml img").attr('src', data.image_path);
 			      		$("#backgroundVal").val(JSON.stringify(data));
+			      	} else {
+			      		alertMsg(res.msg);
 			      	}
 			    }
 			    ,error: function(){
@@ -153,9 +159,15 @@
 			    }
 			  });
 			});
-			$("#saveUpload").click(function(event) {
-				var backgroundVal = $("#backgroundVal").val();
-				if (!backgroundVal) return false;
+			$("#saveUpload,#resetImage").click(function(event) {
+				if ($(this).attr('type') == 'reset') {
+					$(".backgroundhtml img").attr('src', '');
+					$("#backgroundVal").val('');
+				} else {
+					var backgroundVal = $("#backgroundVal").val();
+					if (!backgroundVal) return false;
+				}
+				
 				$.ajax({
 					url: '/index/setting/saveTheme',
 					type: 'GET',
@@ -164,7 +176,7 @@
 				})
 				.done(function(data) {
 					if (data.status) {
-						alertMsg('上传成功',0,1);
+						alertMsg('已保存',0,1);
 					} else {
 						alertMsg(data.msg);
 					}
