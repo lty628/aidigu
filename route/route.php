@@ -93,3 +93,6 @@ Route::get('/:name/del/message/:msg_id', $module . '/Ajax/delMessage')->pattern(
 // Route::domain($url, function () {
 
 // });
+Route::domain('aidigu.cn', function () {
+    Route::get('/', 'tools/home/index');
+});
