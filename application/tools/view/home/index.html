@@ -303,67 +303,86 @@
     </style>
     <style>
         :root {
-            --primary-color: #FF69B4;  /* 更鲜艳的粉色作为主色调 */
-            --secondary-color: #FFB6C1;  /* 稍浅的粉色作为次色调 */
-            --background-color: #FFF0F5;  /* 淡粉色背景 */
-            --text-color: #8B4513;  /* 暖棕色文字，增加对比 */
+            --primary-color: #FF69B4;
+            /* 更鲜艳的粉色作为主色调 */
+            --secondary-color: #FFB6C1;
+            /* 稍浅的粉色作为次色调 */
+            --background-color: #FFF0F5;
+            /* 淡粉色背景 */
+            --text-color: #8B4513;
+            /* 暖棕色文字，增加对比 */
             --light-background: #FFFFFF;
             --shadow-color: rgba(255, 105, 180, 0.1);
             --hover-shadow: rgba(255, 105, 180, 0.3);
         }
-    
+
         body {
-            font-family: 'Comic Sans MS', cursive, sans-serif;  /* 更活泼的字体 */
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            /* 更活泼的字体 */
         }
-    
+
         /* 导航栏样式优化 */
         .navbar {
             background: var(--light-background);
             box-shadow: 0 2px 4px var(--shadow-color);
-            border-bottom: 3px solid var(--primary-color);  /* 添加底部边框 */
+            border-bottom: 3px solid var(--primary-color);
+            /* 添加底部边框 */
         }
-    
+
         /* 英雄部分样式优化 */
         .hero {
             background: url('https://via.placeholder.com/1920x1080?text=Aidigu+Background&bg=FFC0CB') no-repeat center center/cover;
-            animation: changeBackground 10s infinite;  /* 添加背景动画 */
+            animation: changeBackground 10s infinite;
+            /* 添加背景动画 */
         }
-    
+
         @keyframes changeBackground {
-            0% { background-color: #FFC0CB; }
-            50% { background-color: #FFB6C1; }
-            100% { background-color: #FFC0CB; }
+            0% {
+                background-color: #FFC0CB;
+            }
+
+            50% {
+                background-color: #FFB6C1;
+            }
+
+            100% {
+                background-color: #FFC0CB;
+            }
         }
-    
+
         .hero-content h1 {
             color: var(--primary-color);
             text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.5);
         }
-    
+
         .btn {
             background: var(--primary-color);
             border-radius: 25px;
             box-shadow: 0 4px 6px -1px var(--shadow-color);
             transition: all 0.3s ease;
         }
-    
+
         .btn:hover {
-            transform: scale(1.1);  /* 悬停时放大按钮 */
+            transform: scale(1.1);
+            /* 悬停时放大按钮 */
         }
-    
+
         /* 功能介绍样式优化 */
         .feature-item {
             background-color: var(--light-background);
             border-radius: 20px;
-            border: 2px solid var(--secondary-color);  /* 添加边框 */
-            transform: rotate(-2deg);  /* 添加旋转效果 */
+            border: 2px solid var(--secondary-color);
+            /* 添加边框 */
+            transform: rotate(-2deg);
+            /* 添加旋转效果 */
             transition: all 0.3s ease;
         }
-    
+
         .feature-item:hover {
-            transform: rotate(0deg) translateY(-8px);  /* 悬停时恢复旋转并上移 */
+            transform: rotate(0deg) translateY(-8px);
+            /* 悬停时恢复旋转并上移 */
         }
-    
+
         /* 地址块样式优化 */
         .address-block {
             background-color: var(--light-background);
@@ -371,32 +390,40 @@
             border: 2px solid var(--secondary-color);
             transition: all 0.3s ease;
         }
-    
+
         .address-block:hover {
-            transform: scale(1.05);  /* 悬停时放大 */
+            transform: scale(1.05);
+            /* 悬停时放大 */
         }
-    
+
         /* 页脚样式优化 */
         .footer {
             background: var(--light-background);
             box-shadow: 0 -2px 4px var(--shadow-color);
-            border-top: 3px solid var(--primary-color);  /* 添加顶部边框 */
+            border-top: 3px solid var(--primary-color);
+            /* 添加顶部边框 */
         }
-    
+
         .footer-links a:hover {
             color: var(--primary-color);
-            text-decoration: underline;  /* 悬停时添加下划线 */
+            text-decoration: underline;
+            /* 悬停时添加下划线 */
         }
     </style>
     <style>
         :root {
-            --primary-color: #00BCD4;  /* 改为科技蓝 */
+            --primary-color: #00BCD4;
+            /* 改为科技蓝 */
             --secondary-color: #607D8B;
-            --background-color: #f5f5f5;  /* 背景改为浅灰色 */
-            --text-color: #263238;  /* 深灰色文字 */
+            --background-color: #f5f5f5;
+            /* 背景改为浅灰色 */
+            --text-color: #263238;
+            /* 深灰色文字 */
             --light-background: #ffffff;
-            --shadow-color: rgba(0, 0, 0, 0.05);  /* 阴影更淡 */
-            --hover-shadow: rgba(0, 188, 212, 0.1);  /* 悬停阴影更淡 */
+            --shadow-color: rgba(0, 0, 0, 0.05);
+            /* 阴影更淡 */
+            --hover-shadow: rgba(0, 188, 212, 0.1);
+            /* 悬停阴影更淡 */
         }
 
         * {
@@ -406,7 +433,8 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;  /* 更换更柔和的字体 */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            /* 更换更柔和的字体 */
             color: var(--text-color);
             background-color: var(--background-color);
             line-height: 1.6;
@@ -542,12 +570,29 @@
             animation: fadeInItem 0.8s ease-out forwards;
         }
 
-        .feature-item:nth-child(1) { animation-delay: 0.2s; }
-        .feature-item:nth-child(2) { animation-delay: 0.4s; }
-        .feature-item:nth-child(3) { animation-delay: 0.6s; }
-        .feature-item:nth-child(4) { animation-delay: 0.8s; }
-        .feature-item:nth-child(5) { animation-delay: 1s; }
-        .feature-item:nth-child(6) { animation-delay: 1.2s; }
+        .feature-item:nth-child(1) {
+            animation-delay: 0.2s;
+        }
+
+        .feature-item:nth-child(2) {
+            animation-delay: 0.4s;
+        }
+
+        .feature-item:nth-child(3) {
+            animation-delay: 0.6s;
+        }
+
+        .feature-item:nth-child(4) {
+            animation-delay: 0.8s;
+        }
+
+        .feature-item:nth-child(5) {
+            animation-delay: 1s;
+        }
+
+        .feature-item:nth-child(6) {
+            animation-delay: 1.2s;
+        }
 
         .feature-item:hover {
             transform: none;
@@ -665,8 +710,10 @@
         }
 
         .footer {
-            background: linear-gradient(to bottom, var(--light-background), #e0e0e0); /* 添加渐变背景 */
-            box-shadow: 0 -2px 4px var(--shadow-color); /* 添加顶部阴影 */
+            background: linear-gradient(to bottom, var(--light-background), #e0e0e0);
+            /* 添加渐变背景 */
+            box-shadow: 0 -2px 4px var(--shadow-color);
+            /* 添加顶部阴影 */
             padding: 2rem 0;
             text-align: center;
             margin-top: 4rem;
@@ -698,7 +745,8 @@
         }
 
         .footer-links a:hover::after {
-            width: 100%; /* 悬停时显示下划线动画 */
+            width: 100%;
+            /* 悬停时显示下划线动画 */
         }
 
         .footer p {
@@ -712,22 +760,40 @@
             margin: 4rem auto;
         }
 
+        /* 修改 preview-row 样式 */
         .preview-row {
             display: flex;
             gap: 2rem;
             margin-bottom: 2rem;
+            padding: 1.5rem;
         }
 
-        .preview-item {
-            flex: 1;
+        .preview-row:hover {
             background: var(--light-background);
-            padding: 1.5rem;
             border-radius: 8px;
             border: 1px solid #e0e0e0;
-            display: flex; /* 使用 flexbox 布局 */
-            flex-direction: column; /* 垂直排列子元素 */
-            justify-content: center; /* 垂直居中内容 */
             transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 10px 15px -3px var(--hover-shadow), 0 4px 6px -2px var(--hover-shadow);
+        }
+
+        /* 移除 preview-item 的边框和背景样式 */
+        .preview-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 30px;
+            align-items: center;
+            /* 让子元素水平居中 */
+            text-align: center;
+            /* 让文本内容居中 */
+        }
+
+        .preview-item span {
+            margin-bottom: 1rem;
+            /* 调整 span 元素和图片的间距 */
+            display: block;
+            /* 让 span 元素以块级元素显示，独占一行 */
         }
 
         .preview-item.tall {
@@ -738,25 +804,20 @@
             width: 100%;
             height: auto;
             border-radius: 8px;
-            margin-bottom: 0.5rem; /* 减少图片和文字之间的间距 */
+            margin-bottom: 0.5rem;
         }
 
         .preview-description {
             text-align: center;
             color: var(--secondary-color);
-            font-size: 1.1rem; /* 适当放大文字 */
-        }
-
-        .preview-item:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 10px 15px -3px var(--hover-shadow), 0 4px 6px -2px var(--hover-shadow);
+            font-size: 1.1rem;
         }
 
         @media (max-width: 768px) {
             .preview-row {
                 flex-direction: column;
             }
-            
+
             .preview-item.tall {
                 flex: 1;
             }
@@ -767,6 +828,7 @@
                 opacity: 0;
                 transform: translateY(20px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -788,11 +850,11 @@
         <a href="#" class="navbar-logo">爱嘀咕</a>
         <div class="navbar-links">
             <!-- 将首页链接移到第一个位置 -->
-            <a href="#home">首页</a> 
+            <a href="#home">首页</a>
             <a href="#open-source">开源地址</a>
             <a href="#features">功能介绍</a>
             <!-- 新增加群链接 -->
-            <a href="your_group_link">加群</a> 
+            <a href="your_group_link">加群</a>
         </div>
     </div>
 
@@ -815,7 +877,7 @@
             if (index < text.length) {
                 typingText.innerHTML += text.charAt(index);
                 index++;
-                setTimeout(type, typingSpeed); 
+                setTimeout(type, typingSpeed);
             } else {
                 // 打字完成后添加闪烁光标效果
                 const cursor = document.createElement('span');
@@ -840,17 +902,19 @@
         type();
     </script>
 
-    <!-- 开源地址和项目地址 -->
     <div id="open-source" class="container">
         <h2>开源地址和项目地址</h2>
         <div class="address-container">
-            <div class="address-block">
-                <i class="fab fa-github"></i>
-                <a href="https://github.com/your-repo">https://github.com/your-repo</a>
-            </div>
-            <div class="address-block">
-                <i class="fas fa-link"></i>
-                <a href="https://aidigu.com">https://aidigu.com</a>
+            <div class="address-block" style="justify-content: space-around;">
+                <span style="margin-right: 2rem;">
+                    <a href="https://github.com/your-repo"><i class="fab fa-github"></i> GitHub</a>
+                </span>
+                <span>
+                    <a href="https://aidigu.com"><i class="fas fa-link"></i> 测试地址</a>
+                </span>
+                <span>
+                    <a href="https://aidigu.com"><i class="fas fa-link"></i> 项目官网</a>
+                </span>
             </div>
         </div>
     </div>
@@ -860,8 +924,9 @@
         <div class="preview-row">
             <div class="preview-item tall" style="background: none; border: none;">
                 <!-- 替换首页预览图 -->
-                <img src="https://fastly.picsum.photos/id/621/600/400.jpg?hmac=TCPdRygUBDql95PxXUBJNAgMoBbAvJ_uR3ofNJn0tag" alt="首页预览" style="border: none;">
-                
+                <img src="https://fastly.picsum.photos/id/621/600/400.jpg?hmac=TCPdRygUBDql95PxXUBJNAgMoBbAvJ_uR3ofNJn0tag"
+                    alt="首页预览" style="border: none;">
+
             </div>
             <div class="preview-item" style="background: none; border: none;">
                 <p class="preview-description">简洁大气的首页设计，提供清晰的导航和功能入口</p>
@@ -873,20 +938,26 @@
             </div>
             <div class="preview-item tall" style="background: none; border: none;">
                 <!-- 替换话题页面预览图 -->
-                <img src="https://fastly.picsum.photos/id/216/1200/600.jpg?hmac=DkFHH39boeNThycl0UfwW-Og-27onyqeAPb3a9X5bok" alt="话题页面预览" style="border: none;">
-               
+                <img src="https://fastly.picsum.photos/id/216/1200/600.jpg?hmac=DkFHH39boeNThycl0UfwW-Og-27onyqeAPb3a9X5bok"
+                    alt="话题页面预览" style="border: none;">
+
             </div>
         </div>
-        <div class="preview-image" style="background: none; border: none;">
-            <!-- 替换爱嘀咕网站预览图 -->
-            <img src="https://fastly.picsum.photos/id/216/1200/600.jpg?hmac=DkFHH39boeNThycl0UfwW-Og-27onyqeAPb3a9X5bok" alt="爱嘀咕网站预览图" style="border: none;">
-            <p class="preview-description">便捷的消息中心，实时接收和发送消息</p>
+
+        <div class="preview-row">
+            <div class="preview-item" style="background: none; border: none;">
+                <span>sadcasfd</span>
+                <img src="https://fastly.picsum.photos/id/216/1200/600.jpg?hmac=DkFHH39boeNThycl0UfwW-Og-27onyqeAPb3a9X5bok"
+                    alt="爱嘀咕网站预览图" style="border: none;">
+            </div>
         </div>
+
         <div class="preview-row">
             <div class="preview-item tall" style="background: none; border: none;">
                 <!-- 替换消息中心预览图 -->
-                <img src="https://fastly.picsum.photos/id/621/600/400.jpg?hmac=TCPdRygUBDql95PxXUBJNAgMoBbAvJ_uR3ofNJn0tag" alt="消息中心预览" style="border: none;">
-                
+                <img src="https://fastly.picsum.photos/id/621/600/400.jpg?hmac=TCPdRygUBDql95PxXUBJNAgMoBbAvJ_uR3ofNJn0tag"
+                    alt="消息中心预览" style="border: none;">
+
             </div>
             <div class="preview-item" style="background: none; border: none;">
                 <p class="preview-description">便捷的消息中心，实时接收和发送消息</p>
@@ -898,7 +969,8 @@
             </div>
             <div class="preview-item tall" style="background: none; border: none;">
                 <!-- 替换消息中心预览图 -->
-                <img src="https://fastly.picsum.photos/id/621/600/400.jpg?hmac=TCPdRygUBDql95PxXUBJNAgMoBbAvJ_uR3ofNJn0tag" alt="消息中心预览" style="border: none;">
+                <img src="https://fastly.picsum.photos/id/621/600/400.jpg?hmac=TCPdRygUBDql95PxXUBJNAgMoBbAvJ_uR3ofNJn0tag"
+                    alt="消息中心预览" style="border: none;">
             </div>
         </div>
     </div>
