@@ -303,67 +303,89 @@
     </style>
     <style>
         :root {
-            --primary-color: #FFB6C1;  /* 淡粉色作为主色调 */
-            --secondary-color: #FFC0CB;  /* 稍深一点的粉色作为次色调 */
-            --background-color: #FDF5E6;  /* 淡米色背景 */
-            --text-color: #666666;  /* 柔和的深灰色文字 */
+            --primary-color: #FF69B4;  /* 更鲜艳的粉色作为主色调 */
+            --secondary-color: #FFB6C1;  /* 稍浅的粉色作为次色调 */
+            --background-color: #FFF0F5;  /* 淡粉色背景 */
+            --text-color: #8B4513;  /* 暖棕色文字，增加对比 */
             --light-background: #FFFFFF;
-            --shadow-color: rgba(0, 0, 0, 0.1);
-            --hover-shadow: rgba(255, 182, 193, 0.2);
+            --shadow-color: rgba(255, 105, 180, 0.1);
+            --hover-shadow: rgba(255, 105, 180, 0.3);
         }
     
         body {
-            font-family: 'Cursive', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;  /* 更柔和、有女生风格的字体 */
+            font-family: 'Comic Sans MS', cursive, sans-serif;  /* 更活泼的字体 */
         }
     
+        /* 导航栏样式优化 */
         .navbar {
             background: var(--light-background);
             box-shadow: 0 2px 4px var(--shadow-color);
+            border-bottom: 3px solid var(--primary-color);  /* 添加底部边框 */
         }
     
+        /* 英雄部分样式优化 */
         .hero {
-            background: url('https://via.placeholder.com/1920x1080?text=Aidigu+Background&bg=ffe4e1') no-repeat center center/cover;  /* 淡粉色调背景图 */
+            background: url('https://via.placeholder.com/1920x1080?text=Aidigu+Background&bg=FFC0CB') no-repeat center center/cover;
+            animation: changeBackground 10s infinite;  /* 添加背景动画 */
         }
     
-        .hero::before {
-            background: rgba(255, 255, 255, 0.3);  /* 调整遮罩层透明度 */
+        @keyframes changeBackground {
+            0% { background-color: #FFC0CB; }
+            50% { background-color: #FFB6C1; }
+            100% { background-color: #FFC0CB; }
         }
     
         .hero-content h1 {
             color: var(--primary-color);
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-        }
-    
-        .hero-content p {
-            color: var(--text-color);
+            text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.5);
         }
     
         .btn {
             background: var(--primary-color);
             border-radius: 25px;
             box-shadow: 0 4px 6px -1px var(--shadow-color);
+            transition: all 0.3s ease;
         }
     
         .btn:hover {
-            background: #FF69B4;  /* 悬停时更深的粉色 */
-            transform: translateY(-2px);
+            transform: scale(1.1);  /* 悬停时放大按钮 */
         }
     
+        /* 功能介绍样式优化 */
         .feature-item {
             background-color: var(--light-background);
             border-radius: 20px;
-            border: 1px solid #f8e6e6;  /* 淡粉色边框 */
+            border: 2px solid var(--secondary-color);  /* 添加边框 */
+            transform: rotate(-2deg);  /* 添加旋转效果 */
+            transition: all 0.3s ease;
         }
     
+        .feature-item:hover {
+            transform: rotate(0deg) translateY(-8px);  /* 悬停时恢复旋转并上移 */
+        }
+    
+        /* 地址块样式优化 */
         .address-block {
             background-color: var(--light-background);
             border-radius: 20px;
-            border: 1px solid #f8e6e6;
+            border: 2px solid var(--secondary-color);
+            transition: all 0.3s ease;
         }
     
+        .address-block:hover {
+            transform: scale(1.05);  /* 悬停时放大 */
+        }
+    
+        /* 页脚样式优化 */
         .footer {
             background: var(--light-background);
             box-shadow: 0 -2px 4px var(--shadow-color);
+            border-top: 3px solid var(--primary-color);  /* 添加顶部边框 */
+        }
+    
+        .footer-links a:hover {
+            color: var(--primary-color);
+            text-decoration: underline;  /* 悬停时添加下划线 */
         }
     </style>
     <style>
