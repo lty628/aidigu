@@ -8,9 +8,9 @@
 // +----------------------------------------------------------------------
 // | Author: liu21st <liu21st@gmail.com>
 // +----------------------------------------------------------------------
-$url = config('app.url_domain_root');
 
-Route::domain('aidigu.cn', function () {
+// 推广页
+Route::domain(config('app.url_domain_root', 'aidigu.cn'), function () {
     Route::get('/', 'tools/home/index');
 });
 

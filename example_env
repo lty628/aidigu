@@ -3,7 +3,7 @@
 [app]
     debug = true        #调试模式
     trace = true        #详细日志
-    urlDomainRoot = weibo.test        #网站URL
+    urlDomainRoot = xxxx.test   #网站URL（可不配置，单独推广域名）
     chatSocketDomain = ws://weibo.test/
     staticDomain = 
     beian=xxxxxxx        #填入备案号
