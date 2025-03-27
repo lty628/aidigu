@@ -10,7 +10,7 @@
 // +----------------------------------------------------------------------
 $url = config('app.url_domain_root');
 
-Route::domain('tt.aidigu.cn', function () {
+Route::domain('aidigu.cn', function () {
     Route::get('/', 'tools/home/index');
 });
 
