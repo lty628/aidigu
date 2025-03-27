@@ -366,6 +366,55 @@
             box-shadow: 0 2px 8px var(--hover-shadow);
         }
     </style>
+    <style>
+        /* 更新预览图样式 */
+        .preview-images {
+            max-width: 1200px;
+            margin: 4rem auto;
+        }
+
+        .preview-row {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .preview-item {
+            flex: 1;
+            background: var(--light-background);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .preview-item.tall {
+            flex: 1.5;
+        }
+
+        .preview-item img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .preview-description {
+            text-align: center;
+            color: var(--secondary-color);
+            font-size: 0.95rem;
+            margin-top: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .preview-row {
+                flex-direction: column;
+            }
+            
+            .preview-item.tall {
+                flex: 1;
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -404,9 +453,54 @@
     </div>
 
     <!-- 网站预览图 -->
-    <div class="preview-image">
-        <img src="https://via.placeholder.com/1200x600?text=Aidigu+Preview" alt="爱嘀咕网站预览图">
+    <div class="preview-images">
+        <div class="preview-row">
+            <div class="preview-item tall" style="background: none; border: none;">
+                <!-- 替换首页预览图 -->
+                <img src="https://fastly.picsum.photos/id/621/600/400.jpg?hmac=TCPdRygUBDql95PxXUBJNAgMoBbAvJ_uR3ofNJn0tag" alt="首页预览" style="border: none;">
+                
+            </div>
+            <div class="preview-item" style="background: none; border: none;">
+                <p class="preview-description">简洁大气的首页设计，提供清晰的导航和功能入口</p>
+            </div>
+        </div>
+        <div class="preview-row">
+            <div class="preview-item tall" style="background: none; border: none;">
+                <p class="preview-description">丰富的话题讨论页面，支持多种互动方式</p>
+            </div>
+            <div class="preview-item" style="background: none; border: none;">
+                <!-- 替换话题页面预览图 -->
+                <img src="https://fastly.picsum.photos/id/216/1200/600.jpg?hmac=DkFHH39boeNThycl0UfwW-Og-27onyqeAPb3a9X5bok" alt="话题页面预览" style="border: none;">
+               
+            </div>
+        </div>
+        <div class="preview-image" style="background: none; border: none;">
+            <!-- 替换爱嘀咕网站预览图 -->
+            <img src="https://fastly.picsum.photos/id/216/1200/600.jpg?hmac=DkFHH39boeNThycl0UfwW-Og-27onyqeAPb3a9X5bok" alt="爱嘀咕网站预览图" style="border: none;">
+            <p class="preview-description">便捷的消息中心，实时接收和发送消息</p>
+        </div>
+        <div class="preview-row">
+            <div class="preview-item tall" style="background: none; border: none;">
+                <!-- 替换消息中心预览图 -->
+                <img src="https://fastly.picsum.photos/id/621/600/400.jpg?hmac=TCPdRygUBDql95PxXUBJNAgMoBbAvJ_uR3ofNJn0tag" alt="消息中心预览" style="border: none;">
+                
+            </div>
+            <div class="preview-item" style="background: none; border: none;">
+                <p class="preview-description">便捷的消息中心，实时接收和发送消息</p>
+            </div>
+        </div>
+        <div class="preview-row">
+            <div class="preview-item tall" style="background: none; border: none;">
+                <p class="preview-description">便捷的消息中心，实时接收和发送消息</p>
+            </div>
+            <div class="preview-item" style="background: none; border: none;">
+                <!-- 替换消息中心预览图 -->
+                <img src="https://fastly.picsum.photos/id/621/600/400.jpg?hmac=TCPdRygUBDql95PxXUBJNAgMoBbAvJ_uR3ofNJn0tag" alt="消息中心预览" style="border: none;">
+            </div>
+        </div>
     </div>
+
+
     <!-- 功能介绍 -->
     <div id="features" class="container">
         <h2>爱嘀咕功能介绍</h2>
