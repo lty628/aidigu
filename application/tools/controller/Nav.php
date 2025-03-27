@@ -28,6 +28,9 @@ class Nav extends Controller
         // })
         ->select();
 
+        $list = Db::name('app')->select();
+        $list = array_merge($list, $list, $list, $list, $list, $list, $list);
+
         // $bg = cache('bg_nav'.$this->uid);
         // if (!$bg) {
             if (isset($this->userInfo['theme']) && $this->userInfo['theme']) {
