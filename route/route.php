@@ -10,6 +10,10 @@
 // +----------------------------------------------------------------------
 $url = config('app.url_domain_root');
 
+Route::domain('tt.aidigu.cn', function () {
+    Route::get('/', 'tools/home/index');
+});
+
 // 网盘
 Route::any('files', 'upload/upload/index');
 Route::any('files/:key', 'upload/upload/index');
@@ -93,6 +97,3 @@ Route::get('/:name/del/message/:msg_id', $module . '/Ajax/delMessage')->pattern(
 // Route::domain($url, function () {
 
 // });
-Route::domain('aidigu.cn', function () {
-    Route::get('/', 'tools/home/index');
-});
