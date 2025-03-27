@@ -26,11 +26,14 @@ class Nav extends Controller
         // })
         ->select();
 
-        $bg = cache('bg_nav'.$this->uid);
-        if (!$bg) {
-            $bg = '/static/tools/common/images/bg'.mt_rand(1, 10).'.jpg';
-            cache('bg_nav'.$this->uid, $bg, 600);
-        }
+        // $bg = cache('bg_nav'.$this->uid);
+        // if (!$bg) {
+        //     // $bg = '/static/tools/common/images/bg'.mt_rand(1, 10).'.jpg';
+        //     $bg = '/static/index/images/bg1'.mt_rand(1, 5).'.svg';
+        //     cache('bg_nav'.$this->uid, $bg, 600);
+        // }
+
+        $bg = '/static/index/images/bg1.svg';
 
         $this->assign('bg', $bg);
         $this->assign('list', $list);
