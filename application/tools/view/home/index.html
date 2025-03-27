@@ -498,20 +498,58 @@
     <div class="navbar">
         <a href="#" class="navbar-logo">爱嘀咕</a>
         <div class="navbar-links">
+            <!-- 将首页链接移到第一个位置 -->
+            <a href="#home">首页</a> 
             <a href="#open-source">开源地址</a>
             <a href="#features">功能介绍</a>
-            <a href="#home">首页</a>
+            <!-- 新增加群链接 -->
+            <a href="your_group_link">加群</a> 
         </div>
     </div>
 
     <!-- 英雄部分 -->
-    <div id="home" class="hero">
-        <div class="hero-content">
+    <div id="home" class="hero" style="background: linear-gradient(135deg, #009688 0%, #607D8B 100%);">
+        <div class="hero-content" style="width: 50%; margin: 0 auto; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);">
             <h1>爱嘀咕开源项目</h1>
-            <p>探索全新开源世界，满足您的多样需求</p>
-            <a href="#" class="btn">了解更多</a>
+            <p id="typing-text"></p>
+            <a href="#" class="btn" style="transition: all 0.3s ease; transform: scale(1);">了解更多</a>
         </div>
     </div>
+    <!-- 优化后的打字效果脚本 -->
+    <script>
+        const text = "探索全新开源世界，满足您的多样需求。这里有丰富的功能，如私信交流、话题讨论、安全可靠的云存储服务，还有便捷的导航、强大的搜索功能等。快来加入我们，一起开启开源之旅！";
+        const typingText = document.getElementById('typing-text');
+        let index = 0;
+        const typingSpeed = 40; // 调整打字速度
+
+        function type() {
+            if (index < text.length) {
+                typingText.innerHTML += text.charAt(index);
+                index++;
+                setTimeout(type, typingSpeed); 
+            } else {
+                // 打字完成后添加闪烁光标效果
+                const cursor = document.createElement('span');
+                cursor.id = 'cursor';
+                cursor.style.animation = 'blink 1s infinite';
+                cursor.textContent = '|';
+                typingText.appendChild(cursor);
+            }
+        }
+
+        // 定义闪烁光标动画
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes blink {
+                0% { opacity: 1; }
+                50% { opacity: 0; }
+                100% { opacity: 1; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        type();
+    </script>
 
     <!-- 开源地址和项目地址 -->
     <div id="open-source" class="container">
