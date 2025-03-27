@@ -301,6 +301,71 @@
             font-size: 0.9rem;
         }
     </style>
+    <style>
+        :root {
+            --primary-color: #00BCD4;  /* 改为科技蓝 */
+            --secondary-color: #607D8B;
+            --background-color: #f5f5f5;  /* 背景改为浅灰色 */
+            --text-color: #263238;  /* 深灰色文字 */
+            --light-background: #ffffff;
+            --shadow-color: rgba(0, 0, 0, 0.05);  /* 阴影更淡 */
+            --hover-shadow: rgba(0, 188, 212, 0.1);  /* 悬停阴影更淡 */
+        }
+    
+        /* 修改按钮样式 */
+        .btn {
+            background: var(--primary-color);
+            border: none;
+            box-shadow: none;
+            border-radius: 3px;
+        }
+    
+        /* 修改卡片样式 */
+        .feature-item {
+            background-color: var(--light-background);
+            border: 1px solid #e0e0e0;
+            box-shadow: none;
+            border-radius: 8px;
+        }
+    
+        .feature-item:hover {
+            transform: none;
+            box-shadow: 0 2px 8px var(--hover-shadow);
+        }
+    
+        /* 修改图片展示样式 */
+        .preview-image {
+            margin: 4rem 0;
+            padding: 2rem;
+            background: var(--light-background);
+            border-radius: 8px;
+            text-align: center;
+        }
+    
+        .preview-image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: none;
+            border: 1px solid #e0e0e0;
+        }
+    
+        /* 修改导航栏样式 */
+        .navbar {
+            box-shadow: 0 1px 3px var(--shadow-color);
+        }
+    
+        /* 修改地址块样式 */
+        .address-block {
+            box-shadow: none;
+            border: 1px solid #e0e0e0;
+        }
+    
+        .address-block:hover {
+            transform: none;
+            box-shadow: 0 2px 8px var(--hover-shadow);
+        }
+    </style>
 </head>
 
 <body>
