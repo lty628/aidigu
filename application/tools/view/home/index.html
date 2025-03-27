@@ -303,63 +303,67 @@
     </style>
     <style>
         :root {
-            --primary-color: #66BB6A;  /* 清新绿色作为主色调 */
-            --secondary-color: #81C784;  /* 次色调 */
-            --background-color: #FAFAFA;  /* 浅灰色背景 */
-            --text-color: #333333;  /* 深灰色文字 */
+            --primary-color: #FFB6C1;  /* 淡粉色作为主色调 */
+            --secondary-color: #FFC0CB;  /* 稍深一点的粉色作为次色调 */
+            --background-color: #FDF5E6;  /* 淡米色背景 */
+            --text-color: #666666;  /* 柔和的深灰色文字 */
             --light-background: #FFFFFF;
             --shadow-color: rgba(0, 0, 0, 0.1);
-            --hover-shadow: rgba(102, 187, 106, 0.2);
+            --hover-shadow: rgba(255, 182, 193, 0.2);
         }
     
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;  /* 更换更柔和的字体 */
+            font-family: 'Cursive', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;  /* 更柔和、有女生风格的字体 */
         }
     
         .navbar {
-            background: var(--light-background);  /* 导航栏背景改为白色 */
+            background: var(--light-background);
+            box-shadow: 0 2px 4px var(--shadow-color);
         }
     
         .hero {
-            background: url('https://via.placeholder.com/1920x1080?text=Aidigu+Background&bg=e8f5e9') no-repeat center center/cover;  /* 更换更清新的背景图 */
+            background: url('https://via.placeholder.com/1920x1080?text=Aidigu+Background&bg=ffe4e1') no-repeat center center/cover;  /* 淡粉色调背景图 */
         }
     
         .hero::before {
-            background: rgba(255, 255, 255, 0.2);  /* 调整遮罩层透明度 */
+            background: rgba(255, 255, 255, 0.3);  /* 调整遮罩层透明度 */
         }
     
         .hero-content h1 {
-            color: var(--primary-color);  /* 标题颜色改为主色调 */
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);  /* 添加柔和阴影 */
+            color: var(--primary-color);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
         }
     
         .hero-content p {
-            color: var(--text-color);  /* 段落文字颜色 */
+            color: var(--text-color);
         }
     
         .btn {
             background: var(--primary-color);
-            border-radius: 25px;  /* 按钮圆角更大 */
-            box-shadow: 0 4px 6px -1px var(--shadow-color);  /* 添加按钮阴影 */
+            border-radius: 25px;
+            box-shadow: 0 4px 6px -1px var(--shadow-color);
         }
     
         .btn:hover {
-            background: #4CAF50;  /* 按钮悬停颜色 */
-            transform: translateY(-2px);  /* 按钮悬停向上移动 */
+            background: #FF69B4;  /* 悬停时更深的粉色 */
+            transform: translateY(-2px);
         }
     
         .feature-item {
             background-color: var(--light-background);
-            border-radius: 15px;  /* 卡片圆角更大 */
+            border-radius: 20px;
+            border: 1px solid #f8e6e6;  /* 淡粉色边框 */
         }
     
         .address-block {
             background-color: var(--light-background);
-            border-radius: 15px;  /* 地址块圆角更大 */
+            border-radius: 20px;
+            border: 1px solid #f8e6e6;
         }
     
         .footer {
-            background: var(--light-background);  /* 页脚背景改为白色 */
+            background: var(--light-background);
+            box-shadow: 0 -2px 4px var(--shadow-color);
         }
     </style>
     <style>
@@ -372,62 +376,314 @@
             --shadow-color: rgba(0, 0, 0, 0.05);  /* 阴影更淡 */
             --hover-shadow: rgba(0, 188, 212, 0.1);  /* 悬停阴影更淡 */
         }
-    
-        /* 修改按钮样式 */
-        .btn {
-            background: var(--primary-color);
-            border: none;
-            box-shadow: none;
-            border-radius: 3px;
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-    
-        /* 修改卡片样式 */
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;  /* 更换更柔和的字体 */
+            color: var(--text-color);
+            background-color: var(--background-color);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* 导航栏样式 */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 1rem 2rem;
+            background: var(--light-background);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 1px 3px var(--shadow-color);
+            z-index: 1000;
+        }
+
+        .navbar-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .navbar-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .navbar-links a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .navbar-links a:hover {
+            color: var(--primary-color);
+        }
+
+        /* 通用容器样式 */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 7rem 2rem 4rem;
+        }
+
+        h2 {
+            font-size: 2.8rem;
+            margin-bottom: 2.5rem;
+            text-align: center;
+            color: var(--text-color);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        /* 英雄部分样式 */
+        .hero {
+            height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: url('https://via.placeholder.com/1920x1080?text=Aidigu+Background&bg=e8f5e9') no-repeat center center/cover;
+            position: relative;
+        }
+
+        .hero::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .hero-content {
+            text-align: center;
+            color: var(--text-color);
+            z-index: 1;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .hero-content p {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 2rem;
+            background: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 3px;
+            transition: background 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #00796b;
+            transform: translateY(-2px);
+        }
+
+        /* 功能介绍样式 */
+        .feature-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2.5rem;
+            margin-top: 4rem;
+        }
+
         .feature-item {
             background-color: var(--light-background);
+            padding: 2.5rem;
             border: 1px solid #e0e0e0;
-            box-shadow: none;
             border-radius: 8px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: none;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInItem 0.8s ease-out forwards;
         }
-    
+
+        .feature-item:nth-child(1) { animation-delay: 0.2s; }
+        .feature-item:nth-child(2) { animation-delay: 0.4s; }
+        .feature-item:nth-child(3) { animation-delay: 0.6s; }
+        .feature-item:nth-child(4) { animation-delay: 0.8s; }
+        .feature-item:nth-child(5) { animation-delay: 1s; }
+        .feature-item:nth-child(6) { animation-delay: 1.2s; }
+
         .feature-item:hover {
             transform: none;
             box-shadow: 0 2px 8px var(--hover-shadow);
         }
-    
-        /* 修改图片展示样式 */
-        .preview-image {
-            margin: 4rem 0;
-            padding: 2rem;
-            background: var(--light-background);
-            border-radius: 8px;
-            text-align: center;
+
+        .feature-item i {
+            font-size: 3.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
         }
-    
-        .preview-image img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 8px;
-            box-shadow: none;
-            border: 1px solid #e0e0e0;
+
+        .feature-item h3 {
+            font-size: 1.7rem;
+            margin-bottom: 1rem;
+            color: var(--text-color);
+            font-weight: 600;
         }
-    
-        /* 修改导航栏样式 */
-        .navbar {
-            box-shadow: 0 1px 3px var(--shadow-color);
+
+        .feature-item p {
+            font-size: 1rem;
+            color: var(--secondary-color);
         }
-    
-        /* 修改地址块样式 */
+
+        /* 地址块样式 */
+        .address-container {
+            margin-top: 4rem;
+        }
+
         .address-block {
+            background-color: var(--light-background);
+            padding: 2rem;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.8rem;
+            transition: all 0.3s ease;
             box-shadow: none;
             border: 1px solid #e0e0e0;
         }
-    
+
+        .address-block:last-child {
+            margin-bottom: 0;
+        }
+
         .address-block:hover {
             transform: none;
             box-shadow: 0 2px 8px var(--hover-shadow);
         }
-    </style>
-    <style>
+
+        .address-block i {
+            font-size: 2.2rem;
+            margin-right: 1.8rem;
+            color: var(--primary-color);
+            transition: transform 0.3s ease;
+        }
+
+        .address-block:hover i {
+            transform: scale(1.1);
+        }
+
+        .address-block a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-size: 1.4rem;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .address-block a:hover {
+            color: #0056b3;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 1rem;
+            }
+
+            .navbar-links {
+                gap: 1.2rem;
+            }
+
+            .container {
+                padding: 5rem 1rem 3rem;
+            }
+
+            h2 {
+                font-size: 2.2rem;
+            }
+
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-content p {
+                font-size: 1.2rem;
+            }
+
+            .feature-container {
+                grid-template-columns: 1fr;
+            }
+
+            .address-block {
+                padding: 1.5rem;
+            }
+
+            .address-block i {
+                font-size: 1.8rem;
+            }
+
+            .address-block a {
+                font-size: 1.2rem;
+            }
+        }
+
+        .footer {
+            background: linear-gradient(to bottom, var(--light-background), #e0e0e0); /* 添加渐变背景 */
+            box-shadow: 0 -2px 4px var(--shadow-color); /* 添加顶部阴影 */
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 4rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-links a {
+            color: var(--text-color);
+            text-decoration: none;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .footer-links a::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: -2px;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary-color);
+            transition: width 0.3s ease;
+        }
+
+        .footer-links a:hover::after {
+            width: 100%; /* 悬停时显示下划线动画 */
+        }
+
+        .footer p {
+            color: var(--secondary-color);
+            font-size: 0.9rem;
+        }
+
         /* 更新预览图样式 */
         .preview-images {
             max-width: 1200px;
@@ -449,6 +705,7 @@
             display: flex; /* 使用 flexbox 布局 */
             flex-direction: column; /* 垂直排列子元素 */
             justify-content: center; /* 垂直居中内容 */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         .preview-item.tall {
@@ -468,6 +725,11 @@
             font-size: 1.1rem; /* 适当放大文字 */
         }
 
+        .preview-item:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 15px -3px var(--hover-shadow), 0 4px 6px -2px var(--hover-shadow);
+        }
+
         @media (max-width: 768px) {
             .preview-row {
                 flex-direction: column;
@@ -477,48 +739,7 @@
                 flex: 1;
             }
         }
-    </style>
-    <style>
-        /* 优化页脚样式 */
-        .footer {
-            background: linear-gradient(to bottom, var(--light-background), #e0e0e0); /* 添加渐变背景 */
-            box-shadow: 0 -2px 4px var(--shadow-color); /* 添加顶部阴影 */
-        }
-    
-        .footer-links a {
-            position: relative;
-        }
-    
-        .footer-links a::after {
-            content: "";
-            position: absolute;
-            left: 0;
-            bottom: -2px;
-            width: 0;
-            height: 2px;
-            background-color: var(--primary-color);
-            transition: width 0.3s ease;
-        }
-    
-        .footer-links a:hover::after {
-            width: 100%; /* 悬停时显示下划线动画 */
-        }
-    
-        /* 增强预览图交互效果 */
-        .preview-item {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-    
-        .preview-item:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 10px 15px -3px var(--hover-shadow), 0 4px 6px -2px var(--hover-shadow);
-        }
-    
-        /* 为英雄部分添加动画 */
-        .hero-content {
-            animation: fadeInUp 1s ease-out;
-        }
-    
+
         @keyframes fadeInUp {
             from {
                 opacity: 0;
@@ -529,28 +750,13 @@
                 transform: translateY(0);
             }
         }
-    
-        /* 为功能项添加动画 */
-        .feature-item {
-            opacity: 0;
-            transform: translateY(20px);
-            animation: fadeInItem 0.8s ease-out forwards;
-        }
-    
+
         @keyframes fadeInItem {
             to {
                 opacity: 1;
                 transform: translateY(0);
             }
         }
-    
-        /* 为每个功能项设置不同的动画延迟 */
-        .feature-item:nth-child(1) { animation-delay: 0.2s; }
-        .feature-item:nth-child(2) { animation-delay: 0.4s; }
-        .feature-item:nth-child(3) { animation-delay: 0.6s; }
-        .feature-item:nth-child(4) { animation-delay: 0.8s; }
-        .feature-item:nth-child(5) { animation-delay: 1s; }
-        .feature-item:nth-child(6) { animation-delay: 1.2s; }
     </style>
 </head>
 
