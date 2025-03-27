@@ -303,6 +303,67 @@
     </style>
     <style>
         :root {
+            --primary-color: #66BB6A;  /* 清新绿色作为主色调 */
+            --secondary-color: #81C784;  /* 次色调 */
+            --background-color: #FAFAFA;  /* 浅灰色背景 */
+            --text-color: #333333;  /* 深灰色文字 */
+            --light-background: #FFFFFF;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --hover-shadow: rgba(102, 187, 106, 0.2);
+        }
+    
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;  /* 更换更柔和的字体 */
+        }
+    
+        .navbar {
+            background: var(--light-background);  /* 导航栏背景改为白色 */
+        }
+    
+        .hero {
+            background: url('https://via.placeholder.com/1920x1080?text=Aidigu+Background&bg=e8f5e9') no-repeat center center/cover;  /* 更换更清新的背景图 */
+        }
+    
+        .hero::before {
+            background: rgba(255, 255, 255, 0.2);  /* 调整遮罩层透明度 */
+        }
+    
+        .hero-content h1 {
+            color: var(--primary-color);  /* 标题颜色改为主色调 */
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);  /* 添加柔和阴影 */
+        }
+    
+        .hero-content p {
+            color: var(--text-color);  /* 段落文字颜色 */
+        }
+    
+        .btn {
+            background: var(--primary-color);
+            border-radius: 25px;  /* 按钮圆角更大 */
+            box-shadow: 0 4px 6px -1px var(--shadow-color);  /* 添加按钮阴影 */
+        }
+    
+        .btn:hover {
+            background: #4CAF50;  /* 按钮悬停颜色 */
+            transform: translateY(-2px);  /* 按钮悬停向上移动 */
+        }
+    
+        .feature-item {
+            background-color: var(--light-background);
+            border-radius: 15px;  /* 卡片圆角更大 */
+        }
+    
+        .address-block {
+            background-color: var(--light-background);
+            border-radius: 15px;  /* 地址块圆角更大 */
+        }
+    
+        .footer {
+            background: var(--light-background);  /* 页脚背景改为白色 */
+        }
+    </style>
+    <style>
+        :root {
             --primary-color: #00BCD4;  /* 改为科技蓝 */
             --secondary-color: #607D8B;
             --background-color: #f5f5f5;  /* 背景改为浅灰色 */
