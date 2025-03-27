@@ -8,12 +8,14 @@ class Nav extends Controller
     // ALTER TABLE `wb_app` ADD COLUMN `fromuid` int UNSIGNED NOT NULL DEFAULT 0 COMMENT '创建用户' AFTER `app_url`;
     // ALTER TABLE `wb_app` MODIFY COLUMN `app_status` tinyint NOT NULL DEFAULT 1 COMMENT '0关闭，1开启（默认）' AFTER `fromuid`;
     protected $uid;
+    protected $userInfo;
 
 	// 导航页
     public function initialize()
     {
-        $this->uid = getLoginUid();
-        if (!$this->uid) $this->error('请先登录');
+        $this->userInfo = getLoginUserInfo();
+        if (!$this->userInfo) $this->error('请先登录');
+        $this->uid = $this->userInfo['uid'];
     }
 
     public function index()
@@ -28,12 +30,13 @@ class Nav extends Controller
 
         // $bg = cache('bg_nav'.$this->uid);
         // if (!$bg) {
-        //     // $bg = '/static/tools/common/images/bg'.mt_rand(1, 10).'.jpg';
-        //     $bg = '/static/index/images/bg1'.mt_rand(1, 5).'.svg';
+            if (isset($this->userInfo['theme']) && $this->userInfo['theme']) {
+                $bg = $this->userInfo['theme'];
+            } else {
+                $bg = '/static/index/images/bg4.svg';
+            }
         //     cache('bg_nav'.$this->uid, $bg, 600);
         // }
-
-        $bg = '/static/index/images/bg1.svg';
 
         $this->assign('bg', $bg);
         $this->assign('list', $list);
