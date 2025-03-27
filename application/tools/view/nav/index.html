@@ -10,11 +10,12 @@
             margin: 0;
             padding: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: #fff; /* 文字颜色改为白色以适配深色背景 */
+            color: #fff;
+            /* 文字颜色改为白色以适配深色背景 */
             position: relative;
             overflow: hidden;
         }
-    
+
         /* 毛玻璃背景 */
         /* https://picsum.photos/1920/1080 */
         body::before {
@@ -24,169 +25,173 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: url('{$bg}') no-repeat center center fixed; 
+            background: url('{$bg}') no-repeat center center fixed;
             background-size: cover;
             /* 减小模糊半径 */
             filter: blur(5px);
             z-index: -2;
         }
-    
+
         @keyframes drip {
             0% {
                 transform: translateY(0) scale(1);
                 opacity: 1;
             }
+
             100% {
                 transform: translateY(100vh) scale(0);
                 opacity: 0;
             }
         }
-    
-    }
 
-    /* 定义动画 */
-    @keyframes gradient {
-        0% {
-            background-position: 0% 50%;
+        /* 定义动画 */
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
         }
 
-        50% {
-            background-position: 100% 50%;
+        .desktop {
+            display: grid;
+            /* 调整列模板，使图标分布更合理 */
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            /* 适当增大间距 */
+            gap: 40px;
+            padding: 30px;
         }
 
-        100% {
-            background-position: 0% 50%;
+        .icon {
+            width: 100px;
+            text-align: center;
+            cursor: pointer;
+            padding: 20px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            /* 使用 flexbox 布局，让内容垂直居中 */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
-    }
 
-    .desktop {
-        display: grid;
-        /* 调整列模板，使图标分布更合理 */
-        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-        /* 适当增大间距 */
-        gap: 40px;
-        padding: 30px;
-    }
+        .icon:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
 
-    .icon {
-        width: 100px;
-        text-align: center;
-        cursor: pointer;
-        padding: 20px;
-        border-radius: 12px;
-        transition: all 0.3s ease;
-        /* 使用 flexbox 布局，让内容垂直居中 */
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-    }
+        .icon img {
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            margin-bottom: 10px;
+            /* 增强 drop-shadow 效果，模拟 3D 阴影 */
+            filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.3));
+            /* 也可以使用 box-shadow，不过需要图片背景为透明 */
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            /* 添加过渡效果，使悬停变化更平滑 */
+        }
 
-    .icon:hover {
-        background-color: rgba(255, 255, 255, 0.3);
-    }
+        .desktop .icon:hover img {
+            /* 悬停时阴影变化，增强 3D 效果 */
+            filter: drop-shadow(0 12px 18px rgba(0, 0, 0, 0.4));
+            box-shadow: 0 12px 18px rgba(0, 0, 0, 0.4);
+            transform: translateY(-5px);
+            /* 悬停时图片上移 */
+        }
 
-    .icon img {
-        width: 80px;
-        height: 80px;
-        border-radius: 20px;
-        margin-bottom: 10px;
-        /* 增强 drop-shadow 效果，模拟 3D 阴影 */
-        filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.3));
-        /* 也可以使用 box-shadow，不过需要图片背景为透明 */
-        box-shadow: 0 8px 12px rgba(0, 0, 0, 0.3);
-        transition: all 0.3s ease; /* 添加过渡效果，使悬停变化更平滑 */
-    }
-
-    .desktop .icon:hover img {
-        /* 悬停时阴影变化，增强 3D 效果 */
-        filter: drop-shadow(0 12px 18px rgba(0, 0, 0, 0.4));
-        box-shadow: 0 12px 18px rgba(0, 0, 0, 0.4);
-        transform: translateY(-5px); /* 悬停时图片上移 */
-    }
-
-    .icon a {
-        text-decoration: none;
-    }
+        .icon a {
+            text-decoration: none;
+        }
 
 
-    .icon span {
-        font-size: 14px;
-        color: #fff; /* 图标文字颜色改为白色 */
-        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
-    }
+        .icon span {
+            font-size: 14px;
+            color: #fff;
+            /* 图标文字颜色改为白色 */
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+        }
 
-    /* 新增底部导航样式 */
-    .dock {
-        position: fixed;
-        bottom: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-        background-color: rgba(255, 255, 255, 0.8);
-        backdrop-filter: blur(10px);
-        border-radius: 24px;
-        padding: 10px 20px;
-        display: flex;
-        gap: 20px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    }
-    .dock img {
-        width: 48px;
-        height: 48px;
-        border-radius: 10px;
-        transition: transform 0.2s ease;
-    }
+        /* 新增底部导航样式 */
+        .dock {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 10px 20px;
+            display: flex;
+            gap: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
 
-    .dock-icon {
-        width: 48px;
-        height: 48px;
-        transition: transform 0.2s ease;
-    }
+        .dock img {
+            width: 48px;
+            height: 48px;
+            border-radius: 10px;
+            transition: transform 0.2s ease;
+        }
 
-    .dock-icon:hover {
-        transform: scale(1.2);
-    }
-    /* 添加新样式 */
-    #searchEngine {
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 20px;
-        margin-right: 10px;
-        outline: none;
-    }
+        .dock-icon {
+            width: 48px;
+            height: 48px;
+            transition: transform 0.2s ease;
+        }
 
-    #searchForm input[type="text"] {
-        width: 300px;
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 20px;
-        outline: none;
-    }
+        .dock-icon:hover {
+            transform: scale(1.2);
+        }
 
-    #searchForm button[type="submit"] {
-        padding: 10px 20px;
-        border: none;
-        background-color: #0078d4;
-        color: white;
-        border-radius: 20px;
-        margin-left: 10px;
-    }
+        /* 添加新样式 */
+        #searchEngine {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            margin-right: 10px;
+            outline: none;
+        }
+
+        #searchForm input[type="text"] {
+            width: 300px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            outline: none;
+        }
+
+        #searchForm button[type="submit"] {
+            padding: 10px 20px;
+            border: none;
+            background-color: #0078d4;
+            color: white;
+            border-radius: 20px;
+            margin-left: 10px;
+        }
 
         /* ... 已有样式 ... */
         .search-container {
             text-align: center;
             /* 增加 margin-top 值，将搜索框向下移动 */
-            margin: 30px 0 0 0; 
+            margin: 30px 0 0 0;
             display: flex;
             justify-content: center;
             align-items: center;
         }
     </style>
-</style>
-<link rel="stylesheet" href="/static/layui/css/layui.css?t=1" type="text/css" media="screen" />
-<script src="/static/index/js/jquery-1.8.3.min.js"></script>
-<script src="/static/layui/layui.js?4"></script>
-<script language="javascript" type="text/javascript" src="/static/common/js/index.js"></script>
+    </style>
+    <link rel="stylesheet" href="/static/layui/css/layui.css?t=1" type="text/css" media="screen" />
+    <script src="/static/index/js/jquery-1.8.3.min.js"></script>
+    <script src="/static/layui/layui.js?4"></script>
+    <script language="javascript" type="text/javascript" src="/static/common/js/index.js"></script>
 </head>
 
 <body>
@@ -206,7 +211,7 @@
             const searchEngineSelect = document.getElementById('searchEngine');
             const searchForm = document.getElementById('searchForm');
             const searchInput = document.getElementById('searchInput');
-        
+
             searchEngineSelect.addEventListener('change', function () {
                 searchForm.action = this.value;
                 // 根据不同搜索引擎修改参数名
@@ -223,35 +228,37 @@
 
         {foreach $list as $appInfo}
         {if $appInfo['app_type'] == 0 || $appInfo['app_type'] == 1}
-            <!-- 原代码已有链接，保持不变 -->
-            {if $appInfo['open_type'] == 0}
-            <div class="icon">
-                <a href="javascript:;"  data-url="{$appInfo['app_url']}" onclick="showFrameCustom(this, '{$appInfo[\'app_config\']}')">
-                    <img src="{$appInfo['app_image']}" alt="{$appInfo['app_name']}">
-                </a>
-                <a href="javascript:;"  data-url="{$appInfo['app_url']}" onclick="showFrameCustom(this, '{$appInfo[\'app_config\']}')">
-                    <span>{$appInfo['app_name']}</span>
-                </a> 
-            </div>
-            {elseif condition="$appInfo['open_type'] eq 1" /}
-            <div class="icon">
-                <a href="{$appInfo['app_url']}">
-                    <img src="{$appInfo['app_image']}" alt="{$appInfo['app_name']}">
-                </a>
-                <a href="{$appInfo['app_url']}">
-                    <span>{$appInfo['app_name']}</span>
-                </a> 
-            </div>
-            {else /}
-            <div class="icon">
-                <a href="{$appInfo['app_url']}" target="_blank">
-                    <img src="{$appInfo['app_image']}" alt="{$appInfo['app_name']}">
-                </a>
-                <a href="{$appInfo['app_url']}" target="_blank">
-                    <span>{$appInfo['app_name']}</span>
-                </a> 
-            </div>
-            {/if}
+        <!-- 原代码已有链接，保持不变 -->
+        {if $appInfo['open_type'] == 0}
+        <div class="icon">
+            <a href="javascript:;" data-url="{$appInfo['app_url']}"
+                onclick="showFrameCustom(this, '{$appInfo[\'app_config\']}')">
+                <img src="{$appInfo['app_image']}" alt="{$appInfo['app_name']}">
+            </a>
+            <a href="javascript:;" data-url="{$appInfo['app_url']}"
+                onclick="showFrameCustom(this, '{$appInfo[\'app_config\']}')">
+                <span>{$appInfo['app_name']}</span>
+            </a>
+        </div>
+        {elseif condition="$appInfo['open_type'] eq 1" /}
+        <div class="icon">
+            <a href="{$appInfo['app_url']}">
+                <img src="{$appInfo['app_image']}" alt="{$appInfo['app_name']}">
+            </a>
+            <a href="{$appInfo['app_url']}">
+                <span>{$appInfo['app_name']}</span>
+            </a>
+        </div>
+        {else /}
+        <div class="icon">
+            <a href="{$appInfo['app_url']}" target="_blank">
+                <img src="{$appInfo['app_image']}" alt="{$appInfo['app_name']}">
+            </a>
+            <a href="{$appInfo['app_url']}" target="_blank">
+                <span>{$appInfo['app_name']}</span>
+            </a>
+        </div>
+        {/if}
         {/if}
         {/foreach}
 
@@ -264,33 +271,41 @@
         </a>
 
         <a href="javascript:;">
-            <img class="dock-icon" src="/static/tools/common/images/chat.jpg" data-url="/chat" alt="聊天" onclick="showFrameCustom(this, '{&quot;title&quot;:&quot;嘀友聊天&quot;,&quot;shade&quot;:0.8,&quot;closeBtn&quot;:true,&quot;shadeClose&quot;:true,&quot;area&quot;:[&quot;60%&quot;,&quot;70%&quot;],&quot;resize&quot;:true,&quot;maxmin&quot;:true,&quot;id&quot;:&quot;app_3&quot;,&quot;hideOnClose&quot;:false,&quot;scrollbar&quot;:false}')">
+            <img class="dock-icon" src="/static/tools/common/images/chat.jpg" data-url="/chat" alt="聊天"
+                onclick="showFrameCustom(this, '{&quot;title&quot;:&quot;嘀友聊天&quot;,&quot;shade&quot;:0.8,&quot;closeBtn&quot;:true,&quot;shadeClose&quot;:true,&quot;area&quot;:[&quot;60%&quot;,&quot;70%&quot;],&quot;resize&quot;:true,&quot;maxmin&quot;:true,&quot;id&quot;:&quot;app_3&quot;,&quot;hideOnClose&quot;:false,&quot;scrollbar&quot;:false}')">
             <span style="margin-top: 5px; display: block; text-align: center; font-size: 12px;">聊天</span>
         </a>
 
         <a href="javascript:;">
-            <img class="dock-icon" src="/static/tools/common/images/weibo.jpg" data-url="/square/" alt="广场" onclick="showFrameCustom(this, '{&quot;title&quot;:&quot;广场&quot;,&quot;shade&quot;:0.8,&quot;closeBtn&quot;:true,&quot;shadeClose&quot;:true,&quot;area&quot;:[&quot;80%&quot;,&quot;90%&quot;],&quot;resize&quot;:true,&quot;maxmin&quot;:true,&quot;skin&quot;:&quot;layui-layer-win10&quot;,&quot;id&quot;:&quot;app_1&quot;,&quot;hideOnClose&quot;:false,&quot;scrollbar&quot;:false}')">
+            <img class="dock-icon" src="/static/tools/common/images/weibo.jpg" data-url="/square/" alt="广场"
+                onclick="showFrameCustom(this, '{&quot;title&quot;:&quot;广场&quot;,&quot;shade&quot;:0.8,&quot;closeBtn&quot;:true,&quot;shadeClose&quot;:true,&quot;area&quot;:[&quot;80%&quot;,&quot;90%&quot;],&quot;resize&quot;:true,&quot;maxmin&quot;:true,&quot;skin&quot;:&quot;layui-layer-win10&quot;,&quot;id&quot;:&quot;app_1&quot;,&quot;hideOnClose&quot;:false,&quot;scrollbar&quot;:false}')">
             <span style="margin-top: 5px; display: block; text-align: center; font-size: 12px;">微博广场</span>
         </a>
         </a>
 
         <a href="javascript:;">
-            <img class="dock-icon" src="/static/tools/common/images/cloud.jpg" data-url="/cloud/" alt="我的云盘" onclick="showFrameCustom(this, '{&quot;title&quot;:&quot;我的云盘&quot;,&quot;shade&quot;:0.8,&quot;closeBtn&quot;:true,&quot;shadeClose&quot;:true,&quot;area&quot;:[&quot;80%&quot;,&quot;80%&quot;],&quot;resize&quot;:true,&quot;maxmin&quot;:true,&quot;skin&quot;:&quot;layui-layer-win10&quot;,&quot;id&quot;:&quot;app_5&quot;,&quot;hideOnClose&quot;:false,&quot;scrollbar&quot;:false}')">
+            <img class="dock-icon" src="/static/tools/common/images/cloud.jpg" data-url="/cloud/" alt="我的云盘"
+                onclick="showFrameCustom(this, '{&quot;title&quot;:&quot;我的云盘&quot;,&quot;shade&quot;:0.8,&quot;closeBtn&quot;:true,&quot;shadeClose&quot;:true,&quot;area&quot;:[&quot;80%&quot;,&quot;80%&quot;],&quot;resize&quot;:true,&quot;maxmin&quot;:true,&quot;skin&quot;:&quot;layui-layer-win10&quot;,&quot;id&quot;:&quot;app_5&quot;,&quot;hideOnClose&quot;:false,&quot;scrollbar&quot;:false}')">
             <span style="margin-top: 5px; display: block; text-align: center; font-size: 12px;">我的云盘</span>
         </a>
 
         <a href="javascript:;">
-            <img class="dock-icon" src="/static/tools/common/images/movie.jpg" data-url="/tools/movie" alt="影院" onclick="showFrameCustom(this, '{&quot;title&quot;:&quot;嘀咕影院&quot;,&quot;shade&quot;:0.8,&quot;closeBtn&quot;:true,&quot;shadeClose&quot;:true,&quot;area&quot;:[&quot;80%&quot;,&quot;80%&quot;],&quot;resize&quot;:true,&quot;maxmin&quot;:true,&quot;skin&quot;:&quot;layui-layer-win10&quot;,&quot;id&quot;:&quot;app_4&quot;,&quot;hideOnClose&quot;:false,&quot;scrollbar&quot;:false}')">
+            <img class="dock-icon" src="/static/tools/common/images/movie.jpg" data-url="/tools/movie" alt="影院"
+                onclick="showFrameCustom(this, '{&quot;title&quot;:&quot;嘀咕影院&quot;,&quot;shade&quot;:0.8,&quot;closeBtn&quot;:true,&quot;shadeClose&quot;:true,&quot;area&quot;:[&quot;80%&quot;,&quot;80%&quot;],&quot;resize&quot;:true,&quot;maxmin&quot;:true,&quot;skin&quot;:&quot;layui-layer-win10&quot;,&quot;id&quot;:&quot;app_4&quot;,&quot;hideOnClose&quot;:false,&quot;scrollbar&quot;:false}')">
             <span style="margin-top: 5px; display: block; text-align: center; font-size: 12px;">影院</span>
         </a>
 
         <a href="javascript:;">
-            <img class="dock-icon" src="/static/tools/common/images/password.jpg" data-url="/tools/password/list" alt="密码工具" onclick="showFrameCustom(this, '{&quot;title&quot;:&quot;密码工具&quot;,&quot;shade&quot;:0.8,&quot;closeBtn&quot;:true,&quot;shadeClose&quot;:true,&quot;area&quot;:[&quot;80%&quot;,&quot;80%&quot;],&quot;resize&quot;:true,&quot;maxmin&quot;:true,&quot;skin&quot;:&quot;layui-layer-win10&quot;,&quot;id&quot;:&quot;app_6&quot;,&quot;hideOnClose&quot;:false,&quot;scrollbar&quot;:false}')">
+            <img class="dock-icon" src="/static/tools/common/images/password.jpg" data-url="/tools/password/list"
+                alt="密码工具"
+                onclick="showFrameCustom(this, '{&quot;title&quot;:&quot;密码工具&quot;,&quot;shade&quot;:0.8,&quot;closeBtn&quot;:true,&quot;shadeClose&quot;:true,&quot;area&quot;:[&quot;80%&quot;,&quot;80%&quot;],&quot;resize&quot;:true,&quot;maxmin&quot;:true,&quot;skin&quot;:&quot;layui-layer-win10&quot;,&quot;id&quot;:&quot;app_6&quot;,&quot;hideOnClose&quot;:false,&quot;scrollbar&quot;:false}')">
             <span style="margin-top: 5px; display: block; text-align: center; font-size: 12px;">密码工具</span>
         </a>
 
         <a href="javascript:;">
-            <img class="dock-icon" src="/static/tools/common/images/nav-setting.jpg" data-url="/tools/nav/list" alt="导航设置" onclick="showFrameCustom(this, '{&quot;title&quot;:&quot;导航设置&quot;,&quot;shade&quot;:0.8,&quot;closeBtn&quot;:true,&quot;shadeClose&quot;:true,&quot;area&quot;:[&quot;70%&quot;,&quot;80%&quot;],&quot;resize&quot;:true,&quot;maxmin&quot;:true,&quot;skin&quot;:&quot;layui-layer-win10&quot;,&quot;id&quot;:&quot;app_2&quot;,&quot;hideOnClose&quot;:false,&quot;scrollbar&quot;:false}')">
+            <img class="dock-icon" src="/static/tools/common/images/nav-setting.jpg" data-url="/tools/nav/list"
+                alt="导航设置"
+                onclick="showFrameCustom(this, '{&quot;title&quot;:&quot;导航设置&quot;,&quot;shade&quot;:0.8,&quot;closeBtn&quot;:true,&quot;shadeClose&quot;:true,&quot;area&quot;:[&quot;70%&quot;,&quot;80%&quot;],&quot;resize&quot;:true,&quot;maxmin&quot;:true,&quot;skin&quot;:&quot;layui-layer-win10&quot;,&quot;id&quot;:&quot;app_2&quot;,&quot;hideOnClose&quot;:false,&quot;scrollbar&quot;:false}')">
             <span style="margin-top: 5px; display: block; text-align: center; font-size: 12px;">导航设置</span>
         </a>
         {if $uid}
@@ -310,9 +325,9 @@
 </html>
 
 
-    <!-- 动态添加滴水元素 -->
-    <!-- 移除以下代码 -->
-    <!--
+<!-- 动态添加滴水元素 -->
+<!-- 移除以下代码 -->
+<!--
     <script>
         function createDrip() {
             const drip = document.createElement('div');
