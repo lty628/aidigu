@@ -385,6 +385,9 @@
             padding: 1.5rem;
             border-radius: 8px;
             border: 1px solid #e0e0e0;
+            display: flex; /* 使用 flexbox 布局 */
+            flex-direction: column; /* 垂直排列子元素 */
+            justify-content: center; /* 垂直居中内容 */
         }
 
         .preview-item.tall {
@@ -395,14 +398,13 @@
             width: 100%;
             height: auto;
             border-radius: 8px;
-            margin-bottom: 1rem;
+            margin-bottom: 0.5rem; /* 减少图片和文字之间的间距 */
         }
 
         .preview-description {
             text-align: center;
             color: var(--secondary-color);
-            font-size: 0.95rem;
-            margin-top: 1rem;
+            font-size: 1.1rem; /* 适当放大文字 */
         }
 
         @media (max-width: 768px) {
@@ -414,6 +416,80 @@
                 flex: 1;
             }
         }
+    </style>
+    <style>
+        /* 优化页脚样式 */
+        .footer {
+            background: linear-gradient(to bottom, var(--light-background), #e0e0e0); /* 添加渐变背景 */
+            box-shadow: 0 -2px 4px var(--shadow-color); /* 添加顶部阴影 */
+        }
+    
+        .footer-links a {
+            position: relative;
+        }
+    
+        .footer-links a::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: -2px;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary-color);
+            transition: width 0.3s ease;
+        }
+    
+        .footer-links a:hover::after {
+            width: 100%; /* 悬停时显示下划线动画 */
+        }
+    
+        /* 增强预览图交互效果 */
+        .preview-item {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+    
+        .preview-item:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 15px -3px var(--hover-shadow), 0 4px 6px -2px var(--hover-shadow);
+        }
+    
+        /* 为英雄部分添加动画 */
+        .hero-content {
+            animation: fadeInUp 1s ease-out;
+        }
+    
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    
+        /* 为功能项添加动画 */
+        .feature-item {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInItem 0.8s ease-out forwards;
+        }
+    
+        @keyframes fadeInItem {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    
+        /* 为每个功能项设置不同的动画延迟 */
+        .feature-item:nth-child(1) { animation-delay: 0.2s; }
+        .feature-item:nth-child(2) { animation-delay: 0.4s; }
+        .feature-item:nth-child(3) { animation-delay: 0.6s; }
+        .feature-item:nth-child(4) { animation-delay: 0.8s; }
+        .feature-item:nth-child(5) { animation-delay: 1s; }
+        .feature-item:nth-child(6) { animation-delay: 1.2s; }
     </style>
 </head>
 
@@ -465,10 +541,10 @@
             </div>
         </div>
         <div class="preview-row">
-            <div class="preview-item tall" style="background: none; border: none;">
+            <div class="preview-item" style="background: none; border: none;">
                 <p class="preview-description">丰富的话题讨论页面，支持多种互动方式</p>
             </div>
-            <div class="preview-item" style="background: none; border: none;">
+            <div class="preview-item tall" style="background: none; border: none;">
                 <!-- 替换话题页面预览图 -->
                 <img src="https://fastly.picsum.photos/id/216/1200/600.jpg?hmac=DkFHH39boeNThycl0UfwW-Og-27onyqeAPb3a9X5bok" alt="话题页面预览" style="border: none;">
                
@@ -490,10 +566,10 @@
             </div>
         </div>
         <div class="preview-row">
-            <div class="preview-item tall" style="background: none; border: none;">
+            <div class="preview-item" style="background: none; border: none;">
                 <p class="preview-description">便捷的消息中心，实时接收和发送消息</p>
             </div>
-            <div class="preview-item" style="background: none; border: none;">
+            <div class="preview-item tall" style="background: none; border: none;">
                 <!-- 替换消息中心预览图 -->
                 <img src="https://fastly.picsum.photos/id/621/600/400.jpg?hmac=TCPdRygUBDql95PxXUBJNAgMoBbAvJ_uR3ofNJn0tag" alt="消息中心预览" style="border: none;">
             </div>
@@ -561,16 +637,14 @@
         <!-- 新增友情链接 -->
         <div class="footer-links">
             <a href="#">关于我们</a>
+            <span style="color: var(--secondary-color);">|</span>
             <a href="#">联系我们</a>
+            <span style="color: var(--secondary-color);">|</span>
             <a href="#">隐私政策</a>
+            <span style="color: var(--secondary-color);">|</span>
             <a href="#">服务条款</a>
         </div>
-        <!-- 新增友情链接部分 -->
-        <div class="footer-links">
-            <h4>友情链接</h4>
-            <a href="https://example1.com">示例网站1</a>
-            <a href="https://example2.com">示例网站2</a>
-        </div>
+        <hr style="border: 0; height: 1px; background-color: var(--secondary-color); opacity: 0.3; margin: 1rem 0;">
         <p>备案号：<a href="https://beian.miit.gov.cn/" target="_blank">粤 ICP 备 12345678 号</a></p>
         <p>&copy; 2025 爱嘀咕. 保留所有权利。</p>
     </footer>
