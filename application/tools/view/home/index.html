@@ -325,7 +325,7 @@
         .navbar {
             background: var(--light-background);
             box-shadow: 0 2px 4px var(--shadow-color);
-            border-bottom: 3px solid var(--primary-color);
+            /* border-bottom: 3px solid var(--primary-color); */
             /* 添加底部边框 */
         }
 
@@ -400,7 +400,7 @@
         .footer {
             background: var(--light-background);
             box-shadow: 0 -2px 4px var(--shadow-color);
-            border-top: 3px solid var(--primary-color);
+            /* border-top: 3px solid var(--primary-color); */
             /* 添加顶部边框 */
         }
 
@@ -863,7 +863,9 @@
         <div class="hero-content" style="width: 50%; margin: 0 auto; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);">
             <h1>爱嘀咕开源项目</h1>
             <p id="typing-text"></p>
-            <a href="#" class="btn" style="transition: all 0.3s ease; transform: scale(1);">了解更多</a>
+            <a href="#" class="btn" style="transition: all 0.3s ease; transform: scale(1);">Github</a>
+            <a href="#" class="btn" style="transition: all 0.3s ease; transform: scale(1);">测试地址</a>
+            <a href="#" class="btn" style="transition: all 0.3s ease; transform: scale(1);">正式地址</a>
         </div>
     </div>
     <!-- 优化后的打字效果脚本 -->
@@ -903,17 +905,53 @@
     </script>
 
     <div id="open-source" class="container">
-        <h2>开源地址和项目地址</h2>
+        <h2 style="color: var(--primary-color); text-transform: uppercase; letter-spacing: 2px; text-align: center;">玩法推荐</h2>
         <div class="address-container">
-            <div class="address-block" style="justify-content: space-around;">
-                <span style="margin-right: 2rem;">
-                    <a href="https://github.com/your-repo"><i class="fab fa-github"></i> GitHub</a>
+            <div class="address-block" style="justify-content: space-around; padding: 2.5rem; border-radius: 25px; display: flex; flex-wrap: wrap; gap: 1rem;">
+                <!-- 需求备忘录 -->
+                <span class="play-item" style="transition: transform 0.3s ease; display: flex; flex-direction: column; align-items: center;">
+                    <a href="#" style="display: flex; flex-direction: column; align-items: center; color: var(--text-color); text-align: center;">
+                        <i class="fas fa-sticky-note" style="font-size: 2.5rem; color: var(--primary-color); margin-bottom: 0.8rem;"></i>
+                        <span style="font-weight: 600;">需求备忘录</span>
+                    </a>
                 </span>
-                <span>
-                    <a href="https://aidigu.com"><i class="fas fa-link"></i> 测试地址</a>
+                
+                <!-- 资源分享 -->
+                <span class="play-item" style="transition: transform 0.3s ease; display: flex; flex-direction: column; align-items: center;">
+                    <a href="#" style="display: flex; flex-direction: column; align-items: center; color: var(--text-color); text-align: center;">
+                        <i class="fas fa-share-alt" style="font-size: 2.5rem; color: var(--primary-color); margin-bottom: 0.8rem;"></i>
+                        <span style="font-weight: 600;">资源分享</span>
+                    </a>
                 </span>
-                <span>
-                    <a href="https://aidigu.com"><i class="fas fa-link"></i> 项目官网</a>
+
+                <!-- 信息发布 -->
+                <span class="play-item" style="transition: transform 0.3s ease; display: flex; flex-direction: column; align-items: center;">
+                    <a href="#" style="display: flex; flex-direction: column; align-items: center; color: var(--text-color); text-align: center;">
+                        <i class="fas fa-bullhorn" style="font-size: 2.5rem; color: var(--primary-color); margin-bottom: 0.8rem;"></i>
+                        <span style="font-weight: 600;">信息发布</span>
+                    </a>
+                </span>
+                <!-- 私有微博 -->
+                <span class="play-item" style="transition: transform 0.3s ease; display: flex; flex-direction: column; align-items: center;">
+                    <a href="#" style="display: flex; flex-direction: column; align-items: center; color: var(--text-color); text-align: center;">
+                        <i class="fab fa-weibo" style="font-size: 2.5rem; color: var(--primary-color); margin-bottom: 0.8rem;"></i>
+                        <span style="font-weight: 600;">私有微博</span>
+                    </a>
+                </span>
+                <!-- NAS日记 -->
+                <span class="play-item" style="transition: transform 0.3s ease; display: flex; flex-direction: column; align-items: center;">
+                    <a href="#" style="display: flex; flex-direction: column; align-items: center; color: var(--text-color); text-align: center;">
+                        <i class="fas fa-book" style="font-size: 2.5rem; color: var(--primary-color); margin-bottom: 0.8rem;"></i>
+                        <span style="font-weight: 600;">私有日记</span>
+                    </a>
+                </span>
+                
+                <!-- NAS导航 -->
+                <span class="play-item" style="transition: transform 0.3s ease; display: flex; flex-direction: column; align-items: center;">
+                    <a href="#" style="display: flex; flex-direction: column; align-items: center; color: var(--text-color); text-align: center;">
+                        <i class="fas fa-sitemap" style="font-size: 2.5rem; color: var(--primary-color); margin-bottom: 0.8rem;"></i>
+                        <span style="font-weight: 600;">私有导航</span>
+                    </a>
                 </span>
             </div>
         </div>
