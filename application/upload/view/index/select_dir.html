@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>选择目标文件夹</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/static/layui/layui.js"></script>
+    <style>
+        :root {
+            --primary-color: #2196F3;
+            --secondary-color: #607D8B;
+            --background-color: #fafafa;
+            --card-background: #ffffff;
+            --hover-color: #f5f5f5;
+            --border-radius: 8px;
+            --box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            /* margin: 2rem auto; */
+            max-width: 600px;
+            background-color: var(--background-color);
+            color: #333;
+            line-height: 1.6;
+            padding: 0 1rem;
+        }
+
+        .toolbar {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        button {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        button.primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        button.secondary {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        button:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        #current-path {
+            background-color: var(--card-background);
+            padding: 0.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            /* margin-bottom: 1.5rem; */
+            font-weight: 500;
+            /* 修改字体大小 */
+            font-size: 0.9rem; 
+        }
+
+        .directory-tree {
+            background-color: var(--card-background);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 1rem 0;
+            min-height: 380px;
+        }
+
+        .directory-item {
+            padding: 0.8rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .directory-item:hover {
+            background-color: var(--hover-color);
+        }
+
+        .folder-icon {
+            width: 24px;
+            height: 24px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="toolbar">
+        <button id="back-button" class="secondary">
+            <!-- 这里可以根据需要替换为自定义图标 -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+            </svg>
+            返回上一级
+        </button>
+        <button id="confirm-move" class="primary">
+            <!-- 这里可以根据需要替换为自定义图标 -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check" viewBox="0 0 16 16">
+                <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/>
+            </svg>
+            确定移动
+        </button>
+    </div>
+    <div id="current-path">当前路径: 根目录</div>
+    <ul id="dir-tree" class="directory-tree">
+    </ul>
+
+    <input type="hidden" id="selType" value="{$type}">
+    <input type="hidden" id="selId" value="{$id}">
+    <input type="hidden" id="selected-dir-id" value="0">
+
+    <script>
+        layui.use(['layer'], function () {
+            const layer = layui.layer;
+            $(document).ready(function () {
+                let path = ['根目录'];
+                let currentDirId = 0;
+                let parentDirStack = [0];
+
+                loadDirectoryTree(currentDirId);
+
+                $('#back-button').on('click', function () {
+                    if (path.length > 1) {
+                        path.pop();
+                        parentDirStack.pop();
+                        currentDirId = parentDirStack[parentDirStack.length - 1];
+                        $('#selected-dir-id').val(currentDirId);
+                        $('#current-path').text('当前路径: ' + path.join(' > '));
+                        loadDirectoryTree(currentDirId);
+                    }
+                });
+
+                $('#confirm-move').on('click', function () {
+                    var selType = $('#selType').val();
+                    var selId = $('#selId').val();
+                    const targetDirId = $('#selected-dir-id').val();
+                    $.ajax({
+                        url: '/upload/index/moveItem',
+                        type: 'post',
+                        data: {
+                            id: selId,
+                            type: selType,
+                            target_dir_id: targetDirId
+                        },
+                        dataType: 'json',
+                        success: function (response) {
+                            if (response.code === 0) {
+                                parent.layer.closeAll();
+                            } else {
+                                layer.msg(response.msg, { icon: 5 });
+                            }
+                        },
+                        error: function () {
+                            layer.msg('网络错误，请稍后重试', { icon: 5 });
+                        }
+                    });
+                });
+
+                function loadDirectoryTree(parentId) {
+                    var selType = $('#selType').val();
+                    var selId = $('#selId').val();
+                    $.ajax({
+                        url: '/upload/index/selectDir',
+                        type: 'get',
+                        data: { dir_id: parentId },
+                        dataType: 'json',
+                        success: function (response) {
+                            if (response.code === 0) {
+                                const dirs = response.data.dirs;
+                                $('#dir-tree').empty();
+
+                                // 当不是根目录时添加返回上一级选项
+                                if (parentId !== 0) {
+                                    const backListItem = $('<li class="directory-item"></li>');
+                                    const backIcon = $('<img class="folder-icon" src="/static/upload/images/folder-1.svg" alt="文件夹图标">');
+                                    const backText = $('<span>..返回上一级</span>');
+
+                                    backListItem.append(backIcon, backText);
+                                    $('#dir-tree').append(backListItem);
+
+                                    backListItem.on('click', function () {
+                                        if (path.length > 1) {
+                                            path.pop();
+                                            parentDirStack.pop();
+                                            currentDirId = parentDirStack[parentDirStack.length - 1];
+                                            $('#selected-dir-id').val(currentDirId);
+                                            $('#current-path').text('当前路径: ' + path.join(' > '));
+                                            loadDirectoryTree(currentDirId);
+                                        }
+                                    });
+                                }
+
+                                dirs.forEach(function (dir) {
+                                    const listItem = $('<li class="directory-item"></li>');
+                                    const folderIcon = $('<img class="folder-icon" src="/static/upload/images/folder-1.svg" alt="文件夹图标">');
+                                    const dirName = $('<span>' + dir.dir_name + '</span>');
+
+                                    listItem.append(folderIcon, dirName);
+                                    $('#dir-tree').append(listItem);
+
+                                    listItem.on('click', function () {
+                                        currentDirId = dir.dir_id;
+                                        $('#selected-dir-id').val(currentDirId);
+                                        path.push(dir.dir_name);
+                                        parentDirStack.push(currentDirId);
+                                        $('#current-path').text('当前路径: ' + path.join(' > '));
+                                        loadDirectoryTree(currentDirId);
+                                    });
+                                });
+                            } else {
+                                layer.msg(response.msg, { icon: 5 });
+                            }
+                        },
+                        error: function () {
+                            layer.msg('网络错误，无法加载目录树', { icon: 5 });
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

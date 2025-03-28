@@ -125,26 +125,26 @@ class Index extends Controller
         return $parentPath . $dirInfo['dir_name'];
     }
 
-    public function createTable()
-    {
-        // 创建一个无限极分类的 目录表 wb_file_dir 顶级是 dir_id, parent_id , uid, name, is_delete, create_time, update_time
-        // 删除表
-        Db::execute("drop table wb_file_dir");
-        $sql = "CREATE TABLE IF NOT EXISTS `wb_file_dir` (
-            `dir_id` int(11) NOT NULL AUTO_INCREMENT,
-            `parent_id` int(11) NOT NULL DEFAULT '0' COMMENT '父级ID',
-            `uid` int(11) NOT NULL DEFAULT '0' COMMENT '用户ID',
-            `dir_name` varchar(255) NOT NULL DEFAULT '' COMMENT '目录名称',
-            `is_delete` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否删除',
-            `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-            `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-            PRIMARY KEY (`dir_id`)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='文件目录表';";
-        // file表增加dir_id字段默认是0(代表根目录)
-        $alterSql = "ALTER TABLE `wb_file` ADD COLUMN `dir_id` int(11) NOT NULL DEFAULT '0' COMMENT '目录ID';";
-        Db::execute($sql);
-        // Db::execute($alterSql);
-    }
+    // public function createTable()
+    // {
+    //     // 创建一个无限极分类的 目录表 wb_file_dir 顶级是 dir_id, parent_id , uid, name, is_delete, create_time, update_time
+    //     // 删除表
+    //     Db::execute("drop table wb_file_dir");
+    //     $sql = "CREATE TABLE IF NOT EXISTS `wb_file_dir` (
+    //         `dir_id` int(11) NOT NULL AUTO_INCREMENT,
+    //         `parent_id` int(11) NOT NULL DEFAULT '0' COMMENT '父级ID',
+    //         `uid` int(11) NOT NULL DEFAULT '0' COMMENT '用户ID',
+    //         `dir_name` varchar(255) NOT NULL DEFAULT '' COMMENT '目录名称',
+    //         `is_delete` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否删除',
+    //         `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    //         `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    //         PRIMARY KEY (`dir_id`)
+    //     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='文件目录表';";
+    //     // file表增加dir_id字段默认是0(代表根目录)
+    //     $alterSql = "ALTER TABLE `wb_file` ADD COLUMN `dir_id` int(11) NOT NULL DEFAULT '0' COMMENT '目录ID';";
+    //     Db::execute($sql);
+    //     // Db::execute($alterSql);
+    // }
 
     /**
      * 删除文件或目录
@@ -436,5 +436,165 @@ class Index extends Controller
         ]);
         Db::name('file')->where('id', $id)->update(['share_msg_id' => 0]);
         return $this->success('已取消分享！');
+    }
+
+    /**
+     * 重命名文件或目录
+     *
+     * @return \think\response\Json
+     */
+    public function renameItem()
+    {
+        $id = (int) input('post.id');
+        $type = input('post.type');
+        $newName = input('post.new_name');
+        $uid = getLoginUid();
+
+        // 验证新名称是否为空
+        if (empty($newName)) {
+            return json(['code' => 1, 'msg' => '新名称不能为空']);
+        }
+
+        if ($type == 'dir') {
+            // 检查目录是否存在且属于当前用户
+            $dirInfo = Db::name('file_dir')
+                ->where('dir_id', $id)
+                ->where('uid', $uid)
+                ->where('is_delete', 0)
+                ->find();
+
+            if (!$dirInfo) {
+                return json(['code' => 1, 'msg' => '目录不存在或无权限操作']);
+            }
+
+            // 更新目录名称
+            $result = Db::name('file_dir')
+                ->where('dir_id', $id)
+                ->update(['dir_name' => $newName]);
+
+        } elseif ($type == 'file') {
+            // 检查文件是否存在且属于当前用户
+            $fileInfo = Db::name('file')
+                ->where('id', $id)
+                ->where('userid', $uid)
+                ->where('is_delete', 0)
+                ->find();
+
+            if (!$fileInfo) {
+                return json(['code' => 1, 'msg' => '文件不存在或无权限操作']);
+            }
+
+            // 更新文件名称
+            $result = Db::name('file')
+                ->where('id', $id)
+                ->update(['file_name' => $newName]);
+        } else {
+            return json(['code' => 1, 'msg' => '无效的重命名类型']);
+        }
+
+        if (!$result) {
+            return json(['code' => 1, 'msg' => '重命名失败']);
+        }
+
+        return json(['code' => 0, 'msg' => '重命名成功']);
+    }
+
+    /**
+     * 选择目标文件夹页面
+     */
+    public function selectDir()
+    {
+        if (request()->isAjax()) {
+            $parentId = input('get.dir_id', 0);
+            $uid = getLoginUid();
+        
+            $dirs = Db::name('file_dir')
+                ->where('parent_id', $parentId)
+                ->where('uid', $uid)
+                ->where('is_delete', 0)
+                ->select();
+        
+            return json([
+                'code' => 0,
+                'data' => [
+                    'dirs' => $dirs
+                ]
+            ]); 
+        } else {
+            $type = input('get.type');
+            $id = input('get.id');
+            $this->assign('type', $type);
+            $this->assign('id', $id);
+            return $this->fetch();
+        }
+
+    }
+
+    /**
+     * 移动文件或目录
+     *
+     * @return \think\response\Json
+     */
+    public function moveItem()
+    {
+        $id = (int)$this->request->post('id');
+        $type = $this->request->post('type');
+        $targetDirId = (int)$this->request->post('target_dir_id');
+        $uid = getLoginUid();
+
+        // 参数验证
+        if (empty($id) || empty($type)) {
+            return json(['code' => 1, 'msg' => '参数缺失']);
+        }
+
+        try {
+            Db::startTrans(); // 开启事务
+
+            if ($type == 'dir') {
+                // 检查目录是否存在且属于当前用户
+                $dirInfo = Db::name('file_dir')
+                    ->where('dir_id', $id)
+                    ->where('uid', $uid)
+                    ->where('is_delete', 0)
+                    ->find();
+
+                if (!$dirInfo) {
+                    throw new \Exception('目录不存在或无权限操作');
+                }
+
+                // 更新目录的父级 ID
+                $result = Db::name('file_dir')
+                    ->where('dir_id', $id)
+                    ->update(['parent_id' => $targetDirId]);
+            } elseif ($type == 'file') {
+                // 检查文件是否存在且属于当前用户
+                $fileInfo = Db::name('file')
+                    ->where('id', $id)
+                    ->where('userid', $uid)
+                    ->where('is_delete', 0)
+                    ->find();
+
+                if (!$fileInfo) {
+                    throw new \Exception('文件不存在或无权限操作');
+                }
+
+                // 更新文件的目录 ID
+                $result = Db::name('file')
+                    ->where('id', $id)
+                    ->update(['dir_id' => $targetDirId]);
+            } else {
+                throw new \Exception('无效的移动类型');
+            }
+
+            if (!$result) {
+                throw new \Exception('移动失败');
+            }
+
+            Db::commit(); // 提交事务
+            return json(['code' => 0, 'msg' => '移动成功']);
+        } catch (\Exception $e) {
+            Db::rollback(); // 回滚事务
+            return json(['code' => 1, 'msg' => $e->getMessage()]);
+        }
     }
 }

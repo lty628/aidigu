@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,23 +18,23 @@
 
     #file-explorer {
       height: 100%;
-      padding: 20px;
+      padding: 1.25rem;
       box-sizing: border-box;
-      max-width: 1200px;
+      /* max-width: 75rem;.php */
       margin: 0 auto;
       /* 修改背景色，这里使用 #f8f9fa 作为示例，你可以根据需求调整 */
-      background-color: #f8f9fa; 
+      background-color: #f8f9fa;
     }
 
     /* 操作按钮样式 */
     .action-button {
-      margin-right: 10px;
-      padding: 8px 16px;
+      margin-right: .625rem;
+      padding: .5rem 1rem;
       cursor: pointer;
       background-color: #4CAF50;
       color: white;
       border: none;
-      border-radius: 4px;
+      border-radius: .25rem;
       transition: background-color 0.3s ease;
     }
 
@@ -43,11 +44,11 @@
 
     /* 路径栏样式 */
     #path-bar {
-      margin: 20px 0;
-      padding: 12px;
+      margin: 1.25rem 0;
+      padding: .75rem;
       background-color: white;
-      border-radius: 6px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      border-radius: .375rem;
+      box-shadow: 0 .125rem .25rem rgba(0, 0, 0, 0.1);
     }
 
     /* 文件列表样式 */
@@ -56,7 +57,7 @@
       padding: 0;
       display: flex;
       flex-wrap: wrap;
-      gap: 24px;
+      gap: 1.5rem;
     }
 
     .file-item {
@@ -64,19 +65,20 @@
       flex-direction: column;
       align-items: center;
       cursor: pointer;
-      padding: 16px;
-      border-radius: 8px;
+      padding: 1rem;
+      border-radius: .5rem;
       background-color: white;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 .125rem .25rem rgba(0, 0, 0, 0.1);
       transition: transform 0.2s ease, box-shadow 0.2s ease;
       /* 限制文件项的宽度 */
-      min-width: 150px; /* 增加最小宽度 */
-      max-width: 150px; 
+      min-width: 9.375rem;
+      /* 增加最小宽度 */
+      max-width: 9.375rem;
     }
 
     .file-item:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+      transform: translateY(-0.1875rem);
+      box-shadow: 0 .25rem .5rem rgba(0, 0, 0, 0.15);
     }
 
     .folder {
@@ -84,38 +86,43 @@
     }
 
     .file-icon {
-      font-size: 32px; /* 调整图标大小 */
-      margin-bottom: 8px;
-      display: flex; /* 使用 flex 布局 */
-      justify-content: center; /* 水平居中 */
-      align-items: center; /* 垂直居中 */
+      font-size: 2rem;
+      /* 调整图标大小 */
+      margin-bottom: .5rem;
+      display: flex;
+      /* 使用 flex 布局 */
+      justify-content: center;
+      /* 水平居中 */
+      align-items: center;
+      /* 垂直居中 */
     }
 
     /* 右键菜单样式 */
-    #context-menu {
+    #context-menu-list {
       position: absolute;
       background: white;
       border: none;
-      border-radius: 6px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+      border-radius: .375rem;
+      box-shadow: 0 .25rem .5rem rgba(0, 0, 0, 0.15);
       display: none;
-      min-width: 120px;
+      min-width: 7.5rem;
+      z-index: 1000; /* 确保菜单显示在最上层 */
     }
 
-    #context-menu ul {
+    #context-menu-list ul {
       list-style-type: none;
-      padding: 8px 0;
+      padding: .5rem 0;
       margin: 0;
     }
 
-    #context-menu li {
-      padding: 10px 16px;
+    #context-menu-list li {
+      padding: .625rem 1rem;
       cursor: pointer;
       color: #333;
       transition: background-color 0.2s ease;
     }
 
-    #context-menu li:hover {
+    #context-menu-list li:hover {
       background-color: #f0f0f0;
     }
 
@@ -129,6 +136,7 @@
     }
   </style>
 </head>
+
 <body>
   <div id="file-explorer">
     <div>
@@ -157,13 +165,15 @@
     <div id="file-list"></div>
   </div>
   <!-- 右键菜单 -->
-  <div id="context-menu">
-    <ul>
+  <div id="context-menu-container">
+    <ul id="context-menu-list">
       <li id="share-item">分享</li>
+      <li id="rename-item">重命名</li>
+      <li id="move-item">移动</li>
       <li id="delete-item">删除</li>
     </ul>
   </div>
-  <script src="/static/layui/layui.js"></script> 
+  <script src="/static/layui/layui.js"></script>
   <script>
     layui.use(['jquery', 'layer'], function () {
       const $ = layui.jquery;
@@ -174,12 +184,35 @@
       const forwardButton = document.getElementById('forward-button');
       const newFolderButton = document.getElementById('new-folder-button');
       const uploadButton = document.getElementById('upload-button');
-      const contextMenu = document.getElementById('context-menu');
+      const contextMenu = document.getElementById('context-menu-list');
       const shareItem = document.getElementById('share-item');
       const deleteItem = document.getElementById('delete-item');
-      // 获取回到根目录按钮
-      const rootButton = document.getElementById('root-button'); 
+      const rootButton = document.getElementById('root-button');
+      const renameItem = document.getElementById('rename-item');
+      // 添加移动菜单项
+      const moveItem = document.getElementById('move-item');
 
+      moveItem.addEventListener('click', () => {
+        if (selectedItem) {
+          const itemId = selectedItem.isDirectory ? selectedItem.dir_id : selectedItem.id;
+          const itemType = selectedItem.isDirectory ? 'dir' : 'file';
+          // 使用 layer 弹出选择目录窗口
+          layer.open({
+            type: 2, // 2 表示 iframe 层
+            title: '选择目标文件夹',
+            area: ['25rem', '37.5rem'], // 弹框大小
+            content: `/upload/index/selectDir?type=${itemType}&id=${itemId}`,
+            success: function (layero, index) {
+              // 可以在这里添加弹框成功打开后的逻辑
+            },
+            end: function () {
+              // 弹框关闭后重新加载文件列表
+              loadFiles(); 
+            }
+          });
+        }
+        contextMenu.style.display = 'none';
+      });
       // 从本地存储中读取目录状态
       let currentDirId = parseInt(localStorage.getItem('currentDirId')) || 0;
       let history = JSON.parse(localStorage.getItem('history')) || [currentDirId];
@@ -195,9 +228,7 @@
           success: function (response) {
             if (response.current_path) {
               currentPathSpan.textContent = response.current_path;
-            } else {
-              console.error('响应中缺少 current_path 字段');
-            }
+            } 
 
             fileList.innerHTML = '';
 
@@ -224,7 +255,7 @@
             localStorage.setItem('historyIndex', historyIndex);
           },
           error: function () {
-            layer.msg('加载文件失败，请稍后重试', { icon: 5 });
+            layer.msg('加载文件失败，请稍后重试');
           }
         });
       }
@@ -265,11 +296,11 @@
         const icon = document.createElement('img');
         icon.className = 'file-icon';
         // 增大图标尺寸
-        icon.style.width = '48px'; 
-        icon.style.height = '48px'; 
+        icon.style.width = '3rem';
+        icon.style.height = '3rem';
         if (isDirectory) {
           // 使用文件夹图片
-          icon.src = '/static/upload/images/folder.svg'; 
+          icon.src = '/static/upload/images/folder.svg';
         } else {
           const extension = getFileExtension(item.file_name);
           const imagePath = getFileImagePath(extension);
@@ -283,7 +314,6 @@
           nameSpan.textContent = fullName;
           nameSpan.setAttribute('title', fullName);
         } else {
-          console.error(isDirectory ? '目录缺少名称:' : '文件缺少名称:', item);
           nameSpan.textContent = fullName;
           nameSpan.setAttribute('title', nameSpan.textContent);
         }
@@ -291,12 +321,18 @@
 
         // 右键点击事件
         listItem.addEventListener('contextmenu', (e) => {
-          e.preventDefault();
+          e.preventDefault(); // 确保阻止默认右键菜单
           selectedItem = { ...item, isDirectory };
-          console.log('选中项:', selectedItem);
           contextMenu.style.display = 'block';
           contextMenu.style.left = e.pageX + 'px';
           contextMenu.style.top = e.pageY + 'px';
+      
+          // 判断是否为文件夹，若是则隐藏分享按钮
+          if (isDirectory) {
+            shareItem.style.display = 'none';
+          } else {
+            shareItem.style.display = 'block';
+          }
         });
 
         // 点击事件
@@ -326,9 +362,9 @@
       shareItem.addEventListener('click', () => {
         if (selectedItem) {
           if (selectedItem.isDirectory) {
-            console.log(`分享目录: ${selectedItem.dir_name}`);
+            // 移除 console.log
           } else {
-            console.log(`分享文件: ${selectedItem.file_name}`);
+            // 移除 console.log
           }
           contextMenu.style.display = 'none';
         }
@@ -344,7 +380,6 @@
           }, function (index) {
             const itemId = selectedItem.isDirectory ? selectedItem.dir_id : selectedItem.id;
             const itemType = selectedItem.isDirectory ? 'dir' : 'file';
-            console.log('准备删除的 ID:', itemId, '类型:', itemType); 
             $.ajax({
               url: `/upload/index/deleteFile`,
               type: 'POST',
@@ -354,17 +389,15 @@
               },
               dataType: 'json',
               success: function (response) {
-                console.log('删除接口响应:', response); 
                 if (response.code === 0) {
-                  layer.msg('删除成功', { icon: 6 });
+                  layer.msg('删除成功');
                   loadFiles();
                 } else {
-                  layer.msg(response.msg || '删除失败，未知错误', { icon: 5 });
+                  layer.msg(response.msg || '删除失败，未知错误');
                 }
               },
-              error: function (error) {
-                console.error('删除接口请求出错:', error); 
-                layer.msg('删除失败，请稍后重试', { icon: 5 });
+              error: function () {
+                layer.msg('删除失败，请稍后重试');
               }
             });
             contextMenu.style.display = 'none';
@@ -416,14 +449,14 @@
               dataType: 'json',
               success: function (response) {
                 if (response.code === 0) {
-                  layer.msg('文件夹创建成功', { icon: 6 });
+                  layer.msg('文件夹创建成功');
                   loadFiles();
                 } else {
-                  layer.msg(response.msg, { icon: 5 });
+                  layer.msg(response.msg);
                 }
               },
               error: function () {
-                layer.msg('创建文件夹失败，请稍后重试', { icon: 5 });
+                layer.msg('创建文件夹失败，请稍后重试');
               }
             });
           }
@@ -431,14 +464,63 @@
         });
       });
 
+      // 重命名功能
+      renameItem.addEventListener('click', () => {
+        if (selectedItem) {
+          const itemName = selectedItem.isDirectory ? selectedItem.dir_name : selectedItem.file_name;
+          layer.prompt({
+            title: `重命名 ${itemName}`,
+            formType: 0,
+            value: itemName
+          }, function (newName, index) {
+            if (newName) {
+              const itemId = selectedItem.isDirectory ? selectedItem.dir_id : selectedItem.id;
+              const itemType = selectedItem.isDirectory ? 'dir' : 'file';
+              $.ajax({
+                url: `/upload/index/renameItem`,
+                type: 'POST',
+                data: {
+                  id: itemId,
+                  type: itemType,
+                  new_name: newName
+                },
+                dataType: 'json',
+                success: function (response) {
+                  if (response.code === 0) {
+                    layer.msg('重命名成功');
+                    loadFiles();
+                  } else {
+                    layer.msg(response.msg || '重命名失败，未知错误');
+                  }
+                },
+                error: function () {
+                  layer.msg('重命名失败，请稍后重试');
+                }
+              });
+            }
+            layer.close(index);
+          });
+          contextMenu.style.display = 'none';
+        }
+      });
+
       // 上传按钮点击事件
       uploadButton.addEventListener('click', () => {
         const url = `/cloud/?dirId=${currentDirId}&hiddenHeader=1`;
+        let uploadLayerIndex; // 定义一个变量来存储弹窗的索引
         layer.open({
           type: 2,
           title: '文件上传',
+          shade: 0.3,
           area: ['80%', '80%'],
-          content: url
+          content: url,
+          success: function(layero, index) {
+            uploadLayerIndex = index; // 保存弹窗的索引
+          },
+          end: function() {
+            // 关闭弹窗后刷新文件列表
+            loadFiles();
+          }
         });
       });
 
@@ -447,4 +529,5 @@
     });
   </script>
 </body>
+
 </html>
