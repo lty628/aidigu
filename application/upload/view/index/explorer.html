@@ -21,6 +21,8 @@
       box-sizing: border-box;
       max-width: 1200px;
       margin: 0 auto;
+      /* 修改背景色，这里使用 #f8f9fa 作为示例，你可以根据需求调整 */
+      background-color: #f8f9fa; 
     }
 
     /* 操作按钮样式 */
@@ -128,17 +130,30 @@
   </style>
 </head>
 <body>
-  <!-- 页面内容修改，添加回到根目录按钮 -->
   <div id="file-explorer">
     <div>
-      <!-- 新增回到根目录按钮 -->
-      <button class="action-button" id="root-button">回到根目录</button>
-      <button class="action-button" id="back-button">后退</button>
-      <button class="action-button" id="forward-button">前进</button>
-      <button class="action-button" id="new-folder-button">新建文件夹</button>
-      <button class="action-button" id="upload-button">上传文件</button>
+      <!-- 新增回到根目录按钮，用图标替换文字 -->
+      <button class="action-button" id="root-button">
+        <i class="layui-icon layui-icon-home"></i>
+      </button>
+      <button class="action-button" id="back-button">
+        <i class="layui-icon layui-icon-left"></i>
+      </button>
+      <button class="action-button" id="forward-button">
+        <i class="layui-icon layui-icon-right"></i>
+      </button>
+      <button class="action-button" id="new-folder-button">
+        <i class="layui-icon layui-icon-add-1"></i>
+      </button>
+      <button class="action-button" id="upload-button">
+        <i class="layui-icon layui-icon-upload-drag"></i>
+      </button>
     </div>
-    <div id="path-bar">当前路径: <span id="current-path"></span></div>
+    <!-- 路径栏用图标替换部分文字 -->
+    <div id="path-bar">
+      <i class="layui-icon layui-icon-location"></i>
+      <span id="current-path"></span>
+    </div>
     <div id="file-list"></div>
   </div>
   <!-- 右键菜单 -->
@@ -269,7 +284,7 @@
           nameSpan.setAttribute('title', fullName);
         } else {
           console.error(isDirectory ? '目录缺少名称:' : '文件缺少名称:', item);
-          nameSpan.textContent = isDirectory ? '未命名目录' : '未命名文件';
+          nameSpan.textContent = fullName;
           nameSpan.setAttribute('title', nameSpan.textContent);
         }
         listItem.appendChild(nameSpan);
