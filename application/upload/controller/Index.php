@@ -10,21 +10,20 @@ class Index extends Controller
 {
     public function initialize()
     {
-        // if (!getLoginUid()) {
-        //     return $this->error('您没有登录, 请先登录！', '/login/');
-        // }
+        if (!getLoginUid()) {
+            return $this->error('您没有登录, 请先登录！', '/login/');
+        }
+        $dirId = input('get.dirId', 0, 'intval');
+        $hiddenHeader = input('get.hiddenHeader', 0, 'intval');
+        $this->assign('dirId', $dirId);
+        $this->assign('hiddenHeader', $hiddenHeader);
         $this->assign('action', request()->action());
     }
 
     public function index()
     {
-        $dirId = input('get.dirId', 0, 'intval');
-        $hiddenHeader = input('get.hiddenHeader', 0, 'intval');
         // $a = \Carbon\Carbon::parse('2020-04-08');
         // $b = \Carbon\Carbon::now();
-        // dump($b);
-        $this->assign('dirId', $dirId);
-        $this->assign('hiddenHeader', $hiddenHeader);
         return $this->fetch();
     }
 
