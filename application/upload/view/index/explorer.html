@@ -167,6 +167,7 @@
   <!-- 右键菜单 -->
   <div id="context-menu-container">
     <ul id="context-menu-list">
+      <li id="download-item">下载</li>
       <li id="share-item">分享</li>
       <li id="rename-item">重命名</li>
       <li id="move-item">移动</li>
@@ -289,68 +290,71 @@
 
       // 创建列表项
       function createListItem(item, isDirectory) {
-        const listItem = document.createElement('li');
-        listItem.className = isDirectory ? 'file-item folder' : 'file-item';
-
-        // 修改为使用 img 元素
-        const icon = document.createElement('img');
-        icon.className = 'file-icon';
-        // 增大图标尺寸
-        icon.style.width = '3rem';
-        icon.style.height = '3rem';
-        if (isDirectory) {
-          // 使用文件夹图片
-          icon.src = '/static/upload/images/folder.svg';
-        } else {
-          const extension = getFileExtension(item.file_name);
-          const imagePath = getFileImagePath(extension);
-          icon.src = imagePath;
-        }
-        listItem.appendChild(icon);
-
-        const nameSpan = document.createElement('span');
-        const fullName = isDirectory ? item.dir_name : item.file_name;
-        if (fullName) {
-          nameSpan.textContent = fullName;
-          nameSpan.setAttribute('title', fullName);
-        } else {
-          nameSpan.textContent = fullName;
-          nameSpan.setAttribute('title', nameSpan.textContent);
-        }
-        listItem.appendChild(nameSpan);
-
-        // 右键点击事件
-        listItem.addEventListener('contextmenu', (e) => {
-          e.preventDefault(); // 确保阻止默认右键菜单
-          selectedItem = { ...item, isDirectory };
-          contextMenu.style.display = 'block';
-          contextMenu.style.left = e.pageX + 'px';
-          contextMenu.style.top = e.pageY + 'px';
+          const listItem = document.createElement('li');
+          listItem.className = isDirectory ? 'file-item folder' : 'file-item';
       
-          // 判断是否为文件夹，若是则隐藏分享按钮
+          // 修改为使用 img 元素
+          const icon = document.createElement('img');
+          icon.className = 'file-icon';
+          // 增大图标尺寸
+          icon.style.width = '3rem';
+          icon.style.height = '3rem';
           if (isDirectory) {
-            shareItem.style.display = 'none';
+              // 使用文件夹图片
+              icon.src = '/static/upload/images/folder.svg';
           } else {
-            shareItem.style.display = 'block';
+              const extension = getFileExtension(item.file_name);
+              const imagePath = getFileImagePath(extension);
+              icon.src = imagePath;
           }
-        });
-
-        // 点击事件
-        if (isDirectory) {
-          listItem.addEventListener('click', () => {
-            history = history.slice(0, historyIndex + 1);
-            history.push(item.dir_id);
-            historyIndex++;
-            currentDirId = item.dir_id;
-            loadFiles();
+          listItem.appendChild(icon);
+      
+          const nameSpan = document.createElement('span');
+          const fullName = isDirectory ? item.dir_name : item.file_name;
+          if (fullName) {
+              nameSpan.textContent = fullName;
+              nameSpan.setAttribute('title', fullName);
+          } else {
+              nameSpan.textContent = fullName;
+              nameSpan.setAttribute('title', nameSpan.textContent);
+          }
+          listItem.appendChild(nameSpan);
+      
+          // 右键点击事件
+          listItem.addEventListener('contextmenu', (e) => {
+              e.preventDefault(); // 确保阻止默认右键菜单
+              selectedItem = { ...item, isDirectory };
+              contextMenu.style.display = 'block';
+              contextMenu.style.left = e.pageX + 'px';
+              contextMenu.style.top = e.pageY + 'px';
+      
+              const downloadItem = document.getElementById('download-item');
+              // 判断是否为文件夹，若是则隐藏下载按钮
+              if (isDirectory) {
+                  downloadItem.style.display = 'none';
+                  shareItem.style.display = 'none';
+              } else {
+                  downloadItem.style.display = 'block';
+                  shareItem.style.display = 'block';
+              }
           });
-        } else {
-          listItem.addEventListener('click', () => {
-            // 可添加文件下载逻辑
-          });
-        }
-
-        return listItem;
+      
+          // 点击事件
+          if (isDirectory) {
+              listItem.addEventListener('click', () => {
+                  history = history.slice(0, historyIndex + 1);
+                  history.push(item.dir_id);
+                  historyIndex++;
+                  currentDirId = item.dir_id;
+                  loadFiles();
+              });
+          } else {
+              listItem.addEventListener('click', () => {
+                  // 可添加文件下载逻辑
+              });
+          }
+      
+          return listItem;
       }
 
       // 点击页面其他地方隐藏右键菜单
@@ -360,14 +364,39 @@
 
       // 分享功能
       shareItem.addEventListener('click', () => {
-        if (selectedItem) {
-          if (selectedItem.isDirectory) {
-            // 移除 console.log
-          } else {
-            // 移除 console.log
+        if (selectedItem && !selectedItem.isDirectory) {
+          const itemId = selectedItem.id;
+          $.ajax({
+            url: `/upload/index/siteShare`,
+            type: 'GET',
+            data: { id: itemId },
+            dataType: 'json',
+            success: function (response) {
+              if (response.code === 0) {
+                layer.msg(response.msg);
+              } else {
+                layer.msg(response.msg);
+              }
+            },
+            error: function () {
+              layer.msg('分享失败，请稍后重试', { icon: 5 });
+            }
+          });
+        }
+        contextMenu.style.display = 'none';
+      });
+
+      // 下载功能
+      const downloadItem = document.getElementById('download-item');
+      
+      // 下载功能
+      downloadItem.addEventListener('click', () => {
+          if (selectedItem && !selectedItem.isDirectory) {
+              const itemId = selectedItem.id;
+              // 跳转到下载接口
+              window.location.href = `/upload/index/download?id=${itemId}`;
           }
           contextMenu.style.display = 'none';
-        }
       });
 
       // 删除功能

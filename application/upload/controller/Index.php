@@ -278,28 +278,55 @@ class Index extends Controller
         return $upload->server();
     }
 
+    /**
+     * 下载文件方法
+     *
+     * @return \think\Response
+     */
     public function download()
     {
         $id = (int) input('param.id');
         $fileInfo = Db::name('file')->where('id', $id)->where('userid', getLoginUid())->find();
-        if (!$fileInfo) return $this->error('无下载权限');
+        if (!$fileInfo) {
+            return $this->error('无下载权限');
+        }
+
         $storageConfig = config('upload.storage');
-        return $this->redirect($fileInfo['file_location']);
-        // return $this->curlRequest($fileInfo['file_path']);
-        // if ($storageConfig['type'] == 's3') {
-        //     return $this->curlRequest($fileInfo['file_path']);
-        // }
-        // $file = $fileInfo['file_path'];
-        // header("Content-type:application/octet-stream");
-        // header("Content-Disposition:attachment;filename = " . basename($file));
-        // header("Accept-ranges:bytes");
-        // header("Accept-length:" . filesize($file));
-        // $handle = fopen($file, 'rb');
-        // while (!feof($handle)) {
-        //     echo fread($handle, 102400);
-        // }
-        // fclose($handle);
-        // exit();
+        if (isset($storageConfig['type']) && $storageConfig['type'] == 's3') {
+            // 处理 S3 存储的下载逻辑
+            $url = $fileInfo['file_location'];
+            $url = str_replace(' ', '%20', $url);
+            $filename = basename($url);
+            $headers = get_headers($url, 1);
+            if (isset($headers['Content-Length'])) {
+                $fileSize = $headers['Content-Length'];
+                header('Content-Type: application/octet-stream');
+                header('Accept-Ranges: bytes');
+                header('Content-Length: ' . $fileSize);
+                header('Content-Disposition: attachment; filename="' . $filename . '"');
+                readfile($url);
+                exit;
+            } else {
+                return $this->error('获取文件大小失败');
+            }
+        } else {
+            // 处理本地存储的下载逻辑
+            $file =  env('root_path') . 'public' . $fileInfo['file_path'];
+            if (file_exists($file)) {
+                header("Content-type: application/octet-stream");
+                header("Content-Disposition: attachment; filename=" . basename($file));
+                header("Accept-Ranges: bytes");
+                header("Content-Length: " . filesize($file));
+                $handle = fopen($file, 'rb');
+                while (!feof($handle)) {
+                    echo fread($handle, 102400);
+                }
+                fclose($handle);
+                exit;
+            } else {
+                return $this->error('文件不存在');
+            }
+        }
     }
 
     // protected function curlRequest($url) 
@@ -383,45 +410,69 @@ class Index extends Controller
     }
 
     //站内分享
+    /**
+     * 站内分享文件
+     *
+     * @return \think\response\Json|\think\response\View
+     */
     public function siteShare()
     {
         $id = (int) input('param.id');
         $fileInfo = Db::name('file')->where('id', $id)->where('userid', getLoginUid())->find();
-        if (!$fileInfo) return $this->error('无分享权限');
-        if ($fileInfo['share_msg_id']) return $this->error('已分享过了，不能重复分享哦！');
+        if (!$fileInfo) {
+            return $this->error('无分享权限');
+        }
+        if ($fileInfo['share_msg_id']) {
+            return $this->error('已分享过了，不能重复分享哦！');
+        }
+    
         $type = explode('/', $fileInfo['file_type']);
         $pathinfo = pathinfo($fileInfo['file_path']);
         $filePath = $pathinfo['dirname'] . '/' . $pathinfo['filename'];
         $fileExtension = $pathinfo['extension'];
-        // dump($type);die;
-        // 视频分享
-        // {"media_info":"\/uploads\/72\/message\/20220326\/6b5b2500aade4230a7778bdc143eca51","media_type":"png"}
-        // $data['media_info']['media_type'] = $type[1];
+    
         $data['media_info'] = '';
-        if ($type[1] == 'mp4') {
-            $data['content'] = '<p>分享视频' . $fileInfo['file_name'] . '</p>';
-            $data['media'] = $fileInfo['file_path'];
-            $data['media_info'] = json_encode([
-                'media_info' => $filePath,
-                'media_type' => $fileExtension,
-            ]);
-        } elseif ($type[0] == 'image') {
-            $data['content'] = '<p>分享图片</p>';
-            $data['media'] = $fileInfo['file_path'];
-            $data['media_info'] = json_encode([
-                'media_info' => $filePath,
-                'media_type' => $fileExtension,
-            ]);
-        } elseif ($fileInfo['file_type'] == 'audio/mpeg') {
-            $data['content'] = '<p>分享 ' . $fileInfo['file_name'] . '</p><p><audio id="' . 'music_' . $id . '" class="music" controls="controls" loop="loop" onplay="stopOther(this)" preload="none" controlsList="nodownload" οncοntextmenu="return false" name="media"><source src="' . $fileInfo['file_path'] . '" type="audio/mpeg"></audio></p>';
-        } elseif ($type[0] == 'text') {
-            $data['content'] = '<p>阅读文件，点击<a href="javascript:;" data-url="/tools/reader?file_id=' . $fileInfo['id'] . '" data-title="' . $fileInfo['file_name'] . '" onclick="showFrameHtml(this, \'100%\', \'100%\')">' . $fileInfo['file_name'] . '</a>阅读</p>';
-        } else {
-            $data['content'] = '<p>分享文件，点击<a href="' . $fileInfo['file_path'] . '">' . $fileInfo['file_name'] . '</a>下载</p>';
+    
+        // 根据文件类型生成不同的分享内容
+        switch ($type[0]) {
+            case 'video':
+                if ($type[1] == 'mp4') {
+                    $data['content'] = '<p>分享视频' . $fileInfo['file_name'] . '</p>';
+                    $data['media'] = $fileInfo['file_path'];
+                    $data['media_info'] = json_encode([
+                        'media_info' => $filePath,
+                        'media_type' => $fileExtension,
+                    ]);
+                }
+                break;
+            case 'image':
+                $data['content'] = '<p>分享图片</p>';
+                $data['media'] = $fileInfo['file_path'];
+                $data['media_info'] = json_encode([
+                    'media_info' => $filePath,
+                    'media_type' => $fileExtension,
+                ]);
+                break;
+            case 'audio':
+                if ($fileInfo['file_type'] == 'audio/mpeg') {
+                    $data['content'] = '<p>分享 ' . $fileInfo['file_name'] . '</p><p><audio id="' . 'music_' . $id . '" class="music" controls="controls" loop="loop" onplay="stopOther(this)" preload="none" controlsList="nodownload" οncοntextmenu="return false" name="media"><source src="' . $fileInfo['file_path'] . '" type="audio/mpeg"></audio></p>';
+                }
+                break;
+            case 'text':
+                $data['content'] = '<p>阅读文件，点击<a href="javascript:;" data-url="/tools/reader?file_id=' . $fileInfo['id'] . '" data-title="' . $fileInfo['file_name'] . '" onclick="showFrameHtml(this, \'100%\', \'100%\')">' . $fileInfo['file_name'] . '</a>阅读</p>';
+                break;
+            default:
+                $data['content'] = '<p>分享文件，点击<a href="' . $fileInfo['file_path'] . '">' . $fileInfo['file_name'] . '</a>下载</p>';
+                break;
         }
+    
         $result = \app\common\controller\Api::saveMessage($data['content'], $data['media_info']);
-        Db::name('file')->where('id', $id)->update(['share_msg_id' => $result['msg_id'] ?? 0]);
-        return $this->success('分享成功,请在我的首页中查看！');
+        if ($result) {
+            Db::name('file')->where('id', $id)->update(['share_msg_id' => $result['msg_id'] ?? 0]);
+            return $this->success('分享成功,请在我的首页中查看！');
+        } else {
+            return $this->error('分享失败，请稍后重试');
+        }
     }
 
     public function siteCanleShare()
