@@ -9,6 +9,7 @@ class Listener
     {
         $fileMeta = input('post.fileInfo');
         $uploadURL = input('post.uploadURL');
+        $dirId = input('post.dirId', 0);
         // $key = basename($uploadURL);
         $uid = getLoginUid();
         $result = Db::name('file')->where('userid', $uid)->where('file_location', $uploadURL)->find();
@@ -30,6 +31,7 @@ class Listener
         $data['file_type'] = $fileMeta['type'];
         $data['userid'] = $uid;
         $data['file_location'] = $uploadURL;
+        $data['dir_id'] = $dirId;
         $data['create_time'] = date('Y-m-d H:i:s');
         $result = Db::name('file')->insert($data);
         if (!$result) {

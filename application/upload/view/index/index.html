@@ -1,8 +1,22 @@
 {include file='index/header' /}
+  <input type="hidden" value="{$dirId}" id="dirId">
+<script>
+  // 获取dirId
+  // 获取input中的dirId
+  var dirId = document.getElementById('dirId').value;
+  // 存储至sessionStorage
+  sessionStorage.setItem('dirId', dirId);
+</script>
 
+{if !$hiddenHeader}
   <div class="layui-body" style="position: absolute;top: 0;left: 0;margin-top: 65px;">
     <div id="drag-drop-area"></div>
   </div>
-  
+{else}
+  <div class="layui-body" style="position: absolute;top: 0;left: 0;">
+    <div id="drag-drop-area"></div>
+  </div>
+{/if}
+
 {include file='index/footer' /}
 <script src="/static/upload/js/upload.js"></script>

@@ -10,17 +10,21 @@ class Index extends Controller
 {
     public function initialize()
     {
-        if (!getLoginUid()) {
-            return $this->error('您没有登录, 请先登录！', '/login/');
-        }
+        // if (!getLoginUid()) {
+        //     return $this->error('您没有登录, 请先登录！', '/login/');
+        // }
         $this->assign('action', request()->action());
     }
 
     public function index()
     {
+        $dirId = input('get.dirId', 0, 'intval');
+        $hiddenHeader = input('get.hiddenHeader', 0, 'intval');
         // $a = \Carbon\Carbon::parse('2020-04-08');
         // $b = \Carbon\Carbon::now();
         // dump($b);
+        $this->assign('dirId', $dirId);
+        $this->assign('hiddenHeader', $hiddenHeader);
         return $this->fetch();
     }
 
@@ -37,6 +41,183 @@ class Index extends Controller
         // $this->assign('fileList', $result);
         return $this->fetch();
     }
+
+    /**
+     * 资源管理器方法，根据请求类型返回不同结果，同时支持按目录查询文件和目录
+     */
+    public function explorer()
+    {
+        // 获取目录 ID，默认为 0
+        $dirId = input('get.dir_id', 0, 'intval');
+        if (request()->isAjax()) {
+            $get = input('get.');
+            $page = $get['page'] ?? 1;
+            $limit = $get['limit'] ?? 10;
+            $fileName = $get['file_name'] ?? '';
+            $uid = getLoginUid();
+
+            // 查询当前路径
+            $currentPath = $this->getDirectoryPath($dirId, $uid);
+
+            // 查询目录
+            $whereDir = [
+                ['parent_id', '=', $dirId],
+                ['uid', '=', $uid],
+                ['is_delete', '=', 0]
+            ];
+            if ($fileName) {
+                $whereDir[] = ['dir_name', 'like',  '%'.$fileName.'%'];
+            }
+            $dirs = Db::name('file_dir')->where($whereDir)->select();
+
+            // 查询文件
+            $whereFile = [
+                ['dir_id', '=', $dirId],
+                ['userid', '=', $uid],
+                ['is_delete', '=', 0]
+            ];
+            if ($fileName) {
+                $whereFile[] = ['file_name', 'like',  '%'.$fileName.'%'];
+            }
+            $count = Db::name('file')->where($whereFile)->count();
+            $files = Db::name('file')->where($whereFile)->order('create_time', 'desc')->limit($limit)->page($page)->select();
+
+            // 合并目录和文件结果
+            $result = [
+                'dirs' => $dirs,
+                'files' => $files,
+                'count' => $count
+            ];
+
+            return json(['code' => 0, 'data' => $result, 'current_path' => $currentPath]);
+        } else {
+            return $this->fetch();
+        }
+    }
+
+    /**
+     * 递归获取目录路径
+     * @param int $dirId 目录 ID
+     * @param int $uid 用户 ID
+     * @return string 目录完整路径
+     */
+    private function getDirectoryPath($dirId, $uid)
+    {
+        if ($dirId == 0) {
+            return '/';
+        }
+
+        $dirInfo = Db::name('file_dir')
+            ->where('dir_id', $dirId)
+            ->where('uid', $uid)
+            ->where('is_delete', 0)
+            ->find();
+
+        if (!$dirInfo) {
+            return '/';
+        }
+
+        $parentPath = $this->getDirectoryPath($dirInfo['parent_id'], $uid);
+        if ($parentPath !== '/') {
+            $parentPath .= '/';
+        }
+
+        return $parentPath . $dirInfo['dir_name'];
+    }
+
+    public function createTable()
+    {
+        // 创建一个无限极分类的 目录表 wb_file_dir 顶级是 dir_id, parent_id , uid, name, is_delete, create_time, update_time
+        // 删除表
+        Db::execute("drop table wb_file_dir");
+        $sql = "CREATE TABLE IF NOT EXISTS `wb_file_dir` (
+            `dir_id` int(11) NOT NULL AUTO_INCREMENT,
+            `parent_id` int(11) NOT NULL DEFAULT '0' COMMENT '父级ID',
+            `uid` int(11) NOT NULL DEFAULT '0' COMMENT '用户ID',
+            `dir_name` varchar(255) NOT NULL DEFAULT '' COMMENT '目录名称',
+            `is_delete` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否删除',
+            `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+            `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+            PRIMARY KEY (`dir_id`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='文件目录表';";
+        // file表增加dir_id字段默认是0(代表根目录)
+        $alterSql = "ALTER TABLE `wb_file` ADD COLUMN `dir_id` int(11) NOT NULL DEFAULT '0' COMMENT '目录ID';";
+        Db::execute($sql);
+        // Db::execute($alterSql);
+    }
+
+    /**
+     * 删除文件或目录
+     *
+     * @return \think\response\Json
+     */
+    public function deleteFile()
+    {
+        $id = (int) input('post.id');
+        $type = input('post.type');
+        $uid = getLoginUid();   
+        if ($type == 'dir') {
+            // 有文件不能删除
+            $fileCount = Db::name('file')->where('dir_id', $id)->where('userid', $uid)->count();
+            if ($fileCount > 0) {
+                return json(['code' => 1, 'msg' => '该目录下有文件，不能删除']);
+            }
+            $result = Db::name('file_dir')->where('dir_id', $id)->where('uid', $uid)->update(['is_delete' => 1]);
+        } elseif ($type == 'file') {
+            $result = Db::name('file')->where('id', $id)->where('userid', $uid)->update(['is_delete' => 1]);
+        } else {
+            return json(['code' => 1, 'msg' => '无效的删除类型']);
+        }
+
+        if (!$result) {
+            return json(['code' => 1, 'msg' => '删除失败']);
+        }
+        return json(['code' => 0, 'msg' => '删除成功']);
+    }
+
+    public function createDir()
+    {
+        $dirName = input('post.folder_name');
+        $dirId = input('post.parent_dir_id');
+
+        // 处理前端传递的 '.' 为根目录 ID（假设根目录 ID 为 0）
+        if ($dirId === '.') {
+            $dirId = 0;
+        } else {
+            // 尝试将其转换为整数
+            $dirId = (int)$dirId;
+        }
+
+        // 参数验证
+        if (empty($dirName) || !is_numeric($dirId)) {
+            return json([
+                'code' => 1,
+                'msg' => '文件夹名称不能为空，且父目录 ID 必须为有效数字'
+            ]);
+        }
+
+        $uid = getLoginUid();
+        $data = [
+            'parent_id' => $dirId,
+            'uid' => $uid,
+            'dir_name' => $dirName,
+            'is_delete' => 0,
+            'create_time' => date('Y-m-d H:i:s'),
+            'update_time' => date('Y-m-d H:i:s'),
+        ];
+        $result = Db::name('file_dir')->insert($data);
+        if (!$result) {
+            return json([
+                'code' => 1,
+                'msg' => '创建目录失败'
+            ]);
+        }
+        return json([
+            'code' => 0,
+            'msg' => '创建目录成功'
+        ]);
+    }
+
 
     /**
      * 无用

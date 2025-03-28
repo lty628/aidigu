@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/static/layui/css/layui.css?t=1" media="all">
+  <title>文件资源管理器</title>
+  <style>
+    /* 整体背景和字体 */
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f5f6fa;
+    }
+
+    #file-explorer {
+      height: 100%;
+      padding: 20px;
+      box-sizing: border-box;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* 操作按钮样式 */
+    .action-button {
+      margin-right: 10px;
+      padding: 8px 16px;
+      cursor: pointer;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      transition: background-color 0.3s ease;
+    }
+
+    .action-button:hover {
+      background-color: #45a049;
+    }
+
+    /* 路径栏样式 */
+    #path-bar {
+      margin: 20px 0;
+      padding: 12px;
+      background-color: white;
+      border-radius: 6px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    /* 文件列表样式 */
+    #file-list {
+      list-style-type: none;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+    }
+
+    .file-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      padding: 16px;
+      border-radius: 8px;
+      background-color: white;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      /* 限制文件项的宽度 */
+      min-width: 150px; /* 增加最小宽度 */
+      max-width: 150px; 
+    }
+
+    .file-item:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    .folder {
+      color: #2196F3;
+    }
+
+    .file-icon {
+      font-size: 32px; /* 调整图标大小 */
+      margin-bottom: 8px;
+      display: flex; /* 使用 flex 布局 */
+      justify-content: center; /* 水平居中 */
+      align-items: center; /* 垂直居中 */
+    }
+
+    /* 右键菜单样式 */
+    #context-menu {
+      position: absolute;
+      background: white;
+      border: none;
+      border-radius: 6px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+      display: none;
+      min-width: 120px;
+    }
+
+    #context-menu ul {
+      list-style-type: none;
+      padding: 8px 0;
+      margin: 0;
+    }
+
+    #context-menu li {
+      padding: 10px 16px;
+      cursor: pointer;
+      color: #333;
+      transition: background-color 0.2s ease;
+    }
+
+    #context-menu li:hover {
+      background-color: #f0f0f0;
+    }
+
+    /* 文件或目录名称样式 */
+    .file-item span {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <!-- 页面内容修改，添加回到根目录按钮 -->
+  <div id="file-explorer">
+    <div>
+      <!-- 新增回到根目录按钮 -->
+      <button class="action-button" id="root-button">回到根目录</button>
+      <button class="action-button" id="back-button">后退</button>
+      <button class="action-button" id="forward-button">前进</button>
+      <button class="action-button" id="new-folder-button">新建文件夹</button>
+      <button class="action-button" id="upload-button">上传文件</button>
+    </div>
+    <div id="path-bar">当前路径: <span id="current-path"></span></div>
+    <div id="file-list"></div>
+  </div>
+  <!-- 右键菜单 -->
+  <div id="context-menu">
+    <ul>
+      <li id="share-item">分享</li>
+      <li id="delete-item">删除</li>
+    </ul>
+  </div>
+  <script src="/static/layui/layui.js"></script> 
+  <script>
+    layui.use(['jquery', 'layer'], function () {
+      const $ = layui.jquery;
+      const layer = layui.layer;
+      const fileList = document.getElementById('file-list');
+      const currentPathSpan = document.getElementById('current-path');
+      const backButton = document.getElementById('back-button');
+      const forwardButton = document.getElementById('forward-button');
+      const newFolderButton = document.getElementById('new-folder-button');
+      const uploadButton = document.getElementById('upload-button');
+      const contextMenu = document.getElementById('context-menu');
+      const shareItem = document.getElementById('share-item');
+      const deleteItem = document.getElementById('delete-item');
+      // 获取回到根目录按钮
+      const rootButton = document.getElementById('root-button'); 
+
+      // 从本地存储中读取目录状态
+      let currentDirId = parseInt(localStorage.getItem('currentDirId')) || 0;
+      let history = JSON.parse(localStorage.getItem('history')) || [currentDirId];
+      let historyIndex = parseInt(localStorage.getItem('historyIndex')) || 0;
+      let selectedItem = null;
+
+      // 加载文件和目录
+      function loadFiles() {
+        $.ajax({
+          url: `/upload/index/explorer?dir_id=${currentDirId}`,
+          type: 'GET',
+          dataType: 'json',
+          success: function (response) {
+            if (response.current_path) {
+              currentPathSpan.textContent = response.current_path;
+            } else {
+              console.error('响应中缺少 current_path 字段');
+            }
+
+            fileList.innerHTML = '';
+
+            if (response.data && response.data.dirs) {
+              response.data.dirs.forEach(dir => {
+                const listItem = createListItem(dir, true);
+                fileList.appendChild(listItem);
+              });
+            }
+
+            if (response.data && response.data.files) {
+              response.data.files.forEach(file => {
+                const listItem = createListItem(file, false);
+                fileList.appendChild(listItem);
+              });
+            }
+
+            backButton.disabled = historyIndex === 0;
+            forwardButton.disabled = historyIndex === history.length - 1;
+
+            // 保存目录状态到本地存储
+            localStorage.setItem('currentDirId', currentDirId);
+            localStorage.setItem('history', JSON.stringify(history));
+            localStorage.setItem('historyIndex', historyIndex);
+          },
+          error: function () {
+            layer.msg('加载文件失败，请稍后重试', { icon: 5 });
+          }
+        });
+      }
+
+      // 获取文件扩展名
+      function getFileExtension(fileName) {
+        const parts = fileName.split('.');
+        return parts.length > 1 ? parts[parts.length - 1].toLowerCase() : '';
+      }
+
+      // 根据扩展名获取图标类名
+      function getFileIconClass(extension) {
+        const iconMap = {
+          'jpg': 'layui-icon layui-icon-picture',
+          'png': 'layui-icon layui-icon-picture',
+          'gif': 'layui-icon layui-icon-picture',
+          'pdf': 'layui-icon layui-icon-file',
+          'doc': 'layui-icon layui-icon-file',
+          'docx': 'layui-icon layui-icon-file',
+          'xls': 'layui-icon layui-icon-file',
+          'xlsx': 'layui-icon layui-icon-file',
+          'ppt': 'layui-icon layui-icon-file',
+          'pptx': 'layui-icon layui-icon-file',
+          'mp4': 'layui-icon layui-icon-video',
+          'mov': 'layui-icon layui-icon-video',
+          'txt': 'layui-icon layui-icon-file',
+          // 可以根据需要添加更多扩展名和对应的图标
+        };
+        return iconMap[extension] || 'layui-icon layui-icon-file';
+      }
+
+      // 创建列表项
+      function createListItem(item, isDirectory) {
+        const listItem = document.createElement('li');
+        listItem.className = isDirectory ? 'file-item folder' : 'file-item';
+
+        const icon = document.createElement('i');
+        icon.className = 'file-icon';
+        if (isDirectory) {
+          // 修改为 Layui 文件夹图标
+          icon.className += ' layui-icon layui-icon-folder'; 
+        } else {
+          const extension = getFileExtension(item.file_name);
+          const iconClass = getFileIconClass(extension);
+          icon.className += ` ${iconClass}`;
+        }
+        listItem.appendChild(icon);
+
+        const nameSpan = document.createElement('span');
+        const fullName = isDirectory ? item.dir_name : item.file_name;
+        if (fullName) {
+          nameSpan.textContent = fullName;
+          nameSpan.setAttribute('title', fullName);
+        } else {
+          console.error(isDirectory ? '目录缺少名称:' : '文件缺少名称:', item);
+          nameSpan.textContent = isDirectory ? '未命名目录' : '未命名文件';
+          nameSpan.setAttribute('title', nameSpan.textContent);
+        }
+        listItem.appendChild(nameSpan);
+
+        // 右键点击事件
+        listItem.addEventListener('contextmenu', (e) => {
+          e.preventDefault();
+          selectedItem = { ...item, isDirectory };
+          console.log('选中项:', selectedItem);
+          contextMenu.style.display = 'block';
+          contextMenu.style.left = e.pageX + 'px';
+          contextMenu.style.top = e.pageY + 'px';
+        });
+
+        // 点击事件
+        if (isDirectory) {
+          listItem.addEventListener('click', () => {
+            history = history.slice(0, historyIndex + 1);
+            history.push(item.dir_id);
+            historyIndex++;
+            currentDirId = item.dir_id;
+            loadFiles();
+          });
+        } else {
+          listItem.addEventListener('click', () => {
+            // 可添加文件下载逻辑
+          });
+        }
+
+        return listItem;
+      }
+
+      // 点击页面其他地方隐藏右键菜单
+      document.addEventListener('click', () => {
+        contextMenu.style.display = 'none';
+      });
+
+      // 分享功能
+      shareItem.addEventListener('click', () => {
+        if (selectedItem) {
+          if (selectedItem.isDirectory) {
+            console.log(`分享目录: ${selectedItem.dir_name}`);
+          } else {
+            console.log(`分享文件: ${selectedItem.file_name}`);
+          }
+          contextMenu.style.display = 'none';
+        }
+      });
+
+      // 删除功能
+      deleteItem.addEventListener('click', () => {
+        if (selectedItem) {
+          const itemName = selectedItem.isDirectory ? selectedItem.dir_name : selectedItem.file_name;
+          layer.confirm(`确定要删除 ${itemName} 吗？`, {
+            icon: 3,
+            title: '确认删除'
+          }, function (index) {
+            const itemId = selectedItem.isDirectory ? selectedItem.dir_id : selectedItem.id;
+            const itemType = selectedItem.isDirectory ? 'dir' : 'file';
+            console.log('准备删除的 ID:', itemId, '类型:', itemType); 
+            $.ajax({
+              url: `/upload/index/deleteFile`,
+              type: 'POST',
+              data: {
+                id: itemId,
+                type: itemType
+              },
+              dataType: 'json',
+              success: function (response) {
+                console.log('删除接口响应:', response); 
+                if (response.code === 0) {
+                  layer.msg('删除成功', { icon: 6 });
+                  loadFiles();
+                } else {
+                  layer.msg(response.msg || '删除失败，未知错误', { icon: 5 });
+                }
+              },
+              error: function (error) {
+                console.error('删除接口请求出错:', error); 
+                layer.msg('删除失败，请稍后重试', { icon: 5 });
+              }
+            });
+            contextMenu.style.display = 'none';
+            layer.close(index);
+          });
+        }
+      });
+
+      // 后退功能
+      backButton.addEventListener('click', () => {
+        if (historyIndex > 0) {
+          historyIndex--;
+          currentDirId = history[historyIndex];
+          loadFiles();
+        }
+      });
+
+      // 前进功能
+      forwardButton.addEventListener('click', () => {
+        if (historyIndex < history.length - 1) {
+          historyIndex++;
+          currentDirId = history[historyIndex];
+          loadFiles();
+        }
+      });
+
+      // 回到根目录功能
+      rootButton.addEventListener('click', () => {
+        currentDirId = 0; // 设置为根目录 ID
+        history = [0]; // 重置历史记录
+        historyIndex = 0; // 重置历史索引
+        loadFiles(); // 重新加载文件列表
+      });
+
+      // 新建文件夹功能
+      newFolderButton.addEventListener('click', () => {
+        layer.prompt({
+          title: '请输入新文件夹的名称',
+          formType: 0
+        }, function (value, index) {
+          if (value) {
+            $.ajax({
+              url: `/upload/index/createDir`,
+              type: 'POST',
+              data: {
+                folder_name: value,
+                parent_dir_id: currentDirId
+              },
+              dataType: 'json',
+              success: function (response) {
+                if (response.code === 0) {
+                  layer.msg('文件夹创建成功', { icon: 6 });
+                  loadFiles();
+                } else {
+                  layer.msg(response.msg, { icon: 5 });
+                }
+              },
+              error: function () {
+                layer.msg('创建文件夹失败，请稍后重试', { icon: 5 });
+              }
+            });
+          }
+          layer.close(index);
+        });
+      });
+
+      // 上传按钮点击事件
+      uploadButton.addEventListener('click', () => {
+        const url = `/cloud/?dirId=${currentDirId}&hiddenHeader=1`;
+        layer.open({
+          type: 2,
+          title: '文件上传',
+          area: ['80%', '80%'],
+          content: url
+        });
+      });
+
+      // 初始化加载文件
+      loadFiles();
+    });
+  </script>
+</body>
+</html>

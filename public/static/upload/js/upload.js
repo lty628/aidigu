@@ -159,6 +159,11 @@
     })
     uppy.on('upload-success', (file, response) => {
       // console.log(file, response.uploadURL)
+      // dirId 是 input 或者 sessionStorage 中
+      var dirId = $('#dirId').val();
+      if (dirId == null || dirId == '') {
+        dirId = sessionStorage.getItem('dirId');
+      }
       var fileInfo = {};
       fileInfo.name = file.name;
       fileInfo.extension = file.extension;
@@ -169,7 +174,7 @@
         url: '/upload/Listener/index',
         type: 'POST',
         dataType: 'json',
-        data: {fileInfo: fileInfo, uploadURL: response.uploadURL},
+        data: {fileInfo: fileInfo, uploadURL: response.uploadURL, dirId: dirId},
       })
       .done(function(json) {
         console.log("success");
