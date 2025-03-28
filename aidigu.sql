@@ -11,7 +11,7 @@ CREATE TABLE `wb_app`  (
   `app_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '应用名称',
   `app_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '链接',
   `fromuid` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '创建用户',
-  `app_status` tinyint(4) NOT NULL DEFAULT 1 COMMENT '0关闭，1开启（默认）',
+  `app_status` tinyint(4) NOT NULL DEFAULT 1 COMMENT '0关闭，1站内，2站外',
   `app_type` tinyint(3) UNSIGNED NOT NULL DEFAULT 0 COMMENT '0全部，1pc,2手机',
   `app_image` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '图片地址',
   `remind_key` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '提醒key',
@@ -272,11 +272,31 @@ CREATE TABLE `wb_file`  (
   `create_time` datetime NOT NULL COMMENT '创建时间',
   `is_delete` tinyint(3) UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否删除',
   `share_msg_id` bigint(20) UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否站内分享，0未分享',
+  `dir_id` int(11) NOT NULL DEFAULT 0 COMMENT '目录ID',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of wb_file
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for wb_file_dir
+-- ----------------------------
+DROP TABLE IF EXISTS `wb_file_dir`;
+CREATE TABLE `wb_file_dir`  (
+  `dir_id` int(11) NOT NULL AUTO_INCREMENT,
+  `parent_id` int(11) NOT NULL DEFAULT 0 COMMENT '父级ID',
+  `uid` int(11) NOT NULL DEFAULT 0 COMMENT '用户ID',
+  `dir_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '目录名称',
+  `is_delete` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否删除',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`dir_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '文件目录表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of wb_file_dir
 -- ----------------------------
 
 -- ----------------------------
