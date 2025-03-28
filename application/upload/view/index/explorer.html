@@ -224,17 +224,17 @@
       function getFileImagePath(extension) {
         const imageMap = {
           'jpg': '/static/upload/images/jpg.svg',
-          'png': '/static/upload/images/png.svg',
+          'png': '/static/upload/images/jpg-1.svg',
           'gif': '/static/upload/images/gif.svg',
           'pdf': '/static/upload/images/pdf.svg',
-          'doc': '/static/upload/images/doc.svg',
+          'doc': '/static/upload/images/docx.svg',
           'docx': '/static/upload/images/docx.svg',
           'xls': '/static/upload/images/xls.svg',
-          'xlsx': '/static/upload/images/xlsx.svg',
+          'xlsx': '/static/upload/images/excel.svg',
           'ppt': '/static/upload/images/ppt.svg',
-          'pptx': '/static/upload/images/pptx.svg',
+          'pptx': '/static/upload/images/ppt.svg',
           'mp4': '/static/upload/images/mp4.svg',
-          'mov': '/static/upload/images/mov.svg',
+          'mov': '/static/upload/images/mp4.svg',
           'txt': '/static/upload/images/txt.svg',
           // 可以根据需要添加更多扩展名和对应的图片路径
         };
@@ -249,8 +249,9 @@
         // 修改为使用 img 元素
         const icon = document.createElement('img');
         icon.className = 'file-icon';
-        icon.style.width = '32px'; // 调整图片大小
-        icon.style.height = '32px';
+        // 增大图标尺寸
+        icon.style.width = '48px'; 
+        icon.style.height = '48px'; 
         if (isDirectory) {
           // 使用文件夹图片
           icon.src = '/static/upload/images/folder.svg'; 
