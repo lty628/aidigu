@@ -220,25 +220,25 @@
         return parts.length > 1 ? parts[parts.length - 1].toLowerCase() : '';
       }
 
-      // 根据扩展名获取图标类名
-      function getFileIconClass(extension) {
-        const iconMap = {
-          'jpg': 'layui-icon layui-icon-picture',
-          'png': 'layui-icon layui-icon-picture',
-          'gif': 'layui-icon layui-icon-picture',
-          'pdf': 'layui-icon layui-icon-file',
-          'doc': 'layui-icon layui-icon-file',
-          'docx': 'layui-icon layui-icon-file',
-          'xls': 'layui-icon layui-icon-file',
-          'xlsx': 'layui-icon layui-icon-file',
-          'ppt': 'layui-icon layui-icon-file',
-          'pptx': 'layui-icon layui-icon-file',
-          'mp4': 'layui-icon layui-icon-video',
-          'mov': 'layui-icon layui-icon-video',
-          'txt': 'layui-icon layui-icon-file',
-          // 可以根据需要添加更多扩展名和对应的图标
+      // 根据扩展名获取图片路径
+      function getFileImagePath(extension) {
+        const imageMap = {
+          'jpg': '/static/upload/images/jpg.svg',
+          'png': '/static/upload/images/png.svg',
+          'gif': '/static/upload/images/gif.svg',
+          'pdf': '/static/upload/images/pdf.svg',
+          'doc': '/static/upload/images/doc.svg',
+          'docx': '/static/upload/images/docx.svg',
+          'xls': '/static/upload/images/xls.svg',
+          'xlsx': '/static/upload/images/xlsx.svg',
+          'ppt': '/static/upload/images/ppt.svg',
+          'pptx': '/static/upload/images/pptx.svg',
+          'mp4': '/static/upload/images/mp4.svg',
+          'mov': '/static/upload/images/mov.svg',
+          'txt': '/static/upload/images/txt.svg',
+          // 可以根据需要添加更多扩展名和对应的图片路径
         };
-        return iconMap[extension] || 'layui-icon layui-icon-file';
+        return imageMap[extension] || '/static/upload/images/default.svg';
       }
 
       // 创建列表项
@@ -246,15 +246,18 @@
         const listItem = document.createElement('li');
         listItem.className = isDirectory ? 'file-item folder' : 'file-item';
 
-        const icon = document.createElement('i');
+        // 修改为使用 img 元素
+        const icon = document.createElement('img');
         icon.className = 'file-icon';
+        icon.style.width = '32px'; // 调整图片大小
+        icon.style.height = '32px';
         if (isDirectory) {
-          // 修改为 Layui 文件夹图标
-          icon.className += ' layui-icon layui-icon-folder'; 
+          // 使用文件夹图片
+          icon.src = '/static/upload/images/folder.svg'; 
         } else {
           const extension = getFileExtension(item.file_name);
-          const iconClass = getFileIconClass(extension);
-          icon.className += ` ${iconClass}`;
+          const imagePath = getFileImagePath(extension);
+          icon.src = imagePath;
         }
         listItem.appendChild(icon);
 
