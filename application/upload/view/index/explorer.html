@@ -395,15 +395,29 @@
               const itemId = selectedItem.id;
               // 判断是否是被iframe加载的页面
               if (window.self !== window.top) {
-                // 是被iframe加载的页面，使用父窗口的window对象
-                window.parent.location.href = `/upload/index/download?id=${itemId}`;
-              } else {
+                // 是被iframe加载的页面，使用隐藏表单提交
+                const form = document.createElement('form');
+                form.method = 'GET';
+                form.action = `/upload/index/download`;
+                form.target = '_blank';
+                form.style.display = 'none';
+
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'id';
+                input.value = itemId;
+                form.appendChild(input);
+
+                window.parent.document.body.appendChild(form);
+                form.submit();
+                window.parent.document.body.removeChild(form);
+            } else {
                 // 不是被iframe加载的页面，直接使用window对象
                 window.location.href = `/upload/index/download?id=${itemId}`;
-              }
-              return; 
-          }
-          contextMenu.style.display = 'none';
+            }
+            return; 
+        }
+        contextMenu.style.display = 'none';
       });
 
       // 删除功能
