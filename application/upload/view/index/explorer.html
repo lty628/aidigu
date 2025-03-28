@@ -169,8 +169,8 @@
     <ul id="context-menu-list">
       <li id="download-item">下载</li>
       <li id="share-item">分享</li>
-      <li id="rename-item">重命名</li>
       <li id="move-item">移动</li>
+      <li id="rename-item">重命名</li>
       <li id="delete-item">删除</li>
     </ul>
   </div>
@@ -393,8 +393,15 @@
       downloadItem.addEventListener('click', () => {
           if (selectedItem && !selectedItem.isDirectory) {
               const itemId = selectedItem.id;
-              // 跳转到下载接口
-              window.location.href = `/upload/index/download?id=${itemId}`;
+              // 判断是否是被iframe加载的页面
+              if (window.self !== window.top) {
+                // 是被iframe加载的页面，使用父窗口的window对象
+                window.parent.location.href = `/upload/index/download?id=${itemId}`;
+              } else {
+                // 不是被iframe加载的页面，直接使用window对象
+                window.location.href = `/upload/index/download?id=${itemId}`;
+              }
+              return; 
           }
           contextMenu.style.display = 'none';
       });
