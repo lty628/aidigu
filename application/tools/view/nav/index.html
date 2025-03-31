@@ -267,11 +267,10 @@
     </div>
     <!-- 底部导航 -->
     <div class="dock">
-        <a href="/square/">
+        <!-- <a href="/square/">
             <img class="dock-icon" src="/static/tools/common/images/nav.jpg" alt="进入微博">
             <span style="margin-top: 5px; display: block; text-align: center; font-size: 12px;">进入微博</span>
-        </a>
-
+        </a> -->
         <a href="javascript:;">
             <img class="dock-icon" src="/static/upload/images/folder.svg" data-url="/upload/index/explorer" alt="文件管理"
                 onclick="showFrameCustom(this, '{&quot;title&quot;:&quot;文件管理&quot;,&quot;shade&quot;:0.8,&quot;closeBtn&quot;:true,&quot;shadeClose&quot;:true,&quot;area&quot;:[&quot;80%&quot;,&quot;80%&quot;],&quot;resize&quot;:true,&quot;maxmin&quot;:true,&quot;skin&quot;:&quot;layui-layer-win10&quot;,&quot;id&quot;:&quot;app_7&quot;,&quot;hideOnClose&quot;:false,&quot;scrollbar&quot;:false}')">
@@ -315,17 +314,10 @@
                 onclick="showFrameCustom(this, '{&quot;title&quot;:&quot;导航设置&quot;,&quot;shade&quot;:0.8,&quot;closeBtn&quot;:true,&quot;shadeClose&quot;:true,&quot;area&quot;:[&quot;70%&quot;,&quot;80%&quot;],&quot;resize&quot;:true,&quot;maxmin&quot;:true,&quot;skin&quot;:&quot;layui-layer-win10&quot;,&quot;id&quot;:&quot;app_2&quot;,&quot;hideOnClose&quot;:false,&quot;scrollbar&quot;:false}')">
             <span style="margin-top: 5px; display: block; text-align: center; font-size: 12px;">导航设置</span>
         </a>
-        {if $uid}
-        <a href="/logout/">
-            <img class="dock-icon" src="/static/tools/common/images/nav-logout.jpg" alt="退出">
-            <span style="margin-top: 5px; display: block; text-align: center; font-size: 12px;">退出</span>
+        <a href="/square/">
+            <img class="dock-icon" src="/static/tools/common/images/nav-logout.jpg" alt="进入微博">
+            <span style="margin-top: 5px; display: block; text-align: center; font-size: 12px;">进入微博</span>
         </a>
-        {else}
-        <a href="/login/">
-            <img class="dock-icon" src="/static/tools/common/images/nav-login.jpg" alt="登录">
-            <span style="margin-top: 5px; display: block; text-align: center; font-size: 12px;">登录</span>
-        </a>
-        {/if}
     </div>
 </body>
 
