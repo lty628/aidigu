@@ -202,6 +202,8 @@
       <li id="move-item">移动</li>
       <li id="rename-item">重命名</li>
       <li id="delete-item">删除</li>
+      <!-- 新增打开菜单项 -->
+      <li id="open-item">打开</li> 
     </ul>
   </div>
   <!-- 非文件区域右键菜单 -->
@@ -639,6 +641,26 @@
           contextMenu.style.display = 'none';
         }
       });
+
+      // 打开菜单项点击事件
+      // Get the new open menu item
+      const openItem = document.getElementById('open-item'); 
+      
+      if (openItem) {
+        // Open menu item click event
+        openItem.addEventListener('click', () => {
+          if (selectedItem && selectedItem.isDirectory) {
+            history = history.slice(0, historyIndex + 1);
+            history.push(selectedItem.dir_id);
+            historyIndex++;
+            currentDirId = selectedItem.dir_id;
+            loadFiles();
+          }
+          contextMenu.style.display = 'none';
+        });
+      } else {
+        console.error('The open-item element was not found.');
+      }
 
       // 上传按钮点击事件
       uploadButton.addEventListener('click', () => {
