@@ -427,20 +427,54 @@
           }
         });
 
-        // 点击事件
-        if (isDirectory) {
-          listItem.addEventListener('click', () => {
+        // 单击事件，用于选中项
+        listItem.addEventListener('click', (e) => {
+          e.stopPropagation();
+          selectedItem = { ...item, isDirectory };
+          // 可以添加选中样式，例如改变背景色
+          const allItems = document.querySelectorAll('.file-item');
+          allItems.forEach(item => {
+            item.style.backgroundColor = 'white';
+          });
+          listItem.style.backgroundColor = '#e6f7ff';
+        });
+        
+        // 双击事件
+        listItem.addEventListener('dblclick', () => {
+          if (isDirectory) {
+            // 双击目录，打开目录
             history = history.slice(0, historyIndex + 1);
             history.push(item.dir_id);
             historyIndex++;
             currentDirId = item.dir_id;
             loadFiles();
-          });
-        } else {
-          listItem.addEventListener('click', () => {
-            // 可添加文件下载逻辑
-          });
-        }
+          } else {
+            // 双击文件，执行下载逻辑
+            const itemId = item.id;
+            // 判断是否是被iframe加载的页面
+            if (window.self !== window.top) {
+              // 是被iframe加载的页面，使用隐藏表单提交
+              const form = document.createElement('form');
+              form.method = 'GET';
+              form.action = `/upload/index/download`;
+              form.target = '_blank';
+              form.style.display = 'none';
+
+              const input = document.createElement('input');
+              input.type = 'hidden';
+              input.name = 'id';
+              input.value = itemId;
+              form.appendChild(input);
+
+              window.parent.document.body.appendChild(form);
+              form.submit();
+              window.parent.document.body.removeChild(form);
+            } else {
+              // 不是被iframe加载的页面，直接使用window对象
+              window.location.href = `/upload/index/download?id=${itemId}`;
+            }
+          }
+        });
 
         return listItem;
       }
