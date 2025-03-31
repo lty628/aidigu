@@ -106,7 +106,8 @@
       box-shadow: 0 .25rem .5rem rgba(0, 0, 0, 0.15);
       display: none;
       min-width: 7.5rem;
-      z-index: 1000; /* 确保菜单显示在最上层 */
+      z-index: 1000;
+      /* 确保菜单显示在最上层 */
     }
 
     #context-menu-list ul {
@@ -133,6 +134,35 @@
       text-overflow: ellipsis;
       max-width: 100%;
       text-align: center;
+    }
+
+    /* 非文件区域右键菜单样式 */
+    #context-menu-bg {
+      position: absolute;
+      background: white;
+      border: none;
+      border-radius: .375rem;
+      box-shadow: 0 .25rem .5rem rgba(0, 0, 0, 0.15);
+      display: none;
+      min-width: 7.5rem;
+      z-index: 1000;
+    }
+
+    #context-menu-bg ul {
+      list-style-type: none;
+      padding: .5rem 0;
+      margin: 0;
+    }
+
+    #context-menu-bg li {
+      padding: .625rem 1rem;
+      cursor: pointer;
+      color: #333;
+      transition: background-color 0.2s ease;
+    }
+
+    #context-menu-bg li:hover {
+      background-color: #f0f0f0;
     }
   </style>
 </head>
@@ -174,6 +204,14 @@
       <li id="delete-item">删除</li>
     </ul>
   </div>
+  <!-- 非文件区域右键菜单 -->
+  <div id="context-menu-bg-container">
+    <ul id="context-menu-bg">
+      <li id="new-folder-bg">新建文件夹</li>
+      <li id="refresh-bg">刷新</li>
+      <li id="upload-bg">上传</li>
+    </ul>
+  </div>
   <script src="/static/layui/layui.js"></script>
   <script>
     layui.use(['jquery', 'layer'], function () {
@@ -193,6 +231,51 @@
       // 添加移动菜单项
       const moveItem = document.getElementById('move-item');
 
+      const contextMenuBg = document.getElementById('context-menu-bg');
+      const newFolderBg = document.getElementById('new-folder-bg');
+      const refreshBg = document.getElementById('refresh-bg');
+      const uploadBg = document.getElementById('upload-bg');
+
+      // 非文件区域右键事件
+      document.getElementById('file-explorer').addEventListener('contextmenu', (e) => {
+        // 检查是否点击在文件项上，如果是则不处理
+        if (e.target.closest('.file-item')) {
+          return;
+        }
+        e.preventDefault();
+        contextMenu.style.display = 'none'; // 隐藏文件右键菜单
+        contextMenuBg.style.display = 'block';
+        contextMenuBg.style.left = e.pageX + 'px';
+        contextMenuBg.style.top = e.pageY + 'px';
+      });
+
+      // 点击其他地方隐藏右键菜单
+      document.addEventListener('click', (e) => {
+        const isClickInsideMenu = e.target.closest('#context-menu-list') || e.target.closest('#context-menu-bg');
+        if (!isClickInsideMenu) {
+          contextMenu.style.display = 'none';
+          contextMenuBg.style.display = 'none';
+        }
+      });
+
+      // 新建文件夹功能
+      newFolderBg.addEventListener('click', () => {
+        contextMenuBg.style.display = 'none';
+        newFolderButton.click();
+      });
+
+      // 刷新功能
+      refreshBg.addEventListener('click', () => {
+        contextMenuBg.style.display = 'none';
+        loadFiles();
+      });
+
+      // 上传功能
+      uploadBg.addEventListener('click', () => {
+        contextMenuBg.style.display = 'none';
+        uploadButton.click();
+      });
+
       moveItem.addEventListener('click', () => {
         if (selectedItem) {
           const itemId = selectedItem.isDirectory ? selectedItem.dir_id : selectedItem.id;
@@ -208,7 +291,7 @@
             },
             end: function () {
               // 弹框关闭后重新加载文件列表
-              loadFiles(); 
+              loadFiles();
             }
           });
         }
@@ -229,7 +312,7 @@
           success: function (response) {
             if (response.current_path) {
               currentPathSpan.textContent = response.current_path;
-            } 
+            }
 
             fileList.innerHTML = '';
 
@@ -290,71 +373,74 @@
 
       // 创建列表项
       function createListItem(item, isDirectory) {
-          const listItem = document.createElement('li');
-          listItem.className = isDirectory ? 'file-item folder' : 'file-item';
-      
-          // 修改为使用 img 元素
-          const icon = document.createElement('img');
-          icon.className = 'file-icon';
-          // 增大图标尺寸
-          icon.style.width = '3rem';
-          icon.style.height = '3rem';
+        const listItem = document.createElement('li');
+        listItem.className = isDirectory ? 'file-item folder' : 'file-item';
+
+        // 修改为使用 img 元素
+        const icon = document.createElement('img');
+        icon.className = 'file-icon';
+        // 增大图标尺寸
+        icon.style.width = '3rem';
+        icon.style.height = '3rem';
+        if (isDirectory) {
+          // 使用文件夹图片
+          icon.src = '/static/upload/images/folder.svg';
+        } else {
+          const extension = getFileExtension(item.file_name);
+          const imagePath = getFileImagePath(extension);
+          icon.src = imagePath;
+        }
+        listItem.appendChild(icon);
+
+        const nameSpan = document.createElement('span');
+        const fullName = isDirectory ? item.dir_name : item.file_name;
+        if (fullName) {
+          nameSpan.textContent = fullName;
+          nameSpan.setAttribute('title', fullName);
+        } else {
+          nameSpan.textContent = fullName;
+          nameSpan.setAttribute('title', nameSpan.textContent);
+        }
+        listItem.appendChild(nameSpan);
+
+        // 右键点击事件
+        listItem.addEventListener('contextmenu', (e) => {
+          e.preventDefault(); // 确保阻止默认右键菜单
+          e.stopPropagation(); // 阻止事件冒泡
+          selectedItem = { ...item, isDirectory };
+          // 隐藏非文件区域右键菜单
+          contextMenuBg.style.display = 'none'; 
+          contextMenu.style.display = 'block';
+          contextMenu.style.left = e.pageX + 'px';
+          contextMenu.style.top = e.pageY + 'px';
+
+          const downloadItem = document.getElementById('download-item');
+          // 判断是否为文件夹，若是则隐藏下载按钮
           if (isDirectory) {
-              // 使用文件夹图片
-              icon.src = '/static/upload/images/folder.svg';
+            downloadItem.style.display = 'none';
+            shareItem.style.display = 'none';
           } else {
-              const extension = getFileExtension(item.file_name);
-              const imagePath = getFileImagePath(extension);
-              icon.src = imagePath;
+            downloadItem.style.display = 'block';
+            shareItem.style.display = 'block';
           }
-          listItem.appendChild(icon);
-      
-          const nameSpan = document.createElement('span');
-          const fullName = isDirectory ? item.dir_name : item.file_name;
-          if (fullName) {
-              nameSpan.textContent = fullName;
-              nameSpan.setAttribute('title', fullName);
-          } else {
-              nameSpan.textContent = fullName;
-              nameSpan.setAttribute('title', nameSpan.textContent);
-          }
-          listItem.appendChild(nameSpan);
-      
-          // 右键点击事件
-          listItem.addEventListener('contextmenu', (e) => {
-              e.preventDefault(); // 确保阻止默认右键菜单
-              selectedItem = { ...item, isDirectory };
-              contextMenu.style.display = 'block';
-              contextMenu.style.left = e.pageX + 'px';
-              contextMenu.style.top = e.pageY + 'px';
-      
-              const downloadItem = document.getElementById('download-item');
-              // 判断是否为文件夹，若是则隐藏下载按钮
-              if (isDirectory) {
-                  downloadItem.style.display = 'none';
-                  shareItem.style.display = 'none';
-              } else {
-                  downloadItem.style.display = 'block';
-                  shareItem.style.display = 'block';
-              }
+        });
+
+        // 点击事件
+        if (isDirectory) {
+          listItem.addEventListener('click', () => {
+            history = history.slice(0, historyIndex + 1);
+            history.push(item.dir_id);
+            historyIndex++;
+            currentDirId = item.dir_id;
+            loadFiles();
           });
-      
-          // 点击事件
-          if (isDirectory) {
-              listItem.addEventListener('click', () => {
-                  history = history.slice(0, historyIndex + 1);
-                  history.push(item.dir_id);
-                  historyIndex++;
-                  currentDirId = item.dir_id;
-                  loadFiles();
-              });
-          } else {
-              listItem.addEventListener('click', () => {
-                  // 可添加文件下载逻辑
-              });
-          }
-      
-          return listItem;
+        } else {
+          listItem.addEventListener('click', () => {
+            // 可添加文件下载逻辑
+          });
+        }
+
+        return listItem;
       }
 
       // 点击页面其他地方隐藏右键菜单
@@ -388,34 +474,34 @@
 
       // 下载功能
       const downloadItem = document.getElementById('download-item');
-      
+
       // 下载功能
       downloadItem.addEventListener('click', () => {
-          if (selectedItem && !selectedItem.isDirectory) {
-              const itemId = selectedItem.id;
-              // 判断是否是被iframe加载的页面
-              if (window.self !== window.top) {
-                // 是被iframe加载的页面，使用隐藏表单提交
-                const form = document.createElement('form');
-                form.method = 'GET';
-                form.action = `/upload/index/download`;
-                form.target = '_blank';
-                form.style.display = 'none';
+        if (selectedItem && !selectedItem.isDirectory) {
+          const itemId = selectedItem.id;
+          // 判断是否是被iframe加载的页面
+          if (window.self !== window.top) {
+            // 是被iframe加载的页面，使用隐藏表单提交
+            const form = document.createElement('form');
+            form.method = 'GET';
+            form.action = `/upload/index/download`;
+            form.target = '_blank';
+            form.style.display = 'none';
 
-                const input = document.createElement('input');
-                input.type = 'hidden';
-                input.name = 'id';
-                input.value = itemId;
-                form.appendChild(input);
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'id';
+            input.value = itemId;
+            form.appendChild(input);
 
-                window.parent.document.body.appendChild(form);
-                form.submit();
-                window.parent.document.body.removeChild(form);
-            } else {
-                // 不是被iframe加载的页面，直接使用window对象
-                window.location.href = `/upload/index/download?id=${itemId}`;
-            }
-            return; 
+            window.parent.document.body.appendChild(form);
+            form.submit();
+            window.parent.document.body.removeChild(form);
+          } else {
+            // 不是被iframe加载的页面，直接使用window对象
+            window.location.href = `/upload/index/download?id=${itemId}`;
+          }
+          return;
         }
         contextMenu.style.display = 'none';
       });
@@ -565,10 +651,10 @@
           hideOnClose: true,
           area: ['80%', '80%'],
           content: url,
-          success: function(layero, index) {
+          success: function (layero, index) {
             uploadLayerIndex = index; // 保存弹窗的索引
           },
-          end: function() {
+          end: function () {
             // 关闭弹窗后刷新文件列表
             loadFiles();
           }
