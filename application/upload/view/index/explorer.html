@@ -198,12 +198,11 @@
   <div id="context-menu-container">
     <ul id="context-menu-list">
       <li id="download-item">下载</li>
+      <li id="open-item">打开</li> 
       <li id="share-item">分享</li>
       <li id="move-item">移动</li>
       <li id="rename-item">重命名</li>
       <li id="delete-item">删除</li>
-      <!-- 新增打开菜单项 -->
-      <li id="open-item">打开</li> 
     </ul>
   </div>
   <!-- 非文件区域右键菜单 -->
@@ -417,12 +416,15 @@
           contextMenu.style.top = e.pageY + 'px';
 
           const downloadItem = document.getElementById('download-item');
-          // 判断是否为文件夹，若是则隐藏下载按钮
+          const openItem = document.getElementById('open-item');
+          // 判断是否为文件夹，若是则显示打开按钮，否则隐藏
           if (isDirectory) {
             downloadItem.style.display = 'none';
+            openItem.style.display = 'block';
             shareItem.style.display = 'none';
           } else {
             downloadItem.style.display = 'block';
+            openItem.style.display = 'none';
             shareItem.style.display = 'block';
           }
         });
