@@ -164,6 +164,12 @@
     #context-menu-bg li:hover {
       background-color: #f0f0f0;
     }
+    #pagination {
+      float: right; /* 右浮动 */
+      margin-top: 1rem;
+      padding: 1rem 0;
+      clear: both; /* 清除浮动影响 */
+    }
   </style>
 </head>
 
@@ -193,6 +199,8 @@
       <span id="current-path"></span>
     </div>
     <div id="file-list"></div>
+    <!-- 添加分页控件 -->
+    <div id="pagination" class="layui-box layui-laypage layui-laypage-default"></div>
   </div>
   <!-- 右键菜单 -->
   <div id="context-menu-container">
@@ -218,6 +226,12 @@
     layui.use(['jquery', 'layer'], function () {
       const $ = layui.jquery;
       const layer = layui.layer;
+      const laypage = layui.laypage;
+      // 添加分页相关变量
+      let currentPage = 1;
+      const pageSize = 15; // 每页显示数量
+      let totalCount = 0;
+      let totalPages = 0;
       const fileList = document.getElementById('file-list');
       const currentPathSpan = document.getElementById('current-path');
       const backButton = document.getElementById('back-button');
@@ -307,7 +321,7 @@
       // 加载文件和目录
       function loadFiles() {
         $.ajax({
-          url: `/upload/index/explorer?dir_id=${currentDirId}`,
+          url: `/upload/index/explorer?dir_id=${currentDirId}&page=${currentPage}&page_size=${pageSize}`,
           type: 'GET',
           dataType: 'json',
           success: function (response) {
@@ -316,7 +330,10 @@
             }
 
             fileList.innerHTML = '';
+            totalCount = response.data.total_count || 0;
+            totalPages = Math.ceil(totalCount / pageSize);
 
+            // 优先显示文件夹
             if (response.data && response.data.dirs) {
               response.data.dirs.forEach(dir => {
                 const listItem = createListItem(dir, true);
@@ -324,6 +341,7 @@
               });
             }
 
+            // 然后显示文件
             if (response.data && response.data.files) {
               response.data.files.forEach(file => {
                 const listItem = createListItem(file, false);
@@ -331,16 +349,35 @@
               });
             }
 
+            // 渲染分页
+            renderPagination();
+
             backButton.disabled = historyIndex === 0;
             forwardButton.disabled = historyIndex === history.length - 1;
 
-            // 保存目录状态到本地存储
             localStorage.setItem('currentDirId', currentDirId);
             localStorage.setItem('history', JSON.stringify(history));
             localStorage.setItem('historyIndex', historyIndex);
           },
           error: function () {
             layer.msg('加载文件失败，请稍后重试');
+          }
+        });
+      }
+
+      // 添加分页渲染函数
+      function renderPagination() {
+        laypage.render({
+          elem: 'pagination',
+          count: totalCount,
+          curr: currentPage,
+          limit: pageSize,
+          layout: ['count', 'prev', 'page', 'next', 'limit', 'skip'],
+          jump: function(obj, first) {
+            if (!first) {
+              currentPage = obj.curr;
+              loadFiles();
+            }
           }
         });
       }

@@ -51,14 +51,14 @@ class Index extends Controller
         if (request()->isAjax()) {
             $get = input('get.');
             $page = $get['page'] ?? 1;
-            $limit = $get['limit'] ?? 10;
+            $pageSize = $get['page_size'] ?? 10;
             $fileName = $get['file_name'] ?? '';
             $uid = getLoginUid();
 
             // 查询当前路径
             $currentPath = $this->getDirectoryPath($dirId, $uid);
 
-            // 查询目录
+            // 查询目录总数
             $whereDir = [
                 ['parent_id', '=', $dirId],
                 ['uid', '=', $uid],
@@ -67,9 +67,9 @@ class Index extends Controller
             if ($fileName) {
                 $whereDir[] = ['dir_name', 'like',  '%'.$fileName.'%'];
             }
-            $dirs = Db::name('file_dir')->where($whereDir)->select();
-
-            // 查询文件
+            $dirCount = Db::name('file_dir')->where($whereDir)->count();
+            
+            // 查询文件总数
             $whereFile = [
                 ['dir_id', '=', $dirId],
                 ['userid', '=', $uid],
@@ -78,14 +78,34 @@ class Index extends Controller
             if ($fileName) {
                 $whereFile[] = ['file_name', 'like',  '%'.$fileName.'%'];
             }
-            $count = Db::name('file')->where($whereFile)->count();
-            $files = Db::name('file')->where($whereFile)->order('create_time', 'desc')->limit($limit)->page($page)->select();
+            $fileCount = Db::name('file')->where($whereFile)->count();
+            
+            // 计算文件夹分页
+            $dirPageSize = min($pageSize, $dirCount); // 优先显示所有文件夹
+            $dirOffset = ($page - 1) * $pageSize; // 修改1：计算文件夹偏移量
+            $dirs = Db::name('file_dir')
+                ->where($whereDir)
+                ->limit($dirOffset, $dirPageSize)
+                ->select();
+            
+            // 计算文件分页
+            $filePageSize = $pageSize - count($dirs); // 剩余空间显示文件
+            $fileOffset = max(0, ($page - 1) * $pageSize - $dirCount); // 修改2：简化计算
+            
+            $files = [];
+            if ($filePageSize > 0) {
+                $files = Db::name('file')
+                    ->where($whereFile)
+                    ->order('create_time', 'desc')
+                    ->limit($fileOffset, $filePageSize)
+                    ->select();
+            }
 
-            // 合并目录和文件结果
+            // 合并结果
             $result = [
                 'dirs' => $dirs,
                 'files' => $files,
-                'count' => $count
+                'total_count' => $dirCount + $fileCount
             ];
 
             return json(['code' => 0, 'data' => $result, 'current_path' => $currentPath]);
