@@ -120,7 +120,7 @@
                .done(function (json) {
                     var data = json.data.data
                     
-                    if (!data.length) {
+                    if (!json.data || !data.length) {
                         canLoad = true
                         alertMsg(json.msg)
                         return

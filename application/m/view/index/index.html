@@ -261,7 +261,7 @@
 				.done(function (json) {
 					var data = json.data.data
 					
-					if (!data.length) {
+					if (!json.data || !data.length) {
                         canLoad = true
                         alertMsg(json.msg)
                         return
@@ -271,7 +271,7 @@
 						$("#showMore").hide()
 						// $("#showMore").html('没有了')
 					}
-					
+
 					for (var i = 0; i < data.length; i++) {
 						var mediaStr = '';
 						var str = '';
