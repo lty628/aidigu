@@ -11,7 +11,7 @@ class PrivateLetter extends Base
     {
         // dump($frameData);
         $frameData['listtagid'] = self::$listtagid;
-        $frameData = self::initMessageData($frameData);
+        $frameData = self::initMessageData($frameData, self::$listtagid);
         $data['create_time'] = $frameData['create_time'];
         $data['fromuid'] = $frameData['fromuid'];
         $data['content'] = $frameData['content'];

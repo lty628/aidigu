@@ -35,6 +35,10 @@ layui.use(function () {
 });
 function showMessageImg(obj) {
     var imgUrl = $(obj).attr('src');
+    $tmpUrl = $(obj).attr('data-url');
+    if ($tmpUrl) {
+        imgUrl = $tmpUrl
+    }
     // imgUrl = imgUrl.split(".");
     // imgUrl[0] = imgUrl[0].replace("_middle", '');
     var json = {
