@@ -195,12 +195,16 @@
         var anim = 0
         var title='视频播放'
         var skin = ''
+        var seccessCss={}
       } else {
         var area = ['50%', '80%']
         var closeBtn = 0
         var anim = 2
         var title=false
         var skin = 'layui-layer-transparent'
+        var seccessCss={
+            'background-color': 'transparent',
+        }
       }
 
       layer.open({
@@ -219,12 +223,15 @@
           anim: anim, 
           success: function(layero, index) {
             // 弹层打开后添加过渡效果
-            layero.css({
-              // 'opacity': 0,
-              // 'transform': 'scale(0.8)',
-              // 'box-show': 'none !important',
-              'background-color': 'transparent',
-            })
+            if (seccessCss) {
+              layero.css(seccessCss)
+            }
+            // layero.css({
+            //   // 'opacity': 0,
+            //   // 'transform': 'scale(0.8)',
+            //   // 'box-show': 'none !important',
+            //   'background-color': 'transparent',
+            // })
             // .animate({
             //   'opacity': 1,
             //   'transform': 'scale(1)'
