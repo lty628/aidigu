@@ -122,6 +122,7 @@ class Sourcematerial extends Controller
             }
         }
 
+        $this->assign('isMobile', isMobile());
         $this->assign('data', $data);
         $this->assign('id', $id);
         // $this->assign('staticDomain', $staticDomain);

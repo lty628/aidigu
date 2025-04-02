@@ -136,6 +136,7 @@
   </div>
 
   <input type="hidden" value="{$id}" id="previewId">
+  <input type="hidden" value="{$isMobile}" id="isMobile">
 
   <!-- 请勿在项目正式环境中引用该 layui.js 地址 -->
   <script src="/static/layui/layui.js"></script>
@@ -186,15 +187,24 @@
       if (parent.layer) {
         var layer = parent.layer
       }
-  
+
+      var isMobile = $("#isMobile").val()
+      if (isMobile) {
+        var area = ['100%', '100%']
+        var closeBtn = 1
+      } else {
+        var area = ['50%', '80%']
+        var closeBtn = 0
+      }
+
       layer.open({
           type: 2,
           title: false,
-          closeBtn: 0,
+          closeBtn: closeBtn,
           shade: 1,
           // 优化弹层按钮样式
           // btnStyle: ['background-color: #007BFF; color: white; border: none; border-radius: 4px;'],
-          area: ['50%', '80%'],
+          area: area,
           // 修改为透明背景
           skin: 'layui-layer-transparent', 
           shadeClose: true,
