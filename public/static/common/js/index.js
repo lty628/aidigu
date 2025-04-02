@@ -35,7 +35,7 @@ layui.use(function () {
 });
 function showMessageImg(obj) {
     var imgUrl = $(obj).attr('src');
-    $tmpUrl = $(obj).attr('data-url');
+    $tmpUrl = $(obj).attr('data-src');
     if ($tmpUrl) {
         imgUrl = $tmpUrl
     }
