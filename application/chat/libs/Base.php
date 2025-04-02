@@ -15,7 +15,7 @@ class Base
             $data['content'] = '<p  class="massageImg"><video width="200px"  controls=""  name="media"><source src="'.$data['content'].'" type="video/mp4"></video></p>';
         } else {
             if ($listtagid == 'PrivateLetter') {
-                $data['content'] = '<img width="150px" class="massageImgCommon massageImg_jpg" onclick="showMessageImg(this)" src="/static/upload/images/jpg-1.svg" data-src="'. $data['content']. '">';
+                $data['content'] = '<img width="100px" class="massageImgCommon massageImg_jpg" onclick="showMessageImg(this)" src="/static/upload/images/jpg-1.svg" data-src="'. $data['content']. '">';
             } else {
                 $data['content'] = '<img width="150px" class="massageImgCommon massageImg_jpg" onclick="showMessageImg(this)" src="' . $data['content'] . '">';
             }
