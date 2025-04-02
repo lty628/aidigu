@@ -261,11 +261,15 @@
 				.done(function (json) {
 					var data = json.data.data
 					
-					if (!json.data || !data.length) {
-                        canLoad = true
-                        alertMsg(json.msg)
-                        return
-                    }
+					if (!json?.data || data.length === 0) {
+					    // 显示提示信息
+					    alertMsg(json?.msg || '加载数据失败');
+					    // 2 秒后将 canLoad 设置为 true
+					    setTimeout(() => {
+					        canLoad = true;
+					    }, 2000);
+					    return;
+					}
 
 					if (data.length < 20) {
 						$("#showMore").hide()
