@@ -192,14 +192,18 @@
       if (isMobile) {
         var area = ['100%', '100%']
         var closeBtn = 1
+        var anim = 0
+        var title='视频播放'
       } else {
         var area = ['50%', '80%']
         var closeBtn = 0
+        var anim = 2
+        var title=false
       }
 
       layer.open({
           type: 2,
-          title: false,
+          title: title,
           closeBtn: closeBtn,
           shade: 1,
           // 优化弹层按钮样式
@@ -210,7 +214,7 @@
           shadeClose: true,
           content: videoUrl,
           // 添加动画效果
-          anim: 2, 
+          anim: anim, 
           success: function(layero, index) {
             // 弹层打开后添加过渡效果
             layero.css({
