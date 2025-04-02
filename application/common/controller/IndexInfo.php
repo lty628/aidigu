@@ -202,17 +202,22 @@ class IndexInfo extends Info
     {
         $keyword = input('keyword');
 
+        $keyword = base64_decode($keyword);
+        // 移除html标记
+        $keyword = strip_tags($keyword);
+        // 输入过滤
+        $keyword = htmlspecialchars($keyword);
+        // 移除空格
+        $keyword = trim($keyword);
+        $keyword = str_replace('&amp;', '&', $keyword);
+        parse_str($keyword, $keywordArr);
+        // 移除空
+        $keywordArr = array_filter($keywordArr);
+
         $userMessage = [];
         if (request()->isAjax()) {
-            if (!$keyword) return json(array('status' =>  1,'msg' => 'ok', 'data' => ['data' => [], 'allow_delete' => 0]));
-
-            $keyword = base64_decode($keyword);
-            // 移除html标记
-            $keyword = strip_tags($keyword);
-            // 输入过滤
-            $keyword = htmlspecialchars($keyword);
-            // 移除空格
-            $keyword = trim($keyword);
+            
+            if (!$keywordArr) return json(array('status' =>  1,'msg' => 'ok', 'data' => ['data' => [], 'allow_delete' => 0]));
 
             $findUserSearch = Db::name('search')->where('keyword', $keyword)->cache(60)->find();
             if ($findUserSearch && $findUserSearch['uid'] == $this->userid) {
@@ -232,15 +237,38 @@ class IndexInfo extends Info
 
             $page = request()->param('page/d', 1);
 
+            $where = [];
+            if (isset($keywordArr['searchContent'])) {
+                $where[] = ['message.contents', 'like', '%'. $keywordArr['searchContent'] .'%'];
+            }
+            if (isset($keywordArr['userNickname'])) {
+                $user = Db::name('user')->where('blog', $keywordArr['userNickname'])->whereOr('nickname', $keywordArr['userNickname'])->cache(600)->field('uid')->find();
+                if ($user) {
+                    $where[] = ['message.uid', '=', $user['uid']];
+                } else {
+                    return json(array('status' =>  1,'msg' => 'ok', 'data' => ['data' => [], 'allow_delete' => 0]));
+                }
+            }
+
+            if (isset($keywordArr['startDate'])) {
+                $where[] = ['message.ctime', '>=', strtotime($keywordArr['startDate'])];
+            }
+
+            if (isset($keywordArr['endDate'])) {
+                $where[] = ['message.ctime', '<=', strtotime($keywordArr['endDate'])];
+            }
+
             $userMessage = cache('search_'.$keyword.'_'.$page);
+            $userMessage = '';
             if (!$userMessage) {
                 $userMessage = Db::name('message')
                 ->alias('message')
                 ->join([$this->prefix . 'user' => 'user'], 'user.uid=message.uid')
-                ->order('message.ctime desc')
+                ->order('message.ctime asc')
                 ->field('user.uid,user.nickname,user.head_image,user.blog,message.ctime,message.contents,message.repost,message.refrom,message.repostsum,message.media,message.media_info,message.commentsum,message.msg_id')
                 ->where('message.is_delete', 0)
-                ->where('message.contents', 'like', '%'.$keyword.'%')
+                // ->where('message.contents', 'like', '%'.$keyword.'%')
+                ->where($where)
                 ->where(function ($query) {
                     $query->where('user.invisible', 0)->whereOr('user.uid', $this->siteUserId);
                 })
@@ -253,7 +281,7 @@ class IndexInfo extends Info
         }
         
         $this->assign('userMessage', []);
-        $this->assign('keyword', $keyword);
+        $this->assign('keywordArr', $keywordArr);
         return $this->fetch();
     }
 
