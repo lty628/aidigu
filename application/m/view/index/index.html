@@ -261,7 +261,7 @@
 				.done(function (json) {
 					var data = json.data.data
 					
-					if (json?.code) {
+					if (json?.code === 0) {
 					    // 显示提示信息
 					    alertMsg(json?.msg || '加载数据失败');
 					    // 2 秒后将 canLoad 设置为 true
@@ -271,7 +271,7 @@
 					    return;
 					}
 
-					if (data.length < 20) {
+					if (data.length < 8) {
 						$("#showMore").hide()
 						// $("#showMore").html('没有了')
 					}
