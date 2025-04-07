@@ -1,6 +1,27 @@
 const E = window.wangEditor
 const editor = new E("#msgToolBar", "#msgInput")
-editor.config.placeholder = '你在做什么呢？'
+// 定义随机占位符数组
+const placeholders = [
+    '你在做什么呢？',
+    '今天有啥新鲜事？',
+    '分享下想法呗！',
+    '最近有啥趣事儿吗？',
+    '午饭吃啥呀？',
+    '吃到啥美食啦？',
+    '最近有啥瓜可吃？',
+    '最近有烦心事吗？',
+    '你现在的心情咋样呀？',
+    '追啥剧呢？',
+    '最近有啥小成就？',
+    '周末咋安排？',
+    '聚会好玩不？'
+];
+// 随机获取一个占位符
+const randomIndex = Math.floor(Math.random() * placeholders.length);
+const randomPlaceholder = placeholders[randomIndex];
+
+// 设置随机占位符
+editor.config.placeholder = randomPlaceholder;
 editor.config.uploadImgServer = '/index/setting/msgInputImg'
 editor.config.uploadFileName = 'file'
 editor.config.uploadVideoServer = '/index/setting/msgInputImg'
