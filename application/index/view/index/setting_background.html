@@ -111,7 +111,7 @@
 </style>
 <div class="main">
 	<div class="contents">
-		<div class="top">修改头像</div>
+		<div class="top">修改背景</div>
 		<h2><a href="/setting/">个人资料 | </a><span><a href="/setting/avatar/">修改头像 | </a><span><a href="/setting/background/">修改背景 | </a></span><span><a href="/setting/passwd/">修改密码</a></span></h2>
 <!-- 		<h2>头像</h2> -->
 		<div class="entry" style="border-bottom: unset">
@@ -160,34 +160,42 @@
 			  });
 			});
 			$("#saveUpload,#resetImage").click(function(event) {
-				if ($(this).attr('type') == 'reset') {
-					$(".backgroundhtml img").attr('src', '');
-					$("#backgroundVal").val('');
-				} else {
-					var backgroundVal = $("#backgroundVal").val();
-					if (!backgroundVal) return false;
-				}
-				
-				$.ajax({
-					url: '/index/setting/saveTheme',
-					type: 'GET',
-					dataType: 'json',
-					data: {backgroundVal: backgroundVal},
-				})
-				.done(function(data) {
-					if (data.status) {
-						alertMsg('已保存',0,1);
-					} else {
-						alertMsg(data.msg);
-					}
-				})
-				.fail(function() {
-					console.log("error");
-				})
-				.always(function() {
-					console.log("complete");
+				var self = this;
+				layui.use('layer', function(){
+					var layer = layui.layer;
+					// 使用 layui 的弹框进行确认
+					layer.confirm('确定要执行此操作吗？', {
+						btn: ['确定','取消'] //按钮
+					}, function(){
+						if ($(self).attr('type') == 'reset') {
+							$(".backgroundhtml img").attr('src', '');
+							$("#backgroundVal").val('');
+						} else {
+							var backgroundVal = $("#backgroundVal").val();
+							if (!backgroundVal) return false;
+						}
+						
+						$.ajax({
+							url: '/index/setting/saveTheme',
+							type: 'GET',
+							dataType: 'json',
+							data: {backgroundVal: backgroundVal},
+						})
+						.done(function(data) {
+							if (data.status) {
+								alertMsg('已保存',0,1);
+							} else {
+								alertMsg(data.msg);
+							}
+						})
+						.fail(function() {
+							console.log("error");
+						})
+						.always(function() {
+							console.log("complete");
+						});
+					});
 				});
-				
 			});
 		})
 	</script>
