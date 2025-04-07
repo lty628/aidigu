@@ -12,6 +12,10 @@ class Preview extends Controller
     public function getMediaList()
     {
         $mediaList = [];
+        return json([
+            'mediaList' => [],
+            'startIndex' => 1
+        ]);
         $fileList = Db::name('file')->select();
         foreach ($fileList as $file) {
             $mediaList[] = $file['file_path'];
