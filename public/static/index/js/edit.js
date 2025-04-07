@@ -4,21 +4,42 @@ const editor = new E("#msgToolBar", "#msgInput")
 const placeholders = [
     '你在做什么呢？',
     '今天有啥新鲜事？',
-    '分享下想法呗！',
+    '你在想什么呢？',
     '最近有啥趣事儿吗？',
     '午饭吃啥呀？',
     '吃到啥美食啦？',
-    '最近有啥瓜可吃？',
+    '最近在磕什么瓜？',
     '最近有烦心事吗？',
     '你现在的心情咋样呀？',
-    '追啥剧呢？',
+    '最近在追啥剧呢？',
     '最近有啥小成就？',
-    '周末咋安排？',
-    '聚会好玩不？'
+    '周末去哪玩？',
+    '你有多久没看天空了？',
 ];
-// 随机获取一个占位符
-const randomIndex = Math.floor(Math.random() * placeholders.length);
-const randomPlaceholder = placeholders[randomIndex];
+
+// 检查本地缓存
+const cachedData = localStorage.getItem('randomPlaceholderData');
+const now = Date.now();
+let randomPlaceholder;
+
+if (cachedData) {
+    const { placeholder, expireTime } = JSON.parse(cachedData);
+    if (now < expireTime) {
+        randomPlaceholder = placeholder;
+    }
+}
+
+if (!randomPlaceholder) {
+    // 随机获取一个占位符
+    const randomIndex = Math.floor(Math.random() * placeholders.length);
+    randomPlaceholder = placeholders[randomIndex];
+    // 设置缓存，有效期 1 分钟（60000 毫秒）
+    const expireTime = now + 60000;
+    localStorage.setItem('randomPlaceholderData', JSON.stringify({
+        placeholder: randomPlaceholder,
+        expireTime
+    }));
+}
 
 // 设置随机占位符
 editor.config.placeholder = randomPlaceholder;
