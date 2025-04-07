@@ -5,6 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>媒体预览</title>
+    <!-- 引入 DPlayer 的 CSS 文件 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/dplayer/dist/DPlayer.min.css">
+    <!-- 引入 marked 库的 CSS （可选，可根据需要调整样式） -->
     <style>
         body {
             background-color: #000;
@@ -14,6 +17,34 @@
             height: 100vh;
             display: flex;
             flex-direction: column;
+        }
+
+        /* 为 Markdown 解析后的内容添加样式 */
+        .markdown-content {
+            white-space: pre-wrap;
+            text-align: left;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid #666;
+            overflow: auto;
+            color: #fff;
+            max-width: 80%;
+            max-height: 80%;
+            font-family: monospace;
+        }
+
+        .markdown-content h1,
+        .markdown-content h2,
+        .markdown-content h3,
+        .markdown-content h4,
+        .markdown-content h5,
+        .markdown-content h6 {
+            color: #007BFF;
+        }
+
+        .markdown-content a {
+            color: #007BFF;
+            text-decoration: underline;
         }
 
         #nav-bar {
@@ -72,9 +103,12 @@
             padding: 20px;
             position: relative;
             overflow: hidden;
-            max-width: 90vw;  /* 增加最大宽度限制 */
-            max-height: 80vh; /* 增加最大高度限制 */
-            margin: 0 auto;   /* 居中显示 */
+            max-width: 90vw;
+            /* 增加最大宽度限制 */
+            max-height: 80vh;
+            /* 增加最大高度限制 */
+            margin: 0 auto;
+            /* 居中显示 */
         }
 
         #preview-container {
@@ -87,9 +121,11 @@
 
         /* 新增PDF预览样式 */
         #pdf-element {
-            width: 100%;
+            /* width: 100%; */
+            width: 90vw;
             height: 100%;
-            min-height: 600px; /* 设置PDF最小高度 */
+            min-height: 600px;
+            /* 设置PDF最小高度 */
             border: none;
         }
 
@@ -97,6 +133,9 @@
             max-width: 100%;
             max-height: 100%;
             object-fit: contain;
+            position: relative;
+            will-change: transform;
+            /* 开启硬件加速 */
         }
 
         #txt-content {
@@ -107,7 +146,7 @@
             border: 1px solid #666;
             overflow: auto;
             color: #fff;
-            max-width: 80%;
+            /* max-width: 80%; */
             max-height: 80%;
             font-family: monospace;
         }
@@ -144,13 +183,47 @@
         .hidden {
             display: none !important;
         }
+
         #image-controls {
             display: flex;
             gap: 10px;
         }
-        
+
         .image-transformed {
             transition: transform 0.3s ease;
+        }
+
+        #zoom-slider {
+            width: 150px;
+            height: 4px;
+            background: #fff;
+            outline: none;
+            opacity: 0.7;
+            -webkit-transition: .2s;
+            transition: opacity .2s;
+            margin: auto 0;
+        }
+
+        #zoom-slider:hover {
+            opacity: 1;
+        }
+
+        #zoom-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            background: #007BFF;
+            cursor: pointer;
+            border-radius: 50%;
+        }
+
+        #zoom-slider::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            background: #007BFF;
+            cursor: pointer;
+            border-radius: 50%;
         }
     </style>
 </head>
@@ -162,34 +235,43 @@
             <span id="file-index"></span>
         </div>
         <div id="controls">
-            <button id="download-btn" class="control-btn">下载</button>
-            <button id="fullscreen-btn" class="control-btn">全屏</button>
-            <!-- 新增图片操作按钮 -->
             <div id="image-controls" class="hidden">
+                <input type="range" id="zoom-slider" min="0.2" max="3" step="0.2" value="1">
                 <button id="zoom-in-btn" class="control-btn">放大</button>
                 <button id="zoom-out-btn" class="control-btn">缩小</button>
                 <button id="rotate-btn" class="control-btn">旋转</button>
                 <button id="reset-btn" class="control-btn">重置</button>
             </div>
+            <button id="download-btn" class="control-btn">下载</button>
+            <button id="fullscreen-btn" class="control-btn">全屏</button>
+            <!-- 新增图片操作按钮 -->
+
         </div>
     </div>
     <div id="preview-area">
         <div id="preview-container">
             <div id="txt-content" class="hidden"></div>
             <img id="preview-element" class="hidden" src="" alt="预览图片">
-            <video id="video-element" class="hidden" controls></video>
+            <!-- 移除原有的 video 元素，添加 DPlayer 容器 -->
+            <div id="dplayer" class="hidden"></div>
             <iframe id="pdf-element" class="hidden"></iframe>
+            <!-- 新增 Markdown 内容显示容器 -->
+            <div id="markdown-content" class="hidden markdown-content"></div>
         </div>
-        <div id="arrow-left" class="nav-arrow">&lt;</div>
-        <div id="arrow-right" class="nav-arrow">&gt;</div>
     </div>
 
+    <div id="arrow-left" class="nav-arrow">&lt;</div>
+    <div id="arrow-right" class="nav-arrow">&gt;</div>
+
+    <!-- 引入 DPlayer 的 JavaScript 文件 -->
+    <script src="https://cdn.jsdelivr.net/npm/dplayer/dist/DPlayer.min.js"></script>
+    <!-- 引入 marked 库 -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script>
         // DOM 元素
-        // 将DOM元素定义移到最前面
         const previewContainer = document.getElementById('preview-container');
         const previewElement = document.getElementById('preview-element');
-        const videoElement = document.getElementById('video-element');
+        const dplayerContainer = document.getElementById('dplayer');
         const pdfElement = document.getElementById('pdf-element');
         const txtContent = document.getElementById('txt-content');
         const arrowLeft = document.getElementById('arrow-left');
@@ -203,19 +285,31 @@
         const rotateBtn = document.getElementById('rotate-btn');
         const resetBtn = document.getElementById('reset-btn');
         const imageControls = document.getElementById('image-controls');
-        
+        const markdownContent = document.getElementById('markdown-content');
+        const zoomSlider = document.getElementById('zoom-slider');
+
+        let dp; // 定义 DPlayer 实例
+
         // 状态变量
         let mediaList = [];
         let currentIndex = 0;
         let isFullscreen = false;
         let scale = 1;
         let rotation = 0;
-        
+
+        // 新增变量用于记录拖动状态和初始位置
+        let isDragging = false;
+        let startX, startY;
+        let initialX = 0;
+        let initialY = 0;
+
         // 初始化
         init();
 
         function init() {
-            loadMediaList();
+            // 假设从索引 0 开始，可根据需求修改
+            const startIndex = 0;
+            loadMediaList(startIndex);
             setupEventListeners();
         }
 
@@ -226,8 +320,15 @@
                     return response.json();
                 })
                 .then(data => {
-                    mediaList = data;
+                    mediaList = data.mediaList;
+                    const startIndex = data.startIndex;
                     if (mediaList.length > 0) {
+                        // 确保传入的索引在有效范围内
+                        if (startIndex >= 0 && startIndex < mediaList.length) {
+                            currentIndex = startIndex;
+                        } else {
+                            currentIndex = 0;
+                        }
                         showMedia(currentIndex);
                         updateNavArrows();
                     } else {
@@ -240,7 +341,25 @@
                 });
         }
 
-        // 修改showMedia函数中的PDF处理部分
+        function getFileType(path) {
+            const ext = path.split('.').pop().toLowerCase();
+            switch (ext) {
+                case 'jpg':
+                case 'jpeg': return 'image/jpeg';
+                case 'png': return 'image/png';
+                case 'gif': return 'image/gif';
+                case 'mp4': return 'video/mp4';
+                case 'mov': return 'video/quicktime';
+                case 'webm': return 'video/webm';
+                case 'pdf': return 'application/pdf';
+                case 'txt': return 'text/plain';
+                case 'mp3': return 'audio/mpeg';
+                case 'md':
+                case 'markdown': return 'text/markdown';
+                default: return 'application/octet-stream';
+            }
+        }
+
         function showMedia(index) {
             if (mediaList.length === 0) return;
 
@@ -259,31 +378,81 @@
             downloadBtn.onclick = () => downloadFile(path, fileName);
 
             // 清除所有预览元素
-            [previewElement, videoElement, pdfElement, txtContent].forEach(el => el.classList.add('hidden'));
+            [previewElement, dplayerContainer, pdfElement, txtContent, markdownContent].forEach(el => el.classList.add('hidden'));
+            // 隐藏图片控制按钮
+            imageControls.classList.add('hidden');
+            // 移除之前的音频元素
+            const existingAudio = document.getElementById('audio-element');
+            if (existingAudio) {
+                existingAudio.remove();
+            }
 
             // 根据文件类型显示相应预览
             const cacheBustedPath = `${path}?t=${Date.now()}`;
-            
+            let isPreviewable = false;
+
             if (fileType.startsWith('image/')) {
                 previewElement.src = cacheBustedPath;
                 previewElement.classList.remove('hidden');
                 previewElement.classList.add('image-transformed');
                 imageControls.classList.remove('hidden');
                 resetImageTransform(); // 重置变换状态
+                isPreviewable = true;
             } else if (fileType.startsWith('video/')) {
-                videoElement.src = cacheBustedPath;
-                videoElement.type = fileType;
-                videoElement.classList.remove('hidden');
-                imageControls.classList.add('hidden');
-            }
-            else if (fileType === 'application/pdf') {
+                if (dp) {
+                    dp.destroy();
+                }
+                // 设置 DPlayer 容器的样式
+                dplayerContainer.style.width = '90vw'; // 设置宽度为视口宽度的 90%
+                dplayerContainer.style.height = '80vh'; // 设置高度为视口高度的 80%
+                dp = new DPlayer({
+                    container: dplayerContainer,
+                    video: {
+                        url: cacheBustedPath,
+                        type: fileType
+                    }
+                });
+                dplayerContainer.classList.remove('hidden');
+                isPreviewable = true;
+            } else if (fileType === 'application/pdf') {
                 pdfElement.src = cacheBustedPath;
-                pdfElement.style.width = '100%';
-                pdfElement.style.height = '100%';
+                // 设置 PDF 预览元素的样式
+                pdfElement.style.width = '90vw'; // 设置宽度为视口宽度的 90%
+                pdfElement.style.height = '80vh'; // 设置高度为视口高度的 80%
                 pdfElement.classList.remove('hidden');
-            } 
-            else if (fileType === 'text/plain') {
+                isPreviewable = true;
+            } else if (fileType === 'text/plain') {
                 fetchTextContent(cacheBustedPath);
+                isPreviewable = true;
+            } else if (fileType === 'audio/mpeg') {
+                const audioElement = document.createElement('audio');
+                audioElement.src = cacheBustedPath;
+                audioElement.controls = true;
+                audioElement.id = 'audio-element';
+                previewContainer.appendChild(audioElement);
+                isPreviewable = true;
+            } else if (fileType === 'text/markdown') {
+                fetch(cacheBustedPath)
+                    .then(response => {
+                        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                        return response.text();
+                    })
+                    .then(text => {
+                        const html = marked.parse(text);
+                        markdownContent.innerHTML = html;
+                        markdownContent.classList.remove('hidden');
+                    })
+                    .catch(error => {
+                        console.error('获取 Markdown 内容出错:', error);
+                        markdownContent.textContent = '无法加载 Markdown 内容';
+                        markdownContent.classList.remove('hidden');
+                    });
+                isPreviewable = true;
+            }
+
+            if (!isPreviewable) {
+                txtContent.textContent = '此文件无法预览，点击下载按钮下载文件。';
+                txtContent.classList.remove('hidden');
             }
         }
 
@@ -313,139 +482,44 @@
             document.body.removeChild(a);
         }
 
-        function getFileType(path) {
-            const ext = path.split('.').pop().toLowerCase();
-            switch (ext) {
-                case 'jpg':
-                case 'jpeg': return 'image/jpeg';
-                case 'png': return 'image/png';
-                case 'gif': return 'image/gif';
-                case 'mp4': return 'video/mp4';
-                case 'mov': return 'video/quicktime';
-                case 'webm': return 'video/webm';
-                case 'pdf': return 'application/pdf';
-                case 'txt': return 'text/plain';
-                default: return 'application/octet-stream';
-            }
-        }
-
-        /* 新增图片控制样式 */
-   
-        
-        // 修改showMedia函数中的PDF处理部分
-        function showMedia(index) {
-            if (mediaList.length === 0) return;
-        
-            // 处理循环导航
-            if (index < 0) index = mediaList.length - 1;
-            if (index >= mediaList.length) index = 0;
-            currentIndex = index;
-        
-            const path = mediaList[index];
-            const fileType = getFileType(path);
-            const fileName = path.split('/').pop();
-        
-            // 更新UI
-            fileNameElement.textContent = fileName;
-            fileIndexElement.textContent = `(${currentIndex + 1}/${mediaList.length})`;
-            downloadBtn.onclick = () => downloadFile(path, fileName);
-        
-            // 清除所有预览元素
-            [previewElement, videoElement, pdfElement, txtContent].forEach(el => el.classList.add('hidden'));
-        
-            // 根据文件类型显示相应预览
-            const cacheBustedPath = `${path}?t=${Date.now()}`;
-            
-            if (fileType.startsWith('image/')) {
-                previewElement.src = cacheBustedPath;
-                previewElement.classList.remove('hidden');
-                previewElement.classList.add('image-transformed');
-                imageControls.classList.remove('hidden');
-                resetImageTransform(); // 重置变换状态
-            } else if (fileType.startsWith('video/')) {
-                videoElement.src = cacheBustedPath;
-                videoElement.type = fileType;
-                videoElement.classList.remove('hidden');
-                imageControls.classList.add('hidden');
-            }
-            else if (fileType === 'application/pdf') {
-                pdfElement.src = cacheBustedPath;
-                pdfElement.style.width = '100%';
-                pdfElement.style.height = '100%';
-                pdfElement.classList.remove('hidden');
-            } 
-            else if (fileType === 'text/plain') {
-                fetchTextContent(cacheBustedPath);
-            }
-        }
-
-        function fetchTextContent(url) {
-            fetch(url)
-                .then(response => {
-                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-                    return response.text();
-                })
-                .then(text => {
-                    txtContent.textContent = text;
-                    txtContent.classList.remove('hidden');
-                })
-                .catch(error => {
-                    console.error('获取文本内容出错:', error);
-                    txtContent.textContent = '无法加载文本内容';
-                    txtContent.classList.remove('hidden');
-                });
-        }
-
-        function downloadFile(url, filename) {
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = filename;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-        }
-
-        function getFileType(path) {
-            const ext = path.split('.').pop().toLowerCase();
-            switch (ext) {
-                case 'jpg':
-                case 'jpeg': return 'image/jpeg';
-                case 'png': return 'image/png';
-                case 'gif': return 'image/gif';
-                case 'mp4': return 'video/mp4';
-                case 'mov': return 'video/quicktime';
-                case 'webm': return 'video/webm';
-                case 'pdf': return 'application/pdf';
-                case 'txt': return 'text/plain';
-                default: return 'application/octet-stream';
-            }
-        }
-
-        // 修改setupEventListeners函数
-        // 修改setupEventListeners函数
         function setupEventListeners() {
-            arrowLeft.addEventListener('click', () => navigate(-1));
-            arrowRight.addEventListener('click', () => navigate(1));
-            
+            // 导航箭头事件
+            if (arrowLeft) arrowLeft.addEventListener('click', () => navigate(-1));
+            if (arrowRight) arrowRight.addEventListener('click', () => navigate(1));
+
+            // 键盘事件
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'ArrowLeft') navigate(-1);
                 if (e.key === 'ArrowRight') navigate(1);
-            });
-        
-            fullscreenBtn.addEventListener('click', toggleFullscreen);
-        
-            // 只在元素存在时添加图片控制事件
-            if (zoomInBtn) zoomInBtn.addEventListener('click', () => zoomImage(1));
-            if (zoomOutBtn) zoomOutBtn.addEventListener('click', () => zoomImage(-1));
-            if (rotateBtn) rotateBtn.addEventListener('click', rotateImage);
-            if (resetBtn) resetBtn.addEventListener('click', resetImageTransform);
-        
-            // 添加键盘快捷键
-            document.addEventListener('keydown', (e) => {
                 if (e.ctrlKey && e.key === '+') zoomImage(1);
                 if (e.ctrlKey && e.key === '-') zoomImage(-1);
                 if (e.ctrlKey && e.key === 'r') rotateImage();
             });
+
+            // 全屏按钮事件
+            if (fullscreenBtn) fullscreenBtn.addEventListener('click', toggleFullscreen);
+
+            // 图片控制按钮事件
+            if (zoomInBtn) zoomInBtn.addEventListener('click', () => zoomImage(1));
+            if (zoomOutBtn) zoomOutBtn.addEventListener('click', () => zoomImage(-1));
+            if (rotateBtn) rotateBtn.addEventListener('click', rotateImage);
+            if (resetBtn) resetBtn.addEventListener('click', resetImageTransform);
+
+            // 滑块事件监听
+            if (zoomSlider) {
+                zoomSlider.addEventListener('input', (e) => {
+                    scale = parseFloat(e.target.value);
+                    applyImageTransform();
+                });
+            }
+
+            // 图片拖动事件监听
+            if (previewElement) {
+                previewElement.addEventListener('mousedown', startDrag);
+                document.addEventListener('mousemove', drag);
+                document.addEventListener('mouseup', endDrag);
+                document.addEventListener('mouseleave', endDrag);
+            }
         }
 
         function navigate(direction) {
@@ -454,8 +528,10 @@
         }
 
         function updateNavArrows() {
-            arrowLeft.style.display = mediaList.length <= 1 ? 'none' : 'flex';
-            arrowRight.style.display = mediaList.length <= 1 ? 'none' : 'flex';
+            if (arrowLeft && arrowRight) {
+                arrowLeft.style.display = mediaList.length <= 1 ? 'none' : 'flex';
+                arrowRight.style.display = mediaList.length <= 1 ? 'none' : 'flex';
+            }
         }
 
         function toggleFullscreen() {
@@ -479,44 +555,71 @@
             txtContent.classList.remove('hidden');
         }
 
-        // 新增图片变换函数
         function zoomImage(direction) {
             scale += direction * 0.2;
             if (scale < 0.2) scale = 0.2;
+            if (scale > 3) scale = 3;
             applyImageTransform();
+            // 同步滑块的值
+            if (zoomSlider) {
+                zoomSlider.value = scale;
+            }
         }
-        
+
         function rotateImage() {
             rotation += 90;
             if (rotation >= 360) rotation = 0;
             applyImageTransform();
         }
-        
+
+        let requestId = null;
+
+        function startDrag(e) {
+            if (e.button === 0) {
+                isDragging = true;
+                startX = e.clientX - initialX;
+                startY = e.clientY - initialY;
+                e.preventDefault();
+            }
+        }
+
+        function drag(e) {
+            if (isDragging) {
+                e.preventDefault();
+                // 取消上一次的 requestAnimationFrame
+                if (requestId) {
+                    cancelAnimationFrame(requestId);
+                }
+                requestId = requestAnimationFrame(() => {
+                    initialX = e.clientX - startX;
+                    initialY = e.clientY - startY;
+                    applyImageTransform();
+                });
+            }
+        }
+
+        function endDrag() {
+            isDragging = false;
+            if (requestId) {
+                cancelAnimationFrame(requestId);
+            }
+        }
+
+        function applyImageTransform() {
+            previewElement.style.transform = `translate(${initialX}px, ${initialY}px) scale(${scale}) rotate(${rotation}deg)`;
+        }
+
         function resetImageTransform() {
             scale = 1;
             rotation = 0;
+            initialX = 0;
+            initialY = 0;
             applyImageTransform();
-        }
-        
-        function applyImageTransform() {
-            previewElement.style.transform = `scale(${scale}) rotate(${rotation}deg)`;
-        }
-        
-        // 在setupEventListeners中添加事件监听
-        function setupEventListeners() {
-            // ... 已有的事件监听 ...
-            zoomInBtn.addEventListener('click', () => zoomImage(1));
-            zoomOutBtn.addEventListener('click', () => zoomImage(-1));
-            rotateBtn.addEventListener('click', rotateImage);
-            resetBtn.addEventListener('click', resetImageTransform);
-            
-            // 添加键盘快捷键
-            document.addEventListener('keydown', (e) => {
-                if (e.ctrlKey && e.key === '+') zoomImage(1);
-                if (e.ctrlKey && e.key === '-') zoomImage(-1);
-                if (e.ctrlKey && e.key === 'r') rotateImage();
-            });
+            if (zoomSlider) {
+                zoomSlider.value = scale;
+            }
         }
     </script>
 </body>
+
 </html>

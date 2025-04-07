@@ -11,20 +11,21 @@ class Preview extends Controller
      */
     public function getMediaList()
     {
-        // 模拟从数据库或文件系统查询媒体资源路径
-        // $mediaList = [
-        //     '/path/to/image1.jpg',
-        //     '/path/to/video1.mp4',
-        //     '/path/to/document1.pdf',
-        //     '/path/to/text1.txt'
-        // ];
         $mediaList = [];
         $fileList = Db::name('file')->select();
         foreach ($fileList as $file) {
             $mediaList[] = $file['file_path'];
         }
 
-        return json($mediaList);
+        // 假设这里从数据库或者其他逻辑获取起始索引，这里简单模拟设置为 1
+        $startIndex = 1; 
+
+        $responseData = [
+            'mediaList' => $mediaList,
+            'startIndex' => $startIndex
+        ];
+
+        return json($responseData);
     }
 
     public function index()
