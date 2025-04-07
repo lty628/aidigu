@@ -11,6 +11,7 @@ class Preview extends Controller
      */
     public function getMediaList()
     {
+        // 功能暂未启用，返回空数组
         $mediaList = [];
         return json([
             'mediaList' => [],
