@@ -35,12 +35,13 @@ class Media extends Controller
         // 添加日期筛选条件
         if ($date) {
             $dateStart = strtotime($date . ' 00:00:00');
-            $dateEnd = strtotime($date . ' 23:59:59');
+            // $dateEnd = strtotime($date . ' 23:59:59');
+            $dateEnd = time();
             $query->where('message.ctime', 'between', [$dateStart, $dateEnd]);
         }
             
         $userMessage = $query
-            ->order('message.ctime desc')
+            ->order('message.ctime asc')
             ->field('user.uid,user.nickname,user.head_image,user.blog,message.ctime,message.contents,message.repost,message.refrom,message.repostsum,message.media,message.media_info,message.commentsum,message.msg_id')
             ->paginate(8, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
             
@@ -49,14 +50,25 @@ class Media extends Controller
     }
     public function getDiaryDates() {
         $uid = getLoginUid();
+        $month = input('param.month', date('Y-m')); // 默认当前月
         
-        $dates = Db::name('message')->where('uid', $uid)
+        // 计算月份的开始和结束时间
+        $startTime = strtotime($month . '-01 00:00:00');
+        $endTime = strtotime(date('Y-m-t 23:59:59', $startTime));
+        
+        $dates = Db::name('message')
+            ->where('uid', $uid)
+            ->where('ctime', 'between', [$startTime, $endTime])
             ->field("FROM_UNIXTIME(ctime, '%Y-%m-%d') as date")
             ->group("FROM_UNIXTIME(ctime, '%Y-%m-%d')")
             ->order('date desc')
             ->select();
         
-        // 修改为返回json格式
-        return json(array('status' => 1, 'msg' => 'ok', 'data' => $dates));
+        return json([
+            'status' => 1, 
+            'msg' => 'ok', 
+            'data' => $dates,
+            'current_month' => date('Y-m', $startTime) // 返回当前查询的月份
+        ]);
     }
 }
