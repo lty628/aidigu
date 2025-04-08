@@ -39,35 +39,36 @@ class IndexInfo extends Info
     // 个人首页
     public function home()
     {
-        // 我的主页
-        if ($this->isSiteUser) {
-            $userMessage = Db::name('message')
-                ->alias('message')
-                ->join([$this->prefix . 'fans' => 'fans'], 'message.uid=fans.touid and fans.fromuid=' . $this->siteUserId)
-                ->join([$this->prefix . 'user' => 'user'], 'user.uid=fans.touid')
-                ->order('message.ctime desc')
-                ->field('user.uid,user.nickname,user.head_image,user.blog,message.ctime,message.contents,message.repost,message.refrom,message.repostsum,message.media,message.media_info,message.commentsum,message.msg_id')
-                ->where('message.is_delete', 0)
-                ->paginate(8, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
-        } else {
-            $userMessage = Db::name('message')
-                ->alias('message')
-                ->join([$this->prefix . 'fans' => 'fans'], 'message.uid=fans.touid and fans.fromuid=' . $this->siteUserId)
-                ->join([$this->prefix . 'user' => 'user'], 'user.uid=fans.touid')
-                ->order('message.ctime desc')
-                ->field('user.uid,user.nickname,user.head_image,user.blog,message.ctime,message.contents,message.repost,message.refrom,message.repostsum,message.media,message.media_info,message.commentsum,message.msg_id')
-                ->where('message.is_delete', 0)
-                ->where(function ($query) {
-                    $query->where('user.invisible', 0)->whereOr('user.uid', $this->siteUserId);
-                })
-                ->paginate(8, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
-        }
-
-        $this->assign('userMessage', []);
         if (request()->isAjax()) {
+            // 我的主页
+            if ($this->isSiteUser) {
+                $userMessage = Db::name('message')
+                    ->alias('message')
+                    ->join([$this->prefix . 'fans' => 'fans'], 'message.uid=fans.touid and fans.fromuid=' . $this->siteUserId)
+                    ->join([$this->prefix . 'user' => 'user'], 'user.uid=fans.touid')
+                    ->order('message.ctime desc')
+                    ->field('user.uid,user.nickname,user.head_image,user.blog,message.ctime,message.contents,message.repost,message.refrom,message.repostsum,message.media,message.media_info,message.commentsum,message.msg_id')
+                    ->where('message.is_delete', 0)
+                    ->paginate(8, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
+            } else {
+                $userMessage = Db::name('message')
+                    ->alias('message')
+                    ->join([$this->prefix . 'fans' => 'fans'], 'message.uid=fans.touid and fans.fromuid=' . $this->siteUserId)
+                    ->join([$this->prefix . 'user' => 'user'], 'user.uid=fans.touid')
+                    ->order('message.ctime desc')
+                    ->field('user.uid,user.nickname,user.head_image,user.blog,message.ctime,message.contents,message.repost,message.refrom,message.repostsum,message.media,message.media_info,message.commentsum,message.msg_id')
+                    ->where('message.is_delete', 0)
+                    ->where(function ($query) {
+                        $query->where('user.invisible', 0)->whereOr('user.uid', $this->siteUserId);
+                    })
+                    ->paginate(8, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
+            }
             $userMessage = $userMessage->toArray()['data'];
             return json(array('status' =>  1, 'msg' => 'ok', 'data' => ['data' => handleMessage($userMessage), 'allow_delete' => 0]));
         }
+
+        $this->assign('userMessage', []);
+
         return $this->fetch('index');
     }
     public function own()
@@ -156,7 +157,7 @@ class IndexInfo extends Info
         $data = \app\common\libs\FileLog::getList($this->userid, 1, 8);
         foreach ($data as $key => $value) {
             // 获取 /uploads/c81e728d9d4c2f636f067f89cc14862c/avatar/20250408/4f5f96d7f354e3f71de38907440c5563.jpg .jpg前的部分
-            $tmp = pathinfo($value['media_info'], PATHINFO_DIRNAME) . '/' . pathinfo($value['media_info'], PATHINFO_FILENAME) ;
+            $tmp = pathinfo($value['media_info'], PATHINFO_DIRNAME) . '/' . pathinfo($value['media_info'], PATHINFO_FILENAME);
             $mediaInfo = $tmp . '_big.' . $value['media_type'];
             // $mediaInfo = pathinfo($value['media_info'], PATHINFO_FILENAME) . '_big.' . $value['media_type'];
             $data[$key]['media_info'] = $mediaInfo;
@@ -287,7 +288,7 @@ class IndexInfo extends Info
                 $where[] = ['message.ctime', '<=', strtotime($keywordArr['endDate'])];
             }
 
-            $cacheKey = 'search_' . $keyword . '_' .$this->userid . $page;
+            $cacheKey = 'search_' . $keyword . '_' . $this->userid . $page;
 
             $userMessage = cache($cacheKey);
             if (!$userMessage) {

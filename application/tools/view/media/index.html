@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的日记</title>
+    <style>
+        /* 全局样式 */
+        body {
+            font-family: 'Cursive', serif;
+            background-color: #f4e9d4;
+            /* background-image: url('https://www.transparenttextures.com/patterns/paper-fibers.png'); */
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+
+        /* 日记标题样式 */
+        .diary-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .diary-header h1 {
+            position: relative;
+            display: inline-block;
+            padding-bottom: 10px;
+            font-size: 36px;
+            color: #553d00;
+        }
+
+        .diary-header h1:after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 25%;
+            width: 50%;
+            height: 2px;
+            background: linear-gradient(to right, transparent, #c9b18a, transparent);
+        }
+
+        /* 日记容器样式 */
+        .diary-book {
+            background: #f8f1e5;
+            padding: 30px;
+            border: 1px solid #d4c9b8;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
+            margin: 0 auto;
+            border-radius: 10px;
+            position: relative;
+            max-width: 900px;
+            min-height: 600px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 日历样式 */
+        .diary-calendar {
+            background: white;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .calendar-title {
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        .calendar-nav {
+            display: flex;
+            gap: 10px;
+        }
+
+        .calendar-nav button {
+            background: none;
+            border: 1px solid #ddd;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .calendar-nav button:hover {
+            background-color: #f0f0f0;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+        }
+
+        .calendar-day-header {
+            text-align: center;
+            font-weight: bold;
+            font-size: 14px;
+            padding: 5px;
+        }
+
+        .calendar-day {
+            text-align: center;
+            padding: 5px;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .calendar-day:hover {
+            background: #f0f0f0;
+        }
+
+        .calendar-day.has-entry {
+            background: #e3f2fd;
+            font-weight: bold;
+        }
+
+        .calendar-day.selected {
+            background: #bbdefb;
+        }
+
+        .calendar-day.other-month {
+            color: #ccc;
+        }
+
+        .calendar-day.today {
+            border: 1px solid #4CAF50;
+        }
+
+        /* 日记页面样式 */
+        .diary-pages {
+            position: relative;
+            height: 400px;
+            perspective: 1000px;
+        }
+
+        .diary-page {
+            background: white;
+            /* background-image: url('https://www.transparenttextures.com/patterns/paper-fibers.png'); */
+            padding: 30px;
+            border: 1px solid #e0d6c2;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s ease;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            display: none;
+            border-radius: 5px;
+            /* 新增属性，确保内边距和边框包含在宽度内 */
+            box-sizing: border-box; 
+        }
+
+        .diary-page.active {
+            display: block;
+            transform: translateX(0);
+        }
+
+        .diary-page.prev {
+            display: block;
+            transform: translateX(-100%);
+        }
+
+        .diary-page.next {
+            display: block;
+            transform: translateX(100%);
+        }
+
+        /* 翻页按钮样式 */
+        .page-nav {
+            position: absolute;
+            top: 50%;
+            width: 40px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid #d4c9b8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+            transform: translateY(-50%);
+            transition: background-color 0.3s ease;
+        }
+
+        .page-nav.prev {
+            left: 10px;
+            border-radius: 0 5px 5px 0;
+        }
+
+        .page-nav.next {
+            right: 10px;
+            border-radius: 5px 0 0 5px;
+        }
+
+        .page-nav:hover {
+            background-color: #f0f0f0;
+        }
+
+        /* 分页按钮样式 */
+        .diary-pagination {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .diary-pagination button {
+            background: none;
+            border: 1px solid #ddd;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin: 0 5px;
+        }
+
+        .diary-pagination button:hover {
+            background-color: #f0f0f0;
+        }
+
+        .diary-pagination button.active {
+            background-color: #bbdefb;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="diary-header">
+        <h1>我的日记</h1>
+    </div>
+    <div class="diary-book">
+        <div class="diary-calendar">
+            <div class="calendar-header">
+                <div class="calendar-title" id="calendar-title"></div>
+                <div class="calendar-nav">
+                    <button id="prev-month">&lt;</button>
+                    <button id="today">今天</button>
+                    <button id="next-month">&gt;</button>
+                </div>
+            </div>
+            <div class="calendar-grid" id="calendar-days"></div>
+        </div>
+        <div class="diary-pages">
+            <div class="page-nav prev" onclick="changePage('prev')">&lt;</div>
+            <div class="page-nav next" onclick="changePage('next')">&gt;</div>
+        </div>
+        <div class="diary-pagination"></div>
+    </div>
+
+    <script>
+        // 格式化日期
+        function formatDate(timestamp) {
+            const date = new Date(timestamp * 1000);
+            return `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`;
+        }
+
+        // 渲染媒体内容
+        function renderMedia(mediaInfo) {
+            const media = JSON.parse(mediaInfo);
+            if (media.media_type === 'mp4') {
+                return `<video width="100%" controls><source src="${media.url}" type="video/mp4"></video>`;
+            } else {
+                return `<img src="${media.url}" style="max-width:100%">`;
+            }
+        }
+
+        // 渲染日记条目
+        function renderDiaryEntries(entries) {
+            const pagesContainer = document.querySelector('.diary-pages');
+            pagesContainer.innerHTML = '<div class="page-nav prev" onclick="changePage(\'prev\')">&lt;</div><div class="page-nav next" onclick="changePage(\'next\')">&gt;</div>';
+
+            if (entries.length === 0) {
+                const page = document.createElement('div');
+                page.className = 'diary-page active';
+                page.innerHTML = '<div class="diary-entry">暂无日记内容</div>';
+                pagesContainer.appendChild(page);
+                return;
+            }
+
+            const entriesByDate = {};
+            entries.forEach(entry => {
+                const dateStr = formatDate(entry.ctime);
+                if (!entriesByDate[dateStr]) {
+                    entriesByDate[dateStr] = [];
+                }
+                entriesByDate[dateStr].push(entry);
+            });
+
+            Object.keys(entriesByDate).forEach((dateStr, index) => {
+                const page = document.createElement('div');
+                page.className = `diary-page ${index === 0 ? 'active' : ''}`;
+                page.id = `page${index + 1}`;
+
+                const dateHeader = document.createElement('div');
+                dateHeader.className = 'daily-header';
+                dateHeader.textContent = dateStr;
+                page.appendChild(dateHeader);
+
+                entriesByDate[dateStr].forEach(entry => {
+                    const entryElement = document.createElement('div');
+                    entryElement.className = 'diary-entry';
+                    entryElement.innerHTML = `
+                        <div class="diary-content">
+                            ${entry.contents}
+                            ${entry.media ? renderMedia(entry.media_info) : ''}
+                        </div>
+                        <div class="diary-actions">
+                            <a href="javascript:void(0);" onclick="repost(${entry.msg_id})">转发</a> |
+                            <a href="javascript:void(0);" onclick="comment(${entry.msg_id})">评论</a>
+                        </div>
+                    `;
+                    page.appendChild(entryElement);
+                });
+
+                pagesContainer.appendChild(page);
+            });
+
+            updatePagination(Object.keys(entriesByDate).length);
+        }
+
+        // 更新分页按钮
+        function updatePagination(pageCount) {
+            const pagination = document.querySelector('.diary-pagination');
+            pagination.innerHTML = '';
+
+            for (let i = 0; i < pageCount; i++) {
+                const btn = document.createElement('button');
+                btn.className = `page-btn ${i === 0 ? 'active' : ''}`;
+                btn.textContent = i + 1;
+                btn.onclick = () => changePage(i);
+                pagination.appendChild(btn);
+            }
+        }
+
+        // 切换页面
+        function changePage(direction) {
+            const pages = document.querySelectorAll('.diary-page');
+            const currentIndex = Array.from(pages).findIndex(page => page.classList.contains('active'));
+            let nextIndex = currentIndex;
+
+            if (typeof direction === 'string') {
+                if (direction === 'prev' && currentIndex > 0) {
+                    nextIndex = currentIndex - 1;
+                } else if (direction === 'next' && currentIndex < pages.length - 1) {
+                    nextIndex = currentIndex + 1;
+                }
+            } else {
+                nextIndex = direction;
+            }
+
+            if (nextIndex !== currentIndex) {
+                pages[currentIndex].classList.remove('active');
+                pages[nextIndex].classList.add('active');
+
+                // 更新分页按钮状态
+                const pageBtns = document.querySelectorAll('.diary-pagination button');
+                pageBtns.forEach((btn, index) => {
+                    btn.classList.toggle('active', index === nextIndex);
+                });
+            }
+        }
+
+        // 获取日记数据
+        async function fetchDiaryData(date = '') {
+            try {
+                const url = `/tools/media/getDiaryList${date ? `?date=${date}` : '?page=1&limit=10'}`;
+                const response = await fetch(url);
+                const data = await response.json();
+
+                if (data.status === 1) {
+                    const entries = Array.isArray(data.data) ? data.data : data.data.data;
+                    renderDiaryEntries(entries);
+                } else {
+                    console.error('获取数据失败:', data.msg);
+                    const pagesContainer = document.querySelector('.diary-pages');
+                    pagesContainer.innerHTML = '<div class="page-nav prev" onclick="changePage(\'prev\')">&lt;</div><div class="page-nav next" onclick="changePage(\'next\')">&gt;</div>';
+                    const page = document.createElement('div');
+                    page.className = 'diary-page active';
+                    page.innerHTML = `<div class="diary-entry">数据加载失败: ${data.msg}</div>`;
+                    pagesContainer.appendChild(page);
+                }
+            } catch (error) {
+                console.error('获取数据出错:', error);
+                const pagesContainer = document.querySelector('.diary-pages');
+                pagesContainer.innerHTML = '<div class="page-nav prev" onclick="changePage(\'prev\')">&lt;</div><div class="page-nav next" onclick="changePage(\'next\')">&gt;</div>';
+                const page = document.createElement('div');
+                page.className = 'diary-page active';
+                page.innerHTML = '<div class="diary-entry">网络错误，请稍后再试</div>';
+                pagesContainer.appendChild(page);
+            }
+        }
+
+        // 日历类
+        class DiaryCalendar {
+            constructor() {
+                this.currentDate = new Date();
+                this.datesWithEntries = [];
+                this.init();
+            }
+
+            async init() {
+                await this.fetchDiaryDates();
+                this.renderCalendar();
+                this.setupEventListeners();
+            }
+
+            async fetchDiaryDates() {
+                try {
+                    const response = await fetch('/tools/media/getDiaryDates');
+                    const data = await response.json();
+                    if (data.status === 1) {
+                        this.datesWithEntries = data.data.map(item => item.date);
+                    }
+                } catch (error) {
+                    console.error('获取日期列表失败:', error);
+                }
+            }
+
+            renderCalendar() {
+                const year = this.currentDate.getFullYear();
+                const month = this.currentDate.getMonth();
+
+                document.getElementById('calendar-title').textContent = `${year}年${month + 1}月`;
+
+                const firstDay = new Date(year, month, 1);
+                const lastDay = new Date(year, month + 1, 0);
+                const firstDayOfWeek = firstDay.getDay();
+                const prevMonthLastDay = new Date(year, month, 0).getDate();
+
+                const calendarGrid = document.getElementById('calendar-days');
+                calendarGrid.innerHTML = '';
+
+                const weekdays = ['日', '一', '二', '三', '四', '五', '六'];
+                weekdays.forEach(day => {
+                    const dayHeader = document.createElement('div');
+                    dayHeader.className = 'calendar-day-header';
+                    dayHeader.textContent = day;
+                    calendarGrid.appendChild(dayHeader);
+                });
+
+                for (let i = firstDayOfWeek - 1; i >= 0; i--) {
+                    const day = prevMonthLastDay - i;
+                    const dayElement = this.createDayElement(year, month - 1, day, true);
+                    calendarGrid.appendChild(dayElement);
+                }
+
+                for (let day = 1; day <= lastDay.getDate(); day++) {
+                    const dayElement = this.createDayElement(year, month, day, false);
+
+                    const today = new Date();
+                    if (year === today.getFullYear() && month === today.getMonth() && day === today.getDate()) {
+                        dayElement.classList.add('today');
+                    }
+
+                    calendarGrid.appendChild(dayElement);
+                }
+
+                const daysToAdd = 42 - (firstDayOfWeek + lastDay.getDate());
+                for (let day = 1; day <= daysToAdd; day++) {
+                    const dayElement = this.createDayElement(year, month + 1, day, true);
+                    calendarGrid.appendChild(dayElement);
+                }
+            }
+
+            createDayElement(year, month, day, isOtherMonth) {
+                const dayElement = document.createElement('div');
+                dayElement.className = 'calendar-day';
+                dayElement.textContent = day;
+
+                if (isOtherMonth) {
+                    dayElement.classList.add('other-month');
+                } else {
+                    const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                    if (this.datesWithEntries.includes(dateStr)) {
+                        dayElement.classList.add('has-entry');
+                    }
+
+                    dayElement.addEventListener('click', () => {
+                        this.loadDiaryForDate(dateStr);
+                    });
+                }
+
+                return dayElement;
+            }
+
+            async loadDiaryForDate(dateStr) {
+                try {
+                    const pagesContainer = document.querySelector('.diary-pages');
+                    pagesContainer.innerHTML = '<div class="page-nav prev" onclick="changePage(\'prev\')">&lt;</div><div class="page-nav next" onclick="changePage(\'next\')">&gt;</div>';
+                    const page = document.createElement('div');
+                    page.className = 'diary-page active';
+                    page.innerHTML = '<div class="diary-entry">加载中...</div>';
+                    pagesContainer.appendChild(page);
+
+                    const response = await fetch(`/tools/media/getDiaryList?date=${dateStr}`);
+                    const data = await response.json();
+
+                    if (data.status === 1) {
+                        document.querySelector('.diary-pagination').innerHTML = '';
+                        renderDiaryEntries(data.data.data);
+                    } else {
+                        pagesContainer.innerHTML = '<div class="page-nav prev" onclick="changePage(\'prev\')">&lt;</div><div class="page-nav next" onclick="changePage(\'next\')">&gt;</div>';
+                        page.innerHTML = `<div class="diary-entry">${dateStr} 没有日记内容</div>`;
+                        pagesContainer.appendChild(page);
+                    }
+                } catch (error) {
+                    console.error('获取数据出错:', error);
+                    const pagesContainer = document.querySelector('.diary-pages');
+                    pagesContainer.innerHTML = '<div class="page-nav prev" onclick="changePage(\'prev\')">&lt;</div><div class="page-nav next" onclick="changePage(\'next\')">&gt;</div>';
+                    const page = document.createElement('div');
+                    page.className = 'diary-page active';
+                    page.innerHTML = '<div class="diary-entry">加载失败，请重试</div>';
+                    pagesContainer.appendChild(page);
+                }
+            }
+
+            setupEventListeners() {
+                document.getElementById('prev-month').addEventListener('click', () => {
+                    this.currentDate.setMonth(this.currentDate.getMonth() - 1);
+                    this.renderCalendar();
+                });
+
+                document.getElementById('next-month').addEventListener('click', () => {
+                    this.currentDate.setMonth(this.currentDate.getMonth() + 1);
+                    this.renderCalendar();
+                });
+
+                document.getElementById('today').addEventListener('click', () => {
+                    this.currentDate = new Date();
+                    this.renderCalendar();
+                });
+            }
+        }
+
+        // 转发功能
+        function repost(msgId) {
+            console.log('转发消息ID:', msgId);
+        }
+
+        // 评论功能
+        function comment(msgId) {
+            console.log('评论消息ID:', msgId);
+        }
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', async () => {
+            const diaryCalendar = new DiaryCalendar();
+            await diaryCalendar.init;
+        });
+    </script>
+</body>
+
+</html>
