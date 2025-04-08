@@ -287,8 +287,9 @@ class IndexInfo extends Info
                 $where[] = ['message.ctime', '<=', strtotime($keywordArr['endDate'])];
             }
 
-            $userMessage = cache('search_' . $keyword . '_' . $page);
-            $userMessage = '';
+            $cacheKey = 'search_' . $keyword . '_' .$this->userid . $page;
+
+            $userMessage = cache($cacheKey);
             if (!$userMessage) {
                 $userMessage = Db::name('message')
                     ->alias('message')
@@ -303,7 +304,7 @@ class IndexInfo extends Info
                     })
                     ->paginate(8, false, ['page' => $page, 'path' => '[PAGE].html']);
                 $userMessage = $userMessage->toArray()['data'];
-                cache('search_' . $keyword . '_' . $page, $userMessage, 3600);
+                cache($cacheKey, $userMessage, 3600);
             }
 
             return json(array('status' =>  1, 'msg' => 'ok', 'data' => ['data' => handleMessage($userMessage), 'allow_delete' => 0]));
