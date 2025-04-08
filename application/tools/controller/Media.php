@@ -24,27 +24,28 @@ class Media extends Controller
     {
         $userid = getLoginUid();
         $date = input('param.date', '');
-        
+    
+        // 如果没有提供日期，默认查询当前月的1号
+        if (!$date) {
+            $date = date('Y-m-01');
+        }
+    
         $prefix = config('database.prefix');
         $query = Db::name('message')
             ->alias('message')
-            ->join([$prefix . 'fans' => 'fans'], 'message.uid=fans.touid and fans.fromuid=' . $userid)
-            ->join([$prefix . 'user' => 'user'], 'user.uid=fans.touid')
+            ->where('message.uid', $userid) // 只查询自己的日记
             ->where('message.is_delete', 0);
-            
+    
         // 添加日期筛选条件
-        if ($date) {
-            $dateStart = strtotime($date . ' 00:00:00');
-            // $dateEnd = strtotime($date . ' 23:59:59');
-            $dateEnd = time();
-            $query->where('message.ctime', 'between', [$dateStart, $dateEnd]);
-        }
-            
+        $dateStart = strtotime($date . ' 00:00:00');
+        $dateEnd = time();
+        $query->where('message.ctime', 'between', [$dateStart, $dateEnd]);
+    
         $userMessage = $query
             ->order('message.ctime asc')
-            ->field('user.uid,user.nickname,user.head_image,user.blog,message.ctime,message.contents,message.repost,message.refrom,message.repostsum,message.media,message.media_info,message.commentsum,message.msg_id')
+            // ->field('user.uid,user.nickname,user.head_image,user.blog,message.ctime,message.contents,message.repost,message.refrom,message.repostsum,message.media,message.media_info,message.commentsum,message.msg_id')
             ->paginate(8, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
-            
+    
         $userMessage = $userMessage->toArray()['data'];
         return json(array('status' =>  1, 'msg' => 'ok', 'data' => ['data' => handleMessage($userMessage), 'allow_delete' => 0]));
     }
