@@ -62,7 +62,7 @@ class IndexInfo extends Info
                 })
                 ->paginate(8, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
         }
-        
+
         $this->assign('userMessage', []);
         if (request()->isAjax()) {
             $userMessage = $userMessage->toArray()['data'];
@@ -106,7 +106,7 @@ class IndexInfo extends Info
             $userMessage = $userMessage->toArray()['data'];
             return json(array('status' =>  1, 'msg' => 'ok', 'data' => ['data' => handleMessage($userMessage), 'allow_delete' => 0]));
         }
-        Db::name('topic')->where('topic_id', $topicId)->setInc('count',1);
+        Db::name('topic')->where('topic_id', $topicId)->setInc('count', 1);
         $topic = Db::name('topic')->where('topic_id', $topicId)->find();
         $this->assign('topicTitle', $topic['title']);
         $this->assign('userMessage', []);
@@ -153,10 +153,39 @@ class IndexInfo extends Info
     }
     public function avatar()
     {
+        $data = \app\common\libs\FileLog::getList($this->userid, 1, 8);
+        foreach ($data as $key => $value) {
+            // 获取 /uploads/c81e728d9d4c2f636f067f89cc14862c/avatar/20250408/4f5f96d7f354e3f71de38907440c5563.jpg .jpg前的部分
+            $tmp = pathinfo($value['media_info'], PATHINFO_DIRNAME) . '/' . pathinfo($value['media_info'], PATHINFO_FILENAME) ;
+            $mediaInfo = $tmp . '_big.' . $value['media_type'];
+            // $mediaInfo = pathinfo($value['media_info'], PATHINFO_FILENAME) . '_big.' . $value['media_type'];
+            $data[$key]['media_info'] = $mediaInfo;
+            $data[$key]['json'] = json_encode([
+                'media_info' => $tmp,
+                'media_type' => $value['media_type'],
+                'media_size' => $value['media_size'],
+                'media_name' => $value['media_name'],
+                'image_path'  => $mediaInfo,
+                'middle'  => $mediaInfo,
+                'big'  => $tmp
+            ], 320);
+        }
+        $this->assign('avatarArr', $data);
         return $this->fetch('setting_avatar');
     }
     public function background()
     {
+        $data = \app\common\libs\FileLog::getList($this->userid, 5);
+        foreach ($data as $key => $value) {
+            $data[$key]['json'] = json_encode([
+                'media_info' => $value['media_info'],
+                'media_type' => $value['media_type'],
+                'media_size' => $value['media_size'],
+                'media_name' => $value['media_name'],
+                'image_path'  => $value['media_info'],
+            ], 320);
+        }
+        $this->assign('bgArr', $data);
         return $this->fetch('setting_background');
     }
     public function passwd()
@@ -216,13 +245,13 @@ class IndexInfo extends Info
 
         $userMessage = [];
         if (request()->isAjax()) {
-            
-            if (!$keywordArr) return json(array('status' =>  1,'msg' => 'ok', 'data' => ['data' => [], 'allow_delete' => 0]));
+
+            if (!$keywordArr) return json(array('status' =>  1, 'msg' => 'ok', 'data' => ['data' => [], 'allow_delete' => 0]));
 
             $findUserSearch = Db::name('search')->where('keyword', $keyword)->cache(60)->find();
             if ($findUserSearch && $findUserSearch['uid'] == $this->userid) {
                 if (time() - strtotime($findUserSearch['create_time']) >= 120) {
-                    Db::name('search')->where('search_id', $findUserSearch['search_id'])->setInc('count',1);
+                    Db::name('search')->where('search_id', $findUserSearch['search_id'])->setInc('count', 1);
                 }
             } else {
                 $keywordData = [
@@ -231,7 +260,7 @@ class IndexInfo extends Info
                     'create_time' => date('Y-m-d H:i:s'),
                     'count' => 1
                 ];
-    
+
                 Db::name('search')->insert($keywordData);
             }
 
@@ -239,14 +268,14 @@ class IndexInfo extends Info
 
             $where = [];
             if (isset($keywordArr['searchContent'])) {
-                $where[] = ['message.contents', 'like', '%'. $keywordArr['searchContent'] .'%'];
+                $where[] = ['message.contents', 'like', '%' . $keywordArr['searchContent'] . '%'];
             }
             if (isset($keywordArr['userNickname'])) {
                 $user = Db::name('user')->where('blog', $keywordArr['userNickname'])->whereOr('nickname', $keywordArr['userNickname'])->cache(600)->field('uid')->find();
                 if ($user) {
                     $where[] = ['message.uid', '=', $user['uid']];
                 } else {
-                    return json(array('status' =>  1,'msg' => 'ok', 'data' => ['data' => [], 'allow_delete' => 0]));
+                    return json(array('status' =>  1, 'msg' => 'ok', 'data' => ['data' => [], 'allow_delete' => 0]));
                 }
             }
 
@@ -258,28 +287,28 @@ class IndexInfo extends Info
                 $where[] = ['message.ctime', '<=', strtotime($keywordArr['endDate'])];
             }
 
-            $userMessage = cache('search_'.$keyword.'_'.$page);
+            $userMessage = cache('search_' . $keyword . '_' . $page);
             $userMessage = '';
             if (!$userMessage) {
                 $userMessage = Db::name('message')
-                ->alias('message')
-                ->join([$this->prefix . 'user' => 'user'], 'user.uid=message.uid')
-                ->order('message.ctime asc')
-                ->field('user.uid,user.nickname,user.head_image,user.blog,message.ctime,message.contents,message.repost,message.refrom,message.repostsum,message.media,message.media_info,message.commentsum,message.msg_id')
-                ->where('message.is_delete', 0)
-                // ->where('message.contents', 'like', '%'.$keyword.'%')
-                ->where($where)
-                ->where(function ($query) {
-                    $query->where('user.invisible', 0)->whereOr('user.uid', $this->siteUserId);
-                })
-                ->paginate(8, false, ['page' => $page, 'path' => '[PAGE].html']);
+                    ->alias('message')
+                    ->join([$this->prefix . 'user' => 'user'], 'user.uid=message.uid')
+                    ->order('message.ctime asc')
+                    ->field('user.uid,user.nickname,user.head_image,user.blog,message.ctime,message.contents,message.repost,message.refrom,message.repostsum,message.media,message.media_info,message.commentsum,message.msg_id')
+                    ->where('message.is_delete', 0)
+                    // ->where('message.contents', 'like', '%'.$keyword.'%')
+                    ->where($where)
+                    ->where(function ($query) {
+                        $query->where('user.invisible', 0)->whereOr('user.uid', $this->siteUserId);
+                    })
+                    ->paginate(8, false, ['page' => $page, 'path' => '[PAGE].html']);
                 $userMessage = $userMessage->toArray()['data'];
-                cache('search_'.$keyword.'_'.$page, $userMessage, 3600);
+                cache('search_' . $keyword . '_' . $page, $userMessage, 3600);
             }
 
             return json(array('status' =>  1, 'msg' => 'ok', 'data' => ['data' => handleMessage($userMessage), 'allow_delete' => 0]));
         }
-        
+
         $this->assign('userMessage', []);
         $this->assign('keywordArr', $keywordArr);
         return $this->fetch();
@@ -306,7 +335,7 @@ class IndexInfo extends Info
 
             $data = [];
             foreach ($msgIdArr as $v) {
-                if (isset($tmp[$v])){
+                if (isset($tmp[$v])) {
                     $data[$v] = $tmp[$v];
                 }
             }
@@ -327,7 +356,7 @@ class IndexInfo extends Info
         $data['fromuid'] = $this->userid;
         $data['msg_id'] = $msgId;
         $data['collect_time'] = date('Y-m-d H:i:s', $time);
-        
+
         if ($isCancel) {
             $data['collect_time'] = date('Y-m-d H:i:s', $time);
             Db::name('user_collect')->where('fromuid', $this->userid)->where('msg_id', $msgId)->update([
@@ -351,9 +380,7 @@ class IndexInfo extends Info
                 $msg = '收藏成功';
             }
         }
-        
-        return json(array('status' =>  1, 'msg' => $msg));
-        
-    }
 
+        return json(array('status' =>  1, 'msg' => $msg));
+    }
 }

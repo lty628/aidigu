@@ -5,10 +5,12 @@
 		align-items: center;
 		margin-bottom: 15px;
 	}
+
 	.formitem span {
 		width: 100px;
 		font-weight: bold;
 	}
+
 	.formitem input,
 	.formitem select,
 	.formitem textarea {
@@ -17,52 +19,72 @@
 		border-radius: 3px;
 		flex: 1;
 	}
+
 	/* 修改单选框的flex样式 */
 	.formitem input[type="radio"] {
 		flex: 0.1;
 	}
+
 	.formitem u {
 		margin-left: 5px;
 		color: #999;
 	}
+
 	.formhr {
 		border-top: 1px solid #ddd;
 		margin: 20px 0;
 	}
+
 	.formsubmit {
 		text-align: center;
 	}
+
 	.formsubmit input {
 		padding: 10px 20px;
 		background-color: #007BFF;
 		color: white;
 		border: none;
-		border-radius: 5px; /* 增加圆角 */
+		border-radius: 5px;
+		/* 增加圆角 */
 		cursor: pointer;
-		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 增加阴影效果 */
-		transition: background-color 0.3s ease; /* 增加过渡效果 */
+		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+		/* 增加阴影效果 */
+		transition: background-color 0.3s ease;
+		/* 增加过渡效果 */
 	}
+
 	.formsubmit input:hover {
 		background-color: #0056b3;
-		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 鼠标悬停时增加阴影效果 */
+		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+		/* 鼠标悬停时增加阴影效果 */
 	}
+
 	/* 输入框样式优化 */
 	.formitem input,
 	.formitem select,
 	.formitem textarea {
-		padding: 10px; /* 增加内边距 */
+		padding: 10px;
+		/* 增加内边距 */
 		border: 1px solid #ccc;
-		border-radius: 5px; /* 增加圆角 */
-		box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1); /* 增加内阴影效果 */
-		transition: border-color 0.3s ease; /* 增加过渡效果 */
+		border-radius: 5px;
+		/* 增加圆角 */
+		box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+		/* 增加内阴影效果 */
+		transition: border-color 0.3s ease;
+		/* 增加过渡效果 */
 	}
+
 	.formitem input:focus,
 	.formitem select:focus,
 	.formitem textarea:focus {
-		border-color: #007BFF; /* 聚焦时改变边框颜色 */
-		outline: none; /* 去除默认聚焦边框 */
-		box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* 聚焦时增加外阴影效果 */
+		border-color: #007BFF;
+		/* 聚焦时改变边框颜色 */
+		outline: none;
+		/* 去除默认聚焦边框 */
+		box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+		/* 聚焦时增加外阴影效果 */
 	}
+
 	/* 单选框和复选框样式优化 */
 	.formitem input[type="radio"] {
 		/* width: 16px;
@@ -72,11 +94,14 @@
 		margin-right: 5px;
 		position: relative;
 		top: 2px;
-		transition: border-color 0.3s ease; /* 增加过渡效果 */
+		transition: border-color 0.3s ease;
+		/* 增加过渡效果 */
 	}
+
 	.formitem input[type="radio"]:checked {
 		border-color: #007BFF;
 	}
+
 	.formitem input[type="radio"]:checked::before {
 		content: '';
 		display: block;
@@ -89,6 +114,7 @@
 		left: 50%;
 		transform: translate(-50%, -50%);
 	}
+
 	/* 顶部导航链接样式优化 */
 	/* .top {
 		font-size: 24px;
@@ -101,9 +127,11 @@
 		text-decoration: none;
 		transition: color 0.3s ease;
 	}
+
 	h2 a:hover {
 		color: #0056b3;
 	}
+
 	h2 span {
 		margin: 0 5px;
 		color: #333;
@@ -112,61 +140,82 @@
 <div class="main">
 	<div class="contents">
 		<div class="top">修改背景</div>
-		<h2><a href="/setting/">个人资料 | </a><span><a href="/setting/avatar/">修改头像 | </a><span><a href="/setting/background/">修改背景 | </a></span><span><a href="/setting/passwd/">修改密码</a></span></h2>
-<!-- 		<h2>头像</h2> -->
+		<h2><a href="/setting/">个人资料 | </a><span><a href="/setting/avatar/">修改头像 | </a><span><a
+						href="/setting/background/">修改背景 | </a></span><span><a href="/setting/passwd/">修改密码</a></span>
+		</h2>
+		<!-- 		<h2>头像</h2> -->
 		<div class="entry" style="border-bottom: unset">
 			<div class="backgroundhtml">
-				<img width="500px" style="min-height: 200px;" src="{$userInfo.theme | default='/static/index/images/bg4.svg'}" alt="">
+				<img width="100%" style="min-height: 200px; max-height: 350px;"
+					src="{$userInfo.theme | default='/static/index/images/bg4.svg'}" alt="">
 			</div>
+			{if $bgArr}
+			<div class="recent-backgrounds"
+				style="margin-top: 20px; padding: 15px; background: #f8f8f8; border-radius: 5px;">
+				<h3 style="margin-bottom: 15px; color: #333;">最近使用的背景</h3>
+				<div style="display: flex; gap: 5px; flex-wrap: wrap;">
+					{volist name="bgArr" id="bg" key="k"}
+					<div style="width: 120px; height: 70px; cursor: pointer; border-radius: 4px; overflow: hidden;"
+						onclick="$('.backgroundhtml img').attr('src', '{$bg[\'media_info\']}'); $('#backgroundVal').val('{$bg[\'json\']}');">
+						<img src="{$bg['media_info']}"
+							style="width: 100%; height: 100%; object-fit: cover; border: 2px solid #eee; transition: all 0.3s;"
+							onmouseover="this.style.borderColor='#007BFF'" onmouseout="this.style.borderColor='#eee'">
+					</div>
+					{/volist}
+				</div>
+			</div>
+			{/if}
 			<div class="uploadhtml formsubmit">
 				<button type="button" class="layui-btn layui-bg-blue" id="uploadImage">
-				  <i class="layui-icon">&#xe67c;</i>上传
+					<i class="layui-icon">&#xe67c;</i>上传
 				</button>
 				<button type="button" class="layui-btn layui-bg-blue" id="saveUpload">
-				  保存
+					保存
 				</button>
 				<!-- 红色按钮 -->
-				<button type="reset" value="重置" class="layui-btn layui-bg-blue" id="resetImage">
+				<button type="reset" value="重置" class="layui-btn layui-btn-danger" id="resetImage">
 					重置
 				</button>
 			</div>
 		</div>
 
+
+
 	</div>
 	<input type="hidden" value="" id="backgroundVal">
 	<script>
 
-		$(function (){
-			layui.use('upload', function(){
-			  var upload = layui.upload;
-			   
-			  //执行实例
-			  var uploadInst = upload.render({
-			    elem: '#uploadImage' //绑定元素
-			    ,url: '/index/setting/uploadImage' //上传接口
-			    ,method: 'GET'
-			    ,done: function(res){
-			      	if (res.status) {
-			      		var data = res.data;
-			      		$(".backgroundhtml img").attr('src', data.image_path);
-			      		$("#backgroundVal").val(JSON.stringify(data));
-			      	} else {
-			      		alertMsg(res.msg);
-			      	}
-			    }
-			    ,error: function(){
-			      //请求异常回调
-			    }
-			  });
+		$(function () {
+			layui.use('upload', function () {
+				var upload = layui.upload;
+
+				//执行实例
+				var uploadInst = upload.render({
+					elem: '#uploadImage' //绑定元素
+					, url: '/index/setting/uploadImage' //上传接口
+					, method: 'GET'
+					, done: function (res) {
+						if (res.status) {
+							var data = res.data;
+							$(".backgroundhtml img").attr('src', data.image_path);
+							$("#backgroundVal").val(JSON.stringify(data));
+						} else {
+							alertMsg(res.msg);
+						}
+					}
+					, error: function () {
+						//请求异常回调
+					}
+				});
 			});
-			$("#saveUpload,#resetImage").click(function(event) {
+			$("#saveUpload,#resetImage").click(function (event) {
 				var self = this;
-				layui.use('layer', function(){
+				layui.use('layer', function () {
 					var layer = layui.layer;
 					// 使用 layui 的弹框进行确认
 					layer.confirm('确定要执行此操作吗？', {
-						btn: ['确定','取消'] //按钮
-					}, function(){
+						btn: ['确定', '取消'] //按钮
+					}, function () {
 						if ($(self).attr('type') == 'reset') {
 							$(".backgroundhtml img").attr('src', '');
 							$("#backgroundVal").val('');
@@ -174,30 +223,30 @@
 							var backgroundVal = $("#backgroundVal").val();
 							if (!backgroundVal) return false;
 						}
-						
+						console.log(backgroundVal);
 						$.ajax({
 							url: '/index/setting/saveTheme',
 							type: 'GET',
 							dataType: 'json',
-							data: {backgroundVal: backgroundVal},
+							data: { backgroundVal: backgroundVal },
 						})
-						.done(function(data) {
-							if (data.status) {
-								alertMsg('已保存',0,1);
-							} else {
-								alertMsg(data.msg);
-							}
-						})
-						.fail(function() {
-							console.log("error");
-						})
-						.always(function() {
-							console.log("complete");
-						});
+							.done(function (data) {
+								if (data.status) {
+									alertMsg('已保存', 0, 1);
+								} else {
+									alertMsg(data.msg);
+								}
+							})
+							.fail(function () {
+								console.log("error");
+							})
+							.always(function () {
+								console.log("complete");
+							});
 					});
 				});
 			});
 		})
 	</script>
-{include file='index/sidebar_index' /}
-{include file='index/footer' /}
+	{include file='index/sidebar_index' /}
+	{include file='index/footer' /}

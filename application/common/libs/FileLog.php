@@ -38,6 +38,11 @@ class FileLog
         ]);
     }
 
+    public static function getList($uid, $type, $limit = 5)
+    {
+        return Db::name('file_log')->where('uid', $uid)->where('type', $type)->order('create_time desc')->limit($limit)->select();    
+    }
+
     protected static function getApplication($type)
     {
         $mimeTypes = array(
