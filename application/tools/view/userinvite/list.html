@@ -40,7 +40,7 @@
     function copyLink(obj) {
       var $ = layui.$;
       var invite_code = $(obj).attr('data-url');
-      $("#copyLink").attr('data-clipboard-text', "Hi~,私密吐槽空间，吃瓜圣地，电影追剧，快点击链接： "+ window.location.protocol + '//' + window.location.host + '/invite/?invite_code=' + invite_code+" ，等你来玩！");
+      $("#copyLink").attr('data-clipboard-text', "✨ 嘿，我发现了一个超有趣的小天地！在这里可以：\n- 遇见懂你的小伙伴\n- 分享彼此的小秘密\n- 记录生活的美好点滴\n\n点击我的专属邀请链接："+ window.location.protocol + '//' + window.location.host + '/invite/?invite_code=' + invite_code+" ，加入爱嘀咕和我们一起玩耍吧！名额有限哦~");
       // window.location.protocol + '//' + window.location.host + window.location.pathname
       var clipboard = new ClipboardJS('#copyLink')
       $("#copyLink").trigger('click');
