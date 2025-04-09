@@ -43,11 +43,15 @@ class Media extends Controller
     
         $userMessage = $query
             ->order('message.ctime asc')
+            ->field('uid,is_delete,commentsum,repostsum,collectsum',true)
             // ->field('user.uid,user.nickname,user.head_image,user.blog,message.ctime,message.contents,message.repost,message.refrom,message.repostsum,message.media,message.media_info,message.commentsum,message.msg_id')
             ->paginate(8, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
-    
-        $userMessage = $userMessage->toArray()['data'];
-        return json(array('status' =>  1, 'msg' => 'ok', 'data' => ['data' => handleMessage($userMessage), 'allow_delete' => 0]));
+        
+        $userMessage = $userMessage->toArray();
+        $userMessage['data'] = handleMessage($userMessage['data']);
+        $userMessage['allow_delete'] = 1;
+        // dump($userMessage);die;
+        return json(array('status' =>  1, 'msg' => 'ok', 'data' => $userMessage));
     }
     public function getDiaryDates() {
         $uid = getLoginUid();
