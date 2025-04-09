@@ -14,7 +14,7 @@
 			{if $bgArr}
 			<div class="recent-backgrounds"
 				style="margin-top: 20px; padding: 15px; background: #f8f8f8; border-radius: 5px;">
-				<h3 style="margin-bottom: 15px; color: #333;text-align: left;">最近使用的背景</h3>
+				<h3 style="margin-bottom: 15px; color: #333;text-align: left;">最近使用的背景（选择后点击保存生效）</h3>
 				<div style="display: flex; gap: 5px; flex-wrap: wrap;">
 					{volist name="bgArr" id="bg" key="k"}
 					<div style="width: 120px; height: 70px; cursor: pointer; border-radius: 4px; overflow: hidden;"
@@ -31,7 +31,7 @@
 			<!-- 主题选择部分 -->
 			<div class="recent-themes"
 				style="margin-top: 20px; padding: 15px; background: #f8f8f8; border-radius: 5px;">
-				<h3 style="margin-bottom: 15px; color: #333;text-align: left;">选择主题</h3>
+				<h3 style="margin-bottom: 15px; color: #333;text-align: left;">选择主题色系</h3>
 				<div style="display: flex; gap: 5px; flex-wrap: wrap;">
 					<div style="width: 95px; height: 70px; cursor: pointer; border-radius: 4px; overflow: hidden; background-color: #fff; border: 2px solid #eee; transition: all 0.3s;"
 						onclick="applyTheme('default');"
