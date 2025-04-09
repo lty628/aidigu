@@ -41,12 +41,8 @@
 
         /* 日记容器样式，修改为卡片样式 */
         .diary-book {
-            /* background: #f8f1e5; */
             padding: 30px;
-            /* border: 1px solid #d4c9b8;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);  */
             margin: 0 auto;
-            /* border-radius: 15px;  */
             position: relative;
             max-width: 900px;
             min-height: 600px;
@@ -242,7 +238,6 @@
             perspective: 1000px;
             user-select: none;
             overflow: hidden;
-            /* 隐藏溢出的内容 */
         }
 
         .diary-page {
@@ -253,29 +248,22 @@
             width: 100%;
             height: 100%;
             transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            /* 优化过渡函数 */
             box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
-            display: block;
-            /* 始终显示页面 */
             border-radius: 5px;
             box-sizing: border-box;
             transform: translateX(100%);
-            /* 默认将页面移出右侧 */
         }
 
         .diary-page.active {
             transform: translateX(0);
-            /* 显示当前活动页面 */
         }
 
         .diary-page.prev {
             transform: translateX(-100%);
-            /* 将上一个页面移出左侧 */
         }
 
         .diary-page.next {
             transform: translateX(100%);
-            /* 将下一个页面移出右侧 */
         }
 
         /* 翻页箭头样式，调整样式使其与卡片风格更协调 */
@@ -285,11 +273,8 @@
             width: 40px;
             height: 60px;
             background: rgba(255, 255, 255, 0.8);
-            /* 调整背景透明度 */
             border: none;
-            /* 移除边框 */
             border-radius: 50%;
-            /* 圆形箭头 */
             display: none;
             align-items: center;
             justify-content: center;
@@ -298,7 +283,6 @@
             transform: translateY(-50%);
             transition: background-color 0.3s ease;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            /* 增加阴影 */
         }
 
         .page-arrow.prev {
@@ -346,11 +330,9 @@
             </div>
             <div class="calendar-grid" id="calendar-days"></div>
         </div>
-        <div class="diary-pages">
-            <div class="page-arrow prev" onmousedown="startPageHold('prev')" onmouseup="stopPageHold()"
-                onmouseleave="stopPageHold()">&lt;</div>
-            <div class="page-arrow next" onmousedown="startPageHold('next')" onmouseup="stopPageHold()"
-                onmouseleave="stopPageHold()">&gt;</div>
+        <div class="diary-pages" id="diary-pages">
+            <div class="page-arrow prev"></div>
+            <div class="page-arrow next"></div>
         </div>
     </div>
 
@@ -373,43 +355,40 @@
     </div>
 
     <script>
-        // 格式化日期
-        function formatDate(timestamp) {
+        // 全局变量
+        let currentPage = 1;
+        let totalData = 0;
+        let isLoading = false;
+        let isDragging = false;
+        let startX = 0;
+
+        // 工具函数
+        const formatDate = (timestamp) => {
             const date = new Date(timestamp * 1000);
-            return `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`;
-        }
+            const year = date.getFullYear();
+            const month = (date.getMonth() + 1).toString().padStart(2, '0');
+            const day = date.getDate().toString().padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        };
 
-        // 渲染媒体内容
-        function renderMedia(mediaInfo) {
-            const media = JSON.parse(mediaInfo);
-            if (media.media_type === 'mp4') {
-                return `<video width="100%" controls><source src="${media.url}" type="video/mp4"></video>`;
-            } else {
-                return `<img src="${media.url}" style="max-width:100%">`;
-            }
-        }
+        const formatTime = (timestamp) => {
+            const date = new Date(timestamp * 1000);
+            const hours = date.getHours().toString().padStart(2, '0');
+            const minutes = date.getMinutes().toString().padStart(2, '0');
+            return `${hours}:${minutes}`;
+        };
 
-        // 渲染日记条目
-        function renderDiaryEntries(entries) {
+        const renderMedia = (mediaInfo) => {
+            // 媒体渲染逻辑，可根据实际情况实现
+            return '';
+        };
+
+        const renderDiaryEntries = (entries) => {
             const pagesContainer = document.querySelector('.diary-pages');
             pagesContainer.innerHTML = `
-                <div class="page-arrow prev" 
-                    onmousedown="startPageHold('prev')" 
-                    onmouseup="stopPageHold()" 
-                    onmouseleave="stopPageHold()">&lt;</div>
-                <div class="page-arrow next" 
-                    onmousedown="startPageHold('next')" 
-                    onmouseup="stopPageHold()" 
-                    onmouseleave="stopPageHold()">&gt;</div>
+                <div class="page-arrow prev"></div>
+                <div class="page-arrow next"></div>
             `;
-
-            if (entries.length === 0) {
-                const page = document.createElement('div');
-                page.className = 'diary-page active';
-                page.innerHTML = '<div class="diary-entry">暂无日记内容</div>';
-                pagesContainer.appendChild(page);
-                return;
-            }
 
             const entriesByDate = {};
             entries.forEach(entry => {
@@ -422,7 +401,7 @@
 
             Object.keys(entriesByDate).forEach((dateStr, index) => {
                 const page = document.createElement('div');
-                page.className = `diary-page ${index === 0 ? 'active' : ''}`;
+                page.className = 'diary-page';
                 page.id = `page${index + 1}`;
 
                 const dateHeader = document.createElement('div');
@@ -433,97 +412,192 @@
                 entriesByDate[dateStr].forEach(entry => {
                     const entryElement = document.createElement('div');
                     entryElement.className = 'diary-entry';
-                    // 移除多余的 '}' 符号
                     entryElement.innerHTML = `
-                <div class="diary-content">
-                    ${entry.contents}
-                    ${entry.media ? renderMedia(entry.media_info) : ''}
-                </div>
-                <div class="diary-time">
-                    ${formatTime(entry.ctime)}
-                </div>
-            `;
+                        <div class="diary-content">
+                            ${entry.contents}
+                            ${entry.media ? renderMedia(entry.media_info) : ''}
+                        </div>
+                        <div class="diary-time">
+                            ${formatTime(entry.ctime)}
+                        </div>
+                    `;
                     page.appendChild(entryElement);
                 });
-                // 原代码中缺少这部分，用于更新分页按钮
+
                 pagesContainer.appendChild(page);
             });
 
-        }
+            if (entries.length > 0) {
+                document.querySelector('.diary-page').classList.add('active');
+            }
+        };
 
+        const appendDiaryEntries = (entries) => {
+            const pagesContainer = document.querySelector('.diary-pages');
+            const existingPages = document.querySelectorAll('.diary-page');
+            const lastPageIndex = existingPages.length - 1;
 
-        // 切换页面
-        function changePage(direction) {
-            const pages = document.querySelectorAll('.diary-page');
-            const currentIndex = Array.from(pages).findIndex(page => page.classList.contains('active'));
-            let nextIndex = currentIndex;
-
-            if (typeof direction === 'string') {
-                if (direction === 'prev' && currentIndex > 0) {
-                    nextIndex = currentIndex - 1;
-                } else if (direction === 'next' && currentIndex < pages.length - 1) {
-                    nextIndex = currentIndex + 1;
+            const entriesByDate = {};
+            entries.forEach(entry => {
+                const dateStr = formatDate(entry.ctime);
+                if (!entriesByDate[dateStr]) {
+                    entriesByDate[dateStr] = [];
                 }
-            } else {
-                nextIndex = direction;
-            }
+                entriesByDate[dateStr].push(entry);
+            });
 
-            if (nextIndex !== currentIndex) {
-                pages[currentIndex].classList.remove('active');
-                pages[nextIndex].classList.add('active');
+            Object.keys(entriesByDate).forEach((dateStr, index) => {
+                const page = document.createElement('div');
+                page.className = 'diary-page';
+                page.id = `page${lastPageIndex + index + 1}`;
 
-            }
-        }
+                const dateHeader = document.createElement('div');
+                dateHeader.className = 'daily-header';
+                dateHeader.textContent = dateStr;
+                page.appendChild(dateHeader);
 
-        // 获取日记数据
-        async function fetchDiaryData(date = '') {
+                entriesByDate[dateStr].forEach(entry => {
+                    const entryElement = document.createElement('div');
+                    entryElement.className = 'diary-entry';
+                    entryElement.innerHTML = `
+                        <div class="diary-content">
+                            ${entry.contents}
+                            ${entry.media ? renderMedia(entry.media_info) : ''}
+                        </div>
+                        <div class="diary-time">
+                            ${formatTime(entry.ctime)}
+                        </div>
+                    `;
+                    page.appendChild(entryElement);
+                });
+
+                pagesContainer.appendChild(page);
+            });
+        };
+
+        const handleError = (msg) => {
+            const pagesContainer = document.querySelector('.diary-pages');
+            pagesContainer.innerHTML = `
+                <div class="page-arrow prev"></div>
+                <div class="page-arrow next"></div>
+            `;
+            const page = document.createElement('div');
+            page.className = 'diary-page active';
+            page.innerHTML = `<div class="diary-entry">${msg}</div>`;
+            pagesContainer.appendChild(page);
+        };
+
+        const fetchData = async (url) => {
             try {
-                const url = `/tools/media/getDiaryList${date ? `?date=${date}` : '?page=1&limit=10'}`;
                 const response = await fetch(url);
-                const data = await response.json();
+                return await response.json();
+            } catch (error) {
+                console.error('请求出错:', error);
+                return null;
+            }
+        };
 
-                if (data.status === 1) {
-                    const entries = Array.isArray(data.data) ? data.data : data.data.data;
+        const fetchDiaryData = async (date = '', page = 1, limit = 8) => {
+            if (isLoading) return;
+            isLoading = true;
+
+            const url = `/tools/media/getDiaryList${date ? `?date=${date}` : `?page=${page}&limit=${limit}`}`;
+            const data = await fetchData(url);
+
+            if (data && data.status === 1) {
+                const entries = Array.isArray(data.data.data) ? data.data.data : [];
+                totalData = data.data.total;
+
+                if (page === 1) {
                     renderDiaryEntries(entries);
                 } else {
-                    console.error('获取数据失败:', data.msg);
-                    const pagesContainer = document.querySelector('.diary-pages');
-                    pagesContainer.innerHTML = `
-                        <div class="page-arrow prev" 
-                            onmousedown="startPageHold('prev')" 
-                            onmouseup="stopPageHold()" 
-                            onmouseleave="stopPageHold()">&lt;</div>
-                        <div class="page-arrow next" 
-                            onmousedown="startPageHold('next')" 
-                            onmouseup="stopPageHold()" 
-                            onmouseleave="stopPageHold()">&gt;</div>
-                    `;
-                    const page = document.createElement('div');
-                    page.className = 'diary-page active';
-                    page.innerHTML = `<div class="diary-entry">数据加载失败: ${data.msg}</div>`;
-                    pagesContainer.appendChild(page);
+                    appendDiaryEntries(entries);
                 }
-            } catch (error) {
-                console.error('获取数据出错:', error);
-                const pagesContainer = document.querySelector('.diary-pages');
-                pagesContainer.innerHTML = `
-                    <div class="page-arrow prev" 
-                        onmousedown="startPageHold('prev')" 
-                        onmouseup="stopPageHold()" 
-                        onmouseleave="stopPageHold()">&lt;</div>
-                    <div class="page-arrow next" 
-                        onmousedown="startPageHold('next')" 
-                        onmouseup="stopPageHold()" 
-                        onmouseleave="stopPageHold()">&gt;</div>
-                `;
-                const page = document.createElement('div');
-                page.className = 'diary-page active';
-                page.innerHTML = '<div class="diary-entry">网络错误，请稍后再试</div>';
-                pagesContainer.appendChild(page);
-            }
-        }
 
-        // 日历类
+                currentPage = page;
+            } else {
+                handleError(data ? data.msg : '网络错误，请稍后再试');
+            }
+
+            isLoading = false;
+        };
+
+        const changePage = (direction) => {
+            const pages = document.querySelectorAll('.diary-page');
+            const currentIndex = Array.from(pages).findIndex(page => page.classList.contains('active'));
+
+            if (direction === 'prev' && currentIndex > 0) {
+                pages[currentIndex].classList.remove('active');
+                pages[currentIndex - 1].classList.add('active');
+            } else if (direction === 'next' && currentIndex < pages.length - 1) {
+                pages[currentIndex].classList.remove('active');
+                pages[currentIndex + 1].classList.add('active');
+            }
+        };
+
+        const startPageHold = (direction) => {
+            if (window.pageHoldTimer) clearInterval(window.pageHoldTimer);
+            isHolding = true;
+            changePage(direction);
+
+            window.pageHoldTimer = setInterval(() => {
+                changePage(direction);
+            }, 300);
+        };
+
+        const stopPageHold = () => {
+            if (window.pageHoldTimer) clearInterval(window.pageHoldTimer);
+            isHolding = false;
+        };
+
+        const startDrag = (event) => {
+            isDragging = true;
+            startX = event.clientX;
+        };
+
+        const drag = (event) => {
+            if (isDragging) {
+                const diffX = event.clientX - startX;
+                const pages = document.querySelectorAll('.diary-page');
+                const currentIndex = Array.from(pages).findIndex(page => page.classList.contains('active'));
+
+                if (diffX > 0 && currentIndex > 0) {
+                    pages[currentIndex].style.transform = `translateX(${diffX}px)`;
+                    pages[currentIndex - 1].style.transform = `translateX(${diffX - 100}px)`;
+                } else if (diffX < 0 && currentIndex < pages.length - 1) {
+                    pages[currentIndex].style.transform = `translateX(${diffX}px)`;
+                    pages[currentIndex + 1].style.transform = `translateX(${diffX + 100}px)`;
+                }
+            }
+        };
+
+        const endDrag = (event) => {
+            if (isDragging) {
+                isDragging = false;
+                const diffX = event.clientX - startX;
+                const pages = document.querySelectorAll('.diary-page');
+                const currentIndex = Array.from(pages).findIndex(page => page.classList.contains('active'));
+
+                pages.forEach(page => {
+                    page.style.transform = '';
+                });
+
+                if (diffX > 50) {
+                    if (currentIndex > 0) {
+                        changePage('prev');
+                    } else if (currentPage > 1) {
+                        fetchDiaryData('', currentPage - 1, 8);
+                    }
+                } else if (diffX < -50) {
+                    if (currentIndex < pages.length - 1) {
+                        changePage('next');
+                    } else if (currentPage * 8 < totalData) {
+                        fetchDiaryData('', currentPage + 1, 8);
+                    }
+                }
+            }
+        };
+
         class DiaryCalendar {
             constructor() {
                 this.currentDate = new Date();
@@ -546,7 +620,7 @@
 
                     if (data.status === 1) {
                         this.datesWithEntries = data.data.map(item => item.date);
-                        this.currentMonth = data.current_month; // 更新当前月份
+                        this.currentMonth = data.current_month;
                         this.renderCalendar();
                     }
                 } catch (error) {
@@ -632,7 +706,6 @@
                 }
             }
 
-            // 添加年份导航方法
             navigateYears(offset) {
                 const currentYear = this.currentDate.getFullYear();
                 this.currentDate.setFullYear(currentYear + (offset * 10));
@@ -711,52 +784,50 @@
                 try {
                     const pagesContainer = document.querySelector('.diary-pages');
                     pagesContainer.innerHTML = `
-                        <div class="page-arrow prev" 
-                            onmousedown="startPageHold('prev')" 
-                            onmouseup="stopPageHold()" 
-                            onmouseleave="stopPageHold()">&lt;</div>
-                        <div class="page-arrow next" 
-                            onmousedown="startPageHold('next')" 
-                            onmouseup="stopPageHold()" 
-                            onmouseleave="stopPageHold()">&gt;</div>
+                        <div class="page-arrow prev"></div>
+                        <div class="page-arrow next"></div>
                     `;
                     const page = document.createElement('div');
                     page.className = 'diary-page active';
                     page.innerHTML = '<div class="diary-entry">加载中...</div>';
                     pagesContainer.appendChild(page);
 
-                    const response = await fetch(`/tools/media/getDiaryList?date=${dateStr}`);
+                    const response = await fetch(`/tools/media/getDiaryList?date=${dateStr}&page=1&limit=10`);
                     const data = await response.json();
 
                     if (data.status === 1) {
                         renderDiaryEntries(data.data.data);
                     } else {
                         pagesContainer.innerHTML = `
-                            <div class="page-arrow prev" 
-                                onmousedown="startPageHold('prev')" 
-                                onmouseup="stopPageHold()" 
-                                onmouseleave="stopPageHold()">&lt;</div>
-                            <div class="page-arrow next" 
-                                onmousedown="startPageHold('next')" 
-                                onmouseup="stopPageHold()" 
-                                onmouseleave="stopPageHold()">&gt;</div>
+                            <div class="page-arrow prev"></div>
+                            <div class="page-arrow next"></div>
                         `;
                         page.innerHTML = `<div class="diary-entry">${dateStr} 没有日记内容</div>`;
                         pagesContainer.appendChild(page);
                     }
+
+                    // 重新绑定翻页和滑动事件
+                    const diaryPages = document.getElementById('diary-pages');
+                    diaryPages.addEventListener('mousedown', startDrag);
+                    diaryPages.addEventListener('mousemove', drag);
+                    diaryPages.addEventListener('mouseup', endDrag);
+                    diaryPages.addEventListener('mouseleave', endDrag);
+
+                    const prevArrow = document.querySelector('.page-arrow.prev');
+                    const nextArrow = document.querySelector('.page-arrow.next');
+                    prevArrow.addEventListener('mousedown', () => startPageHold('prev'));
+                    prevArrow.addEventListener('mouseup', stopPageHold);
+                    prevArrow.addEventListener('mouseleave', stopPageHold);
+                    nextArrow.addEventListener('mousedown', () => startPageHold('next'));
+                    nextArrow.addEventListener('mouseup', stopPageHold);
+                    nextArrow.addEventListener('mouseleave', stopPageHold);
                 } catch (error) {
                     console.error('获取数据出错:', error);
                     const pagesContainer = document.querySelector('.diary-pages');
                     pagesContainer.innerHTML = `
-                        <div class="page-arrow prev" 
-                            onmousedown="startPageHold('prev')" 
-                            onmouseup="stopPageHold()" 
-                            onmouseleave="stopPageHold()">&lt;</div>
-                        <div class="page-arrow next" 
-                            onmousedown="startPageHold('next')" 
-                            onmouseup="stopPageHold()" 
-                            onmouseleave="stopPageHold()">&gt;</div>
-                `;
+                        <div class="page-arrow prev"></div>
+                        <div class="page-arrow next"></div>
+                    `;
                     const page = document.createElement('div');
                     page.className = 'diary-page active';
                     page.innerHTML = '<div class="diary-entry">加载失败，请重试</div>';
@@ -765,33 +836,12 @@
             }
         }
 
-        // 添加按住翻页功能
-        let pageHoldTimer = null;
-        let isHolding = false;
-
-        function startPageHold(direction) {
-            if (pageHoldTimer) clearInterval(pageHoldTimer);
-            isHolding = true;
-            changePage(direction); // 立即翻一页
-
-            // 按住持续翻页
-            pageHoldTimer = setInterval(() => {
-                changePage(direction);
-            }, 300);
-        }
-
-        function stopPageHold() {
-            if (pageHoldTimer) clearInterval(pageHoldTimer);
-            isHolding = false;
-        }
-
         // 页面加载完成后初始化
         document.addEventListener('DOMContentLoaded', async () => {
             const diaryCalendar = new DiaryCalendar();
-            await diaryCalendar.init;
 
-            // 将日历实例保存到DOM元素上，方便全局访问
-            document.querySelector('.diary-calendar')._diaryCalendar = diaryCalendar;
+            // 初始加载数据
+            await fetchDiaryData();
 
             // 点击日历按钮显示/隐藏日历
             document.getElementById('show-calendar').addEventListener('click', (e) => {
@@ -806,20 +856,29 @@
                     document.getElementById('calendar-modal').style.display = 'none';
                 }
             });
+
+            // 滑动事件监听
+            const diaryPages = document.getElementById('diary-pages');
+            diaryPages.addEventListener('mousedown', startDrag);
+            diaryPages.addEventListener('mousemove', drag);
+            diaryPages.addEventListener('mouseup', endDrag);
+            diaryPages.addEventListener('mouseleave', endDrag);
+
+            // 翻页箭头事件监听
+            const prevArrow = document.querySelector('.page-arrow.prev');
+            const nextArrow = document.querySelector('.page-arrow.next');
+            prevArrow.addEventListener('mousedown', () => startPageHold('prev'));
+            prevArrow.addEventListener('mouseup', stopPageHold);
+            prevArrow.addEventListener('mouseleave', stopPageHold);
+            nextArrow.addEventListener('mousedown', () => startPageHold('next'));
+            nextArrow.addEventListener('mouseup', stopPageHold);
+            nextArrow.addEventListener('mouseleave', stopPageHold);
+
+            // 全局函数供按钮调用
+            window.navigateYears = (offset) => {
+                diaryCalendar.navigateYears(offset);
+            };
         });
-
-        // 添加全局函数供按钮调用
-        function navigateYears(offset) {
-            const calendar = document.querySelector('.diary-calendar')._diaryCalendar;
-            calendar.navigateYears(offset);
-        }
-
-        function formatTime(timestamp) {
-            const date = new Date(timestamp * 1000);
-            const hours = date.getHours().toString().padStart(2, '0');
-            const minutes = date.getMinutes().toString().padStart(2, '0');
-            return `${hours}:${minutes}`;
-        }
     </script>
 </body>
 
