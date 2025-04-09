@@ -13,19 +13,79 @@
     --warning-color: red;
 }
 
-/* 暗黑主题 */
-:root.dark {
-    --base-font-color: #e0e0e0;
-    --link-color: #8FA5D3;
-    --link-hover-color: #0056b3;
-    --primary-color: #007BFF;
-    --primary-hover-color: #0056b3;
-    --secondary-color: #1899c9;
-    --background-color: #2d2d2d;
-    --light-background-color: #3d3d3d;
-    --border-color: #4d4d4d;
-    --shadow-color: rgba(255, 255, 255, 0.1);
-    --warning-color: red;
+/* 粉系少女主题 */
+:root.pink {
+    --base-font-color: #FF69B4;
+    --link-color: #FFB6C1;
+    --link-hover-color: #FF1493;
+    --primary-color: #FF8CBA;
+    --primary-hover-color: #FF69B4;
+    --secondary-color: #FFB6C1;
+    --background-color: #FFF0F5;
+    --light-background-color: #FFF5EE;
+    --border-color: #FFB6C1;
+    --shadow-color: rgba(255, 192, 203, 0.3);
+    --warning-color: #FF0000;
+}
+
+/* 绿色清新主题 */
+:root.green {
+    --base-font-color: #2E8B57;
+    --link-color: #3CB371;
+    --link-hover-color: #008000;
+    --primary-color: #66CDAA;
+    --primary-hover-color: #5F9EA0;
+    --secondary-color: #228B22;
+    --background-color: #F0FFF0;
+    --light-background-color: #E0FFFF;
+    --border-color: #98FB98;
+    --shadow-color: rgba(144, 238, 144, 0.3);
+    --warning-color: #FF0000;
+}
+
+/* 复古主题 */
+:root.vintage {
+    --base-font-color: #7B68EE;
+    --link-color: #9370DB;
+    --link-hover-color: #8A2BE2;
+    --primary-color: #D2B48C;
+    --primary-hover-color: #BC8F8F;
+    --secondary-color: #DEB887;
+    --background-color: #F5F5DC;
+    --light-background-color: #FAEBD7;
+    --border-color: #D2B48C;
+    --shadow-color: rgba(210, 180, 140, 0.3);
+    --warning-color: #FF4500;
+}
+
+/* 海洋主题 */
+:root.ocean {
+    --base-font-color: #008B8B;
+    --link-color: #00BFFF;
+    --link-hover-color: #1E90FF;
+    --primary-color: #4682B4;
+    --primary-hover-color: #6495ED;
+    --secondary-color: #87CEFA;
+    --background-color: #F0FFFF;
+    --light-background-color: #E0FFFF;
+    --border-color: #7FFFD4;
+    --shadow-color: rgba(70, 130, 180, 0.3);
+    --warning-color: #FF6347;
+}
+
+/* 沙漠主题 */
+:root.desert {
+    --base-font-color: #8B4513;
+    --link-color: #D2691E;
+    --link-hover-color: #A0522D;
+    --primary-color: #CD853F;
+    --primary-hover-color: #DAA520;
+    --secondary-color: #FFD700;
+    --background-color: #FFF8DC;
+    --light-background-color: #FFE4B5;
+    --border-color: #D2B48C;
+    --shadow-color: rgba(205, 133, 63, 0.3);
+    --warning-color: #FF4500;
 }
 
 html {
@@ -179,6 +239,10 @@ a img {
     margin-top: 10px;
 }
 
+.contents .post input[type="button"]  {
+    width: 80px;
+    background-color: var(--secondary-color);
+}
 .contents .post .postnow span {
     float: right;
 }
@@ -572,9 +636,9 @@ th.center {
 }
 
 /* 合并重复的.formsubmit input样式 */
-.formsubmit input {
+.formsubmit input,.formsubmit button {
     padding: 10px 20px;
-    background-color: var(--primary-color);
+    background-color: var(--secondary-color);
     color: white;
     border: none;
     border-radius: 5px;
@@ -818,18 +882,19 @@ i.warning {
 .formitem select,
 .formitem textarea {
     padding: 10px; /* 增加内边距 */
-    border: 1px solid #ccc;
+    border: 1px solid var(--border-color);
     border-radius: 5px; /* 增加圆角 */
-    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1); /* 增加内阴影效果 */
+    box-shadow: inset 0 1px 2px var(--shadow-color); 
     transition: border-color 0.3s ease; /* 增加过渡效果 */
+    flex: 1;
 }
 
 .formitem input:focus,
 .formitem select:focus,
 .formitem textarea:focus {
-    border-color: #007BFF; /* 聚焦时改变边框颜色 */
+    border-color: var(--primary-color); 
     outline: none; /* 去除默认聚焦边框 */
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* 聚焦时增加外阴影效果 */
+    box-shadow: 0 0 5px rgba(var(--primary-color), 0.5); 
 }
 
 .formitem input[type="radio"] {
@@ -838,10 +903,11 @@ i.warning {
     position: relative;
     top: 2px;
     transition: border-color 0.3s ease; /* 增加过渡效果 */
+    border: 1px solid var(--border-color);
 }
 
 .formitem input[type="radio"]:checked {
-    border-color: #007BFF;
+    border-color: var(--primary-color);
 }
 
 .formitem input[type="radio"]:checked::before {
@@ -849,12 +915,17 @@ i.warning {
     display: block;
     width: 8px;
     height: 8px;
-    background-color: #007BFF;
+    background-color: var(--primary-color);
     border-radius: 50%;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+}
+
+.formitem u {
+    margin-left: 5px;
+    color: #999;
 }
 
 h2 a {
@@ -870,4 +941,67 @@ h2 a:hover {
 h2 span {
     margin: 0 5px;
     color: var(--base-font-color);
+}
+
+  /* 原有样式 */
+  .search-container {
+    /* background-color: #f9f9f9; */
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 30px;
+    margin: 20px auto;
+    max-width: 700px;
+    /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
+}
+
+.search-formitem {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    gap: 15px;
+    /* 允许换行，防止内容溢出 */
+    flex-wrap: wrap;
+}
+
+.search-formitem label {
+    font-weight: 600;
+    color: #333;
+    min-width: 80px;
+    text-align: right;
+}
+
+.search-formitem input {
+    padding: 12px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    flex: 1;
+    font-size: 14px;
+}
+
+.search-formitem input:focus {
+    border-color: #2196F3;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.2);
+}
+
+.search-formitem button {
+    padding: 12px 25px;
+    background-color: var(--secondary-color);;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    margin-left: 15px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.search-formitem button:hover {
+    background-color: var(--secondary-color);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transform: translateY(-1px);
 }

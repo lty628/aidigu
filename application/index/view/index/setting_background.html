@@ -27,15 +27,55 @@
 				</div>
 			</div>
 			{/if}
+
+			<!-- 主题选择部分 -->
+			<div class="recent-themes"
+				style="margin-top: 20px; padding: 15px; background: #f8f8f8; border-radius: 5px;">
+				<h3 style="margin-bottom: 15px; color: #333;text-align: left;">选择主题</h3>
+				<div style="display: flex; gap: 5px; flex-wrap: wrap;">
+					<div style="width: 95px; height: 70px; cursor: pointer; border-radius: 4px; overflow: hidden; background-color: #fff; border: 2px solid #eee; transition: all 0.3s;"
+						onclick="applyTheme('default');"
+						onmouseover="this.style.borderColor='#007BFF'" onmouseout="this.style.borderColor='#eee'">
+						<span style="display: block; text-align: center; line-height: 70px;">默认主题</span>
+					</div>
+					<div style="width: 95px; height: 70px; cursor: pointer; border-radius: 4px; overflow: hidden; background-color: #FFB6C1; border: 2px solid #eee; transition: all 0.3s;"
+						onclick="applyTheme('pink');"
+						onmouseover="this.style.borderColor='#007BFF'" onmouseout="this.style.borderColor='#eee'">
+						<span style="display: block; text-align: center; line-height: 70px;">粉系少女主题</span>
+					</div>
+					<div style="width: 95px; height: 70px; cursor: pointer; border-radius: 4px; overflow: hidden; background-color: #66CDAA; border: 2px solid #eee; transition: all 0.3s;"
+						onclick="applyTheme('green');"
+						onmouseover="this.style.borderColor='#007BFF'" onmouseout="this.style.borderColor='#eee'">
+						<span style="display: block; text-align: center; line-height: 70px;">绿色清新主题</span>
+					</div>
+					<div style="width: 95px; height: 70px; cursor: pointer; border-radius: 4px; overflow: hidden; background-color: #BC8F8F; border: 2px solid #eee; transition: all 0.3s;"
+						onclick="applyTheme('vintage');"
+						onmouseover="this.style.borderColor='#007BFF'" onmouseout="this.style.borderColor='#eee'">
+						<span style="display: block; text-align: center; line-height: 70px;">复古主题</span>
+					</div>
+					<div style="width: 95px; height: 70px; cursor: pointer; border-radius: 4px; overflow: hidden; background-color: #6495ED; border: 2px solid #eee; transition: all 0.3s;"
+						onclick="applyTheme('ocean');"
+						onmouseover="this.style.borderColor='#007BFF'" onmouseout="this.style.borderColor='#eee'">
+						<span style="display: block; text-align: center; line-height: 70px;">海洋主题</span>
+					</div>
+					<div style="width: 95px; height: 70px; cursor: pointer; border-radius: 4px; overflow: hidden; background-color: #FFD700; border: 2px solid #eee; transition: all 0.3s;"
+						onclick="applyTheme('desert');"
+						onmouseover="this.style.borderColor='#007BFF'" onmouseout="this.style.borderColor='#eee'">
+						<span style="display: block; text-align: center; line-height: 70px;">沙漠主题</span>
+					</div>
+				</div>
+			</div>
+
 			<div class="uploadhtml formsubmit">
-				<button type="button" class="layui-btn layui-bg-blue" id="uploadImage">
+                
+				<button type="button" id="uploadImage">
 					<i class="layui-icon">&#xe67c;</i>上传
 				</button>
-				<button type="button" class="layui-btn layui-bg-blue" id="saveUpload">
+				<button type="button" id="saveUpload">
 					保存
 				</button>
 				<!-- 红色按钮 -->
-				<button type="reset" value="重置" class="layui-btn layui-btn-danger" id="resetImage">
+				<button type="reset" value="重置" style="background-color: #ff5656;" id="resetImage">
 					重置
 				</button>
 			</div>
@@ -110,5 +150,25 @@
 			});
 		})
 	</script>
+	<script>
+        // 定义 applyTheme 函数
+        function applyTheme(theme) {
+            if (theme === 'default') {
+                document.documentElement.className = '';
+            } else {
+                document.documentElement.className = theme;
+            }
+            var header = document.getElementById('header');
+            if (header) {
+                if (theme === 'default') {
+                    header.className = '';
+                } else {
+                    header.className = theme;
+                }
+            }
+            // 保存主题到 localStorage
+            localStorage.setItem('selectedTheme', theme);
+        }
+    </script>
 	{include file='index/sidebar_index' /}
 	{include file='index/footer' /}
