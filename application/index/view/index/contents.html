@@ -136,11 +136,6 @@
 					    return;
 					}
 
-                    if (data.length < 8) {
-                        $("#showMore").hide()
-                        // $("#showMore").html('没有了')
-                    }
-
                     for (var i = 0; i < data.length; i++) {
                         var mediaStr = '';
                         var str = '';
@@ -187,6 +182,13 @@
                         $("#msgContent").append(str);
                         iniVideo(data[i].msg_id)
                     }
+
+                    if (data.length < 8) {
+						$("#showMore").hide()
+						return
+						// $("#showMore").html('没有了')
+					}
+
                     canLoad = true
                 })
                .always(function () {

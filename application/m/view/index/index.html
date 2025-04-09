@@ -269,12 +269,7 @@
 					        canLoad = true;
 					    }, 2000);
 					    return;
-					}
-
-					if (data.length < 8) {
-						$("#showMore").hide()
-						// $("#showMore").html('没有了')
-					}
+					}	
 
 					for (var i = 0; i < data.length; i++) {
 						var mediaStr = '';
@@ -326,6 +321,13 @@
 						$("#msgContent").append(str);
 						iniVideo(data[i].msg_id)
 					}
+
+					if (data.length < 8) {
+						$("#showMore").hide()
+						return
+						// $("#showMore").html('没有了')
+					}
+
 					canLoad = true
 				})
 				.always(function () {
