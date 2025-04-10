@@ -1039,7 +1039,7 @@ i.warning {
     height: 17px;
     text-align: center;
     font-size: 1rem;
-    background: #0db2f7;
+    background: var(--secondary-color);
     border-radius: 0.4rem;
     color: #fff;
 }
