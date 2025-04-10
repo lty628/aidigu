@@ -88,6 +88,127 @@
     --warning-color: #FF4500;
 }
 
+
+/* 卡通动漫主题 */
+:root.cartoon {
+    --base-font-color: #FFA500;
+    --link-color: #FF4500;
+    --link-hover-color: #FF6347;
+    --primary-color: #FFD700;
+    --primary-hover-color: #FFC107;
+    --secondary-color: #FF69B4;
+    --background-color: #FFFFE0;
+    --light-background-color: #FFFACD;
+    --border-color: #FFD700;
+    --shadow-color: rgba(255, 215, 0, 0.3);
+    --warning-color: #FF0000;
+}
+
+/* 商务大气主题 */
+:root.business {
+    --base-font-color: #2F4F4F;
+    --link-color: #4682B4;
+    --link-hover-color: #00008B;
+    --primary-color: #006400;
+    --primary-hover-color: #008000;
+    --secondary-color: #2E8B57;
+    --background-color: #F5F5F5;
+    --light-background-color: #E0E0E0;
+    --border-color: #BDBDBD;
+    --shadow-color: rgba(0, 0, 0, 0.2);
+    --warning-color: #FF4500;
+}
+
+/* 科技极简主题 */
+:root.tech {
+    --base-font-color: #212121;
+    --link-color: #00BCD4;
+    --link-hover-color: #0097A7;
+    --primary-color: #607D8B;
+    --primary-hover-color: #546E7A;
+    --secondary-color: #9E9E9E;
+    --background-color: #FAFAFA;
+    --light-background-color: #F5F5F5;
+    --border-color: #EEEEEE;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --warning-color: #FF5722;
+}
+
+/* 田园风格主题 */
+:root.rural {
+    --base-font-color: #8B4513;
+    --link-color: #9ACD32;
+    --link-hover-color: #6B8E23;
+    --primary-color: #FFA07A;
+    --primary-hover-color: #FF7F50;
+    --secondary-color: #F0E68C;
+    --background-color: #FDF5E6;
+    --light-background-color: #FFFACD;
+    --border-color: #D2B48C;
+    --shadow-color: rgba(210, 180, 140, 0.3);
+    --warning-color: #FF0000;
+}
+
+/* 节日主题 */
+:root.festival {
+    --base-font-color: #FF0000;
+    --link-color: #FFD700;
+    --link-hover-color: #FFA500;
+    --primary-color: #FF1493;
+    --primary-hover-color: #FF69B4;
+    --secondary-color: #FF4500;
+    --background-color: #FFF8DC;
+    --light-background-color: #FFFACD;
+    --border-color: #FFD700;
+    --shadow-color: rgba(255, 215, 0, 0.3);
+    --warning-color: #FF0000;
+}
+
+/* 星空宇宙主题 */
+:root.space {
+    --base-font-color: #87CEFA;
+    --link-color: #00BFFF;
+    --link-hover-color: #1E90FF;
+    --primary-color: #4B0082;
+    --primary-hover-color: #8A2BE2;
+    --secondary-color: #9400D3;
+    --background-color: #000000;
+    --light-background-color: #191970;
+    --border-color: #87CEFA;
+    --shadow-color: rgba(135, 206, 250, 0.3);
+    --warning-color: #FF6347;
+}
+
+/* 渐变风格主题 */
+:root.gradient {
+    --base-font-color: #333333;
+    --link-color: #666666;
+    --link-hover-color: #999999;
+    --primary-color: linear-gradient(45deg, #FF6B6B, #556270);
+    --primary-hover-color: linear-gradient(45deg, #FF8E8E, #778899);
+    --secondary-color: linear-gradient(45deg, #FFD166, #06D6A0);
+    --background-color: linear-gradient(135deg, #F4F4F4, #E0E0E0);
+    --light-background-color: linear-gradient(135deg, #FFFFFF, #F5F5F5);
+    --border-color: #BDBDBD;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --warning-color: #FF4500;
+}
+
+/* 简约白色风格主题 */
+:root.minimal-white {
+    --base-font-color: #333333;
+    --link-color: #666666;
+    --link-hover-color: #999999;
+    --primary-color: #FFFFFF;
+    --primary-hover-color: #F5F5F5;
+    --secondary-color: #E0E0E0;
+    --background-color: #FFFFFF;
+    --light-background-color: #F5F5F5;
+    --border-color: #BDBDBD;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --warning-color: #FF4500;
+}
+
 html {
     font-size: 62.5%; /* Set base font size to 10px */
 }
@@ -492,7 +613,7 @@ a img {
 }
 
 .sidebar .counter {
-    background: url(../images/rightnavbg.gif) 0 -90px no-repeat;
+    /* background: url(../images/rightnavbg.gif) 0 -90px no-repeat; */
     height: 50px;
 }
 
