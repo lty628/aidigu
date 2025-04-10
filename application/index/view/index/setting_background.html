@@ -28,10 +28,24 @@
 			</div>
 			{/if}
 
+			<div class="uploadhtml formsubmit">
+                
+				<button type="button" id="uploadImage">
+					<i class="layui-icon">&#xe67c;</i>上传
+				</button>
+				<button type="button" id="saveUpload">
+					保存
+				</button>
+				<!-- 红色按钮 -->
+				<button type="reset" value="重置" style="background-color: #ff5656;" id="resetImage">
+					重置
+				</button>
+			</div>
+
 			<!-- 主题选择部分 -->
 			<div class="recent-themes"
 				style="margin-bottom: 20px; padding: 15px; border-radius: 5px;">
-				<h3 style="margin-bottom: 15px; color: #333;text-align: left;">选择主题色系</h3>
+				<h3 style="margin-bottom: 15px; color: #333;text-align: left;">选择主题色系(点击立即生效)</h3>
 				<div style="display: flex; gap: 5px; flex-wrap: wrap;">
 					<!-- 原有的主题选择项 -->
 					<div style="width: 95px; height: 70px; cursor: pointer; border-radius: 4px; overflow: hidden; background-color: #1899c9; border: 2px solid #eee; transition: all 0.3s;"
@@ -127,19 +141,6 @@
 				</div>
 			</div>
 
-			<div class="uploadhtml formsubmit">
-                
-				<button type="button" id="uploadImage">
-					<i class="layui-icon">&#xe67c;</i>上传
-				</button>
-				<button type="button" id="saveUpload">
-					保存
-				</button>
-				<!-- 红色按钮 -->
-				<button type="reset" value="重置" style="background-color: #ff5656;" id="resetImage">
-					重置
-				</button>
-			</div>
 		</div>
 
 
