@@ -163,7 +163,10 @@
 							$("#backgroundVal").val('');
 						} else {
 							var backgroundVal = $("#backgroundVal").val();
-							if (!backgroundVal) return false;
+							if (!backgroundVal) {
+								alertMsg('已保存');
+								return false;
+							}
 						}
 						console.log(backgroundVal);
 						$.ajax({
