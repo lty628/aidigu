@@ -212,7 +212,7 @@
     --link-color: #666666;
     --link-hover-color: #999999;
     --primary-color: #FFFFFF;
-    --primary-hover-color: #F5F5F5;
+    --primary-hover-color: #333333;
     --secondary-color: #E0E0E0;
     --background-color: rgba(255, 255, 255, 0.8); /* 修改为带0.8透明度的白色 */
     --primary-btn-color: rgba(255, 255, 255, 0.8); /* 修改为带0.8透明度的白色 */
