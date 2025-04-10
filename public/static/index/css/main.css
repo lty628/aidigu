@@ -363,6 +363,7 @@ a img {
 .contents .post input[type="button"]  {
     width: 80px;
     background-color: var(--secondary-color);
+    color: var(--background-color);
 }
 .contents .post .postnow span {
     float: right;
@@ -527,7 +528,7 @@ a img {
 }
 
 .sidebar h2 a {
-    color: #FFF;
+    color: var(--background-color);
 }
 
 .sidebar .box {
