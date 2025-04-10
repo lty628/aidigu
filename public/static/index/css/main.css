@@ -7,6 +7,7 @@
     --primary-hover-color: #0056b3;
     --secondary-color: #1899c9;
     --background-color: #fff;
+    --primary-btn-color: #fff;
     --light-background-color: #f1f1f2;
     --border-color: #e0e0e0;
     --shadow-color: rgba(0, 0, 0, 0.1);
@@ -22,6 +23,7 @@
     --primary-hover-color: #FF69B4;
     --secondary-color: #FFB6C1;
     --background-color: #FFF0F5;
+    --primary-btn-color: #FFF0F5;
     --light-background-color: #FFF5EE;
     --border-color: #FFB6C1;
     --shadow-color: rgba(255, 192, 203, 0.3);
@@ -37,6 +39,7 @@
     --primary-hover-color: #5F9EA0;
     --secondary-color: #228B22;
     --background-color: #F0FFF0;
+    --primary-btn-color: #F0FFF0;
     --light-background-color: #E0FFFF;
     --border-color: #98FB98;
     --shadow-color: rgba(144, 238, 144, 0.3);
@@ -52,6 +55,7 @@
     --primary-hover-color: #BC8F8F;
     --secondary-color: #DEB887;
     --background-color: #F5F5DC;
+    --primary-btn-color: #F5F5DC;
     --light-background-color: #FAEBD7;
     --border-color: #D2B48C;
     --shadow-color: rgba(210, 180, 140, 0.3);
@@ -67,6 +71,7 @@
     --primary-hover-color: #6495ED;
     --secondary-color: #87CEFA;
     --background-color: #F0FFFF;
+    --primary-btn-color: #F0FFFF;
     --light-background-color: #E0FFFF;
     --border-color: #7FFFD4;
     --shadow-color: rgba(70, 130, 180, 0.3);
@@ -82,6 +87,7 @@
     --primary-hover-color: #DAA520;
     --secondary-color: #FFD700;
     --background-color: #FFF8DC;
+    --primary-btn-color: #FFF8DC;
     --light-background-color: #FFE4B5;
     --border-color: #D2B48C;
     --shadow-color: rgba(205, 133, 63, 0.3);
@@ -98,6 +104,7 @@
     --primary-hover-color: #FFC107;
     --secondary-color: #FF69B4;
     --background-color: #FFFFE0;
+    --primary-btn-color: #FFFFE0;
     --light-background-color: #FFFACD;
     --border-color: #FFD700;
     --shadow-color: rgba(255, 215, 0, 0.3);
@@ -113,6 +120,7 @@
     --primary-hover-color: #008000;
     --secondary-color: #2E8B57;
     --background-color: #F5F5F5;
+    --primary-btn-color: #F5F5F5;
     --light-background-color: #E0E0E0;
     --border-color: #BDBDBD;
     --shadow-color: rgba(0, 0, 0, 0.2);
@@ -128,6 +136,7 @@
     --primary-hover-color: #546E7A;
     --secondary-color: #9E9E9E;
     --background-color: #FAFAFA;
+    --primary-btn-color: #FAFAFA;
     --light-background-color: #F5F5F5;
     --border-color: #EEEEEE;
     --shadow-color: rgba(0, 0, 0, 0.1);
@@ -143,6 +152,7 @@
     --primary-hover-color: #FF7F50;
     --secondary-color: #F0E68C;
     --background-color: #FDF5E6;
+    --primary-btn-color: #6B8E23;
     --light-background-color: #FFFACD;
     --border-color: #D2B48C;
     --shadow-color: rgba(210, 180, 140, 0.3);
@@ -158,6 +168,7 @@
     --primary-hover-color: #FF69B4;
     --secondary-color: #FF4500;
     --background-color: #FFF8DC;
+    --primary-btn-color: #FFF8DC;
     --light-background-color: #FFFACD;
     --border-color: #FFD700;
     --shadow-color: rgba(255, 215, 0, 0.3);
@@ -173,6 +184,7 @@
     --primary-hover-color: #8A2BE2;
     --secondary-color: #9400D3;
     --background-color: #000000;
+    --primary-btn-color: #000000;
     --light-background-color: #191970;
     --border-color: #87CEFA;
     --shadow-color: rgba(135, 206, 250, 0.3);
@@ -188,6 +200,7 @@
     --primary-hover-color: linear-gradient(45deg, #FF8E8E, #778899);
     --secondary-color: linear-gradient(45deg, #FFD166, #06D6A0);
     --background-color: linear-gradient(135deg, #F4F4F4, #E0E0E0);
+    --primary-btn-color: linear-gradient(45deg, #FF6B6B, #556270);
     --light-background-color: linear-gradient(135deg, #FFFFFF, #F5F5F5);
     --border-color: #BDBDBD;
     --shadow-color: rgba(0, 0, 0, 0.1);
@@ -203,6 +216,7 @@
     --primary-hover-color: #F5F5F5;
     --secondary-color: #E0E0E0;
     --background-color: #FFFFFF;
+    --primary-btn-color: #FFFFFF;
     --light-background-color: #F5F5F5;
     --border-color: #BDBDBD;
     --shadow-color: rgba(0, 0, 0, 0.1);
@@ -363,7 +377,7 @@ a img {
 .contents .post input[type="button"]  {
     width: 80px;
     background-color: var(--secondary-color);
-    color: var(--background-color);
+    color: var(--primary-btn-color);
 }
 .contents .post .postnow span {
     float: right;
@@ -528,7 +542,7 @@ a img {
 }
 
 .sidebar h2 a {
-    color: var(--background-color);
+    color: var(--primary-btn-color);
 }
 
 .sidebar .box {
