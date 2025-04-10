@@ -162,7 +162,7 @@
 /* 节日主题 */
 :root.festival {
     --base-font-color: #FF0000;
-    --link-color: #FFD700;
+    --link-color: #FF0000;
     --link-hover-color: #FFA500;
     --primary-color: #FF1493;
     --primary-hover-color: #FF69B4;
