@@ -88,7 +88,7 @@ class Sourcematerial extends Controller
         }
 
         $imgArray = ['jiff', 'jpg', 'bmp', 'jpeg', 'png', 'gif'];
-        $videoArray = ['mp4'];
+        $videoArray = ['mp4','MP4'];
         // $otherArray = ['zip', 'rar', '7z', 'pdf'];
         $textArray = ['txt'];
         $data = [];
