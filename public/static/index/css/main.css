@@ -223,6 +223,70 @@
     --warning-color: #FF4500;
 }
 
+/* 新增主题：暗黑科技主题 */
+:root.dark-tech {
+    --base-font-color: #f0f0f0;
+    --link-color: #00FFFF;
+    --link-hover-color: #00FFCC;
+    --primary-color: #1E1E1E;
+    --primary-hover-color: #2A2A2A;
+    --secondary-color: #333333;
+    --background-color: #121212;
+    --primary-btn-color: #f0f0f0;
+    --light-background-color: #212121;
+    --border-color: #444444;
+    --shadow-color: rgba(0, 255, 255, 0.2);
+    --warning-color: #FF0000;
+}
+
+/* 新增主题：糖果梦幻主题 */
+:root.candy-dream {
+    --base-font-color: #FF33CC;
+    --link-color: #FF66FF;
+    --link-hover-color: #FF00FF;
+    --primary-color: #FFCCFF;
+    --primary-hover-color: #FF99FF;
+    --secondary-color: #FFFF99;
+    --background-color: #FFF0FF;
+    --primary-btn-color: #FFF0FF;
+    --light-background-color: #FFFFCC;
+    --border-color: #FF99FF;
+    --shadow-color: rgba(255, 102, 255, 0.3);
+    --warning-color: #FF0000;
+}
+
+/* 新增主题：森林神秘主题 */
+:root.forest-mystery {
+    --base-font-color: #006400;
+    --link-color: #32CD32;
+    --link-hover-color: #00FF00;
+    --primary-color: #228B22;
+    --primary-hover-color: #008000;
+    --secondary-color: #556B2F;
+    --background-color: #F0FFF0;
+    --primary-btn-color: #F0FFF0;
+    --light-background-color: #E0FFE0;
+    --border-color: #98FB98;
+    --shadow-color: rgba(0, 128, 0, 0.3);
+    --warning-color: #FF4500;
+}
+
+/* 新增主题：金属工业主题 */
+:root.metal-industry {
+    --base-font-color: #808080;
+    --link-color: #A9A9A9;
+    --link-hover-color: #C0C0C0;
+    --primary-color: #696969;
+    --primary-hover-color: #778899;
+    --secondary-color: #B0C4DE;
+    --background-color: #DCDCDC;
+    --primary-btn-color: #DCDCDC;
+    --light-background-color: #F5F5F5;
+    --border-color: #A9A9A9;
+    --shadow-color: rgba(128, 128, 128, 0.3);
+    --warning-color: #FF0000;
+}
+
 html {
     font-size: 62.5%; /* Set base font size to 10px */
 }

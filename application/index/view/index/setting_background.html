@@ -33,75 +33,96 @@
 				style="margin-top: 20px; padding: 15px; background: #f8f8f8; border-radius: 5px;">
 				<h3 style="margin-bottom: 15px; color: #333;text-align: left;">选择主题色系</h3>
 				<div style="display: flex; gap: 5px; flex-wrap: wrap;">
-					<div style="width: 80px; height: 70px; cursor: pointer; border-radius: 4px; overflow: hidden; background-color: #fff; border: 2px solid #eee; transition: all 0.3s;"
+					<!-- 原有的主题选择项 -->
+					<div style="width: 95px; height: 70px; cursor: pointer; border-radius: 4px; overflow: hidden; background-color: #fff; border: 2px solid #eee; transition: all 0.3s;"
 						onclick="applyTheme('default');"
 						onmouseover="this.style.borderColor='#007BFF'" onmouseout="this.style.borderColor='#eee'">
 						<span style="display: block; text-align: center; line-height: 70px;">默认主题</span>
 					</div>
-					<div style="width: 80px; height: 70px; cursor: pointer; border-radius: 4px; overflow: hidden; background-color: #FFFFFF; border: 2px solid #eee; transition: all 0.3s;"
+					<div style="width: 95px; height: 70px; cursor: pointer; border-radius: 4px; overflow: hidden; background-color: #FFFFFF; border: 2px solid #eee; transition: all 0.3s;"
 						onclick="applyTheme('minimal-white');"
 						onmouseover="this.style.borderColor='#007BFF'" onmouseout="this.style.borderColor='#eee'">
 						<span style="display: block; text-align: center; line-height: 70px;">简约白色</span>
 					</div>
-					<div style="width: 80px; height: 70px; cursor: pointer; border-radius: 4px; overflow: hidden; background-color: #FFB6C1; border: 2px solid #eee; transition: all 0.3s;"
+					<div style="width: 95px; height: 70px; cursor: pointer; border-radius: 4px; overflow: hidden; background-color: #FFB6C1; border: 2px solid #eee; transition: all 0.3s;"
 						onclick="applyTheme('pink');"
 						onmouseover="this.style.borderColor='#007BFF'" onmouseout="this.style.borderColor='#eee'">
 						<span style="display: block; text-align: center; line-height: 70px;">粉系少女</span>
 					</div>
-					<div style="width: 80px; height: 70px; cursor: pointer; border-radius: 4px; overflow: hidden; background-color: #66CDAA; border: 2px solid #eee; transition: all 0.3s;"
+					<div style="width: 95px; height: 70px; cursor: pointer; border-radius: 4px; overflow: hidden; background-color: #66CDAA; border: 2px solid #eee; transition: all 0.3s;"
 						onclick="applyTheme('green');"
 						onmouseover="this.style.borderColor='#007BFF'" onmouseout="this.style.borderColor='#eee'">
 						<span style="display: block; text-align: center; line-height: 70px;">绿色清新</span>
 					</div>
-					<div style="width: 80px; height: 70px; cursor: pointer; border-radius: 4px; overflow: hidden; background-color: #FFA07A; border: 2px solid #eee; transition: all 0.3s;"
+					<div style="width: 95px; height: 70px; cursor: pointer; border-radius: 4px; overflow: hidden; background-color: #FFA07A; border: 2px solid #eee; transition: all 0.3s;"
 						onclick="applyTheme('rural');"
 						onmouseover="this.style.borderColor='#007BFF'" onmouseout="this.style.borderColor='#eee'">
 						<span style="display: block; text-align: center; line-height: 70px;">田园风格</span>
 					</div>
-					<div style="width: 80px; height: 70px; cursor: pointer; border-radius: 4px; overflow: hidden; background-color: #6495ED; border: 2px solid #eee; transition: all 0.3s;"
+					<div style="width: 95px; height: 70px; cursor: pointer; border-radius: 4px; overflow: hidden; background-color: #6495ED; border: 2px solid #eee; transition: all 0.3s;"
 						onclick="applyTheme('ocean');"
 						onmouseover="this.style.borderColor='#007BFF'" onmouseout="this.style.borderColor='#eee'">
 						<span style="display: block; text-align: center; line-height: 70px;">海洋主题</span>
 					</div>
-					<div style="width: 80px; height: 70px; cursor: pointer; border-radius: 4px; overflow: hidden; background-color: #FFD700; border: 2px solid #eee; transition: all 0.3s;"
+					<div style="width: 95px; height: 70px; cursor: pointer; border-radius: 4px; overflow: hidden; background-color: #FFD700; border: 2px solid #eee; transition: all 0.3s;"
 						onclick="applyTheme('desert');"
 						onmouseover="this.style.borderColor='#007BFF'" onmouseout="this.style.borderColor='#eee'">
 						<span style="display: block; text-align: center; line-height: 70px;">沙漠主题</span>
 					</div>
-					<div style="width: 80px; height: 70px; cursor: pointer; border-radius: 4px; overflow: hidden; background-color: #FFA500; border: 2px solid #eee; transition: all 0.3s;"
+					<div style="width: 95px; height: 70px; cursor: pointer; border-radius: 4px; overflow: hidden; background-color: #FFA500; border: 2px solid #eee; transition: all 0.3s;"
 						onclick="applyTheme('cartoon');"
 						onmouseover="this.style.borderColor='#007BFF'" onmouseout="this.style.borderColor='#eee'">
 						<span style="display: block; text-align: center; line-height: 70px;">卡通动漫</span>
 					</div>
-					<div style="width: 80px; height: 70px; cursor: pointer; border-radius: 4px; overflow: hidden; background: linear-gradient(45deg, #FF6B6B, #556270); border: 2px solid #eee; transition: all 0.3s;"
+					<div style="width: 95px; height: 70px; cursor: pointer; border-radius: 4px; overflow: hidden; background: linear-gradient(45deg, #FF6B6B, #556270); border: 2px solid #eee; transition: all 0.3s;"
 						onclick="applyTheme('gradient');"
 						onmouseover="this.style.borderColor='#007BFF'" onmouseout="this.style.borderColor='#eee'">
 						<span style="display: block; text-align: center; line-height: 70px;">渐变风格</span>
 					</div>
-					<div style="width: 80px; height: 70px; cursor: pointer; border-radius: 4px; overflow: hidden; background-color: #BC8F8F; border: 2px solid #eee; transition: all 0.3s;"
+					<div style="width: 95px; height: 70px; cursor: pointer; border-radius: 4px; overflow: hidden; background-color: #BC8F8F; border: 2px solid #eee; transition: all 0.3s;"
 						onclick="applyTheme('vintage');"
 						onmouseover="this.style.borderColor='#007BFF'" onmouseout="this.style.borderColor='#eee'">
 						<span style="display: block; text-align: center; line-height: 70px;">复古主题</span>
 					</div>
-					<div style="width: 80px; height: 70px; cursor: pointer; border-radius: 4px; overflow: hidden; background-color: #2F4F4F; border: 2px solid #eee; transition: all 0.3s;"
+					<div style="width: 95px; height: 70px; cursor: pointer; border-radius: 4px; overflow: hidden; background-color: #2F4F4F; border: 2px solid #eee; transition: all 0.3s;"
 						onclick="applyTheme('business');"
 						onmouseover="this.style.borderColor='#007BFF'" onmouseout="this.style.borderColor='#eee'">
 						<span style="display: block; text-align: center; line-height: 70px;">商务大气</span>
 					</div>
-					<div style="width: 80px; height: 70px; cursor: pointer; border-radius: 4px; overflow: hidden; background-color: #607D8B; border: 2px solid #eee; transition: all 0.3s;"
+					<div style="width: 95px; height: 70px; cursor: pointer; border-radius: 4px; overflow: hidden; background-color: #607D8B; border: 2px solid #eee; transition: all 0.3s;"
 						onclick="applyTheme('tech');"
 						onmouseover="this.style.borderColor='#007BFF'" onmouseout="this.style.borderColor='#eee'">
 						<span style="display: block; text-align: center; line-height: 70px;">科技极简</span>
 					</div>
-					<div style="width: 80px; height: 70px; cursor: pointer; border-radius: 4px; overflow: hidden; background-color: #FF1493; border: 2px solid #eee; transition: all 0.3s;"
+					<div style="width: 95px; height: 70px; cursor: pointer; border-radius: 4px; overflow: hidden; background-color: #FF1493; border: 2px solid #eee; transition: all 0.3s;"
 						onclick="applyTheme('festival');"
 						onmouseover="this.style.borderColor='#007BFF'" onmouseout="this.style.borderColor='#eee'">
 						<span style="display: block; text-align: center; line-height: 70px;">节日主题</span>
 					</div>
-					<div style="width: 80px; height: 70px; cursor: pointer; border-radius: 4px; overflow: hidden; background-color: #4B0082; border: 2px solid #eee; transition: all 0.3s;"
+					<div style="width: 95px; height: 70px; cursor: pointer; border-radius: 4px; overflow: hidden; background-color: #4B0082; border: 2px solid #eee; transition: all 0.3s;"
 						onclick="applyTheme('space');"
 						onmouseover="this.style.borderColor='#007BFF'" onmouseout="this.style.borderColor='#eee'">
 						<span style="display: block; text-align: center; line-height: 70px;">星空宇宙</span>
+					</div>
+					<div style="width: 95px; height: 70px; cursor: pointer; border-radius: 4px; overflow: hidden; background-color: #1E1E1E; border: 2px solid #eee; transition: all 0.3s;"
+						onclick="applyTheme('dark-tech');"
+						onmouseover="this.style.borderColor='#007BFF'" onmouseout="this.style.borderColor='#eee'">
+						<span style="display: block; text-align: center; line-height: 70px;">暗黑科技</span>
+					</div>
+					<div style="width: 95px; height: 70px; cursor: pointer; border-radius: 4px; overflow: hidden; background-color: #FF33CC; border: 2px solid #eee; transition: all 0.3s;"
+						onclick="applyTheme('candy-dream');"
+						onmouseover="this.style.borderColor='#007BFF'" onmouseout="this.style.borderColor='#eee'">
+						<span style="display: block; text-align: center; line-height: 70px;">糖果梦幻</span>
+					</div>
+					<div style="width: 95px; height: 70px; cursor: pointer; border-radius: 4px; overflow: hidden; background-color: #228B22; border: 2px solid #eee; transition: all 0.3s;"
+						onclick="applyTheme('forest-mystery');"
+						onmouseover="this.style.borderColor='#007BFF'" onmouseout="this.style.borderColor='#eee'">
+						<span style="display: block; text-align: center; line-height: 70px;">森林神秘</span>
+					</div>
+					<div style="width: 95px; height: 70px; cursor: pointer; border-radius: 4px; overflow: hidden; background-color: #696969; border: 2px solid #eee; transition: all 0.3s;"
+						onclick="applyTheme('metal-industry');"
+						onmouseover="this.style.borderColor='#007BFF'" onmouseout="this.style.borderColor='#eee'">
+						<span style="display: block; text-align: center; line-height: 70px;">金属工业</span>
 					</div>
 				</div>
 			</div>
@@ -195,6 +216,19 @@
 	</script>
 	<script>
         // 定义 applyTheme 函数
+        function getContrastColor(hexColor) {
+            // 去除可能的 # 符号
+            hexColor = hexColor.replace('#', '');
+            // 提取 RGB 值
+            var r = parseInt(hexColor.substr(0, 2), 16);
+            var g = parseInt(hexColor.substr(2, 2), 16);
+            var b = parseInt(hexColor.substr(4, 2), 16);
+            // 计算亮度
+            var brightness = (r * 299 + g * 587 + b * 114) / 1000;
+            // 根据亮度选择文字颜色
+            return brightness > 128 ? '#000' : '#fff';
+        }
+        
         function applyTheme(theme) {
             if (theme === 'default') {
                 document.documentElement.className = '';
@@ -212,6 +246,27 @@
             // 保存主题到 localStorage
             localStorage.setItem('selectedTheme', theme);
         }
-    </script>
+        
+        // 动态设置文字颜色
+        document.querySelectorAll('.recent-themes div').forEach(function (div) {
+            var bgColor = getComputedStyle(div).backgroundColor;
+            // 将 RGB 颜色转换为十六进制颜色
+            var hexColor = rgbToHex(bgColor);
+            var textColor = getContrastColor(hexColor);
+            div.style.color = textColor;
+        });
+        
+        function rgbToHex(rgb) {
+            var rgbValues = rgb.match(/\d+/g);
+            if (rgbValues) {
+                var r = parseInt(rgbValues[0]).toString(16).padStart(2, '0');
+                var g = parseInt(rgbValues[1]).toString(16).padStart(2, '0');
+                var b = parseInt(rgbValues[2]).toString(16).padStart(2, '0');
+                return '#' + r + g + b;
+            }
+            return '#000';
+        }
+
+	</script>
 	{include file='index/sidebar_index' /}
 	{include file='index/footer' /}
