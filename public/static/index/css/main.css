@@ -202,7 +202,7 @@
     --primary-btn-color: linear-gradient(45deg, #FF6B6B, #556270);
     --light-background-color: linear-gradient(135deg, #FFFFFF, #F5F5F5);
     --border-color: #87CEFA;
-    --shadow-color: rgba(135, 206, 250, 0.3);
+    --shadow-color: rgba(50, 50, 50, 0.8);
     --warning-color: #FF4500;
 }
 
@@ -420,7 +420,7 @@ a img {
     min-height: 97rem; /* Use rem for min-height */
     background-color: var(--background-color);
     border-radius: 8px;
-    box-shadow: 0 2px 4px var(--shadow-color);
+    box-shadow: 0 0px 10px var(--shadow-color);
     padding: 20px;
     padding-top: 5px;
 }
@@ -600,7 +600,7 @@ a img {
     width: 260px;
     background-color: var(--background-color);
     border-radius: 8px;
-    box-shadow: 0 2px 4px var(--shadow-color);
+    box-shadow: 0 0px 10px var(--shadow-color);
     padding: 20px;
     min-height: 600px;
 }
