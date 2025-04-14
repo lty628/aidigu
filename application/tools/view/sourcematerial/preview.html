@@ -128,7 +128,12 @@
     {if $data['other']}
     <div class="flow-div-other">
       {foreach $data['other'] as $key => $value}
-      <li class="showOther"><span><a href="{$value['mediaUrl']}">点击下载 {$value['file_name']}</a></span></li>
+      <li class="showOther">
+        <span>
+          <!-- 修改为点击事件触发下载 -->
+          <a href="javascript:;" onclick="downloadFile('{$value[\'mediaUrl\']}', '{$value[\'file_name\']}')">点击下载 {$value['file_name']}</a>
+        </span>
+      </li>
       {/foreach}
     </div>
     {/if}
@@ -283,6 +288,31 @@
         // parent.$('#iframe-sourcematerial-' + id).parent().css('overflow', 'hidden');
       }
 
+    }
+
+    // 添加下载函数
+    function downloadFile(url, fileName) {
+      if (window.self !== window.top) {
+        // 是被iframe加载的页面，使用隐藏表单提交
+        const form = document.createElement('form');
+        form.method = 'GET';
+        form.action = url;
+        form.target = '_blank';
+        form.style.display = 'none';
+
+        window.parent.document.body.appendChild(form);
+        form.submit();
+        window.parent.document.body.removeChild(form);
+      } else {
+        // 不是被iframe加载的页面，直接创建a标签触发下载
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = fileName;
+        a.style.display = 'none';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      }
     }
   </script>
 
