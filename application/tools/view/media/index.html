@@ -137,8 +137,13 @@
                 const year = this.currentDate.getFullYear();
                 const month = String(this.currentDate.getMonth() + 1).padStart(2, '0');
                 const monthParam = `${year}-${month}`;
+                const url = `/tools/media/getDiaryDates?month=${monthParam}`;
+
                 try {
-                    const response = await fetch(`/tools/media/getDiaryDates?month=${monthParam}`);
+                    const response = await fetch(url);
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
                     const data = await response.json();
                     if (data.status === 1) {
                         this.datesWithEntries = data.data.map(item => item.date);
@@ -146,6 +151,7 @@
                     }
                 } catch (error) {
                     console.error('获取日期失败:', error);
+                    alert('获取日期失败，请稍后重试');
                 }
             }
 
@@ -187,8 +193,12 @@
             }
 
             async loadDiary(dateStr) {
+                const url = `/tools/media/getDiaryList?date=${dateStr}`;
                 try {
-                    const response = await fetch(`/tools/media/getDiaryList?date=${dateStr}`);
+                    const response = await fetch(url);
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
                     const data = await response.json();
                     const diaryEntries = document.getElementById('diary-entries');
                     const diaryDate = document.getElementById('diary-date');
@@ -200,8 +210,23 @@
                         data.data.data.forEach(entry => {
                             const entryElement = document.createElement('div');
                             entryElement.className = 'diary-entry';
+
+                            // 处理媒体信息
+                            let mediaStr = '';
+                            if (entry.media) {
+                                const mediaInfo = JSON.parse(entry.media_info);
+                                if (mediaInfo.media_type === 'mp4' || mediaInfo.media_type === 'm3u8') {
+                                    mediaStr = `<p class="massageImg clear showVideo${entry.id}" vid="${entry.media}"><video width="400px"  controls=""  name="media"><source src="${entry.media}" type="video/mp4"></video></p>`;
+                                } else if (mediaInfo.media_type === 'mp3') {
+                                    mediaStr = `<p class="massageImg clear"><audio id="music_${entry.id}" class="music" controls="controls" loop="loop" onplay="stopOther(this)" preload="none" controlsList="nodownload" οncοntextmenu="return false" name="media"><source src="${entry.media}" type="audio/mpeg"></audio></p>`;
+                                } else {
+                                    mediaStr = `<p  class="massageImg clear"><img class="massageImgCommon massageImg_${mediaInfo.media_type}"  onclick="showMessageImg(this)" src="${entry.media}"></p>`;
+                                }
+                            }
+
                             entryElement.innerHTML = `
                                 <p>${entry.contents}</p>
+                                ${mediaStr}
                                 <p class="time">${new Date(entry.ctime * 1000).toLocaleTimeString()}</p>
                             `;
                             diaryEntries.appendChild(entryElement);
@@ -211,6 +236,7 @@
                     }
                 } catch (error) {
                     console.error('加载日记失败:', error);
+                    alert('加载日记失败，请稍后重试');
                 }
             }
 
