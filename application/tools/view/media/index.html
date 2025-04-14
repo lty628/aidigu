@@ -7,18 +7,22 @@
     <title>我的日记</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f9f9f9;
+            font-family: 'Comic Neue', cursive;
+            background-size: cover;
+            background-attachment: fixed;
             margin: 0;
             padding: 0;
-            color: #333;
+            color: #666;
         }
 
         .header {
             text-align: center;
-            padding: 20px;
-            background-color: #4CAF50;
-            color: white;
+            padding: 30px;
+            background-color: #ffb6c1; /* 可爱的粉色 */
+            color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            border-radius: 0 0 20px 20px; /* 圆角效果 */
         }
 
         .container {
@@ -26,23 +30,41 @@
             flex-direction: row;
             gap: 20px;
             padding: 20px;
+            flex-wrap: wrap; /* 响应式布局 */
+            justify-content: center;
         }
 
         .calendar {
             flex: 1;
             max-width: 300px;
-            background: white;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 10px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            background: #fff;
+            border: 2px solid #ffb6c1;
+            border-radius: 15px;
+            padding: 15px;
+            box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);
         }
 
         .calendar-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
+            color: #ffb6c1;
+        }
+
+        .calendar-header button {
+            background-color: #ffb6c1;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            transition: opacity 0.3s;
+        }
+
+        .calendar-header button:hover {
+            opacity: 0.8;
         }
 
         .calendar-grid {
@@ -54,50 +76,60 @@
         .calendar-day {
             text-align: center;
             padding: 10px;
-            border-radius: 3px;
+            border-radius: 50%; /* 圆形日期 */
             cursor: pointer;
             transition: background-color 0.3s;
         }
 
         .calendar-day:hover {
-            background-color: #f0f0f0;
+            background-color: #ffe4e1;
         }
 
         .calendar-day.today {
-            background-color: #4CAF50;
+            background-color: #ff69b4;
             color: white;
         }
 
         .calendar-day.has-entry {
             font-weight: bold;
-            background-color: #e3f2fd;
+            background-color: #ffdab9;
         }
 
         .diary {
             flex: 2;
-            background: white;
-            border: 1px solid #ddd;
-            border-radius: 5px;
+            min-width: 300px;
+            background: #fff;
+            border: 2px solid #ffb6c1;
+            border-radius: 15px;
             padding: 20px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);
         }
 
         .diary-entry {
             margin-bottom: 20px;
+            padding: 15px;
+            background: #fff0f5;
+            border-left: 5px solid #ffb6c1;
+            border-radius: 5px;
+        }
+
+        .diary-entry p {
+            font-size: 16px;
+            line-height: 1.6;
         }
 
         .diary-entry .time {
             font-size: 12px;
-            color: #888;
+            color: #999;
             float: right;
         }
 
         .calendar-day.selected {
-            border: 2px solid #ff9800;
+            border: 2px solid #ff69b4;
         }
 
         .calendar-day.first-day-with-entry {
-            background-color: #ff9800;
+            background-color: #ff69b4;
             color: white;
         }
     </style>
@@ -132,7 +164,6 @@
             }
 
             async init() {
-                // 移除 console.log('初始化开始');
                 await this.fetchDiaryDates();
                 const firstDayWithEntry = this.findFirstDayWithEntry();
                 if (firstDayWithEntry) {
@@ -140,7 +171,6 @@
                 }
                 this.renderCalendar();
                 this.setupEventListeners();
-                // 移除 console.log('初始化完成');
             }
 
             async fetchDiaryDates() {
@@ -149,23 +179,19 @@
                 const monthParam = `${year}-${month}`;
                 const url = `/tools/media/getDiaryDates?month=${monthParam}`;
 
-                // 移除 console.log('开始获取日期数据，请求 URL:', url);
                 try {
                     const response = await fetch(url);
                     if (!response.ok) {
                         throw new Error(`HTTP error! status: ${response.status}`);
                     }
                     const data = await response.json();
-                    // 移除 console.log('接口返回的原始数据:', data);
                     if (data.status === 1) {
                         this.datesWithEntries = data.data.map(item => item.date);
                         this.datesWithEntries.sort();
-                        // 移除 console.log('获取到的有数据的日期列表:', this.datesWithEntries);
                     } else {
-                        // 移除 console.log('接口返回状态非 1，未获取到有效日期数据');
+                        alert('接口返回状态非 1，未获取到有效日期数据');
                     }
                 } catch (error) {
-                    // 移除 console.error('获取日期失败:', error);
                     alert('获取日期失败，请稍后重试');
                 }
             }
@@ -185,28 +211,36 @@
                 return null;
             }
 
+            // 提取生成日期字符串的方法，提高代码复用性
+            generateDateStr(year, month, day) {
+                return `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+            }
+
+            /**
+             * 查找上一个月最后一个有日记条目的日期
+             * @returns {string|null} 上一个月最后有日记条目的日期字符串，若没有则返回 null
+             */
             findLastDayWithEntryInPrevMonth() {
                 try {
+                    // 创建一个新的日期对象，设置为当前日期的上一个月
                     const prevMonthDate = new Date(this.currentDate);
                     prevMonthDate.setMonth(prevMonthDate.getMonth());
                     const year = prevMonthDate.getFullYear();
                     const month = prevMonthDate.getMonth() + 1;
+                    // 获取上一个月的最后一天
                     const lastDay = new Date(year, month, 0);
 
-                    // 移除 console.log('正在查找的上一月信息：', { year, month, lastDay });
-
+                    // 从最后一天开始向前遍历，查找有日记条目的日期
                     for (let day = lastDay.getDate(); day > 0; day--) {
-                        const dateStr = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-                        // 移除 console.log('正在检查上一月的日期:', dateStr);
+                        const dateStr = this.generateDateStr(year, month, day);
                         if (this.datesWithEntries.includes(dateStr)) {
-                            // 移除 console.log('找到上一月最后一天有数据的日期:', dateStr);
                             return dateStr;
                         }
                     }
-                    // 移除 console.log('未找到上一月有数据的日期');
                     return null;
                 } catch (error) {
-                    // 移除 console.error('查找上一月最后一天有数据的日期时出错:', error);
+                    // 打印错误日志，方便调试
+                    console.error('查找上一月最后有日记条目的日期时出错:', error);
                     return null;
                 }
             }
@@ -251,7 +285,6 @@
             }
 
             async loadDiary(dateStr) {
-                // 移除 console.log('开始加载日记，日期:', dateStr);
                 const previousSelected = document.querySelector('.calendar-day.selected');
                 if (previousSelected) {
                     previousSelected.classList.remove('selected');
@@ -299,34 +332,33 @@
                     }
 
                     this.renderCalendar();
-                    // 移除 console.log('日记加载完成');
                 } catch (error) {
-                    // 移除 console.error('加载日记失败:', error);
                     alert('加载日记失败，请稍后重试');
                 }
             }
 
             setupEventListeners() {
                 document.getElementById('prev-month').addEventListener('click', async () => {
-                    // 移除 console.log('点击上一月按钮，开始切换月份');
+                    // 先更新当前日期为上一个月
                     this.currentDate.setMonth(this.currentDate.getMonth() - 1);
+                    // 重新获取上一个月有日记条目的日期列表
                     await this.fetchDiaryDates();
+                    // 查找上一个月最后有日记条目的日期
                     const lastDayWithEntry = this.findLastDayWithEntryInPrevMonth();
-                    // 移除 console.log('上一月最后一天有数据的日期:', lastDayWithEntry);
                     if (lastDayWithEntry) {
+                        // 若找到，则加载对应的日记
                         await this.loadDiary(lastDayWithEntry);
                     } else {
+                        // 若未找到，清空当前视图日期并重新渲染日历
                         this.currentViewDate = null;
                         this.renderCalendar();
                     }
                 });
 
                 document.getElementById('next-month').addEventListener('click', async () => {
-                    // 移除 console.log('点击下一月按钮，开始切换月份');
                     this.currentDate.setMonth(this.currentDate.getMonth() + 1);
                     await this.fetchDiaryDates();
                     const firstDayWithEntry = this.findFirstDayWithEntry();
-                    // 移除 console.log('下一月第一天有数据的日期:', firstDayWithEntry);
                     if (firstDayWithEntry) {
                         await this.loadDiary(firstDayWithEntry);
                     } else {
