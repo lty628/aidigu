@@ -6,13 +6,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="/static/layui/css/layui.css" rel="stylesheet">
   <style>
-    .flow-div .flow-div-img {
+    .flow-div .flow-div-media {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
       gap: 5px;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
     }
 
-    /* 添加以下样式 */
+    .flow-div .flow-div-media li img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+    }
+
     .showVideo {
       position: relative;
     }
@@ -36,24 +41,6 @@
       background: rgba(0, 0, 0, 0.7);
     }
 
-     /* .flow-div .flow-div-img li {
-      height: 220px;
-      overflow: hidden;
-    } */
-
-    .flow-div .flow-div-img li img {
-      width: 100%;
-      height: 150px;
-      object-fit: cover;
-    }
-
-    .flow-div .flow-div-video {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 1%;
-      margin-top: 5px;
-    }
-
     .flow-div video {
       display: block;
       width: 100%;
@@ -69,7 +56,6 @@
       gap: 1%;
     }
 
-
     .flow-div .showOther {
       clear: both;
       margin: 0;
@@ -78,30 +64,25 @@
       height: 50px;
       line-height: 50px;
       text-align: left;
-      /* background-color: #fff; */
       overflow: hidden;
     }
-    .layui-layer-transparent {
-        background: transparent !important;
-        box-shadow: none !important;
-    }
 
+    .layui-layer-transparent {
+      background: transparent !important;
+      box-shadow: none !important;
+    }
   </style>
 </head>
 
 <body>
   <div class="flow-div" id="ID-flow-div-manual">
-
-    {if $data['img']}
-    <div class="flow-div-img">
+    <div class="flow-div-media">
+      {if $data['img']}
       {foreach $data['img'] as $key => $value}
-      <li><a href="javascript:;"><img data-index="{$key}" onclick="showMessageImg(this)" src="{$value['mediaUrl']}"></a>
-      </li>
+      <li><a href="javascript:;"><img data-index="{$key}" onclick="showMessageImg(this)" src="{$value['mediaUrl']}"></a></li>
       {/foreach}
-    </div>
-    {/if}
-    {if $data['video']}
-    <div class="flow-div-video">
+      {/if}
+      {if $data['video']}
       {foreach $data['video'] as $key => $value}
       <li class="showVideo">
         <!-- 移除 controls 属性以去掉播放控制 -->
@@ -112,8 +93,9 @@
         <button class="play-btn" onclick="showVideoPopup(this)" data-src="{$value['mediaUrl']}">▶</button>
       </li>
       {/foreach}
+      {/if}
     </div>
-    {/if}
+
     {if $data['text']}
     <div class="flow-div-other">
       {foreach $data['text'] as $key => $value}
@@ -131,13 +113,12 @@
       <li class="showOther">
         <span>
           <!-- 修改为点击事件触发下载 -->
-          <a href="javascript:;" onclick="downloadFile('{$value[\'mediaUrl\']}', '{$value[\'file_name\']}')">点击下载 {$value['file_name']}</a>
+          <a href="javascript:;" onclick="downloadFile('{$value['mediaUrl']}', '{$value['file_name']}')">点击下载 {$value['file_name']}</a>
         </span>
       </li>
       {/foreach}
     </div>
     {/if}
-
   </div>
 
   <input type="hidden" value="{$id}" id="previewId">
@@ -146,27 +127,41 @@
   <!-- 请勿在项目正式环境中引用该 layui.js 地址 -->
   <script src="/static/layui/layui.js"></script>
   <script>
-    var $ = layui.$
+    var $ = layui.$;
+
+    // 动态调整媒体布局
+    function adjustLayout() {
+      const mediaContainer = $('.flow-div-media');
+      const mediaCount = mediaContainer.find('li').length;
+
+      if (mediaCount > 0) {
+        // 根据媒体数量调整列数
+        let mediaColumns = mediaCount < 3 ? `repeat(${mediaCount}, 1fr)` : 'repeat(auto-fill, minmax(150px, 1fr))';
+        mediaContainer.css('grid-template-columns', mediaColumns);
+      }
+    }
+
+    adjustLayout();
+
     function showMessageImg(obj) {
-      var imgList = $('li').find('img').map(function () {
+      var imgList = $('.flow-div-media li img').map(function () {
         return $(this).attr('src');
       }).get();
-
       var imgArray = [];
       for (var i = 0; i < imgList.length; i++) {
         imgArray.push({
           "alt": "",
-          "pid": i, //图片id
-          "src": imgList[i], //原图地址
-          "thumb": "" //缩略图地址})
+          "pid": i, // 图片id
+          "src": imgList[i], // 原图地址
+          "thumb": "" // 缩略图地址
         })
       }
       // console.log(imgArray)
       // var imgUrl = $(obj).attr('src');
       var json = {
-        "title": "", //相册标题
-        "id": 0, //相册id
-        "start": $(obj).attr('data-index'), //初始显示的图片序号，默认0
+        "title": "", // 相册标题
+        "id": 0, // 相册id
+        "start": $(obj).attr('data-index'), // 初始显示的图片序号，默认0
         "data": imgArray
       }
 
@@ -287,7 +282,6 @@
         // 父集的overflow hidden
         // parent.$('#iframe-sourcematerial-' + id).parent().css('overflow', 'hidden');
       }
-
     }
 
     // 添加下载函数
