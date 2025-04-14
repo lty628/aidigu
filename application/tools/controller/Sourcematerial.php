@@ -8,9 +8,11 @@ class Sourcematerial extends Controller
 {	
     public function initialize()
     {
+        $isMobile = isMobile();
+        $this->assign('isMobile', $isMobile);
         if (!getLoginUid()) {
             $pubIndex = env('app.pubIndex', '');
-            if (!$pubIndex || isMobile()) {
+            if (!$pubIndex || $isMobile) {
                 // 无逻辑处理
                 $this->error('未登录', '/login/');
             }
@@ -20,7 +22,7 @@ class Sourcematerial extends Controller
 
     public function list()
     {
-        $this->assign('isMobile', isMobile());
+        
         return $this->fetch();
     }
 
@@ -31,7 +33,6 @@ class Sourcematerial extends Controller
 
     public function share()
     {
-        $this->assign('isMobile', isMobile());
         return $this->fetch();
     }
 
@@ -122,7 +123,6 @@ class Sourcematerial extends Controller
             }
         }
 
-        $this->assign('isMobile', isMobile());
         $this->assign('data', $data);
         $this->assign('id', $id);
         // $this->assign('staticDomain', $staticDomain);

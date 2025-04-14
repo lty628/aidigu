@@ -89,7 +89,14 @@
       {foreach $data['video'] as $key => $value}
       <li class="showVideo">
         <!-- 移除 controls 属性以去掉播放控制 -->
-        <video onclick="return false;" src="{$value['mediaUrl']}" name="media">
+        <video 
+          onclick="return false;" 
+          src="{$value['mediaUrl']}" 
+          name="media"
+          {if $isMobile}
+          poster="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg=="
+          {/if}
+        >
           <source src="{$value['mediaUrl']}" type="video/mp4">
         </video>
         <!-- 添加播放按钮 -->
