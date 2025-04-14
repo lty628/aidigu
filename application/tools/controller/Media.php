@@ -30,7 +30,6 @@ class Media extends Controller
             $date = date('Y-m-d');
         }
 
-        $prefix = config('database.prefix');
         $query = Db::name('message')
             ->alias('message')
             ->where('message.uid', $userid) // 只查询自己的日记
@@ -77,6 +76,7 @@ class Media extends Controller
             ->where('ctime', 'between', [$startTime, $endTime])
             ->field("FROM_UNIXTIME(ctime, '%Y-%m-%d') as date")
             ->group("FROM_UNIXTIME(ctime, '%Y-%m-%d')")
+            ->where('message.is_delete', 0)
             ->order('date desc')
             ->select();
 
