@@ -292,27 +292,61 @@
 
     // 添加下载函数
     function downloadFile(url, fileName) {
-      if (window.self !== window.top) {
-        // 是被iframe加载的页面，使用隐藏表单提交
-        const form = document.createElement('form');
-        form.method = 'GET';
-        form.action = url;
-        form.target = '_blank';
-        form.style.display = 'none';
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', url, true);
+        xhr.responseType = 'blob';
 
-        window.parent.document.body.appendChild(form);
-        form.submit();
-        window.parent.document.body.removeChild(form);
-      } else {
-        // 不是被iframe加载的页面，直接创建a标签触发下载
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = fileName;
-        a.style.display = 'none';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-      }
+        // 显示加载提示
+        let layer;
+        if (parent.layer) {
+            layer = parent.layer;
+        } else {
+            layer = layui.layer;
+        }
+        const loadingIndex = layer.load(1, {
+            shade: [0.1, '#fff']
+        });
+
+        xhr.onload = function() {
+            // 关闭加载提示
+            layer.close(loadingIndex);
+            if (xhr.status === 200) {
+                const blob = new Blob([xhr.response]);
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = fileName;
+                link.style.display = 'none';
+
+                if (window.self !== window.top) {
+                    window.parent.document.body.appendChild(link);
+                } else {
+                    document.body.appendChild(link);
+                }
+
+                link.click();
+
+                if (window.self !== window.top) {
+                    window.parent.document.body.removeChild(link);
+                } else {
+                    document.body.removeChild(link);
+                }
+
+                // 释放 URL 对象
+                URL.revokeObjectURL(link.href);
+            } else {
+                // 下载失败提示
+                layer.msg('下载失败，请稍后重试', { icon: 5 });
+            }
+        };
+
+        xhr.onerror = function() {
+            // 关闭加载提示
+            layer.close(loadingIndex);
+            // 网络错误提示
+            layer.msg('网络错误，请检查网络连接', { icon: 5 });
+        };
+
+        xhr.send();
     }
   </script>
 
