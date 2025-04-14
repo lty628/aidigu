@@ -71,6 +71,9 @@
       background: transparent !important;
       box-shadow: none !important;
     }
+    .last-row-container {
+      width: 100%;
+    }
   </style>
 </head>
 
@@ -130,18 +133,30 @@
     var $ = layui.$;
 
     // 动态调整媒体布局
-    function adjustLayout() {
-      const mediaContainer = $('.flow-div-media');
-      const mediaCount = mediaContainer.find('li').length;
+    // function adjustLayout() {
+    //   const mediaContainer = $('.flow-div-media');
+    //   const mediaCount = mediaContainer.find('li').length;
 
-      if (mediaCount > 0) {
-        // 根据媒体数量调整列数
-        let mediaColumns = mediaCount < 3 ? `repeat(${mediaCount}, 1fr)` : 'repeat(auto-fill, minmax(150px, 1fr))';
-        mediaContainer.css('grid-template-columns', mediaColumns);
-      }
-    }
+    //   if (mediaCount > 0) {
+    //     let mediaColumns;
+    //     if (mediaCount <= 3) {
+    //       // 当总数小于等于 3 个时，每个元素最大 300px
+    //       mediaColumns = `repeat(auto-fill, minmax(150px, 1fr))`;
+    //     } else {
+    //       const remainder = mediaCount % 3;
+    //       if (remainder === 0) {
+    //         // 能被 3 整除，每行显示 3 个
+    //         mediaColumns = 'repeat(3, 1fr)';
+    //       } else {
+    //         // 不能被 3 整除，前面行每行 3 个，最后一行用最大宽度限制
+    //         mediaColumns = `repeat(3, 1fr) repeat(auto-fill, minmax(150px, 200px))`;
+    //       }
+    //     }
+    //     mediaContainer.css('grid-template-columns', mediaColumns);
+    //   }
+    // }
 
-    adjustLayout();
+    // adjustLayout();
 
     function showMessageImg(obj) {
       var imgList = $('.flow-div-media li img').map(function () {
