@@ -20,13 +20,34 @@
 
         .header {
             text-align: center;
-            padding: 30px;
+            /* 使用相对单位，增强响应式 */
+            padding: clamp(15px, 3vw, 30px); 
             /* 使用 CSS 变量 */
             background-color: var(--primary-color); 
             color: var(--primary-btn-color);
             box-shadow: 0 2px 5px var(--shadow-color);
             text-shadow: 2px 2px 4px var(--shadow-color);
             border-radius: 0 0 20px 20px; /* 圆角效果 */
+            /* 添加过渡效果，提升交互体验 */
+            transition: all 0.3s ease; 
+            /* 提升可访问性，设置鼠标指针样式 */
+            cursor: default; 
+            /* 防止内容溢出 */
+            overflow: hidden; 
+        }
+
+        /* 当鼠标悬停在 .header 上时，改变阴影和背景颜色 */
+        .header:hover {
+            box-shadow: 0 4px 10px var(--shadow-color);
+            background-color: var(--primary-hover-color);
+        }
+
+        /* 针对小屏幕设备调整样式 */
+        @media (max-width: 768px) {
+            .header {
+                padding: 15px;
+                border-radius: 0;
+            }
         }
 
         .container {
@@ -36,6 +57,7 @@
             padding: 20px;
             flex-wrap: wrap; /* 响应式布局 */
             justify-content: center;
+            width: unset;
         }
 
         .calendar {
