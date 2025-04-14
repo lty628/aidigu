@@ -76,7 +76,7 @@ class Media extends Controller
             ->where('ctime', 'between', [$startTime, $endTime])
             ->field("FROM_UNIXTIME(ctime, '%Y-%m-%d') as date")
             ->group("FROM_UNIXTIME(ctime, '%Y-%m-%d')")
-            ->where('message.is_delete', 0)
+            ->where('is_delete', 0)
             ->order('date desc')
             ->select();
 
