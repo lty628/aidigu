@@ -89,11 +89,15 @@
         .diary-entry .time {
             font-size: 12px;
             color: #888;
+            float: right;
         }
-    </style>
-    <style>
+
+        .calendar-day.selected {
+            border: 2px solid #ff9800;
+        }
+
         .calendar-day.first-day-with-entry {
-            background-color: #ff9800; /* 可以根据需要修改颜色 */
+            background-color: #ff9800;
             color: white;
         }
     </style>
@@ -128,9 +132,15 @@
             }
 
             async init() {
+                // 移除 console.log('初始化开始');
                 await this.fetchDiaryDates();
+                const firstDayWithEntry = this.findFirstDayWithEntry();
+                if (firstDayWithEntry) {
+                    await this.loadDiary(firstDayWithEntry);
+                }
                 this.renderCalendar();
                 this.setupEventListeners();
+                // 移除 console.log('初始化完成');
             }
 
             async fetchDiaryDates() {
@@ -139,46 +149,93 @@
                 const monthParam = `${year}-${month}`;
                 const url = `/tools/media/getDiaryDates?month=${monthParam}`;
 
+                // 移除 console.log('开始获取日期数据，请求 URL:', url);
                 try {
                     const response = await fetch(url);
                     if (!response.ok) {
                         throw new Error(`HTTP error! status: ${response.status}`);
                     }
                     const data = await response.json();
+                    // 移除 console.log('接口返回的原始数据:', data);
                     if (data.status === 1) {
                         this.datesWithEntries = data.data.map(item => item.date);
                         this.datesWithEntries.sort();
+                        // 移除 console.log('获取到的有数据的日期列表:', this.datesWithEntries);
+                    } else {
+                        // 移除 console.log('接口返回状态非 1，未获取到有效日期数据');
                     }
                 } catch (error) {
-                    console.error('获取日期失败:', error);
+                    // 移除 console.error('获取日期失败:', error);
                     alert('获取日期失败，请稍后重试');
+                }
+            }
+
+            findFirstDayWithEntry() {
+                const year = this.currentDate.getFullYear();
+                const month = this.currentDate.getMonth() + 1;
+                const firstDay = new Date(year, month - 1, 1);
+                const lastDay = new Date(year, month, 0);
+
+                for (let day = 1; day <= lastDay.getDate(); day++) {
+                    const dateStr = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                    if (this.datesWithEntries.includes(dateStr)) {
+                        return dateStr;
+                    }
+                }
+                return null;
+            }
+
+            findLastDayWithEntryInPrevMonth() {
+                try {
+                    const prevMonthDate = new Date(this.currentDate);
+                    prevMonthDate.setMonth(prevMonthDate.getMonth());
+                    const year = prevMonthDate.getFullYear();
+                    const month = prevMonthDate.getMonth() + 1;
+                    const lastDay = new Date(year, month, 0);
+
+                    // 移除 console.log('正在查找的上一月信息：', { year, month, lastDay });
+
+                    for (let day = lastDay.getDate(); day > 0; day--) {
+                        const dateStr = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                        // 移除 console.log('正在检查上一月的日期:', dateStr);
+                        if (this.datesWithEntries.includes(dateStr)) {
+                            // 移除 console.log('找到上一月最后一天有数据的日期:', dateStr);
+                            return dateStr;
+                        }
+                    }
+                    // 移除 console.log('未找到上一月有数据的日期');
+                    return null;
+                } catch (error) {
+                    // 移除 console.error('查找上一月最后一天有数据的日期时出错:', error);
+                    return null;
                 }
             }
 
             renderCalendar() {
                 const year = this.currentDate.getFullYear();
-                const month = this.currentDate.getMonth();
-                const firstDay = new Date(year, month, 1);
-                const lastDay = new Date(year, month + 1, 0);
+                const month = this.currentDate.getMonth() + 1;
+                const firstDay = new Date(year, month - 1, 1);
+                const lastDay = new Date(year, month, 0);
 
                 const calendarGrid = document.getElementById('calendar-grid');
                 calendarGrid.innerHTML = '';
 
-                document.getElementById('calendar-title').textContent = `${year}年${month + 1}月`;
+                document.getElementById('calendar-title').textContent = `${year}年${month}月`;
 
                 for (let i = 0; i < firstDay.getDay(); i++) {
                     calendarGrid.appendChild(this.createDayElement('', true));
                 }
 
                 for (let day = 1; day <= lastDay.getDate(); day++) {
-                    const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-                    const isToday = new Date().toDateString() === new Date(year, month, day).toDateString();
+                    const dateStr = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                    const isToday = new Date().toDateString() === new Date(year, month - 1, day).toDateString();
                     const hasEntry = this.datesWithEntries.includes(dateStr);
-                    calendarGrid.appendChild(this.createDayElement(day, false, isToday, hasEntry, dateStr));
+                    const isSelected = dateStr === this.currentViewDate;
+                    calendarGrid.appendChild(this.createDayElement(day, false, isToday, hasEntry, dateStr, isSelected));
                 }
             }
 
-            createDayElement(day, isPlaceholder, isToday = false, hasEntry = false, dateStr = '') {
+            createDayElement(day, isPlaceholder, isToday = false, hasEntry = false, dateStr = '', isSelected = false) {
                 const dayElement = document.createElement('div');
                 dayElement.className = 'calendar-day';
                 if (isPlaceholder) {
@@ -187,12 +244,19 @@
                     dayElement.textContent = day;
                     if (isToday) dayElement.classList.add('today');
                     if (hasEntry) dayElement.classList.add('has-entry');
+                    if (isSelected) dayElement.classList.add('selected');
                     dayElement.addEventListener('click', () => this.loadDiary(dateStr));
                 }
                 return dayElement;
             }
 
             async loadDiary(dateStr) {
+                // 移除 console.log('开始加载日记，日期:', dateStr);
+                const previousSelected = document.querySelector('.calendar-day.selected');
+                if (previousSelected) {
+                    previousSelected.classList.remove('selected');
+                }
+
                 const url = `/tools/media/getDiaryList?date=${dateStr}`;
                 try {
                     const response = await fetch(url);
@@ -211,7 +275,6 @@
                             const entryElement = document.createElement('div');
                             entryElement.className = 'diary-entry';
 
-                            // 处理媒体信息
                             let mediaStr = '';
                             if (entry.media) {
                                 const mediaInfo = JSON.parse(entry.media_info);
@@ -234,23 +297,42 @@
                     } else {
                         diaryEntries.innerHTML = '<p>没有日记内容</p>';
                     }
+
+                    this.renderCalendar();
+                    // 移除 console.log('日记加载完成');
                 } catch (error) {
-                    console.error('加载日记失败:', error);
+                    // 移除 console.error('加载日记失败:', error);
                     alert('加载日记失败，请稍后重试');
                 }
             }
 
             setupEventListeners() {
                 document.getElementById('prev-month').addEventListener('click', async () => {
+                    // 移除 console.log('点击上一月按钮，开始切换月份');
                     this.currentDate.setMonth(this.currentDate.getMonth() - 1);
                     await this.fetchDiaryDates();
-                    this.renderCalendar();
+                    const lastDayWithEntry = this.findLastDayWithEntryInPrevMonth();
+                    // 移除 console.log('上一月最后一天有数据的日期:', lastDayWithEntry);
+                    if (lastDayWithEntry) {
+                        await this.loadDiary(lastDayWithEntry);
+                    } else {
+                        this.currentViewDate = null;
+                        this.renderCalendar();
+                    }
                 });
 
                 document.getElementById('next-month').addEventListener('click', async () => {
+                    // 移除 console.log('点击下一月按钮，开始切换月份');
                     this.currentDate.setMonth(this.currentDate.getMonth() + 1);
                     await this.fetchDiaryDates();
-                    this.renderCalendar();
+                    const firstDayWithEntry = this.findFirstDayWithEntry();
+                    // 移除 console.log('下一月第一天有数据的日期:', firstDayWithEntry);
+                    if (firstDayWithEntry) {
+                        await this.loadDiary(firstDayWithEntry);
+                    } else {
+                        this.currentViewDate = null;
+                        this.renderCalendar();
+                    }
                 });
             }
         }
