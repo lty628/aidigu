@@ -48,6 +48,7 @@
       height: 150px;
       object-fit: cover;
       filter: saturate(150%);
+      background-color: black;
     }
 
     .flow-div .flow-div-other {
@@ -93,9 +94,6 @@
           onclick="return false;" 
           src="{$value['mediaUrl']}" 
           name="media"
-          {if $isMobile}
-          poster="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
-          {/if}
         >
           <source src="{$value['mediaUrl']}" type="video/mp4">
         </video>
