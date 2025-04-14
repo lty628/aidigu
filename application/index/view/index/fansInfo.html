@@ -7,7 +7,11 @@
 <div class="main">
 	<div class="contents">
 		<div class="top">关注</div>
-		<h2><b>{$whichUser}</b>关注的人</h2>
+		{if request()->action() == 'concern'}
+		<h2><b>{$whichUser}</b> 关注的人</h2>
+		{else} 
+		<h2>关注 <b>{$whichUser}</b> 的人</h2>
+		{/if}
 		<h3><a href="{:url('/'.$userInfo.blog.'/'.'concern/')}"><b>{$whichUser}</b> 关注的人</a><span><a href="{:url('/'.$userInfo.blog.'/'.'fans/')}">关注 <b>{$whichUser}</b> 的人</a></span></h3>
 		{foreach $userFans as $fans}
 		<div class="entry">
