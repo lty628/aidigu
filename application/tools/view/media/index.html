@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/index/css/main.css">
     <title>我的日记</title>
     <style>
         body {
@@ -12,16 +13,19 @@
             background-attachment: fixed;
             margin: 0;
             padding: 0;
-            color: #666;
+            /* 使用 CSS 变量 */
+            color: var(--base-font-color);
+            background-color: var(--background-color);
         }
 
         .header {
             text-align: center;
             padding: 30px;
-            background-color: #ffb6c1; /* 可爱的粉色 */
-            color: #fff;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            /* 使用 CSS 变量 */
+            background-color: var(--primary-color); 
+            color: var(--primary-btn-color);
+            box-shadow: 0 2px 5px var(--shadow-color);
+            text-shadow: 2px 2px 4px var(--shadow-color);
             border-radius: 0 0 20px 20px; /* 圆角效果 */
         }
 
@@ -37,11 +41,12 @@
         .calendar {
             flex: 1;
             max-width: 300px;
-            background: #fff;
-            border: 2px solid #ffb6c1;
+            background: var(--background-color);
+            /* 使用 CSS 变量 */
+            border: 2px solid var(--primary-color); 
             border-radius: 15px;
             padding: 15px;
-            box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 5px 5px 10px var(--shadow-color);
         }
 
         .calendar-header {
@@ -49,12 +54,14 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 15px;
-            color: #ffb6c1;
+            /* 使用 CSS 变量 */
+            color: var(--primary-color); 
         }
 
         .calendar-header button {
-            background-color: #ffb6c1;
-            color: #fff;
+            /* 使用 CSS 变量 */
+            background-color: var(--primary-color); 
+            color: var(--primary-btn-color);
             border: none;
             border-radius: 50%;
             width: 30px;
@@ -82,60 +89,94 @@
         }
 
         .calendar-day:hover {
-            background-color: #ffe4e1;
+            /* 使用 CSS 变量 */
+            background-color: var(--light-background-color); 
         }
 
-        .calendar-day.today {
-            background-color: #ff69b4;
-            color: white;
-        }
 
         .calendar-day.has-entry {
             font-weight: bold;
-            background-color: #ffdab9;
+            /* 使用 CSS 变量 */
+            background-color: var(--primary-color); 
+            color: var(--primary-btn-color);
         }
+
+        .calendar-day.today {
+            /* 使用 CSS 变量 */
+            background-color: var(--secondary-color); 
+            color: var(--primary-btn-color);
+        }
+
 
         .diary {
             flex: 2;
             min-width: 300px;
-            background: #fff;
-            border: 2px solid #ffb6c1;
+            background: var(--background-color);
+            /* 使用 CSS 变量 */
+            border: 2px solid var(--primary-color); 
             border-radius: 15px;
             padding: 20px;
-            box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 5px 5px 10px var(--shadow-color);
         }
 
         .diary-entry {
             margin-bottom: 20px;
             padding: 15px;
-            background: #fff0f5;
-            border-left: 5px solid #ffb6c1;
+            /* 使用 CSS 变量 */
+            background: var(--light-background-color); 
+            border-left: 5px solid var(--primary-color);
             border-radius: 5px;
         }
 
         .diary-entry p {
             font-size: 16px;
             line-height: 1.6;
+            /* 使用 CSS 变量 */
+            color: var(--base-font-color); 
         }
 
         .diary-entry .time {
             font-size: 12px;
-            color: #999;
+            /* 使用 CSS 变量 */
+            color: var(--secondary-color); 
             float: right;
         }
 
         .calendar-day.selected {
-            border: 2px solid #ff69b4;
+            /* 使用 CSS 变量 */
+            border: 2px solid var(--primary-hover-color); 
         }
 
         .calendar-day.first-day-with-entry {
-            background-color: #ff69b4;
-            color: white;
+            /* 使用 CSS 变量 */
+            background-color: var(--primary-hover-color); 
+            color: var(--primary-btn-color);
         }
         .massageImg img {
             width: 300px;
         }
     </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 从 localStorage 中读取保存的主题
+            var selectedTheme = localStorage.getItem('selectedTheme');
+            if (selectedTheme) {
+                if (selectedTheme === 'default') {
+                    document.documentElement.className = '';
+                } else {
+                    document.documentElement.className = selectedTheme;
+                }
+                var header = document.getElementById('header');
+                if (header) {
+                    if (selectedTheme === 'default') {
+                        header.className = '';
+                    } else {
+                        header.className = selectedTheme;
+                    }
+                }
+            }
+        });
+    </script>
 </head>
 
 <body>
