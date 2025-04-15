@@ -8,7 +8,7 @@
             <!-- 将用户昵称、开始时间和结束时间放在同一个 search-formitem 中 -->
             <p class="search-formitem">
                 <label for="user-nickname">用户或昵称:</label>
-                <input type="text" autocomplete="off" id="user-nickname" value="{$keywordArr['userNickname'] | default=''}" name="user-nickname" class="layui-input" style="flex: 2;">
+                <input type="text" autocomplete="off" id="user-nickname" placeholder="{$loginUserInfo['blog']}" value="{$keywordArr['userNickname'] | default=''}" name="user-nickname" class="layui-input" style="flex: 2;">
                 <label for="start-date">开始时间:</label>
                 <input type="text" id="start-date" autocomplete="off" name="start-date" value="{$keywordArr['startDate'] | default=''}" class="layui-input" style="flex: 2;">
                 <label for="end-date">结束时间:</label>
