@@ -5,6 +5,14 @@ use think\Db;
 
 class PrivateLetter
 {
+    public function __construct()
+    {
+        // 是否命令行
+        if (request()->isCli() == false) {
+            die('非法访问');
+        }
+    }
+    
     // php index.php task/Private_Letter/del
     // 每天清理私信计划任务中执行
     public function del()

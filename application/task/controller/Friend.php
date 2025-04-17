@@ -5,6 +5,14 @@ use think\Db;
 
 class Friend
 {
+    public function __construct()
+    {
+        // 是否命令行
+        if (request()->isCli() == false) {
+            die('非法访问');
+        }
+    }
+    
     public function index()
     {
         $info = Db::name('fans')->select();

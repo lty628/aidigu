@@ -6,6 +6,14 @@ use think\Db;
 
 class Index
 {
+    public function __construct()
+    {
+        // 是否命令行
+        if (request()->isCli() == false) {
+            die('非法访问');
+        }
+    }
+    
     public function test()
     {
         $id = request()->server()['argv'][2] ?? 0;
