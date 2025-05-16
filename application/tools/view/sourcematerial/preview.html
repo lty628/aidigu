@@ -98,7 +98,7 @@
           <source src="{$value['mediaUrl']}" type="video/mp4">
         </video>
         <!-- 添加播放按钮 -->
-        <button class="play-btn" onclick="showVideoPopup(this)" data-src="{$value['mediaUrl']}">▶</button>
+        <button class="play-btn" id="iframe-{$value['id']}" onclick="showVideoPopup(this)" data-src="{$value['mediaUrl']}">▶</button>
       </li>
       {/foreach}
       {/if}
@@ -206,6 +206,7 @@
   
       if (parent.layer) {
         var layer = parent.layer
+        parent.stopOther(obj)
       }
 
       var isMobile = $("#isMobile").val()
