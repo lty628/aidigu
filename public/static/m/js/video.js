@@ -44,7 +44,9 @@ function iniVideo(i)
 			DP[index].on('play', function () {
 				playIngVideoId = index
 				if (playIngMusicId) {
-					document.getElementById(playIngMusicId).pause()
+					if (document.getElementById(playIngMusicId)) {
+						document.getElementById(playIngMusicId).pause()
+					}
 				}
 			});
 			DP[index].on('loadedmetadata', function() {
