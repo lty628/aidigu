@@ -5,7 +5,10 @@ var DP = [];
 function stopOther(obj) {
 	var id = $(obj).attr("id")
 	if (playIngMusicId != '' && id != playIngMusicId) {
-		document.getElementById(playIngMusicId).pause()
+		// 如果playIngMusicId 不正确导致的错误，就不执行暂停操作
+		if (document.getElementById(playIngMusicId)) {
+			document.getElementById(playIngMusicId).pause()
+		}
 	}
 	if (playIngVideoId != -1) {
 		DP[playIngVideoId].pause()
