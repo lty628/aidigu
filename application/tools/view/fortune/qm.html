@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>诗词起名</title>
+    <style>
+        :root {
+            --primary-color: #007BFF;
+            --secondary-color: #0056b3;
+            --background-color: #f4f4f4;
+            --card-background: #fff;
+            --text-color: #333;
+            --success-color: #28a745;
+            --info-color: #17a2b8;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 20px;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--text-color);
+            margin-bottom: 2rem;
+            font-size: 2.5rem;
+        }
+
+        form {
+            background-color: var(--card-background);
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #555;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 1.5rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.2);
+        }
+
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            transition: background-color 0.3s ease;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: var(--secondary-color);
+        }
+
+        #result {
+            margin-top: 2rem;
+            padding: 2rem;
+            background-color: var(--card-background);
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            line-height: 1.8;
+        }
+
+        #result h2 {
+            margin-top: 0;
+            margin-bottom: 1rem;
+            color: var(--text-color);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #ddd;
+        }
+
+        .score-high {
+            color: var(--success-color);
+            font-weight: bold;
+        }
+
+        .score-medium {
+            color: var(--warning-color);
+        }
+
+        .score-low {
+            color: var(--danger-color);
+        }
+    </style>
+</head>
+<body>
+    <h1>诗词起名</h1>
+    <form id="nameForm">
+        <label for="surname">请输入姓氏:</label>
+        <input type="text" id="surname" required>
+        <label for="birthdate">请输入出生年月:</label>
+        <input type="date" id="birthdate" required>
+        <label for="birthtime">请输入出生时间:</label>
+        <input type="time" id="birthtime" required>
+        <label for="gender">请选择性别:</label>
+        <select id="gender" required>
+            <option value="male">男</option>
+            <option value="female">女</option>
+        </select>
+        <button type="submit">生成名字</button>
+    </form>
+    <div id="result"></div>
+
+    <script>
+        // 扩充历史优秀诗词库
+        const poems = [
+            // 已有诗词
+            "但愿人长久，千里共婵娟。",
+            "天生我材必有用，千金散尽还复来。",
+            "采菊东篱下，悠然见南山。",
+            "海上生明月，天涯共此时。",
+            "会当凌绝顶，一览众山小。",
+            "大漠孤烟直，长河落日圆。",
+            "等闲识得东风面，万紫千红总是春。",
+            "月上柳梢头，人约黄昏后。",
+            "两情若是久长时，又岂在朝朝暮暮。",
+            "日出江花红胜火，春来江水绿如蓝。",
+            "疏影横斜水清浅，暗香浮动月黄昏。",
+            "沾衣欲湿杏花雨，吹面不寒杨柳风。",
+            "好雨知时节，当春乃发生。",
+            "随风潜入夜，润物细无声。",
+            "野径云俱黑，江船火独明。",
+            "晓看红湿处，花重锦官城。",
+            "两个黄鹂鸣翠柳，一行白鹭上青天。",
+            "窗含西岭千秋雪，门泊东吴万里船。",
+            "迟日江山丽，春风花草香。",
+            "泥融飞燕子，沙暖睡鸳鸯。",
+            "离离原上草，一岁一枯荣。",
+            "野火烧不尽，春风吹又生。",
+            "远芳侵古道，晴翠接荒城。",
+            "又送王孙去，萋萋满别情。",
+            "慈母手中线，游子身上衣。",
+            "临行密密缝，意恐迟迟归。",
+            "谁言寸草心，报得三春晖。",
+            "葡萄美酒夜光杯，欲饮琵琶马上催。",
+            "醉卧沙场君莫笑，古来征战几人回？",
+            "黄河远上白云间，一片孤城万仞山。",
+            "黄沙百战穿金甲，不破楼兰终不还。",
+            "但使龙城飞将在，不教胡马度阴山。",
+            "劝君更尽一杯酒，西出阳关无故人。",
+            "渭城朝雨浥轻尘，客舍青青柳色新。",
+            "红豆生南国，春来发几枝？",
+            "愿君多采撷，此物最相思。",
+            "床前明月光，疑是地上霜。",
+            "举头望明月，低头思故乡。",
+            "朝辞白帝彩云间，千里江陵一日还。",
+            "两岸猿声啼不住，轻舟已过万重山。",
+            "故人西辞黄鹤楼，烟花三月下扬州。",
+            "孤帆远影碧空尽，唯见长江天际流。",
+            "飞流直下三千尺，疑是银河落九天。",
+            "日照香炉生紫烟，遥看瀑布挂前川。",
+            "天门中断楚江开，碧水东流至此回。",
+            "两岸青山相对出，孤帆一片日边来。",
+            "云想衣裳花想容，春风拂槛露华浓。",
+            "若非群玉山头见，会向瑶台月下逢。",
+            "长风破浪会有时，直挂云帆济沧海。",
+            "金樽清酒斗十千，玉盘珍羞直万钱。",
+            "仰天大笑出门去，我辈岂是蓬蒿人。",
+            "清水出芙蓉，天然去雕饰。",
+            "天生丽质难自弃，一朝选在君王侧。",
+            "回眸一笑百媚生，六宫粉黛无颜色。",
+            "在天愿作比翼鸟，在地愿为连理枝。",
+            "几处早莺争暖树，谁家新燕啄春泥。",
+            "乱花渐欲迷人眼，浅草才能没马蹄。",
+            "最爱湖东行不足，绿杨阴里白沙堤。",
+            "我劝天公重抖擞，不拘一格降人才。",
+            "九州生气恃风雷，万马齐喑究可哀。",
+            "不要人夸颜色好，只留清气满乾坤。",
+            "千磨万击还坚劲，任尔东西南北风。",
+            "粉骨碎身浑不怕，要留清白在人间。",
+            "咬定青山不放松，立根原在破岩中。",
+            // 新增大量《诗经》诗句
+            "关关雎鸠，在河之洲。窈窕淑女，君子好逑。",
+            "桃之夭夭，灼灼其华。之子于归，宜其室家。",
+            "桃之夭夭，有蕡其实。之子于归，宜其家室。",
+            "桃之夭夭，其叶蓁蓁。之子于归，宜其家人。",
+            "青青子衿，悠悠我心。纵我不往，子宁不嗣音？",
+            "青青子佩，悠悠我思。纵我不往，子宁不来？",
+            "投我以木瓜，报之以琼琚。匪报也，永以为好也！",
+            "投我以木桃，报之以琼瑶。匪报也，永以为好也！",
+            "投我以木李，报之以琼玖。匪报也，永以为好也！",
+            "风雨如晦，鸡鸣不已。既见君子，云胡不喜。",
+            "呦呦鹿鸣，食野之苹。我有嘉宾，鼓瑟吹笙。",
+            "呦呦鹿鸣，食野之蒿。我有嘉宾，德音孔昭。",
+            "呦呦鹿鸣，食野之芩。我有嘉宾，鼓瑟鼓琴。",
+            "昔我往矣，杨柳依依。今我来思，雨雪霏霏。",
+            "蒹葭苍苍，白露为霜。所谓伊人，在水一方。",
+            "蒹葭萋萋，白露未晞。所谓伊人，在水之湄。",
+            "蒹葭采采，白露未已。所谓伊人，在水之涘。",
+            "巧笑倩兮，美目盼兮。素以为绚兮。",
+            "芃芃黍苗，阴雨膏之。",
+            "如月之恒，如日之升。如南山之寿，不骞不崩。",
+            "如松柏之茂，无不尔或承。",
+            "高山仰止，景行行止。虽不能至，心向往之。",
+            "鹤鸣于九皋，声闻于野。鱼潜在渊，或在于渚。",
+            "鹤鸣于九皋，声闻于天。鱼在于渚，或潜在渊。",
+            "我心фист，不可转也。我心фи席，不可卷也。",
+            "战战兢兢，如临深渊，如履薄冰。",
+            "柔嘉维则，令仪令色，小心翼翼。",
+            "有匪君子，如切如磋，如琢如磨。",
+            "有匪君子，充耳琇莹，会弁如星。",
+            "有匪君子，如金如锡，如圭如璧。",
+            "思皇多士，生此王国。王国克生，维周之桢。",
+            "济济多士，文王以宁。",
+            "穆穆文王，于缉熙敬止。",
+            "文王在上，于昭于天。周虽旧邦，其命维新。",
+            "明明天子，令闻不已。矢其文德，洽此四国。",
+            "凤凰于飞，翙翙其羽，亦集爰止。蔼蔼王多吉士，维君子使，媚于天子。",
+            "凤凰于飞，翙翙其羽，亦傅于天。蔼蔼王多吉人，维君子命，媚于庶人。",
+            "芃芃黍苗，阴雨膏之。悠悠南行，召伯劳之。",
+            "肆成人有德，小子有造。古之人无斁，誉髦斯士。",
+            "呦呦鹿鸣，食野之苹。我有嘉宾，鼓瑟吹笙。吹笙鼓。",
+            "承筐是将。人之好我，示我周行。",
+            "春日载阳，有鸣仓庚。女执懿筐，遵彼微行，爰求柔桑。",
+            "有美一人，清扬婉兮。邂逅相遇，适我愿兮。",
+            "有美一人，硕大且俨。邂逅相遇，得我愿兮。",
+            "夜如何其？夜未央，庭燎之光。君子至止，鸾声将将。",
+            "夜如何其？夜未艾，庭燎晣晣。君子至止，鸾声哕哕。",
+            "夜如何其？夜乡晨，庭燎有煇。君子至止，言观其旂。",
+            "芃芃黍苗，阴雨膏之。悠悠南行，召伯劳之。",
+            "其笠伊ncorrect，其镈斯赵，以薅荼蓼。荼蓼朽止，黍稷茂止。",
+            "鸳鸯于飞，毕之罗之。君子万年，福禄宜之。",
+            "鸳鸯在梁，戢其左翼。君子万年，宜其遐福。",
+            "有渰萋萋，兴雨祈祈。雨我公田，遂及我私。",
+            "黍稷彧彧，攸介攸止，烝我髦士。",
+            "喓喓草虫，趯趯阜螽。未见君子，忧心忡忡。亦既见止，亦既觏止，我心则降。",
+            "陟彼南山，言采其蕨。未见君子，忧心惙惙。亦既见止，亦既觏止，我心则说。",
+            "陟彼南山，言采其薇。未见君子，我心伤悲。亦既见止，亦既觏止，我心则夷。",
+            "皎皎白驹，食我场苗。絷之维之，以永今朝。所谓伊人，于焉逍遥。",
+            "皎皎白驹，食我场藿。絷之维之，以永今夕。所谓伊人，于焉嘉客。",
+            "皎皎白驹，贲然来思。尔公尔侯，逸豫无期。慎尔优游，勉尔遁思。",
+            "皎皎白驹，在彼空谷。生刍一束，其人如玉。毋金玉尔音，而有遐心。",
+            "芃芃黍苗，阴雨膏之。悠悠南行，召伯劳之。",
+            "肃肃谢功，召伯营之。烈烈征师，召伯成之。",
+            "原隰既平，泉流既清。召伯有成，王心则宁。",
+            "营营青蝇，止于樊。岂弟君子，无信谗言。",
+            "营营青蝇，止于棘。谗人罔极，交乱四国。",
+            "营营青蝇，止于榛。谗人罔极，构我二人。",
+            "凤凰鸣矣，于彼高冈。梧桐生矣，于彼朝阳。菶菶萋萋，雍雍喈喈。",
+            "芃芃黍苗，阴雨膏之。悠悠南行，召伯劳之。",
+            "其崇如墉，其比如栉。以开百室，百室盈止，妇子宁止。",
+            "鼓钟将将，淮水汤汤，忧心且伤。淑人君子，怀允不忘。",
+            "鼓钟喈喈，淮水湝湝，忧心且悲。淑人君子，其德不回。",
+            "鼓钟伐鼛，淮有三洲，忧心且妯。淑人君子，其德不犹。",
+            "鼓钟钦钦，鼓瑟鼓琴，笙磬同音。以雅以南，以籥不僭。",
+            "呦呦鹿鸣，食野之苹。我有嘉宾，鼓瑟吹笙。吹笙鼓簧，承筐是将。人之好我，示我周行。",
+            "呦呦鹿鸣，食野之蒿。我有嘉宾，德音孔昭。视民不恌，君子是则是效。我有旨酒，嘉宾式燕以敖。",
+            "呦呦鹿鸣，食野之芩。我有嘉宾，鼓瑟鼓琴。鼓瑟鼓琴，和乐且湛。我有旨酒，以燕乐嘉宾之心。"
+        ];
+
+        // 提前将诗词拆分成有意义的词语或短语
+        const nameCandidates = [];
+        poems.forEach(poem => {
+            // 去除标点符号
+            const cleanPoem = poem.replace(/[，。？！]/g, '');
+            for (let i = 1; i <= 2; i++) {
+                for (let j = 0; j <= cleanPoem.length - i; j++) {
+                    const candidate = cleanPoem.slice(j, j + i);
+                    nameCandidates.push(candidate);
+                }
+            }
+        });
+
+        // 简单的平仄判断，假设平声为 0，仄声为 1
+        const toneMap = {
+            '一': 0, '七': 0, '八': 0, '九': 0, '十': 0,
+            // 可继续扩充平仄字典
+        };
+
+        // 五行字典，示例数据，可按需扩充
+        const fiveElementsMap = {
+            '金': ['鑫', '铭', '锐', '钧', '钰', '银', '铁', '铜', '锡', '锌'],
+            '木': ['林', '森', '柏', '松', '柳', '杨', '枫', '桂', '榕', '梅'],
+            '水': ['海', '洋', '波', '涛', '江', '河', '湖', '溪', '泉', '雨'],
+            '火': ['炎', '焱', '炜', '焰', '灿', '煜', '烨', '辉', '耀', '灵'],
+            '土': ['坤', '垚', '城', '堡', '坛', '基', '坚', '均', '培', '增']
+        };
+
+        // 天干地支五行对应表
+        const heavenlyStem = {
+            '甲': '木', '乙': '木', '丙': '火', '丁': '火', '戊': '土',
+            '己': '土', '庚': '金', '辛': '金', '壬': '水', '癸': '水'
+        };
+        const earthlyBranch = {
+            '子': '水', '丑': '土', '寅': '木', '卯': '木', '辰': '土',
+            '巳': '火', '午': '火', '未': '土', '申': '金', '酉': '金',
+            '戌': '土', '亥': '水'
+        };
+
+        // 农历相关数据
+        const lunarInfo = [
+            0x04bd8, 0x04ae0, 0x0a570, 0x054d5, 0x0d260, 0x0d950, 0x16554, 0x056a0, 0x09ad0, 0x055d2,
+            0x04ae0, 0x0a5b6, 0x0a4d0, 0x0d250, 0x1d255, 0x0b540, 0x0d6a0, 0x0ada2, 0x095b0, 0x14977,
+            0x04970, 0x0a4b0, 0x0b4b5, 0x06a50, 0x06d40, 0x1ab54, 0x02b60, 0x09570, 0x052f2, 0x04970,
+            0x06566, 0x0d4a0, 0x0ea50, 0x06e95, 0x05ad0, 0x02b60, 0x186e3, 0x092e0, 0x1c8d7, 0x0c950,
+            0x0d4a0, 0x1d8a6, 0x0b550, 0x056a0, 0x1a5b4, 0x025d0, 0x092d0, 0x0d2b2, 0x0a950, 0x0b557,
+            0x06ca0, 0x0b550, 0x15355, 0x04da0, 0x0a5b0, 0x14573, 0x052b0, 0x0a9a8, 0x0e950, 0x06aa0,
+            0x0aea6, 0x0ab50, 0x04b60, 0x0aae4, 0x0a570, 0x05260, 0x0f263, 0x0d950, 0x05b57, 0x056a0,
+            0x096d0, 0x04dd5, 0x04ad0, 0x0a4d0, 0x0d4d4, 0x0d250, 0x0d558, 0x0b540, 0x0b5a0, 0x195a6,
+            0x095b0, 0x049b0, 0x0a974, 0x0a4b0, 0x0b27a, 0x06a50, 0x06d40, 0x0af46, 0x0ab60, 0x09570,
+            0x04af5, 0x04970, 0x064b0, 0x074a3, 0x0ea50, 0x06b58, 0x055c0, 0x0ab60, 0x096d5, 0x092e0,
+            0x0c960, 0x0d954, 0x0d4a0, 0x0da50, 0x07552, 0x056a0, 0x0abb7, 0x025d0, 0x092d0, 0x0cab5,
+            0x0a950, 0x0b4a0, 0x0baa4, 0x0ad50, 0x055d9, 0x04ba0, 0x0a5b0, 0x15176, 0x052b0, 0x0a930,
+            0x07954, 0x06aa0, 0x0ad50, 0x05b52, 0x04b60, 0x0a6e6, 0x0a4e0, 0x0d260, 0x0ea65, 0x0d530,
+            0x05aa0, 0x076a3, 0x096d0, 0x04bd7, 0x04ad0, 0x0a4d0, 0x1d0b6, 0x0d250, 0x0d520, 0x0dd45,
+            0x0b5a0, 0x056d0, 0x055b2, 0x049b0, 0x0a577, 0x0a4b0, 0x0aa50, 0x1b255, 0x06d20, 0x0ada0
+        ];
+
+        // 获取农历日期
+        function getLunarDate(solarDate) {
+            const year = solarDate.getFullYear();
+            const month = solarDate.getMonth() + 1;
+            const day = solarDate.getDate();
+
+            let offset = (solarDate - new Date(year, 0, 1)) / 86400000;
+            let temp = 0;
+            let i = 0;
+            for (i = 0; ; i++) {
+                temp = getYearDays(year + i);
+                if (offset - temp < 1) break;
+                offset -= temp;
+            }
+            const lunarYear = year + i;
+            let leap = getLeapMonth(lunarYear);
+            let isLeap = false;
+
+            for (i = 1; i <= 13; i++) {
+                if (leap > 0 && i === (leap + 1) && isLeap === false) {
+                    --i;
+                    isLeap = true;
+                    temp = getLeapDays(lunarYear);
+                } else {
+                    temp = getMonthDays(lunarYear, i);
+                }
+                if (offset - temp < 1) break;
+                offset -= temp;
+            }
+            const lunarMonth = isLeap ? leap : i;
+            const lunarDay = offset;
+
+            return { lunarYear, lunarMonth, lunarDay, isLeap };
+        }
+
+        // 获取某年的天数
+        function getYearDays(y) {
+            let i, sum = 348;
+            for (i = 0x8000; i > 0x8; i >>= 1) {
+                sum += (lunarInfo[y - 1900] & i) ? 1 : 0;
+            }
+            return sum + getLeapDays(y);
+        }
+
+        // 获取某年闰月的天数
+        function getLeapDays(y) {
+            if (getLeapMonth(y)) {
+                return ((lunarInfo[y - 1900] & 0x10000) ? 30 : 29);
+            } else {
+                return 0;
+            }
+        }
+
+        // 获取某年闰哪个月
+        function getLeapMonth(y) {
+            return (lunarInfo[y - 1900] & 0xf);
+        }
+
+        // 获取某年某月的天数
+        function getMonthDays(y, m) {
+            return ((lunarInfo[y - 1900] & (0x10000 >> m)) ? 30 : 29);
+        }
+
+        // 干支纪年法
+        function getGanzhiYear(year) {
+            const tg = ['甲', '乙', '丙', '丁', '戊', '己', '庚', '辛', '壬', '癸'];
+            const dz = ['子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥'];
+            return tg[(year - 4) % 10] + dz[(year - 4) % 12];
+        }
+
+        // 干支纪月法
+        function getGanzhiMonth(year, month) {
+            const tg = ['甲', '乙', '丙', '丁', '戊', '己', '庚', '辛', '壬', '癸'];
+            const dz = ['寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥', '子', '丑'];
+            const startYear = 1900;
+            const baseTgIndex = 6;
+            const yearOffset = year - startYear;
+            let tgIndex = (baseTgIndex + yearOffset * 12 + month - 1) % 10;
+            let dzIndex = (month - 1) % 12;
+            return tg[tgIndex] + dz[dzIndex];
+        }
+
+        // 干支纪日法
+        function getGanzhiDay(date) {
+            const startDate = new Date(1900, 0, 31);
+            const offset = Math.floor((date - startDate) / (1000 * 60 * 60 * 24));
+            const tg = ['甲', '乙', '丙', '丁', '戊', '己', '庚', '辛', '壬', '癸'];
+            const dz = ['子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥'];
+            const tgIndex = (offset + 4) % 10;
+            const dzIndex = (offset + 4) % 12;
+            return tg[tgIndex] + dz[dzIndex];
+        }
+
+        // 干支纪时法
+        function getGanzhiHour(date) {
+            const hour = date.getHours();
+            const tg = ['甲', '乙', '丙', '丁', '戊', '己', '庚', '辛', '壬', '癸'];
+            const dz = ['子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥'];
+            const dzIndex = Math.floor((hour + 1) / 2) % 12;
+            const dayGanzhi = getGanzhiDay(date);
+            const dayTg = dayGanzhi[0];
+            let baseTgIndex;
+            switch (dayTg) {
+                case '甲':
+                case '己':
+                    baseTgIndex = 0;
+                    break;
+                case '乙':
+                case '庚':
+                    baseTgIndex = 2;
+                    break;
+                case '丙':
+                case '辛':
+                    baseTgIndex = 4;
+                    break;
+                case '丁':
+                case '壬':
+                    baseTgIndex = 6;
+                    break;
+                case '戊':
+                case '癸':
+                    baseTgIndex = 8;
+                    break;
+            }
+            const tgIndex = (baseTgIndex + Math.floor((hour + 1) / 2)) % 10;
+            return tg[tgIndex] + dz[dzIndex];
+        }
+
+        // 分析五行
+        function analyzeFiveElements(date) {
+            const yearGanzhi = getGanzhiYear(date.getFullYear());
+            const monthGanzhi = getGanzhiMonth(date.getFullYear(), date.getMonth() + 1);
+            const dayGanzhi = getGanzhiDay(date);
+            const hourGanzhi = getGanzhiHour(date);
+            const eightCharacters = yearGanzhi + monthGanzhi + dayGanzhi + hourGanzhi;
+
+            const elements = { '金': 0, '木': 0, '水': 0, '火': 0, '土': 0 };
+            for (let i = 0; i < eightCharacters.length; i++) {
+                const char = eightCharacters[i];
+                if (heavenlyStem[char]) {
+                    elements[heavenlyStem[char]]++;
+                } else if (earthlyBranch[char]) {
+                    elements[earthlyBranch[char]]++;
+                }
+            }
+
+            const missingElements = Object.entries(elements).filter(([_, count]) => count === 0).map(([element]) => element);
+            return { elements, missingElements, eightCharacters };
+        }
+
+        function getTone(char) {
+            return toneMap[char] || 1;
+        }
+
+        // 改进的评分函数，根据名字长度、出生年月、平仄搭配、五行信息评分
+        function scoreName(name, birthdate, gender, missingElements) {
+            let score = 0;
+            // let reasons = [];
+
+            // 名字长度为 2 或 3 时加分
+            if (name.length === 2 || name.length === 3) {
+                score += 30;
+                // reasons.push(`名字长度为 ${name.length} 个汉字，加 30 分`);
+            }
+
+            // 根据出生年份最后一位数字评分
+            const birthYear = new Date(birthdate).getFullYear();
+            const lastDigit = birthYear % 10;
+            const digitScore = lastDigit * 2;
+            score += digitScore;
+            // reasons.push(`出生年份最后一位数字为 ${lastDigit}，加 ${digitScore} 分`);
+
+            // 平仄搭配评分
+            let toneScore = 0;
+            for (let i = 0; i < name.length - 1; i++) {
+                const currentTone = getTone(name[i]);
+                const nextTone = getTone(name[i + 1]);
+                if (currentTone !== nextTone) {
+                    toneScore += 10;
+                }
+            }
+            score += toneScore;
+            // reasons.push(`平仄搭配加 ${toneScore} 分`);
+
+            // 五行匹配评分
+            let fiveElementsScore = 0;
+            let matchedElements = [];
+            name.split('').forEach(char => {
+                Object.entries(fiveElementsMap).forEach(([element, chars]) => {
+                    if (chars.includes(char) && missingElements.includes(element)) {
+                        fiveElementsScore += 20;
+                        if (!matchedElements.includes(element)) {
+                            matchedElements.push(element);
+                        }
+                    }
+                });
+            });
+            score += fiveElementsScore;
+            // if (matchedElements.length > 0) {
+            //     reasons.push(`匹配五行 ${matchedElements.join(', ')}，加 ${fiveElementsScore} 分`);
+            // }
+
+            // 性别相关评分，示例，可按需调整
+            let genderScore = 0;
+            if (gender === 'male' && name.includes('伟')) {
+                genderScore += 10;
+                // reasons.push(`男性名字包含 "伟"，加 10 分`);
+            } else if (gender === 'female' && name.includes('芳')) {
+                genderScore += 10;
+                // reasons.push(`女性名字包含 "芳"，加 10 分`);
+            }
+            score += genderScore;
+
+            // 随机加分，模拟不同的意境感受
+            const randomScore = Math.floor(Math.random() * 30) + 20;
+            score += randomScore;
+            // reasons.push(`随机意境加分 ${randomScore} 分`);
+
+            return { score };
+        }
+
+        document.getElementById('nameForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // 获取用户输入的姓氏、出生年月、出生时间和性别
+            const surname = document.getElementById('surname').value;
+            const birthdate = document.getElementById('birthdate').value;
+            const birthtime = document.getElementById('birthtime').value;
+            const gender = document.getElementById('gender').value;
+
+            const fullBirthDate = new Date(`${birthdate}T${birthtime}`);
+
+            // 分析五行缺失情况
+            const { elements, missingElements, eightCharacters } = analyzeFiveElements(fullBirthDate);
+
+            let resultHtml = '<h2>五行分析结果</h2>';
+            resultHtml += `<p>八字：${eightCharacters}</p>`;
+            resultHtml += `<p>五行分布：金 ${elements.金}，木 ${elements.木}，水 ${elements.水}，火 ${elements.火}，土 ${elements.土}</p>`;
+            resultHtml += `<p>五行缺失：${missingElements.length > 0 ? missingElements.join(', ') : '无'}</p>`;
+            if (missingElements.length > 0) {
+                const suggestChars = missingElements.flatMap(element => fiveElementsMap[element]);
+                resultHtml += `<p>建议姓名中包含以下五行相关字：${suggestChars.join(', ')}</p>`;
+            }
+            resultHtml += '<h2>生成的名字如下：</h2>';
+            resultHtml += `
+            <table>
+                <thead>
+                    <tr>
+                        <th>姓名</th>
+                        <th>灵感诗词</th>
+                        <th>评分</th>
+                    </tr>
+                </thead>
+                <tbody>`;
+
+            // 生成 10 个名字
+            for (let j = 0; j < 10; j++) {
+                // 随机选择一个候选名字
+                let name;
+                do {
+                    name = nameCandidates[Math.floor(Math.random() * nameCandidates.length)];
+                } while ((surname.length + name.length) < 2 || (surname.length + name.length) > 3);
+
+                // 组合完整姓名
+                const fullName = surname + name;
+                // 计算评分
+                const { score } = scoreName(fullName, fullBirthDate, gender, missingElements);
+
+                // 查找对应的诗词
+                let sourcePoem = '';
+                poems.some(poem => {
+                    if (poem.includes(name)) {
+                        sourcePoem = poem;
+                        return true;
+                    }
+                    return false;
+                });
+
+                let scoreClass = '';
+                if (score >= 80) {
+                    scoreClass = 'score-high';
+                } else if (score >= 60) {
+                    scoreClass = 'score-medium';
+                } else {
+                    scoreClass = 'score-low';
+                }
+
+                resultHtml += `
+                    <tr>
+                        <td>${fullName}</td>
+                        <td>${sourcePoem}</td>
+                        <td class="${scoreClass}">${score} 分</td>
+                    </tr>`;
+            }
+
+            resultHtml += `
+                </tbody>
+            </table>`;
+
+            // 显示生成的名字、对应的诗词、评分和五行缺失信息
+            document.getElementById('result').innerHTML = resultHtml;
+        });
+    </script>
+</body>
+</html>

@@ -10,4 +10,9 @@ class Fortune extends Controller
     {
         return $this->fetch();
     }
+
+    public function qm()
+    {
+        return $this->fetch();
+    }
 }
