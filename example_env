@@ -34,8 +34,12 @@
     endpoint = http://192.168.1.11/
     region = 中国华北一区
 [wechat]               #微信API调用
-app_id = wadfas
-secret = sdfasdaasdffdsg
-token = asdfasdfdsfdddadweqwdeff
-aes_key = ''
-callback = /examples/oauth_callback.php
+    app_id = wadfas
+    secret = sdfasdaasdffdsg
+    token = asdfasdfdsfdddadweqwdeff
+    aes_key = ''
+    callback = /examples/oauth_callback.php
+
+[caiji]
+    juheToutiaoAppkey = xxxxxxxxxxx
+    juheToutiaoToUid = 1

@@ -13,6 +13,54 @@ class Index
             die('非法访问');
         }
     }
+
+    // 每日热点新闻采集
+    public function hotToday()
+    {
+
+        $appKey = env('caiji.juheToutiaoAppkey');
+        $uid = env('caiji.juheToutiaoToUid');
+
+        if (!$appKey || !$uid) {
+            dump('请配置juheToutiaoAppkey和juheToutiaoToUid');
+            return;
+        }
+
+        $apiUrl = 'http://v.juhe.cn/toutiao/index';
+
+        // 构造请求参数
+        $params = [
+            'type' => 'top', // 头条新闻
+            'key' => $appKey
+        ];
+
+        // 拼接完整的请求 URL
+        $fullUrl = $apiUrl . '?' . http_build_query($params);
+
+        // 发起 HTTP GET 请求获取新闻数据
+        $result = CurlHelpers::getInstance()->curlApiGet($fullUrl);
+
+        // 解析返回的 JSON 数据
+        $newsData = json_decode($result, true);
+
+        if ($newsData && $newsData['error_code'] === 0 && isset($newsData['result']['data'])) {
+            foreach ($newsData['result']['data'] as $news) {
+                // 提取新闻标题和内容
+                $title = $news['title'] ?? '';
+                $content = $news['content'] ?? '';
+
+                if ($title && $content) {
+                    // 准备要保存到数据库的数据
+                    $contents = $title. "<br/>". $content;
+
+                    $this->saveMsg($uid, $contents, '');
+                }
+            }
+            dump('热点新闻采集完成');
+        } else {
+            dump('未获取到有效新闻数据，错误信息: ' . ($newsData['reason'] ?? '未知错误'));
+        }
+    }
     
     public function test()
     {
@@ -33,12 +81,13 @@ class Index
         foreach ($result['items'] as $val) {
             $content = $val['content'];
             $media = $val["ext"]['media'] ?? '';
-            $this->saveMsg($content, $media);
+            $uid = mt_rand(73, 98);
+            $this->saveMsg($uid, $content, $media);
         }
         dump('任务完成');
     }
 
-    protected function saveMsg($contents, $mediaInfo)
+    protected function saveMsg($uid, $contents, $mediaInfo)
     {
 
         if ($mediaInfo) {
@@ -46,7 +95,7 @@ class Index
             $data['media'] = $mediaInfo[0]['href'] ?? '';
         }
 
-        $data['uid'] = mt_rand(73, 98);
+        $data['uid'] = $uid;
         $data['refrom'] = '网站';
         $data['repost'] = '';
         $data['ctime'] = time();
