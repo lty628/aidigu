@@ -1,0 +1,15 @@
+# Docker 相关文件
+.env
+runtime/
+public/uploads/*
+!public/uploads/.gitkeep
+
+# 忽略 vendor 目录（在构建时安装）
+# vendor/
+
+# 日志文件
+*.log
+
+# 系统文件
+.DS_Store
+Thumbs.db

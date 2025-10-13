@@ -18,7 +18,7 @@ class UserInfo extends Controller
 		$this->assign('beian', env('app.beian', ''));
 		$this->assign('noRegister', env('app.noRegister', ''));
 	}
-	
+
 	public function login()
 	{
 		$redirectUrl = input('get.url');
@@ -66,6 +66,12 @@ class UserInfo extends Controller
 		$userid = $user->id;
 		\app\tools\controller\Userinvite::changeInviteInfo($userid, $data['inviteCode']);
 		setLoginUid($userid);
+        $this->rememberMe(1, [
+            'uid' => $userid,
+            'blog' => $user->blog,
+            'nickname' => $user->nickname,
+            'password' => $user->password
+        ]);
 		Fans::create(['fromuid' => $userid, 'touid' => $userid, 'mutual_concern' => 1]);
 		return json(['status' => 1, 'msg' => '注册成功']);
 	}

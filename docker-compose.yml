@@ -1,0 +1,79 @@
+version: '3.8'
+
+services:
+  # PHP 应用服务（包含 PHP-FPM 和 Swoole 聊天服务）
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: aidigu_app
+    restart: unless-stopped
+    working_dir: /var/www/html
+    volumes:
+      - ./:/var/www/html
+      - ./public/uploads:/var/www/html/public/uploads
+      - ./runtime:/var/www/html/runtime
+    ports:
+      - "9501:9501"  # Swoole WebSocket 聊天服务
+    environment:
+      - WAIT_FOR_MYSQL=true
+      - DB_HOST=mysql
+      - DB_PORT=3306
+    networks:
+      - aidigu_network
+    depends_on:
+      - mysql
+      - redis
+
+  # Nginx 服务
+  nginx:
+    image: nginx:alpine
+    container_name: aidigu_nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./:/var/www/html
+      - ./default.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - aidigu_network
+    depends_on:
+      - app
+
+  # MySQL 数据库
+  mysql:
+    image: mysql:5.7
+    container_name: aidigu_mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: aidigu
+      MYSQL_USER: aidigu
+      MYSQL_PASSWORD: aidigu123
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./aidigu.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - aidigu_network
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+
+  # Redis 缓存
+  redis:
+    image: redis:alpine
+    container_name: aidigu_redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    networks:
+      - aidigu_network
+
+networks:
+  aidigu_network:
+    driver: bridge
+
+volumes:
+  mysql_data:
+    driver: local
