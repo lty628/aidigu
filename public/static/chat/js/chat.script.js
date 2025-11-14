@@ -104,17 +104,29 @@ var chat = {
 	// 	chat.data.head_image = '';
 	// 	location.reload() ;
 	// },
+	// 增强键盘快捷键支持
 	keySend : function( event ){
-		// if ((event.shiftKey || event.ctrlKey) && event.keyCode == 13) {
-		if (event.shiftKey && event.keyCode == 13) {
-			// var text = editor.txt.html();
-			// editor.txt.html(text+"<br>")
-			return true
-		}else if( event.keyCode == 13){
-			event.preventDefault();//避免回车换行
-			this.sendMessage();
-			blinkingTitle.stop(true);
-		}
+	// Shift + Enter 换行
+	if (event.shiftKey && event.keyCode == 13) {
+	return true;
+	}
+	// Ctrl/Cmd + Enter 发送消息
+	else if ((event.ctrlKey || event.metaKey) && event.keyCode == 13) {
+	event.preventDefault();
+	this.sendMessage();
+	blinkingTitle.stop(true);
+	}
+	// Enter 发送消息（可配置）
+	else if(event.keyCode == 13 && !event.altKey){
+	event.preventDefault();
+	this.sendMessage();
+	blinkingTitle.stop(true);
+	}
+	// Esc 清空输入框
+	else if(event.keyCode == 27) {
+	editor.txt.clear();
+	$("#msgInput").focus();
+	}
 	},
 	sendMessage : function(){		
 		// this.data.login = true
@@ -131,12 +143,42 @@ var chat = {
 		$("#msgInput").focus();
 		return true;
 	},
+	// 优化WebSocket连接管理
 	ws : function(){
-		this.data.wSock = new WebSocket(config.wsserver);
-		this.wsOpen();
-		this.wsMessage();
-		this.wsOnclose();
-		this.wsOnerror();
+	    try {
+	        this.data.wSock = new WebSocket(config.wsserver);
+	        this.wsOpen();
+	        this.wsMessage();
+	        this.wsOnclose();
+	        this.wsOnerror();
+	    } catch (e) {
+	        chat.displayError('chatErrorMessage_logout', "WebSocket连接失败，请检查网络连接", 0);
+	        // 添加重连机制
+	        setTimeout(function() {
+	            chat.ws();
+	        }, 5000);
+	    }
+	},
+	
+	// 增强重连机制
+	wsOnclose : function(){
+	    this.data.wSock.onclose = function(event){
+	        chat.displayError('chatErrorMessage_logout', "连接已断开，正在重连...", 0);
+	        // 指数退避重连
+	        let reconnectDelay = 1000;
+	        const maxDelay = 30000;
+	        
+	        const reconnect = function() {
+	            if (reconnectDelay <= maxDelay) {
+	                setTimeout(function() {
+	                    chat.ws();
+	                    reconnectDelay *= 2;
+	                }, reconnectDelay);
+	            }
+	        };
+	        
+	        reconnect();
+	    }
 	},
 	wsSend : function(data){
 		this.data.wSock.send(data);
@@ -223,94 +265,105 @@ var chat = {
 		   })
 		}
 	},
+	// 优化消息历史加载
+	loadMoreHistory : function(listtagid, beforeTime) {
+	    // 显示加载指示器
+	    $('#chatLineHolder-' + listtagid).prepend('<div class="history-loading"><div class="loading-spinner"></div> 加载历史消息...</div>');
+	    
+	    // 请求历史消息
+	    var json = {"type": 4, "listtagid": listtagid, "beforeTime": beforeTime, "touid": chat.data.touid, "groupid": chat.data.groupid};
+	    chat.wsSend(JSON.stringify(json));
+	},
+	
+	// 在wsMessage中添加历史消息处理
 	wsMessage : function(){
-		this.data.wSock.onmessage=function(event){
-			heartCheck.reset().start();
-			if (event.data == 'pong') {
-				return 
-			}
-			var d = jQuery.parseJSON(event.data);
-			switch(d.code){
-				case 1:
-					// console.log(d)
-					// if(d.data.mine){
-						chat.data.uid = d.data.uid;
-						chat.data.nickname = d.data.nickname;
-						chat.data.head_image = d.data.head_image;
-						// chat.data.storage.setItem("dologin",1);
-						// chat.data.storage.setItem("name",d.data.nickname);
-						// chat.data.storage.setItem("email",chat.data.email);
-						// console.log(chat.data)
-						// document.title = d.data.nickname + '-' + document.title;
-						chat.loginDiv(chat.data);
-					// } 
-					// chat.addChatLine('newlogin',d.data,d.data.listtagid);
-					// chat.addUserLine('user',d.data);
-					// chat.displayError('chatErrorMessage_login',d.msg,1);
-					break;
-				case 2:
-					chat.initMessage(d.data, false)
-					// if(d.data.fromuid == chat.data.uid){
-					// 	chat.addChatLine('mymessage',d.data,d.data.listtagid);
-					// 	$("#chattext").val('');
-					// } else {
-					// 	if(d.data.remains){
-					// 		for(var i = 0 ; i < d.data.remains.length;i++){
-					// 			if(chat.data.fd == d.data.remains[i].fd){
-					// 				chat.shake();
-					// 				var msg = d.data.nickname + "在群聊@了你。";
-					// 				chat.displayError('chatErrorMessage_logout',msg,0);
-					// 			}
-					// 		}
-					// 	}
-					// 	chat.chatAudio();
-					// 	chat.addChatLine('chatLine',d.data,d.data.listtagid);
-					// 	//增加消息
-					// 	chat.showMsgCount(d.data.listtagid,'show');
-					// }
-					break;
-				case 3:
-					if (d.data) {
-						// console.log(d)
-						$('#chatLineHolder-' + d.listtagid).html('');
-						var len = d.data.length
-						for (let index = len - 1; index >= 0; index--) {
-							d.data[index].listtagid = d.listtagid
-							chat.initMessage(d.data[index], true)
-						}				
-					}
-
-					// chat.removeUser('logout',d.data);
-					// if(d.data.mine && d.data.action == 'logout'){
-						
-					// 	return;
-					// }
-					// chat.displayError('chatErrorMessage_logout',d.msg,1);
-					break;
-				case 4: //页面初始化
-					chat.initPage(d.data);
-					break;
-				case 5:
-					if(d.data.mine){
-						chat.displayError('chatErrorMessage_logout',d.msg,1);
-					}
-					break;
-				case 6:
-					if(d.data.mine){
-						//如果是自己
-						
-					} else {
-						//如果是其他人
-						
-					}
-					//删除旧房间该用户
-					chat.changeUser(d.data);
-					chat.addUserLine('user',d.data);
-					break;
-				default :
-					chat.displayError('chatErrorMessage_logout',d.msg,1);
-			}
-		}
+	    this.data.wSock.onmessage=function(event){
+	        heartCheck.reset().start();
+	        if (event.data == 'pong') {
+	            return 
+	        }
+	        var d = jQuery.parseJSON(event.data);
+	        switch(d.code){
+	            case 1:
+	                // console.log(d)
+	                // if(d.data.mine){
+	                chat.data.uid = d.data.uid;
+	                chat.data.nickname = d.data.nickname;
+	                chat.data.head_image = d.data.head_image;
+	                // chat.data.storage.setItem("dologin",1);
+	                // chat.data.storage.setItem("name",d.data.nickname);
+	                // chat.data.storage.setItem("email",chat.data.email);
+	                // console.log(chat.data)
+	                // document.title = d.data.nickname + '-' + document.title;
+	                chat.loginDiv(chat.data);
+	            // } 
+	            // chat.addChatLine('newlogin',d.data,d.data.listtagid);
+	            // chat.addUserLine('user',d.data);
+	            // chat.displayError('chatErrorMessage_login',d.msg,1);
+	            break;
+	            case 2:
+	                chat.initMessage(d.data, false)
+	                // if(d.data.fromuid == chat.data.uid){
+	                // 	chat.addChatLine('mymessage',d.data,d.data.listtagid);
+	                // 	$("#chattext").val('');
+	                // } else {
+	                // 	if(d.data.remains){
+	                // 		for(var i = 0 ; i < d.data.remains.length;i++){
+	                // 			if(chat.data.fd == d.data.remains[i].fd){
+	                // 				chat.shake();
+	                // 				var msg = d.data.nickname + "在群聊@了你。";
+	                // 				chat.displayError('chatErrorMessage_logout',msg,0);
+	                // 			}
+	                // 		}
+	                // 	}
+	                // 	chat.chatAudio();
+	                // 	chat.addChatLine('chatLine',d.data,d.data.listtagid);
+	                // 	//增加消息
+	                // 	chat.showMsgCount(d.data.listtagid,'show');
+	                // }
+	                break;
+	            case 3:
+	                if (d.data) {
+	                    // console.log(d)
+	                    $('#chatLineHolder-' + d.listtagid).html('');
+	                    var len = d.data.length
+	                    for (let index = len - 1; index >= 0; index--) {
+d.data[index].listtagid = d.listtagid
+	                        chat.initMessage(d.data[index], true)
+	                    }				
+	                }
+	
+	                // chat.removeUser('logout',d.data);
+	                // if(d.data.mine && d.data.action == 'logout'){
+	                    
+	                // 	return;
+	                // }
+	                // chat.displayError('chatErrorMessage_logout',d.msg,1);
+	                break;
+	            case 4: //页面初始化
+	                chat.initPage(d.data);
+	                break;
+	            case 5:
+	                if(d.data.mine){
+	                    chat.displayError('chatErrorMessage_logout',d.msg,1);
+	                }
+	                break;
+	            case 6:
+	                if(d.data.mine){
+	                    //如果是自己
+	                    
+	                } else {
+	                    //如果是其他人
+	                    
+	                }
+	                //删除旧房间该用户
+	                chat.changeUser(d.data);
+	                chat.addUserLine('user',d.data);
+	                break;
+	            default :
+	                chat.displayError('chatErrorMessage_logout',d.msg,1);
+	        }
+	    }
 	},
 	wsOnclose : function(){
 		this.data.wSock.onclose = function(event){
@@ -558,9 +611,11 @@ var chat = {
 	changeUser : function(obj){
 
 		if ($("#isMobile").val()) {
-			// $("#menu-pannel").css('display', 'none')
+			$("#menu-pannel").css('display', 'none')
 			$("#sub-menu-pannel").css('display', 'none')
 			$("#content-pannel").show();
+			// 移动端显示返回按钮
+			$("#backToListBtn").show();
 		}
 
 		$("#showGroupUser").hide();
@@ -610,6 +665,8 @@ var chat = {
 			// $("#menu-pannel").css('display', 'none')
 			$("#sub-menu-pannel").css('display', 'none')
 			$("#content-pannel").show();
+			// 移动端显示返回按钮
+			$("#backToListBtn").show();
 		}
 
 		$("#showGroupUser").show();
