@@ -611,12 +611,10 @@ d.data[index].listtagid = d.listtagid
 	changeUser : function(obj){
 
 		if ($("#isMobile").val()) {
-			$("#menu-pannel").css('display', 'none')
+			// $("#menu-pannel").css('display', 'none')
 			$("#sub-menu-pannel").css('display', 'none')
 			$("#content-pannel").show();
-			// 移动端显示返回按钮
-			$("#backToListBtn").show();
-		}
+					}
 
 		$("#showGroupUser").hide();
 
@@ -665,8 +663,6 @@ d.data[index].listtagid = d.listtagid
 			// $("#menu-pannel").css('display', 'none')
 			$("#sub-menu-pannel").css('display', 'none')
 			$("#content-pannel").show();
-			// 移动端显示返回按钮
-			$("#backToListBtn").show();
 		}
 
 		$("#showGroupUser").show();
