@@ -5,15 +5,257 @@
 	<meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
 	<meta charset="utf-8">
 	<meta name="renderer" content="webkit">
-	<title></title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>智能聊天助手</title>
+
 	<link media="all" href="/static/chat/css/style.css?v=2224" type="text/css" rel="stylesheet">
 	<link media="all" href="/static/chat/css/shake.css?v=2224" type="text/css" rel="stylesheet">
 	<link rel="stylesheet" href="/static/layui/css/layui.css?t=1" type="text/css" media="screen" />
 	<style>
+		/* 现代化基础样式 */
+		* {
+			box-sizing: border-box;
+		}
+		
+		body {
+			font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+			background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+			margin: 0;
+			padding: 20px;
+			height: 100vh;
+			overflow: hidden;
+		}
+		
+		/* 主容器现代化 */
+		#layout-container {
+			height: calc(100vh - 40px);
+			border-radius: 20px;
+			box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+			overflow: hidden;
+			background: rgba(255, 255, 255, 0.95);
+			backdrop-filter: blur(10px);
+		}
+		
+		#layout-main {
+			height: 100%;
+			display: flex;
+			flex-direction: column;
+		}
+		
+		/* 菜单面板现代化 */
+		#menu-pannel {
+			background: linear-gradient(180deg, #4a90e2 0%, #357abd 100%);
+			width: 80px;
+			border-right: none;
+			padding: 20px 0;
+		}
+		
+		#menu-pannel .main-menus .menu-item {
+			padding: 15px 0;
+			margin: 5px 10px;
+			border-radius: 12px;
+			transition: all 0.3s ease;
+			color: rgba(255, 255, 255, 0.8);
+		}
+		
+		#menu-pannel .main-menus .menu-item:hover {
+			background: rgba(255, 255, 255, 0.2);
+			color: white;
+			transform: translateY(-2px);
+		}
+		
+		/* 对话列表现代化 */
+		#sub-menu-pannel {
+			background: #f8fafc;
+			width: 280px;
+			border-right: 1px solid #e2e8f0;
+		}
+		
+		#sub-menu-pannel.conv-list-pannel .conv-lists .conv-item {
+			padding: 15px 20px;
+			margin: 5px 10px;
+			border-radius: 12px;
+			transition: all 0.3s ease;
+			border: 1px solid transparent;
+		}
+		
+		#sub-menu-pannel.conv-list-pannel .conv-lists .conv-item:hover {
+			background: #e6f3ff;
+			border-color: #4a90e2;
+			transform: translateX(5px);
+			box-shadow: 0 4px 12px rgba(74, 144, 226, 0.15);
+		}
+		
+		#sub-menu-pannel.conv-list-pannel .conv-lists .conv-item.active {
+			background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+			color: white;
+			box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
+		}
+		
+		/* 聊天内容区域现代化 */
+		#content-pannel {
+			background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+			flex: 1;
+			display: flex;
+			flex-direction: column;
+		}
+		
+		#content-pannel .content-pannel-head {
+			background: rgba(255, 255, 255, 0.9);
+			padding: 20px;
+			border-bottom: 1px solid #e2e8f0;
+			box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+		}
+		
+		#content-pannel .content-pannel-body {
+			flex: 1;
+			padding: 20px;
+			overflow-y: auto;
+			background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+		}
+		
+		/* 消息气泡现代化 */
+		.msg-item {
+			margin: 15px 0;
+			display: flex;
+			align-items: flex-start;
+			animation: fadeInUp 0.5s ease;
+		}
+		
+		.msg-item .msg-bubble {
+			max-width: 70%;
+			padding: 12px 16px;
+			border-radius: 18px;
+			box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+			position: relative;
+			word-wrap: break-word;
+		}
+		
+		.msg-item.left .msg-bubble {
+			background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+			border: 1px solid #e2e8f0;
+			margin-left: 10px;
+		}
+		
+		.msg-item.right .msg-bubble {
+			background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+			color: white;
+			margin-right: 10px;
+		}
+		
+		/* 输入区域现代化 */
+		.send-msg-box-wrapper {
+			background: rgba(255, 255, 255, 0.95);
+			padding: 20px;
+			border-top: 1px solid #e2e8f0;
+			box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+		}
+		
+		.input-area {
+			display: flex !important;
+			flex-direction: column;
+		}
+		
+		.tool-bar {
+			display: flex;
+			gap: 10px;
+			margin-bottom: 10px;
+		}
+		
+		.tool-item {
+			padding: 8px 12px;
+			border-radius: 8px;
+			background: #f1f5f9;
+			cursor: pointer;
+			transition: all 0.3s ease;
+		}
+		
+		.tool-item:hover {
+			background: #4a90e2;
+			color: white;
+			transform: translateY(-2px);
+		}
+		
+		.msg-box {
+			background: #ffffff;
+			border: 2px solid #e2e8f0;
+			border-radius: 12px;
+			padding: 12px;
+			transition: all 0.3s ease;
+		}
+		
+		.msg-box:focus-within {
+			border-color: #4a90e2;
+			box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+		}
+		
+		/* 用户引导现代化 */
+		.user-guide {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			margin-top: 10px;
+			font-size: 12px;
+			color: #64748b;
+		}
+		
+		/* 动画效果 */
+		@keyframes fadeInUp {
+			from {
+				opacity: 0;
+				transform: translateY(20px);
+			}
+			to {
+				opacity: 1;
+				transform: translateY(0);
+			}
+		}
+		
+		/* 响应式设计 */
+		@media (max-width: 768px) {
+			body {
+				padding: 0;
+			}
+			
+			#layout-container {
+				height: 100vh;
+				border-radius: 0;
+			}
+			
+			#menu-pannel {
+				width: 60px;
+			}
+			
+			#sub-menu-pannel {
+				width: 250px;
+			}
+		}
+		
+		/* 滚动条美化 */
+		::-webkit-scrollbar {
+			width: 6px;
+		}
+		
+		::-webkit-scrollbar-track {
+			background: #f1f5f9;
+			border-radius: 3px;
+		}
+		
+		::-webkit-scrollbar-thumb {
+			background: #cbd5e1;
+			border-radius: 3px;
+		}
+		
+		::-webkit-scrollbar-thumb:hover {
+			background: #94a3b8;
+		}
+		
+		/* 原有样式保持 */
 		.w-e-menu:first-child .w-e-panel-container {
 			margin-top: -265px!important;
 			margin-left: -20px!important;
 		}
+		
 		{if $isMobile}
 		#sub-menu-pannel {
 			width: 100%;
@@ -116,6 +358,75 @@
 	<script language="javascript" type="text/javascript" src="/static/common/js/index.js?20"></script>
 	<script type="text/javascript" src="/static/common/js/wangEditor.min.js"></script>
 	<script src="/static/chat/js/edit.js?v=10"></script>
+	<script>
+	// 页面加载完成后添加交互效果
+	document.addEventListener('DOMContentLoaded', function() {
+	    // 添加消息动画
+	    function animateMessages() {
+	        const messages = document.querySelectorAll('.msg-item');
+	        messages.forEach((msg, index) => {
+	            msg.style.animationDelay = `${index * 0.1}s`;
+	            msg.classList.add('fadeInUp');
+	        });
+	    }
+	    
+	    // 输入框焦点效果
+	    const msgInput = document.getElementById('msgInput');
+	    if (msgInput) {
+	        msgInput.addEventListener('focus', function() {
+	            this.parentElement.classList.add('focused');
+	        });
+	        
+	        msgInput.addEventListener('blur', function() {
+	            this.parentElement.classList.remove('focused');
+	        });
+	    }
+	    
+	    // 对话项悬停效果
+	    const convItems = document.querySelectorAll('.conv-item');
+	    convItems.forEach(item => {
+	        item.addEventListener('mouseenter', function() {
+	            this.style.transform = 'translateX(5px)';
+	        });
+	        
+	        item.addEventListener('mouseleave', function() {
+	            this.style.transform = 'translateX(0)';
+	        });
+	    });
+	    
+	    // 工具栏按钮效果
+	    const toolItems = document.querySelectorAll('.tool-item');
+	    toolItems.forEach(item => {
+	        item.addEventListener('click', function() {
+	            this.style.transform = 'scale(0.95)';
+	            setTimeout(() => {
+	                this.style.transform = 'scale(1)';
+	            }, 150);
+	        });
+	    });
+	    
+	    // 初始化动画
+	    animateMessages();
+	    
+	    // 监听新消息
+	    const observer = new MutationObserver(function(mutations) {
+	        mutations.forEach(function(mutation) {
+	            if (mutation.addedNodes.length > 0) {
+	                mutation.addedNodes.forEach(function(node) {
+	                    if (node.classList && node.classList.contains('msg-item')) {
+	                        node.style.animation = 'fadeInUp 0.5s ease';
+	                    }
+	                });
+	            }
+	        });
+	    });
+	    
+	    const chatContainer = document.getElementById('chatLineHolder');
+	    if (chatContainer) {
+	        observer.observe(chatContainer, { childList: true });
+	    }
+	});
+	</script>
 </body>
 
 </html>

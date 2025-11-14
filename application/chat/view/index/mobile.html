@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+	<meta charset="utf-8">
+	<meta name="renderer" content="webkit">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<meta name="format-detection" content="telephone=no">
+	<title>聊天</title>
+	<style>
+		/* 重置样式 */
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+		
+		html, body {
+			width: 100%;
+			height: 100%;
+			font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+			font-size: 16px;
+			color: #333;
+			background-color: #f5f5f5;
+			overflow: hidden;
+		}
+		
+		/* 主容器 */
+		#mobile-container {
+			width: 100%;
+			height: 100%;
+			display: flex;
+			flex-direction: column;
+		}
+		
+		/* 顶部导航栏 */
+		#mobile-header {
+			height: 50px;
+			background-color: #008CEE;
+			color: white;
+			display: flex;
+			align-items: center;
+			padding: 0 15px;
+			position: relative;
+			z-index: 10;
+		}
+		
+		#mobile-header .back-btn {
+			font-size: 16px;
+			margin-right: 20px;
+			cursor: pointer;
+		}
+		
+		#mobile-header .title {
+			flex: 1;
+			text-align: center;
+			font-size: 18px;
+			font-weight: 500;
+			margin-right: 20px;
+		}
+		
+		#mobile-header .right-icon {
+			font-size: 20px;
+		}
+		
+		/* 聊天列表页面 */
+		#chat-list-page {
+			flex: 1;
+			overflow-y: auto;
+			background-color: #f5f5f5;
+		}
+		
+		.chat-item {
+			display: flex;
+			align-items: center;
+			padding: 12px 15px;
+			background-color: white;
+			border-bottom: 1px solid #f0f0f0;
+		}
+		
+		.chat-item .avatar {
+			width: 50px;
+			height: 50px;
+			border-radius: 50%;
+			overflow: hidden;
+			background-color: #e0e0e0;
+			margin-right: 12px;
+		}
+		
+		.chat-item .avatar img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+		}
+		
+		.chat-item .info {
+			flex: 1;
+			min-width: 0;
+		}
+		
+		.chat-item .info .name {
+			font-size: 16px;
+			font-weight: 500;
+			margin-bottom: 4px;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
+		
+		.chat-item .info .message {
+			font-size: 14px;
+			color: #999;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
+		
+		.chat-item .time {
+			font-size: 12px;
+			color: #999;
+			margin-left: 10px;
+		}
+		
+		.chat-item .badge {
+			background-color: #ff4234;
+			color: white;
+			font-size: 12px;
+			padding: 2px 6px;
+			border-radius: 10px;
+			min-width: 20px;
+			text-align: center;
+			margin-top: 5px;
+		}
+		
+		/* 聊天详情页面 */
+		#chat-detail-page {
+			flex: 1;
+			display: flex;
+			flex-direction: column;
+			background-color: #f8faff;
+			position: absolute;
+			top: 50px;
+			left: 0;
+			width: 100%;
+			height: calc(100% - 50px);
+			transform: translateX(100%);
+			transition: transform 0.3s ease;
+			z-index: 20;
+		}
+		
+		#chat-detail-page.active {
+			transform: translateX(0);
+		}
+		
+		.chat-content {
+			flex: 1;
+			overflow-y: auto;
+			padding: 15px;
+			background-color: #f8faff;
+		}
+		
+		.msg-wrapper {
+			margin-bottom: 20px;
+			position: relative;
+		}
+		
+		.msg-wrapper.self {
+			display: flex;
+			flex-direction: row-reverse;
+			margin-left: auto;
+			max-width: 75%;
+		}
+		
+		.msg-wrapper.other {
+			margin-right: auto;
+			max-width: 75%;
+		}
+		
+		.msg-wrapper .avatar {
+			width: 36px;
+			height: 36px;
+			border-radius: 50%;
+			overflow: hidden;
+			background-color: #e0e0e0;
+			margin: 0 8px;
+		}
+		
+		.msg-wrapper .avatar img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+		}
+		
+		.msg-wrapper .msg-content {
+			background-color: white;
+			padding: 10px 12px;
+			border-radius: 8px;
+			position: relative;
+			word-break: break-word;
+			max-width: calc(100% - 52px);
+		}
+		
+		.msg-wrapper.self .msg-content {
+			background-color: #91d5ff;
+		}
+		
+		.msg-wrapper .msg-time {
+			font-size: 11px;
+			color: #999;
+			text-align: center;
+			margin: 0 8px;
+			margin-bottom: 2px;
+		}
+		
+		/* 输入区域 */
+		.input-area {
+			background-color: white;
+			padding: 10px;
+			border-top: 1px solid #f0f0f0;
+			position: relative;
+		}
+		
+		.input-toolbar {
+			display: flex;
+			align-items: center;
+			margin-bottom: 8px;
+		}
+		
+		.input-toolbar .tool-icon {
+			font-size: 24px;
+			margin-right: 15px;
+			color: #666;
+		}
+		
+		.input-box {
+			background-color: #f5f5f5;
+			border-radius: 20px;
+			padding: 8px 15px;
+			min-height: 40px;
+			max-height: 120px;
+			overflow-y: auto;
+			outline: none;
+		}
+		
+		.send-btn {
+			position: absolute;
+			bottom: 15px;
+			right: 15px;
+			background-color: #008CEE;
+			color: white;
+			border: none;
+			padding: 6px 15px;
+			border-radius: 15px;
+			font-size: 14px;
+			outline: none;
+		}
+		
+		.send-btn:disabled {
+			background-color: #ccc;
+		}
+		
+		/* 加载更多 */
+		.load-more {
+			text-align: center;
+			padding: 10px;
+			color: #999;
+			font-size: 14px;
+		}
+		
+		/* 空状态 */
+		.empty-state {
+			text-align: center;
+			padding: 50px 20px;
+			color: #999;
+		}
+		
+		.empty-state .icon {
+			font-size: 50px;
+			margin-bottom: 15px;
+		}
+		
+		/* 动画 */
+		@keyframes fadeIn {
+			from {
+				opacity: 0;
+				transform: translateY(10px);
+			}
+			to {
+				opacity: 1;
+				transform: translateY(0);
+			}
+		}
+		
+		.msg-wrapper {
+			animation: fadeIn 0.3s ease;
+		}
+	</style>
+</head>
+
+<body>
+	<div id="mobile-container">
+		<!-- 顶部导航栏 -->
+		<div id="mobile-header">
+			<div class="back-btn" id="backBtn">返回</div>
+			<div class="title" id="pageTitle">聊天列表</div>
+			<div class="right-icon" id="headerRightIcon"></div>
+		</div>
+		
+		<!-- 聊天列表页面 -->
+		<div id="chat-list-page">
+			<div class="chat-list" id="chat-list"></div>
+		</div>
+		
+		<!-- 聊天详情页面 -->
+		<div id="chat-detail-page">
+			<!-- 聊天内容区域 -->
+			<div class="chat-content" id="chat-content">
+				<div id="chat-messages"></div>
+				<div class="load-more" id="load-more">上拉加载更多</div>
+			</div>
+			
+			<!-- 输入区域 -->
+			<div class="input-area">
+				<div class="input-toolbar">
+					<div class="tool-icon" id="emojiBtn">😊</div>
+					<div class="tool-icon" id="imageBtn">📷</div>
+				</div>
+				<div class="input-box" id="msgInput" contenteditable="true" placeholder="输入消息..."></div>
+				<button class="send-btn" id="sendBtn" disabled>发送</button>
+			</div>
+		</div>
+	</div>
+	
+	<input type="hidden" value="{$touid}" id="privateToUid">
+	<input type="hidden" value="{$messageChatId}" id="messageChatId">
+	<input type="hidden" value="{$fromuid}" id="privateFromUid">
+	<input type="hidden" id="mediaVal">
+
+	<!-- 首先引入所有必要的脚本 -->
+	<script src="/static/chat/js/jquery.min.js"></script>
+	<script src="/static/chat/js/face.js?v=3345"></script>
+	<script src="/static/chat/js/create.div.js?v=34"></script>
+	<script src="/static/chat/js/functions.js?v=2115"></script>
+	<script src="/static/chat/js/xlyjs.js?v=215"></script>
+	<script src="/static/layui/layui.js?4"></script>
+	<script language="javascript" type="text/javascript" src="/static/common/js/index.js?20"></script>
+	<script type="text/javascript" src="/static/common/js/wangEditor.min.js"></script>
+	<script src="/static/chat/js/edit.js?v=10"></script>
+	
+	<script>
+		// 配置
+		var config = {
+			'wsserver' : "{$wsserver}"
+		};
+		
+		// 避免jQuery冲突，使用安全的DOM选择器
+		function getElement(id) { 
+			return document.getElementById(id); 
+		}
+		
+		// 页面元素
+		var chatListPage = getElement('chat-list-page');
+		var chatDetailPage = getElement('chat-detail-page');
+		var backBtn = getElement('backBtn');
+		var pageTitle = getElement('pageTitle');
+		var msgInput = getElement('msgInput');
+		var sendBtn = getElement('sendBtn');
+		var chatList = getElement('chat-list');
+		var chatMessages = getElement('chat-messages');
+		
+		// 页面状态
+		var currentChatId = '';
+		var currentChatName = '';
+		
+		// 初始化
+		document.addEventListener('DOMContentLoaded', function() {
+			// 初始化输入框事件
+			initInputEvents();
+			
+			// 初始化页面切换事件
+			initPageEvents();
+			
+			// 加载聊天列表
+			loadChatList();
+			
+			// 如果有指定的聊天ID，直接进入聊天详情
+			var messageChatId = getElement('messageChatId').value;
+			var touid = getElement('privateToUid').value;
+			var fromuid = getElement('privateFromUid').value;
+			
+			if (messageChatId || touid) {
+				var chatId = messageChatId || touid;
+				enterChatDetail(chatId, '聊天');
+			}
+		});
+		
+		// 初始化输入框事件
+		function initInputEvents() {
+			// 监听输入框变化
+			msgInput.addEventListener('input', function() {
+				sendBtn.disabled = !msgInput.innerText.trim();
+			});
+			
+			// 发送按钮点击
+			sendBtn.addEventListener('click', function() {
+				sendMessage();
+			});
+			
+			// 输入框回车发送
+			msgInput.addEventListener('keydown', function(e) {
+				if (e.key === 'Enter' && !e.shiftKey) {
+					e.preventDefault();
+					sendMessage();
+				}
+			});
+		}
+		
+		// 初始化页面事件
+		function initPageEvents() {
+			// 返回按钮点击
+			backBtn.addEventListener('click', function() {
+				if (chatDetailPage.classList.contains('active')) {
+					exitChatDetail();
+				}
+			});
+		}
+		
+		// 加载聊天列表
+		function loadChatList() {
+			// 使用模拟数据显示聊天列表
+			var chats = [
+				{id: 1, name: '张三', avatar: '/static/images/avatar1.jpg', lastMsg: '你好！', time: '10:30', unread: 2},
+				{id: 2, name: '李四', avatar: '/static/images/avatar2.jpg', lastMsg: '明天见', time: '昨天', unread: 0}
+			];
+			
+			var html = '';
+			chats.forEach(chat => {
+				html += `
+					<div class="chat-item" data-id="${chat.id}">
+						<div class="avatar">
+							<img src="${chat.avatar}" alt="${chat.name}">
+						</div>
+						<div class="info">
+							<div class="name">${chat.name}</div>
+							<div class="message">${chat.lastMsg}</div>
+						</div>
+						<div>
+							<div class="time">${chat.time}</div>
+							${chat.unread > 0 ? `<div class="badge">${chat.unread}</div>` : ''}
+						</div>
+				</div>
+			`;
+			});
+			chatList.innerHTML = html;
+			
+			// 绑定点击事件
+			var chatItems = document.querySelectorAll('.chat-item');
+			chatItems.forEach(item => {
+				item.addEventListener('click', function() {
+					var id = this.dataset.id;
+					var name = this.querySelector('.name').innerText;
+					enterChatDetail(id, name);
+				});
+			});
+		}
+		
+		// 进入聊天详情页
+		function enterChatDetail(chatId, chatName) {
+			currentChatId = chatId;
+			currentChatName = chatName;
+			pageTitle.innerText = chatName;
+			chatDetailPage.classList.add('active');
+			
+			// 加载聊天消息
+			loadChatMessages(chatId);
+			
+			// 聚焦输入框
+			msgInput.focus();
+		}
+		
+		// 退出聊天详情页
+		function exitChatDetail() {
+			chatDetailPage.classList.remove('active');
+			pageTitle.innerText = '聊天列表';
+			currentChatId = '';
+			currentChatName = '';
+		}
+		
+		// 加载聊天消息
+		function loadChatMessages(chatId) {
+			// 使用模拟数据显示聊天消息
+			var messages = [
+				{id: 1, content: '你好！', type: 'other', time: '10:30', avatar: '/static/images/avatar1.jpg'},
+				{id: 2, content: '你好，有什么可以帮助你的？', type: 'self', time: '10:31', avatar: '/static/images/default_avatar.jpg'},
+				{id: 3, content: '我想咨询一下产品信息', type: 'other', time: '10:32', avatar: '/static/images/avatar1.jpg'}
+			];
+			
+			var html = '';
+			messages.forEach(msg => {
+				html += `
+					<div class="msg-wrapper ${msg.type}">
+						<div class="msg-time">${msg.time}</div>
+						<div class="avatar">
+							<img src="${msg.avatar || '/static/images/default_avatar.jpg'}" alt="">
+						</div>
+						<div class="msg-content">${msg.content}</div>
+				</div>
+			`;
+			});
+			chatMessages.innerHTML = html;
+			
+			// 滚动到底部
+			scrollToBottom();
+		}
+		
+		// 发送消息
+		function sendMessage() {
+			var content = msgInput.innerText.trim();
+			if (!content || !currentChatId) return;
+			
+			// 清空输入框
+			msgInput.innerText = '';
+			sendBtn.disabled = true;
+			
+			// 添加消息到界面
+			var now = new Date();
+			var time = now.getHours() + ':' + (now.getMinutes() < 10 ? '0' : '') + now.getMinutes();
+			
+			var msgHtml = `
+				<div class="msg-wrapper self">
+					<div class="msg-time">${time}</div>
+					<div class="avatar">
+						<img src="/static/images/default_avatar.jpg" alt="">
+					</div>
+					<div class="msg-content">${content}</div>
+				</div>
+			`;
+			
+			chatMessages.insertAdjacentHTML('beforeend', msgHtml);
+			
+			// 滚动到底部
+			scrollToBottom();
+			
+			// 尝试调用原有的发送消息功能（如果存在）
+			try {
+				if (typeof window.chat !== 'undefined' && typeof window.chat.sendMessage === 'function') {
+					// 存储当前消息内容供原函数使用
+					getElement('mediaVal').value = content;
+					// 调用原函数
+					window.chat.sendMessage();
+				} else {
+					console.log('发送消息:', content);
+				}
+			} catch (e) {
+				console.error('发送消息时出错:', e);
+			}
+		}
+		
+		// 滚动到底部
+		function scrollToBottom() {
+			var chatContent = getElement('chat-content');
+			chatContent.scrollTop = chatContent.scrollHeight;
+		}
+		
+		// 适配原有的聊天功能
+		window.mobileChat = {
+			enterChatDetail: enterChatDetail,
+			exitChatDetail: exitChatDetail,
+			sendMessage: sendMessage,
+			loadChatMessages: loadChatMessages,
+			loadChatList: loadChatList
+		};
+		
+		// 确保与原系统兼容
+		if (typeof window.chat === 'undefined') {
+			window.chat = {
+				sendMessage: function() {
+					console.log('发送消息:', msgInput.innerText.trim());
+				},
+				showGroupUser: function() {
+					console.log('显示群成员');
+				}
+			};
+		}
+	</script>
+</body>
+</html>
+			var originalChat = window.chat;
+			
+			// 扩展原有功能，使其适配移动端
+			window.chat = {
+				...originalChat,
+				sendMessage: function() {
+					// 使用移动端的发送逻辑
+					mobileChat.sendMessage();
+					// 也可以调用原有的发送逻辑
+					// originalChat.sendMessage.call(this);
+				}
+			};
+		}
+	</script>
+</body>
+
+</html>
