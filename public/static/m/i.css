@@ -943,82 +943,106 @@ cursor: pointer;
     .post-text { font-size: 14px; }
 }
 
- .body-top-bg {
-            /* 设置背景图片样式 */
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            
-            /* 设置尺寸和边距 */
-            height: 180px;
-            padding: 20px;
-            margin-bottom: 20px;
-            
-            /* 设置圆角和阴影 */
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            
-            /* 添加渐变遮罩 */
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .body-top-bg::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(0,0,0,0.3) 100%);
-            z-index: 1;
-        }
-        
-        /* 调整用户头像样式 */
-        .body-gravatar {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            border: 3px solid white;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-            margin-bottom: 12px;
-            position: relative;
-            z-index: 2;
-        }
-        
-        /* 调整标题样式 */
-        .body-top-bg h2 {
-            color: white;
-            font-size: 20px;
-            font-weight: 600;
-            margin: 0 0 6px 0;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-            position: relative;
-            z-index: 2;
-        }
-        
-        /* 调整简介样式 */
-        .body-top-bg small {
-            color: rgba(255, 255, 255, 0.9);
-            font-size: 14px;
-            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-            position: relative;
-            z-index: 2;
-        }
-        
-        /* 响应式调整 */
-        @media screen and (max-width: 768px) {
-            .body-top-bg {
-                height: 150px;
-                padding: 15px;
-            }
-            
-            .body-gravatar {
-                width: 60px;
-                height: 60px;
-            }
-            
-            .body-top-bg h2 {
-                font-size: 18px;
-            }
-        }
+/* 使用CSS变量保持主题一致性 */
+.body-top-bg {
+    /* 背景图片设置 */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    
+    /* 尺寸和布局 */
+    height: 200px;
+    padding: var(--spacing-xl);
+    margin-bottom: var(--spacing-xl);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    
+    /* 使用CSS变量设置圆角和阴影 */
+    border-radius: var(--radius-lg);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    
+    /* 添加渐变遮罩提升文字可读性 */
+    position: relative;
+    overflow: hidden;
+}
+
+.body-top-bg::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.4) 100%);
+    z-index: 1;
+}
+
+/* 用户头像样式 */
+.body-gravatar {
+    width: 90px;
+    height: 90px;
+    border-radius: var(--radius-full);
+    border: 3px solid var(--background-primary);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    margin-bottom: var(--spacing-md);
+    position: relative;
+    z-index: 2;
+    transition: transform 0.3s ease;
+}
+
+.body-gravatar:hover {
+    transform: scale(1.05);
+}
+
+/* 用户名样式 */
+.body-top-bg h2 {
+    color: white;
+    font-size: 22px;
+    font-weight: 600;
+    margin: 0 0 var(--spacing-sm) 0;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    position: relative;
+    z-index: 2;
+}
+
+/* 个人简介样式 */
+.body-top-bg small {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 14px;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    position: relative;
+    z-index: 2;
+    max-width: 90%;
+    text-align: center;
+    line-height: 1.4;
+}
+
+/* 响应式设计调整 */
+@media screen and (max-width: 768px) {
+    .body-top-bg {
+        height: 180px;
+        padding: var(--spacing-lg);
+    }
+    
+    .body-gravatar {
+        width: 70px;
+        height: 70px;
+    }
+    
+    .body-top-bg h2 {
+        font-size: 20px;
+    }
+    
+    .body-top-bg small {
+        font-size: 13px;
+    }
+}
+
+/* 增强视觉效果的hover状态 */
+.body-top-bg:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
