@@ -1,42 +1,115 @@
-
 {include file='index/header' /}
 
 <style>
-	body{
-		background-color: white;
-		
-	}
-	.body{
-		height: 800px;
-	}
+/* 工具网格容器 */
+.tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: var(--spacing-lg);
+    padding: var(--spacing-lg);
+    max-width: 1024px;
+    margin: 0 auto;
+}
+
+/* 工具卡片样式 */
+.tool-card {
+    background-color: var(--background-primary);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    transition: all 0.3s ease;
+    border: 1px solid var(--border-color);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: var(--spacing-lg);
+    height: 100%;
+}
+
+/* 工具卡片悬停效果 */
+.tool-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-color: var(--primary-color);
+}
+
+/* 工具图标样式 */
+.tool-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: var(--radius-md);
+    object-fit: cover;
+    margin-bottom: var(--spacing-md);
+}
+
+/* 工具名称样式 */
+.tool-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin: 0;
+    padding: 0;
+    line-height: 1.4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 通知徽章样式 */
+.notification-badge {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    margin-left: var(--spacing-xs);
+    animation: pulse 2s infinite;
+}
+
+/* 脉冲动画 */
+@keyframes pulse {
+    0% { opacity: 0.6; }
+    50% { opacity: 1; }
+    100% { opacity: 0.6; }
+}
+
+/* 响应式调整 */
+@media screen and (max-width: 768px) {
+    .tools-grid {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        gap: var(--spacing-md);
+        padding: var(--spacing-md);
+    }
+    
+    .tool-icon {
+        width: 50px;
+        height: 50px;
+    }
+}
 </style>
 
+<div class="tools-grid">
 {foreach $list as $appInfo}
 {if $appInfo['app_type'] == 0 || $appInfo['app_type'] == 2}
-<div>
-	{if $appInfo['open_type'] == 0}
-	<a href="javascript:;" data-title="{$appInfo['app_name']}" data-url="{$appInfo['app_url']}" onclick="showFrameCustom(this, '{$appInfo[\'app_config\']}')">
-	{elseif condition="$appInfo['open_type'] eq 1" /}
-	<a href="{$appInfo['app_url']}">
-	{else /}
-	<a href="{$appInfo['app_url']}" target="_blank">
-	{/if}
-		<div class="post"  style="float: left; width: 50%;">
-			<img class="post-head" src="{$appInfo['app_image']}" />
-			<div class="post-article">
-				<div class="post-content">
-					<li>
-						{$appInfo['app_name']}
-						{if in_array($appInfo['remind_key'], $chatRemind['types'])}
-						<span class="layui-badge-dot layui-bg-blue"></span>
-						{/if}
-					</li>
-				</div>
-			</div>
-		</div>
-	</a>
-</div>
+    {if $appInfo['open_type'] == 0}
+    <a href="javascript:;" data-title="{$appInfo['app_name']}" data-url="{$appInfo['app_url']}" onclick="showFrameCustom(this, '{$appInfo[\'app_config\']}')" class="tool-link">
+    {elseif condition="$appInfo['open_type'] eq 1" /}
+    <a href="{$appInfo['app_url']}" class="tool-link">
+    {else /}
+    <a href="{$appInfo['app_url']}" target="_blank" class="tool-link">
+    {/if}
+        <div class="tool-card">
+            <img class="tool-icon" src="{$appInfo['app_image']}" alt="{$appInfo['app_name']}" />
+            <h3 class="tool-name">
+                {$appInfo['app_name']}
+                {if in_array($appInfo['remind_key'], $chatRemind['types'])}
+                <span class="notification-badge"></span>
+                {/if}
+            </h3>
+        </div>
+    </a>
 {/if}
 {/foreach}
+</div>
 
 {include file='index/foot' /}
