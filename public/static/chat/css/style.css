@@ -128,7 +128,7 @@ button.onloading::after, .button.onloading::after, .datetime-input-box .dtpicker
 .conv-detail-pannel { position: relative; }
 .conv-detail-pannel .content-pannel-body { position: relative; box-sizing: border-box; display: flex; flex-flow: row nowrap; }
 .conv-detail-pannel .content-pannel-body .chat-items { -moz-box-flex: 1; flex: 1 1 0%; overflow-y: auto; position: relative; }
-.conv-detail-pannel .content-pannel-body .chat-items .msg-items { position: absolute; box-sizing: border-box; min-height: 100%; width: 100%; padding: 4px 16px 16px; }
+.conv-detail-pannel .content-pannel-body .chat-items .msg-items { position: absolute; box-sizing: border-box; min-height: 100%; width: 100%; }
 /* .conv-detail-pannel .content-pannel-body .chat-items .msg-items { position: absolute; box-sizing: border-box; min-height: 100%; min-width: 550px; width: 100%; padding: 4px 16px 16px; } */
 .conv-detail-pannel .content-pannel-body .chat-items .msg-items .msg-box:first-child .safety-tips::before { display: none; }
 .conv-detail-pannel .content-pannel-body .chat-status { margin: 16px auto; text-align: center; color: rgb(189, 190, 191); font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; overflow-wrap: normal; }
@@ -177,7 +177,7 @@ button.onloading::after, .button.onloading::after, .datetime-input-box .dtpicker
 .conv-detail-pannel .content-pannel-body .new-chat-reminder { position: absolute; bottom: 0px; right: 0px; box-sizing: border-box; z-index: 20; height: 32px; padding: 7px 10px 0px; background-color: rgb(209, 236, 253); border-radius: 16px 0px 0px 16px; box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.25); }
 .conv-detail-pannel .send-msg-box-wrapper { position: relative; display: flex; flex-flow: row nowrap; -moz-box-align: stretch; align-items: stretch; box-sizing: border-box; width: 100%; height: 180px; border-top: 1px solid rgb(230, 229, 230); background-color: rgb(245, 249, 255); border-bottom-right-radius: 3px; }
 .conv-detail-pannel .send-msg-box-wrapper .input-area { -moz-box-flex: 1; flex: 1 1 0%; display: flex; flex-flow: column nowrap; position: relative; }
-.conv-detail-pannel .send-msg-box-wrapper .input-area .user-guide {color: rgb(189, 190, 191);font-size: 12px;position: absolute;right: 8px;top: 6px;z-index:10001;}
+.conv-detail-pannel .send-msg-box-wrapper .input-area .user-guide {color: rgb(189, 190, 191);font-size: 12px;position: absolute;right: 8px;top: 3px;z-index:10001;}
 /* .conv-detail-pannel .send-msg-box-wrapper .input-area .tool-bar { padding: 7px 7px 7px 13px; width: 90%; } */
 .conv-detail-pannel .send-msg-box-wrapper .input-area .tool-bar { width: 100%; }
 .conv-detail-pannel .send-msg-box-wrapper .input-area .tool-bar .tool-item { display: inline-block; position: relative; margin: 0px 4px; width: 18px; text-align: center; }
