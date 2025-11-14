@@ -324,7 +324,6 @@ h6 { font-size: 0.8em; }
 
 /* 帖子样式 */
 .post {
-    padding: 20px 15px 5px 15px;
     background-color: var(--background-primary);
     position: relative;
     word-break: break-all;
@@ -334,8 +333,6 @@ h6 { font-size: 0.8em; }
     margin-bottom: 0;
     transition: background-color 0.2s ease;
 }
-
-.post:hover { background-color: var(--background-secondary); }
 
 .post+.post { margin-top: 0; }
 
@@ -445,6 +442,8 @@ p.more {
     margin-bottom: 12px;
     max-width: none;
     line-height: 2em;
+    padding-left: 12px;
+    padding-right: 12px;
 }
 
 .post-content a {
@@ -470,14 +469,13 @@ p.more {
 
 .post-info-i h2 {
     display: inline;
-    font-size: 15px;
     font-weight: 700;
     margin-right: 6px;
     color: var(--text-primary);
     margin-top: 8px;
 }
 
-.post-info-i h2 a { color: var(--text-primary); text-decoration: none; }
+.post-info-i h2 a { color: var(--text-primary); text-decoration: none; font-size: 16px;}
 
 .post-info-i small {
     display: block;
@@ -508,7 +506,6 @@ p.more {
 .post-meta {
     background-color: var(--background-primary);
     color: var(--text-secondary);
-    margin-top: 8px;
 }
 
 .post-meta i { margin-right: 4px; }
@@ -541,9 +538,6 @@ p.more {
     background-color: var(--primary-light);
     color: var(--primary-color);
 }
-
-/* 评论表单 */
-#comment_form, .post-near { padding-bottom: 15px; }
 
 .input-g {
     position: relative;
@@ -663,7 +657,7 @@ p.more {
 
 /* 支付按钮 */
 .pay {
-    cursor: pointer;
+cursor: pointer;
     text-align: center;
     border: 1px solid var(--warning-color);
     padding: 4px 8px;
@@ -747,7 +741,8 @@ p.more {
 
 /* 媒体元素 */
 .massageImgCommon {
-    max-width: 100%;
+    max-width: 75%;
+    min-width: 5%;
     border-radius: var(--radius-lg);
     margin: 8px 0;
 }
@@ -825,6 +820,7 @@ p.more {
     border-radius: var(--radius-lg);
     padding: 16px;
     border: 1px solid var(--border-color);
+    margin-bottom: 5px;
 }
 
 /* 加载更多样式 */
@@ -835,7 +831,7 @@ p.more {
 }
 
 /* 视频播放器样式 */
-.dplayer { border-radius: var(--radius-lg); overflow: hidden; }
+.dplayer { border-radius: var(--radius-lg); overflow: hidden; max-width: 75%;}
 
 /* 表情选择器样式 */
 #showfacenamereplace .tbbq {
@@ -907,8 +903,8 @@ p.more {
     .article-list { width: 390px; }
     .post-article { margin-left: 40px; }
     .post-head {
-        width: 40px;
-        height: 40px;
+        width: 45px;
+        height: 45px;
         left: 10px;
         top: 10px;
     }
@@ -933,7 +929,7 @@ p.more {
     .post-head {
         position: static;
         float: left;
-        margin: 0 10px 5px 0;
+        margin: 10px 10px 5px 0;
     }
     .post-article { margin-left: 0; }
     .body { margin-top: 10px; }
@@ -943,7 +939,86 @@ p.more {
         padding-right: 17px;
     }
     .post { padding: 12px 16px; }
-    .post-info-i h2 { font-size: 14px; }
     .post-info-i small { font-size: 13px; }
     .post-text { font-size: 14px; }
 }
+
+ .body-top-bg {
+            /* 设置背景图片样式 */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            
+            /* 设置尺寸和边距 */
+            height: 180px;
+            padding: 20px;
+            margin-bottom: 20px;
+            
+            /* 设置圆角和阴影 */
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            
+            /* 添加渐变遮罩 */
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .body-top-bg::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(0,0,0,0.3) 100%);
+            z-index: 1;
+        }
+        
+        /* 调整用户头像样式 */
+        .body-gravatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            margin-bottom: 12px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        /* 调整标题样式 */
+        .body-top-bg h2 {
+            color: white;
+            font-size: 20px;
+            font-weight: 600;
+            margin: 0 0 6px 0;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 2;
+        }
+        
+        /* 调整简介样式 */
+        .body-top-bg small {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 14px;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 2;
+        }
+        
+        /* 响应式调整 */
+        @media screen and (max-width: 768px) {
+            .body-top-bg {
+                height: 150px;
+                padding: 15px;
+            }
+            
+            .body-gravatar {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .body-top-bg h2 {
+                font-size: 18px;
+            }
+        }
