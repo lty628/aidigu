@@ -190,7 +190,10 @@
 		@media (max-width: 1000px) {
 		    /* 确保布局容器适应手机屏幕 */
 			audio {
-				width: 225px;
+				width: 210px;
+			}
+			#menu-pannel {
+				width: 60px;
 			}
 		    #layout-container {
 		        height: 100vh;
@@ -252,14 +255,28 @@
 		
 		/* 超小屏幕优化 (iPhone SE等) */
 		@media (max-width: 375px) {
+			#menu-pannel {
+				height: 60px;
+			}
+			
+			#menu-pannel .main-menus .menu-item {
+				padding: 5px 8px;
+				min-width: 50px;
+				font-size: 11px;
+			}
+			
+			#menu-pannel .main-menus .menu-item::before {
+				width: 18px;
+				height: 18px;
+			}
+			
 			#sub-menu-pannel {
-				width: 260px;
-				min-width: 260px;
+				width: 100%;
 			}
 			
 			#sub-menu-pannel.conv-list-pannel .conv-lists .conv-item {
 				padding: 10px 12px;
-				margin: 3px 6px;
+				margin: 0;
 				font-size: 13px;
 			}
 			
@@ -276,17 +293,28 @@
 		
 		/* 横屏模式优化 */
 		@media (max-width: 768px) and (orientation: landscape) {
-			#layout-container {
-				flex-direction: row;
+			#menu-pannel {
+				height: 55px;
+				width: 100%;
 			}
 			
-			#menu-pannel {
-				width: 50px;
+			#menu-pannel .main-menus {
+				max-width: 600px;
+			}
+			
+			#menu-pannel .main-menus .menu-item {
+				min-width: 80px;
+				font-size: 13px;
+				padding: 8px 12px;
+			}
+			
+			#menu-pannel .main-menus .menu-item::before {
+				width: 22px;
+				height: 22px;
 			}
 			
 			#sub-menu-pannel {
-				width: 200px;
-				min-width: 200px;
+				width: 100%;
 			}
 			
 			#content-pannel .content-pannel-body {
