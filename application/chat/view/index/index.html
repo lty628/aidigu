@@ -6,9 +6,7 @@
 	<meta charset="utf-8">
 	<meta name="renderer" content="webkit">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>智能聊天助手</title>
-
-	<link media="all" href="/static/chat/css/style.css?v=2225" type="text/css" rel="stylesheet">
+	<link media="all" href="/static/chat/css/style.css?v=2226" type="text/css" rel="stylesheet">
 	<link media="all" href="/static/chat/css/shake.css?v=2224" type="text/css" rel="stylesheet">
 	<link rel="stylesheet" href="/static/layui/css/layui.css?t=1" type="text/css" media="screen" />
 	<style>
@@ -153,7 +151,6 @@
 			display: flex;
 			justify-content: space-between;
 			align-items: center;
-			/* margin-top: 10px; */
 			font-size: 12px;
 			color: #64748b;
 		}
@@ -167,26 +164,6 @@
 			to {
 				opacity: 1;
 				transform: translateY(0);
-			}
-		}
-		
-		/* 响应式设计 */
-		@media (max-width: 768px) {
-			body {
-				padding: 0;
-			}
-			
-			#layout-container {
-				height: 100vh;
-				border-radius: 0;
-			}
-			
-			#menu-pannel {
-				width: 60px;
-			}
-			
-			#sub-menu-pannel {
-				width: 250px;
 			}
 		}
 		
@@ -209,24 +186,173 @@
 			background: #94a3b8;
 		}
 		
-		/* 原有样式保持 */
-		.w-e-menu:first-child .w-e-panel-container {
-			margin-top: -265px!important;
-			margin-left: -20px!important;
-		}
-		/* 发送按钮样式 */
-		.send-message-button {
-			padding: 8px 16px;
-			border-radius: 24px;
-			background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
-			color: white;
-			cursor: pointer;
-			transition: all 0.3s ease;
+		/* 响应式设计 - 1000px以内手机端优化 */
+		@media (max-width: 1000px) {
+		    /* 确保布局容器适应手机屏幕 */
+			audio {
+				width: 225px;
+			}
+		    #layout-container {
+		        height: 100vh;
+		        border-radius: 0;
+		        position: fixed;
+		        top: 0;
+		        left: 0;
+		        right: 0;
+		        bottom: 0;
+		    }
+		    
+		    /* 返回按钮手机端样式 */
+		    #backToListBtn {
+		        display: flex !important;
+		        align-items: center;
+		        justify-content: center;
+		        position: absolute;
+		        left: 15px;
+		        top: 50%;
+		        transform: translateY(-50%);
+		        background: rgba(255, 255, 255, 0.2);
+		        border: 1px solid rgba(255, 255, 255, 0.3);
+		        color: white;
+		        padding: 8px 12px;
+		        border-radius: 20px;
+		        font-size: 14px;
+		        z-index: 20;
+		        backdrop-filter: blur(10px);
+		        cursor: pointer;
+		        transition: all 0.3s ease;
+		    }
+		    
+		    #backToListBtn:hover {
+		        background: rgba(255, 255, 255, 0.3);
+		    }
+		    
+		    /* 消息动画优化 */
+		    .msg-item {
+		        animation: fadeInUp 0.3s ease;
+		    }
+		    
+		    @keyframes fadeInUp {
+		        from {
+		            opacity: 0;
+		            transform: translateY(10px);
+		        }
+		        to {
+		            opacity: 1;
+		            transform: translateY(0);
+		        }
+		    }
+		    
+		    /* 输入框焦点效果优化 */
+		    .input-area.focused {
+		        background: rgba(255, 255, 255, 0.95);
+		        backdrop-filter: blur(10px);
+		    }
 		}
 		
-		.send-message-button:hover {
-			transform: translateY(-2px);
-			box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
+		/* 超小屏幕优化 (iPhone SE等) */
+		@media (max-width: 375px) {
+			#sub-menu-pannel {
+				width: 260px;
+				min-width: 260px;
+			}
+			
+			#sub-menu-pannel.conv-list-pannel .conv-lists .conv-item {
+				padding: 10px 12px;
+				margin: 3px 6px;
+				font-size: 13px;
+			}
+			
+			.msg-item .msg-bubble {
+				max-width: 90%;
+				padding: 8px 12px;
+				font-size: 13px;
+			}
+			
+			.input-area {
+				padding: 8px 12px;
+			}
+		}
+		
+		/* 横屏模式优化 */
+		@media (max-width: 768px) and (orientation: landscape) {
+			#layout-container {
+				flex-direction: row;
+			}
+			
+			#menu-pannel {
+				width: 50px;
+			}
+			
+			#sub-menu-pannel {
+				width: 200px;
+				min-width: 200px;
+			}
+			
+			#content-pannel .content-pannel-body {
+				padding: 10px;
+			}
+		}
+		
+		/* 防止iOS Safari工具栏遮挡 */
+		@supports (-webkit-touch-callout: none) {
+			#layout-container {
+				height: -webkit-fill-available;
+			}
+		}
+		
+		/* 安全区域适配 (iPhone X及以上) */
+		@supports (padding: max(0px)) {
+			.input-area {
+				padding-left: max(15px, env(safe-area-inset-left));
+				padding-right: max(15px, env(safe-area-inset-right));
+				padding-bottom: max(10px, env(safe-area-inset-bottom));
+			}
+			
+			#content-pannel .content-pannel-body {
+				padding-left: max(15px, env(safe-area-inset-left));
+				padding-right: max(15px, env(safe-area-inset-right));
+			}
+		}
+		
+		/* 触摸优化 */
+		@media (hover: none) and (pointer: coarse) {
+			.conv-item:hover,
+			.tool-item:hover,
+			.menu-item:hover {
+				transform: none !important;
+			}
+			
+			.conv-item:active,
+			.tool-item:active,
+			.menu-item:active {
+				transform: scale(0.98);
+				transition: transform 0.1s ease;
+			}
+		}
+		
+		/* 高对比度模式支持 */
+		@media (prefers-contrast: high) {
+			#menu-pannel {
+				background: #1a365d;
+			}
+			
+			.msg-item.right .msg-bubble {
+				background: #1a365d;
+			}
+			
+			.conv-item.active {
+				background: #1a365d;
+			}
+		}
+		
+		/* 减少动画模式支持 */
+		@media (prefers-reduced-motion: reduce) {
+			* {
+				animation-duration: 0.01ms !important;
+				animation-iteration-count: 1 !important;
+				transition-duration: 0.01ms !important;
+			}
 		}
 		
 		{if $isMobile}
