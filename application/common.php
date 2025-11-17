@@ -184,5 +184,9 @@ function getPrefix()
 function getThemeInfo($theme)
 {
 	$themeInfo = explode(';', $theme);
-	return array_merge(['default', ''], $themeInfo);
+	if (count($themeInfo) < 2){
+		$themeInfo[0] = 'default';
+		$themeInfo[1] = $theme;
+	}
+	return $themeInfo;
 }
