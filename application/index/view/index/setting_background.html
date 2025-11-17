@@ -147,6 +147,7 @@
 
 	</div>
 	<input type="hidden" value="" id="backgroundVal">
+	<input type="hidden" value="default" id="backgroundTheme">
 	<script>
 
 		$(function () {
@@ -185,17 +186,18 @@
 							$("#backgroundVal").val('');
 						} else {
 							var backgroundVal = $("#backgroundVal").val();
-							if (!backgroundVal) {
-								alertMsg('已保存');
-								return false;
-							}
+							var backgroundTheme = $("#backgroundTheme").val();
+							// if (!backgroundVal) {
+							// 	alertMsg('已保存');
+							// 	return false;
+							// }
 						}
-						console.log(backgroundVal);
+						// console.log(backgroundVal);
 						$.ajax({
 							url: '/index/setting/saveTheme',
 							type: 'GET',
 							dataType: 'json',
-							data: { backgroundVal: backgroundVal },
+							data: { backgroundVal: backgroundVal, backgroundTheme: backgroundTheme },
 						})
 							.done(function (data) {
 								if (data.status) {
@@ -245,6 +247,7 @@
                 }
             }
             // 保存主题到 localStorage
+			$("#backgroundTheme").val(theme);
             localStorage.setItem('selectedTheme', theme);
         }
         

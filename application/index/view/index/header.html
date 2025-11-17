@@ -18,11 +18,11 @@
 <script language="javascript" type="text/javascript" src="/static/index/js/video.js?11"></script>
 
 {if $userInfo}
-{if $userInfo.isSiteUser}
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         // 从 localStorage 中读取保存的主题
-        var selectedTheme = localStorage.getItem('selectedTheme');
+        // var selectedTheme = localStorage.getItem('selectedTheme');
+		var selectedTheme = {getThemeInfo($userInfo['theme'])[0]};
         if (selectedTheme) {
             if (selectedTheme === 'default') {
                 document.documentElement.className = '';
@@ -41,14 +41,13 @@
     });
 </script>
 {/if}
-{/if}
 
 </head>
 
 <body>
 
-{if $userInfo && $userInfo['theme']}
-<div class="background-blur" style="background: url({$userInfo['theme']}) no-repeat 0 0;background-attachment:fixed;background-size:100% 100%;height:auto;min-height: 100%"></div>
+{if $userInfo && getThemeInfo($userInfo['theme'])[1]}
+<div class="background-blur" style="background: url({getThemeInfo($userInfo['theme'])[1]}) no-repeat 0 0;background-attachment:fixed;background-size:100% 100%;height:auto;min-height: 100%"></div>
 {else}
 <div class="background-blur"></div>
 {/if}

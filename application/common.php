@@ -180,3 +180,9 @@ function getPrefix()
 {
 	return config('database.prefix');
 }
+
+function getThemeInfo($theme)
+{
+	$themeInfo = explode(';', $theme);
+	return array_merge($themeInfo, ['default', '']);
+}

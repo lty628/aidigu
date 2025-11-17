@@ -96,6 +96,7 @@ class SettingInfo extends Base
 	public function saveTheme()
 	{
 		$saveUpload = input('get.backgroundVal');
+		$backgroundTheme = input('get.backgroundTheme');
 		// dump($saveUpload);die;
 		$saveUpload = json_decode($saveUpload, true);	
 		if (!$saveUpload || !isset($saveUpload['image_path'])) {
@@ -103,7 +104,7 @@ class SettingInfo extends Base
 		}
 		$userid = getLoginUid();
 		$result = UserModel::where('uid', $userid)->update([
-			'theme'=>$saveUpload['image_path'],
+			'theme'=>$backgroundTheme.';'.$saveUpload['image_path'],
 		]);
 		if (!$result) return json(['status'=>0, 'msg'=>'保存失败']);
 		return json(['status'=>1, 'msg'=>'保存成功']);

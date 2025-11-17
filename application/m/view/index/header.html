@@ -32,8 +32,8 @@
 
     <div class="body c-min">
     {if !$userInfo.isSiteUser}
-        {if $userInfo['theme']}
-        <div class="body-top-bg shadow" style="background-image: url({$userInfo['theme']})">
+        {if getThemeInfo($userInfo['theme'])[1]}
+        <div class="body-top-bg shadow" style="background-image: url({getThemeInfo($userInfo['theme'])[1]})">
         {else}
         <div class="body-top-bg shadow" style="background-image: url(/static/index/images/bg4.svg)">
         {/if}
