@@ -183,10 +183,16 @@ function getPrefix()
 
 function getThemeInfo($theme)
 {
-	$themeInfo = explode(';', $theme);
-	if (count($themeInfo) < 2){
+	if (!$theme) {
 		$themeInfo[0] = 'default';
-		$themeInfo[1] = $theme;
+		$themeInfo[1] = '/static/index/images/bg4.svg';
+	} else {
+		$themeInfo = explode(';', $theme);	
+		if (count($themeInfo) < 2){
+			$themeInfo[0] = 'default';
+			$themeInfo[1] = $theme;
+		}
 	}
+	
 	return $themeInfo;
 }
