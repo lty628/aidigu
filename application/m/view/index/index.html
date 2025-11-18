@@ -220,7 +220,7 @@
 				};
 				localStorage.setItem(scrollKey, JSON.stringify(scrollData));
 				return true;
-			} catch (e) {
+} catch (e) {
 				console.warn('滚动位置保存失败:', e);
 				return false;
 			}
@@ -299,23 +299,47 @@
 	};
 
 	// 下拉刷新功能
+	// 优化后的下拉刷新功能
 	var PullRefresh = {
 		startY: 0,
 		currentY: 0,
 		isRefreshing: false,
-		threshold: 80, // 下拉阈值
+		threshold: 100, // 增加阈值让体验更好
+		maxPullDistance: 150, // 最大拉动距离
+		lastRefreshTime: null,
 		
 		init: function() {
-			document.addEventListener('touchstart', this.handleTouchStart.bind(this));
-			document.addEventListener('touchmove', this.handleTouchMove.bind(this));
+			// 记录上次刷新时间
+			this.lastRefreshTime = localStorage.getItem('last_refresh_time');
+			this.updateRefreshTime();
+			
+			// 添加触摸事件监听
+			document.addEventListener('touchstart', this.handleTouchStart.bind(this), { passive: false });
+			document.addEventListener('touchmove', this.handleTouchMove.bind(this), { passive: false });
 			document.addEventListener('touchend', this.handleTouchEnd.bind(this));
+			
+			// 添加鼠标事件支持（桌面端调试）
+			document.addEventListener('mousedown', this.handleMouseStart.bind(this));
+			document.addEventListener('mousemove', this.handleMouseMove.bind(this));
+			document.addEventListener('mouseup', this.handleMouseEnd.bind(this));
 		},
 		
 		handleTouchStart: function(e) {
+			this.startTouch(e.touches[0].pageY);
+		},
+		
+		handleMouseStart: function(e) {
+			if (e.button === 0) { // 左键
+				this.startTouch(e.pageY);
+			}
+		},
+		
+		startTouch: function(pageY) {
 			// 只有在页面顶部且没有在刷新时才启用下拉刷新
-			if (window.pageYOffset === 0 && !this.isRefreshing) {
-				this.startY = e.touches[0].pageY;
+			if ((window.pageYOffset === 0 || window.pageYOffset <= 10) && !this.isRefreshing) {
+				this.startY = pageY;
 				this.currentY = this.startY;
+				this.showIndicator();
 			}
 		},
 		
@@ -323,16 +347,44 @@
 			if (this.startY === 0 || this.isRefreshing) return;
 			
 			this.currentY = e.touches[0].pageY;
+			this.handleMove();
+			
+			// 阻止默认滚动行为
+			if (this.currentY > this.startY) {
+				e.preventDefault();
+			}
+		},
+		
+		handleMouseMove: function(e) {
+			if (this.startY === 0 || this.isRefreshing) return;
+			
+			this.currentY = e.pageY;
+			this.handleMove();
+		},
+		
+		handleMove: function() {
 			var deltaY = this.currentY - this.startY;
 			
-			// 只有向下拉动才显示刷新指示器
+			// 只有向下拉动才处理
 			if (deltaY > 0) {
-				e.preventDefault();
-				this.updateIndicator(deltaY);
+				var progress = Math.min(deltaY / this.threshold, 1);
+				var distance = Math.min(deltaY, this.maxPullDistance);
+				
+				this.updateIndicator(deltaY, progress, distance);
 			}
 		},
 		
 		handleTouchEnd: function(e) {
+			this.endTouch();
+		},
+		
+		handleMouseEnd: function(e) {
+			if (e.button === 0) {
+				this.endTouch();
+			}
+		},
+		
+		endTouch: function() {
 			if (this.startY === 0 || this.isRefreshing) return;
 			
 			var deltaY = this.currentY - this.startY;
@@ -347,43 +399,108 @@
 			this.currentY = 0;
 		},
 		
-		updateIndicator: function(deltaY) {
+		updateIndicator: function(deltaY, progress, distance) {
 			var indicator = document.getElementById('pullRefreshIndicator');
-			var text = document.getElementById('pullRefreshText');
+			var text = document.querySelector('.pull-refresh-text');
+			var arrow = document.querySelector('.pull-refresh-arrow');
 			
+			// 更新指示器位置
+			indicator.style.top = Math.min(distance, this.maxPullDistance) - 80 + 'px';
+			
+			// 更新文本和箭头状态
 			if (deltaY > this.threshold) {
 				text.textContent = '释放刷新';
-				indicator.style.background = '#e8f4fd';
+				indicator.classList.add('pulling');
+				indicator.style.background = 'linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%)';
 			} else {
 				text.textContent = '下拉刷新';
-				indicator.style.background = '#f8f8f8';
+				indicator.classList.remove('pulling');
+				// 根据拉动进度渐变背景色
+				var colorProgress = Math.min(progress * 1.5, 1);
+				indicator.style.background = `linear-gradient(135deg, 
+					rgba(102, 126, 234, ${colorProgress}) 0%, 
+					rgba(118, 75, 162, ${colorProgress}) 100%)`;
 			}
 			
-			indicator.style.display = 'block';
-			indicator.style.transform = 'translateY(' + Math.min(deltaY, this.threshold * 2) + 'px)';
+			// 添加拉动效果
+			indicator.style.transform = `scale(${1 + progress * 0.1})`;
+		},
+		
+		showIndicator: function() {
+			var indicator = document.getElementById('pullRefreshIndicator');
+			indicator.classList.add('active');
 		},
 		
 		hideIndicator: function() {
 			var indicator = document.getElementById('pullRefreshIndicator');
-			indicator.style.display = 'none';
-			indicator.style.transform = 'translateY(0)';
+			indicator.classList.remove('active');
+			indicator.classList.remove('pulling');
+			indicator.style.transform = 'scale(1)';
+			indicator.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+			
+			// 添加隐藏动画
+			setTimeout(() => {
+				indicator.style.top = '-80px';
+			}, 300);
 		},
 		
 		startRefresh: function() {
 			this.isRefreshing = true;
 			var indicator = document.getElementById('pullRefreshIndicator');
-			var text = document.getElementById('pullRefreshText');
+			var text = document.querySelector('.pull-refresh-text');
+			var arrow = document.querySelector('.pull-refresh-arrow');
+			var spinner = document.querySelector('.pull-refresh-spinner');
 			
+			// 显示加载动画
+			arrow.style.display = 'none';
+			spinner.style.display = 'block';
 			text.textContent = '刷新中...';
-			indicator.style.background = '#d4edda';
+			indicator.style.background = 'linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%)';
+			
+			// 记录刷新时间
+			this.lastRefreshTime = new Date().toLocaleString();
+			localStorage.setItem('last_refresh_time', this.lastRefreshTime);
+			this.updateRefreshTime();
 			
 			// 清空所有缓存
 			CacheManager.clearAllCache();
 			
+			// 添加刷新完成的回调
+			var refreshComplete = function() {
+				setTimeout(() => {
+					text.textContent = '刷新完成';
+					indicator.style.background = 'linear-gradient(135deg, #a8e6cf 0%, #88d8b0 100%)';
+					
+					setTimeout(() => {
+						PullRefresh.hideIndicator();
+						PullRefresh.isRefreshing = false;
+					}, 800);
+				}, 300);
+			};
+			
 			// 刷新页面
 			setTimeout(function() {
 				location.reload();
-			}, 500);
+				// 如果页面没有重载，调用完成回调
+				setTimeout(refreshComplete, 2000);
+			}, 800);
+		},
+		
+		updateRefreshTime: function() {
+			var timeElement = document.getElementById('pullRefreshTime');
+			if (this.lastRefreshTime) {
+				timeElement.textContent = '上次刷新: ' + this.lastRefreshTime;
+			} else {
+				timeElement.textContent = '尚未刷新';
+			}
+		},
+		
+		// 手动触发刷新（用于调试）
+		manualRefresh: function() {
+			if (!this.isRefreshing) {
+				this.showIndicator();
+				this.startRefresh();
+			}
 		}
 	};
 
@@ -401,6 +518,14 @@
 		setTimeout(function() {
 			CacheManager.restoreScrollPosition();
 		}, 100);
+		
+		// 添加键盘快捷键（Ctrl+R 或 Cmd+R）
+		document.addEventListener('keydown', function(e) {
+			if ((e.ctrlKey || e.metaKey) && e.key === 'r') {
+				e.preventDefault();
+				PullRefresh.manualRefresh();
+			}
+		});
 	});
 
 	// 页面卸载前保存滚动位置
@@ -561,6 +686,123 @@
 		initNextPage(page)
 	})
 
+</script>
+<script>
+	
+</script>
+{include file='index/header' /}
+
+<!-- 优化后的下拉刷新提示 -->
+<div id="pullRefreshIndicator" class="pull-refresh-indicator">
+    <div class="pull-refresh-content">
+        <div class="pull-refresh-icon">
+            <svg class="pull-refresh-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 5v14M5 12l7-7 7 7"/>
+            </svg>
+            <div class="pull-refresh-spinner" style="display: none;">
+                <div class="spinner-circle"></div>
+            </div>
+        </div>
+        <span class="pull-refresh-text">下拉刷新</span>
+        <span class="pull-refresh-time" id="pullRefreshTime"></span>
+    </div>
+</div>
+
+<style>
+.pull-refresh-indicator {
+    position: fixed;
+    top: -80px;
+    left: 0;
+    width: 100%;
+    height: 80px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: top 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    border-radius: 0 0 20px 20px;
+}
+
+.pull-refresh-indicator.active {
+    top: 0;
+}
+
+.pull-refresh-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.pull-refresh-icon {
+    position: relative;
+    width: 32px;
+    height: 32px;
+}
+
+.pull-refresh-arrow {
+    transition: transform 0.3s ease;
+}
+
+.pull-refresh-indicator.pulling .pull-refresh-arrow {
+    transform: rotate(180deg);
+}
+
+.pull-refresh-spinner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.spinner-circle {
+    width: 24px;
+    height: 24px;
+    border: 2px solid transparent;
+    border-top: 2px solid white;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.pull-refresh-text {
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+}
+
+.pull-refresh-time {
+    font-size: 12px;
+    opacity: 0.8;
+    font-weight: 300;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .pull-refresh-indicator {
+        height: 70px;
+        border-radius: 0 0 15px 15px;
+    }
+    
+    .pull-refresh-text {
+        font-size: 13px;
+    }
+    
+    .pull-refresh-time {
+        font-size: 11px;
+    }
+}
+</style>
+
+{if $userInfo.isSiteUser}
 </script>
 <script>
 	
