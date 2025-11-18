@@ -550,6 +550,10 @@ if (!cacheStr) return null;
 			if (fromCache) {
 				// 如果是缓存数据，直接处理
 				renderData(data, json);
+				// 添加缓存数据加载后的滚动位置恢复
+				setTimeout(function() {
+					CacheManager.restoreScrollPosition();
+				}, 50);
 				canLoad = true;
 			} else {
 				// 如果是新数据，正常处理流程
