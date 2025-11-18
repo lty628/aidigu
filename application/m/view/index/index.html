@@ -89,28 +89,6 @@
 <!-- <section class="back-to-top">
 	回到顶部
 </section> -->
-<!-- <div class="post">
-	<img class="post-head" src="" />
-	<div class="post-article">
-		<div class="post-info-i">
-			<h2><a href="#">404 啥也没找到</a></h2>
-		</div>
-		<div class="post-content">
-			<p>什么都没有找到啊。。抱歉啦！</p>
-			404页面是客户端在浏览网页时，服务器无法正常提供信息，或是服务器无法回应，且不知道原因所返回的页面。据说在第三次科技革命之前，互联网的形态就是一个大型的中央数据库，这个数据库就设置在404房间里面。那时候所有的请求都是由人工手动完成的，如果在数据库中没有找到请求者所需要的文件，或者由于请求者写错了文件编号，用户就会得到一个返回信息：room 404 : file not found。404错误信息通常是在目标页面被更改或移除，或客户端输入页面地址错误后显示的页面，人们也就习惯了用404作为服务器未找到文件的错误代码了。当然实际考证传说中的room 404是不存在的，在http请求3位的返回码中，4开头的代表客户错误，5开头代表服务器端错误。
-		</div>
-	</div>
-	<div class="clear"></div>
-	<div class="post-meta">
-			<span><i class="fa fa-user"></i> <a href="#">System</a></span>
-			<span><i class="fa fa-inbox"></i> 404,not,found</span>
-	    	<span><i class="fa fa-comment"></i> Zero</span>
-	    	<div class="clear"></div>
-	</div>
-</div> -->
-
-{include file='index/foot' /}
-
 <script>
 	/**
 	* 缓冲函数
@@ -155,14 +133,154 @@
 
 </script>
 <script>
+	// 缓存管理功能
+	var CacheManager = {
+		// 缓存前缀
+		cachePrefix: 'msg_cache_',
+		// 缓存过期时间（30分钟）
+		cacheExpireTime: 30 * 60 * 1000,
+		
+		// 生成缓存键
+		getCacheKey: function(page, url) {
+			return this.cachePrefix + btoa(url || window.location.pathname) + '_' + page;
+		},
+		
+		// 设置缓存
+		setCache: function(page, data, url) {
+			try {
+				var cacheKey = this.getCacheKey(page, url);
+				var cacheData = {
+					data: data,
+					timestamp: new Date().getTime(),
+					expireTime: this.cacheExpireTime
+				};
+				localStorage.setItem(cacheKey, JSON.stringify(cacheData));
+				return true;
+			} catch (e) {
+				console.warn('缓存设置失败:', e);
+				return false;
+			}
+		},
+		
+		// 获取缓存
+		getCache: function(page, url) {
+			try {
+				var cacheKey = this.getCacheKey(page, url);
+				var cacheStr = localStorage.getItem(cacheKey);
+				if (!cacheStr) return null;
+				
+				var cacheData = JSON.parse(cacheStr);
+				var currentTime = new Date().getTime();
+				
+				// 检查缓存是否过期
+				if (currentTime - cacheData.timestamp > cacheData.expireTime) {
+					this.removeCache(page, url);
+					return null;
+				}
+				
+				return cacheData.data;
+			} catch (e) {
+				console.warn('缓存获取失败:', e);
+				return null;
+			}
+		},
+		
+		// 删除缓存
+		removeCache: function(page, url) {
+			try {
+				var cacheKey = this.getCacheKey(page, url);
+				localStorage.removeItem(cacheKey);
+				return true;
+			} catch (e) {
+				console.warn('缓存删除失败:', e);
+				return false;
+			}
+		},
+		
+		// 清理所有过期缓存
+		cleanExpiredCache: function() {
+			try {
+				var keysToRemove = [];
+				for (var i = 0; i < localStorage.length; i++) {
+					var key = localStorage.key(i);
+					if (key && key.startsWith(this.cachePrefix)) {
+						try {
+							var cacheStr = localStorage.getItem(key);
+							var cacheData = JSON.parse(cacheStr);
+							var currentTime = new Date().getTime();
+							
+							if (currentTime - cacheData.timestamp > cacheData.expireTime) {
+								keysToRemove.push(key);
+							}
+						} catch (e) {
+							// 如果解析失败，也删除该缓存
+							keysToRemove.push(key);
+						}
+					}
+				}
+				
+				keysToRemove.forEach(function(key) {
+					localStorage.removeItem(key);
+				});
+				
+				return keysToRemove.length;
+			} catch (e) {
+				console.warn('缓存清理失败:', e);
+				return 0;
+			}
+		},
+		
+		// 清理所有缓存
+		clearAllCache: function() {
+			try {
+				var keysToRemove = [];
+				for (var i = 0; i < localStorage.length; i++) {
+					var key = localStorage.key(i);
+					if (key && key.startsWith(this.cachePrefix)) {
+						keysToRemove.push(key);
+					}
+				}
+				
+				keysToRemove.forEach(function(key) {
+					localStorage.removeItem(key);
+				});
+				
+				return keysToRemove.length;
+			} catch (e) {
+				console.warn('缓存清理失败:', e);
+				return 0;
+			}
+		}
+	};
+
+	// 页面加载时清理过期缓存
+	$(document).ready(function() {
+		var cleanedCount = CacheManager.cleanExpiredCache();
+		if (cleanedCount > 0) {
+			console.log('清理了 ' + cleanedCount + ' 个过期缓存');
+		}
+	});
+
 	var page = 0;
 	$(function () {
 		var canLoad = true
+		
+		// 修改后的初始化下一页函数，支持缓存
 		function initNextPage(url) {
 			if (!canLoad) return
 			page++
 			canLoad = false
 			var url = window.location.pathname
+			
+			// 先尝试从缓存获取数据
+			var cachedData = CacheManager.getCache(page, url);
+			if (cachedData) {
+				console.log('使用缓存数据，页码:', page);
+				processData(cachedData, true);
+				return;
+			}
+			
+			// 缓存中没有数据，发起AJAX请求
 			$.ajax({
 				type: "get",
 				url: url,
@@ -180,72 +298,114 @@
 					        canLoad = true;
 					    }, 2000);
 					    return;
-					}	
-
-					for (var i = 0; i < data.length; i++) {
-						var mediaStr = '';
-						var str = '';
-						var delStr = '';
-						var c1 = '';
-						var c2 = '';
-						if (data[i].media) {
-							data[i].media_info = $.parseJSON(data[i].media_info)
-							if (data[i].media_info.media_type == 'mp4' || data[i].media_info.media_type == 'm3u8') {
-								mediaStr = '<p class="massageImg clear showVideo' + data[i].msg_id + '" vid="' + data[i].media + '"><video width="400px"  controls=""  name="media"><source src="" type="video/mp4"></video></p>';
-							} else if (data[i].media_info.media_type == 'mp3') {
-									mediaStr = '<p class="massageImg clear"><audio id="music_'+message.msg_id+'" class="music" controls="controls" loop="loop" onplay="stopOther(this); event.stopPropagation();" preload="none" controlsList="nodownload" οncοntextmenu="return false" name="media"><source src="'+message.media+'" type="audio/mpeg"></audio></p>';
-								}  else {
-								mediaStr = '<p  class="massageImg clear"><img class="massageImgCommon massageImg_'+data[i].media_info.media_type+'"  onclick="showMessageImg(this)" src="' + data[i].media + '"></p>';
-							}
-						}
-						// if (0 != data[i].repostsum) {
-						// 	c1 = '('+data[i].repostsum+')'
-						// }
-						if (0 != data[i].commentsum) {
-							c2 = '(' + data[i].commentsum + ')'
-						}
-						// 添加样式类以实现右侧对齐和样式美化
-						delStr += '<div class="post-meta-icons" style="text-align: right;">'; 
-						delStr += '<span><a href="/' + data[i].blog + '/message/' + data[i].msg_id + '"><i class="layui-icon layui-icon-eye"></i> 查看</a></span>';
-						delStr += '<span><a href="javascript:;" data-title="评论" data-url="/chat/messageChatId/' + data[i].msg_id + '" onclick="showFrameHtml(this, \'100%\', \'100%\')"><i class="layui-icon layui-icon-reply-fill"></i> 评论' + c2 + '</a></span>';
-						if (json.data.allow_delete) {
-							delStr += '<span><a href="/' + data[i].blog + '/del/message/' + data[i].msg_id + '"><i class="layui-icon layui-icon-delete"></i> 删除</a></span>';
-						} else if(json.data.is_collect) {
-							delStr += '<span><a href="javascript:void(0);" onclick="collectMsg(' + data[i].msg_id + ',1);"><i class="layui-icon layui-icon-star-fill"></i> 取消收藏</a></span>';
-						} else {
-							delStr += '<span><a href="javascript:void(0);" onclick="collectMsg(' + data[i].msg_id + ',0);"><i class="layui-icon layui-icon-star"></i> 收藏</a></span>';
-						}
-						delStr += '</div>'; // 关闭样式类
-						str = '<div class="post"><img class="post-head" src="' + data[i].head_image + '" />'
-							+ '<div class="post-article">'
-							+ '<div class="post-info-i">'
-							+ '<h2><a href="/' + data[i].blog + '/own/">' + data[i].nickname + '</a></h2><small><i class="fa fa-clock-o"></i>'+getDateDiff(data[i].ctime)+'<i class="fa fa-eye"></i>'+' 来自' + data[i].refrom+'</small>'
-							+ '</div>'
-							+ '<div class="post-content"><div class="post-text">' + data[i].contents + data[i].repost + '</div>'  + mediaStr + '</div>'
-							+ '</div>'
-							+ '<div class="clear"></div>'
-							+ '<div class="post-meta">'+delStr+'</div>'
-							+ '<div class="clear"></div>'
-							+ '</div>'
-							+ '</div>';
-
-						$("#msgContent").append(str);
-						iniVideo(data[i].msg_id)
 					}
-
-					if (data.length < 8) {
-						$("#showMore").hide()
-						return
-						// $("#showMore").html('没有了')
-					}
-
-					canLoad = true
+					
+					// 缓存获取到的数据
+					CacheManager.setCache(page, json, url);
+					
+					processData(json, false);
 				})
 				.always(function () {
 				})
 				.fail(function () {
+					canLoad = true;
 				});
 		}
+		
+		// 处理数据的通用函数
+		function processData(json, fromCache) {
+			var data = json.data.data;
+			
+			if (fromCache) {
+				// 如果是缓存数据，直接处理
+				renderData(data, json);
+				canLoad = true;
+			} else {
+				// 如果是新数据，正常处理流程
+				renderData(data, json);
+				
+				if (data.length < 8) {
+					$("#showMore").hide()
+					return
+				}
+				
+				canLoad = true;
+			}
+		}
+		
+		// 渲染数据的函数
+		function renderData(data, json) {
+			for (var i = 0; i < data.length; i++) {
+				var mediaStr = '';
+				var str = '';
+				var delStr = '';
+				var c1 = '';
+				var c2 = '';
+				if (data[i].media) {
+					data[i].media_info = $.parseJSON(data[i].media_info)
+					if (data[i].media_info.media_type == 'mp4' || data[i].media_info.media_type == 'm3u8') {
+						mediaStr = '<p class="massageImg clear showVideo' + data[i].msg_id + '" vid="' + data[i].media + '"><video width="400px"  controls=""  name="media"><source src="" type="video/mp4"></video></p>';
+					} else if (data[i].media_info.media_type == 'mp3') {
+							mediaStr = '<p class="massageImg clear"><audio id="music_'+data[i].msg_id+'" class="music" controls="controls" loop="loop" onplay="stopOther(this); event.stopPropagation();" preload="none" controlsList="nodownload" οncοntextmenu="return false" name="media"><source src="'+data[i].media+'" type="audio/mpeg"></audio></p>';
+						}  else {
+						mediaStr = '<p  class="massageImg clear"><img class="massageImgCommon massageImg_'+data[i].media_info.media_type+'"  onclick="showMessageImg(this)" src="' + data[i].media + '"></p>';
+					}
+				}
+				// if (0 != data[i].repostsum) {
+				// 	c1 = '('+data[i].repostsum+')'
+				// }
+				if (0 != data[i].commentsum) {
+					c2 = '(' + data[i].commentsum + ')'
+				}
+				// 添加样式类以实现右侧对齐和样式美化
+				delStr += '<div class="post-meta-icons" style="text-align: right;">'; 
+				delStr += '<span><a href="/' + data[i].blog + '/message/' + data[i].msg_id + '"><i class="layui-icon layui-icon-eye"></i> 查看</a></span>';
+				delStr += '<span><a href="javascript:;" data-title="评论" data-url="/chat/messageChatId/' + data[i].msg_id + '" onclick="showFrameHtml(this, \'100%\', \'100%\')"><i class="layui-icon layui-icon-reply-fill"></i> 评论' + c2 + '</a></span>';
+				if (json.data.allow_delete) {
+					delStr += '<span><a href="/' + data[i].blog + '/del/message/' + data[i].msg_id + '"><i class="layui-icon layui-icon-delete"></i> 删除</a></span>';
+				} else if(json.data.is_collect) {
+					delStr += '<span><a href="javascript:void(0);" onclick="collectMsg(' + data[i].msg_id + ',1);"><i class="layui-icon layui-icon-star-fill"></i> 取消收藏</a></span>';
+				} else {
+					delStr += '<span><a href="javascript:void(0);" onclick="collectMsg(' + data[i].msg_id + ',0);"><i class="layui-icon layui-icon-star"></i> 收藏</a></span>';
+				}
+				delStr += '</div>'; // 关闭样式类
+				str = '<div class="post"><img class="post-head" src="' + data[i].head_image + '" />'
+					+ '<div class="post-article">'
+					+ '<div class="post-info-i">'
+					+ '<h2><a href="/' + data[i].blog + '/own/">' + data[i].nickname + '</a></h2><small><i class="fa fa-clock-o"></i>'+getDateDiff(data[i].ctime)+'<i class="fa fa-eye"></i>'+' 来自' + data[i].refrom+'</small>'
+					+ '</div>'
+					+ '<div class="post-content"><div class="post-text">' + data[i].contents + data[i].repost + '</div>'  + mediaStr + '</div>'
+					+ '</div>'
+					+ '<div class="clear"></div>'
+					+ '<div class="post-meta">'+delStr+'</div>'
+					+ '<div class="clear"></div>'
+					+ '</div>'
+					+ '</div>';
+
+				$("#msgContent").append(str);
+				iniVideo(data[i].msg_id)
+			}
+		}
+		
+		// 添加手动刷新缓存的功能（可用于调试）
+		window.refreshCache = function() {
+			CacheManager.clearAllCache();
+			alertMsg('缓存已清空，页面将重新加载数据');
+			location.reload();
+		};
+		
+		// 添加查看缓存状态的功能
+		window.showCacheStatus = function() {
+			var cacheCount = 0;
+			for (var i = 0; i < localStorage.length; i++) {
+				var key = localStorage.key(i);
+				if (key && key.startsWith(CacheManager.cachePrefix)) {
+					cacheCount++;
+				}
+			}
+			alertMsg('当前缓存数量: ' + cacheCount + ' 条');
+		};
+
 		$(window).scroll(function () {
 			var top = $(window).scrollTop();
 			var winH = $(window).height();
@@ -258,3 +418,7 @@
 	})
 
 </script>
+<script>
+	
+</script>
+{include file='index/foot' /}
