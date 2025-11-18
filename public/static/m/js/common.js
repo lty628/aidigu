@@ -214,7 +214,7 @@ function comdel(url){
 								var str = '<div class="post"><img class="post-head" src="' +userInfo.head_image + '" />'
 								+ '<div class="post-article">'
 								+ '<div class="post-info-i">'
-								+ '<h2><a href="/' +userInfo.blog + '/own/">' +userInfo.nickname + '</a></h2><small><i class="fa fa-clock-o"></i>刚刚<i class="fa fa-eye"></i>'
+								+ '<h2><a href="/' +userInfo.blog + '/own/">' +userInfo.nickname + '</a></h2><small><i class="fa fa-clock-o"></i>刚刚<i class="fa fa-eye"></i></small>'
 								+ '</div>'
 								+ '<div class="post-content"><p>' +message.contents +message.repost + '</p></div>'
 								+ '<p  class="massageImg clear"><img class="massageImgCommon massageImg_'+message.media_info.media_type+'"  onclick="showMessageImg(this)" src="' + message.media + '"></p>';
@@ -230,7 +230,7 @@ function comdel(url){
 							var str = '<div class="post"><img class="post-head" src="' +userInfo.head_image + '" />'
 								+ '<div class="post-article">'
 								+ '<div class="post-info-i">'
-								+ '<h2><a href="/' +userInfo.blog + '/own/">' +userInfo.nickname + '</a></h2><small><i class="fa fa-clock-o"></i>刚刚<i class="fa fa-eye"></i>'
+								+ '<h2><a href="/' +userInfo.blog + '/own/">' +userInfo.nickname + '</a></h2><small><i class="fa fa-clock-o"></i>刚刚<i class="fa fa-eye"></i></small>'
 								+ '</div>'
 								+ '<div class="post-content"><p>' +message.contents +message.repost + '</p></div>'
 								+ '</div>'

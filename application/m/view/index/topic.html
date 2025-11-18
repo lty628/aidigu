@@ -1,17 +1,135 @@
 {include file='index/header' /}
+<style>
+	/* ... existing code ... */
 
+/* 话题页面样式优化 */
+.topic-item {
+    padding: 15px;
+    border-radius: var(--radius-md);
+    background-color: var(--background-primary);
+    border: 1px solid var(--border-color);
+    margin-bottom: 12px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.topic-item:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+.topic-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+}
+
+.topic-title {
+    margin: 0;
+    flex: 1;
+    font-size: 16px;
+    line-height: 1.4;
+}
+
+.topic-title a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-size: 16px;
+    transition: color 0.2s ease;
+}
+
+.topic-title a:hover {
+    color: var(--primary-color);
+}
+
+.topic-meta {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.topic-hot {
+    padding: 4px 10px;
+    /* border-radius: var(--radius-full); */
+    font-size: 12px;
+    font-weight: 500;
+    white-space: nowrap;
+    /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); */
+}
+
+/* 响应式适配 */
+@media (max-width: 768px) {
+    .topic-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+    
+    .topic-meta {
+        align-self: flex-end;
+    }
+    
+    .topic-title {
+        font-size: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .topic-item {
+        padding: 12px;
+        margin-bottom: 10px;
+    }
+    
+    .topic-title {
+        font-size: 14px;
+    }
+    
+    .topic-hot {
+        font-size: 11px;
+        padding: 3px 8px;
+    }
+}
+
+/* 暗色模式适配 */
+@media (prefers-color-scheme: dark) {
+    .topic-item {
+        background-color: var(--background-secondary);
+        border-color: var(--border-color-dark);
+    }
+}
+
+/* 高对比度模式 */
+@media (prefers-contrast: high) {
+    .topic-item {
+        border-width: 2px;
+    }
+    
+    .topic-title a {
+        font-weight: 700;
+    }
+}
+
+/* 减少动画模式 */
+@media (prefers-reduced-motion: reduce) {
+    .topic-item {
+        transition: none;
+    }
+    
+    .topic-item:hover {
+        transform: none;
+    }
+}
+</style>
 {foreach $topicArr as $topic}
 <div class="post">
-	<div class="post-article">
-		<div class="post-info-i">
-			<h2><a style="color: #f87a7a;" href="/topic/{$topic['topic_id']}/">{$topic['title']}</a></h2>
-		</div>
-		
-		<div class="post-content">
-	    	
-		</div>
-		<div class="post-content">
-			<li>话题热度： {$topic['count']}</li>
+	<div class="post-article topic-item">
+		<div class="topic-header">
+			<h2 class="topic-title"><a class="topic" href="/topic/{$topic['topic_id']}/">{$topic['title']}</a></h2>
+			<div class="topic-meta">
+				<span class="topic-hot">🔥 热度：{$topic['count']}</span>
+			</div>
 		</div>
 	</div>
 </div>

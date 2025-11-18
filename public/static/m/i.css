@@ -177,26 +177,6 @@ h6 { font-size: 0.8em; }
 .body { margin: 22px auto 20px auto; }
 .clear { clear: both; }
 
-/* 导航栏 */
-.top-bar-body {
-    padding: 10px 0 0 0;
-    margin: 0 0 10px 0;
-    text-align: center;
-    background-color: var(--background-primary);
-}
-
-.top-bar-body .current { border-bottom-color: var(--primary-color); }
-
-.top-bar-body li {
-    display: inline-block;
-    padding: 0 10px 6px 10px;
-    border-bottom: 3px solid transparent;
-    margin: 0 10px;
-    transition: border-color 0.2s ease;
-}
-
-.top-bar-body li:hover { border-bottom-color: var(--primary-light); }
-
 /* 侧边栏 */
 .sidebar {
     float: left;
@@ -773,6 +753,262 @@ cursor: pointer;
 }
 
 #sendButton:hover { background-color: var(--primary-hover); }
+
+/* 导航栏样式 - 合并优化 */
+.top-bar-body {
+    padding: 0;
+    margin: 0 0 15px 0;
+    background: linear-gradient(135deg, var(--background-primary), var(--background-secondary));
+    border-radius: var(--radius-lg);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.top-bar-body .current { border-bottom-color: var(--primary-color); }
+
+.top-bar-body li {
+    display: inline-block;
+    padding: 0 10px 6px 10px;
+    border-bottom: 3px solid transparent;
+    margin: 0 10px;
+    transition: border-color 0.2s ease;
+}
+
+.top-bar-body li:hover { border-bottom-color: var(--primary-light); }
+
+.nav-menu {
+    padding: 0;
+}
+
+.nav-list {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    flex-wrap: wrap;
+}
+
+.nav-item {
+    flex: 1;
+    min-width: 0;
+    position: relative;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nav-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 12px 8px;
+    text-decoration: none;
+    color: var(--text-secondary);
+    font-size: 12px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    position: relative;
+    border-radius: var(--radius-md);
+    margin: 4px;
+    background: transparent;
+}
+
+.nav-link:hover {
+    color: var(--primary-color);
+    background: rgba(var(--primary-rgb), 0.05);
+    transform: translateY(-2px);
+}
+
+.nav-item.active .nav-link {
+    color: var(--primary-color);
+    background: linear-gradient(135deg, rgba(var(--primary-rgb), 0.1), rgba(var(--primary-rgb), 0.05));
+}
+
+.nav-icon {
+    font-size: 18px;
+    margin-bottom: 4px;
+    transition: transform 0.3s ease;
+}
+
+.nav-link:hover .nav-icon {
+    transform: scale(1.1);
+}
+
+.nav-text {
+    font-size: 11px;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
+
+.nav-badge {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+}
+
+/* 活动状态指示器 */
+.nav-item.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60%;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+    border-radius: var(--radius-full);
+    animation: slideIn 0.3s ease;
+}
+
+/* 响应式适配 - 合并重复的.top-bar-body定义 */
+@media (max-width: 768px) {
+    .nav-list {
+        justify-content: space-between;
+    }
+    
+    .nav-item {
+        flex: 0 1 auto;
+        min-width: 60px;
+    }
+    
+    .nav-link {
+        padding: 10px 6px;
+        font-size: 11px;
+    }
+    
+    .nav-icon {
+        font-size: 16px;
+    }
+    
+    .nav-text {
+        font-size: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .top-bar-body {
+        margin: 0 0 12px 0;
+        border-radius: var(--radius-md);
+    }
+    
+    .nav-item {
+        min-width: 55px;
+    }
+    
+    .nav-link {
+        padding: 8px 4px;
+    }
+    
+    .nav-icon {
+        font-size: 14px;
+        margin-bottom: 2px;
+    }
+    
+    .nav-text {
+        font-size: 9px;
+    }
+}
+
+/* 删除第908行和第957行的重复响应式定义 */
+/* @media (max-width: 480px) {
+    .top-bar-body {
+        margin: 0 0 12px 0;
+        border-radius: var(--radius-md);
+    }
+} */
+
+/* 动画效果 */
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(var(--primary-rgb), 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 6px rgba(var(--primary-rgb), 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(var(--primary-rgb), 0);
+    }
+}
+
+@keyframes slideIn {
+    from {
+        width: 0;
+        opacity: 0;
+    }
+    to {
+        width: 60%;
+        opacity: 1;
+    }
+}
+
+/* 暗色模式适配 - 合并优化 */
+@media (prefers-color-scheme: dark) {
+    .top-bar-body {
+        background: linear-gradient(135deg, var(--background-secondary), var(--background-tertiary));
+        border-color: rgba(255, 255, 255, 0.05);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    }
+    
+    .nav-link:hover {
+        background: rgba(var(--primary-rgb), 0.1);
+    }
+}
+
+/* 高对比度模式 */
+@media (prefers-contrast: high) {
+    .nav-item.active::after {
+        height: 4px;
+        background: var(--primary-color);
+    }
+    
+    .nav-link {
+        border: 1px solid transparent;
+    }
+    
+    .nav-link:hover {
+        border-color: var(--primary-color);
+    }
+}
+
+/* 减少动画模式 */
+@media (prefers-reduced-motion: reduce) {
+    .nav-link,
+    .nav-link:hover,
+    .nav-icon,
+    .nav-item.active::after {
+        transition: none;
+        animation: none;
+    }
+    
+    .nav-link:hover {
+        transform: none;
+    }
+}
+
+/* 触摸设备优化 */
+@media (hover: none) and (pointer: coarse) {
+    .nav-link:active {
+        background: rgba(var(--primary-rgb), 0.1);
+        transform: scale(0.95);
+    }
+    
+    .nav-link:hover {
+        transform: none;
+        background: transparent;
+    }
+}
+
 #sendButton:disabled {
     background-color: var(--primary-light);
     cursor: not-allowed;
@@ -942,6 +1178,9 @@ cursor: pointer;
     .post-info-i small { font-size: 13px; }
     .post-text { font-size: 14px; }
 }
+
+/* 删除重复的.body-top-bg和.body-gravatar样式（第1211-1308行） */
+/* 这些样式已经在文件前面的响应式部分定义过，无需重复 */
 
 /* 使用CSS变量保持主题一致性 */
 .body-top-bg {

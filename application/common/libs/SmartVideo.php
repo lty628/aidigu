@@ -100,7 +100,7 @@ class SmartVideo
         }
         
         $id = $match['video_id'][0] == '' ? $match['video_id2'][0] : $match['video_id'][0];
-        $width = '100%';
+        $width = '80%';
         $height = '350px';
         if (in_array($site, $is_music)) {
             $height = '110px';
