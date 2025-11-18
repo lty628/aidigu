@@ -145,7 +145,7 @@
 		// 滚动位置缓存键
 		scrollPosKey: 'scroll_position_',
 		// 缓存过期时间（30分钟）
-		cacheExpireTime: 30 * 60 * 1000,
+		cacheExpireTime: 1 * 60 * 1000,
 		
 		// 生成缓存键
 		// 生成缓存键 - 改进版
@@ -171,7 +171,7 @@
 					timestamp: new Date().getTime(),
 					expireTime: this.cacheExpireTime
 				};
-				localStorage.setItem(cacheKey, JSON.stringify(cacheData));
+				sessionStorage.setItem(cacheKey, JSON.stringify(cacheData));
 				return true;
 			} catch (e) {
 				console.warn('缓存设置失败:', e);
@@ -183,8 +183,8 @@
 		getCache: function(page, url) {
 			try {
 				var cacheKey = this.getCacheKey(page, url);
-				var cacheStr = localStorage.getItem(cacheKey);
-if (!cacheStr) return null;
+				var cacheStr = sessionStorage.getItem(cacheKey);
+				if (!cacheStr) return null;
 				
 				var cacheData = JSON.parse(cacheStr);
 				var currentTime = new Date().getTime();
@@ -206,7 +206,7 @@ if (!cacheStr) return null;
 		removeCache: function(page, url) {
 			try {
 				var cacheKey = this.getCacheKey(page, url);
-				localStorage.removeItem(cacheKey);
+				sessionStorage.removeItem(cacheKey);
 				return true;
 			} catch (e) {
 				console.warn('缓存删除失败:', e);
@@ -223,7 +223,7 @@ if (!cacheStr) return null;
 					position: scrollPos,
 					timestamp: new Date().getTime()
 				};
-				localStorage.setItem(scrollKey, JSON.stringify(scrollData));
+				sessionStorage.setItem(scrollKey, JSON.stringify(scrollData));
 				return true;
 			} catch (e) {
 				console.warn('滚动位置保存失败:', e);
@@ -235,7 +235,7 @@ if (!cacheStr) return null;
 		restoreScrollPosition: function(url) {
 			try {
 				var scrollKey = this.getScrollPosKey(url);
-				var scrollStr = localStorage.getItem(scrollKey);
+				var scrollStr = sessionStorage.getItem(scrollKey);
 				if (!scrollStr) return false;
 				
 				var scrollData = JSON.parse(scrollStr);
@@ -251,11 +251,11 @@ if (!cacheStr) return null;
 		cleanExpiredCache: function() {
 			try {
 				var keysToRemove = [];
-				for (var i = 0; i < localStorage.length; i++) {
-					var key = localStorage.key(i);
+				for (var i = 0; i < sessionStorage.length; i++) {
+					var key = sessionStorage.key(i);
 					if (key && key.startsWith(this.cachePrefix)) {
 						try {
-							var cacheStr = localStorage.getItem(key);
+							var cacheStr = sessionStorage.getItem(key);
 							var cacheData = JSON.parse(cacheStr);
 							var currentTime = new Date().getTime();
 							
@@ -270,7 +270,7 @@ if (!cacheStr) return null;
 				}
 				
 				keysToRemove.forEach(function(key) {
-					localStorage.removeItem(key);
+					sessionStorage.removeItem(key);
 				});
 				
 				return keysToRemove.length;
@@ -284,15 +284,15 @@ if (!cacheStr) return null;
 		clearAllCache: function() {
 			try {
 				var keysToRemove = [];
-				for (var i = 0; i < localStorage.length; i++) {
-					var key = localStorage.key(i);
+				for (var i = 0; i < sessionStorage.length; i++) {
+					var key = sessionStorage.key(i);
 					if (key && key.startsWith(this.cachePrefix)) {
 						keysToRemove.push(key);
 					}
 				}
 				
 				keysToRemove.forEach(function(key) {
-					localStorage.removeItem(key);
+					sessionStorage.removeItem(key);
 				});
 				
 				return keysToRemove.length;
@@ -456,14 +456,6 @@ if (!cacheStr) return null;
 	window.addEventListener('beforeunload', function() {
 		CacheManager.saveScrollPosition();
 	});
-	// 添加键盘快捷键支持（用于测试）
-	document.addEventListener('keydown', function(e) {
-		// Ctrl+R 或 Cmd+R 触发下拉刷新
-		if ((e.ctrlKey || e.metaKey) && e.key === 'r') {
-			e.preventDefault();
-			PullRefresh.manualRefresh();
-		}
-	});
 
 	var page = 0;
 	$(function () {
@@ -550,10 +542,6 @@ if (!cacheStr) return null;
 			if (fromCache) {
 				// 如果是缓存数据，直接处理
 				renderData(data, json);
-				// 添加缓存数据加载后的滚动位置恢复
-				setTimeout(function() {
-					CacheManager.restoreScrollPosition();
-				}, 50);
 				canLoad = true;
 			} else {
 				// 如果是新数据，正常处理流程
@@ -629,8 +617,8 @@ if (!cacheStr) return null;
 		// 添加查看缓存状态的功能
 		window.showCacheStatus = function() {
 			var cacheCount = 0;
-			for (var i = 0; i < localStorage.length; i++) {
-				var key = localStorage.key(i);
+			for (var i = 0; i < sessionStorage.length; i++) {
+				var key = sessionStorage.key(i);
 				if (key && key.startsWith(CacheManager.cachePrefix)) {
 					cacheCount++;
 				}
