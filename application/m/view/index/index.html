@@ -148,8 +148,13 @@
 		cacheExpireTime: 30 * 60 * 1000,
 		
 		// 生成缓存键
+		// 生成缓存键 - 改进版
 		getCacheKey: function(page, url) {
-			return this.cachePrefix + btoa(url || window.location.pathname) + '_' + page;
+		    // 添加更多的上下文信息，如查询参数，确保缓存键的唯一性
+		    var fullUrl = url || window.location.href; // 使用完整URL包括查询参数
+		    // 添加时间戳的一部分作为盐值，避免不同会话间的冲突
+		    var salt = (new Date().getTime() % 1000000).toString(36);
+		    return this.cachePrefix + btoa(fullUrl) + '_page_' + page + '_' + salt;
 		},
 		
 		// 生成滚动位置缓存键
@@ -179,7 +184,7 @@
 			try {
 				var cacheKey = this.getCacheKey(page, url);
 				var cacheStr = localStorage.getItem(cacheKey);
-				if (!cacheStr) return null;
+if (!cacheStr) return null;
 				
 				var cacheData = JSON.parse(cacheStr);
 				var currentTime = new Date().getTime();
@@ -451,7 +456,6 @@
 	window.addEventListener('beforeunload', function() {
 		CacheManager.saveScrollPosition();
 	});
-
 	// 添加键盘快捷键支持（用于测试）
 	document.addEventListener('keydown', function(e) {
 		// Ctrl+R 或 Cmd+R 触发下拉刷新
@@ -470,47 +474,74 @@
 			if (!canLoad) return
 			page++
 			canLoad = false
-			var url = window.location.pathname
+			// 移除这行：var url = window.location.pathname;
+			// 使用传入的url参数，如果没有则使用当前页面路径
+			var targetUrl = url || window.location.pathname;
 			
 			// 先尝试从缓存获取数据
-			var cachedData = CacheManager.getCache(page, url);
+			var cachedData = CacheManager.getCache(page, targetUrl);
 			if (cachedData) {
-				console.log('使用缓存数据，页码:', page);
-				processData(cachedData, true);
+				console.log('使用缓存数据，页码:', page, 'URL:', targetUrl);
+				// 添加缓存数据有效性检查
+				if (cachedData.data && cachedData.data.data && Array.isArray(cachedData.data.data)) {
+					processData(cachedData, true);
+				} else {
+					console.warn('缓存数据格式无效，重新请求数据');
+					// 移除无效缓存
+					CacheManager.removeCache(page, targetUrl);
+					// 重新请求数据
+					fetchData(page, targetUrl);
+				}
 				return;
 			}
 			
 			// 缓存中没有数据，发起AJAX请求
+			fetchData(page, targetUrl);
+		}
+		
+		// 提取单独的数据获取函数
+		function fetchData(pageNum, targetUrl) {
 			$.ajax({
 				type: "get",
-				url: url,
-				data: { page: page },
+				url: targetUrl,
+				data: { page: pageNum },
 				dataType: "json",
 			})
-				.done(function (json) {
-					var data = json.data.data
-					
-					if (json?.code === 0) {
-					    // 显示提示信息
-					    alertMsg(json?.msg || '加载数据失败');
-					    // 2 秒后将 canLoad 设置为 true
-					    setTimeout(() => {
-					        canLoad = true;
-					    }, 2000);
-					    return;
-					}
-					
-					// 缓存获取到的数据
-					CacheManager.setCache(page, json, url);
-					
-					processData(json, false);
-				})
-				.always(function () {
-				})
-				.fail(function () {
-					canLoad = true;
-				});
+			.done(function (json) {
+				var data = json.data.data
+				
+				if (json?.code === 0) {
+					// 显示提示信息
+					alertMsg(json?.msg || '加载数据失败');
+					// 2 秒后将 canLoad 设置为 true
+					setTimeout(() => {
+						canLoad = true;
+					}, 2000);
+					return;
+				}
+				
+				// 缓存获取到的数据
+				CacheManager.setCache(pageNum, json, targetUrl);
+				
+				processData(json, false);
+			})
+			.always(function () {
+			})
+			.fail(function () {
+				canLoad = true;
+			});
 		}
+		
+		// 相应地修改调用处
+		$(window).scroll(function () {
+			var top = $(window).scrollTop();
+			var winH = $(window).height();
+			var docH = $(document).height();
+			if (docH <= (top + winH + 200)) {
+				initNextPage() // 可以不传参数，函数内部会处理
+			}
+		});
+		initNextPage() // 可以不传参数，函数内部会处理
 		
 		// 处理数据的通用函数
 		function processData(json, fromCache) {
