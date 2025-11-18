@@ -1,10 +1,5 @@
+
 {include file='index/header' /}
-
-<!-- 下拉刷新提示 - 优化固定顶部版 -->
-<div id="pullRefreshIndicator" style="position: fixed; top: 0; left: 0; width: 100%; height: 60px; background: #f8f8f8; text-align: center; line-height: 60px; z-index: 100001; display: none; border-bottom: 1px solid #ddd; transition: transform 0.3s ease, background-color 0.3s ease; transform: translateY(-100%);">
-    <span id="pullRefreshText">下拉刷新</span>
-</div>
-
 {if $userInfo.isSiteUser}
     <!-- 新增悬浮固定发布按钮 -->
     <!-- <div id="floating_publish_button" style="position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 999;">
@@ -12,7 +7,7 @@
     </div> -->
     <!-- 新增一个容器用于包裹评论表单，并默认隐藏 -->
     <div id="comment_form_container" >
-        <div method="post" class="comment_form" action="" id="comment_form">
+        <div method="post" class="post" action="" id="comment_form">
             <!-- <small></small> -->
             <div id="msgInput" class="text" maxlength="2800" onkeyup="check_len1()">
                 <!-- <p>你在做什么呢</p> -->
@@ -28,7 +23,7 @@
             <!-- 表情等 -->
             <div id="msgToolBar" class="toolbar"></div>
             <div class="tool-up-class" style="display: none;">
-<div class="imgHtml" style="display: block;border-radius: 3px;">
+                <div class="imgHtml" style="display: block;border-radius: 3px;">
                     <!-- <img src="" width="70px" alt=""> -->
                     上传成功！
                     <i class="layui-icon layui-icon-close-fill" onclick="removeImg(this)"
@@ -70,7 +65,7 @@
 				<i class="fa fa-eye"></i>
 				<a href=""><i class="fa fa-pencil-square-o"></i>编辑</a></small>
 			</div>
-<div class="post-content">
+			<div class="post-content">
 			<p class="more"><a href="" title="asdfasfasf">继续阅读</a></p>
 			</div>
 		</div>
@@ -94,6 +89,28 @@
 <!-- <section class="back-to-top">
 	回到顶部
 </section> -->
+<!-- <div class="post">
+	<img class="post-head" src="" />
+	<div class="post-article">
+		<div class="post-info-i">
+			<h2><a href="#">404 啥也没找到</a></h2>
+		</div>
+		<div class="post-content">
+			<p>什么都没有找到啊。。抱歉啦！</p>
+			404页面是客户端在浏览网页时，服务器无法正常提供信息，或是服务器无法回应，且不知道原因所返回的页面。据说在第三次科技革命之前，互联网的形态就是一个大型的中央数据库，这个数据库就设置在404房间里面。那时候所有的请求都是由人工手动完成的，如果在数据库中没有找到请求者所需要的文件，或者由于请求者写错了文件编号，用户就会得到一个返回信息：room 404 : file not found。404错误信息通常是在目标页面被更改或移除，或客户端输入页面地址错误后显示的页面，人们也就习惯了用404作为服务器未找到文件的错误代码了。当然实际考证传说中的room 404是不存在的，在http请求3位的返回码中，4开头的代表客户错误，5开头代表服务器端错误。
+		</div>
+	</div>
+	<div class="clear"></div>
+	<div class="post-meta">
+			<span><i class="fa fa-user"></i> <a href="#">System</a></span>
+			<span><i class="fa fa-inbox"></i> 404,not,found</span>
+	    	<span><i class="fa fa-comment"></i> Zero</span>
+	    	<div class="clear"></div>
+	</div>
+</div> -->
+
+{include file='index/foot' /}
+
 <script>
 	/**
 	* 缓冲函数
@@ -138,589 +155,97 @@
 
 </script>
 <script>
-	// 缓存管理功能
-	// 修改CacheManager，添加全量数据缓存支持
-	var CacheManager = {
-	    // 缓存前缀
-	    cachePrefix: 'msg_cache_',
-	    // 滚动位置缓存键
-	    scrollPosKey: 'scroll_position_',
-	    // 缓存过期时间（30分钟）
-	    cacheExpireTime: 30 * 60 * 1000,
-	    
-	    // 生成缓存键
-	    getCacheKey: function(page, url) {
-	        // 使用完整URL包括查询参数，确保缓存键的唯一性
-	        var fullUrl = url || window.location.href;
-	        // 添加时间戳的一部分作为盐值，避免不同会话间的冲突
-	        var salt = (new Date().getTime() % 1000000).toString(36);
-	        return this.cachePrefix + btoa(fullUrl) + '_page_' + page + '_' + salt;
-	    },
-	    
-	    // 生成滚动位置缓存键
-	    getScrollPosKey: function(url) {
-	        return this.scrollPosKey + btoa(url || window.location.pathname);
-	    },
-	    
-	    // 设置缓存
-	    setCache: function(page, data, url) {
-	        try {
-	            var cacheKey = this.getCacheKey(page, url);
-	            var cacheData = {
-	                data: data,
-	                timestamp: new Date().getTime(),
-	                expireTime: this.cacheExpireTime
-	            };
-	            sessionStorage.setItem(cacheKey, JSON.stringify(cacheData));
-	            return true;
-	        } catch (e) {
-	            console.warn('缓存设置失败:', e);
-	            return false;
-	        }
-	    },
-	    
-	    // 获取缓存
-	    getCache: function(page, url) {
-	        try {
-	            var cacheKey = this.getCacheKey(page, url);
-	            var cacheStr = sessionStorage.getItem(cacheKey);
-	            if (!cacheStr) return null;
-	            
-	            var cacheData = JSON.parse(cacheStr);
-	            var currentTime = new Date().getTime();
-	            
-	            // 检查缓存是否过期
-	            if (currentTime - cacheData.timestamp > cacheData.expireTime) {
-	                this.removeCache(page, url);
-	                return null;
-	            }
-	            
-	            return cacheData.data;
-	        } catch (e) {
-	            console.warn('缓存获取失败:', e);
-	            return null;
-	        }
-	    },
-	    
-	    // 删除缓存
-	    removeCache: function(page, url) {
-	        try {
-	            var cacheKey = this.getCacheKey(page, url);
-	            sessionStorage.removeItem(cacheKey);
-	            return true;
-	        } catch (e) {
-	            console.warn('缓存删除失败:', e);
-	            return false;
-	        }
-	    },
-	    
-	    // 保存滚动位置
-	    saveScrollPosition: function(url) {
-	        try {
-	            var scrollPos = window.pageYOffset || document.documentElement.scrollTop;
-	            var scrollKey = this.getScrollPosKey(url);
-	            var scrollData = {
-	                position: scrollPos,
-	                timestamp: new Date().getTime()
-	            };
-	            sessionStorage.setItem(scrollKey, JSON.stringify(scrollData));
-	            return true;
-	        } catch (e) {
-	            console.warn('滚动位置保存失败:', e);
-	            return false;
-	        }
-	    },
-	    
-	    // 恢复滚动位置
-	    restoreScrollPosition: function(url) {
-	        try {
-	            var scrollKey = this.getScrollPosKey(url);
-	            var scrollStr = sessionStorage.getItem(scrollKey);
-	            if (!scrollStr) return false;
-	            
-	            var scrollData = JSON.parse(scrollStr);
-	            window.scrollTo(0, scrollData.position);
-	            return true;
-	        } catch (e) {
-	            console.warn('滚动位置恢复失败:', e);
-	            return false;
-	        }
-	    },
-	    
-	    // 清理所有过期缓存
-	    cleanExpiredCache: function() {
-	        try {
-	            var keysToRemove = [];
-	            for (var i = 0; i < sessionStorage.length; i++) {
-	                var key = sessionStorage.key(i);
-	                if (key && key.startsWith(this.cachePrefix)) {
-	                    try {
-	                        var cacheStr = sessionStorage.getItem(key);
-	                        var cacheData = JSON.parse(cacheStr);
-	                        var currentTime = new Date().getTime();
-	                        
-	                        if (currentTime - cacheData.timestamp > cacheData.expireTime) {
-	                            keysToRemove.push(key);
-	                        }
-	                    } catch (e) {
-	                        // 如果解析失败，也删除该缓存
-	                        keysToRemove.push(key);
-	                    }
-	                }
-	            }
-	            
-	            keysToRemove.forEach(function(key) {
-	                sessionStorage.removeItem(key);
-	            });
-	            
-	            return keysToRemove.length;
-	        } catch (e) {
-	            console.warn('缓存清理失败:', e);
-	            return 0;
-	        }
-	    },
-	    
-	    // 清理所有缓存
-	    clearAllCache: function() {
-	        try {
-	            var keysToRemove = [];
-	            for (var i = 0; i < sessionStorage.length; i++) {
-	                var key = sessionStorage.key(i);
-	                if (key && key.startsWith(this.cachePrefix)) {
-	                    keysToRemove.push(key);
-	                }
-	            }
-	            
-	            keysToRemove.forEach(function(key) {
-	                sessionStorage.removeItem(key);
-	            });
-	            
-	            return keysToRemove.length;
-	        } catch (e) {
-	            console.warn('缓存清理失败:', e);
-	            return 0;
-	        }
-	    }
-	};
-
-	// 下拉刷新功能 - 固定顶部优化版
-	var PullRefresh = {
-	    startY: 0,
-	    currentY: 0,
-	    isRefreshing: false,
-	    threshold: 80, // 下拉阈值
-	    isEnabled: false, // 是否启用下拉刷新
-	    
-	    init: function() {
-	        // 检查是否在移动设备上
-	        if ('ontouchstart' in window) {
-	            document.addEventListener('touchstart', this.handleTouchStart.bind(this), { passive: false });
-	            document.addEventListener('touchmove', this.handleTouchMove.bind(this), { passive: false });
-	            document.addEventListener('touchend', this.handleTouchEnd.bind(this));
-	            console.log('下拉刷新功能已启用');
-	        } else {
-	            console.log('非移动设备，下拉刷新功能未启用');
-	        }
-	    },
-	    
-	    handleTouchStart: function(e) {
-	        // 只有在页面顶部且没有在刷新时才启用下拉刷新
-	        var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-	        if (scrollTop <= 10 && !this.isRefreshing) {
-	            this.startY = e.touches[0].pageY;
-	            this.currentY = this.startY;
-	            this.isEnabled = true;
-	        } else {
-	            this.isEnabled = false;
-	        }
-	    },
-	    
-	    handleTouchMove: function(e) {
-	        if (!this.isEnabled || this.isRefreshing) return;
-	        
-	        this.currentY = e.touches[0].pageY;
-	        var deltaY = this.currentY - this.startY;
-	        
-	        // 只有向下拉动且在页面顶部才显示刷新指示器
-	        if (deltaY > 0 && (window.pageYOffset || document.documentElement.scrollTop) <= 10) {
-	            e.preventDefault();
-	            this.updateIndicator(deltaY);
-	        }
-	    },
-	    
-	    handleTouchEnd: function(e) {
-	        if (!this.isEnabled || this.isRefreshing) return;
-	        
-	        var deltaY = this.currentY - this.startY;
-	        
-	        if (deltaY > this.threshold) {
-	            this.startRefresh();
-	        } else {
-	            this.hideIndicator();
-	        }
-	        
-	        this.startY = 0;
-	        this.currentY = 0;
-	        this.isEnabled = false;
-	    },
-	    
-	    updateIndicator: function(deltaY) {
-	        var indicator = document.getElementById('pullRefreshIndicator');
-	        var text = document.getElementById('pullRefreshText');
-	        
-	        if (!indicator || !text) {
-	            console.error('下拉刷新指示器元素未找到');
-	            return;
-	        }
-	        
-	        // 限制下拉距离，防止过度下拉
-	        var pullDistance = Math.min(deltaY, this.threshold * 1.5);
-	        var translateY = Math.min(-60 + pullDistance * 0.8, 0); // 确保不会向下超出视口
-	        
-	        if (deltaY > this.threshold) {
-	            text.textContent = '释放刷新';
-	            indicator.style.background = '#e8f4fd';
-	        } else {
-	            text.textContent = '下拉刷新';
-	            indicator.style.background = '#f8f8f8';
-	        }
-	        
-	        indicator.style.display = 'block';
-	        indicator.style.transform = 'translateY(' + translateY + 'px)';
-	    },
-	    
-	    hideIndicator: function() {
-	        var indicator = document.getElementById('pullRefreshIndicator');
-	        if (indicator) {
-	            indicator.style.transform = 'translateY(-100%)'; // 回到隐藏位置
-	            setTimeout(function() {
-	                indicator.style.display = 'none';
-	            }, 300); // 等待过渡动画完成后隐藏
-	        }
-	    },
-	    
-	    // 修改PullRefresh.startRefresh方法，移除全量数据缓存清理
-	    PullRefresh.startRefresh = function() {
-	        this.isRefreshing = true;
-	        var indicator = document.getElementById('pullRefreshIndicator');
-	        var text = document.getElementById('pullRefreshText');
-	        
-	        if (indicator && text) {
-	            text.textContent = '刷新中...';
-	            indicator.style.background = '#d4edda';
-	            indicator.style.transform = 'translateY(0)';
-	        }
-	        
-	        // 只清空普通缓存
-	        CacheManager.clearAllCache();
-	        
-	        // 延迟刷新页面，让用户看到刷新效果
-	        setTimeout(function() {
-	            location.reload();
-	        }, 1000);
-	    };
-	    
-	    // 保留第一个滚动事件监听（约680行附近），删除第二个（约757行附近）
-	    // 第一个initNextPage()调用应该不传参数，第二个应该删除
-	    
-	    // 2. 修改PullRefresh.startRefresh方法，确保同时清理全量数据缓存
-	    PullRefresh.startRefresh = function() {
-	        this.isRefreshing = true;
-	        var indicator = document.getElementById('pullRefreshIndicator');
-	        var text = document.getElementById('pullRefreshText');
-	        
-	        if (indicator && text) {
-	            text.textContent = '刷新中...';
-	            indicator.style.background = '#d4edda';
-	            indicator.style.transform = 'translateY(0)';
-	        }
-	        
-	        // 同时清空普通缓存和全量数据缓存
-	        CacheManager.clearAllCache();
-	        CacheManager.removeFullData();
-	        
-	        // 延迟刷新页面，让用户看到刷新效果
-	        setTimeout(function() {
-	            location.reload();
-	        }, 1000);
-	    };
-	    
-	    // 3. 修复showCacheStatus函数，使其同时统计全量数据缓存
-	    window.showCacheStatus = function() {
-	        var cacheCount = 0;
-	        var fullDataCount = 0;
-	        for (var i = 0; i < sessionStorage.length; i++) {
-	            var key = sessionStorage.key(i);
-	            if (key && key.startsWith(CacheManager.cachePrefix)) {
-	                cacheCount++;
-	            } else if (key && key.startsWith(CacheManager.fullDataCacheKey)) {
-	                fullDataCount++;
-	            }
-	        }
-	        alertMsg('当前缓存数量: ' + cacheCount + ' 条，全量数据缓存: ' + fullDataCount + ' 条');
-	    };
-	    
-	    // 4. 修改CacheManager.clearAllCache方法，使其同时清理全量数据缓存
-	    clearAllCache: function() {
-	        try {
-	            var keysToRemove = [];
-	            for (var i = 0; i < sessionStorage.length; i++) {
-	                var key = sessionStorage.key(i);
-	                if (key && (key.startsWith(this.cachePrefix) || key.startsWith(this.fullDataCacheKey))) {
-	                    keysToRemove.push(key);
-	                }
-	            }
-	            
-	            keysToRemove.forEach(function(key) {
-	                sessionStorage.removeItem(key);
-	            });
-	            
-	            return keysToRemove.length;
-	        } catch (e) {
-	            console.warn('缓存清理失败:', e);
-	            return 0;
-	        }
-	    }
-	    
-	    // 5. 修改cleanExpiredCache方法，使其也能清理过期的全量数据缓存
-	    cleanExpiredCache: function() {
-	        try {
-	            var keysToRemove = [];
-	            for (var i = 0; i < sessionStorage.length; i++) {
-	                var key = sessionStorage.key(i);
-	                if (key && (key.startsWith(this.cachePrefix) || key.startsWith(this.fullDataCacheKey))) {
-	                    try {
-	                        var cacheStr = sessionStorage.getItem(key);
-	                        var cacheData = JSON.parse(cacheStr);
-	                        var currentTime = new Date().getTime();
-	                        
-	                        if (currentTime - cacheData.timestamp > cacheData.expireTime) {
-	                            keysToRemove.push(key);
-	                        }
-	                    } catch (e) {
-	                        // 如果解析失败，也删除该缓存
-	                        keysToRemove.push(key);
-	                    }
-	                }
-	            }
-	            
-	            keysToRemove.forEach(function(key) {
-	                sessionStorage.removeItem(key);
-	            });
-	            
-	            return keysToRemove.length;
-	        } catch (e) {
-	            console.warn('缓存清理失败:', e);
-	            return 0;
-	        }
-	    }
-	    
-	    // 手动触发下拉刷新（用于测试）
-	    manualRefresh: function() {
-	        if (!this.isRefreshing) {
-	            this.startRefresh();
-	        }
-	    }
-	};
-
-	// 添加测试函数到全局作用域
-	window.testPullRefresh = function() {
-		PullRefresh.manualRefresh();
-	};
-
-	// 页面加载时初始化
-	$(document).ready(function() {
-		var cleanedCount = CacheManager.cleanExpiredCache();
-		if (cleanedCount > 0) {
-			console.log('清理了 ' + cleanedCount + ' 个过期缓存');
-		}
-		
-		// 初始化下拉刷新
-		PullRefresh.init();
-		
-		// 页面加载完成后恢复滚动位置
-		setTimeout(function() {
-			CacheManager.restoreScrollPosition();
-		}, 100);
-		
-		// 添加调试信息
-		console.log('页面加载完成，下拉刷新功能已初始化');
-		console.log('测试方法: 在控制台输入 testPullRefresh() 或 PullRefresh.manualRefresh()');
-	});
-
-	// 页面卸载前保存滚动位置
-	window.addEventListener('beforeunload', function() {
-		CacheManager.saveScrollPosition();
-	});
-
 	var page = 0;
 	$(function () {
 		var canLoad = true
-		
-		// 修改后的初始化下一页函数，支持缓存
 		function initNextPage(url) {
 			if (!canLoad) return
 			page++
 			canLoad = false
-			// 移除这行：var url = window.location.pathname;
-			// 使用传入的url参数，如果没有则使用当前页面路径
-			var targetUrl = url || window.location.pathname;
-			
-			// 先尝试从缓存获取数据
-			var cachedData = CacheManager.getCache(page, targetUrl);
-			if (cachedData) {
-				console.log('使用缓存数据，页码:', page, 'URL:', targetUrl);
-				// 添加缓存数据有效性检查
-				if (cachedData.data && cachedData.data.data && Array.isArray(cachedData.data.data)) {
-					processData(cachedData, true);
-				} else {
-					console.warn('缓存数据格式无效，重新请求数据');
-					// 移除无效缓存
-					CacheManager.removeCache(page, targetUrl);
-					// 重新请求数据
-					fetchData(page, targetUrl);
-				}
-				return;
-			}
-			
-			// 缓存中没有数据，发起AJAX请求
-			fetchData(page, targetUrl);
-		}
-		
-		// 提取单独的数据获取函数
-		function fetchData(pageNum, targetUrl) {
+			var url = window.location.pathname
 			$.ajax({
 				type: "get",
-				url: targetUrl,
-				data: { page: pageNum },
+				url: url,
+				data: { page: page },
 				dataType: "json",
 			})
-			.done(function (json) {
-				var data = json.data.data
-				
-				if (json?.code === 0) {
-					// 显示提示信息
-					alertMsg(json?.msg || '加载数据失败');
-					// 2 秒后将 canLoad 设置为 true
-					setTimeout(() => {
-						canLoad = true;
-					}, 2000);
-					return;
-				}
-				
-				// 缓存获取到的数据
-				CacheManager.setCache(pageNum, json, targetUrl);
-				
-				processData(json, false);
-			})
-			.always(function () {
-			})
-			.fail(function () {
-				canLoad = true;
-			});
-		}
-		// 相应地修改调用处
-		$(window).scroll(function () {
-			var top = $(window).scrollTop();
-			var winH = $(window).height();
-			var docH = $(document).height();
-			if (docH <= (top + winH + 200)) {
-				initNextPage() // 可以不传参数，函数内部会处理
-			}
-		});
-		initNextPage() // 可以不传参数，函数内部会处理
-		
-		// 处理数据的通用函数
-		function processData(json, fromCache) {
-			var data = json.data.data;
-			
-			if (fromCache) {
-				// 如果是缓存数据，直接处理
-				renderData(data, json);
-				canLoad = true;
-			} else {
-				// 如果是新数据，正常处理流程
-				renderData(data, json);
-				
-				if (data.length < 8) {
-					$("#showMore").hide()
-					return
-				}
-				
-				canLoad = true;
-			}
-		}
-		
-		// 渲染数据的函数
-		function renderData(data, json) {
-			for (var i = 0; i < data.length; i++) {
-				var mediaStr = '';
-				var str = '';
-				var delStr = '';
-				var c1 = '';
-				var c2 = '';
-				if (data[i].media) {
-					data[i].media_info = $.parseJSON(data[i].media_info)
-					if (data[i].media_info.media_type == 'mp4' || data[i].media_info.media_type == 'm3u8') {
-						mediaStr = '<p class="massageImg clear showVideo' + data[i].msg_id + '" vid="' + data[i].media + '"><video width="400px"  controls=""  name="media"><source src="" type="video/mp4"></video></p>';
-					} else if (data[i].media_info.media_type == 'mp3') {
-							mediaStr = '<p class="massageImg clear"><audio id="music_'+data[i].msg_id+'" class="music" controls="controls" loop="loop" onplay="stopOther(this); event.stopPropagation();" preload="none" controlsList="nodownload" οncοntextmenu="return false" name="media"><source src="'+data[i].media+'" type="audio/mpeg"></audio></p>';
-						}  else {
-						mediaStr = '<p  class="massageImg clear"><img class="massageImgCommon massageImg_'+data[i].media_info.media_type+'"  onclick="showMessageImg(this)" src="' + data[i].media + '"></p>';
+				.done(function (json) {
+					var data = json.data.data
+					
+					if (json?.code === 0) {
+					    // 显示提示信息
+					    alertMsg(json?.msg || '加载数据失败');
+					    // 2 秒后将 canLoad 设置为 true
+					    setTimeout(() => {
+					        canLoad = true;
+					    }, 2000);
+					    return;
+					}	
+
+					for (var i = 0; i < data.length; i++) {
+						var mediaStr = '';
+						var str = '';
+						var delStr = '';
+						var c1 = '';
+						var c2 = '';
+						if (data[i].media) {
+							data[i].media_info = $.parseJSON(data[i].media_info)
+							if (data[i].media_info.media_type == 'mp4' || data[i].media_info.media_type == 'm3u8') {
+								mediaStr = '<p class="massageImg clear showVideo' + data[i].msg_id + '" vid="' + data[i].media + '"><video width="400px"  controls=""  name="media"><source src="" type="video/mp4"></video></p>';
+							} else if (data[i].media_info.media_type == 'mp3') {
+									mediaStr = '<p class="massageImg clear"><audio id="music_'+data[i].msg_id+'" class="music" controls="controls" loop="loop" onplay="stopOther(this)" preload="none" controlsList="nodownload" οncοntextmenu="return false" name="media"><source src="'+data[i].media+'" type="audio/mpeg"></audio></p>';
+								}  else {
+								mediaStr = '<p  class="massageImg clear"><img class="massageImgCommon massageImg_'+data[i].media_info.media_type+'"  onclick="showMessageImg(this)" src="' + data[i].media + '"></p>';
+							}
+						}
+						// if (0 != data[i].repostsum) {
+						// 	c1 = '('+data[i].repostsum+')'
+						// }
+						if (0 != data[i].commentsum) {
+							c2 = '(' + data[i].commentsum + ')'
+						}
+						// 添加样式类以实现右侧对齐和样式美化
+						delStr += '<div class="post-meta-icons" style="text-align: right;">'; 
+						delStr += '<span><a href="/' + data[i].blog + '/message/' + data[i].msg_id + '"><i class="layui-icon layui-icon-eye"></i> 查看</a></span>';
+						delStr += '<span><a href="javascript:;" data-title="评论" data-url="/chat/messageChatId/' + data[i].msg_id + '" onclick="showFrameHtml(this, \'100%\', \'100%\')"><i class="layui-icon layui-icon-reply-fill"></i> 评论' + c2 + '</a></span>';
+						if (json.data.allow_delete) {
+							delStr += '<span><a href="/' + data[i].blog + '/del/message/' + data[i].msg_id + '"><i class="layui-icon layui-icon-delete"></i> 删除</a></span>';
+						} else if(json.data.is_collect) {
+							delStr += '<span><a href="javascript:void(0);" onclick="collectMsg(' + data[i].msg_id + ',1);"><i class="layui-icon layui-icon-star-fill"></i> 取消收藏</a></span>';
+						} else {
+							delStr += '<span><a href="javascript:void(0);" onclick="collectMsg(' + data[i].msg_id + ',0);"><i class="layui-icon layui-icon-star"></i> 收藏</a></span>';
+						}
+						delStr += '</div>'; // 关闭样式类
+						str = '<div class="post"><img class="post-head" src="' + data[i].head_image + '" />'
+							+ '<div class="post-article">'
+							+ '<div class="post-info-i">'
+							+ '<h2><a href="/' + data[i].blog + '/own/">' + data[i].nickname + '</a></h2><small><i class="fa fa-clock-o"></i>'+getDateDiff(data[i].ctime)+'<i class="fa fa-eye"></i>'+' 来自' + data[i].refrom+'</small>'
+							+ '</div>'
+							+ '<div class="post-content"><div class="post-text">' + data[i].contents + data[i].repost + '</div>'  + mediaStr + '</div>'
+							+ '</div>'
+							+ '<div class="clear"></div>'
+							+ '<div class="post-meta">'+delStr+'</div>'
+							+ '<div class="clear"></div>'
+							+ '</div>'
+							+ '</div>';
+
+						$("#msgContent").append(str);
+						iniVideo(data[i].msg_id)
 					}
-				}
-				if (0 != data[i].commentsum) {
-					c2 = '(' + data[i].commentsum + ')'
-				}
-				// 添加样式类以实现右侧对齐和样式美化
-				delStr += '<div class="post-meta-icons" style="text-align: right;">'; 
-				delStr += '<span><a href="/' + data[i].blog + '/message/' + data[i].msg_id + '"><i class="layui-icon layui-icon-eye"></i> 查看</a></span>';
-				delStr += '<span><a href="javascript:;" data-title="评论" data-url="/chat/messageChatId/' + data[i].msg_id + '" onclick="showFrameHtml(this, \'100%\', \'100%\')"><i class="layui-icon layui-icon-reply-fill"></i> 评论' + c2 + '</a></span>';
-				if (json.data.allow_delete) {
-					delStr += '<span><a href="/' + data[i].blog + '/del/message/' + data[i].msg_id + '"><i class="layui-icon layui-icon-delete"></i> 删除</a></span>';
-				} else if(json.data.is_collect) {
-					delStr += '<span><a href="javascript:void(0);" onclick="collectMsg(' + data[i].msg_id + ',1);"><i class="layui-icon layui-icon-star-fill"></i> 取消收藏</a></span>';
-				} else {
-					delStr += '<span><a href="javascript:void(0);" onclick="collectMsg(' + data[i].msg_id + ',0);"><i class="layui-icon layui-icon-star"></i> 收藏</a></span>';
-				}
-				delStr += '</div>'; // 关闭样式类
-				str = '<div class="post"><img class="post-head" src="' + data[i].head_image + '" />'
-					+ '<div class="post-article">'
-					+ '<div class="post-info-i">'
-					+ '<h2><a href="/' + data[i].blog + '/own/">' + data[i].nickname + '</a></h2><small><i class="fa fa-clock-o"></i>'+getDateDiff(data[i].ctime)+'<i class="fa fa-eye"></i>'+' 来自' + data[i].refrom+'</small>'
-					+ '</div>'
-					+ '<div class="post-content"><div class="post-text">' + data[i].contents + data[i].repost + '</div>'  + mediaStr + '</div>'
-					+ '</div>'
-					+ '<div class="clear"></div>'
-					+ '<div class="post-meta">'+delStr+'</div>'
-					+ '<div class="clear"></div>'
-					+ '</div>'
-					+ '</div>';
 
-				$("#msgContent").append(str);
-				iniVideo(data[i].msg_id)
-			}
+					if (data.length < 8) {
+						$("#showMore").hide()
+						return
+						// $("#showMore").html('没有了')
+					}
+
+					canLoad = true
+				})
+				.always(function () {
+				})
+				.fail(function () {
+				});
 		}
-		
-		// 添加手动刷新缓存的功能（可用于调试）
-		window.refreshCache = function() {
-			CacheManager.clearAllCache();
-			alertMsg('缓存已清空，页面将重新加载数据');
-			location.reload();
-		};
-		
-		// 添加查看缓存状态的功能
-		window.showCacheStatus = function() {
-			var cacheCount = 0;
-			for (var i = 0; i < sessionStorage.length; i++) {
-				var key = sessionStorage.key(i);
-				if (key && key.startsWith(CacheManager.cachePrefix)) {
-					cacheCount++;
-				}
-			}
-			alertMsg('当前缓存数量: ' + cacheCount + ' 条');
-		};
-
 		$(window).scroll(function () {
 			var top = $(window).scrollTop();
 			var winH = $(window).height();
@@ -733,4 +258,3 @@
 	})
 
 </script>
-{include file='index/foot' /}
