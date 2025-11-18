@@ -1,20 +1,24 @@
-
 var playIngMusicId = '';
 var playIngVideoId = -1;
 var DP = [];
 function stopOther(obj) {
-	var id = $(obj).attr("id")
-	if (playIngMusicId != '' && id != playIngMusicId) {
-		// 如果playIngMusicId 不正确导致的错误，就不执行暂停操作
-		if (document.getElementById(playIngMusicId)) {
-			document.getElementById(playIngMusicId).pause()
-		}
-	}
-	if (playIngVideoId != -1) {
-		DP[playIngVideoId].pause()
-	}
-	playIngMusicId = id;
-	return
+    var id = $(obj).attr("id")
+    if (playIngMusicId != '' && id != playIngMusicId) {
+        // 如果playIngMusicId 不正确导致的错误，就不执行暂停操作
+        if (document.getElementById(playIngMusicId)) {
+            document.getElementById(playIngMusicId).pause()
+        }
+    }
+    if (playIngVideoId != -1) {
+        DP[playIngVideoId].pause()
+    }
+    playIngMusicId = id;
+    
+    // 添加：阻止音频播放时焦点转移到输入框
+    if (document.activeElement && document.activeElement.tagName === 'INPUT') {
+        document.activeElement.blur();
+    }
+    return
 }
 
 function iniVideo(i)

@@ -663,9 +663,10 @@ d.data[index].listtagid = d.listtagid
 			// $("#menu-pannel").css('display', 'none')
 			$("#sub-menu-pannel").css('display', 'none')
 			$("#content-pannel").show();
+		} else {
+			$("#showGroupUser").show();
 		}
 
-		$("#showGroupUser").show();
 
 		window.parent.$(".layui-layer-title").text($(obj).attr("uname"));
 
