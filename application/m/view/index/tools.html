@@ -16,7 +16,7 @@
     background-color: var(--background-primary);
     border-radius: var(--radius-lg);
     overflow: hidden;
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     border: 1px solid var(--border-color);
     text-align: center;
     display: flex;
@@ -24,13 +24,21 @@
     align-items: center;
     padding: var(--spacing-lg);
     height: 100%;
+    cursor: pointer;
+    position: relative;
 }
 
 /* 工具卡片悬停效果 */
 .tool-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
     border-color: var(--primary-color);
+}
+
+/* 点击效果 */
+.tool-card:active {
+    transform: translateY(-1px);
+    transition: transform 0.1s ease;
 }
 
 /* 工具图标样式 */
@@ -40,12 +48,17 @@
     border-radius: var(--radius-md);
     object-fit: cover;
     margin-bottom: var(--spacing-md);
+    transition: transform 0.3s ease;
+}
+
+.tool-card:hover .tool-icon {
+    transform: scale(1.1);
 }
 
 /* 工具名称样式 */
 .tool-name {
     font-size: 14px;
-    font-weight: 500;
+    font-weight: 600;
     color: var(--text-primary);
     margin: 0;
     padding: 0;
@@ -53,6 +66,11 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: color 0.3s ease;
+}
+
+.tool-card:hover .tool-name {
+    color: var(--primary-color);
 }
 
 /* 通知徽章样式 */
@@ -73,6 +91,22 @@
     100% { opacity: 0.6; }
 }
 
+/* 微光效果 */
+.tool-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    transition: left 0.5s ease;
+}
+
+.tool-card:hover::before {
+    left: 100%;
+}
+
 /* 响应式调整 */
 @media screen and (max-width: 768px) {
     .tools-grid {
@@ -85,6 +119,22 @@
         width: 50px;
         height: 50px;
     }
+    
+    .tool-card:hover {
+        transform: translateY(-2px);
+    }
+}
+
+/* 工具链接样式优化 */
+.tool-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.tool-link:hover {
+    text-decoration: none;
+    color: inherit;
 }
 </style>
 

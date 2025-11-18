@@ -125,7 +125,36 @@ function showFrameUrl(obj, width, height) {
 // 小应用专用
 function showFrameCustom(obj, appConfig) {
     appConfig = JSON.parse(appConfig)
-    layer.open({
+     // 创建iframe内容
+    const iframeContent = `
+        <div style="position:relative;width:100%;height:100%;">
+            <div class="tool-loading" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:10;display:flex;align-items:center;justify-content:center;flex-direction:column;">
+                <div style="width:40px;height:40px;border:3px solid #f3f3f3;border-top:3px solid #3498db;border-radius:50%;animation:spin 1s linear infinite;"></div>
+                <p style="margin-top:10px;color:#666;font-size:14px;">加载中...</p>
+            </div>
+            <iframe 
+                sandbox="allow-same-origin allow-scripts allow-popups allow-forms" 
+                src="${$(obj).attr('data-url')}" 
+                allowfullscreen="true" 
+                allowtransparency="true" 
+                width="100%" 
+                height="100%" 
+                frameborder="0" 
+                scrolling="auto"
+                style="background:#fff;"
+                onload="this.previousElementSibling.style.display='none'"
+            ></iframe>
+        </div>
+        <style>
+            @keyframes spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+            }
+        </style>
+    `;
+    
+    // 打开弹窗
+    const index = layer.open({
         type: 1,
         title: appConfig.title,
         shade: appConfig.shade,
@@ -139,7 +168,8 @@ function showFrameCustom(obj, appConfig) {
         hideOnClose: appConfig.hideOnClose,
         // moveOut: true,
         scrollbar: false,
-        content: '<iframe sandbox="allow-same-origin allow-scripts allow-popups" src="' + $(obj).attr('data-url') + '" allowfullscreen="true" allowtransparency="true" width="100%" height="100%" frameborder="0" scrolling="yes"></iframe>',
+        content: iframeContent,
+        // content: '<iframe sandbox="allow-same-origin allow-scripts allow-popups" src="' + $(obj).attr('data-url') + '" allowfullscreen="true" allowtransparency="true" width="100%" height="100%" frameborder="0" scrolling="yes"></iframe>',
         // zIndex: layer.zIndex, //重点1
         // success: function(layero){
         //     layer.setTop(layero); //重点2
@@ -147,7 +177,48 @@ function showFrameCustom(obj, appConfig) {
         // end: function(){ 
         // } 
     });
-    $(".layui-layer-content").css("overflow", 'hidden')
+
+    // 优化弹窗样式
+    setTimeout(() => {
+        const layero = $('.layui-layer[type="1"]').last();
+        if (layero.length) {
+            // 优化标题栏
+            layero.find('.layui-layer-title').css({
+                'background': 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                'color': '#fff',
+                'font-weight': '600',
+                'border-radius': '8px 8px 0 0',
+                'text-align': 'center',
+                'padding': '15px'
+            });
+            
+            // 优化关闭按钮
+            layero.find('.layui-layer-setwin a').css({
+                'color': '#fff',
+                'font-size': '18px'
+            });
+            
+            // 优化内容区域
+            layero.find('.layui-layer-content').css({
+                // 'border-radius': '0 0 8px 8px',
+                'overflow': 'hidden'
+            });
+        }
+    }, 10);
+    
+    // 添加ESC键支持
+    $(document).on('keydown.toolModal', function(e) {
+        if (e.keyCode === 27) {
+            layer.close(index);
+        }
+    });
+    
+    // 清理事件
+    layer.style(index, {
+        end: function() {
+            $(document).off('keydown.toolModal');
+        }
+    });
     // layer.style(index, {
     //     overflow: 'hidden',
     // });
