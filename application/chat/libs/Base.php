@@ -12,7 +12,7 @@ class Base
         if ($data['content_type'] == 'mp3') {
             $data['content'] = '<p class="massageImg clear"><audio id="music_' . (string)$time . '" class="music" controls="controls" loop="loop" onplay="stopOther(this)" preload="none" controlsList="nodownload" οncοntextmenu="return false" name="media"><source src="' . $data['content'] . '" type="audio/mpeg"></audio></p>';
         } elseif($data['content_type'] == 'mp4' || $data['content_type'] == 'm3u8') {
-            $data['content'] = '<p  class="massageImg"><video width="200px"  controls=""  name="media"><source src="'.$data['content'].'" type="video/mp4"></video></p>';
+            $data['content'] = '<p  class="massageImg"><video id="video_' . (string)$time . '" width="200px"  controls=""  name="media" onplay="stopOther(this)"><source src="'.$data['content'].'" type="video/mp4"></video></p>';
         } else {
             if ($listtagid == 'PrivateLetter') {
                 $data['content'] = '<img width="100px" class="massageImgCommon massageImg_jpg" onclick="showMessageImg(this)" src="/static/upload/images/jpg-1.svg" data-src="'. $data['content']. '">';
