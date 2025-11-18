@@ -28,7 +28,7 @@
             <!-- 表情等 -->
             <div id="msgToolBar" class="toolbar"></div>
             <div class="tool-up-class" style="display: none;">
-                <div class="imgHtml" style="display: block;border-radius: 3px;">
+<div class="imgHtml" style="display: block;border-radius: 3px;">
                     <!-- <img src="" width="70px" alt=""> -->
                     上传成功！
                     <i class="layui-icon layui-icon-close-fill" onclick="removeImg(this)"
@@ -139,168 +139,168 @@
 </script>
 <script>
 	// 缓存管理功能
+	// 修改CacheManager，添加全量数据缓存支持
 	var CacheManager = {
-		// 缓存前缀
-		cachePrefix: 'msg_cache_',
-		// 滚动位置缓存键
-		scrollPosKey: 'scroll_position_',
-		// 缓存过期时间（30分钟）
-		cacheExpireTime: 1 * 60 * 1000,
-		
-		// 生成缓存键
-		// 生成缓存键 - 改进版
-		getCacheKey: function(page, url) {
-		    // 添加更多的上下文信息，如查询参数，确保缓存键的唯一性
-		    var fullUrl = url || window.location.href; // 使用完整URL包括查询参数
-		    // 添加时间戳的一部分作为盐值，避免不同会话间的冲突
-		    var salt = (new Date().getTime() % 1000000).toString(36);
-		    return this.cachePrefix + btoa(fullUrl) + '_page_' + page + '_' + salt;
-		},
-		
-		// 生成滚动位置缓存键
-		getScrollPosKey: function(url) {
-			return this.scrollPosKey + btoa(url || window.location.pathname);
-		},
-		
-		// 设置缓存
-		setCache: function(page, data, url) {
-			try {
-				var cacheKey = this.getCacheKey(page, url);
-				var cacheData = {
-					data: data,
-					timestamp: new Date().getTime(),
-					expireTime: this.cacheExpireTime
-				};
-				sessionStorage.setItem(cacheKey, JSON.stringify(cacheData));
-				return true;
-			} catch (e) {
-				console.warn('缓存设置失败:', e);
-				return false;
-			}
-		},
-		
-		// 获取缓存
-		getCache: function(page, url) {
-			try {
-				var cacheKey = this.getCacheKey(page, url);
-				var cacheStr = sessionStorage.getItem(cacheKey);
-				if (!cacheStr) return null;
-				
-				var cacheData = JSON.parse(cacheStr);
-				var currentTime = new Date().getTime();
-				
-				// 检查缓存是否过期
-				if (currentTime - cacheData.timestamp > cacheData.expireTime) {
-					this.removeCache(page, url);
-					return null;
-				}
-				
-				return cacheData.data;
-			} catch (e) {
-				console.warn('缓存获取失败:', e);
-				return null;
-			}
-		},
-		
-		// 删除缓存
-		removeCache: function(page, url) {
-			try {
-				var cacheKey = this.getCacheKey(page, url);
-				sessionStorage.removeItem(cacheKey);
-				return true;
-			} catch (e) {
-				console.warn('缓存删除失败:', e);
-				return false;
-			}
-		},
-		
-		// 保存滚动位置
-		saveScrollPosition: function(url) {
-			try {
-				var scrollPos = window.pageYOffset || document.documentElement.scrollTop;
-				var scrollKey = this.getScrollPosKey(url);
-				var scrollData = {
-					position: scrollPos,
-					timestamp: new Date().getTime()
-				};
-				sessionStorage.setItem(scrollKey, JSON.stringify(scrollData));
-				return true;
-			} catch (e) {
-				console.warn('滚动位置保存失败:', e);
-				return false;
-			}
-		},
-		
-		// 恢复滚动位置
-		restoreScrollPosition: function(url) {
-			try {
-				var scrollKey = this.getScrollPosKey(url);
-				var scrollStr = sessionStorage.getItem(scrollKey);
-				if (!scrollStr) return false;
-				
-				var scrollData = JSON.parse(scrollStr);
-				window.scrollTo(0, scrollData.position);
-				return true;
-			} catch (e) {
-				console.warn('滚动位置恢复失败:', e);
-				return false;
-			}
-		},
-		
-		// 清理所有过期缓存
-		cleanExpiredCache: function() {
-			try {
-				var keysToRemove = [];
-				for (var i = 0; i < sessionStorage.length; i++) {
-					var key = sessionStorage.key(i);
-					if (key && key.startsWith(this.cachePrefix)) {
-						try {
-							var cacheStr = sessionStorage.getItem(key);
-							var cacheData = JSON.parse(cacheStr);
-							var currentTime = new Date().getTime();
-							
-							if (currentTime - cacheData.timestamp > cacheData.expireTime) {
-								keysToRemove.push(key);
-							}
-						} catch (e) {
-							// 如果解析失败，也删除该缓存
-							keysToRemove.push(key);
-						}
-					}
-				}
-				
-				keysToRemove.forEach(function(key) {
-					sessionStorage.removeItem(key);
-				});
-				
-				return keysToRemove.length;
-			} catch (e) {
-				console.warn('缓存清理失败:', e);
-				return 0;
-			}
-		},
-		
-		// 清理所有缓存
-		clearAllCache: function() {
-			try {
-				var keysToRemove = [];
-				for (var i = 0; i < sessionStorage.length; i++) {
-					var key = sessionStorage.key(i);
-					if (key && key.startsWith(this.cachePrefix)) {
-						keysToRemove.push(key);
-					}
-				}
-				
-				keysToRemove.forEach(function(key) {
-					sessionStorage.removeItem(key);
-				});
-				
-				return keysToRemove.length;
-			} catch (e) {
-				console.warn('缓存清理失败:', e);
-				return 0;
-			}
-		}
+	    // 缓存前缀
+	    cachePrefix: 'msg_cache_',
+	    // 滚动位置缓存键
+	    scrollPosKey: 'scroll_position_',
+	    // 缓存过期时间（30分钟）
+	    cacheExpireTime: 30 * 60 * 1000,
+	    
+	    // 生成缓存键
+	    getCacheKey: function(page, url) {
+	        // 使用完整URL包括查询参数，确保缓存键的唯一性
+	        var fullUrl = url || window.location.href;
+	        // 添加时间戳的一部分作为盐值，避免不同会话间的冲突
+	        var salt = (new Date().getTime() % 1000000).toString(36);
+	        return this.cachePrefix + btoa(fullUrl) + '_page_' + page + '_' + salt;
+	    },
+	    
+	    // 生成滚动位置缓存键
+	    getScrollPosKey: function(url) {
+	        return this.scrollPosKey + btoa(url || window.location.pathname);
+	    },
+	    
+	    // 设置缓存
+	    setCache: function(page, data, url) {
+	        try {
+	            var cacheKey = this.getCacheKey(page, url);
+	            var cacheData = {
+	                data: data,
+	                timestamp: new Date().getTime(),
+	                expireTime: this.cacheExpireTime
+	            };
+	            sessionStorage.setItem(cacheKey, JSON.stringify(cacheData));
+	            return true;
+	        } catch (e) {
+	            console.warn('缓存设置失败:', e);
+	            return false;
+	        }
+	    },
+	    
+	    // 获取缓存
+	    getCache: function(page, url) {
+	        try {
+	            var cacheKey = this.getCacheKey(page, url);
+	            var cacheStr = sessionStorage.getItem(cacheKey);
+	            if (!cacheStr) return null;
+	            
+	            var cacheData = JSON.parse(cacheStr);
+	            var currentTime = new Date().getTime();
+	            
+	            // 检查缓存是否过期
+	            if (currentTime - cacheData.timestamp > cacheData.expireTime) {
+	                this.removeCache(page, url);
+	                return null;
+	            }
+	            
+	            return cacheData.data;
+	        } catch (e) {
+	            console.warn('缓存获取失败:', e);
+	            return null;
+	        }
+	    },
+	    
+	    // 删除缓存
+	    removeCache: function(page, url) {
+	        try {
+	            var cacheKey = this.getCacheKey(page, url);
+	            sessionStorage.removeItem(cacheKey);
+	            return true;
+	        } catch (e) {
+	            console.warn('缓存删除失败:', e);
+	            return false;
+	        }
+	    },
+	    
+	    // 保存滚动位置
+	    saveScrollPosition: function(url) {
+	        try {
+	            var scrollPos = window.pageYOffset || document.documentElement.scrollTop;
+	            var scrollKey = this.getScrollPosKey(url);
+	            var scrollData = {
+	                position: scrollPos,
+	                timestamp: new Date().getTime()
+	            };
+	            sessionStorage.setItem(scrollKey, JSON.stringify(scrollData));
+	            return true;
+	        } catch (e) {
+	            console.warn('滚动位置保存失败:', e);
+	            return false;
+	        }
+	    },
+	    
+	    // 恢复滚动位置
+	    restoreScrollPosition: function(url) {
+	        try {
+	            var scrollKey = this.getScrollPosKey(url);
+	            var scrollStr = sessionStorage.getItem(scrollKey);
+	            if (!scrollStr) return false;
+	            
+	            var scrollData = JSON.parse(scrollStr);
+	            window.scrollTo(0, scrollData.position);
+	            return true;
+	        } catch (e) {
+	            console.warn('滚动位置恢复失败:', e);
+	            return false;
+	        }
+	    },
+	    
+	    // 清理所有过期缓存
+	    cleanExpiredCache: function() {
+	        try {
+	            var keysToRemove = [];
+	            for (var i = 0; i < sessionStorage.length; i++) {
+	                var key = sessionStorage.key(i);
+	                if (key && key.startsWith(this.cachePrefix)) {
+	                    try {
+	                        var cacheStr = sessionStorage.getItem(key);
+	                        var cacheData = JSON.parse(cacheStr);
+	                        var currentTime = new Date().getTime();
+	                        
+	                        if (currentTime - cacheData.timestamp > cacheData.expireTime) {
+	                            keysToRemove.push(key);
+	                        }
+	                    } catch (e) {
+	                        // 如果解析失败，也删除该缓存
+	                        keysToRemove.push(key);
+	                    }
+	                }
+	            }
+	            
+	            keysToRemove.forEach(function(key) {
+	                sessionStorage.removeItem(key);
+	            });
+	            
+	            return keysToRemove.length;
+	        } catch (e) {
+	            console.warn('缓存清理失败:', e);
+	            return 0;
+	        }
+	    },
+	    
+	    // 清理所有缓存
+	    clearAllCache: function() {
+	        try {
+	            var keysToRemove = [];
+	            for (var i = 0; i < sessionStorage.length; i++) {
+	                var key = sessionStorage.key(i);
+	                if (key && key.startsWith(this.cachePrefix)) {
+	                    keysToRemove.push(key);
+	                }
+	            }
+	            
+	            keysToRemove.forEach(function(key) {
+	                sessionStorage.removeItem(key);
+	            });
+	            
+	            return keysToRemove.length;
+	        } catch (e) {
+	            console.warn('缓存清理失败:', e);
+	            return 0;
+	        }
+	    }
 	};
 
 	// 下拉刷新功能 - 固定顶部优化版
@@ -399,7 +399,8 @@
 	        }
 	    },
 	    
-	    startRefresh: function() {
+	    // 修改PullRefresh.startRefresh方法，移除全量数据缓存清理
+	    PullRefresh.startRefresh = function() {
 	        this.isRefreshing = true;
 	        var indicator = document.getElementById('pullRefreshIndicator');
 	        var text = document.getElementById('pullRefreshText');
@@ -407,17 +408,112 @@
 	        if (indicator && text) {
 	            text.textContent = '刷新中...';
 	            indicator.style.background = '#d4edda';
-	            indicator.style.transform = 'translateY(0)'; // 完全显示
+	            indicator.style.transform = 'translateY(0)';
 	        }
 	        
-	        // 清空所有缓存
+	        // 只清空普通缓存
 	        CacheManager.clearAllCache();
 	        
 	        // 延迟刷新页面，让用户看到刷新效果
 	        setTimeout(function() {
 	            location.reload();
 	        }, 1000);
-	    },
+	    };
+	    
+	    // 保留第一个滚动事件监听（约680行附近），删除第二个（约757行附近）
+	    // 第一个initNextPage()调用应该不传参数，第二个应该删除
+	    
+	    // 2. 修改PullRefresh.startRefresh方法，确保同时清理全量数据缓存
+	    PullRefresh.startRefresh = function() {
+	        this.isRefreshing = true;
+	        var indicator = document.getElementById('pullRefreshIndicator');
+	        var text = document.getElementById('pullRefreshText');
+	        
+	        if (indicator && text) {
+	            text.textContent = '刷新中...';
+	            indicator.style.background = '#d4edda';
+	            indicator.style.transform = 'translateY(0)';
+	        }
+	        
+	        // 同时清空普通缓存和全量数据缓存
+	        CacheManager.clearAllCache();
+	        CacheManager.removeFullData();
+	        
+	        // 延迟刷新页面，让用户看到刷新效果
+	        setTimeout(function() {
+	            location.reload();
+	        }, 1000);
+	    };
+	    
+	    // 3. 修复showCacheStatus函数，使其同时统计全量数据缓存
+	    window.showCacheStatus = function() {
+	        var cacheCount = 0;
+	        var fullDataCount = 0;
+	        for (var i = 0; i < sessionStorage.length; i++) {
+	            var key = sessionStorage.key(i);
+	            if (key && key.startsWith(CacheManager.cachePrefix)) {
+	                cacheCount++;
+	            } else if (key && key.startsWith(CacheManager.fullDataCacheKey)) {
+	                fullDataCount++;
+	            }
+	        }
+	        alertMsg('当前缓存数量: ' + cacheCount + ' 条，全量数据缓存: ' + fullDataCount + ' 条');
+	    };
+	    
+	    // 4. 修改CacheManager.clearAllCache方法，使其同时清理全量数据缓存
+	    clearAllCache: function() {
+	        try {
+	            var keysToRemove = [];
+	            for (var i = 0; i < sessionStorage.length; i++) {
+	                var key = sessionStorage.key(i);
+	                if (key && (key.startsWith(this.cachePrefix) || key.startsWith(this.fullDataCacheKey))) {
+	                    keysToRemove.push(key);
+	                }
+	            }
+	            
+	            keysToRemove.forEach(function(key) {
+	                sessionStorage.removeItem(key);
+	            });
+	            
+	            return keysToRemove.length;
+	        } catch (e) {
+	            console.warn('缓存清理失败:', e);
+	            return 0;
+	        }
+	    }
+	    
+	    // 5. 修改cleanExpiredCache方法，使其也能清理过期的全量数据缓存
+	    cleanExpiredCache: function() {
+	        try {
+	            var keysToRemove = [];
+	            for (var i = 0; i < sessionStorage.length; i++) {
+	                var key = sessionStorage.key(i);
+	                if (key && (key.startsWith(this.cachePrefix) || key.startsWith(this.fullDataCacheKey))) {
+	                    try {
+	                        var cacheStr = sessionStorage.getItem(key);
+	                        var cacheData = JSON.parse(cacheStr);
+	                        var currentTime = new Date().getTime();
+	                        
+	                        if (currentTime - cacheData.timestamp > cacheData.expireTime) {
+	                            keysToRemove.push(key);
+	                        }
+	                    } catch (e) {
+	                        // 如果解析失败，也删除该缓存
+	                        keysToRemove.push(key);
+	                    }
+	                }
+	            }
+	            
+	            keysToRemove.forEach(function(key) {
+	                sessionStorage.removeItem(key);
+	            });
+	            
+	            return keysToRemove.length;
+	        } catch (e) {
+	            console.warn('缓存清理失败:', e);
+	            return 0;
+	        }
+	    }
 	    
 	    // 手动触发下拉刷新（用于测试）
 	    manualRefresh: function() {
@@ -523,7 +619,6 @@
 				canLoad = true;
 			});
 		}
-		
 		// 相应地修改调用处
 		$(window).scroll(function () {
 			var top = $(window).scrollTop();
