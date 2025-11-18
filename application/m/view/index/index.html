@@ -1,5 +1,6 @@
 
 {include file='index/header' /}
+
 {if $userInfo.isSiteUser}
     <!-- 新增悬浮固定发布按钮 -->
     <!-- <div id="floating_publish_button" style="position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 999;">
@@ -7,7 +8,7 @@
     </div> -->
     <!-- 新增一个容器用于包裹评论表单，并默认隐藏 -->
     <div id="comment_form_container" >
-        <div method="post" class="post" action="" id="comment_form">
+        <div method="post" class="comment_form" action="" id="comment_form">
             <!-- <small></small> -->
             <div id="msgInput" class="text" maxlength="2800" onkeyup="check_len1()">
                 <!-- <p>你在做什么呢</p> -->
