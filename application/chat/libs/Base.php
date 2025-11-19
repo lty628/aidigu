@@ -10,7 +10,8 @@ class Base
         $data['create_time'] = date('Y-m-d H:i:s', $time);
         if (!$data['content_type']) return $data;
         if ($data['content_type'] == 'mp3') {
-            $data['content'] = '<p class="massageImg clear"><audio id="music_' . (string)$time . '" class="music" controls="controls" loop="loop" onplay="stopOther(this)" preload="none" controlsList="nodownload" οncοntextmenu="return false" name="media"><source src="' . $data['content'] . '" type="audio/mpeg"></audio></p>';
+            // 简洁版音频播放器
+            $data['content'] = '<p class="massageImg clear massageAudio"><audio id="music_' . (string)$time . '" class="simple-audio" controls preload="none" controlsList="nodownload"><source src="' . $data['content'] . '" type="audio/mpeg"></audio></p>';
         } elseif($data['content_type'] == 'mp4' || $data['content_type'] == 'm3u8') {
             $data['content'] = '<p  class="massageImg"><video id="video_' . (string)$time . '" width="200px"  controls=""  name="media" onplay="stopOther(this)"><source src="'.$data['content'].'" type="video/mp4"></video></p>';
         } else {
