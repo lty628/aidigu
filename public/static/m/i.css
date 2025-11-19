@@ -373,7 +373,7 @@ p.more {
 .post-head {
     width: 50px;
     height: 50px;
-    border-radius: var(--radius-full);
+    border-radius: var(--radius-md);
     position: absolute;
     left: 15px;
     top: 15px;
