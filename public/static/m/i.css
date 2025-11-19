@@ -744,8 +744,8 @@ cursor: pointer;
     background-color: var(--primary-color);
     color: white;
     border: none;
-    border-radius: 9999px;
-    padding: 10px 20px;
+    /* border-radius: 9999px; */
+    padding: 8px 20px;
     font-weight: 700;
     cursor: pointer;
     transition: background-color 0.2s ease;
