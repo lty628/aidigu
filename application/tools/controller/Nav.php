@@ -29,14 +29,16 @@ class Nav extends Controller
         ->select();
 
         // $bg = cache('bg_nav'.$this->uid);
-        // if (!$bg) {
-            if (isset($this->userInfo['theme']) && $this->userInfo['theme']) {
-                $bg = $this->userInfo['theme'];
-            } else {
+        $bg = getThemeInfo($this->userInfo['theme'])[1] ?? '';
+        if (!$bg) {
+            // if (isset($this->userInfo['theme']) && $this->userInfo['theme']) {
+            //     $bg = getThemeInfo($this->userInfo['theme'])[1];
+            //     echo $bg;die;
+            // } else {
                 $bg = '/static/index/images/bg4.svg';
-            }
-        //     cache('bg_nav'.$this->uid, $bg, 600);
-        // }
+            // }
+            // cache('bg_nav'.$this->uid, $bg, 600);
+        }
 
         $this->assign('bg', $bg);
         $this->assign('list', $list);
