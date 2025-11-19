@@ -514,10 +514,10 @@ p.more {
     transition: all 0.2s ease;
 }
 
-.post-meta-icons a:hover {
+/* .post-meta-icons a:hover {
     background-color: var(--primary-light);
     color: var(--primary-color);
-}
+} */
 
 .input-g {
     position: relative;
@@ -648,7 +648,7 @@ cursor: pointer;
     transition: background-color 0.2s ease;
 }
 
-.pay:hover { background-color: rgba(193, 132, 1, 0.1); }
+/* .pay:hover { background-color: rgba(193, 132, 1, 0.1); } */
 
 .pay span { display: inline-block; padding: 2px 5px; }
 
