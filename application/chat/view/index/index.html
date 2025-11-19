@@ -6,7 +6,7 @@
 	<meta charset="utf-8">
 	<meta name="renderer" content="webkit">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link media="all" href="/static/chat/css/style.css?v=2228" type="text/css" rel="stylesheet">
+	<link media="all" href="/static/chat/css/style.css?v=2230" type="text/css" rel="stylesheet">
 	<link media="all" href="/static/chat/css/shake.css?v=2224" type="text/css" rel="stylesheet">
 	<link rel="stylesheet" href="/static/layui/css/layui.css?t=1" type="text/css" media="screen" />
 	<style>
@@ -16,13 +16,13 @@
 			background: rgba(255, 255, 255, 0.95);
 			backdrop-filter: blur(10px);
 		}
-		
+
 		#layout-main {
 			height: 100%;
 			display: flex;
 			flex-direction: column;
 		}
-		
+
 		/* 菜单面板现代化 */
 		#menu-pannel {
 			background: linear-gradient(180deg, #4a90e2 0%, #357abd 100%);
@@ -30,7 +30,7 @@
 			border-right: none;
 			padding: 20px 0;
 		}
-		
+
 		#menu-pannel .main-menus .menu-item {
 			padding: 15px 0;
 			margin: 5px 10px;
@@ -38,19 +38,19 @@
 			transition: all 0.3s ease;
 			color: rgba(255, 255, 255, 0.8);
 		}
-		
+
 		#menu-pannel .main-menus .menu-item:hover {
 			background: rgba(255, 255, 255, 0.2);
 			color: white;
 			transform: translateY(-2px);
 		}
-		
+
 		/* 对话列表现代化 */
 		#sub-menu-pannel {
 			background: #f8fafc;
 			border-right: 1px solid #e2e8f0;
 		}
-		
+
 		#sub-menu-pannel.conv-list-pannel .conv-lists .conv-item {
 			padding: 15px 20px;
 			margin: 5px 10px;
@@ -58,20 +58,20 @@
 			transition: all 0.3s ease;
 			border: 1px solid transparent;
 		}
-		
+
 		#sub-menu-pannel.conv-list-pannel .conv-lists .conv-item:hover {
 			background: #e6f3ff;
 			border-color: #4a90e2;
 			transform: translateX(5px);
 			box-shadow: 0 4px 12px rgba(74, 144, 226, 0.15);
 		}
-		
+
 		#sub-menu-pannel.conv-list-pannel .conv-lists .conv-item.active {
 			background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
 			color: white;
 			box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
 		}
-		
+
 		/* 聊天内容区域现代化 */
 		#content-pannel {
 			background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
@@ -79,21 +79,21 @@
 			display: flex;
 			flex-direction: column;
 		}
-		
+
 		#content-pannel .content-pannel-head {
 			background: rgba(255, 255, 255, 0.9);
 			padding: 20px;
 			border-bottom: 1px solid #e2e8f0;
 			box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 		}
-		
+
 		#content-pannel .content-pannel-body {
 			flex: 1;
 			padding: 20px;
 			overflow-y: auto;
 			background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
 		}
-		
+
 		/* 消息气泡现代化 */
 		.msg-item {
 			margin: 15px 0;
@@ -101,7 +101,7 @@
 			align-items: flex-start;
 			animation: fadeInUp 0.5s ease;
 		}
-		
+
 		.msg-item .msg-bubble {
 			max-width: 70%;
 			padding: 12px 16px;
@@ -110,28 +110,28 @@
 			position: relative;
 			word-wrap: break-word;
 		}
-		
+
 		.msg-item.left .msg-bubble {
 			background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
 			border: 1px solid #e2e8f0;
 			margin-left: 10px;
 		}
-		
+
 		.msg-item.right .msg-bubble {
 			background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
 			color: white;
 			margin-right: 10px;
 		}
-		
+
 		.input-area {
 			display: flex !important;
 			flex-direction: column;
 		}
-		
+
 		.tool-bar {
 			border-bottom: 1px solid #e2e8f0;
 		}
-		
+
 		.tool-item {
 			padding: 8px 12px;
 			border-radius: 8px;
@@ -139,13 +139,13 @@
 			cursor: pointer;
 			transition: all 0.3s ease;
 		}
-		
+
 		.tool-item:hover {
 			background: #4a90e2;
 			color: white;
 			transform: translateY(-2px);
 		}
-		
+
 		/* 用户引导现代化 */
 		.user-guide {
 			display: flex;
@@ -161,113 +161,111 @@
 			color: rgb(56, 173, 255);
 			margin-right: 15px;
 		}
-		
+
 		/* 动画效果 */
 		@keyframes fadeInUp {
 			from {
 				opacity: 0;
 				transform: translateY(20px);
 			}
+
 			to {
 				opacity: 1;
 				transform: translateY(0);
 			}
 		}
-		
+
 		/* 滚动条美化 */
 		::-webkit-scrollbar {
 			width: 6px;
 		}
-		
+
 		::-webkit-scrollbar-track {
 			background: #f1f5f9;
 			border-radius: 3px;
 		}
-		
+
 		::-webkit-scrollbar-thumb {
 			background: #cbd5e1;
 			border-radius: 3px;
 		}
-		
+
 		::-webkit-scrollbar-thumb:hover {
 			background: #94a3b8;
 		}
-		.simple-audio {
-			width: 100%;
-			max-width: 200px;
-			border-radius: 4px;
-		}
-		.massageAudio {
-			margin: 5px 0;
-		}
-		
+
 		/* 响应式设计 - 1000px以内手机端优化 */
 		@media (max-width: 1000px) {
-		    /* 确保布局容器适应手机屏幕 */
+
+			/* 确保布局容器适应手机屏幕 */
 			audio {
 				width: 100%;
+				
 			}
+
 			#menu-pannel {
 				width: 60px;
 			}
-		    #layout-container {
-		        height: 100vh;
-		        border-radius: 0;
-		        position: fixed;
-		        top: 0;
-		        left: 0;
-		        right: 0;
-		        bottom: 0;
-		    }
-		    
-		    /* 返回按钮手机端样式 */
-		    #backToListBtn {
-		        display: flex !important;
-		        align-items: center;
-		        justify-content: center;
-		        position: absolute;
-		        left: 15px;
-		        top: 50%;
-		        transform: translateY(-50%);
-		        background: rgba(255, 255, 255, 0.2);
-		        border: 1px solid rgba(255, 255, 255, 0.3);
-		        color: white;
-		        padding: 8px 12px;
-		        border-radius: 20px;
-		        font-size: 14px;
-		        z-index: 20;
-		        backdrop-filter: blur(10px);
-		        cursor: pointer;
-		        transition: all 0.3s ease;
-		    }
-		    
-		    #backToListBtn:hover {
-		        background: rgba(255, 255, 255, 0.3);
-		    }
-		    
-		    /* 消息动画优化 */
-		    .msg-item {
-		        animation: fadeInUp 0.3s ease;
-		    }
-		    
-		    @keyframes fadeInUp {
-		        from {
-		            opacity: 0;
-		            transform: translateY(10px);
-		        }
-		        to {
-		            opacity: 1;
-		            transform: translateY(0);
-		        }
-		    }
-		    
-		    /* 输入框焦点效果优化 */
-		    .input-area.focused {
-		        background: rgba(255, 255, 255, 0.95);
-		        backdrop-filter: blur(10px);
-		    }
+
+			#layout-container {
+				height: 100vh;
+				border-radius: 0;
+				position: fixed;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+			}
+
+			/* 返回按钮手机端样式 */
+			#backToListBtn {
+				display: flex !important;
+				align-items: center;
+				justify-content: center;
+				position: absolute;
+				left: 15px;
+				top: 50%;
+				transform: translateY(-50%);
+				background: rgba(255, 255, 255, 0.2);
+				border: 1px solid rgba(255, 255, 255, 0.3);
+				color: white;
+				padding: 8px 12px;
+				border-radius: 20px;
+				font-size: 14px;
+				z-index: 20;
+				backdrop-filter: blur(10px);
+				cursor: pointer;
+				transition: all 0.3s ease;
+			}
+
+			#backToListBtn:hover {
+				background: rgba(255, 255, 255, 0.3);
+			}
+
+			/* 消息动画优化 */
+			.msg-item {
+				animation: fadeInUp 0.3s ease;
+			}
+
+			@keyframes fadeInUp {
+				from {
+					opacity: 0;
+					transform: translateY(10px);
+				}
+
+				to {
+					opacity: 1;
+					transform: translateY(0);
+				}
+			}
+
+			/* 输入框焦点效果优化 */
+			.input-area.focused {
+				background: rgba(255, 255, 255, 0.95);
+				backdrop-filter: blur(10px);
+			}
 		}
-		
+
 		/* 超小屏幕优化 (iPhone SE等) */
 		/* @media (max-width: 375px) {
 			#menu-pannel {
@@ -305,45 +303,45 @@
 				padding: 8px 12px;
 			}
 		} */
-		
+
 		/* 横屏模式优化 */
 		@media (max-width: 768px) and (orientation: landscape) {
 			#menu-pannel {
 				height: 55px;
 				width: 100%;
 			}
-			
+
 			#menu-pannel .main-menus {
 				max-width: 600px;
 			}
-			
+
 			#menu-pannel .main-menus .menu-item {
 				min-width: 80px;
 				font-size: 13px;
 				padding: 8px 12px;
 			}
-			
+
 			#menu-pannel .main-menus .menu-item::before {
 				width: 22px;
 				height: 22px;
 			}
-			
+
 			#sub-menu-pannel {
 				width: 100%;
 			}
-			
+
 			#content-pannel .content-pannel-body {
 				padding: 10px;
 			}
 		}
-		
+
 		/* 防止iOS Safari工具栏遮挡 */
 		@supports (-webkit-touch-callout: none) {
 			#layout-container {
 				height: -webkit-fill-available;
 			}
 		}
-		
+
 		/* 安全区域适配 (iPhone X及以上) */
 		/* @supports (padding: max(0px)) {
 			.input-area {
@@ -357,15 +355,16 @@
 				padding-right: max(15px, env(safe-area-inset-right));
 			}
 		} */
-		
+
 		/* 触摸优化 */
 		@media (hover: none) and (pointer: coarse) {
+
 			.conv-item:hover,
 			.tool-item:hover,
 			.menu-item:hover {
 				transform: none !important;
 			}
-			
+
 			.conv-item:active,
 			.tool-item:active,
 			.menu-item:active {
@@ -373,22 +372,22 @@
 				transition: transform 0.1s ease;
 			}
 		}
-		
+
 		/* 高对比度模式支持 */
 		@media (prefers-contrast: high) {
 			#menu-pannel {
 				background: #1a365d;
 			}
-			
+
 			.msg-item.right .msg-bubble {
 				background: #1a365d;
 			}
-			
+
 			.conv-item.active {
 				background: #1a365d;
 			}
 		}
-		
+
 		/* 减少动画模式支持 */
 		@media (prefers-reduced-motion: reduce) {
 			* {
@@ -397,14 +396,17 @@
 				transition-duration: 0.01ms !important;
 			}
 		}
-		
+
 		{if $isMobile}
+
 		#sub-menu-pannel {
 			width: 100%;
 		}
+
 		#content-pannel {
 			display: none;
 		}
+
 		{/if}
 	</style>
 </head>
@@ -455,18 +457,20 @@
 											<!-- 如果是手机则显示按钮 -->
 											{if $isMobile}
 											<a href="javascript:;" class="send-message-button"
-													onclick="chat.sendMessage()">发送</a>
+												onclick="chat.sendMessage()">发送</a>
 											{else}
 											<span style="line-height: 34px;">按 Enter 发送</span>
 											{/if}
 											<span>
-												<a href="javascript:;" style="display: none;" id="showGroupUser" onclick="chat.showGroupUser(this)">
+												<a href="javascript:;" style="display: none;" id="showGroupUser"
+													onclick="chat.showGroupUser(this)">
 													<i class="layui-icon layui-icon-group"></i>
 												</a>
 											</span>
 										</div>
-										
-										<div class="msg-box" style="width: 100%; height:100%;" id="msgInput"  onkeydown="chat.keySend(event);">
+
+										<div class="msg-box" style="width: 100%; height:100%;" id="msgInput"
+											onkeydown="chat.keySend(event);">
 											<!-- <textarea class="textarea input-msg-box" onkeydown="chat.keySend(event);"
 												id="chattext"></textarea> -->
 										</div>
@@ -493,13 +497,13 @@
 	<input type="hidden" id="mediaVal">
 	<script>
 		var config = {
-			'wsserver' : "{$wsserver}"
+			'wsserver': "{$wsserver}"
 		}
 	</script>
 	<script src="/static/chat/js/jquery.min.js"></script>
 	<script src="/static/chat/js/face.js?v=3345"></script>
 	<script src="/static/chat/js/create.div.js?v=34"></script>
-	<script src="/static/chat/js/chat.script.js?v=42"></script>
+	<script src="/static/chat/js/chat.script.js?v=43"></script>
 	<script src="/static/chat/js/functions.js?v=2115"></script>
 	<script src="/static/chat/js/xlyjs.js?v=215"></script>
 	<script src="/static/layui/layui.js?4"></script>
@@ -507,73 +511,158 @@
 	<script type="text/javascript" src="/static/common/js/wangEditor.min.js"></script>
 	<script src="/static/chat/js/edit.js?v=10"></script>
 	<script>
-	// 页面加载完成后添加交互效果
-	document.addEventListener('DOMContentLoaded', function() {
-	    // 添加消息动画
-	    function animateMessages() {
-	        const messages = document.querySelectorAll('.msg-item');
-	        messages.forEach((msg, index) => {
-	            msg.style.animationDelay = `${index * 0.1}s`;
-	            msg.classList.add('fadeInUp');
-	        });
-	    }
-	    
-	    // 输入框焦点效果
-	    const msgInput = document.getElementById('msgInput');
-	    if (msgInput) {
-	        msgInput.addEventListener('focus', function() {
-	            this.parentElement.classList.add('focused');
-	        });
-	        
-	        msgInput.addEventListener('blur', function() {
-	            this.parentElement.classList.remove('focused');
-	        });
-	    }
-	    
-	    // 对话项悬停效果
-	    const convItems = document.querySelectorAll('.conv-item');
-	    convItems.forEach(item => {
-	        item.addEventListener('mouseenter', function() {
-	            this.style.transform = 'translateX(5px)';
-	        });
-	        
-	        item.addEventListener('mouseleave', function() {
-	            this.style.transform = 'translateX(0)';
-	        });
-	    });
-	    
-	    // 工具栏按钮效果
-	    const toolItems = document.querySelectorAll('.tool-item');
-	    toolItems.forEach(item => {
-	        item.addEventListener('click', function() {
-	            this.style.transform = 'scale(0.95)';
-	            setTimeout(() => {
-	                this.style.transform = 'scale(1)';
-	            }, 150);
-	        });
-	    });
-	    
-	    // 初始化动画
-	    animateMessages();
-	    
-	    // 监听新消息
-	    const observer = new MutationObserver(function(mutations) {
-	        mutations.forEach(function(mutation) {
-	            if (mutation.addedNodes.length > 0) {
-	                mutation.addedNodes.forEach(function(node) {
-	                    if (node.classList && node.classList.contains('msg-item')) {
-	                        node.style.animation = 'fadeInUp 0.5s ease';
-	                    }
-	                });
-	            }
-	        });
-	    });
-	    
-	    const chatContainer = document.getElementById('chatLineHolder');
-	    if (chatContainer) {
-	        observer.observe(chatContainer, { childList: true });
-	    }
-	});
+		// 页面加载完成后添加交互效果
+		document.addEventListener('DOMContentLoaded', function () {
+			// 添加消息动画
+			function animateMessages() {
+				const messages = document.querySelectorAll('.msg-item');
+				messages.forEach((msg, index) => {
+					msg.style.animationDelay = `${index * 0.1}s`;
+					msg.classList.add('fadeInUp');
+				});
+			}
+
+			// 输入框焦点效果
+			const msgInput = document.getElementById('msgInput');
+			if (msgInput) {
+				msgInput.addEventListener('focus', function () {
+					this.parentElement.classList.add('focused');
+				});
+
+				msgInput.addEventListener('blur', function () {
+					this.parentElement.classList.remove('focused');
+				});
+			}
+
+			// 对话项悬停效果
+			const convItems = document.querySelectorAll('.conv-item');
+			convItems.forEach(item => {
+				item.addEventListener('mouseenter', function () {
+					this.style.transform = 'translateX(5px)';
+				});
+
+				item.addEventListener('mouseleave', function () {
+					this.style.transform = 'translateX(0)';
+				});
+			});
+
+			// 工具栏按钮效果
+			const toolItems = document.querySelectorAll('.tool-item');
+			toolItems.forEach(item => {
+				item.addEventListener('click', function () {
+					this.style.transform = 'scale(0.95)';
+					setTimeout(() => {
+						this.style.transform = 'scale(1)';
+					}, 150);
+				});
+			});
+
+			// 初始化动画
+			animateMessages();
+
+			// 监听新消息
+			const observer = new MutationObserver(function (mutations) {
+				mutations.forEach(function (mutation) {
+					if (mutation.addedNodes.length > 0) {
+						mutation.addedNodes.forEach(function (node) {
+							if (node.classList && node.classList.contains('msg-item')) {
+								node.style.animation = 'fadeInUp 0.5s ease';
+							}
+						});
+					}
+				});
+			});
+
+			const chatContainer = document.getElementById('chatLineHolder');
+			if (chatContainer) {
+				observer.observe(chatContainer, { childList: true });
+			}
+		});
+
+		// 添加媒体播放控制函数
+		var playIngMusicId = '';
+		var playIngVideoId = -1;
+		var DP = [];
+
+		function stopOther(obj) {
+			var id = $(obj).attr("id")
+			// 音频互斥播放
+			if (playIngMusicId != '' && id != playIngMusicId) {
+			// 如果playIngMusicId 不正确导致的错误，就不执行暂停操作
+			if (document.getElementById(playIngMusicId)) {
+			document.getElementById(playIngMusicId).pause()
+			}
+			}
+			
+			// 原生video互斥播放 - 增强版
+			// 1. 处理DP对象管理的视频
+			if (playIngVideoId != -1) {
+			try {
+			DP[playIngVideoId].pause()
+			} catch (e) {
+			console.log('DP播放器暂停失败:', e)
+			}
+			}
+			
+			// 2. 处理所有原生video元素（不仅是DP管理的）
+			document.querySelectorAll('video:not([id="' + id + '"])').forEach(function(video) {
+			try {
+			video.pause();
+			} catch (e) {
+			console.log('原生video暂停失败:', e)
+			}
+			});
+			
+			// 更新当前播放状态
+			if (id.startsWith('music_')) {
+			playIngMusicId = id;
+			} else if (id.startsWith('video_')) {
+			playIngVideoId = id;
+			}
+			
+			// 添加：阻止音频播放时焦点转移到输入框
+			if (document.activeElement && document.activeElement.tagName === 'INPUT') {
+			document.activeElement.blur();
+			}
+			
+			return
+		}
+
+		// 视频播放器初始化函数（如果需要）
+		function iniVideo(i) {
+			$(".massageImg").each(function (index) {
+				var url = $(this).attr('vid')
+				if (!$(this).hasClass("showVideo" + i)) return
+				if (url) {
+					DP[index] = new DPlayer({
+						container: document.getElementsByClassName('massageImg')[index],
+						autoplay: false,
+						loop: true,
+						preload: 'metadata',
+						mutex: true,
+						chromecast: true,
+						theme: '#FADFA3',
+						volume: 0.7,
+						lang: 'zh-cn',
+						video: {
+							url: url,
+							type: 'auto',
+						},
+					});
+					DP[index].on('play', function () {
+						playIngVideoId = index
+						if (playIngMusicId) {
+							if (document.getElementById(playIngMusicId)) {
+								document.getElementById(playIngMusicId).pause()
+							}
+						}
+					});
+					DP[index].on('loadedmetadata', function () {
+						DP[index].seek(0); // 将视频跳转到第一秒
+					});
+				}
+			})
+		}
 	</script>
 </body>
 

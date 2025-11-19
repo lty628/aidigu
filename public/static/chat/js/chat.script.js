@@ -650,66 +650,6 @@ d.data[index].listtagid = d.listtagid
 		// //设置当前房间
 		// this.data.crd = uid;
 
-// 添加媒体播放控制函数
-var playIngMusicId = '';
-var playIngVideoId = -1;
-var DP = [];
-
-function stopOther(obj) {
-    var id = $(obj).attr("id")
-    if (playIngMusicId != '' && id != playIngMusicId) {
-        // 如果playIngMusicId 不正确导致的错误，就不执行暂停操作
-        if (document.getElementById(playIngMusicId)) {
-            document.getElementById(playIngMusicId).pause()
-        }
-    }
-    if (playIngVideoId != -1) {
-        DP[playIngVideoId].pause()
-    }
-    playIngMusicId = id;
-    
-    // 添加：阻止音频播放时焦点转移到输入框
-    if (document.activeElement && document.activeElement.tagName === 'INPUT') {
-        document.activeElement.blur();
-    }
-    return
-}
-
-// 视频播放器初始化函数（如果需要）
-function iniVideo(i) {
-    $(".massageImg").each(function (index) {
-        var url = $(this).attr('vid')
-        if (!$(this).hasClass("showVideo"+i)) return
-        if (url) {
-            DP[index] = new DPlayer({
-                container: document.getElementsByClassName('massageImg')[index],
-                autoplay: false,
-                loop: true,
-                preload: 'metadata',
-                mutex: true,
-                chromecast: true,
-                theme: '#FADFA3',
-                volume: 0.7,
-                lang: 'zh-cn',
-                video: {
-                    url: url,
-                    type: 'auto',
-                },
-            });
-            DP[index].on('play', function () {
-                playIngVideoId = index
-                if (playIngMusicId) {
-                    if (document.getElementById(playIngMusicId)) {
-                        document.getElementById(playIngMusicId).pause()
-                    }
-                }
-            });
-            DP[index].on('loadedmetadata', function() {
-                DP[index].seek(0); // 将视频跳转到第一秒
-            });
-        }
-    })
-}
 		//用户切换房间
 		chat.data.touid = uid
 		chat.data.listtagid = listtagid
