@@ -213,15 +213,43 @@ function showFrameCustom(obj, appConfig) {
         }
     });
     
+    // 保存原始触摸事件处理函数
+    let touchStartX = 0;
+    let touchStartY = 0;
+    
+    // 触摸开始事件
+    function handleTouchStart(e) {
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+    }
+    
+    // 触摸结束事件
+    function handleTouchEnd(e) {
+        const touchEndX = e.changedTouches[0].clientX;
+        const touchEndY = e.changedTouches[0].clientY;
+        const deltaX = touchEndX - touchStartX;
+        const deltaY = touchEndY - touchStartY;
+        
+        // 判断是否为水平滑动（左滑或右滑）
+        if (Math.abs(deltaX) > Math.abs(deltaY) * 2 && Math.abs(deltaX) > 50) {
+            // 左滑或右滑都关闭弹窗
+            layer.close(index);
+        }
+    }
+    
+    // 添加触摸事件监听
+    document.addEventListener('touchstart', handleTouchStart);
+    document.addEventListener('touchend', handleTouchEnd);
+    
     // 清理事件
     layer.style(index, {
         end: function() {
             $(document).off('keydown.toolModal');
+            // 移除触摸事件监听，恢复原功能
+            document.removeEventListener('touchstart', handleTouchStart);
+            document.removeEventListener('touchend', handleTouchEnd);
         }
     });
-    // layer.style(index, {
-    //     overflow: 'hidden',
-    // });
 }
 
 //字符串转换为时间戳
