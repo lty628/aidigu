@@ -210,6 +210,216 @@ const E = window.wangEditor
 	editor.config.uploadVideoAccept = ['mp4', 'mp3']
 
 
+	// 修改图片压缩函数为返回Promise的版本
+	function compressImage(file) {
+		return new Promise((resolve, reject) => {
+			// 如果是GIF图片，不进行压缩
+			if (file.type === 'image/gif') {
+				resolve(file);
+				return;
+			}
+
+			// 根据文件大小设置目标压缩大小
+			let targetSize;
+			const fileSize = file.size;
+			if (fileSize <= 500 * 1024) {
+				// 500KB以下轻微压缩
+				targetSize = fileSize * 0.8;
+			} else if (fileSize > 500 * 1024 && fileSize <= 2 * 1024 * 1024) {
+				// 500KB-2MB压缩至200KB内
+				targetSize = 200 * 1024;
+			} else if (fileSize > 2 * 1024 * 1024 && fileSize <= 3 * 1024 * 1024) {
+				// 2MB-3MB压缩至300KB内
+				targetSize = 300 * 1024;
+			} else {
+				// 3MB以上压缩至500KB内
+				targetSize = 500 * 1024;
+			}
+
+			const canvas = document.createElement('canvas');
+			const ctx = canvas.getContext('2d');
+			const img = new Image();
+
+			img.onload = function() {
+				// 计算缩放比例
+				const maxWidth = 1920;
+				const maxHeight = 1080;
+				let width = img.width;
+				let height = img.height;
+
+				if (width > height) {
+					if (width > maxWidth) {
+						height = (height * maxWidth) / width;
+						width = maxWidth;
+					}
+				} else {
+					if (height > maxHeight) {
+						width = (width * maxHeight) / height;
+						height = maxHeight;
+					}
+				}
+
+				canvas.width = width;
+				canvas.height = height;
+				ctx.drawImage(img, 0, 0, width, height);
+
+				// 使用二分法查找合适的压缩质量
+				let minQuality = 0.1;
+				let maxQuality = 0.9;
+				let finalQuality = 0.7;
+
+				// 如果文件本身就很小，就不需要大幅度压缩了
+				if (fileSize <= 100 * 1024) {
+					finalQuality = 0.9;
+				} else {
+					// 使用二分法寻找合适的压缩质量
+					const binarySearchQuality = (min, max, attempts = 0) => {
+						if (attempts > 10) return (min + max) / 2; // 防止无限循环
+						
+						const midQuality = (min + max) / 2;
+						
+						return new Promise((resolveQuality) => {
+							canvas.toBlob(function(blob) {
+								if (!blob) {
+									resolveQuality(midQuality);
+									return;
+								}
+								
+								if (blob.size <= targetSize || max - min < 0.05) {
+									resolveQuality(midQuality);
+								} else if (blob.size > targetSize) {
+									// 文件仍然太大，降低质量
+									resolveQuality(binarySearchQuality(min, midQuality, attempts + 1));
+								} else {
+									// 文件太小，提高质量
+									resolveQuality(binarySearchQuality(midQuality, max, attempts + 1));
+								}
+							}, 'image/jpeg', midQuality);
+						});
+					};
+
+					// 同步执行二分查找
+					binarySearchQuality(minQuality, maxQuality).then(quality => {
+						finalQuality = quality;
+						
+						// 使用最终确定的质量生成最终文件
+						canvas.toBlob(function(blob) {
+							if (blob) {
+								const compressedFile = new File([blob], file.name, {
+									type: 'image/jpeg',
+									lastModified: Date.now()
+								});
+								
+								// console.log(`压缩详情 - 原始大小: ${(fileSize / 1024).toFixed(2)} KB, 目标大小: ${(targetSize / 1024).toFixed(2)} KB, 最终大小: ${(compressedFile.size / 1024).toFixed(2)} KB, 压缩质量: ${finalQuality.toFixed(2)}`);
+								resolve(compressedFile);
+							} else {
+								reject(new Error('压缩失败'));
+							}
+						}, 'image/jpeg', finalQuality);
+					});
+					return;
+				}
+
+				// 对于小文件，直接使用确定的质量
+				canvas.toBlob(function(blob) {
+					if (blob) {
+						const compressedFile = new File([blob], file.name, {
+							type: 'image/jpeg',
+							lastModified: Date.now()
+						});
+						
+						// console.log(`压缩详情 - 原始大小: ${(fileSize / 1024).toFixed(2)} KB, 目标大小: ${(targetSize / 1024).toFixed(2)} KB, 最终大小: ${(compressedFile.size / 1024).toFixed(2)} KB, 压缩质量: ${finalQuality.toFixed(2)}`);
+						resolve(compressedFile);
+					} else {
+						reject(new Error('压缩失败'));
+					}
+				}, 'image/jpeg', finalQuality);
+			};
+
+			img.onerror = function() {
+				reject(new Error('图片加载失败'));
+			};
+
+			const reader = new FileReader();
+			reader.onload = function(e) {
+				img.src = e.target.result;
+			};
+			reader.onerror = function() {
+				reject(new Error('文件读取失败'));
+			};
+			reader.readAsDataURL(file);
+		});
+	}
+
+	const originalXHROpen = XMLHttpRequest.prototype.open;
+	const originalXHRSend = XMLHttpRequest.prototype.send;
+
+	XMLHttpRequest.prototype.open = function() {
+		this._requestURL = arguments[1];
+		return originalXHROpen.apply(this, arguments);
+	};
+
+	XMLHttpRequest.prototype.send = function(data) {
+		const self = this;
+		const requestURL = this._requestURL;
+		
+		// 检查是否是图片上传请求
+		if (requestURL && requestURL.includes('/index/setting/msgInputImg')) {
+
+			if (data instanceof FormData) {
+				// 异步处理FormData压缩
+				(async () => {
+					try {
+						const files = Array.from(data.getAll('file') || []);
+						if (files.length === 0) {
+							return originalXHRSend.call(self, data);
+						}
+						
+						let hasCompressed = false;
+						const processedFormData = new FormData();
+						
+						// 复制所有字段（包括非文件字段）
+						for (const [key, value] of data.entries()) {
+							if (value instanceof File) {
+								const file = value;
+								if (file.type.startsWith('image/') && file.type !== 'image/gif') {
+									try {
+										const compressedFile = await compressImage(file);
+										processedFormData.append(key, compressedFile, compressedFile.name);
+										hasCompressed = true;
+									} catch (error) {
+										processedFormData.append(key, file, file.name);
+									}
+								} else {
+									processedFormData.append(key, file, file.name);
+								}
+							} else {
+								// 非文件字段直接复制
+								processedFormData.append(key, value);
+							}
+						}
+						
+						if (hasCompressed) {
+							return originalXHRSend.call(self, processedFormData);
+						} else {
+							return originalXHRSend.call(self, data);
+						}
+						
+					} catch (error) {
+						return originalXHRSend.call(self, data);
+					}
+				})();
+				
+				return; // 阻止原始send执行
+			} else {
+				// console.log('ℹ️ 非FormData请求，正常处理');
+			}
+		}
+		
+		// 非图片上传请求，正常处理
+		return originalXHRSend.call(this, data);
+	};
+
 	// 配置粘贴文本的内容处理
 	// editor.config.pasteTextHandle = function (pasteStr) {
 	//     // 对粘贴的文本进行处理，然后返回处理后的结果
