@@ -473,11 +473,10 @@ p.more {
 }
 
 #randomarticle li+li {
-    border-top: 1px solid var(--border-color);
+border-top: 1px solid var(--border-color);
     margin-top: 10px;
     padding-top: 10px;
 }
-
 /* 评论样式 */
 .comment-meta small { color: var(--text-secondary); }
 .comment-author { margin-bottom: 10px; }
@@ -765,16 +764,42 @@ cursor: pointer;
     position: sticky;
     top: 0;
     z-index: 100000;
+    /* 添加flexbox布局，确保一行显示 */
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    /* 防止换行 */
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    /* 隐藏滚动条但保留滚动功能 */
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+.top-bar-body ul {
+    display: flex;
+}
+
+/* 隐藏WebKit浏览器的滚动条 */
+.top-bar-body::-webkit-scrollbar {
+    display: none;
 }
 
 .top-bar-body .current { border-bottom-color: var(--primary-color); }
 
 .top-bar-body li {
-    display: inline-block;
-    padding: 6px 10px 6px 10px;
+    /* 修改为flex项 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 6px 20px 6px 20px;
     border-bottom: 3px solid transparent;
-    margin: 0 10px;
+    margin: 0;
     transition: border-color 0.2s ease;
+    /* 确保每个菜单项宽度均匀 */
+    flex: 1;
+    min-width: 0;
+    /* 确保不换行 */
+    white-space: nowrap;
 }
 
 .top-bar-body li:hover { border-bottom-color: var(--primary-light); }
