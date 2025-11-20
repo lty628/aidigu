@@ -364,7 +364,7 @@ const E = window.wangEditor
 		const requestURL = this._requestURL;
 		
 		// 检查是否是图片上传请求
-		if (requestURL && requestURL.includes('/index/setting/msgInputImg')) {
+		if (requestURL && requestURL.includes('/index/setting/chatMessage')) {
 
 			if (data instanceof FormData) {
 				// 异步处理FormData压缩
