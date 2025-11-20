@@ -434,3 +434,6 @@ business-item:first-child .icon::after { top: 7px; }
   font-size: 20px;
   color: #DDD;
 }
+video,audio,iframe,.massageImgCommon {
+	    width: -webkit-fill-available;
+}
