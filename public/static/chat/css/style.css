@@ -78,7 +78,7 @@ button.onloading::after, .button.onloading::after, .datetime-input-box .dtpicker
 .dialog.mini .head .close.iconfont:hover::before, .dialog.mini .head .close.iconfont:hover, .dialog.mini .head .dialog-close.iconfont:hover::before, .dialog.mini .head .dialog-close.iconfont:hover { color: rgb(255, 66, 52); }
 .dialog.mini .head .close::before, .dialog.mini .head .dialog-close::before { content: ""; position: absolute; top: 0px; left: 0px; color: rgb(133, 142, 153); font-size: 21px; line-height: 21px; }
 .unpop-modal .head .close.iconfont:hover::before, .unpop-modal .head .close.iconfont:hover, .unpop-modal .head .dialog-close.iconfont:hover::before, .unpop-modal .head .dialog-close.iconfont:hover { color: rgb(255, 66, 52); }
-.unpop-modal .head .close::before, .unpop-modal .head .dialog-close::before { content: "��2"; position: absolute; top: 0px; left: 0px; color: rgb(133, 142, 153); font-size: 21px; line-height: 21px; }
+.unpop-modal .head .close::before, .unpop-modal .head .dialog-close::before { content: ""; position: absolute; top: 0px; left: 0px; color: rgb(133, 142, 153); font-size: 21px; line-height: 21px; }
 .tip-menu { position: absolute; z-index: 300; min-width: 72px; max-width: 126px; background-color: rgb(255, 255, 255); box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.15); border-radius: 3px; }
 .tipper, .tipper *, .tipper *::before, .tipper *::after { box-sizing: border-box; }
 .audio-player.audio-wrapper .iconfont::before { content: ""; font-family: iconfont; color: rgb(0, 140, 238); cursor: pointer; }
@@ -127,272 +127,8 @@ button.onloading::after, .button.onloading::after, .datetime-input-box .dtpicker
 #sub-menu-pannel.conv-list-pannel .conv-lists .conv-item.pin::before { content: " "; display: inline-block; position: absolute; left: 0px; top: 0px; width: 0px; height: 0px; border-style: solid dashed dashed; border-width: 6px 8px 0px 0px; border-color: rgb(94, 201, 246) transparent transparent; }
 .conv-detail-pannel { position: relative; }
 .conv-detail-pannel .content-pannel-body { position: relative; box-sizing: border-box; display: flex; flex-flow: row nowrap; }
-.conv-detail-pannel .content-pannel-body .chat-items { 
-    -moz-box-flex: 1; 
-    flex: 1 1 0%; 
-    overflow-y: auto;
-    overflow-x: hidden; 
-    position: relative;
-    background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
-    scroll-behavior: smooth;
-}
-
-.conv-detail-pannel .content-pannel-body .chat-items .msg-items { 
-    position: absolute; 
-    box-sizing: border-box; 
-    min-height: 100%; 
-    width: 100%;
-    padding: 20px;
-}
-
-/* 聊天消息容器现代化的滚动条 */
-.conv-detail-pannel .content-pannel-body .chat-items::-webkit-scrollbar {
-    width: 8px;
-}
-
-.conv-detail-pannel .content-pannel-body .chat-items::-webkit-scrollbar-track {
-    background: rgba(241, 245, 249, 0.5);
-    border-radius: 4px;
-    margin: 10px 0;
-}
-
-.conv-detail-pannel .content-pannel-body .chat-items::-webkit-scrollbar-thumb {
-    background: rgba(203, 213, 225, 0.6);
-    border-radius: 4px;
-    border: 2px solid transparent;
-    background-clip: padding-box;
-}
-
-.conv-detail-pannel .content-pannel-body .chat-items::-webkit-scrollbar-thumb:hover {
-    background: rgba(148, 163, 184, 0.8);
-}
-
-.conv-detail-pannel .content-pannel-body .chat-items::-webkit-scrollbar-thumb:active {
-    background: rgba(100, 116, 139, 0.9);
-}
-
-/* Firefox 滚动条样式 */
-.conv-detail-pannel .content-pannel-body .chat-items {
-    scrollbar-width: thin;
-    scrollbar-color: rgba(203, 213, 225, 0.6) rgba(241, 245, 249, 0.5);
-}
-
-/* 消息项现代化样式 */
-.msg-item {
-    margin: 15px 0;
-    display: flex;
-    align-items: flex-start;
-    animation: fadeInUp 0.5s ease;
-    transition: all 0.3s ease;
-}
-
-.msg-item:hover {
-    transform: translateY(-2px);
-}
-
-.msg-item .msg-bubble {
-    max-width: 70%;
-    padding: 12px 16px;
-    border-radius: 18px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    position: relative;
-    word-wrap: break-word;
-    transition: all 0.3s ease;
-}
-
-.msg-item.left .msg-bubble {
-    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-    border: 1px solid #e2e8f0;
-    margin-left: 10px;
-}
-
-.msg-item.right .msg-bubble {
-    background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
-    color: white;
-    margin-right: 10px;
-}
-
-.msg-item.left .msg-bubble::before {
-    content: '';
-    position: absolute;
-    left: -8px;
-    top: 12px;
-    width: 0;
-    height: 0;
-    border: 8px solid transparent;
-    border-right-color: #e2e8f0;
-}
-
-.msg-item.left .msg-bubble::after {
-    content: '';
-    position: absolute;
-    left: -7px;
-    top: 12px;
-    width: 0;
-    height: 0;
-    border: 8px solid transparent;
-    border-right-color: white;
-}
-
-.msg-item.right .msg-bubble::before {
-    content: '';
-    position: absolute;
-    right: -8px;
-    top: 12px;
-    width: 0;
-    height: 0;
-    border: 8px solid transparent;
-    border-left-color: #357abd;
-}
-
-/* 消息时间戳样式 */
-.msg-time {
-    font-size: 11px;
-    color: #94a3b8;
-    margin: 4px 0;
-    text-align: center;
-    opacity: 0.7;
-    transition: opacity 0.3s ease;
-}
-
-.msg-item:hover .msg-time {
-    opacity: 1;
-}
-
-/* 消息发送状态指示器 */
-.msg-status {
-    font-size: 12px;
-    color: #94a3b8;
-    margin: 0 8px;
-    display: flex;
-    align-items: center;
-}
-
-.msg-status.sending {
-    color: #f59e0b;
-}
-
-.msg-status.sent {
-    color: #10b981;
-}
-
-.msg-status.failed {
-    color: #ef4444;
-}
-
-/* 动画效果 */
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-@keyframes slideInRight {
-    from {
-        opacity: 0;
-        transform: translateX(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
-
-@keyframes slideInLeft {
-    from {
-        opacity: 0;
-        transform: translateX(-30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
-
-.msg-item.left {
-    animation: slideInLeft 0.5s ease;
-}
-
-.msg-item.right {
-    animation: slideInRight 0.5s ease;
-}
-
-/* 响应式设计优化 */
-@media (max-width: 768px) {
-    .conv-detail-pannel .content-pannel-body .chat-items .msg-items {
-        padding: 15px;
-    }
-    
-    .msg-item .msg-bubble {
-        max-width: 85%;
-        padding: 10px 14px;
-    }
-    
-    .msg-item.left .msg-bubble {
-        margin-left: 5px;
-    }
-    
-    .msg-item.right .msg-bubble {
-        margin-right: 5px;
-    }
-}
-
-@media (max-width: 480px) {
-    .conv-detail-pannel .content-pannel-body .chat-items .msg-items {
-        padding: 10px;
-    }
-    
-    .msg-item .msg-bubble {
-        max-width: 90%;
-        padding: 8px 12px;
-        font-size: 14px;
-    }
-    
-    .conv-detail-pannel .content-pannel-body .chat-items::-webkit-scrollbar {
-        width: 4px;
-    }
-}
-
-/* 减少动画模式支持 */
-@media (prefers-reduced-motion: reduce) {
-    .msg-item {
-        animation: none !important;
-        transition: none !important;
-    }
-}
-
-/* 深色模式支持 */
-@media (prefers-color-scheme: dark) {
-    .conv-detail-pannel .content-pannel-body .chat-items {
-        background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-    }
-    
-    .conv-detail-pannel .content-pannel-body .chat-item.not-me .msg-bubble {
-        background: linear-gradient(135deg, #334155 0%, #1e293b 100%);
-        border-color: rgba(71, 85, 105, 0.8);
-        color: #f1f5f9;
-    }
-    
-    .conv-detail-pannel .content-pannel-body .chat-item:hover {
-        background-color: rgba(30, 41, 59, 0.4);
-    }
-}
-
-/* 高对比度模式支持 */
-@media (prefers-contrast: high) {
-    .msg-item.left .msg-bubble {
-        border: 2px solid #000;
-    }
-    
-    .msg-item.right .msg-bubble {
-        border: 2px solid #fff;
-    }
-}
+.conv-detail-pannel .content-pannel-body .chat-items { -moz-box-flex: 1; flex: 1 1 0%; overflow-y: auto;overflow-x: hidden; position: relative; }
+.conv-detail-pannel .content-pannel-body .chat-items .msg-items { position: absolute; box-sizing: border-box; min-height: 100%; width: 100%; }
 /* .conv-detail-pannel .content-pannel-body .chat-items .msg-items { position: absolute; box-sizing: border-box; min-height: 100%; min-width: 550px; width: 100%; padding: 4px 16px 16px; } */
 .conv-detail-pannel .content-pannel-body .chat-items .msg-items .msg-box:first-child .safety-tips::before { display: none; }
 .conv-detail-pannel .content-pannel-body .chat-status { margin: 16px auto; text-align: center; color: rgb(189, 190, 191); font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; overflow-wrap: normal; }
@@ -539,7 +275,7 @@ button.onloading::after, .button.onloading::after, .datetime-input-box .dtpicker
 .transfer-group-boss-modal.dialog .body .people.checked .head_image::after { content: ""; font-family: iconfont; position: absolute; left: 50%; top: 50%; margin-left: -9px; margin-top: -9px; color: rgb(255, 255, 255); font-size: 18px; }
 .select-panel-modal .selector-and-content .selector-choices-wrapper .choiced-item .iconfont.iconfont:hover::before, .select-panel-modal .selector-and-content .selector-choices-wrapper .choiced-item .iconfont.iconfont:hover { color: rgb(255, 66, 52); }
 .user-register-dialog .head .close.iconfont:hover::before, .user-register-dialog .head .close.iconfont:hover, .user-register-dialog .head .dialog-close.iconfont:hover::before, .user-register-dialog .head .dialog-close.iconfont:hover { color: rgb(255, 66, 52); }
-.user-register-dialog .head .close::before, .user-register-dialog .head .dialog-close::before { content: "��2"; position: absolute; top: 0px; left: 0px; color: rgb(133, 142, 153); font-size: 21px; line-height: 21px; }
+.user-register-dialog .head .close::before, .user-register-dialog .head .dialog-close::before { content: ""; position: absolute; top: 0px; left: 0px; color: rgb(133, 142, 153); font-size: 21px; line-height: 21px; }
 .mac-os .user-register-dialog .close::before { content: ""; font-family: iconfont; font-size: 13px; color: rgb(34, 34, 34); opacity: 0.85; visibility: hidden; width: 100%; height: 100%; }
 .mac-os .user-register-dialog .close::before { visibility: visible; content: ""; }
 .mac-os .user-register-dialog .close:hover::before { visibility: visible; color: rgb(34, 34, 34) ! important; }
@@ -638,7 +374,8 @@ business-item:first-child .icon::after { top: 7px; }
 ::-webkit-scrollbar-thumb {  
   border-radius: 999px;  
   border: 5px solid transparent;  
-}
+}  
+  
 ::-webkit-scrollbar-track {  
   box-shadow: 1px 1px 5px rgba(0,0,0,.2) inset;  
 }  
