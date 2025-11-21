@@ -260,95 +260,12 @@
 			}
 		}
 
-		/* 超小屏幕优化 (iPhone SE等) */
-		/* @media (max-width: 375px) {
-			#menu-pannel {
-				height: 60px;
-			}
-			
-			#menu-pannel .main-menus .menu-item {
-				padding: 5px 8px;
-				min-width: 50px;
-				font-size: 11px;
-			}
-			
-			#menu-pannel .main-menus .menu-item::before {
-				width: 18px;
-				height: 18px;
-			}
-			
-			#sub-menu-pannel {
-				width: 100%;
-			}
-			
-			#sub-menu-pannel.conv-list-pannel .conv-lists .conv-item {
-				padding: 10px 12px;
-				margin: 0;
-				font-size: 13px;
-			}
-			
-			.msg-item .msg-bubble {
-				max-width: 90%;
-				padding: 8px 12px;
-				font-size: 13px;
-			}
-			
-			.input-area {
-				padding: 8px 12px;
-			}
-		} */
-
-		/* 横屏模式优化 */
-		@media (max-width: 768px) and (orientation: landscape) {
-			#menu-pannel {
-				height: 55px;
-				width: 100%;
-			}
-
-			#menu-pannel .main-menus {
-				max-width: 600px;
-			}
-
-			#menu-pannel .main-menus .menu-item {
-				min-width: 80px;
-				font-size: 13px;
-				padding: 8px 12px;
-			}
-
-			#menu-pannel .main-menus .menu-item::before {
-				width: 22px;
-				height: 22px;
-			}
-
-			#sub-menu-pannel {
-				width: 100%;
-			}
-
-			#content-pannel .content-pannel-body {
-				padding: 10px;
-			}
-		}
-
 		/* 防止iOS Safari工具栏遮挡 */
 		@supports (-webkit-touch-callout: none) {
 			#layout-container {
 				height: -webkit-fill-available;
 			}
 		}
-
-		/* 安全区域适配 (iPhone X及以上) */
-		/* @supports (padding: max(0px)) {
-			.input-area {
-				padding-left: max(15px, env(safe-area-inset-left));
-				padding-right: max(15px, env(safe-area-inset-right));
-				padding-bottom: max(10px, env(safe-area-inset-bottom));
-			}
-			
-			#content-pannel .content-pannel-body {
-				padding-left: max(15px, env(safe-area-inset-left));
-				padding-right: max(15px, env(safe-area-inset-right));
-			}
-		} */
 
 		/* 触摸优化 */
 		@media (hover: none) and (pointer: coarse) {
