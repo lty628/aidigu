@@ -176,7 +176,7 @@ class IndexInfo extends Info
     }
     public function background()
     {
-        $data = \app\common\libs\FileLog::getList($this->userid, 15);
+        $data = \app\common\libs\FileLog::getList($this->userid, 5, 15);
         foreach ($data as $key => $value) {
             $data[$key]['json'] = json_encode([
                 'media_info' => $value['media_info'],
