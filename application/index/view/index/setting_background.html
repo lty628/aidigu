@@ -18,7 +18,7 @@
 				<div style="display: flex; gap: 5px; flex-wrap: wrap;">
 					{volist name="bgArr" id="bg" key="k"}
 					<div style="width: 120px; height: 70px; cursor: pointer; border-radius: 4px; overflow: hidden;"
-						onclick="$('.backgroundhtml img').attr('src', '{$bg[\'media_info\']}'); $('#backgroundVal').val('{$bg[\'media_info\']}');">
+						onclick="$('.backgroundhtml img').attr('src', '{$bg[\'media_info\']}'); $('#backgroundVal').val('{$bg[\'media_info\']}'); $('.background-blur').css('background-image', 'url(' + '{$bg[\'media_info\']}' + ')');">
 						<img src="{$bg['media_info']}"
 							style="width: 100%; height: 100%; object-fit: cover; border: 2px solid #eee; transition: all 0.3s;"
 							onmouseover="this.style.borderColor='#007BFF'" onmouseout="this.style.borderColor='#eee'">
@@ -163,7 +163,9 @@
 						if (res.status) {
 							var data = res.data;
 							$(".backgroundhtml img").attr('src', data.image_path);
-							$("#backgroundVal").val(JSON.stringify(data));
+							$("#backgroundVal").val(data.image_path);
+							$(".background-blur").css('background-image', 'url(' + data.image_path + ')');
+							// $("#backgroundVal").val(JSON.stringify(data));
 						} else {
 							alertMsg(res.msg);
 						}
