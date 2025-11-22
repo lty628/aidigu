@@ -71,13 +71,17 @@ function showMessageImg(obj) {
 
 // 显示网盘
 var showFrame = false;
+var currentLayerIndex = null;
+
 function showFrameHtml(obj, width, height) {
     if (showFrame) return
     showFrame = true
     if (parent.layer) {
         var layer = parent.layer
     }
-    layer.open({
+    
+    // 打开弹框并保存索引
+    currentLayerIndex = layer.open({
         type: 2,
         title: $(obj).attr('data-title'),
         shade: false,
@@ -89,15 +93,24 @@ function showFrameHtml(obj, width, height) {
         zIndex: layer.zIndex, //重点1
         success: function (layero) {
             layer.setTop(layero); //重点2
+            // 添加手机返回键支持
+            window.history.pushState(null, null, window.location.href);
+            $(window).on('popstate.showFrameHtml', function() {
+                layer.close(currentLayerIndex);
+            });
         },
         end: function () {
             showFrame = false;
+            currentLayerIndex = null;
+            // 移除事件监听
+            $(window).off('popstate.showFrameHtml');
         }
     });
 }
 
 function showFrameUrl(obj, width, height) {
-    layer.open({
+    // 打开弹框并保存索引
+    currentLayerIndex = layer.open({
         type: 1,
         title: $(obj).attr('data-title'),
         shade: 0.8,
@@ -109,17 +122,21 @@ function showFrameUrl(obj, width, height) {
         // moveOut: true,
         scrollbar: false,
         content: '<iframe sandbox="allow-same-origin allow-scripts allow-popups" src="' + $(obj).attr('data-url') + '" allowfullscreen="true" allowtransparency="true" width="100%" height="100%" frameborder="0" scrolling="yes"></iframe>',
-        // zIndex: layer.zIndex, //重点1
-        // success: function(layero){
-        //     layer.setTop(layero); //重点2
-        // },
-        // end: function(){ 
-        // } 
+        success: function() {
+            // 添加手机返回键支持
+            window.history.pushState(null, null, window.location.href);
+            $(window).on('popstate.showFrameUrl', function() {
+                layer.close(currentLayerIndex);
+            });
+        },
+        end: function() {
+            currentLayerIndex = null;
+            // 移除事件监听
+            $(window).off('popstate.showFrameUrl');
+        }
     });
-    $(".layui-layer-content").css("overflow", 'hidden')
-    // layer.style(index, {
-    //     overflow: 'hidden',
-    // });
+    
+    $("layui-layer-content").css("overflow", 'hidden')
 }
 
 // 小应用专用
@@ -169,13 +186,18 @@ function showFrameCustom(obj, appConfig) {
         // moveOut: true,
         scrollbar: false,
         content: iframeContent,
-        // content: '<iframe sandbox="allow-same-origin allow-scripts allow-popups" src="' + $(obj).attr('data-url') + '" allowfullscreen="true" allowtransparency="true" width="100%" height="100%" frameborder="0" scrolling="yes"></iframe>',
-        // zIndex: layer.zIndex, //重点1
-        // success: function(layero){
-        //     layer.setTop(layero); //重点2
-        // },
-        // end: function(){ 
-        // } 
+        success: function() {
+            // 添加手机返回键支持
+            window.history.pushState(null, null, window.location.href);
+            $(window).on('popstate.showFrameCustom', function() {
+                layer.close(index);
+            });
+        },
+        end: function() {
+            // 移除事件监听
+            $(window).off('popstate.showFrameCustom');
+            $(document).off('keydown.toolModal');
+        }
     });
 
     // 优化弹窗样式
@@ -212,16 +234,6 @@ function showFrameCustom(obj, appConfig) {
             layer.close(index);
         }
     });
-    
-    // 清理事件
-    layer.style(index, {
-        end: function() {
-            $(document).off('keydown.toolModal');
-        }
-    });
-    // layer.style(index, {
-    //     overflow: 'hidden',
-    // });
 }
 
 //字符串转换为时间戳
