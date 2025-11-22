@@ -209,6 +209,10 @@ h6 { font-size: 0.8em; }
     background-color: transparent;
 }
 
+.box-body span {
+    margin-top: 5px;
+}
+
 .box .fa, .post-info-i .fa {
     width: 15px;
     text-align: center;
