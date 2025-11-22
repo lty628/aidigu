@@ -79,15 +79,24 @@ function showFrameHtml(obj, width, height) {
     if (parent.layer) {
         var layer = parent.layer
     }
-    
+
+    var resize = true;
+    var maxmin = true,
+    // 判断是否是手机
+    if (navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i)) {
+        // width = '100%';
+        // height = '100%';
+        resize = false;
+        maxmin =false;
+    }
     // 打开弹框并保存索引
     currentLayerIndex = layer.open({
         type: 2,
         title: $(obj).attr('data-title'),
         shade: false,
         area: [width, height],
-        resize: true,
-        maxmin: true,
+        resize: resize,
+        maxmin: maxmin,
         scrollbar: false,
         content: $(obj).attr('data-url'),
         zIndex: layer.zIndex, //重点1
