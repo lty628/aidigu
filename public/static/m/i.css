@@ -70,11 +70,11 @@ img {
     max-width: 100%;
 }
 
-video {
+/* video {
     background-color: var(--background-secondary);
     max-height: 80vh;
     max-width: 100%;
-}
+} */
 
 hr {
     border: none;
@@ -730,7 +730,7 @@ cursor: pointer;
 }
 
 .post-content video {
-    border-radius: var(--radius-lg);
+    /* border-radius: var(--radius-lg); */
 }
 
 .music { width: 100%; margin: 8px 0; }

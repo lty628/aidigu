@@ -194,7 +194,7 @@
 							if (data[i].media_info.media_type == 'mp4' || data[i].media_info.media_type == 'm3u8') {
 								mediaStr = '<p class="massageImg clear showVideo' + data[i].msg_id + '" vid="' + data[i].media + '"><video width="400px"  controls=""  name="media"><source src="" type="video/mp4"></video></p>';
 							} else if (data[i].media_info.media_type == 'mp3') {
-									mediaStr = '<p class="massageImg clear"><audio id="music_'+data[i].msg_id+'" class="music" controls="controls" loop="loop" onplay="stopOther(this)" preload="none" controlsList="nodownload" οncοntextmenu="return false" name="media"><source src="'+data[i].media+'" type="audio/mpeg"></audio></p>';
+									mediaStr = '<p class="massageImg clear"><audio id="music_'+data[i].msg_id+'" class="music" controls="controls" onclick="return false;" loop="loop" onplay="stopOther(this)" preload="none" controlsList="nodownload" οncοntextmenu="return false" name="media"><source src="'+data[i].media+'" type="audio/mpeg"></audio></p>';
 								}  else {
 								mediaStr = '<p  class="massageImg clear"><img class="massageImgCommon massageImg_'+data[i].media_info.media_type+'"  onclick="showMessageImg(this)" src="' + data[i].media + '"></p>';
 							}
