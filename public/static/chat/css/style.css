@@ -146,7 +146,7 @@ button.onloading::after, .button.onloading::after, .datetime-input-box .dtpicker
 .conv-detail-pannel .content-pannel-body .chat-item.not-me .name a:hover .at { visibility: visible; }
 .conv-detail-pannel .content-pannel-body .chat-item.not-me .head_image { float: left; margin-left: 0px; margin-right: 7px; }
 .conv-detail-pannel .content-pannel-body .chat-item.not-me .msg-bubble-box { float: left; width: 80%;}
-.conv-detail-pannel .content-pannel-body .chat-item.not-me .msg-bubble-area { padding-right: 20%; padding-left: 0px; float: left; clear: both; position: relative; margin-bottom: 3px; }
+.conv-detail-pannel .content-pannel-body .chat-item.not-me .msg-bubble-area { padding-left: 0px; float: left; clear: both; position: relative; margin-bottom: 3px; }
 .conv-detail-pannel .content-pannel-body .chat-item.not-me .msg-bubble-area .text { max-width: 100%; }
 .conv-detail-pannel .content-pannel-body .chat-item.not-me .msg-bubble-area .text .chat-content-face { width: 34px; height: 34px; vertical-align: middle; margin: 0px 5px; }
 .conv-detail-pannel .content-pannel-body .chat-item.not-me .msg-bubble-area .read-status, .conv-detail-pannel .content-pannel-body .chat-item.not-me .msg-bubble-area .msg-menu-box, .conv-detail-pannel .content-pannel-body .chat-item.not-me .msg-bubble-area .cancel-sending { position: absolute; width: 130px; font-size: 12px; right: 5px; text-align: left; }
@@ -160,7 +160,7 @@ button.onloading::after, .button.onloading::after, .datetime-input-box .dtpicker
 .conv-detail-pannel .content-pannel-body .chat-item.me .head_image { cursor: pointer; }
 .conv-detail-pannel .content-pannel-body .chat-item.me .head_image { float: right; margin-right: 0px; margin-left: 7px; }
 .conv-detail-pannel .content-pannel-body .chat-item.me .msg-bubble-box { float: right;  width: 80%;}
-.conv-detail-pannel .content-pannel-body .chat-item.me .msg-bubble-area { padding-left: 20%; padding-right: 0px; float: right; clear: both; position: relative; margin-bottom: 3px; }
+.conv-detail-pannel .content-pannel-body .chat-item.me .msg-bubble-area { padding-right: 0px; float: right; clear: both; position: relative; margin-bottom: 3px; }
 .conv-detail-pannel .content-pannel-body .chat-item.me .msg-bubble-area .text { max-width: 100%; }
 .conv-detail-pannel .content-pannel-body .chat-item.me .msg-bubble-area .text .chat-content-face { width: 34px; height: 34px; vertical-align: middle; margin: 0px 5px; }
 .conv-detail-pannel .content-pannel-body .chat-item.me .msg-bubble-area .text a { color: rgb(209, 236, 253); }
