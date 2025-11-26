@@ -141,9 +141,9 @@ button, input[type=button], input[type=submit] {
     transition: background-color 0.2s ease;
 }
 
-button:hover, input[type=button]:hover, input[type=submit]:hover {
+/* button:hover, input[type=button]:hover, input[type=submit]:hover {
     background: var(--primary-hover);
-}
+} */
 
 textarea {
     width: 100%;
