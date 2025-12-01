@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>任务发布展示</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #7f8c8d;
+            font-size: 1.1em;
+        }
+
+        .add-task {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 500;
+            transition: background-color 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: #2980b9;
+        }
+
+        .btn-danger {
+            background-color: #e74c3c;
+        }
+
+        .btn-danger:hover {
+            background-color: #c0392b;
+        }
+
+        .task-list {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        .task-header {
+            background-color: #ecf0f1;
+            padding: 15px 20px;
+            border-radius: 6px;
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        /* 九宫格布局 */
+        .task-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        /* 卡片样式 */
+        .task-card {
+            background-color: #fff;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            position: relative;
+            min-height: 200px;
+        }
+
+        .task-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .task-card .task-title {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 16px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .task-card .task-desc {
+            color: #7f8c8d;
+            font-size: 14px;
+            margin-bottom: 15px;
+            height: 60px;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+        }
+
+        .task-card .task-actions {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .task-card .status-select {
+            padding: 4px 8px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            font-size: 12px;
+            flex: 1;
+            margin-right: 10px;
+        }
+
+        .task-card .task-meta {
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .status {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .status-active {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .status-completed {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .status-pending {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            color: #95a5a6;
+            font-size: 16px;
+            grid-column: 1 / -1;
+        }
+
+        .empty-state i {
+            font-size: 64px;
+            margin-bottom: 20px;
+            color: #bdc3c7;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 20px auto;
+                padding: 15px;
+            }
+
+            .task-items {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .task-card {
+                padding: 15px;
+                min-height: 180px;
+            }
+
+            .task-card .task-actions {
+                position: static;
+                margin-top: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>任务发布展示</h1>
+            <p class="subtitle">查看和管理您的所有任务</p>
+        </header>
+
+        <div class="add-task">
+            <a href="/tools/task/add" class="btn">+ 创建新任务</a>
+        </div>
+
+        <div class="task-list">
+            <div class="task-header">我的任务列表</div>
+            <div id="taskList" class="task-items">
+                <!-- 任务项将通过JavaScript动态生成 -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 从cookie中读取任务数据并渲染到页面
+        function loadTasksFromCookie() {
+            const taskListElement = document.getElementById('taskList');
+            
+            // 从cookie中获取任务数据
+            let tasks = JSON.parse(getCookie('tasks') || '[]');
+            
+            if (tasks.length === 0) {
+                taskListElement.innerHTML = `
+                    <div class="empty-state">
+                        <i>📁</i>
+                        <p>暂无任务</p>
+                        <p>点击上方按钮创建第一个任务吧！</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // 渲染任务列表（卡片样式）
+            taskListElement.innerHTML = '';
+            tasks.forEach((task) => {
+                const statusClass = getStatusClass(task.status);
+                
+                const taskCard = document.createElement('div');
+                taskCard.className = 'task-card';
+                taskCard.innerHTML = `
+                    <div class="task-meta">
+                        <div class="status ${statusClass}">${getStatusText(task.status)}</div>
+                        <div style="font-size: 12px; color: #95a5a6;">${task.create_time || formatDate(task.createdAt)}</div>
+                    </div>
+                    <div class="task-title">${escapeHtml(task.title)}</div>
+                    <div class="task-desc">${task.content ? escapeHtml(task.content) : '无描述'}</div>
+                    <div class="task-actions">
+                        <select class="status-select" onchange="updateTaskStatus(${task.id}, this.value)">
+                            <option value="pending" ${task.status === 'pending' ? 'selected' : ''}>待处理</option>
+                            <option value="active" ${task.status === 'active' ? 'selected' : ''}>进行中</option>
+                            <option value="completed" ${task.status === 'completed' ? 'selected' : ''}>已完成</option>
+                        </select>
+                        <button class="btn btn-danger" style="padding: 5px 10px; font-size: 12px;" onclick="deleteTask(${task.id})")>删除</button>
+                    </div>
+                `;
+                
+                taskListElement.appendChild(taskCard);
+            });
+        }
+
+        // 更新任务状态
+        function updateTaskStatus(taskId, newStatus) {
+            // 使用Ajax更新状态
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', '/tools/task/updateStatus', true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        const response = JSON.parse(xhr.responseText);
+                        if (response.code === 0) {
+                            // 重新加载任务列表以更新UI
+                            loadTasksFromCookie();
+                        }
+                    }
+                }
+            };
+            xhr.send(`id=${taskId}&status=${newStatus}`);
+        }
+
+        // 删除任务
+        function deleteTask(taskId) {
+            if (confirm('确定要删除这个任务吗？')) {
+                window.location.href = `/tools/task/delete/${taskId}`;
+            }
+        }
+
+        // 获取cookie中的值
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) {
+                // 添加decodeURIComponent来解码URL编码的数据
+                return decodeURIComponent(parts.pop().split(';').shift());
+            }
+            return null;
+        }
+
+        // 转义HTML特殊字符
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // 根据状态返回对应的类名
+        function getStatusClass(status) {
+            switch (status) {
+                case 'active':
+                    return 'status-active';
+                case 'completed':
+                    return 'status-completed';
+                case 'pending':
+                    return 'status-pending';
+                default:
+                    return 'status-pending';
+            }
+        }
+
+        // 根据状态返回对应的文本
+        function getStatusText(status) {
+            switch (status) {
+                case 'active':
+                    return '进行中';
+                case 'completed':
+                    return '已完成';
+                case 'pending':
+                    return '待处理';
+                default:
+                    return '待处理';
+            }
+        }
+
+        // 格式化日期显示
+        function formatDate(dateString) {
+            if (!dateString) return '';
+            const date = new Date(dateString);
+            const year = date.getFullYear();
+            const month = (date.getMonth() + 1).toString().padStart(2, '0');
+            const day = date.getDate().toString().padStart(2, '0');
+            const hours = date.getHours().toString().padStart(2, '0');
+            const minutes = date.getMinutes().toString().padStart(2, '0');
+            
+            return `${year}-${month}-${day} ${hours}:${minutes}`;
+        }
+
+        // 页面加载完成后执行
+        document.addEventListener('DOMContentLoaded', function() {
+            loadTasksFromCookie();
+        });
+    </script>
+</body>
+</html>

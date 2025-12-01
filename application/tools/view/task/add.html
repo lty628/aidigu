@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>创建任务</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #7f8c8d;
+            font-size: 1.1em;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        input[type="text"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background-color: #3498db;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #2980b9;
+        }
+
+        .btn-secondary {
+            background-color: #95a5a6;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #7f8c8d;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: #3498db;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 20px;
+                padding: 15px;
+            }
+
+            .btn-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>创建新任务</h1>
+            <p class="subtitle">请填写任务相关信息</p>
+        </header>
+
+        <form id="taskForm" action="/tools/task/save" method="post">
+            <div class="form-group">
+                <label for="title">任务标题 *</label>
+                <input type="text" id="title" name="title" required>
+            </div>
+
+            <div class="form-group">
+                <label for="content">任务描述</label>
+                <textarea id="content" name="content" placeholder="请输入任务详细描述..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="status">任务状态</label>
+                <select id="status" name="status">
+                    <option value="pending">待处理</option>
+                    <option value="active">进行中</option>
+                    <option value="completed">已完成</option>
+                </select>
+            </div>
+
+            <div class="btn-group">
+                <button type="submit" class="btn btn-primary">保存任务</button>
+                <button type="button" class="btn btn-secondary" onclick="window.location.href='/tools/task/index'">取消</button>
+            </div>
+        </form>
+
+        <a href="/tools/task/index" class="back-link">← 返回任务列表</a>
+    </div>
+
+    <script>
+        // 处理表单提交
+        document.getElementById('taskForm').addEventListener('submit', function(e) {
+            // 表单将直接提交到后端，由Task.php的save方法处理
+            // 这里可以添加额外的客户端验证
+            const title = document.getElementById('title').value;
+            if (!title.trim()) {
+                alert('请输入任务标题');
+                e.preventDefault();
+                return;
+            }
+        });
+    </script>
+</body>
+</html>
