@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -217,8 +218,36 @@
                 margin-top: 15px;
             }
         }
+
+        /* 素材预览样式 */
+        .material-preview {
+            margin-top: 10px;
+            padding: 8px;
+            background-color: #f5f5f5;
+            border-radius: 4px;
+            font-size: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .material-preview .material-title {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .material-preview .material-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .material-preview a {
+            color: #009688;
+            text-decoration: none;
+        }
     </style>
 </head>
+
 <body>
     <div class="container">
         <header>
@@ -238,14 +267,47 @@
         </div>
     </div>
 
+    <!-- 素材选择弹窗 -->
+    <div id="materialModal"
+        style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center;">
+        <div
+            style="background: white; border-radius: 8px; width: 90%; max-width: 800px; max-height: 80vh; overflow: hidden; display: flex; flex-direction: column;">
+            <div
+                style="padding: 15px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center;">
+                <h3>选择素材</h3>
+                <button onclick="closeMaterialModal()"
+                    style="background: none; border: none; font-size: 20px; cursor: pointer;">&times;</button>
+            </div>
+
+            <div style="padding: 15px;">
+                <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                    <input type="text" id="materialSearch" placeholder="搜索素材"
+                        style="flex: 1; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                    <button onclick="searchMaterials()"
+                        style="padding: 8px 16px; background: #009688; color: white; border: none; border-radius: 4px; cursor: pointer;">搜索</button>
+                    <button onclick="createNewMaterial()"
+                        style="padding: 8px 16px; background: #1E9FFF; color: white; border: none; border-radius: 4px; cursor: pointer;">创建新素材</button>
+                </div>
+
+                <div id="materialList" style="max-height: 400px; overflow-y: auto;">
+                    <!-- 素材列表将通过JavaScript动态生成 -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/layui/layui.js"></script>
     <script>
+        let currentTaskId = null;
+        let currentTaskStatus = null;
+
         // 从cookie中读取任务数据并渲染到页面
         function loadTasksFromCookie() {
             const taskListElement = document.getElementById('taskList');
-            
+
             // 从cookie中获取任务数据
             let tasks = JSON.parse(getCookie('tasks') || '[]');
-            
+
             if (tasks.length === 0) {
                 taskListElement.innerHTML = `
                     <div class="empty-state">
@@ -261,7 +323,22 @@
             taskListElement.innerHTML = '';
             tasks.forEach((task) => {
                 const statusClass = getStatusClass(task.status);
-                
+
+                // 构建素材预览HTML
+                let materialPreviewHtml = '';
+                if (task.material_info) {
+                    materialPreviewHtml = `
+                        <div class="material-preview">
+                            <div class="material-title">关联素材：${escapeHtml(task.material_info.title)}</div>
+                            <div class="material-actions">
+                                <a href="/tools/sourcematerial/preview?id=${task.material_info.id}" target="_blank">预览</a>
+                                <span>|</span>
+                                <a href="javascript:void(0)" onclick="removeMaterial(${task.id})">移除</a>
+                            </div>
+                        </div>
+                    `;
+                }
+
                 const taskCard = document.createElement('div');
                 taskCard.className = 'task-card';
                 taskCard.innerHTML = `
@@ -271,8 +348,9 @@
                     </div>
                     <div class="task-title">${escapeHtml(task.title)}</div>
                     <div class="task-desc">${task.content ? escapeHtml(task.content) : '无描述'}</div>
+                    ${materialPreviewHtml}
                     <div class="task-actions">
-                        <select class="status-select" onchange="updateTaskStatus(${task.id}, this.value)">
+                        <select class="status-select" onchange="showMaterialModal(${task.id}, this.value)">
                             <option value="pending" ${task.status === 'pending' ? 'selected' : ''}>待处理</option>
                             <option value="active" ${task.status === 'active' ? 'selected' : ''}>进行中</option>
                             <option value="completed" ${task.status === 'completed' ? 'selected' : ''}>已完成</option>
@@ -280,18 +358,121 @@
                         <button class="btn btn-danger" style="padding: 5px 10px; font-size: 12px;" onclick="deleteTask(${task.id})")>删除</button>
                     </div>
                 `;
-                
+
                 taskListElement.appendChild(taskCard);
             });
         }
 
-        // 更新任务状态
-        function updateTaskStatus(taskId, newStatus) {
+        // 显示素材选择弹窗
+        function showMaterialModal(taskId, status) {
+            currentTaskId = taskId;
+            currentTaskStatus = status;
+
+            // 显示弹窗
+            document.getElementById('materialModal').style.display = 'flex';
+
+            // 加载素材列表
+            loadMaterialList();
+        }
+
+        // 关闭素材选择弹窗
+        function closeMaterialModal() {
+            document.getElementById('materialModal').style.display = 'none';
+            currentTaskId = null;
+            currentTaskStatus = null;
+        }
+
+        // 加载素材列表
+        function loadMaterialList() {
+            const title = document.getElementById('materialSearch').value;
+            const materialListElement = document.getElementById('materialList');
+
+            // 显示加载中
+            materialListElement.innerHTML = '<div style="text-align: center; padding: 20px;">加载中...</div>';
+
+            // 发送请求获取素材列表
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', `/tools/task/getMaterialList?title=${encodeURIComponent(title)}`, true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    const response = JSON.parse(xhr.responseText);
+                    if (response.code === 0 && response.data) {
+                        if (response.data.length === 0) {
+                            materialListElement.innerHTML = '<div style="text-align: center; padding: 20px;">暂无素材，请创建新素材</div>';
+                        } else {
+                            // 渲染素材列表
+                            materialListElement.innerHTML = '';
+                            response.data.forEach((material) => {
+                                const materialItem = document.createElement('div');
+                                materialItem.className = 'layui-form-item';
+                                materialItem.innerHTML = `
+                                    <label>
+                                        <input type="radio" name="materialSelect" value="${material.id}" style="margin-right: 8px;">
+                                        <span>${escapeHtml(material.title)}</span>
+                                        <span style="color: #999; font-size: 12px; margin-left: 10px;">(${material.create_time})</span>
+                                        <a href="/tools/sourcematerial/preview?id=${material.id}" target="_blank" style="margin-left: 10px; color: #009688; font-size: 12px;">预览</a>
+                                    </label>
+                                `;
+                                materialListElement.appendChild(materialItem);
+                            });
+
+                            // 添加不选择素材的选项
+                            const noMaterialItem = document.createElement('div');
+                            noMaterialItem.className = 'layui-form-item';
+                            noMaterialItem.innerHTML = `
+                                <label>
+                                    <input type="radio" name="materialSelect" value="0" style="margin-right: 8px;" checked>
+                                    <span>不关联素材</span>
+                                </label>
+                            `;
+                            materialListElement.insertBefore(noMaterialItem, materialListElement.firstChild);
+
+                            // 添加确认按钮
+                            const confirmButton = document.createElement('button');
+                            confirmButton.style = 'margin-top: 15px; padding: 8px 24px; background: #009688; color: white; border: none; border-radius: 4px; cursor: pointer;';
+                            confirmButton.textContent = '确认选择';
+                            confirmButton.onclick = confirmMaterialSelection;
+                            materialListElement.appendChild(confirmButton);
+                        }
+                    }
+                }
+            };
+            xhr.send();
+        }
+
+        // 搜索素材
+        function searchMaterials() {
+            loadMaterialList();
+        }
+
+        // 创建新素材
+        function createNewMaterial() {
+            // 打开素材创建页面（在新标签页或弹窗中）
+            window.open('/tools/sourcematerial/add', '_blank');
+
+            // 提示用户创建完成后刷新
+            alert('素材创建完成后请刷新此页面以查看新素材');
+        }
+
+        // 确认素材选择并更新任务状态
+        function confirmMaterialSelection() {
+            const selectedMaterial = document.querySelector('input[name="materialSelect"]:checked');
+            const materialId = selectedMaterial ? selectedMaterial.value : 0;
+
+            // 调用原有的状态更新函数
+            updateTaskStatus(currentTaskId, currentTaskStatus, materialId);
+
+            // 关闭弹窗
+            closeMaterialModal();
+        }
+
+        // 更新任务状态（新增materialId参数）
+        function updateTaskStatus(taskId, newStatus, materialId = 0) {
             // 使用Ajax更新状态
             const xhr = new XMLHttpRequest();
             xhr.open('POST', '/tools/task/updateStatus', true);
             xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-            xhr.onreadystatechange = function() {
+            xhr.onreadystatechange = function () {
                 if (xhr.readyState === 4) {
                     if (xhr.status === 200) {
                         const response = JSON.parse(xhr.responseText);
@@ -302,7 +483,22 @@
                     }
                 }
             };
-            xhr.send(`id=${taskId}&status=${newStatus}`);
+            xhr.send(`id=${taskId}&status=${newStatus}&materialId=${materialId}`);
+        }
+
+        // 移除任务关联的素材
+        function removeMaterial(taskId) {
+            if (confirm('确定要移除关联的素材吗？')) {
+                // 将素材ID设为0来移除关联
+                updateTaskStatus(taskId, getTaskStatusById(taskId), 0);
+            }
+        }
+
+        // 根据任务ID获取当前状态
+        function getTaskStatusById(taskId) {
+            let tasks = JSON.parse(getCookie('tasks') || '[]');
+            const task = tasks.find(t => t.id === taskId);
+            return task ? task.status : 'pending';
         }
 
         // 删除任务
@@ -367,14 +563,15 @@
             const day = date.getDate().toString().padStart(2, '0');
             const hours = date.getHours().toString().padStart(2, '0');
             const minutes = date.getMinutes().toString().padStart(2, '0');
-            
+
             return `${year}-${month}-${day} ${hours}:${minutes}`;
         }
 
         // 页面加载完成后执行
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             loadTasksFromCookie();
         });
     </script>
 </body>
+
 </html>

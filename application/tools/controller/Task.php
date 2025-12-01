@@ -1,7 +1,9 @@
 <?php
 namespace app\tools\controller;
+
 use think\Controller;
 use think\Request;
+use think\Db;
 
 class Task extends Controller
 {
@@ -96,7 +98,7 @@ class Task extends Controller
     }
     
     /**
-     * 更新任务状态
+     * 更新任务状态（支持关联素材）
      * @param Request $request
      * @return \think\response\Json
      */
@@ -104,12 +106,26 @@ class Task extends Controller
     {
         $taskId = $request->post('id');
         $status = $request->post('status');
+        $materialId = $request->post('materialId', 0); // 新增素材ID参数，默认为0
         
         if ($taskId && in_array($status, ['pending', 'active', 'completed'])) {
             $taskList = $this->getTasksFromCookie();
             foreach ($taskList as &$task) {
                 if ($task['id'] == $taskId) {
                     $task['status'] = $status;
+                    // 如果提供了素材ID，则关联到任务
+                    if ($materialId) {
+                        $task['material_id'] = $materialId;
+                        // 获取素材信息
+                        $material = Db::name('source_material')->where('id', $materialId)->where('uid', getLoginUid())->find();
+                        if ($material) {
+                            $task['material_info'] = [
+                                'id' => $material['id'],
+                                'title' => $material['title'],
+                                'create_time' => $material['create_time']
+                            ];
+                        }
+                    }
                     break;
                 }
             }
@@ -119,6 +135,28 @@ class Task extends Controller
         }
         
         return json(['code' => 1, 'msg' => '参数错误']);
+    }
+
+    /**
+     * 获取用户的素材列表
+     * @return \think\response\Json
+     */
+    public function getMaterialList()
+    {
+        $title = input('get.title', '');
+        $where[] = ['uid', '=', getLoginUid()];
+        $where[] = ['status', '=', 1];
+        
+        if ($title) {
+            $where[] = ['title', 'like', '%' . $title . '%'];
+        }
+        
+        $list = Db::name('source_material')
+            ->where($where)
+            ->order('id', 'desc')
+            ->select();
+        
+        return json(['code' => 0, 'data' => $list]);
     }
     
     /**
