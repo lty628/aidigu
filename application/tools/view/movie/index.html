@@ -1,239 +1,701 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 
 <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>视频解析播放</title>
     <link type="text/css" rel="stylesheet" href="/static/tools/movie/css/argon.min.css" />
     <link rel="stylesheet" href="/static/layui/css/layui.css?t=1" type="text/css" media="screen" />
     <script src="/static/common/js/jquery.min.js"></script>
     <script src="/static/layui/layui.js?4"></script>
     <style>
-        body {
-            background-color: #f8f9fa;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        /* 基础样式重置和变量定义 */
+        :root {
+            --primary-color: #4f46e5;
+            --primary-light: #6366f1;
+            --primary-dark: #4338ca;
+            --success-color: #10b981;
+            --danger-color: #ef4444;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --border-color: #475569;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --border-radius-sm: 6px;
+            --border-radius-md: 8px;
+            --border-radius-lg: 12px;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
 
-        .main-container {
+        body {
+            background: radial-gradient(circle at top right, var(--bg-primary) 0%, #020617 100%);
+            background-attachment: fixed;
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text-primary);
+            line-height: 1.6;
+            padding: 20px;
             min-height: 100vh;
-            display: flex;
+        }
+
+        /* 主容器 */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px 0;
+        }
+
+        /* 页面标题 */
+        .page-header {
+            text-align: center;
+            margin-bottom: 30px;
             position: relative;
         }
 
-        .video-section {
-            position: fixed;
+        .page-header h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(90deg, var(--primary-light), #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .page-header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        /* 视频播放区域 - 使用16:9响应式比例 */
+        .video-container {
+            width: 100%;
+            background: var(--bg-secondary);
+            border-radius: var(--border-radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+            margin-bottom: 30px;
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .video-container:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .video-frame-wrapper {
+            width: 100%;
+            position: relative;
+            /* 保持16:9的宽高比 */
+            padding-bottom: 56.25%;
+            height: 0;
+        }
+
+        .video-frame {
+            position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
+            border: none;
+            background-color: #000;
+        }
+
+        /* 控制面板 */
+        .control-panel {
+            background: var(--bg-secondary);
+            border-radius: var(--border-radius-lg);
+            padding: 25px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-color);
+            transition: var(--transition);
+        }
+
+        .control-panel:hover {
+            border-color: var(--primary-light);
+            box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.1);
+        }
+
+        .form-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--text-primary);
             display: flex;
-            justify-content: center;
             align-items: center;
         }
 
-        .video-player {
-            width: 100%;
-            max-width: 100%;
-            height: 100%;
-            background-color: #000;
-            border-radius: 0;
-            overflow: hidden;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+        .form-title i {
+            margin-right: 8px;
+            color: var(--primary-light);
         }
 
-        #player {
-            width: 100%;
-            height: 100%;
-            border: none;
+        /* 表单样式 */
+        .parse-form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: stretch;
         }
 
-        .form-section {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 40%;
-            max-width: 600px;
-            padding: 2rem;
-            background-color: rgba(0, 0, 0, 0.7);
-            border-radius: 10px;
-            border-left: none;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
-            z-index: 1;
-            overflow-y: auto;
+        .form-group {
+            flex: 1;
+            min-width: 200px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
         }
 
-        .close-btn {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            font-size: 24px;
-            cursor: pointer;
-            color: #ccc; /* 修改关闭按钮颜色 */
-            transition: color 0.3s ease;
-        }
-
-        .close-btn:hover {
-            color: #0d6efd;
-        }
-
-        .form-container {
-            max-width: 100%;
-            margin: 0 auto;
+        .form-group.full-width {
+            flex: 2;
+            min-width: 300px;
         }
 
         .form-label {
+            display: block;
+            margin-bottom: 8px;
             font-weight: 600;
-            color: #ccc; /* 修改表单标签颜色 */
-            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            transition: var(--transition);
         }
 
-        .form-select,
-        .form-control {
-            border: 1px solid #fff;
-            border-radius: 5px;
-            padding: 0.75rem 1rem;
-            margin-bottom: 1.5rem;
-            width: 100%;
-            transition: border-color 0.3s ease;
-            background-color: rgba(255, 255, 255, 0.1);
-            color: #ccc; /* 修改输入框和下拉框文字颜色 */
-        }
-
-        .form-select:focus,
-        .form-control:focus {
-            border-color: #0d6efd;
+        .form-control,
+        .form-select {
+            background: var(--bg-tertiary);
+            border: 2px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 12px 16px;
+            border-radius: var(--border-radius-md);
+            font-size: 1rem;
+            transition: var(--transition);
             outline: none;
         }
 
-        .btn-primary {
-            background-color: #0d6efd;
-            border-color: #0d6efd;
-            color: #fff;
-            padding: 0.75rem 1rem;
-            border-radius: 5px;
+        .form-control:focus,
+        .form-select:focus {
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+            background: rgba(51, 65, 85, 0.8);
+        }
+
+        .form-control::placeholder {
+            color: #64748b;
+        }
+
+        .form-select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2394a3b8'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 20px;
+        }
+
+        .form-select option {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            padding: 10px;
+        }
+
+        /* 按钮样式 */
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: var(--border-radius-md);
             font-weight: 600;
-            transition: background-color 0.3s ease;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            white-space: nowrap;
+            min-width: 120px;
+            height: fit-content;
+            margin-top: 28px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: white;
+            box-shadow: 0 4px 14px 0 rgba(79, 70, 229, 0.39);
         }
 
         .btn-primary:hover {
-            background-color: #0b5ed7;
-            border-color: #0a58ca;
+            background: linear-gradient(135deg, var(--primary-light), var(--primary-color));
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px 0 rgba(79, 70, 229, 0.5);
         }
 
-        .btn-round {
-            border-radius: 50px;
+        .btn-primary:active {
+            transform: translateY(0);
         }
 
-        .form-header {
-            text-align: center;
-            margin-bottom: 2rem;
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
         }
 
-        .form-header h2 {
-            font-size: 1.5rem;
-            color: #ccc; /* 修改标题颜色 */
-            margin-bottom: 0.5rem;
+        .btn-icon i {
+            margin-right: 8px;
         }
 
-        .form-header p {
+        /* 加载动画 */
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 8px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* 功能提示 */
+        .feature-tips {
+            background: var(--bg-tertiary);
+            border-radius: var(--border-radius-md);
+            padding: 15px;
+            margin-top: 20px;
+            border-left: 4px solid var(--primary-light);
+        }
+
+        .feature-tips h4 {
+            font-size: 1rem;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        .feature-tips ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .feature-tips li {
+            padding: 4px 0;
+            color: var(--text-secondary);
             font-size: 0.9rem;
-            color: #ccc; /* 修改描述文字颜色 */
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .feature-tips li:before {
+            content: "✓";
+            color: var(--success-color);
+            margin-right: 8px;
+            font-weight: bold;
+        }
+
+        /* 解析历史 */
+        .history-section {
+            margin-top: 30px;
+        }
+
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .history-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .clear-history {
+            font-size: 0.9rem;
+            color: var(--primary-light);
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: var(--border-radius-sm);
+            transition: var(--transition);
+        }
+
+        .clear-history:hover {
+            background: rgba(79, 70, 229, 0.1);
+        }
+
+        .history-list {
+            background: var(--bg-tertiary);
+            border-radius: var(--border-radius-md);
+            padding: 10px;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+
+        .history-item {
+            padding: 8px 12px;
+            margin-bottom: 5px;
+            background: var(--bg-secondary);
+            border-radius: var(--border-radius-sm);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .history-item:hover {
+            background: rgba(79, 70, 229, 0.1);
+            transform: translateX(5px);
+        }
+
+        .history-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .history-url {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            max-width: 80%;
+        }
+
+        .history-delete {
+            color: var(--danger-color);
+            cursor: pointer;
+            opacity: 0.6;
+            transition: var(--transition);
+        }
+
+        .history-delete:hover {
+            opacity: 1;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+
+            .page-header h1 {
+                font-size: 2rem;
+            }
+
+            .parse-form {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .form-group,
+            .form-group.full-width {
+                flex: none;
+                width: 100%;
+                min-width: unset;
+            }
+
+            .btn {
+                margin-top: 0;
+                width: 100%;
+            }
+
+            .video-container {
+                margin-bottom: 20px;
+            }
+
+            .control-panel {
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+
+            .page-header h1 {
+                font-size: 1.8rem;
+            }
+
+            .page-header p {
+                font-size: 1rem;
+            }
+
+            .control-panel {
+                padding: 15px;
+            }
+        }
+
+        /* 自定义滚动条 */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #64748b;
         }
     </style>
-    <script type="text/javascript">
-        $(document).ready(function () {
-            // 点击关闭按钮隐藏表单
-            $('.close-btn').click(function () {
-                $('.form-section').hide();
-            });
-
-            // 点击解析按钮隐藏表单
-            $('button[onclick="dihejk()"]').click(function () {
-                $('.form-section').hide();
-            });
-        });
-    </script>
-    <script
-        type="text/javascript">eval(function (p, a, c, k, e, d) { e = function (c) { return (c < a ? "" : e(parseInt(c / a))) + ((c = c % a) > 35 ? String.fromCharCode(c + 29) : c.toString(36)) }; if (!''.replace(/^/, String)) { while (c--) d[e(c)] = k[c] || e(c); k = [function (e) { return d[e] }]; e = function () { return '\\w+' }; c = 1 }; while (c--) if (k[c]) p = p.replace(new RegExp('\\b' + e(c) + '\\b', 'g'), k[c]); return p }('b a(){0 6=1.2("9").4;0 5=1.2("3");0 3=1.2("3").c;0 8=5.e[3].4;0 7=1.2("f");7.d=8+6}', 16, 16, 'var|document|getElementById|jk|value|jkurl|diz|cljurl|jkv|url|dihejk|function|selectedIndex|src|options|player'.split('|'), 0, {}))</script>
 </head>
 
 <body>
-    <div class="main-container">
-        <div class="video-section">
-            <div class="video-player">
-                <iframe sandbox="allow-same-origin allow-scripts allow-popups" src="javascript:;" allowfullscreen="true"
-                    id="player" width="100%" height="100%" allowtransparency="true" frameborder="0" scrolling="no">
+    <div class="container">
+        <!-- 页面标题 -->
+        <header class="page-header">
+            <h1>🚀 视频解析工具</h1>
+            <p>高效解析各大视频平台链接，享受流畅观影体验</p>
+        </header>
+
+        <!-- 视频播放区域 -->
+        <div class="video-container">
+            <div class="video-frame-wrapper">
+                <iframe 
+                    id="player" 
+                    class="video-frame"
+                    sandbox="allow-same-origin allow-scripts allow-popups"
+                    src="javascript:;"
+                    allowfullscreen="true"
+                    allowtransparency="true"
+                    frameborder="0"
+                    scrolling="no"
+                >
                 </iframe>
             </div>
         </div>
-        <div class="form-section">
-            <!-- <span class="close-btn">&times;</span> -->
-            <div class="form-container">
-                <div class="form-header">
-                    <h2>视频解析</h2>
-                    <p>选择解析线路并输入视频地址，即可开始解析播放。</p>
+
+        <!-- 控制面板 -->
+        <div class="control-panel">
+            <h3 class="form-title">
+                <i class="layui-icon layui-icon-video"></i> 解析设置
+            </h3>
+            
+            <form id="parseForm">
+                <div class="parse-form">
+                    <div class="form-group">
+                        <label for="jk" class="form-label">解析线路</label>
+                        <select class="form-select" id="jk">
+                            <option value="https://im1907.top/?jx=" selected>线路 1【支持链接+名称】</option>
+                            <option value="https://jx.xmflv.com/?url=" selected>线路 2【支持链接】</option>
+                            <option value="https://vip.bljiex.com/?v=" selected>线路 3【支持链接+名称】</option>
+                            <option value="https://jx.jsonplayer.com/player/?url=" selected>B站 1</option>
+                            <option value="https://jx.aidouer.net/?url=" selected>爱豆</option>
+                            <option value="https://www.gai4.com/?url=" selected>CHok</option>
+                            <option value="https://jx.rdhk.net/?v=" selected>RDHK</option>
+                            <option value="https://jx.blbo.cc:4433/?url=" selected>人人迷</option>
+                            <option value="https://jsap.attakids.com/?url=" selected>思古 3</option>
+                            <option value="https://jx.dj6u.com/?url=" selected>听乐</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group full-width">
+                        <label for="url" class="form-label">视频地址或名称</label>
+                        <input 
+                            type="search" 
+                            autocomplete="new-password" 
+                            class="form-control" 
+                            id="url" 
+                            placeholder="输入播放地址或视频名称【支持链接部分支持名称】"
+                        >
+                    </div>
+                    
+                    <button 
+                        type="button" 
+                        class="btn btn-primary btn-icon" 
+                        id="parseButton"
+                    >
+                        <i class="layui-icon layui-icon-play"></i> 开始解析
+                    </button>
                 </div>
-                <form method="get" id="1233911832">
-                    <div class="mb-3 row">
-                        <label for="jk" class="col-sm-12 col-form-label form-label">解析线路：</label>
-                        <div class="col-sm-12">
-                            <select class="form-select" id="jk">
-                                <option value="https://im1907.top/?jx=">线路 1【支持链接+名称】</option>
-                                <option value="https://jx.xmflv.com/?url=">线路 2【支持链接】</option>
-                                <option value="https://vip.bljiex.com/?v=">线路 3【支持链接+名称】</option>
-                                <option value="https://jx.jsonplayer.com/player/?url=">B站 1</option>
-                                <option value="https://jx.aidouer.net/?url=">爱豆</option>
-                                <option value="https://www.gai4.com/?url=">CHok</option>
-                                <option value="https://jx.rdhk.net/?v=">RDHK</option>
-                                <option value="https://jx.blbo.cc:4433/?url=">人人迷</option>
-                                <option value="https://jsap.attakids.com/?url=">思古 3</option>
-                                <option value="https://jx.dj6u.com/?url=">听乐</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="mb-3 row">
-                        <label for="url" class="col-sm-12 col-form-label form-label">视频地址或名称：</label>
-                        <div class="col-sm-12">
-                            <input type="search" autocomplete="new-password" class="form-control" id="url"
-                                placeholder="输入播放地址或视频名称【支持链接部分支持名称】">
-                        </div>
-                    </div>
-                    <div class="text-center">
-                        <button type="button" class="btn btn-primary btn-round" onclick="dihejk()">
-                            <i class="bi bi-play-fill"></i> 开始解析
-                        </button>
-                    </div>
-                </form>
+            </form>
+
+            <!-- 功能提示 -->
+            <div class="feature-tips">
+                <h4>使用提示</h4>
+                <ul>
+                    <li>支持大部分主流视频平台链接解析</li>
+                    <li>部分线路支持直接搜索视频名称观看</li>
+                    <li>解析失败时可尝试切换其他线路</li>
+                    <li>视频解析需要一定时间，请耐心等待</li>
+                </ul>
+            </div>
+
+            <!-- 解析历史 -->
+            <div class="history-section">
+                <div class="history-header">
+                    <h4 class="history-title">最近解析</h4>
+                    <button class="clear-history" id="clearHistory">清空历史</button>
+                </div>
+                <div class="history-list" id="historyList">
+                    <!-- 历史记录将由JavaScript动态填充 -->
+                </div>
             </div>
         </div>
     </div>
-</body>
-<!-- <script>
-    $(function () {
-        $("#siteShare").click(function () {
-            var url = $("#url").val()
-            var jk = $("#jk").val()
-            if (!url || !jk) {
-                return false
-            }
-            layer.prompt({title: '请输入分享标题'}, function(value, index, elem){
-                if(value === '') return elem.focus();
-                $.ajax({
-                    type: "GET",
-                    url: "/upload/index/siteUrlShare",
-                    data: {'url': jk+url, 'title': value},
-                    dataType: "json",
-                    success: function (response) {
-                        layer.msg(response.msg);
-                    }
-                });
-                // 关闭 prompt
-                layer.close(index);
-            });
-        })
-    })
-</script> -->
 
+    <script type="text/javascript">
+        // 解析函数
+        function parseVideo() {
+            const urlInput = document.getElementById('url');
+            const jkSelect = document.getElementById('jk');
+            const playerFrame = document.getElementById('player');
+            const parseButton = document.getElementById('parseButton');
+            
+            const videoUrl = urlInput.value.trim();
+            const selectedLine = jkSelect.value;
+            
+            if (!videoUrl) {
+                alert('请输入视频地址或名称');
+                return;
+            }
+            
+            // 保存到历史记录
+            saveToHistory(videoUrl);
+            
+            // 显示加载状态
+            parseButton.disabled = true;
+            parseButton.innerHTML = '<div class="spinner"></div> 解析中...';
+            
+            // 构建解析URL
+            const parseUrl = selectedLine + encodeURIComponent(videoUrl);
+            
+            // 设置iframe src
+            playerFrame.src = parseUrl;
+            
+            // 3秒后恢复按钮状态
+            setTimeout(() => {
+                parseButton.disabled = false;
+                parseButton.innerHTML = '<i class="layui-icon layui-icon-play"></i> 开始解析';
+            }, 3000);
+        }
+        
+        // 保存到历史记录
+        function saveToHistory(url) {
+            let history = JSON.parse(localStorage.getItem('videoParseHistory') || '[]');
+            
+            // 移除重复项
+            history = history.filter(item => item !== url);
+            
+            // 添加到开头
+            history.unshift(url);
+            
+            // 最多保存10条
+            if (history.length > 10) {
+                history = history.slice(0, 10);
+            }
+            
+            localStorage.setItem('videoParseHistory', JSON.stringify(history));
+            renderHistory();
+        }
+        
+        // 渲染历史记录
+        function renderHistory() {
+            const historyList = document.getElementById('historyList');
+            const history = JSON.parse(localStorage.getItem('videoParseHistory') || '[]');
+            
+            if (history.length === 0) {
+                historyList.innerHTML = '<div style="text-align: center; padding: 15px; color: var(--text-secondary); font-size: 0.9rem;">暂无历史记录</div>';
+                return;
+            }
+            
+            historyList.innerHTML = '';
+            
+            history.forEach((url, index) => {
+                const item = document.createElement('div');
+                item.className = 'history-item';
+                
+                const urlSpan = document.createElement('span');
+                urlSpan.className = 'history-url';
+                urlSpan.textContent = url;
+                urlSpan.title = url;
+                urlSpan.addEventListener('click', () => {
+                    document.getElementById('url').value = url;
+                });
+                
+                const deleteBtn = document.createElement('span');
+                deleteBtn.className = 'history-delete';
+                deleteBtn.innerHTML = '✕';
+                deleteBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    deleteHistoryItem(index);
+                });
+                
+                item.appendChild(urlSpan);
+                item.appendChild(deleteBtn);
+                historyList.appendChild(item);
+            });
+        }
+        
+        // 删除历史记录项
+        function deleteHistoryItem(index) {
+            let history = JSON.parse(localStorage.getItem('videoParseHistory') || '[]');
+            history.splice(index, 1);
+            localStorage.setItem('videoParseHistory', JSON.stringify(history));
+            renderHistory();
+        }
+        
+        // 清空历史记录
+        function clearHistory() {
+            if (confirm('确定要清空所有历史记录吗？')) {
+                localStorage.removeItem('videoParseHistory');
+                renderHistory();
+            }
+        }
+        
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 绑定解析按钮事件
+            document.getElementById('parseButton').addEventListener('click', parseVideo);
+            
+            // 绑定清空历史按钮事件
+            document.getElementById('clearHistory').addEventListener('click', clearHistory);
+            
+            // 绑定回车事件
+            document.getElementById('url').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    parseVideo();
+                }
+            });
+            
+            // 渲染历史记录
+            renderHistory();
+            
+            // 输入框聚焦效果
+            const inputs = document.querySelectorAll('.form-control, .form-select');
+            inputs.forEach(input => {
+                input.addEventListener('focus', function() {
+                    this.parentElement.classList.add('focused');
+                });
+                
+                input.addEventListener('blur', function() {
+                    this.parentElement.classList.remove('focused');
+                });
+            });
+        });
+    </script>
+</body>
 </html>
