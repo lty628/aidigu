@@ -340,7 +340,7 @@
 
         .history-list {
             background: var(--bg-tertiary);
-            border-radius: var(--border-radius-md);
+border-radius: var(--border-radius-md);
             padding: 10px;
             max-height: 150px;
             overflow-y: auto;
@@ -633,7 +633,9 @@
                 urlSpan.textContent = url;
                 urlSpan.title = url;
                 urlSpan.addEventListener('click', () => {
+                    // 修复：填充URL后自动触发解析
                     document.getElementById('url').value = url;
+                    parseVideo(); // 添加这一行，自动触发解析
                 });
                 
                 const deleteBtn = document.createElement('span');
