@@ -32,6 +32,13 @@ class Userinvite extends Controller
 
         $count = Db::name('user_invite')->where('fromuid', $uid)->where('invite_status', '<>', 3)->count();
 
+        // 用户是否被邀请
+        $topuid = Db::name('user_invite')->where('touid', $uid)->value('topuid');
+        if (!$topuid) {
+            // return json(['code' => 0, 'msg' => '您已被邀请，不能再邀请了']);
+            $topuid = $uid;
+        }
+        
         if ($count >= 20) {
             return json(['code' => 0, 'msg' => '邀请人数超过20人不能再邀请了']);
         }
@@ -40,6 +47,7 @@ class Userinvite extends Controller
             'fromuid' => $uid,
             'invite_code' => md5('uid_'.$uid.'_time_'.$time),
             'fromuid' => $uid,
+            'topuid' => $topuid,
             'create_time' => date('Y-m-d H:i:s', $time)
         ]);
 
