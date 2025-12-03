@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>小应用管理 - 后台管理系统</title>
+    <link rel="stylesheet" href="/static/layui/css/layui.css">
+    <link rel="stylesheet" href="/static/admin/css/style.css">
+</head>
+<body>
+    <div class="layui-fluid">
+        <div class="layui-card">
+            <div class="layui-card-header">
+                <div class="layui-row">
+                    <div class="layui-col-md8">
+                        <h2><i class="layui-icon layui-icon-app"></i> 小应用管理</h2>
+                    </div>
+                    <div class="layui-col-md4 header-actions">
+                        <a href="{:url('create')}" class="layui-btn">
+                            <i class="layui-icon layui-icon-add-1"></i> 创建应用
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-card-body">
+                <!-- 搜索表单 -->
+                <form class="layui-form" lay-filter="search-form">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">关键词</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="keyword" value="{$keyword}" placeholder="应用名称/链接" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">状态</label>
+                            <div class="layui-input-inline">
+                                <select name="app_status" lay-search>
+                                    <option value="">全部状态</option>
+                                    {volist name="statusOptions" id="name" key="key"}
+                                    <option value="{$key}" {if condition="$key == $app_status"}selected{/if}>{$name}</option>
+                                    {/volist}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">类型</label>
+                            <div class="layui-input-inline">
+                                <select name="app_type" lay-search>
+                                    <option value="">全部类型</option>
+                                    {volist name="typeOptions" id="name" key="key"}
+                                    <option value="{$key}" {if condition="$key == $app_type"}selected{/if}>{$name}</option>
+                                    {/volist}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <button class="layui-btn layui-btn-primary" type="reset" id="reset-search">重置</button>
+                            <button class="layui-btn" lay-submit lay-filter="search-submit">搜索</button>
+                        </div>
+                    </div>
+                </form>
+                
+                <!-- 操作按钮 -->
+                <div class="layui-btn-container" style="margin-bottom: 15px;">
+                    <button class="layui-btn layui-btn-danger" id="batch-delete">
+                        <i class="layui-icon layui-icon-delete"></i> 批量删除
+                    </button>
+                </div>
+                
+                <!-- 数据表格 -->
+                <table class="layui-table" lay-skin="line">
+                    <thead>
+                        <tr>
+                            <th style="width: 40px;"><input type="checkbox" lay-skin="primary" lay-filter="select-all"></th>
+                            <th style="width: 80px;">ID</th>
+                            <th>应用名称</th>
+                            <th>链接</th>
+                            <th style="width: 100px;">图片</th>
+                            <th style="width: 100px;">状态</th>
+                            <th style="width: 100px;">类型</th>
+                            <th style="width: 120px;">打开方式</th>
+                            <th style="width: 100px;">创建者</th>
+                            <th style="width: 160px;">创建时间</th>
+                            <th style="width: 160px;">更新时间</th>
+                            <th style="width: 200px;">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {empty name="list"}
+                        <tr>
+                            <td colspan="12" align="center">暂无数据</td>
+                        </tr>
+                        {else/}
+                        {volist name="list" id="app"}
+                        <tr>
+                            <td><input type="checkbox" name="id" value="{$app.id}" lay-skin="primary"></td>
+                            <td>{$app.id}</td>
+                            <td>{$app.app_name|default='-'}</td>
+                            <td>
+                                {notempty name="app.app_url"}
+                                <a href="{$app.app_url}" target="_blank" class="layui-text">{$app.app_url}</a>
+                                {else/}
+                                -
+                                {/notempty}
+                            </td>
+                            <td>
+                                {notempty name="app.app_image"}
+                                <img src="{$app.app_image}" alt="应用图片" class="app-image">
+                                {else/}
+                                <span>-无-</span>
+                                {/notempty}
+                            </td>
+                            <td>
+                                {switch name="app.app_status"}
+                                    {case value="0"}<span class="status-badge status-close">关闭</span>{/case}
+                                    {case value="1"}<span class="status-badge status-inside">站内</span>{/case}
+                                    {default /}<span class="status-badge status-outside">站外</span>
+                                {/switch}
+                            </td>
+                            <td>{$app.app_type_text|default='-'}</td>
+                            <td>{$app.open_type_text|default='-'}</td>
+                            <td>{notempty name="app.user"}{$app.user.username}{else/}系统{/notempty}</td>
+                            <td>{$app.create_time|date='Y-m-d H:i:s'}</td>
+                            <td>{$app.update_time|date='Y-m-d H:i:s'}</td>
+                            <td class="action-buttons">
+                                <a href="{:url('edit', ['id' => $app.id])}" class="layui-btn layui-btn-normal layui-btn-xs">编辑</a>
+                                <button class="layui-btn layui-btn-xs toggle-status-btn {if condition="$app.app_status eq 0"}layui-btn-success{else/}layui-btn-primary{/if}" 
+                                        data-id="{$app.id}" data-status="{$app.app_status}">
+                                    {if condition="$app.app_status eq 0"}开启{else/}关闭{/if}
+                                </button>
+                                <button class="layui-btn layui-btn-danger layui-btn-xs delete-btn" data-id="{$app.id}">
+                                    删除
+                                </button>
+                            </td>
+                        </tr>
+                        {/volist}
+                        {/empty}
+                    </tbody>
+                </table>
+                
+                <!-- 分页 -->
+                <div id="pagination">
+                    {$list|raw|default=''}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="/static/layui/layui.js"></script>
+    <script>
+    layui.use(['layer', 'form'], function() {
+        var layer = layui.layer;
+        var form = layui.form;
+        var $ = layui.$;
+        
+        // 全选功能
+        form.on('checkbox(select-all)', function(data) {
+            var checked = data.elem.checked;
+            $('input[name="id"]').prop('checked', checked);
+            form.render('checkbox');
+        });
+        
+        // 搜索表单提交
+        form.on('submit(search-submit)', function(data) {
+            var params = new URLSearchParams();
+            for (var key in data.field) {
+                if (data.field[key]) {
+                    params.append(key, data.field[key]);
+                }
+            }
+            var queryString = params.toString();
+            window.location.href = '{:url("index")}' + (queryString ? '?' + queryString : '');
+            return false;
+        });
+        
+        // 重置搜索
+        $('#reset-search').on('click', function() {
+            window.location.href = '{:url("index")}';
+        });
+        
+        // 单个删除
+        $(document).on('click', '.delete-btn', function() {
+            var id = $(this).data('id');
+            var tr = $(this).closest('tr');
+            
+            layer.confirm('确定要删除这个应用吗？', {
+                icon: 3,
+                title: '删除确认'
+            }, function(index) {
+                layer.close(index);
+                var loading = layer.load(2);
+                
+                $.ajax({
+                    url: '{:url("delete")}',
+                    type: 'POST',
+                    data: {id: id},
+                    dataType: 'json',
+                    success: function(res) {
+                        layer.close(loading);
+                        if (res.code === 1) {
+                            layer.msg(res.msg, {icon: 1});
+                            tr.remove();
+                            // 如果表格为空，添加"暂无数据"行
+                            if ($('tbody tr').length === 0) {
+                                $('tbody').append('<tr><td colspan="12" align="center">暂无数据</td></tr>');
+                            }
+                        } else {
+                            layer.msg(res.msg, {icon: 2});
+                        }
+                    },
+                    error: function() {
+                        layer.close(loading);
+                        layer.msg('请求失败，请重试', {icon: 2});
+                    }
+                });
+            });
+        });
+        
+        // 切换状态
+        $(document).on('click', '.toggle-status-btn', function() {
+            var id = $(this).data('id');
+            var currentStatus = $(this).data('status');
+            var button = $(this);
+            var tr = $(this).closest('tr');
+            
+            var action = currentStatus == 0 ? '开启' : '关闭';
+            
+            layer.confirm('确定要' + action + '这个应用吗？', {
+                icon: 3,
+                title: action + '确认'
+            }, function(index) {
+                layer.close(index);
+                var loading = layer.load(2);
+                
+                $.ajax({
+                    url: '{:url("toggleStatus")}',
+                    type: 'POST',
+                    data: {id: id},
+                    dataType: 'json',
+                    success: function(res) {
+                        layer.close(loading);
+                        if (res.code === 1) {
+                            layer.msg(res.msg, {icon: 1});
+                            // 更新状态显示和按钮
+                            var newStatus = res.data.new_status;
+                            var statusText = '';
+                            var statusClass = '';
+                            
+                            switch(newStatus) {
+                                case 0:
+                                    statusText = '关闭';
+                                    statusClass = 'status-close';
+                                    button.removeClass('layui-btn-primary').addClass('layui-btn-success').text('开启').data('status', 0);
+                                    break;
+                                case 1:
+                                    statusText = '站内';
+                                    statusClass = 'status-inside';
+                                    button.removeClass('layui-btn-success').addClass('layui-btn-primary').text('关闭').data('status', 1);
+                                    break;
+                                case 2:
+                                    statusText = '站外';
+                                    statusClass = 'status-outside';
+                                    button.removeClass('layui-btn-success').addClass('layui-btn-primary').text('关闭').data('status', 2);
+                                    break;
+                            }
+                            
+                            tr.find('.status-badge')
+                              .removeClass('status-close status-inside status-outside')
+                              .addClass(statusClass)
+                              .text(statusText);
+                        } else {
+                            layer.msg(res.msg, {icon: 2});
+                        }
+                    },
+                    error: function() {
+                        layer.close(loading);
+                        layer.msg('请求失败，请重试', {icon: 2});
+                    }
+                });
+            });
+        });
+        
+        // 批量删除
+        $('#batch-delete').on('click', function() {
+            var checkedIds = [];
+            $('input[name="id"]:checked').each(function() {
+                checkedIds.push($(this).val());
+            });
+            
+            if (checkedIds.length === 0) {
+                layer.msg('请选择要删除的应用', {icon: 3});
+                return;
+            }
+            
+            layer.confirm('确定要删除选中的 ' + checkedIds.length + ' 个应用吗？', {
+                icon: 3,
+                title: '批量删除确认'
+            }, function(index) {
+                layer.close(index);
+                var loading = layer.load(2);
+                
+                $.ajax({
+                    url: '{:url("batchDelete")}',
+                    type: 'POST',
+                    data: {ids: checkedIds},
+                    dataType: 'json',
+                    traditional: true,
+                    success: function(res) {
+                        layer.close(loading);
+                        if (res.code === 1) {
+                            layer.msg(res.msg, {icon: 1});
+                            // 移除选中的行
+                            $('input[name="id"]:checked').closest('tr').remove();
+                            // 如果表格为空，添加"暂无数据"行
+                            if ($('tbody tr').length === 0) {
+                                $('tbody').append('<tr><td colspan="12" align="center">暂无数据</td></tr>');
+                            }
+                            // 取消全选
+                            $('input[lay-filter="select-all"]').prop('checked', false);
+                            form.render('checkbox');
+                        } else {
+                            layer.msg(res.msg, {icon: 2});
+                        }
+                    },
+                    error: function() {
+                        layer.close(loading);
+                        layer.msg('请求失败，请重试', {icon: 2});
+                    }
+                });
+            });
+        });
+        
+        // 渲染表单
+        form.render();
+    });
+    </script>
+</body>
+</html>

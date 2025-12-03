@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>编辑用户</title>
+    <link rel="stylesheet" href="/static/layui/css/layui.css">
+</head>
+<body>
+    <div class="layui-container" style="margin-top: 20px;">
+        <div class="layui-row">
+            <div class="layui-col-md8 layui-col-md-offset2">
+                <div class="layui-card">
+                    <div class="layui-card-header">
+                        <span class="layui-breadcrumb">
+                            <a href="javascript:;" lay-href="admin/index/index">首页</a>
+                            <a href="javascript:;" lay-href="admin/user/index">用户管理</a>
+                            <a><cite>编辑用户</cite></a>
+                        </span>
+                    </div>
+                    <div class="layui-card-body">
+                        <form class="layui-form" action="" lay-filter="user-edit-form">
+                            <input type="hidden" name="uid" value="{$user.uid}">
+                            
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">昵称 <span class="required-mark">*</span></label>
+                                <div class="layui-input-block">
+                                    <input type="text" 
+                                           name="nickname" 
+                                           value="{$user.nickname}" 
+                                           placeholder="请输入昵称" 
+                                           lay-verify="required|nickname" 
+                                           autocomplete="off"
+                                           class="layui-input">
+                                </div>
+                            </div>
+                            
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">用户名</label>
+                                <div class="layui-input-block">
+                                    <input type="text" 
+                                           name="username" 
+                                           value="{$user.username}" 
+                                           placeholder="请输入用户名" 
+                                           lay-verify="username" 
+                                           autocomplete="off"
+                                           class="layui-input">
+                                </div>
+                            </div>
+                            
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">手机号</label>
+                                <div class="layui-input-block">
+                                    <input type="tel" 
+                                           name="phone" 
+                                           value="{$user.phone}" 
+                                           placeholder="请输入手机号" 
+                                           lay-verify="phone" 
+                                           autocomplete="off"
+                                           class="layui-input">
+                                </div>
+                            </div>
+                            
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">邮箱</label>
+                                <div class="layui-input-block">
+                                    <input type="email" 
+                                           name="email" 
+                                           value="{$user.email}" 
+                                           placeholder="请输入邮箱" 
+                                           lay-verify="email" 
+                                           autocomplete="off"
+                                           class="layui-input">
+                                </div>
+                            </div>
+                            
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">性别</label>
+                                <div class="layui-input-block">
+                                    <input type="radio" name="sex" value="0" title="保密" {if condition="$user.sex == 0"}checked{/if}>
+                                    <input type="radio" name="sex" value="1" title="男" {if condition="$user.sex == 1"}checked{/if}>
+                                    <input type="radio" name="sex" value="2" title="女" {if condition="$user.sex == 2"}checked{/if}>
+                                </div>
+                            </div>
+                            
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">博客名</label>
+                                <div class="layui-input-block">
+                                    <input type="text" 
+                                           name="blog" 
+                                           value="{$user.blog}" 
+                                           placeholder="请输入博客名" 
+                                           lay-verify="blog" 
+                                           autocomplete="off"
+                                           class="layui-input">
+                                </div>
+                            </div>
+                            
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">省份</label>
+                                <div class="layui-input-block">
+                                    <input type="text" 
+                                           name="province" 
+                                           value="{$user.province}" 
+                                           placeholder="请输入省份" 
+                                           lay-verify="province" 
+                                           autocomplete="off"
+                                           class="layui-input">
+                                </div>
+                            </div>
+                            
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">城市</label>
+                                <div class="layui-input-block">
+                                    <input type="text" 
+                                           name="city" 
+                                           value="{$user.city}" 
+                                           placeholder="请输入城市" 
+                                           lay-verify="city" 
+                                           autocomplete="off"
+                                           class="layui-input">
+                                </div>
+                            </div>
+                            
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">个人简介</label>
+                                <div class="layui-input-block">
+                                    <textarea name="intro" 
+                                              placeholder="请输入个人简介" 
+                                              lay-verify="intro" 
+                                              class="layui-textarea">{$user.intro}</textarea>
+                                </div>
+                            </div>
+                            
+                            <div class="layui-form-item">
+                                <div class="layui-input-block">
+                                    <button class="layui-btn" lay-submit lay-filter="edit-submit">
+                                        <i class="layui-icon layui-icon-ok"></i> 保存
+                                    </button>
+                                    <button type="button" class="layui-btn layui-btn-primary" id="btn-back">
+                                        <i class="layui-icon layui-icon-return"></i> 返回
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="/static/layui/layui.js"></script>
+    <script>
+        layui.use(['form', 'layer'], function() {
+            var form = layui.form;
+            var layer = layui.layer;
+            var $ = layui.$;
+            
+            // 表单验证规则
+            form.verify({
+                nickname: function(value) {
+                    if (!value) {
+                        return '昵称为必填项';
+                    }
+                    if (value.length < 2) {
+                        return '昵称长度不能少于2个字符';
+                    }
+                    if (value.length > 11) {
+                        return '昵称长度不能超过11个字符';
+                    }
+                },
+                username: function(value) {
+                    if (value && (value.length < 1 || value.length > 10)) {
+                        return '用户名长度必须在1-10个字符之间';
+                    }
+                },
+                phone: function(value) {
+                    if (value && !/^1\d{10}$/.test(value)) {
+                        return '手机号格式不正确';
+                    }
+                },
+                blog: function(value) {
+                    if (value && value.length > 20) {
+                        return '博客名长度不能超过20个字符';
+                    }
+                },
+                province: function(value) {
+                    if (value && value.length > 10) {
+                        return '省份长度不能超过10个字符';
+                    }
+                },
+                city: function(value) {
+                    if (value && value.length > 25) {
+                        return '城市长度不能超过25个字符';
+                    }
+                },
+                intro: function(value) {
+                    if (value && value.length > 210) {
+                        return '个人简介长度不能超过210个字符';
+                    }
+                }
+            });
+            
+            // 监听提交
+            form.on('submit(edit-submit)', function(data) {
+                var loading = layer.load(1);
+                
+                $.ajax({
+                    url: '{:url("admin/user/update")}',
+                    type: 'post',
+                    data: data.field,
+                    dataType: 'json',
+                    success: function(res) {
+                        layer.close(loading);
+                        if (res.code === 1) {
+                            layer.msg(res.msg, {icon: 1}, function() {
+                                // 如果有返回URL则跳转，否则返回上一页
+                                if (res.url) {
+                                    window.location.href = res.url;
+                                } else {
+                                    history.back();
+                                }
+                            });
+                        } else {
+                            layer.msg(res.msg, {icon: 2});
+                        }
+                    },
+                    error: function() {
+                        layer.close(loading);
+                        layer.msg('网络错误，请稍后重试', {icon: 2});
+                    }
+                });
+                
+                return false;
+            });
+            
+            // 返回按钮事件
+            $('#btn-back').on('click', function() {
+                history.back();
+            });
+            
+            // 渲染表单
+            form.render();
+        });
+    </script>
+    
+    <style>
+        .required-mark {
+            color: #ff5722;
+        }
+        
+        .layui-form-label {
+            width: 120px;
+        }
+        
+        .layui-input-block {
+            margin-left: 150px;
+        }
+        
+        @media screen and (max-width: 768px) {
+            .layui-form-label {
+                width: 80px;
+            }
+            
+            .layui-input-block {
+                margin-left: 100px;
+            }
+        }
+    </style>
+</body>
+</html>

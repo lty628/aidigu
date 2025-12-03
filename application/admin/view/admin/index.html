@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>后台管理系统</title>
+    <!-- 使用CDN引入layui的CSS -->
+    <link rel="stylesheet" href="/static/layui/css/layui.css">
+    <style>
+        /* CSS变量定义 */
+        :root {
+            --primary-color: #1E9FFF;
+            --primary-hover: #40a9ff;
+            --success-color: #52c41a;
+            --warning-color: #faad14;
+            --danger-color: #f5222d;
+            --border-color: #e8e8e8;
+            --text-primary: #333;
+            --text-secondary: #666;
+            --text-tertiary: #999;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f0f2f5;
+            --bg-hover: #f7f9fc;
+            --shadow-base: 0 2px 8px rgba(0, 0, 0, 0.06);
+            --shadow-light: 0 1px 3px rgba(0, 0, 0, 0.1);
+            --header-height: 60px;
+            --sidebar-width: 220px;
+            --transition-base: all 0.3s ease;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body, html {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background-color: var(--bg-secondary);
+            font-size: 14px;
+            color: var(--text-primary);
+        }
+
+        .layui-layout-admin {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        /* 头部样式 */
+        .layui-header {
+            background-color: var(--bg-primary) !important;
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: var(--shadow-light);
+            height: var(--header-height);
+            z-index: 999;
+        }
+
+        .layui-logo {
+            width: var(--sidebar-width);
+            height: var(--header-height);
+            line-height: var(--header-height);
+            padding: 0 20px;
+            background-color: var(--bg-primary) !important;
+            color: var(--primary-color) !important;
+            font-size: 18px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            border-right: 1px solid var(--border-color);
+        }
+
+        .layui-logo i {
+            font-size: 20px;
+            margin-right: 8px;
+            color: var(--primary-color);
+            vertical-align: middle;
+        }
+
+        /* 顶部导航样式 */
+        .layui-header .layui-nav {
+            background-color: transparent !important;
+            height: var(--header-height);
+            padding: 0;
+        }
+
+        .layui-header .layui-nav-item {
+            line-height: var(--header-height);
+        }
+
+        .layui-header .layui-nav-item a {
+            color: var(--text-secondary) !important;
+            padding: 0 20px;
+            height: var(--header-height);
+            line-height: var(--header-height);
+            transition: var(--transition-base);
+        }
+
+        .layui-header .layui-nav-item a:hover {
+            color: var(--primary-color) !important;
+            background-color: var(--bg-hover);
+        }
+
+        .layui-header .layui-nav-img {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            margin-right: 8px;
+            transition: var(--transition-base);
+        }
+
+        .layui-header .layui-nav-img:hover {
+            transform: scale(1.05);
+        }
+
+        /* 侧边栏样式 */
+        .layui-side {
+            width: var(--sidebar-width) !important;
+            background-color: var(--bg-primary);
+            border-right: 1px solid var(--border-color);
+            top: var(--header-height);
+            transition: var(--transition-base);
+        }
+
+        .layui-side-scroll {
+            width: calc(var(--sidebar-width) + 18px);
+        }
+
+        .layui-nav-tree {
+            background-color: transparent;
+        }
+
+        .layui-nav-tree .layui-nav-item {
+            margin-bottom: 2px;
+        }
+
+        .layui-nav-tree .layui-nav-item a {
+            color: var(--text-secondary) !important;
+            height: 42px;
+            line-height: 42px;
+            padding: 0 20px;
+            border-left: 3px solid transparent;
+            transition: var(--transition-base);
+        }
+
+        .layui-nav-tree .layui-nav-item a:hover {
+            color: var(--text-primary) !important;
+            background-color: var(--bg-hover);
+            border-left-color: var(--primary-color);
+        }
+
+        .layui-nav-tree .layui-nav-itemed > a,
+        .layui-nav-tree .layui-this > a {
+            color: var(--primary-color);
+            background-color: var(--bg-hover);
+            border-left-color: var(--primary-color);
+        }
+
+        .layui-nav-tree .layui-nav-bar {
+            background-color: var(--primary-color);
+            width: 3px;
+            border-radius: 0;
+        }
+
+        .layui-nav-tree .layui-nav-child {
+            background-color: #fafafa;
+            border-radius: 0;
+            margin: 0;
+        }
+
+        .layui-nav-tree .layui-nav-child dd a {
+            padding-left: 50px;
+            color: var(--text-secondary);
+            border-left: none;
+        }
+
+        .layui-nav-tree .layui-nav-child dd a:hover {
+            color: var(--primary-color);
+            background-color: #edf7ff;
+            border-left: none;
+        }
+
+        .layui-nav-tree .layui-nav-child dd.layui-this a {
+            color: var(--primary-color);
+            background-color: #edf7ff;
+        }
+
+        .layui-nav-tree .layui-icon {
+            color: var(--text-tertiary);
+            font-size: 16px;
+            margin-right: 10px;
+            transition: var(--transition-base);
+        }
+
+        .layui-nav-tree .layui-nav-item:hover .layui-icon,
+        .layui-nav-tree .layui-nav-itemed .layui-icon,
+        .layui-nav-tree .layui-this .layui-icon {
+            color: var(--primary-color);
+        }
+
+        /* 主内容区域样式 */
+        .layui-body {
+            top: var(--header-height);
+            left: var(--sidebar-width);
+            right: 0;
+            bottom: 0;
+            background-color: var(--bg-secondary);
+            transition: var(--transition-base);
+            overflow: hidden;
+        }
+
+        #main-content {
+            width: 100%;
+            height: 100%;
+            border: none;
+            margin: 0;
+            padding: 0;
+            display: block;
+            transition: opacity 0.3s ease;
+        }
+
+        /* 加载动画样式 */
+        .loading-container {
+            position: fixed;
+            top: var(--header-height);
+            left: var(--sidebar-width);
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255, 255, 255, 0.95);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: all 0.3s ease;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(30, 159, 255, 0.2);
+            border-radius: 50%;
+            border-top-color: var(--primary-color);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        .loading-text {
+            margin-top: 16px;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* 响应式设计 */
+        @media screen and (max-width: 768px) {
+            :root {
+                --sidebar-width: 180px;
+            }
+            
+            .layui-side {
+                transform: translateX(-100%);
+                z-index: 998;
+            }
+            
+            .layui-side.open {
+                transform: translateX(0);
+            }
+            
+            .layui-body {
+                left: 0;
+            }
+            
+            .layui-logo {
+                width: 180px;
+                padding: 0 15px;
+                font-size: 16px;
+            }
+        }
+
+        /* 暗黑模式适配（预留） */
+        @media (prefers-color-scheme: dark) {
+            /* 这里可以添加暗黑模式的样式，当前版本暂不实现 */
+        }
+    </style>
+</head>
+<body>
+<div class="layui-layout layui-layout-admin">
+    <!-- 头部区域 -->
+    <div class="layui-header">
+        <div class="layui-logo">
+            <i class="layui-icon layui-icon-home"></i>
+            <span>后台管理系统</span>
+        </div>
+        <!-- 顶部工具栏 -->
+        <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item">
+                <a href="javascript:;">
+                    <!-- <img src="https://via.placeholder.com/32x32" class="layui-nav-img"> -->
+                    <span>管理员</span>
+                </a>
+                <dl class="layui-nav-child">
+                    <dd><a href="javascript:;" id="logout"><i class="layui-icon layui-icon-logout"></i>退出登录</a></dd>
+                </dl>
+            </li>
+        </ul>
+    </div>
+
+    <!-- 侧边栏菜单 -->
+    <div class="layui-side">
+        <div class="layui-side-scroll">
+            <ul class="layui-nav layui-nav-tree" lay-filter="side-menu">
+                <li class="layui-nav-item layui-nav-itemed">
+                    <a href="javascript:;">
+                        <i class="layui-icon layui-icon-console"></i>
+                        <span>系统管理</span>
+                    </a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:;" data-url="dashboard.html">
+                            <i class="layui-icon layui-icon-chart"></i>
+                            <span>仪表盘</span>
+                        </a></dd>
+                        <dd><a href="javascript:;" data-url="/admin/user/index">
+                            <i class="layui-icon layui-icon-group"></i>
+                            <span>用户管理</span>
+                        </a></dd>
+                    </dl>
+                </li>
+
+                <li class="layui-nav-item">
+                    <a href="javascript:;">
+                        <i class="layui-icon layui-icon-file"></i>
+                        <span>内容管理</span>
+                    </a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:;" data-url="/admin/message/index">
+                            <i class="layui-icon layui-icon-edit"></i>
+                            <span>微博管理</span>
+                        </a></dd>
+                        <dd><a href="javascript:;" data-url="/admin/App/index">
+                            <i class="layui-icon layui-icon-app"></i>
+                            <span>小应用管理</span>
+                        </a></dd>
+                    </dl>
+                </li>
+
+                <li class="layui-nav-item">
+                    <a href="javascript:;">
+                        <i class="layui-icon layui-icon-log"></i>
+                        <span>日志管理</span>
+                    </a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:;" data-url="/admin/file_log/index">
+                            <i class="layui-icon layui-icon-read"></i>
+                            <span>文件日志</span>
+                        </a></dd>
+                    </dl>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- 主内容区域 -->
+    <div class="layui-body">
+        <iframe id="main-content" src="dashboard.html" frameborder="0"></iframe>
+    </div>
+</div>
+
+<!-- 使用CDN引入layui的JS -->
+<script src="/static/layui/layui.js"></script>
+<script>
+    layui.use(['element', 'layer'], function () {
+        const element = layui.element;
+        const layer = layui.layer;
+
+        const allowedUrls = [
+            "dashboard.html",
+            "/admin/user/index",
+            "/admin/message/index",
+            "/admin/App/index",
+            "/admin/file_log/index"
+        ];
+
+        /**
+         * 创建加载动画元素
+         */
+        function createLoading() {
+            const loadingDiv = document.createElement('div');
+            loadingDiv.className = 'loading-container';
+            loadingDiv.innerHTML = `
+                <div class="loading-spinner"></div>
+                <div class="loading-text">加载中...</div>
+            `;
+            document.body.appendChild(loadingDiv);
+            return loadingDiv;
+        }
+
+        /**
+         * iframe 加载管理器
+         */
+        class IframeLoader {
+            constructor(selector) {
+                this.iframe = document.querySelector(selector);
+                this.currentLoading = null;
+            }
+
+            load(url) {
+                if (!allowedUrls.includes(url)) {
+                    layer.msg("非法页面请求", {icon: 2, time: 2000, shade: 0.1});
+                    return;
+                }
+
+                // 移除之前的加载动画（如果存在）
+                if (this.currentLoading) {
+                    document.body.removeChild(this.currentLoading);
+                }
+
+                // 创建新的加载动画
+                this.currentLoading = createLoading();
+                
+                // 淡入iframe
+                this.iframe.style.opacity = '0';
+                
+                // 加载新页面
+                this.iframe.src = url;
+                
+                // 页面加载完成
+                this.iframe.onload = () => {
+                    setTimeout(() => {
+                        this.iframe.style.opacity = '1';
+                        if (this.currentLoading) {
+                            // 平滑移除加载动画
+                            this.currentLoading.style.opacity = '0';
+                            setTimeout(() => {
+                                if (this.currentLoading && document.body.contains(this.currentLoading)) {
+                                    document.body.removeChild(this.currentLoading);
+                                    this.currentLoading = null;
+                                }
+                            }, 300);
+                        }
+                    }, 100);
+                };
+                
+                // 页面加载失败
+                this.iframe.onerror = () => {
+                    if (this.currentLoading) {
+                        document.body.removeChild(this.currentLoading);
+                        this.currentLoading = null;
+                    }
+                    layer.msg("页面加载失败，请稍后再试", {icon: 2, time: 3000, shade: 0.1});
+                    this.iframe.style.opacity = '1';
+                };
+            }
+        }
+
+        const loader = new IframeLoader('#main-content');
+
+        // 监听侧边栏菜单点击事件
+        element.on('nav(side-menu)', function (elem) {
+            const url = elem.attr('data-url');
+            if (url) {
+                loader.load(url);
+            }
+        });
+
+        // 退出登录功能
+        document.getElementById('logout').addEventListener('click', function () {
+            layer.confirm('确定要退出登录吗？', {
+                btn: ['确定', '取消'],
+                title: '提示',
+                skin: 'layui-layer-lan',
+                icon: 3,
+                btnAlign: 'c',
+                shade: 0.3
+            }, function (index) {
+                // 模拟退出登录请求
+                fetch('/api/logout', {
+                    method: 'POST',
+                    credentials: 'include'
+                })
+                .then(() => {
+                    layer.close(index);
+                    layer.msg('退出成功', {
+                        icon: 1,
+                        time: 1500,
+                        shade: 0.1,
+                        end: function() {
+                            // 可以在这里添加跳转到登录页面的代码
+                            // window.location.href = '/login';
+                        }
+                    });
+                })
+                .catch(err => {
+                    console.error('Logout error:', err);
+                    layer.msg('退出失败，请重试', {icon: 2, time: 2000, shade: 0.1});
+                });
+            });
+        });
+    });
+</script>
+</body>
+</html>
