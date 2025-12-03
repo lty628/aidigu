@@ -564,4 +564,8 @@ CREATE TABLE `wb_user_invite`  (
 -- Records of wb_user_invite
 -- ----------------------------
 
+ALTER TABLE `wb_user` ADD `uptime` BIGINT NOT NULL COMMENT '更新时间' AFTER `ctime`;
+ALTER TABLE `wb_user` ADD `status` TINYINT NOT NULL DEFAULT '0' COMMENT '状态0正常，1以上不正常' AFTER `invisible`;
+ALTER TABLE `wb_user_invite` ADD `topuid` INT NOT NULL DEFAULT '0' COMMENT '父集uid' AFTER `touid`;
+
 SET FOREIGN_KEY_CHECKS = 1;

@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>小应用管理 - 后台管理系统</title>
+    <link rel="stylesheet" href="/static/layui/css/layui.css">
+    <link rel="stylesheet" href="/static/admin/css/style.css">
+</head>
+<body>
+    <div class="layui-fluid">
+        <div class="layui-card">
+            <div class="layui-card-header">
+                <div class="layui-row">
+                    <div class="layui-col-md8">
+                        <h2><i class="layui-icon layui-icon-app"></i> 小应用管理</h2>
+                    </div>
+                    <div class="layui-col-md4 header-actions">
+                        <a href="{:url('create')}" class="layui-btn">
+                            <i class="layui-icon layui-icon-add-1"></i> 创建应用
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-card-body">
+                <!-- 搜索表单 -->
+                <form class="layui-form" lay-filter="search-form">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">关键词</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="keyword" placeholder="应用名称/链接" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">状态</label>
+                            <div class="layui-input-inline">
+                                <select name="app_status" lay-search>
+                                    <option value="">全部状态</option>
+                                    <option value="0">关闭</option>
+                                    <option value="1">站内</option>
+                                    <option value="2">站外</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">类型</label>
+                            <div class="layui-input-inline">
+                                <select name="app_type" lay-search>
+                                    <option value="">全部类型</option>
+                                    <option value="0">全部</option>
+                                    <option value="1">PC</option>
+                                    <option value="2">手机</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <button class="layui-btn layui-btn-primary" type="reset" id="reset-search">重置</button>
+                            <button class="layui-btn" lay-submit lay-filter="search-submit">搜索</button>
+                        </div>
+                    </div>
+                </form>
+                
+                <!-- 操作按钮 -->
+                <div class="layui-btn-container" style="margin-bottom: 15px;">
+                    <button class="layui-btn layui-btn-danger" id="batch-delete">
+                        <i class="layui-icon layui-icon-delete"></i> 批量删除
+                    </button>
+                </div>
+                
+                <!-- 数据表格容器 -->
+                <table id="appTable" lay-filter="appTable"></table>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 操作按钮模板 -->
+    <script type="text/html" id="actionTpl">
+        <a href="{{d.edit_url}}" class="layui-btn layui-btn-normal layui-btn-xs">编辑</a>
+        <button class="layui-btn layui-btn-xs toggle-status-btn {{d.app_status == 0 ? 'layui-btn-success' : 'layui-btn-primary'}}" 
+                data-id="{{d.id}}" data-status="{{d.app_status}}" lay-event="toggleStatus">
+            {{d.app_status == 0 ? '开启' : '关闭'}}
+        </button>
+        <button class="layui-btn layui-btn-danger layui-btn-xs delete-btn" data-id="{{d.id}}" lay-event="delete">
+            删除
+        </button>
+    </script>
+    
+    <!-- 状态模板 -->
+    <script type="text/html" id="statusTpl">
+        <span class="status-badge status-{{d.app_status == 0 ? 'close' : (d.app_status == 1 ? 'inside' : 'outside')}}">
+            {{d.app_status_text}}
+        </span>
+    </script>
+    
+    <!-- 图片模板 -->
+    <script type="text/html" id="imageTpl">
+        {{# if(d.app_image){ }}
+        <img src="{{d.app_image}}" alt="应用图片" class="app-image">
+        {{# } else { }}
+        <span>-无-</span>
+        {{# } }}
+    </script>
+    
+    <!-- 链接模板 -->
+    <script type="text/html" id="urlTpl">
+        {{# if(d.app_url){ }}
+        <a href="{{d.app_url}}" target="_blank" class="layui-text">{{d.app_url}}</a>
+        {{# } else { }}
+        -
+        {{# } }}
+    </script>
+    
+    <script src="/static/layui/layui.js"></script>
+    <script>
+    layui.use(['table', 'layer', 'form'], function() {
+        var table = layui.table;
+        var layer = layui.layer;
+        var form = layui.form;
+        var $ = layui.$;
+        
+        // 渲染数据表格
+        var appTable = table.render({
+            elem: '#appTable',
+            url: '{:url("getList")}',
+            method: 'POST',
+            page: true,
+            limit: 20,
+            limits: [10, 20, 30, 50],
+            height: 'full-35',
+            lineStyle: 'height: 151px;', // 定义表格的多行样式
+            cols: [[
+                {type: 'checkbox'},
+                {field: 'id', width: 80, title: 'ID', sort: true},
+                {field: 'app_name', title: '应用名称'},
+                {field: 'app_url', title: '链接', templet: '#urlTpl'},
+                {field: 'app_image', width: 120, title: '图片', templet: '#imageTpl'},
+                {field: 'app_status', width: 100, title: '状态', templet: '#statusTpl', sort: true},
+                {field: 'app_type_text', width: 100, title: '类型'},
+                {field: 'open_type_text', width: 120, title: '打开方式'},
+                {field: 'username', width: 100, title: '创建者'},
+                {field: 'create_time', width: 160, title: '创建时间', sort: true},
+                {field: 'update_time', width: 160, title: '更新时间', sort: true},
+                {fixed: 'right', width: 200, title: '操作', toolbar: '#actionTpl'}
+            ]],
+            done: function(res, curr, count) {
+                // 表格渲染完成后的回调
+            }
+        });
+        
+        // 搜索表单提交
+        form.on('submit(search-submit)', function(data) {
+            appTable.reload({
+                where: data.field,
+                page: {curr: 1}
+            });
+            return false;
+        });
+        
+        // 重置搜索
+        $('#reset-search').on('click', function() {
+            form.val('search-form', {
+                'keyword': '',
+                'app_status': '',
+                'app_type': ''
+            });
+            appTable.reload({
+                where: {},
+                page: {curr: 1}
+            });
+        });
+        
+        // 监听表格工具条
+        table.on('tool(appTable)', function(obj) {
+            var data = obj.data;
+            
+            // 切换状态
+            if (obj.event === 'toggleStatus') {
+                var action = data.app_status == 0 ? '开启' : '关闭';
+                
+                layer.confirm('确定要' + action + '这个应用吗？', {
+                    icon: 3,
+                    title: action + '确认'
+                }, function(index) {
+                    layer.close(index);
+                    var loading = layer.load(2);
+                    
+                    $.ajax({
+                        url: '{:url("toggleStatus")}',
+                        type: 'POST',
+                        data: {id: data.id},
+                        dataType: 'json',
+                        success: function(res) {
+                            layer.close(loading);
+                            if (res.code === 1) {
+                                layer.msg(res.msg, {icon: 1});
+                                appTable.reload();
+                            } else {
+                                layer.msg(res.msg, {icon: 2});
+                            }
+                        },
+                        error: function() {
+                            layer.close(loading);
+                            layer.msg('请求失败，请重试', {icon: 2});
+                        }
+                    });
+                });
+            }
+            
+            // 删除
+            else if (obj.event === 'delete') {
+                layer.confirm('确定要删除这个应用吗？', {
+                    icon: 3,
+                    title: '删除确认'
+                }, function(index) {
+                    layer.close(index);
+                    var loading = layer.load(2);
+                    
+                    $.ajax({
+                        url: '{:url("delete")}',
+                        type: 'POST',
+                        data: {id: data.id},
+                        dataType: 'json',
+                        success: function(res) {
+                            layer.close(loading);
+                            if (res.code === 1) {
+                                layer.msg(res.msg, {icon: 1});
+                                obj.del(); // 删除表格行
+                            } else {
+                                layer.msg(res.msg, {icon: 2});
+                            }
+                        },
+                        error: function() {
+                            layer.close(loading);
+                            layer.msg('请求失败，请重试', {icon: 2});
+                        }
+                    });
+                });
+            }
+        });
+        
+        // 批量删除
+        $('#batch-delete').on('click', function() {
+            var checkStatus = table.checkStatus('appTable');
+            var checkedData = checkStatus.data;
+            
+            if (checkedData.length === 0) {
+                layer.msg('请选择要删除的应用', {icon: 3});
+                return;
+            }
+            
+            var checkedIds = checkedData.map(function(item) {
+                return item.id;
+            });
+            
+            layer.confirm('确定要删除选中的 ' + checkedIds.length + ' 个应用吗？', {
+                icon: 3,
+                title: '批量删除确认'
+            }, function(index) {
+                layer.close(index);
+                var loading = layer.load(2);
+                
+                $.ajax({
+                    url: '{:url("batchDelete")}',
+                    type: 'POST',
+                    data: {ids: checkedIds},
+                    dataType: 'json',
+                    traditional: true,
+                    success: function(res) {
+                        layer.close(loading);
+                        if (res.code === 1) {
+                            layer.msg(res.msg, {icon: 1});
+                            appTable.reload();
+                        } else {
+                            layer.msg(res.msg, {icon: 2});
+                        }
+                    },
+                    error: function() {
+                        layer.close(loading);
+                        layer.msg('请求失败，请重试', {icon: 2});
+                    }
+                });
+            });
+        });
+    });
+    </script>
+</body>
+</html>

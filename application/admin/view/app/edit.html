@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>编辑应用 - 后台管理系统</title>
+    <link rel="stylesheet" href="/static/layui/css/layui.css">
+    <style>
+        .layui-form-label {
+            width: 120px;
+        }
+        .layui-input-block {
+            margin-left: 150px;
+        }
+        .layui-upload-img {
+            max-width: 120px;
+            max-height: 120px;
+            margin-top: 10px;
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .required-mark {
+            color: #ff5722;
+        }
+        .header-actions {
+            text-align: right;
+        }
+        .upload-container {
+            padding: 10px 0;
+        }
+        .form-footer {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="layui-fluid">
+        <div class="layui-card">
+            <div class="layui-card-header">
+                <div class="layui-row">
+                    <div class="layui-col-md8">
+                        <h2><i class="layui-icon layui-icon-edit"></i> 编辑应用</h2>
+                    </div>
+                    <div class="layui-col-md4 header-actions">
+                        <a href="{:url('index')}" class="layui-btn layui-btn-primary">
+                            <i class="layui-icon layui-icon-return"></i> 返回列表
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-card-body">
+                <form class="layui-form" lay-filter="app-edit-form">
+                    <input type="hidden" name="id" value="{$app.id}">
+                    
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">应用名称 <span class="required-mark">*</span></label>
+                        <div class="layui-input-block">
+                            <input type="text" 
+                                   name="app_name" 
+                                   value="{$app.app_name|default=''}" 
+                                   placeholder="请输入应用名称" 
+                                   lay-verify="required" 
+                                   autocomplete="off"
+                                   class="layui-input">
+                        </div>
+                    </div>
+                    
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">应用链接 <span class="required-mark">*</span></label>
+                        <div class="layui-input-block">
+                            <input type="text" 
+                                   name="app_url" 
+                                   value="{$app.app_url|default=''}" 
+                                   placeholder="请输入应用链接（带http/https）" 
+                                   lay-verify="required|url" 
+                                   autocomplete="off"
+                                   class="layui-input">
+                        </div>
+                    </div>
+                    
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">应用图片 <span class="required-mark">*</span></label>
+                        <div class="layui-input-block">
+                            <div class="layui-upload">
+                                <button type="button" class="layui-btn" id="upload-image">
+                                    <i class="layui-icon layui-icon-upload"></i> 上传图片
+                                </button>
+                                <div class="layui-upload-list upload-container">
+                                    {notempty name="app.app_image"}
+                                    <img class="layui-upload-img" id="preview-image" src="{$app.app_image}" alt="应用图片">
+                                    {else/}
+                                    <img class="layui-upload-img" id="preview-image" style="display:none;" alt="应用图片">
+                                    {/notempty}
+                                    <div id="image-text"></div>
+                                </div>
+                            </div>
+                            <input type="hidden" 
+                                   name="app_image" 
+                                   id="app-image-input" 
+                                   value="{$app.app_image|default=''}" 
+                                   lay-verify="required">
+                        </div>
+                    </div>
+                    
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">应用状态 <span class="required-mark">*</span></label>
+                        <div class="layui-input-block">
+                            <select name="app_status" lay-verify="required">
+                                <option value="">请选择应用状态</option>
+                                {volist name="statusOptions" id="name" key="key"}
+                                <option value="{$key}" {if condition="$key == $app.app_status"}selected{/if}>{$name}</option>
+                                {/volist}
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">应用类型 <span class="required-mark">*</span></label>
+                        <div class="layui-input-block">
+                            <select name="app_type" lay-verify="required">
+                                <option value="">请选择应用类型</option>
+                                {volist name="typeOptions" id="name" key="key"}
+                                <option value="{$key}" {if condition="$key == $app.app_type"}selected{/if}>{$name}</option>
+                                {/volist}
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">打开方式 <span class="required-mark">*</span></label>
+                        <div class="layui-input-block">
+                            <select name="open_type" lay-verify="required">
+                                <option value="">请选择打开方式</option>
+                                {volist name="openTypeOptions" id="name" key="key"}
+                                <option value="{$key}" {if condition="$key == $app.open_type"}selected{/if}>{$name}</option>
+                                {/volist}
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">提醒Key</label>
+                        <div class="layui-input-block">
+                            <input type="text" 
+                                   name="remind_key" 
+                                   value="{$app.remind_key|default=''}" 
+                                   placeholder="请输入提醒Key（可选）" 
+                                   autocomplete="off"
+                                   class="layui-input">
+                        </div>
+                    </div>
+                    
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">应用配置</label>
+                        <div class="layui-input-block">
+                            <textarea name="app_config" 
+                                      placeholder="请输入应用配置JSON（可选）" 
+                                      class="layui-textarea" 
+                                      rows="6">{$app.app_config|default=''}</textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="layui-form-item form-footer">
+                        <div class="layui-input-block">
+                            <button type="submit" class="layui-btn" lay-submit lay-filter="submit-form">
+                                <i class="layui-icon layui-icon-ok"></i> 更新
+                            </button>
+                            <button type="reset" class="layui-btn layui-btn-primary">
+                                <i class="layui-icon layui-icon-refresh"></i> 重置
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <script src="/static/layui/layui.js"></script>
+    <script>
+    layui.use(['layer', 'form', 'upload'], function() {
+        var layer = layui.layer;
+        var form = layui.form;
+        var upload = layui.upload;
+        var $ = layui.$;
+        
+        // 图片上传
+        var uploadInst = upload.render({
+            elem: '#upload-image',
+            url: '{:url("admin/upload/upload")}',
+            method: 'POST',
+            data: {
+                type: 'app'
+            },
+            accept: 'images',
+            acceptMime: 'image/*',
+            size: 2048, // 限制文件大小，单位 KB
+            before: function(obj) {
+                // 预读本地文件示例，不支持ie8
+                obj.preview(function(index, file, result) {
+                    $('#preview-image').attr('src', result).show();
+                });
+                
+                layer.load(2);
+            },
+            done: function(res) {
+                layer.closeAll('loading');
+                
+                // 如果上传成功
+                if (res.code === 1) {
+                    $('#app-image-input').val(res.data.src);
+                    $('#image-text').html('<span style="color: #5FB878;"><i class="layui-icon layui-icon-ok-circle"></i> 上传成功</span>');
+                    layer.msg('上传成功', {icon: 1});
+                } else {
+                    // 显示错误信息
+                    $('#image-text').html('<span style="color: #FF5722;"><i class="layui-icon layui-icon-close"></i> 上传失败：' + res.msg + '</span>');
+                    layer.msg('上传失败：' + res.msg, {icon: 2});
+                }
+            },
+            error: function() {
+                layer.closeAll('loading');
+                
+                // 演示失败状态，并实现重传
+                $('#image-text').html(`
+                    <span style="color: #FF5722;">
+                        <i class="layui-icon layui-icon-close"></i> 上传失败
+                    </span>
+                    <button class="layui-btn layui-btn-xs layui-btn-primary demo-reload" style="margin-left: 10px;">
+                        <i class="layui-icon layui-icon-refresh"></i> 重试
+                    </button>
+                `);
+                
+                $('#image-text .demo-reload').on('click', function() {
+                    uploadInst.upload();
+                });
+                
+                layer.msg('上传失败，请重试', {icon: 2});
+            }
+        });
+        
+        // 表单提交
+        form.on('submit(submit-form)', function(data) {
+            var loading = layer.load(2);
+            
+            $.ajax({
+                url: '{:url("edit")}',
+                type: 'POST',
+                data: data.field,
+                dataType: 'json',
+                success: function(res) {
+                    layer.close(loading);
+                    if (res.code === 1) {
+                        layer.msg(res.msg, {icon: 1}, function() {
+                            // 如果有返回URL则跳转，否则返回列表页
+                            if (res.url) {
+                                window.location.href = res.url;
+                            } else {
+                                window.location.href = '{:url("index")}';
+                            }
+                        });
+                    } else {
+                        layer.msg(res.msg, {icon: 2});
+                    }
+                },
+                error: function() {
+                    layer.close(loading);
+                    layer.msg('网络错误，请稍后重试', {icon: 2});
+                }
+            });
+            
+            return false;
+        });
+        
+        // 渲染表单
+        form.render();
+    });
+    </script>
+</body>
+</html>

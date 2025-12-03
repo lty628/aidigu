@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>内容详情 - 后台管理系统</title>
+    <link rel="stylesheet" href="/static/layui/css/layui.css">
+    <style>
+        .info-item {
+            margin-bottom: 15px;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .info-item:last-child {
+            border-bottom: none;
+        }
+        
+        .info-label {
+            display: inline-block;
+            width: 100px;
+            font-weight: bold;
+            text-align: right;
+            margin-right: 20px;
+            color: #333;
+        }
+        
+        .info-content {
+            display: inline-block;
+            vertical-align: top;
+            color: #666;
+        }
+        
+        .media-container {
+            margin-top: 10px;
+        }
+        
+        .media-container img {
+            max-width: 100%;
+            max-height: 400px;
+            margin: 10px 10px 10px 0;
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .content-box {
+            background-color: #f8f8f8;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 10px 0;
+            line-height: 1.6;
+            min-height: 20px;
+        }
+        
+        .stats-box {
+            display: inline-block;
+            padding: 5px 10px;
+            margin-right: 15px;
+            background-color: #f0f0f0;
+            border-radius: 3px;
+        }
+        
+        .topic-link {
+            color: #1E9FFF;
+            text-decoration: underline;
+        }
+        
+        .topic-link:hover {
+            color: #0066cc;
+        }
+        
+        .header-actions {
+            text-align: right;
+        }
+        
+        .back-link {
+            margin-right: 10px;
+        }
+        
+        pre.info-content {
+            background-color: #f8f8f8;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        
+        .media-link {
+            color: #1E9FFF;
+            text-decoration: underline;
+        }
+        
+        .media-link:hover {
+            color: #0066cc;
+        }
+    </style>
+</head>
+<body>
+    <div class="layui-fluid">
+        <div class="layui-card">
+            <div class="layui-card-header">
+                <div class="layui-row">
+                    <div class="layui-col-md8">
+                        <h2><i class="layui-icon layui-icon-list"></i> 内容详情</h2>
+                    </div>
+                    <div class="layui-col-md4 header-actions">
+                        <a href="{:url('index')}" class="layui-btn back-link">
+                            <i class="layui-icon layui-icon-return"></i> 返回列表
+                        </a>
+                        <button class="layui-btn layui-btn-danger" id="delete-btn">
+                            <i class="layui-icon layui-icon-delete"></i> 删除
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-card-body">
+                <div class="info-item">
+                    <span class="info-label">内容ID：</span>
+                    <span class="info-content">{$message.msg_id|default='-'}</span>
+                </div>
+                
+                <div class="info-item">
+                    <span class="info-label">发布用户：</span>
+                    <span class="info-content">
+                        {notempty name="message.user"}
+                        <a href="{:url('User/edit', ['uid' => $message.user.uid])}" target="_blank" class="layui-text">
+                            {$message.user.username|default='-'} ({$message.user.nickname|default='-'})
+                        </a>
+                        {else/}
+                        -
+                        {/notempty}
+                    </span>
+                </div>
+                
+                <div class="info-item">
+                    <span class="info-label">发布时间：</span>
+                    <span class="info-content">
+                        {notempty name="message.ctime"}
+                        {$message.ctime|date='Y-m-d H:i:s'}
+                        {else/}
+                        -
+                        {/notempty}
+                    </span>
+                </div>
+                
+                <div class="info-item">
+                    <span class="info-label">内容：</span>
+                    <div class="info-content">
+                        <div class="content-box">
+                            {$message.contents|default='<span class="layui-text-em">无内容</span>'}
+                        </div>
+                    </div>
+                </div>
+                
+                {notempty name="message.repost"}
+                <div class="info-item">
+                    <span class="info-label">转发内容：</span>
+                    <div class="info-content">
+                        <div class="content-box">
+                            {$message.repost}
+                        </div>
+                    </div>
+                </div>
+                {/notempty}
+                
+                <div class="info-item">
+                    <span class="info-label">来源：</span>
+                    <span class="info-content">{$message.refrom|default='-'}</span>
+                </div>
+                
+                {notempty name="message.media"}
+                <div class="info-item">
+                    <span class="info-label">媒体文件：</span>
+                    <div class="info-content media-container">
+                        <a href="{$message.media}" target="_blank" class="media-link">
+                            <i class="layui-icon layui-icon-link"></i> {$message.media}
+                        </a>
+                    </div>
+                </div>
+                {/notempty}
+                
+                {notempty name="message.media_info"}
+                <div class="info-item">
+                    <span class="info-label">媒体信息：</span>
+                    <pre class="info-content">{$message.media_info}</pre>
+                </div>
+                {/notempty}
+                
+                <div class="info-item">
+                    <span class="info-label">统计数据：</span>
+                    <span class="info-content">
+                        <div class="stats-box">
+                            <i class="layui-icon layui-icon-share"></i> 转发: {$message.repostsum|default=0}
+                        </div>
+                        <div class="stats-box">
+                            <i class="layui-icon layui-icon-dialogue"></i> 评论: {$message.commentsum|default=0}
+                        </div>
+                        <div class="stats-box">
+                            <i class="layui-icon layui-icon-star"></i> 收藏: {$message.collectsum|default=0}
+                        </div>
+                    </span>
+                </div>
+                
+                {notempty name="message.topic_id"}
+                <div class="info-item">
+                    <span class="info-label">话题：</span>
+                    <span class="info-content">
+                        <a href="{:url('Topic/detail', ['topic_id' => $message.topic_id])}" 
+                           target="_blank" class="topic-link">
+                            话题ID: {$message.topic_id}
+                        </a>
+                    </span>
+                </div>
+                {/notempty}
+            </div>
+        </div>
+    </div>
+    
+    <script src="/static/layui/layui.js"></script>
+    <script>
+    layui.use(['layer', 'jquery'], function() {
+        var layer = layui.layer;
+        var $ = layui.jquery;
+        
+        // 删除按钮事件
+        $('#delete-btn').on('click', function() {
+            var msgId = '{$message.msg_id}';
+            
+            layer.confirm('确定要删除这条内容吗？此操作不可恢复！', {
+                icon: 3,
+                title: '删除确认',
+                btn: ['确定', '取消']
+            }, function(index) {
+                layer.close(index);
+                var loading = layer.load(2, {shade: [0.1, '#fff']});
+                
+                $.ajax({
+                    url: '{:url("delete")}',
+                    type: 'POST',
+                    data: {msg_id: msgId},
+                    dataType: 'json',
+                    success: function(res) {
+                        layer.close(loading);
+                        if (res.code === 1) {
+                            layer.msg(res.msg, {icon: 1});
+                            setTimeout(function() {
+                                window.location.href = '{:url("index")}';
+                            }, 1500);
+                        } else {
+                            layer.msg(res.msg, {icon: 2});
+                        }
+                    },
+                    error: function() {
+                        layer.close(loading);
+                        layer.msg('请求失败，请重试', {icon: 2});
+                    }
+                });
+            });
+        });
+    });
+    </script>
+</body>
+</html>

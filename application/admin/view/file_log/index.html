@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <title>文件日志管理 - 后台管理系统</title>
+    <link rel="stylesheet" href="/static/layui/css/layui.css">
+    <link rel="stylesheet" href="/static/admin/css/style.css">
+</head>
+
+<body>
+    <div class="layui-fluid">
+        <div class="layui-card">
+            <div class="layui-card-header">
+                <h2>文件日志管理</h2>
+            </div>
+            <div class="layui-card-body">
+                <!-- 搜索表单 -->
+                <form class="layui-form" lay-filter="search-form">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">关键词</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="keyword" placeholder="文件名称/信息" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">用户ID</label>
+                            <div class="layui-input-inline">
+                                <input type="number" name="uid" placeholder="用户ID" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">文件类型</label>
+                            <div class="layui-input-inline">
+                                <select name="type" lay-search>
+                                    <option value="">全部类型</option>
+                                    <option value="1">头像</option>
+                                    <option value="2">微博</option>
+                                    <option value="3">聊天</option>
+                                    <option value="4">素材</option>
+                                    <option value="5">主题</option>
+                                    <option value="6">网盘</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">状态</label>
+                            <div class="layui-input-inline">
+                                <select name="is_del">
+                                    <option value="">全部</option>
+                                    <option value="0">正常</option>
+                                    <option value="1">已删除</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">时间范围</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="start_time" placeholder="开始时间" class="layui-input" id="start-time">
+                            </div>
+                            <div class="layui-form-mid">-</div>
+                            <div class="layui-input-inline">
+                                <input type="text" name="end_time" placeholder="结束时间" class="layui-input" id="end-time">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <button class="layui-btn layui-btn-primary" type="reset" id="reset-search">重置</button>
+                            <button class="layui-btn" lay-submit lay-filter="search-submit">搜索</button>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- 操作按钮 -->
+                <div class="layui-btn-container" style="margin-bottom: 15px;">
+                    <button class="layui-btn layui-btn-danger" id="batch-delete">
+                        <i class="layui-icon layui-icon-delete"></i> 批量删除
+                    </button>
+                    <button class="layui-btn layui-btn-normal" id="batch-restore">
+                        <i class="layui-icon layui-icon-refresh"></i> 批量恢复
+                    </button>
+                </div>
+
+                <!-- 数据表格容器 -->
+                <table id="fileLogTable" lay-filter="fileLogTable"></table>
+            </div>
+        </div>
+    </div>
+
+    <!-- 操作按钮模板 -->
+    <script type="text/html" id="actionTpl">
+        {{# if(d.is_del == 0){ }}
+        <button class="layui-btn layui-btn-danger layui-btn-xs delete-btn" data-id="{{d.id}}" lay-event="delete">
+            删除
+        </button>
+        {{# } else { }}
+        <button class="layui-btn layui-btn-normal layui-btn-xs restore-btn" data-id="{{d.id}}" lay-event="restore">
+            恢复
+        </button>
+        {{# } }}
+    </script>
+    
+    <!-- 状态模板 -->
+    <script type="text/html" id="statusTpl">
+        <span class="status-badge status-{{d.is_del == 0 ? 'normal' : 'delete'}}">
+            {{d.is_del == 0 ? '正常' : '已删除'}}
+        </span>
+    </script>
+    
+    <!-- 文件信息模板 -->
+    <script type="text/html" id="infoTpl">
+        {{# if(d.media_info){ }}
+        <a href="javascript:void(0);" class="preview-btn layui-btn layui-btn-xs layui-btn-primary" lay-event="preview" 
+           data-info="{{d.media_info}}" data-type="{{d.file_type}}" data-name="{{d.file_name}}">
+            预览
+        </a>
+        {{# } else { }}
+        -
+        {{# } }}
+    </script>
+    
+    <!-- 用户名模板 -->
+    <script type="text/html" id="usernameTpl">
+        {{d.username || '-'}}
+    </script>
+
+    <script src="/static/layui/layui.js"></script>
+    <script>
+        layui.use(['table', 'layer', 'form', 'laydate'], function () {
+            var table = layui.table;
+            var layer = layui.layer;
+            var form = layui.form;
+            var laydate = layui.laydate;
+            var $ = layui.$;
+
+            // 初始化日期选择器
+            laydate.render({
+                elem: '#start-time',
+                theme: '#448aff'
+            });
+
+            laydate.render({
+                elem: '#end-time',
+                theme: '#448aff'
+            });
+
+            // 渲染数据表格
+            var fileLogTable = table.render({
+                elem: '#fileLogTable',
+                url: '{:url("getList")}',
+                method: 'POST',
+                page: true,
+                limit: 20,
+                limits: [10, 20, 30, 50],
+                cols: [[
+                    {type: 'checkbox'},
+                    {field: 'id', width: 80, title: 'ID', sort: true},
+                    {field: 'uid', width: 80, title: '用户ID', sort: true},
+                    {field: 'username', width: 120, title: '用户名', templet: '#usernameTpl'},
+                    {field: 'type_text', width: 100, title: '文件类型'},
+                    {field: 'media_name', width: 260, title: '文件名称'},
+                    {field: 'media_type', width: 100, title: '文件格式'},
+                    {field: 'media_size', width: 100, title: '文件大小', sort: true, templet: function(d) {
+                        return (d.media_size || 0) + ' MB';
+                    }},
+                    {field: 'media_info', width: 100, title: '文件信息', templet: '#infoTpl'},
+                    {field: 'is_del', width: 80, title: '状态', templet: '#statusTpl', sort: true},
+                    {field: 'create_time', width: 160, title: '创建时间', sort: true, templet: function(d) {
+                        return new Date(d.create_time * 1000).toLocaleString('zh-CN');
+                    }},
+                    {fixed: 'right', width: 150, title: '操作', toolbar: '#actionTpl'}
+                ]],
+                done: function(res, curr, count) {
+                    // 表格渲染完成后的回调
+                }
+            });
+
+            // 搜索表单提交
+            form.on('submit(search-submit)', function (data) {
+                fileLogTable.reload({
+                    where: data.field,
+                    page: {curr: 1}
+                });
+                return false;
+            });
+
+            // 重置搜索
+            $('#reset-search').on('click', function () {
+                form.val('search-form', {
+                    'keyword': '',
+                    'uid': '',
+                    'type': '',
+                    'is_del': '',
+                    'start_time': '',
+                    'end_time': ''
+                });
+                fileLogTable.reload({
+                    where: {},
+                    page: {curr: 1}
+                });
+            });
+
+            // 监听表格行工具事件
+            table.on('tool(fileLogTable)', function(obj) {
+                var data = obj.data;
+                
+                // 删除
+                if (obj.event === 'delete') {
+                    layer.confirm('确定要删除这条文件日志吗？', {
+                        icon: 3,
+                        title: '删除确认'
+                    }, function (index) {
+                        layer.close(index);
+                        var loading = layer.load(2);
+
+                        $.ajax({
+                            url: '{:url("delete")}',
+                            type: 'POST',
+                            data: { id: data.id },
+                            dataType: 'json',
+                            success: function (res) {
+                                layer.close(loading);
+                                if (res.code === 1) {
+                                    layer.msg(res.msg, { icon: 1 });
+                                    // 更新行数据
+                                    obj.update({
+                                        is_del: 1
+                                    });
+                                } else {
+                                    layer.msg(res.msg, { icon: 2 });
+                                }
+                            },
+                            error: function () {
+                                layer.close(loading);
+                                layer.msg('请求失败，请重试', { icon: 2 });
+                            }
+                        });
+                    });
+                }
+                
+                // 恢复
+                else if (obj.event === 'restore') {
+                    layer.confirm('确定要恢复这条文件日志吗？', {
+                        icon: 3,
+                        title: '恢复确认'
+                    }, function (index) {
+                        layer.close(index);
+                        var loading = layer.load(2);
+
+                        $.ajax({
+                            url: '{:url("restore")}',
+                            type: 'POST',
+                            data: { id: data.id },
+                            dataType: 'json',
+                            success: function (res) {
+                                layer.close(loading);
+                                if (res.code === 1) {
+                                    layer.msg(res.msg, { icon: 1 });
+                                    // 更新行数据
+                                    obj.update({
+                                        is_del: 0
+                                    });
+                                } else {
+                                    layer.msg(res.msg, { icon: 2 });
+                                }
+                            },
+                            error: function () {
+                                layer.close(loading);
+                                layer.msg('请求失败，请重试', { icon: 2 });
+                            }
+                        });
+                    });
+                }
+                
+                // 预览文件
+                if (obj.event === 'preview') {
+                    // 使用正确的字段名
+                    previewFile(data.media_info || data.path, data.file_type, data.file_name);
+                }
+            });
+
+            // 文件预览函数
+            function previewFile(data) {
+                var mediaInfo = data.media_info;
+                var mediaType = data.media_type.toLowerCase();
+                
+                // 图片预览
+                if (['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'].includes(mediaType)) {
+                    layer.open({
+                        type: 1,
+                        title: '图片预览',
+                        area: ['80%', '80%'],
+                        content: '<img src="' + mediaInfo + '" style="width:100%;height:100%;object-fit:contain;">',
+                        cancel: function() {
+                            // 关闭时的回调
+                        }
+                    });
+                }
+                // 视频预览
+                else if (['mp4', 'avi', 'mov', 'wmv', 'flv', 'mkv'].includes(mediaType)) {
+                    layer.open({
+                        type: 1,
+                        title: '视频预览',
+                        area: ['80%', '80%'],
+                        content: '<video src="' + mediaInfo + '" controls style="width:100%;height:100%;object-fit:contain;"></video>',
+                        cancel: function() {
+                            // 关闭时的回调
+                        }
+                    });
+                }
+                // 音频预览
+                else if (['mp3', 'wav', 'ogg', 'aac', 'flac'].includes(mediaType)) {
+                    layer.open({
+                        type: 1,
+                        title: '音频预览',
+                        area: ['400px', '100px'],
+                        content: '<audio src="' + mediaInfo + '" controls style="width:100%;"></audio>',
+                        cancel: function() {
+                            // 关闭时的回调
+                        }
+                    });
+                }
+                // 文本预览
+                else if (['txt', 'md', 'json', 'xml', 'html', 'css', 'js', 'php', 'py', 'java', 'c', 'cpp'].includes(mediaType)) {
+                    // 对于文本文件，可以通过AJAX请求获取内容后预览
+                    $.ajax({
+                        url: mediaInfo,
+                        type: 'GET',
+                        success: function(content) {
+                            layer.open({
+                                type: 1,
+                                title: '文本预览',
+                                area: ['80%', '80%'],
+                                content: '<pre style="width:100%;height:100%;overflow:auto;padding:10px;">' + content + '</pre>',
+                                cancel: function() {
+                                    // 关闭时的回调
+                                }
+                            });
+                        },
+                        error: function() {
+                            layer.msg('无法预览文本内容', {icon: 2});
+                        }
+                    });
+                }
+                // PDF预览
+                else if (mediaType === 'pdf') {
+                    layer.open({
+                        type: 2,
+                        title: 'PDF预览',
+                        area: ['80%', '80%'],
+                        content: mediaInfo,
+                        cancel: function() {
+                            // 关闭时的回调
+                        }
+                    });
+                }
+                // Office文档预览（需要浏览器支持）
+                else if (['doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx'].includes(mediaType)) {
+                    // 可以使用一些在线预览服务或者提示下载
+                    layer.confirm('是否下载该文档？', {
+                        icon: 3,
+                        title: '文档预览',
+                        btn: ['下载', '取消']
+                    }, function(index) {
+                        layer.close(index);
+                        window.open(mediaInfo);
+                    });
+                }
+                // 其他文件类型
+                else {
+                    layer.confirm('该文件类型不支持在线预览，是否下载？', {
+                        icon: 3,
+                        title: '文件预览',
+                        btn: ['下载', '取消']
+                    }, function(index) {
+                        layer.close(index);
+                        window.open(mediaInfo);
+                    });
+                }
+            }
+
+            // 监听表格工具条中的预览事件
+            table.on('tool(fileLogTable)', function(obj) {
+                var data = obj.data;
+                
+                // 预览
+                if (obj.event === 'preview') {
+                    previewFile(data);
+                }
+                // ... 其他事件处理
+            });
+
+            // 批量删除
+            $('#batch-delete').on('click', function () {
+                var checkStatus = table.checkStatus('fileLogTable');
+                var checkedData = checkStatus.data;
+                
+                if (checkedData.length === 0) {
+                    layer.msg('请选择要删除的记录', { icon: 3 });
+                    return;
+                }
+                
+                var checkedIds = checkedData.map(function(item) {
+                    return item.id;
+                });
+
+                layer.confirm('确定要删除选中的 ' + checkedIds.length + ' 条记录吗？', {
+                    icon: 3,
+                    title: '批量删除确认'
+                }, function (index) {
+                    layer.close(index);
+                    var loading = layer.load(2);
+
+                    $.ajax({
+                        url: '{:url("batchDelete")}',
+                        type: 'POST',
+                        data: { ids: checkedIds },
+                        dataType: 'json',
+                        traditional: true,
+                        success: function (res) {
+                            layer.close(loading);
+                            if (res.code === 1) {
+                                layer.msg(res.msg, { icon: 1 });
+                                // 重新加载表格
+                                fileLogTable.reload();
+                            } else {
+                                layer.msg(res.msg, { icon: 2 });
+                            }
+                        },
+                        error: function () {
+                            layer.close(loading);
+                            layer.msg('请求失败，请重试', { icon: 2 });
+                        }
+                    });
+                });
+            });
+
+            // 批量恢复
+            $('#batch-restore').on('click', function () {
+                var checkStatus = table.checkStatus('fileLogTable');
+                var checkedData = checkStatus.data;
+                
+                if (checkedData.length === 0) {
+                    layer.msg('请选择要恢复的记录', { icon: 3 });
+                    return;
+                }
+                
+                var checkedIds = checkedData.map(function(item) {
+                    return item.id;
+                });
+
+                layer.confirm('确定要恢复选中的 ' + checkedIds.length + ' 条记录吗？', {
+                    icon: 3,
+                    title: '批量恢复确认'
+                }, function (index) {
+                    layer.close(index);
+                    var loading = layer.load(2);
+
+                    $.ajax({
+                        url: '{:url("batchRestore")}',
+                        type: 'POST',
+                        data: { ids: checkedIds },
+                        dataType: 'json',
+                        traditional: true,
+                        success: function (res) {
+                            layer.close(loading);
+                            if (res.code === 1) {
+                                layer.msg(res.msg, { icon: 1 });
+                                // 重新加载表格
+                                fileLogTable.reload();
+                            } else {
+                                layer.msg(res.msg, { icon: 2 });
+                            }
+                        },
+                        error: function () {
+                            layer.close(loading);
+                            layer.msg('请求失败，请重试', { icon: 2 });
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

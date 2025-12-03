@@ -1,5 +1,6 @@
 <?php
 
+use think\Db;
 
 function ajaxJson($code, $msg, $data = [])
 {
@@ -11,7 +12,7 @@ function getLoginUserInfo()
 	$userid = getLoginUid();
 	$info = session('userInfo' . $userid);
 	if (!$info) {
-		$info = Db::name('user')->field('blog,uid,theme')->where('uid', $userid)->find();
+		$info = Db::name('user')->field('blog,uid,nickname,theme')->where('uid', $userid)->find();
 	}
 	return $info;
 }
@@ -19,8 +20,11 @@ function checkUserCookie($rememberMe, $fields = 'uid,blog')
 {
 	if (!$rememberMe) return false;
 	$rememberMe = unserialize(unserialize($rememberMe));
-	$info = Db::name('user')->where('blog', $rememberMe['blog'])->where('nickname', $rememberMe['nickname'])->where('password', $rememberMe['password'])->field($fields)->find();
-	if (!$info) return false;
+	$info = Db::name('user')->where('blog', $rememberMe['blog'])->where('nickname', $rememberMe['nickname'])->where('uptime', $rememberMe['uptime'])->field($fields)->find();
+	if (!$info && $rememberMe['password'] != encryptionPass($info['password'])) return false;
+	if ($info['status'] != 0) return false;
+	Db::name('user')->where('uid', $info['uid'])->update(['uptime' => time()]);
+
 	session('userid', $info['uid']);
 	return $info;
 }

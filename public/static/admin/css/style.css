@@ -1,0 +1,76 @@
+/* 表格图片样式 - 保留最大的尺寸设置并添加圆角 */
+.layui-table img {
+    max-width: 80px;
+    max-height: 80px;
+    border-radius: 4px;
+}
+
+/* 状态标签通用样式 */
+.status-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+}
+
+/* 不同状态的样式 */
+.status-close, .status-delete {
+    background-color: #FF5722;
+    color: white;
+}
+
+.status-inside, .status-normal {
+    background-color: #5FB878;
+    color: white;
+}
+
+.status-outside {
+    background-color: #1E9FFF;
+    color: white;
+}
+
+/* 操作按钮样式 */
+.action-buttons .layui-btn {
+    margin-right: 5px;
+}
+
+.action-buttons .layui-btn:last-child {
+    margin-right: 0;
+}
+
+/* 表单布局样式 */
+.layui-form-item .layui-inline {
+    margin-right: 15px;
+}
+
+/* 应用图片样式 */
+.app-image {
+    display: block;
+    margin: 5px 0;
+}
+
+/* 头部操作样式 */
+.header-actions {
+    text-align: right;
+}
+
+/* 尺寸文本样式 */
+.size-text {
+    font-size: 12px;
+    color: #666;
+}
+
+/* 内容预览样式 */
+.content-preview {
+    max-height: 80px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
+
+/* 媒体链接样式 */
+.media-link {
+    margin-right: 5px;
+}

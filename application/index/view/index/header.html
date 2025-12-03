@@ -86,8 +86,8 @@
 					<li><a href="{:url('/'.$loginUserInfo.blog.'/')}">我的首页</a></li>
 					<!-- <li><a href="/topic/">话题</a></li> -->
 				{/if}
-				{if "WINADMIN" == 111}
-				<li><a href="">站点管理</a></li>
+				{if $userInfo.uid == 1}
+				<li><a href="{:url('/admin/')}">后台管理</a></li>
 				{/if}
 				<li><a href="{:url('/logout/')}">退出</a></li>
 			{else} 
