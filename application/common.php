@@ -12,7 +12,7 @@ function getLoginUserInfo()
 	$userid = getLoginUid();
 	$info = session('userInfo' . $userid);
 	if (!$info) {
-		$info = Db::name('user')->field('blog,uid,theme')->where('uid', $userid)->find();
+		$info = Db::name('user')->field('blog,uid,nickname,theme')->where('uid', $userid)->find();
 	}
 	return $info;
 }

@@ -7,9 +7,10 @@ class Base extends Controller
 {
     public function initialize()
     {
-        $uid = getLoginUid();
-        if (!$uid && $uid != 1) {
-            $this->error('请先登录', '/');
+        $userInfo = getLoginUserInfo();
+        $uid = $userInfo['uid'];
+        if (!$uid || $uid != 1) {
+            $this->redirect('/'.$userInfo['blog'].'/');
         }
 
     }
