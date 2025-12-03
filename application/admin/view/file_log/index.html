@@ -112,8 +112,9 @@
     <!-- 文件信息模板 -->
     <script type="text/html" id="infoTpl">
         {{# if(d.media_info){ }}
-        <a href="javascript:void(0);" class="preview-btn" lay-event="preview" data-info="{{d.media_info}}">
-            查看预览
+        <a href="javascript:void(0);" class="preview-btn layui-btn layui-btn-xs layui-btn-primary" lay-event="preview" 
+           data-info="{{d.media_info}}" data-type="{{d.file_type}}" data-name="{{d.file_name}}">
+            预览
         </a>
         {{# } else { }}
         -
@@ -154,17 +155,17 @@
                 limit: 20,
                 limits: [10, 20, 30, 50],
                 cols: [[
-                    {type: 'checkbox', width: 40},
+                    {type: 'checkbox'},
                     {field: 'id', width: 80, title: 'ID', sort: true},
                     {field: 'uid', width: 80, title: '用户ID', sort: true},
                     {field: 'username', width: 120, title: '用户名', templet: '#usernameTpl'},
                     {field: 'type_text', width: 100, title: '文件类型'},
-                    {field: 'media_name', title: '文件名称'},
+                    {field: 'media_name', width: 260, title: '文件名称'},
                     {field: 'media_type', width: 100, title: '文件格式'},
                     {field: 'media_size', width: 100, title: '文件大小', sort: true, templet: function(d) {
                         return (d.media_size || 0) + ' MB';
                     }},
-                    {field: 'media_info', title: '文件信息', templet: '#infoTpl'},
+                    {field: 'media_info', width: 100, title: '文件信息', templet: '#infoTpl'},
                     {field: 'is_del', width: 80, title: '状态', templet: '#statusTpl', sort: true},
                     {field: 'create_time', width: 160, title: '创建时间', sort: true, templet: function(d) {
                         return new Date(d.create_time * 1000).toLocaleString('zh-CN');
@@ -201,7 +202,7 @@
                 });
             });
 
-            // 监听表格工具条
+            // 监听表格行工具事件
             table.on('tool(fileLogTable)', function(obj) {
                 var data = obj.data;
                 
@@ -273,28 +274,122 @@
                     });
                 }
                 
-                // 预览
-                else if (obj.event === 'preview') {
-                    var mediaInfo = $(this).data('info');
-                    
-                    // 尝试解析JSON格式的媒体信息
-                    var content = '';
-                    try {
-                        var parsedInfo = JSON.parse(mediaInfo);
-                        content = '<pre style="background: #f8f8f8; padding: 10px; border-radius: 4px; overflow: auto; max-height: 400px;">' +
-                            JSON.stringify(parsedInfo, null, 2) + '</pre>';
-                    } catch (e) {
-                        // 如果不是JSON格式，直接显示原始信息
-                        content = '<div style="word-break: break-all;">' + mediaInfo + '</div>';
-                    }
+                // 预览文件
+                if (obj.event === 'preview') {
+                    // 使用正确的字段名
+                    previewFile(data.media_info || data.path, data.file_type, data.file_name);
+                }
+            });
 
+            // 文件预览函数
+            function previewFile(data) {
+                var mediaInfo = data.media_info;
+                var mediaType = data.media_type.toLowerCase();
+                
+                // 图片预览
+                if (['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'].includes(mediaType)) {
                     layer.open({
                         type: 1,
-                        title: '媒体信息预览 - ID: ' + data.id,
-                        area: ['600px', '400px'],
-                        content: content
+                        title: '图片预览',
+                        area: ['80%', '80%'],
+                        content: '<img src="' + mediaInfo + '" style="width:100%;height:100%;object-fit:contain;">',
+                        cancel: function() {
+                            // 关闭时的回调
+                        }
                     });
                 }
+                // 视频预览
+                else if (['mp4', 'avi', 'mov', 'wmv', 'flv', 'mkv'].includes(mediaType)) {
+                    layer.open({
+                        type: 1,
+                        title: '视频预览',
+                        area: ['80%', '80%'],
+                        content: '<video src="' + mediaInfo + '" controls style="width:100%;height:100%;object-fit:contain;"></video>',
+                        cancel: function() {
+                            // 关闭时的回调
+                        }
+                    });
+                }
+                // 音频预览
+                else if (['mp3', 'wav', 'ogg', 'aac', 'flac'].includes(mediaType)) {
+                    layer.open({
+                        type: 1,
+                        title: '音频预览',
+                        area: ['400px', '100px'],
+                        content: '<audio src="' + mediaInfo + '" controls style="width:100%;"></audio>',
+                        cancel: function() {
+                            // 关闭时的回调
+                        }
+                    });
+                }
+                // 文本预览
+                else if (['txt', 'md', 'json', 'xml', 'html', 'css', 'js', 'php', 'py', 'java', 'c', 'cpp'].includes(mediaType)) {
+                    // 对于文本文件，可以通过AJAX请求获取内容后预览
+                    $.ajax({
+                        url: mediaInfo,
+                        type: 'GET',
+                        success: function(content) {
+                            layer.open({
+                                type: 1,
+                                title: '文本预览',
+                                area: ['80%', '80%'],
+                                content: '<pre style="width:100%;height:100%;overflow:auto;padding:10px;">' + content + '</pre>',
+                                cancel: function() {
+                                    // 关闭时的回调
+                                }
+                            });
+                        },
+                        error: function() {
+                            layer.msg('无法预览文本内容', {icon: 2});
+                        }
+                    });
+                }
+                // PDF预览
+                else if (mediaType === 'pdf') {
+                    layer.open({
+                        type: 2,
+                        title: 'PDF预览',
+                        area: ['80%', '80%'],
+                        content: mediaInfo,
+                        cancel: function() {
+                            // 关闭时的回调
+                        }
+                    });
+                }
+                // Office文档预览（需要浏览器支持）
+                else if (['doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx'].includes(mediaType)) {
+                    // 可以使用一些在线预览服务或者提示下载
+                    layer.confirm('是否下载该文档？', {
+                        icon: 3,
+                        title: '文档预览',
+                        btn: ['下载', '取消']
+                    }, function(index) {
+                        layer.close(index);
+                        window.open(mediaInfo);
+                    });
+                }
+                // 其他文件类型
+                else {
+                    layer.confirm('该文件类型不支持在线预览，是否下载？', {
+                        icon: 3,
+                        title: '文件预览',
+                        btn: ['下载', '取消']
+                    }, function(index) {
+                        layer.close(index);
+                        window.open(mediaInfo);
+                    });
+                }
+            }
+
+            // 监听表格工具条中的预览事件
+            table.on('tool(fileLogTable)', function(obj) {
+                var data = obj.data;
+                
+                // 预览
+                if (obj.event === 'preview') {
+                    previewFile(data);
+                }
+                // ... 其他事件处理
             });
 
             // 批量删除

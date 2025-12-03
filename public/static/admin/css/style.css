@@ -1,7 +1,7 @@
 /* 表格图片样式 - 保留最大的尺寸设置并添加圆角 */
 .layui-table img {
-    max-width: 100px;
-    max-height: 100px;
+    max-width: 80px;
+    max-height: 80px;
     border-radius: 4px;
 }
 

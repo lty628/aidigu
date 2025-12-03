@@ -8,42 +8,34 @@
      <link rel="stylesheet" href="/static/admin/css/style.css">
 </head>
 <body>
-    <div class="layui-container" style="margin-top: 20px;">
-        <div class="layui-row">
-            <div class="layui-col-md12">
-                <div class="layui-card">
-                    <div class="layui-card-header">
-                        <span class="layui-breadcrumb">
-                            <a href="javascript:;" lay-href="admin/index/index">首页</a>
-                            <a><cite>用户管理</cite></a>
-                        </span>
+    <div class="layui-fluid">
+        <div class="layui-card">
+            <div class="layui-card-header">
+                <h2>用户管理</h2>
+            </div>
+            <div class="layui-card-body">
+                <!-- 搜索表单 -->
+                <form class="layui-form layui-form-item" lay-filter="search-form" style="margin-bottom: 20px;">
+                    <div class="layui-input-inline" style="width: 300px;">
+                        <input type="text" name="keyword" placeholder="请输入昵称、用户名、博客名或手机号" class="layui-input">
                     </div>
-                    <div class="layui-card-body">
-                        <!-- 搜索栏 -->
-                        <form class="layui-form layui-form-item" lay-filter="search-form" style="margin-bottom: 20px;">
-                            <div class="layui-input-inline" style="width: 300px;">
-                                <input type="text" name="keyword" placeholder="请输入昵称、用户名、博客名或手机号" class="layui-input">
-                            </div>
-                            <div class="layui-input-inline">
-                                <button class="layui-btn layui-btn-primary" lay-submit lay-filter="search-btn">
-                                    <i class="layui-icon layui-icon-search"></i> 搜索
-                                </button>
-                            </div>
-                            <div class="layui-input-inline">
-                                <a href="{:url('admin/user/create')}" class="layui-btn">
-                                    <i class="layui-icon layui-icon-plus"></i> 添加用户
-                                </a>
-                            </div>
-                        </form>
-                        
-                        <!-- 用户列表表格 -->
-                        <table id="user-table" lay-filter="user-table"></table>
+                    <div class="layui-input-inline">
+                        <button class="layui-btn layui-btn-primary" lay-submit lay-filter="search-btn">
+                            <i class="layui-icon layui-icon-search"></i> 搜索
+                        </button>
                     </div>
-                </div>
+                    <div class="layui-input-inline">
+                        <a href="{:url('admin/user/create')}" class="layui-btn">
+                            <i class="layui-icon layui-icon-plus"></i> 添加用户
+                        </a>
+                    </div>
+                </form>
+                
+                <!-- 数据表格 -->
+                <table id="user-table" lay-filter="user-table"></table>
             </div>
         </div>
     </div>
-    
     <!-- 表格行操作模板 -->
     <script type="text/html" id="user-toolbar">
         <div class="layui-btn-group">
@@ -87,11 +79,11 @@
                 cols: [[
                     {field: 'uid', title: 'ID', width: 80, sort: true},
                     {field: 'head_image', title: '头像', width: 80, templet: '#avatar-tpl'},
-                    {field: 'nickname', title: '昵称', width: 120},
-                    {field: 'username', title: '用户名', width: 120, templet: function(d) { return d.username || '-'; }},
+                    {field: 'nickname', title: '昵称'},
+                    {field: 'username', title: '用户名', templet: function(d) { return d.username || '-'; }},
                     {field: 'blog', title: '博客名', width: 150, templet: function(d) { return d.blog || '-'; }},
                     {field: 'phone', title: '手机号', width: 120, templet: function(d) { return d.phone || '-'; }},
-                    {field: 'email', title: '邮箱', width: 180, templet: function(d) { return d.email || '-'; }},
+                    {field: 'email', title: '邮箱', templet: function(d) { return d.email || '-'; }},
                     {field: 'status', title: '状态', width: 100, templet: '#status-tpl'},
                     {field: 'ctime', title: '注册时间', width: 160, sort: true, templet: function(d) {
                         return new Date(d.ctime * 1000).toLocaleString('zh-CN', {
@@ -144,10 +136,10 @@
                 
                 if (obj.event === 'edit') {
                     // 跳转到编辑页面
-                    window.location.href = '{:url("admin/user/edit", ["uid" => ""])}/' + data.uid;
+                    window.location.href = '{:url("admin/user/edit", ["uid" => ""])}?uid=' + data.uid;
                 } else if (obj.event === 'changePassword') {
                     // 跳转到修改密码页面
-                    window.location.href = '{:url("admin/user/changePassword", ["uid" => ""])}/' + data.uid;
+                    window.location.href = '{:url("admin/user/changePassword", ["uid" => ""])}?uid=' + data.uid;
                 } else if (obj.event === 'toggleStatus') {
                     // 切换用户状态
                     layer.confirm('确定要执行此操作吗？', {

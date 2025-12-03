@@ -21,19 +21,21 @@
             justify-content: space-between;
             margin-bottom: 30px;
             flex-wrap: wrap;
+            gap: 15px;
         }
         .stat-card {
-            width: 23%;
+            width: calc(25% - 12px);
             min-width: 200px;
             background: #fff;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
-            transition: transform 0.2s;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-sizing: border-box;
         }
         .stat-card:hover {
             transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
         }
         .stat-icon {
             font-size: 36px;
@@ -53,15 +55,16 @@
             justify-content: space-between;
             flex-wrap: wrap;
             margin-bottom: 30px;
+            gap: 20px;
         }
         .chart-container {
-            width: 48%;
+            width: calc(50% - 10px);
             min-width: 300px;
             background: #fff;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
+            box-sizing: border-box;
         }
         .activity-container {
             width: 100%;
@@ -82,10 +85,14 @@
             overflow-y: auto;
         }
         .activity-item {
-            padding: 10px 0;
+            padding: 12px 0;
             border-bottom: 1px solid #f5f5f5;
             display: flex;
             align-items: center;
+            transition: background-color 0.2s;
+        }
+        .activity-item:hover {
+            background-color: #f9f9f9;
         }
         .activity-item:last-child {
             border-bottom: none;
@@ -100,11 +107,25 @@
         .activity-time {
             color: #999;
             font-size: 12px;
+            margin-top: 2px;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 1200px) {
+            .stat-card {
+                width: calc(50% - 8px);
+            }
+        }
+        @media (max-width: 768px) {
+            .stat-card,
+            .chart-container {
+                width: 100%;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="layui-container" style="margin-top: 20px;">
+    <div class="layui-container">
         <div class="dashboard-header">
             <h2>欢迎使用后台管理系统</h2>
         </div>
@@ -164,24 +185,24 @@
                     </div>
                 </div>
                 <div class="activity-item">
-                    <div class="activity-icon layui-icon layui-icon-comment" style="color: #FFB800;"></div>
+                    <div class="activity-icon layui-icon layui-icon-praise" style="color: #FFB800;"></div>
                     <div class="activity-info">
-                        <div>用户 <span style="color: #FFB800;">user456</span> 发表了评论</div>
-                        <div class="activity-time">1小时前</div>
-                    </div>
-                </div>
-                <div class="activity-item">
-                    <div class="activity-icon layui-icon layui-icon-refresh" style="color: #FF5722;"></div>
-                    <div class="activity-info">
-                        <div>系统数据已更新</div>
+                        <div>内容 <span style="color: #FFB800;">#系统更新公告#</span> 获得了新点赞</div>
                         <div class="activity-time">2小时前</div>
                     </div>
                 </div>
                 <div class="activity-item">
-                    <div class="activity-icon layui-icon layui-icon-delete" style="color: #909399;"></div>
+                    <div class="activity-icon layui-icon layui-icon-delete" style="color: #FF5722;"></div>
                     <div class="activity-info">
-                        <div>管理员删除了过期内容</div>
-                        <div class="activity-time">3小时前</div>
+                        <div>管理员删除了违规内容</div>
+                        <div class="activity-time">5小时前</div>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-icon layui-icon layui-icon-set" style="color: #1E9FFF;"></div>
+                    <div class="activity-info">
+                        <div>系统设置已更新</div>
+                        <div class="activity-time">昨天</div>
                     </div>
                 </div>
             </div>
@@ -189,11 +210,10 @@
     </div>
 
     <script src="/static/layui/layui.js"></script>
+    <script src="/static/admin/js/echarts-5.4.3.min.js"></script>
     <script>
-        layui.use(['jquery', 'layer', 'echarts'], function() {
+        layui.use(['jquery'], function() {
             var $ = layui.jquery;
-            var layer = layui.layer;
-            var echarts = layui.echarts;
             
             // 模拟数据 - 实际应用中应从服务器获取
             function loadDashboardData() {

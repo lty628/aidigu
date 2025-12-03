@@ -94,6 +94,8 @@
             page: true,
             limit: 20,
             limits: [10, 20, 30, 50, 100],
+            height: 'full',
+            lineStyle: 'height: 151px;', // 定义表格的多行样式
             cols: [[
                 {type: 'checkbox', fixed: 'left'},
                 {field: 'msg_id', title: 'ID', width: 80, fixed: 'left', sort: true},
@@ -176,7 +178,7 @@
             var data = obj.data;
             if (obj.event === 'show') {
                 // 跳转到详情页
-                window.location.href = '{:url("show", ["msg_id" => ""])}/' + data.msg_id;
+                window.location.href = '{:url("show", ["msg_id" => ""])}?msg_id=' + data.msg_id;
             } else if (obj.event === 'delete') {
                 // 单个删除
                 layer.confirm('确定要删除这条内容吗？', {
