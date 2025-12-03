@@ -18,6 +18,9 @@ function checkUserCookie($rememberMe, $fields = 'uid,blog')
 {
 	if (!$rememberMe) return false;
 	$rememberMe = unserialize(unserialize($rememberMe));
+	if (!isset($rememberMe['blog']) || !isset($rememberMe['nickname']) || !isset($rememberMe['uptime']) || !isset($rememberMe['password'])) {
+		return false;
+	}
 	$info = Db::name('user')->where('blog', $rememberMe['blog'])->where('nickname', $rememberMe['nickname'])->where('uptime', $rememberMe['uptime'])->field($fields)->find();
 	if (!$info && $rememberMe['password'] != encryptionPass($info['password'])) return false;
 	if ($info['status'] != 0) return false;
