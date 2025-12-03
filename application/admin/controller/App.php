@@ -3,7 +3,6 @@ namespace app\admin\controller;
 use think\facade\Request;
 use think\facade\Validate;
 use app\common\model\App as AppModel;
-use think\Db;
 
 class App extends Base
 {
