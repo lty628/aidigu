@@ -8,9 +8,15 @@ class User extends Base
     // 显示用户列表
     public function index()
     {
-        $keyword = input('get.keyword', '');
-        $page = input('get.page', 1, 'intval');
-        $limit = input('get.limit', 10, 'intval');
+        return $this->fetch();
+    }
+    
+    // 获取表格数据
+    public function getList()
+    {
+        $keyword = input('post.keyword', '');
+        $page = input('post.page', 1, 'intval');
+        $limit = input('post.limit', 10, 'intval');
         
         $query = UserModel::order('uid desc');
         
@@ -25,11 +31,12 @@ class User extends Base
         $total = $query->count();
         $users = $query->page($page, $limit)->select();
         
-        $this->assign('users', $users);
-        $this->assign('total', $total);
-        $this->assign('keyword', $keyword);
-        
-        return $this->fetch();
+        // 返回表格数据格式
+        return json([
+            'msg' => 'success',
+            'count' => $total,
+            'data' => $users
+        ]);
     }
     
     // 创建用户页面

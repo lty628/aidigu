@@ -22,8 +22,7 @@
                         <!-- 搜索栏 -->
                         <form class="layui-form layui-form-item" lay-filter="search-form" style="margin-bottom: 20px;">
                             <div class="layui-input-inline" style="width: 300px;">
-                                <input type="text" name="keyword" id="keyword" placeholder="请输入昵称、用户名、博客名或手机号" 
-                                       value="{$keyword}" class="layui-input">
+                                <input type="text" name="keyword" placeholder="请输入昵称、用户名、博客名或手机号" class="layui-input">
                             </div>
                             <div class="layui-input-inline">
                                 <button class="layui-btn layui-btn-primary" lay-submit lay-filter="search-btn">
@@ -38,84 +37,96 @@
                         </form>
                         
                         <!-- 用户列表表格 -->
-                        <table id="user-table" class="layui-table" lay-even lay-skin="row">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>头像</th>
-                                    <th>昵称</th>
-                                    <th>用户名</th>
-                                    <th>博客名</th>
-                                    <th>手机号</th>
-                                    <th>邮箱</th>
-                                    <th>状态</th>
-                                    <th>注册时间</th>
-                                    <th>操作</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {empty name="users"}
-                                <tr>
-                                    <td colspan="10" align="center">暂无数据</td>
-                                </tr>
-                                {else/}
-                                {volist name="users" id="user"}
-                                <tr>
-                                    <td>{$user.uid}</td>
-                                    <td>
-                                        <img src="{$user.head_image ?: '/static/images/default_avatar.png'}" 
-                                             alt="头像" style="width: 40px; height: 40px; border-radius: 50%;">
-                                    </td>
-                                    <td>{$user.nickname}</td>
-                                    <td>{$user.username ?: '-'}</td>
-                                    <td>{$user.blog ?: '-'}</td>
-                                    <td>{$user.phone ?: '-'}</td>
-                                    <td>{$user.email ?: '-'}</td>
-                                    <td>
-                                        <span class="layui-badge {$user.status ? 'layui-bg-red' : 'layui-bg-green'}">
-                                            {$user.status ? '已禁止' : '正常'}
-                                        </span>
-                                    </td>
-                                    <td>{$user.ctime|date='Y-m-d H:i:s'}</td>
-                                    <td>
-                                        <div class="layui-btn-group">
-                                            <a href="{:url('admin/user/edit', ['uid' => $user.uid])}" 
-                                               class="layui-btn layui-btn-xs">编辑</a>
-                                            <a href="{:url('admin/user/changePassword', ['uid' => $user.uid])}" 
-                                               class="layui-btn layui-btn-xs layui-btn-warm">修改密码</a>
-                                            <button class="layui-btn layui-btn-xs {$user.status ? 'layui-btn-normal' : 'layui-btn-danger'}" 
-                                                    lay-event="toggleStatus" data-uid="{$user.uid}">
-                                                {$user.status ? '启用' : '禁止'}
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                {/volist}
-                                {/empty}
-                            </tbody>
-                        </table>
-                        
-                        <!-- 分页 -->
-                        <div class="layui-box layui-laypage layui-laypage-default" id="page">
-                            {$page|default=''}
-                        </div>
+                        <table id="user-table" lay-filter="user-table"></table>
                     </div>
                 </div>
             </div>
         </div>
     </div>
     
+    <!-- 表格行操作模板 -->
+    <script type="text/html" id="user-toolbar">
+        <div class="layui-btn-group">
+            <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+            <a class="layui-btn layui-btn-xs layui-btn-warm" lay-event="changePassword">修改密码</a>
+            <a class="layui-btn layui-btn-xs {{d.status ? 'layui-btn-normal' : 'layui-btn-danger'}}" lay-event="toggleStatus">
+                {{d.status ? '启用' : '禁止'}}
+            </a>
+        </div>
+    </script>
+    
+    <!-- 状态模板 -->
+    <script type="text/html" id="status-tpl">
+        <span class="layui-badge {{d.status ? 'layui-bg-red' : 'layui-bg-green'}}">
+            {{d.status ? '已禁止' : '正常'}}
+        </span>
+    </script>
+    
+    <!-- 头像模板 -->
+    <script type="text/html" id="avatar-tpl">
+        <img src="{{d.head_image || '/static/images/default_avatar.png'}}" 
+             alt="头像" style="width: 40px; height: 40px; border-radius: 50%;">
+    </script>
+    
     <script src="/static/layui/layui.js"></script>
     <script>
-        layui.use(['jquery', 'layer', 'form'], function() {
+        layui.use(['jquery', 'layer', 'form', 'table'], function() {
             var $ = layui.jquery;
             var layer = layui.layer;
             var form = layui.form;
+            var table = layui.table;
+            
+            // 初始化表格
+            var userTable = table.render({
+                elem: '#user-table',
+                url: '{:url("admin/user/getList")}',
+                method: 'POST',
+                page: true,
+                limit: 10,
+                limits: [10, 20, 30, 50, 100],
+                cols: [[
+                    {field: 'uid', title: 'ID', width: 80, sort: true},
+                    {field: 'head_image', title: '头像', width: 80, templet: '#avatar-tpl'},
+                    {field: 'nickname', title: '昵称', width: 120},
+                    {field: 'username', title: '用户名', width: 120, templet: function(d) { return d.username || '-'; }},
+                    {field: 'blog', title: '博客名', width: 150, templet: function(d) { return d.blog || '-'; }},
+                    {field: 'phone', title: '手机号', width: 120, templet: function(d) { return d.phone || '-'; }},
+                    {field: 'email', title: '邮箱', width: 180, templet: function(d) { return d.email || '-'; }},
+                    {field: 'status', title: '状态', width: 100, templet: '#status-tpl'},
+                    {field: 'ctime', title: '注册时间', width: 160, sort: true, templet: function(d) {
+                        return new Date(d.ctime * 1000).toLocaleString('zh-CN', {
+                            year: 'numeric',
+                            month: '2-digit',
+                            day: '2-digit',
+                            hour: '2-digit',
+                            minute: '2-digit',
+                            second: '2-digit'
+                        });
+                    }},
+                    {fixed: 'right', title: '操作', width: 240, toolbar: '#user-toolbar'}
+                ]],
+                response: {
+                    statusCode: 0
+                },
+                parseData: function(res) {
+                    return {
+                        "code": 0,
+                        "msg": res.msg,
+                        "count": res.count,
+                        "data": res.data
+                    };
+                }
+            });
             
             // 搜索功能
             form.on('submit(search-btn)', function(data) {
-                var keyword = data.field.keyword;
-                window.location.href = '{:url("admin/user/index")}?keyword=' + encodeURIComponent(keyword);
+                // 重新加载表格数据
+                userTable.reload({
+                    where: data.field,
+                    page: {
+                        curr: 1 // 重新从第1页开始
+                    }
+                });
                 return false;
             });
             
@@ -127,40 +138,48 @@
                 }
             });
             
-            // 切换用户状态
-            $(document).on('click', 'button[lay-event="toggleStatus"]', function() {
-                var uid = $(this).data('uid');
-                var button = $(this);
+            // 表格行操作事件
+            table.on('tool(user-table)', function(obj) {
+                var data = obj.data;
                 
-                layer.confirm('确定要执行此操作吗？', {
-                    btn: ['确定', '取消']
-                }, function(index) {
-                    layer.close(index);
-                    
-                    var loadIndex = layer.load(1);
-                    
-                    $.ajax({
-                        url: '{:url("admin/user/toggleStatus")}',
-                        type: 'post',
-                        data: {uid: uid},
-                        dataType: 'json',
-                        success: function(res) {
-                            layer.close(loadIndex);
-                            if (res.code === 1) {
-                                layer.msg(res.msg, {icon: 1}, function() {
-                                    // 直接刷新页面而不是尝试重新加载表格
-                                    location.reload();
-                                });
-                            } else {
-                                layer.msg(res.msg, {icon: 2});
+                if (obj.event === 'edit') {
+                    // 跳转到编辑页面
+                    window.location.href = '{:url("admin/user/edit", ["uid" => ""])}/' + data.uid;
+                } else if (obj.event === 'changePassword') {
+                    // 跳转到修改密码页面
+                    window.location.href = '{:url("admin/user/changePassword", ["uid" => ""])}/' + data.uid;
+                } else if (obj.event === 'toggleStatus') {
+                    // 切换用户状态
+                    layer.confirm('确定要执行此操作吗？', {
+                        btn: ['确定', '取消']
+                    }, function(index) {
+                        layer.close(index);
+                        
+                        var loadIndex = layer.load(1);
+                        
+                        $.ajax({
+                            url: '{:url("admin/user/toggleStatus")}',
+                            type: 'post',
+                            data: {uid: data.uid},
+                            dataType: 'json',
+                            success: function(res) {
+                                layer.close(loadIndex);
+                                if (res.code === 1) {
+                                    layer.msg(res.msg, {icon: 1}, function() {
+                                        // 重新加载表格
+                                        userTable.reload();
+                                    });
+                                } else {
+                                    layer.msg(res.msg, {icon: 2});
+                                }
+                            },
+                            error: function() {
+                                layer.close(loadIndex);
+                                layer.msg('网络错误，请重试', {icon: 2});
                             }
-                        },
-                        error: function() {
-                            layer.close(loadIndex);
-                            layer.msg('网络错误，请重试', {icon: 2});
-                        }
+                        });
                     });
-                });
+                }
             });
         });
     </script>

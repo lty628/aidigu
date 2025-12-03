@@ -8,10 +8,20 @@ use think\Db;
 class App extends Base
 {
     /**
-     * 应用列表
+     * 应用列表页面
      * @return mixed
      */
     public function index()
+    {
+        // 渲染模板
+        return $this->fetch();
+    }
+    
+    /**
+     * 获取应用列表数据（layui table所需的JSON数据）
+     * @return json
+     */
+    public function getList()
     {
         // 获取搜索参数
         $keyword = Request::param('keyword', '');
@@ -40,18 +50,19 @@ class App extends Base
         // 获取应用列表
         $list = AppModel::getAppList($where, $page, $limit);
         
-        // 渲染模板
-        $this->assign('list', $list);
-        $this->assign('keyword', $keyword);
-        $this->assign('app_status', $app_status);
-        $this->assign('app_type', $app_type);
+        // 处理数据，添加编辑链接
+        $data = $list->items();
+        foreach ($data as &$item) {
+            $item['edit_url'] = url('edit', ['id' => $item['id']]);
+        }
         
-        // 获取选项数据
-        $this->assign('statusOptions', [0 => '关闭', 1 => '站内', 2 => '站外']);
-        $this->assign('typeOptions', [0 => '全部', 1 => 'PC', 2 => '手机']);
-        $this->assign('openTypeOptions', [0 => 'Frame', 1 => '直接打开', 2 => '新窗口打开']);
-        
-        return $this->fetch();
+        // 返回layui table所需的JSON格式
+        return json([
+            'code' => 0,
+            'msg' => '',
+            'count' => $list->total(),
+            'data' => $data
+        ]);
     }
     
     /**
@@ -251,11 +262,12 @@ class App extends Base
         $newStatus = $app['app_status'] == 0 ? 1 : 0;
         $result = $app->save(['app_status' => $newStatus]);
         
+        // 注意：这里需要修改返回值，添加new_status字段
         if ($result) {
             // 记录操作日志
             $statusText = $newStatus == 0 ? '关闭' : '开启';
             $this->log($statusText . '应用：' . $app['app_name']);
-            return json(['code' => 1, 'msg' => '操作成功']);
+            return json(['code' => 1, 'msg' => '操作成功', 'data' => ['new_status' => $newStatus]]);
         } else {
             return json(['code' => 0, 'msg' => '操作失败']);
         }

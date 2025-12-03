@@ -12,11 +12,23 @@ class Message extends Base
      */
     public function index()
     {
+        // 渲染模板
+        return $this->fetch();
+    }
+    
+    /**
+     * 获取表格数据
+     * @return json
+     */
+    public function getList()
+    {
         // 获取搜索参数
         $keyword = Request::param('keyword', '');
         $username = Request::param('username', '');
         $start_time = Request::param('start_time', '');
         $end_time = Request::param('end_time', '');
+        $page = Request::param('page', 1, 'intval');
+        $limit = Request::param('limit', 20, 'intval');
         
         // 构建查询条件
         $where = [];
@@ -50,22 +62,27 @@ class Message extends Base
             $where['ctime'] = ['between', [strtotime($start_time), strtotime($end_time) + 86399]];
         }
         
+        // 获取数据总数
+        $count = MessageModel::where($where)->count();
+        
         // 获取数据列表
-        $list = MessageModel::with('user')
+        $data = MessageModel::with('user')
             ->where($where)
             ->order('ctime', 'desc')
-            ->paginate(20, false, [
-                'query' => Request::param(),
-                'path' => '[PAGE]'
-            ]);
+            ->page($page, $limit)
+            ->select();
         
-        // 渲染模板
-        $this->assign('list', $list);
-        $this->assign('keyword', $keyword);
-        $this->assign('username', $username);
-        $this->assign('start_time', $start_time);
-        $this->assign('end_time', $end_time);
-        return $this->fetch();
+        // 格式化数据
+        foreach ($data as &$item) {
+            $item['username'] = $item->user->username ?? '-';
+        }
+        
+        // 返回表格数据格式
+        return json([
+            'msg' => 'success',
+            'count' => $count,
+            'data' => $data
+        ]);
     }
     
     /**
@@ -165,7 +182,7 @@ class Message extends Base
         } catch (\Exception $e) {
             // 回滚事务
             Db::rollback();
-            return json(['code' => 0, 'msg' => '删除失败，错误信息：' . $e->getMessageModel()]);
+            return json(['code' => 0, 'msg' => '删除失败，错误信息：' . $e->getMessage()]);
         }
     }
     

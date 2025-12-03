@@ -21,14 +21,13 @@
                         <div class="layui-inline">
                             <label class="layui-form-label">关键词</label>
                             <div class="layui-input-inline">
-                                <input type="text" name="keyword" value="{$keyword}" placeholder="文件名称/信息"
-                                    class="layui-input">
+                                <input type="text" name="keyword" placeholder="文件名称/信息" class="layui-input">
                             </div>
                         </div>
                         <div class="layui-inline">
                             <label class="layui-form-label">用户ID</label>
                             <div class="layui-input-inline">
-                                <input type="number" name="uid" value="{$uid}" placeholder="用户ID" class="layui-input">
+                                <input type="number" name="uid" placeholder="用户ID" class="layui-input">
                             </div>
                         </div>
                         <div class="layui-inline">
@@ -36,9 +35,12 @@
                             <div class="layui-input-inline">
                                 <select name="type" lay-search>
                                     <option value="">全部类型</option>
-                                    {volist name="typeOptions" id="name" key="key"}
-                                    <option value="{$key}" {if condition="$key == $type" }selected{/if}>{$name}</option>
-                                    {/volist}
+                                    <option value="1">头像</option>
+                                    <option value="2">微博</option>
+                                    <option value="3">聊天</option>
+                                    <option value="4">素材</option>
+                                    <option value="5">主题</option>
+                                    <option value="6">网盘</option>
                                 </select>
                             </div>
                         </div>
@@ -49,21 +51,19 @@
                             <div class="layui-input-inline">
                                 <select name="is_del">
                                     <option value="">全部</option>
-                                    <option value="0" {if condition="$is_del === '0'" }selected{/if}>正常</option>
-                                    <option value="1" {if condition="$is_del === '1'" }selected{/if}>已删除</option>
+                                    <option value="0">正常</option>
+                                    <option value="1">已删除</option>
                                 </select>
                             </div>
                         </div>
                         <div class="layui-inline">
                             <label class="layui-form-label">时间范围</label>
                             <div class="layui-input-inline">
-                                <input type="text" name="start_time" value="{$start_time}" placeholder="开始时间"
-                                    class="layui-input" id="start-time">
+                                <input type="text" name="start_time" placeholder="开始时间" class="layui-input" id="start-time">
                             </div>
                             <div class="layui-form-mid">-</div>
                             <div class="layui-input-inline">
-                                <input type="text" name="end_time" value="{$end_time}" placeholder="结束时间"
-                                    class="layui-input" id="end-time">
+                                <input type="text" name="end_time" placeholder="结束时间" class="layui-input" id="end-time">
                             </div>
                         </div>
                         <div class="layui-inline">
@@ -83,86 +83,52 @@
                     </button>
                 </div>
 
-                <!-- 数据表格 -->
-                <table class="layui-table" lay-skin="line">
-                    <thead>
-                        <tr>
-                            <th style="width: 40px;"><input type="checkbox" lay-skin="primary" lay-filter="select-all">
-                            </th>
-                            <th style="width: 80px;">ID</th>
-                            <th style="width: 80px;">用户ID</th>
-                            <th style="width: 120px;">用户名</th>
-                            <th style="width: 100px;">文件类型</th>
-                            <th>文件名称</th>
-                            <th style="width: 100px;">文件格式</th>
-                            <th style="width: 100px;">文件大小</th>
-                            <th>文件信息</th>
-                            <th style="width: 80px;">状态</th>
-                            <th style="width: 160px;">创建时间</th>
-                            <th style="width: 150px;">操作</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {empty name="list"}
-                        <tr>
-                            <td colspan="12" align="center">暂无数据</td>
-                        </tr>
-                        {else/}
-                        {volist name="list" id="file"}
-                        <tr>
-                            <td><input type="checkbox" name="id" value="{$file.id}" lay-skin="primary"></td>
-                            <td>{$file.id}</td>
-                            <td>{$file.uid}</td>
-                            <td>{notempty name="file.user"}{$file.user.username}{else}-{/notempty}</td>
-                            <td>{$file.type_text}</td>
-                            <td>{$file.media_name|default='-'}</td>
-                            <td>{$file.media_type|default='-'}</td>
-                            <td>{$file.media_size|default='0'} MB</td>
-                            <td>
-                                {notempty name="file.media_info"}
-                                <a href="javascript:void(0);" class="preview-btn" data-id="{$file.id}"
-                                    data-info="{$file.media_info}">
-                                    查看预览
-                                </a>
-                                {else/}-{/notempty}
-                            </td>
-                            <td>
-                                {if condition="$file.is_del == 0"}
-                                <span class="status-badge status-normal">正常</span>
-                                {else/}
-                                <span class="status-badge status-delete">已删除</span>
-                                {/if}
-                            </td>
-                            <td>{$file.create_time|date='Y-m-d H:i:s'}</td>
-                            <td class="action-buttons">
-                                {if condition="$file.is_del == 0"}
-                                <button class="layui-btn layui-btn-danger layui-btn-xs delete-btn" data-id="{$file.id}">
-                                    删除
-                                </button>
-                                {else/}
-                                <button class="layui-btn layui-btn-normal layui-btn-xs restore-btn"
-                                    data-id="{$file.id}">
-                                    恢复
-                                </button>
-                                {/if}
-                            </td>
-                        </tr>
-                        {/volist}
-                        {/empty}
-                    </tbody>
-                </table>
-
-                <!-- 分页 -->
-                <div id="pagination">
-                    {$list|raw|default=''}
-                </div>
+                <!-- 数据表格容器 -->
+                <table id="fileLogTable" lay-filter="fileLogTable"></table>
             </div>
         </div>
     </div>
 
+    <!-- 操作按钮模板 -->
+    <script type="text/html" id="actionTpl">
+        {{# if(d.is_del == 0){ }}
+        <button class="layui-btn layui-btn-danger layui-btn-xs delete-btn" data-id="{{d.id}}" lay-event="delete">
+            删除
+        </button>
+        {{# } else { }}
+        <button class="layui-btn layui-btn-normal layui-btn-xs restore-btn" data-id="{{d.id}}" lay-event="restore">
+            恢复
+        </button>
+        {{# } }}
+    </script>
+    
+    <!-- 状态模板 -->
+    <script type="text/html" id="statusTpl">
+        <span class="status-badge status-{{d.is_del == 0 ? 'normal' : 'delete'}}">
+            {{d.is_del == 0 ? '正常' : '已删除'}}
+        </span>
+    </script>
+    
+    <!-- 文件信息模板 -->
+    <script type="text/html" id="infoTpl">
+        {{# if(d.media_info){ }}
+        <a href="javascript:void(0);" class="preview-btn" lay-event="preview" data-info="{{d.media_info}}">
+            查看预览
+        </a>
+        {{# } else { }}
+        -
+        {{# } }}
+    </script>
+    
+    <!-- 用户名模板 -->
+    <script type="text/html" id="usernameTpl">
+        {{d.username || '-'}}
+    </script>
+
     <script src="/static/layui/layui.js"></script>
     <script>
-        layui.use(['layer', 'form', 'laydate'], function () {
+        layui.use(['table', 'layer', 'form', 'laydate'], function () {
+            var table = layui.table;
             var layer = layui.layer;
             var form = layui.form;
             var laydate = layui.laydate;
@@ -179,118 +145,171 @@
                 theme: '#448aff'
             });
 
-            // 全选功能
-            form.on('checkbox(select-all)', function (data) {
-                var checked = data.elem.checked;
-                $('input[name="id"]').prop('checked', checked);
-                form.render('checkbox');
+            // 渲染数据表格
+            var fileLogTable = table.render({
+                elem: '#fileLogTable',
+                url: '{:url("getList")}',
+                method: 'POST',
+                page: true,
+                limit: 20,
+                limits: [10, 20, 30, 50],
+                cols: [[
+                    {type: 'checkbox', width: 40},
+                    {field: 'id', width: 80, title: 'ID', sort: true},
+                    {field: 'uid', width: 80, title: '用户ID', sort: true},
+                    {field: 'username', width: 120, title: '用户名', templet: '#usernameTpl'},
+                    {field: 'type_text', width: 100, title: '文件类型'},
+                    {field: 'media_name', title: '文件名称'},
+                    {field: 'media_type', width: 100, title: '文件格式'},
+                    {field: 'media_size', width: 100, title: '文件大小', sort: true, templet: function(d) {
+                        return (d.media_size || 0) + ' MB';
+                    }},
+                    {field: 'media_info', title: '文件信息', templet: '#infoTpl'},
+                    {field: 'is_del', width: 80, title: '状态', templet: '#statusTpl', sort: true},
+                    {field: 'create_time', width: 160, title: '创建时间', sort: true, templet: function(d) {
+                        return new Date(d.create_time * 1000).toLocaleString('zh-CN');
+                    }},
+                    {fixed: 'right', width: 150, title: '操作', toolbar: '#actionTpl'}
+                ]],
+                done: function(res, curr, count) {
+                    // 表格渲染完成后的回调
+                }
             });
 
             // 搜索表单提交
             form.on('submit(search-submit)', function (data) {
-                var params = new URLSearchParams();
-                for (var key in data.field) {
-                    if (data.field[key]) {
-                        params.append(key, data.field[key]);
-                    }
-                }
-                var queryString = params.toString();
-                window.location.href = '{:url("index")}' + (queryString ? '?' + queryString : '');
+                fileLogTable.reload({
+                    where: data.field,
+                    page: {curr: 1}
+                });
                 return false;
             });
 
             // 重置搜索
             $('#reset-search').on('click', function () {
-                window.location.href = '{:url("index")}';
-            });
-
-            // 单个删除
-            $(document).on('click', '.delete-btn', function () {
-                var id = $(this).data('id');
-                var tr = $(this).closest('tr');
-
-                layer.confirm('确定要删除这条文件日志吗？', {
-                    icon: 3,
-                    title: '删除确认'
-                }, function (index) {
-                    layer.close(index);
-                    var loading = layer.load(2);
-
-                    $.ajax({
-                        url: '{:url("delete")}',
-                        type: 'POST',
-                        data: { id: id },
-                        dataType: 'json',
-                        success: function (res) {
-                            layer.close(loading);
-                            if (res.code === 1) {
-                                layer.msg(res.msg, { icon: 1 });
-                                // 更新状态显示
-                                tr.find('.status-badge').removeClass('status-normal').addClass('status-delete').text('已删除');
-                                tr.find('.action-buttons').html(
-                                    '<button class="layui-btn layui-btn-normal layui-btn-xs restore-btn" data-id="' + id + '">恢复</button>'
-                                );
-                            } else {
-                                layer.msg(res.msg, { icon: 2 });
-                            }
-                        },
-                        error: function () {
-                            layer.close(loading);
-                            layer.msg('请求失败，请重试', { icon: 2 });
-                        }
-                    });
+                form.val('search-form', {
+                    'keyword': '',
+                    'uid': '',
+                    'type': '',
+                    'is_del': '',
+                    'start_time': '',
+                    'end_time': ''
+                });
+                fileLogTable.reload({
+                    where: {},
+                    page: {curr: 1}
                 });
             });
 
-            // 单个恢复
-            $(document).on('click', '.restore-btn', function () {
-                var id = $(this).data('id');
-                var tr = $(this).closest('tr');
+            // 监听表格工具条
+            table.on('tool(fileLogTable)', function(obj) {
+                var data = obj.data;
+                
+                // 删除
+                if (obj.event === 'delete') {
+                    layer.confirm('确定要删除这条文件日志吗？', {
+                        icon: 3,
+                        title: '删除确认'
+                    }, function (index) {
+                        layer.close(index);
+                        var loading = layer.load(2);
 
-                layer.confirm('确定要恢复这条文件日志吗？', {
-                    icon: 3,
-                    title: '恢复确认'
-                }, function (index) {
-                    layer.close(index);
-                    var loading = layer.load(2);
-
-                    $.ajax({
-                        url: '{:url("restore")}',
-                        type: 'POST',
-                        data: { id: id },
-                        dataType: 'json',
-                        success: function (res) {
-                            layer.close(loading);
-                            if (res.code === 1) {
-                                layer.msg(res.msg, { icon: 1 });
-                                // 更新状态显示
-                                tr.find('.status-badge').removeClass('status-delete').addClass('status-normal').text('正常');
-                                tr.find('.action-buttons').html(
-                                    '<button class="layui-btn layui-btn-danger layui-btn-xs delete-btn" data-id="' + id + '">删除</button>'
-                                );
-                            } else {
-                                layer.msg(res.msg, { icon: 2 });
+                        $.ajax({
+                            url: '{:url("delete")}',
+                            type: 'POST',
+                            data: { id: data.id },
+                            dataType: 'json',
+                            success: function (res) {
+                                layer.close(loading);
+                                if (res.code === 1) {
+                                    layer.msg(res.msg, { icon: 1 });
+                                    // 更新行数据
+                                    obj.update({
+                                        is_del: 1
+                                    });
+                                } else {
+                                    layer.msg(res.msg, { icon: 2 });
+                                }
+                            },
+                            error: function () {
+                                layer.close(loading);
+                                layer.msg('请求失败，请重试', { icon: 2 });
                             }
-                        },
-                        error: function () {
-                            layer.close(loading);
-                            layer.msg('请求失败，请重试', { icon: 2 });
-                        }
+                        });
                     });
-                });
+                }
+                
+                // 恢复
+                else if (obj.event === 'restore') {
+                    layer.confirm('确定要恢复这条文件日志吗？', {
+                        icon: 3,
+                        title: '恢复确认'
+                    }, function (index) {
+                        layer.close(index);
+                        var loading = layer.load(2);
+
+                        $.ajax({
+                            url: '{:url("restore")}',
+                            type: 'POST',
+                            data: { id: data.id },
+                            dataType: 'json',
+                            success: function (res) {
+                                layer.close(loading);
+                                if (res.code === 1) {
+                                    layer.msg(res.msg, { icon: 1 });
+                                    // 更新行数据
+                                    obj.update({
+                                        is_del: 0
+                                    });
+                                } else {
+                                    layer.msg(res.msg, { icon: 2 });
+                                }
+                            },
+                            error: function () {
+                                layer.close(loading);
+                                layer.msg('请求失败，请重试', { icon: 2 });
+                            }
+                        });
+                    });
+                }
+                
+                // 预览
+                else if (obj.event === 'preview') {
+                    var mediaInfo = $(this).data('info');
+                    
+                    // 尝试解析JSON格式的媒体信息
+                    var content = '';
+                    try {
+                        var parsedInfo = JSON.parse(mediaInfo);
+                        content = '<pre style="background: #f8f8f8; padding: 10px; border-radius: 4px; overflow: auto; max-height: 400px;">' +
+                            JSON.stringify(parsedInfo, null, 2) + '</pre>';
+                    } catch (e) {
+                        // 如果不是JSON格式，直接显示原始信息
+                        content = '<div style="word-break: break-all;">' + mediaInfo + '</div>';
+                    }
+
+                    layer.open({
+                        type: 1,
+                        title: '媒体信息预览 - ID: ' + data.id,
+                        area: ['600px', '400px'],
+                        content: content
+                    });
+                }
             });
 
             // 批量删除
             $('#batch-delete').on('click', function () {
-                var checkedIds = [];
-                $('input[name="id"]:checked').each(function () {
-                    checkedIds.push($(this).val());
-                });
-
-                if (checkedIds.length === 0) {
+                var checkStatus = table.checkStatus('fileLogTable');
+                var checkedData = checkStatus.data;
+                
+                if (checkedData.length === 0) {
                     layer.msg('请选择要删除的记录', { icon: 3 });
                     return;
                 }
+                
+                var checkedIds = checkedData.map(function(item) {
+                    return item.id;
+                });
 
                 layer.confirm('确定要删除选中的 ' + checkedIds.length + ' 条记录吗？', {
                     icon: 3,
@@ -309,18 +328,8 @@
                             layer.close(loading);
                             if (res.code === 1) {
                                 layer.msg(res.msg, { icon: 1 });
-                                // 更新选中行的状态
-                                $('input[name="id"]:checked').each(function () {
-                                    var tr = $(this).closest('tr');
-                                    tr.find('.status-badge').removeClass('status-normal').addClass('status-delete').text('已删除');
-                                    var id = $(this).val();
-                                    tr.find('.action-buttons').html(
-                                        '<button class="layui-btn layui-btn-normal layui-btn-xs restore-btn" data-id="' + id + '">恢复</button>'
-                                    );
-                                });
-                                // 取消全选
-                                $('input[lay-filter="select-all"]').prop('checked', false);
-                                form.render('checkbox');
+                                // 重新加载表格
+                                fileLogTable.reload();
                             } else {
                                 layer.msg(res.msg, { icon: 2 });
                             }
@@ -335,15 +344,17 @@
 
             // 批量恢复
             $('#batch-restore').on('click', function () {
-                var checkedIds = [];
-                $('input[name="id"]:checked').each(function () {
-                    checkedIds.push($(this).val());
-                });
-
-                if (checkedIds.length === 0) {
+                var checkStatus = table.checkStatus('fileLogTable');
+                var checkedData = checkStatus.data;
+                
+                if (checkedData.length === 0) {
                     layer.msg('请选择要恢复的记录', { icon: 3 });
                     return;
                 }
+                
+                var checkedIds = checkedData.map(function(item) {
+                    return item.id;
+                });
 
                 layer.confirm('确定要恢复选中的 ' + checkedIds.length + ' 条记录吗？', {
                     icon: 3,
@@ -362,18 +373,8 @@
                             layer.close(loading);
                             if (res.code === 1) {
                                 layer.msg(res.msg, { icon: 1 });
-                                // 更新选中行的状态
-                                $('input[name="id"]:checked').each(function () {
-                                    var tr = $(this).closest('tr');
-                                    tr.find('.status-badge').removeClass('status-delete').addClass('status-normal').text('正常');
-                                    var id = $(this).val();
-                                    tr.find('.action-buttons').html(
-                                        '<button class="layui-btn layui-btn-danger layui-btn-xs delete-btn" data-id="' + id + '">删除</button>'
-                                    );
-                                });
-                                // 取消全选
-                                $('input[lay-filter="select-all"]').prop('checked', false);
-                                form.render('checkbox');
+                                // 重新加载表格
+                                fileLogTable.reload();
                             } else {
                                 layer.msg(res.msg, { icon: 2 });
                             }
@@ -385,32 +386,6 @@
                     });
                 });
             });
-
-            // 预览功能
-            $(document).on('click', '.preview-btn', function () {
-                var mediaInfo = $(this).data('info');
-                var id = $(this).data('id');
-
-                // 尝试解析JSON格式的媒体信息
-                var content = '';
-                try {
-                    var parsedInfo = JSON.parse(mediaInfo);
-                    content = '<pre style="background: #f8f8f8; padding: 10px; border-radius: 4px; overflow: auto; max-height: 400px;">' +
-                        JSON.stringify(parsedInfo, null, 2) + '</pre>';
-                } catch (e) {
-                    // 如果不是JSON格式，直接显示原始信息
-                    content = '<div style="word-break: break-all;">' + mediaInfo + '</div>';
-                }
-
-                layer.open({
-                    type: 1,
-                    title: '媒体信息预览 - ID: ' + id,
-                    area: ['600px', '400px'],
-                    content: content
-                });
-            });
-            // 渲染表单
-            form.render();
         });
     </script>
 </body>

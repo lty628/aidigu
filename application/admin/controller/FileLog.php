@@ -7,10 +7,20 @@ use think\Db;
 class FileLog extends Base
 {
     /**
-     * 文件日志列表
+     * 文件日志列表页面
      * @return mixed
      */
     public function index()
+    {
+        // 渲染模板
+        return $this->fetch();
+    }
+    
+    /**
+     * 获取文件日志列表数据（layui table所需的JSON数据）
+     * @return json
+     */
+    public function getList()
     {
         // 获取搜索参数
         $keyword = Request::param('keyword', '');
@@ -58,27 +68,16 @@ class FileLog extends Base
         // 获取文件日志列表
         $list = FileLogModel::getFileLogs($where, $page, $limit);
         
-        // 渲染模板
-        $this->assign('list', $list);
-        $this->assign('keyword', $keyword);
-        $this->assign('uid', $uid);
-        $this->assign('type', $type);
-        $this->assign('is_del', $is_del);
-        $this->assign('start_time', $start_time);
-        $this->assign('end_time', $end_time);
+        // 获取数据项
+        $data = $list->items();
         
-        // 获取类型选项
-        $typeOptions = [
-            1 => '头像',
-            2 => '微博',
-            3 => '聊天',
-            4 => '素材',
-            5 => '主题',
-            6 => '网盘',
-        ];
-        $this->assign('typeOptions', $typeOptions);
-        
-        return $this->fetch();
+        // 返回layui table所需的JSON格式
+        return json([
+            'code' => 0,
+            'msg' => '',
+            'count' => $list->total(),
+            'data' => $data
+        ]);
     }
     
     /**
@@ -159,6 +158,35 @@ class FileLog extends Base
             // 记录操作日志
             $this->log('恢复文件日志 ID: ' . $id);
             return json(['code' => 1, 'msg' => '恢复成功']);
+        } else {
+            return json(['code' => 0, 'msg' => '恢复失败']);
+        }
+    }
+    
+    /**
+     * 批量恢复
+     * @return json
+     */
+    public function batchRestore()
+    {
+        $ids = Request::param('ids', '');
+        
+        if (empty($ids)) {
+            return json(['code' => 0, 'msg' => '请选择要恢复的记录']);
+        }
+        
+        // 转换为数组
+        if (!is_array($ids)) {
+            $ids = explode(',', $ids);
+        }
+        
+        // 执行批量恢复
+        $result = FileLogModel::where('id', 'in', $ids)->update(['is_del' => 0]);
+        
+        if ($result) {
+            // 记录操作日志
+            $this->log('批量恢复文件日志 IDs: ' . implode(',', $ids));
+            return json(['code' => 1, 'msg' => '恢复成功，共恢复 ' . $result . ' 条记录']);
         } else {
             return json(['code' => 0, 'msg' => '恢复失败']);
         }
