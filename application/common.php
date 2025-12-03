@@ -1,7 +1,5 @@
 <?php
 
-use think\Db;
-
 function ajaxJson($code, $msg, $data = [])
 {
 	return json(['code' => $code, 'msg' => $msg, 'data' => $data]);
