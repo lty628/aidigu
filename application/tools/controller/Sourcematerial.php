@@ -11,7 +11,7 @@ class Sourcematerial extends Controller
         $isMobile = isMobile();
         $this->assign('isMobile', $isMobile);
         if (!getLoginUid()) {
-            $pubIndex = env('app.pubIndex', '');
+            $pubIndex = sysConfig('app.pubIndex', '');
             if (!$pubIndex || $isMobile) {
                 // 无逻辑处理
                 $this->error('未登录', '/login/');
@@ -64,7 +64,7 @@ class Sourcematerial extends Controller
     public function preview()
     {
         $id = (int)input('get.id');
-        $staticDomain = env('app.staticDomain', '');
+        $staticDomain = sysConfig('app.staticDomain', '');
 
         // if (request()->isAjax()) {
             

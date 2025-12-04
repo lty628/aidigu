@@ -31,7 +31,7 @@ class Reader extends Controller
         }
 
         if ($path) {
-            $path = env('root_path') . 'public' . $path;
+            $path = sysConfig('root_path') . 'public' . $path;
         }
 
         if (file_exists($path)) {

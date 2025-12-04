@@ -11,7 +11,7 @@ class Jellyfin
     public function __construct()
     {
         // 从环境变量获取 Jellyfin API Key
-        $this->apiKey = env('jellyfin.api_key');
+        $this->apiKey = sysConfig('jellyfin.api_key');
     }
 
     /**

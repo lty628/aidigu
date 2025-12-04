@@ -22,7 +22,7 @@ class Base extends Controller
     /**
      * 记录用户行为
      */
-    protected function recordBehavior($customContent = '')
+    public function recordBehavior($customContent = '')
     {
         $userInfo = getLoginUserInfo();
         $uid = $userInfo['uid'] ?? 0;

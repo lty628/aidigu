@@ -18,8 +18,8 @@ class Index
     public function hotToday()
     {
 
-        $appKey = env('caiji.juheToutiaoAppkey');
-        $uid = env('caiji.juheToutiaoToUid');
+        $appKey = sysConfig('caiji.juheToutiaoAppkey');
+        $uid = sysConfig('caiji.juheToutiaoToUid');
 
         if (!$appKey || !$uid) {
             dump('请配置juheToutiaoAppkey和juheToutiaoToUid');

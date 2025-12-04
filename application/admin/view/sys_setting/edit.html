@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>编辑配置</title>
+    <link rel="stylesheet" href="/static/layui/css/layui.css">
+    <script src="/static/layui/layui.js"></script>
+    <style>
+        body {
+            padding: 15px;
+        }
+        .layui-form-item {
+            margin-bottom: 20px;
+        }
+        .readonly-field {
+            background-color: #f5f7fa;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <form class="layui-form" action="" method="post">
+        <input type="hidden" name="id" value="{$setting.id}">
+        
+        <div class="layui-form-item">
+            <label class="layui-form-label">配置分组</label>
+            <div class="layui-input-block">
+                <input type="text" name="section" value="{$setting.section}" readonly class="layui-input readonly-field">
+            </div>
+        </div>
+        
+        <div class="layui-form-item">
+            <label class="layui-form-label">键名</label>
+            <div class="layui-input-block">
+                <input type="text" name="key" value="{$setting.key}" readonly class="layui-input readonly-field">
+            </div>
+        </div>
+        
+        <div class="layui-form-item">
+            <label class="layui-form-label">配置值</label>
+            <div class="layui-input-block">
+                <textarea name="value" rows="5" placeholder="请输入配置值" class="layui-textarea">{$setting.value|default=''}</textarea>
+            </div>
+        </div>
+        
+        <div class="layui-form-item">
+            <label class="layui-form-label">配置描述</label>
+            <div class="layui-input-block">
+                <input type="text" name="description" value="{$setting.description|default=''}" placeholder="请输入配置描述" class="layui-input">
+            </div>
+        </div>
+        
+        <div class="layui-form-item">
+            <label class="layui-form-label">创建时间</label>
+            <div class="layui-input-block">
+                <input type="text" value="{$setting.created_at|date='Y-m-d H:i:s'}" readonly class="layui-input readonly-field">
+            </div>
+        </div>
+        
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit lay-filter="submit">更新</button>
+                <button type="button" class="layui-btn layui-btn-primary" onclick="history.back()">取消</button>
+            </div>
+        </div>
+    </form>
+    
+    <script>
+        layui.use(['form'], function() {
+            var form = layui.form;
+            
+            // 提交表单
+            form.on('submit(submit)', function(data) {
+                return true;
+            });
+        });
+    </script>
+</body>
+</html>

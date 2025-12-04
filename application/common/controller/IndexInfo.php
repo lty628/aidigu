@@ -15,7 +15,7 @@ class IndexInfo extends Info
     public function index()
     {
         // 修改自定义首页
-        $defaultIndex = env('app.defaultIndex');
+        $defaultIndex = sysConfig('app.defaultIndex');
         if ($defaultIndex && $defaultIndex != '/' && !isMobile() && $this->userid) {
             $defaultIndex = explode('@', $defaultIndex);
             return app($defaultIndex[0])->{$defaultIndex[1]}();

@@ -17,7 +17,7 @@ class Base extends Controller
 		}
 		
 		// 读取配置文件检查是否允许首页不登录访问
-		$pubIndex = env('app.pubIndex', '');
+		$pubIndex = sysConfig('app.pubIndex', '');
 		if ($pubIndex && request()->action() == 'index' && !isMobile()) {
 			// 无逻辑处理
 			return true;

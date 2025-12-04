@@ -183,7 +183,7 @@ function isMobile()
 
 function handleMessage($message)
 {
-	$staticDomain = env('app.staticDomain', '');
+	$staticDomain = sysConfig('app.staticDomain', '');
 	foreach ($message as &$data) {
 		$data['media'] = $data['media'] ? $staticDomain . $data['media'] : '';
 	}
@@ -209,4 +209,23 @@ function getThemeInfo($theme)
 	}
 	
 	return $themeInfo;
+}
+
+function sysConfig($sectionKey, $default = null)
+{
+	$cacheData = cache($sectionKey);
+	if ($cacheData) {
+		return $cacheData;
+	} else {
+		$sectionKeyArr = explode('.', $sectionKey);
+		$section = $sectionKeyArr[0] ?? 'app';
+		$key = $sectionKeyArr[1];
+		$cacheData = \app\common\model\AdminSystemSetting::getSettingValue($section, $key, null);
+		if ($cacheData !== null) {
+			cache($sectionKey, $cacheData, 60);
+			return $cacheData;
+		} else {
+			return env($sectionKey, $default);
+		}
+	}
 }

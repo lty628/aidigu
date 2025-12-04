@@ -17,7 +17,7 @@ class Index extends Controller
         $touid = input('private');
         $messageChatId = input('messageChatId');
         $fromuid = getLoginUid();
-        $wsserver = env('app.chatSocketDomain');
+        $wsserver = sysConfig('app.chatSocketDomain');
 
         if (!$fromuid) {
             $this->error('没有登录');

@@ -44,7 +44,7 @@ class SettingInfo extends Base
 	{
 		$path = 'uploads/'.getLoginMd5Uid().'/avatar';
 		// 4m
-		$size = env('app.picUploadSize', 4194304);
+		$size = sysConfig('app.picUploadSize', 4194304);
 		$file = request()->file('file');
 		// 移动到框架应用根目录/uploads/ 目录下
 		$info = $file->validate(['size'=>$size,'ext'=>'jpg,jiff,bmp,jpeg,png,gif'])->move($path);
@@ -114,7 +114,7 @@ class SettingInfo extends Base
 	{
 		$path = 'uploads/'.getLoginMd5Uid().'/message';
 		// 4m
-		$size = env('app.fileUploadSize', 62914561);
+		$size = sysConfig('app.fileUploadSize', 62914561);
 		$file = request()->file('file');
 		// 移动到框架应用根目录/uploads/ 目录下
 		$info = $file->validate(['size'=>$size,'ext'=>'mp4,mp3,jiff,jpg,bmp,jpeg,png,gif'])->move($path);
@@ -139,7 +139,7 @@ class SettingInfo extends Base
 	{
 		$path = 'uploads/'.getLoginMd5Uid().'/chatMessage';
 		// 4m
-		$size = env('app.fileUploadSize', 62914561);
+		$size = sysConfig('app.fileUploadSize', 62914561);
 		$file = request()->file('file');
 		// 移动到框架应用根目录/uploads/ 目录下
 		$info = $file->validate(['size'=>$size,'ext'=>'mp4,mp3,jiff,jpg,bmp,jpeg,png,gif'])->move($path);
@@ -164,7 +164,7 @@ class SettingInfo extends Base
 	{
 		$path = 'uploads/'.getLoginMd5Uid().'/sourcematerial';
 		// 4m
-		$size = env('app.fileUploadSize', 62914561);
+		$size = sysConfig('app.fileUploadSize', 62914561);
 		$file = request()->file('file');
 		// 移动到框架应用根目录/uploads/ 目录下
 		$info = $file->validate(['size'=>$size,'ext'=>'mp4,mp3,jiff,jpg,bmp,jpeg,png,gif,pdf,zip,rar,7z,gz,tar.gz,xls,xlsx,txt,doc,docx,ppt,pptx'])->move($path);
@@ -191,7 +191,7 @@ class SettingInfo extends Base
 	{
 		$path = 'uploads/'.getLoginMd5Uid().'/theme';
 		// 4m
-		$size = env('app.picUploadSize', 4194304);
+		$size = sysConfig('app.picUploadSize', 4194304);
 		$file = request()->file('file');
 		// 移动到框架应用根目录/uploads/ 目录下
 		$info = $file->validate(['size'=>$size,'ext'=>'jpg,jiff,bmp,jpeg,png,gif'])->move($path);

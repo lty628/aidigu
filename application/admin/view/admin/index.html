@@ -320,24 +320,34 @@
     <div class="layui-side">
         <div class="layui-side-scroll">
             <ul class="layui-nav layui-nav-tree" lay-filter="side-menu">
+                <!-- 仪表盘 -->
+                 <li class="layui-nav-item layui-nav-itemed"><a href="javascript:;" data-url="dashboard.html">
+                            <i class="layui-icon layui-icon-chart"></i>
+                            <span>仪表盘</span>
+                        </a></li>
+
                 <li class="layui-nav-item layui-nav-itemed">
                     <a href="javascript:;">
                         <i class="layui-icon layui-icon-console"></i>
                         <span>系统管理</span>
                     </a>
                     <dl class="layui-nav-child">
-                        <dd><a href="javascript:;" data-url="dashboard.html">
+                        <!-- <dd><a href="javascript:;" data-url="dashboard.html">
                             <i class="layui-icon layui-icon-chart"></i>
                             <span>仪表盘</span>
-                        </a></dd>
+                        </a></dd> -->
                         <dd><a href="javascript:;" data-url="/admin/user/index">
                             <i class="layui-icon layui-icon-group"></i>
                             <span>用户管理</span>
                         </a></dd>
+                        <dd><a href="javascript:;" data-url="/admin/sys_setting/index">
+                            <i class="layui-icon layui-icon-set"></i>
+                            <span>系统配置</span>
+                        </a></dd>
                     </dl>
                 </li>
 
-                <li class="layui-nav-item">
+                <li class="layui-nav-item layui-nav-itemed">
                     <a href="javascript:;">
                         <i class="layui-icon layui-icon-file"></i>
                         <span>内容管理</span>
@@ -354,7 +364,7 @@
                     </dl>
                 </li>
 
-                <li class="layui-nav-item">
+                <li class="layui-nav-item layui-nav-itemed">
                     <a href="javascript:;">
                         <i class="layui-icon layui-icon-log"></i>
                         <span>日志管理</span>
@@ -393,7 +403,8 @@
             "/admin/message/index",
             "/admin/App/index",
             "/admin/file_log/index",
-            "/admin/behavior_log/index"
+            "/admin/behavior_log/index",
+            "/admin/sys_setting/index"
         ];
 
         /**

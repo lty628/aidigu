@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>系统配置管理</title>
+    <link rel="stylesheet" href="/static/layui/css/layui.css">
+    <script src="/static/layui/layui.js"></script>
+    <style>
+        body {
+            padding: 15px;
+        }
+        .filter-bar {
+            margin-bottom: 15px;
+            padding: 10px;
+            background: #f5f7fa;
+            border-radius: 4px;
+        }
+        .operation-btn {
+            margin-bottom: 15px;
+        }
+        .layui-table th {
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="operation-btn">
+        <a href="{:url('add')}" class="layui-btn layui-btn-normal">添加配置</a>
+    </div>
+    
+    <form class="layui-form filter-bar" action="" method="get">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">配置分组：</label>
+                <div class="layui-input-inline">
+                    <select name="section" lay-verify="" lay-search>
+                        <option value="">全部</option>
+                        {volist name="sections" id="section"}
+                        <option value="{$section}" {if condition="$section eq $current_section"}selected{/if}>{$section}</option>
+                        {/volist}
+                    </select>
+                </div>
+                <button class="layui-btn layui-btn-sm" lay-submit lay-filter="filter">查询</button>
+                <a href="{:url('index')}" class="layui-btn layui-btn-sm layui-btn-warm">重置</a>
+            </div>
+        </div>
+    </form>
+    
+    <form id="batch-form" action="{:url('batchSave')}" method="post">
+        <table class="layui-table">
+            <thead>
+                <tr>
+                    <th>分组</th>
+                    <th>键名</th>
+                    <th>值</th>
+                    <th>描述</th>
+                    <th>创建时间</th>
+                    <th>更新时间</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                {volist name="list" id="setting"}
+                <tr>
+                    <td>{$setting.section}</td>
+                    <td>{$setting.key}</td>
+                    <td>
+                        <input type="hidden" name="settings[{$setting.section}][{$setting.key}]" value="{$setting.value}">
+                        <div class="value-display">{$setting.value|default='-'}</div>
+                    </td>
+                    <td>{$setting.description|default='-'}</td>
+                    <td>{$setting.created_at|date='Y-m-d H:i:s'}</td>
+                    <td>{$setting.updated_at|date='Y-m-d H:i:s'}</td>
+                    <td>
+                        <a href="{:url('edit', ['id' => $setting.id])}" class="layui-btn layui-btn-xs">编辑</a>
+                        <a href="javascript:;" data-id="{$setting.id}" class="layui-btn layui-btn-xs layui-btn-danger delete-btn">删除</a>
+                    </td>
+                </tr>
+                {/volist}
+            </tbody>
+        </table>
+        
+        <div class="layui-box" style="text-align: center;">
+            {$list->render()}
+        </div>
+    </form>
+    
+    <script>
+        layui.use(['form', 'layer'], function() {
+            var form = layui.form;
+            var layer = layui.layer;
+            var $ = layui.jquery;
+            
+            // 删除操作
+            $('.delete-btn').on('click', function() {
+                var id = $(this).data('id');
+                layer.confirm('确定要删除这条配置吗？', {
+                    btn: ['确定', '取消']
+                }, function() {
+                    window.location.href = '{:url('delete')}?id=' + id;
+                });
+            });
+        });
+    </script>
+</body>
+</html>
