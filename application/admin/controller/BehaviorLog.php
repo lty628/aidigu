@@ -4,21 +4,6 @@ use think\facade\Request;
 use app\common\model\AdminBehaviorLog as BehaviorLogModel;
 
 
-
-// CREATE TABLE `wb_admin_behavior_log` (
-//   `id` int(11) NOT NULL AUTO_INCREMENT,
-//   `uid` int(11) NOT NULL COMMENT '用户ID',
-//   `module` varchar(50) NOT NULL COMMENT '模块名',
-//   `controller` varchar(50) NOT NULL COMMENT '控制器名',
-//   `action` varchar(50) NOT NULL COMMENT '方法名',
-//   `ip` varchar(20) DEFAULT NULL COMMENT 'IP地址',
-//   `content` varchar(255) DEFAULT NULL COMMENT '操作内容描述',
-//   `params` text COMMENT '操作参数JSON',
-//   `create_time` int(11) NOT NULL COMMENT '创建时间',
-//   PRIMARY KEY (`id`),
-//   KEY `idx_uid` (`uid`),
-//   KEY `idx_create_time` (`create_time`)
-// ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户行为日志表';
 class BehaviorLog extends Base
 {
     /**

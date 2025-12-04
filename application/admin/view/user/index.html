@@ -74,8 +74,10 @@
                 url: '{:url("admin/user/getList")}',
                 method: 'POST',
                 page: true,
-                limit: 10,
+                limit: 20,
                 limits: [10, 20, 30, 50, 100],
+                height: 'full-35',
+                 lineStyle: 'height: 50px;', // 定义表格的多行样式
                 cols: [[
                     {field: 'uid', title: 'ID', width: 80, sort: true},
                     {field: 'head_image', title: '头像', width: 80, templet: '#avatar-tpl'},
@@ -85,7 +87,7 @@
                     {field: 'phone', title: '手机号', width: 120, templet: function(d) { return d.phone || '-'; }},
                     {field: 'email', title: '邮箱', templet: function(d) { return d.email || '-'; }},
                     {field: 'status', title: '状态', width: 100, templet: '#status-tpl'},
-                    {field: 'ctime', title: '注册时间', width: 120, templet: function(d) { return d.ctime || '-'; }},
+                    {field: 'ctime', title: '注册时间', width: 160, templet: function(d) { return d.ctime || '-'; }},
                     {field: 'uptime', title: '更新时间', width: 160, sort: true, templet: function(d) {
                         return new Date(d.uptime * 1000).toLocaleString('zh-CN', {
                             year: 'numeric',

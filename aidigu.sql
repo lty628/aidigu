@@ -568,4 +568,52 @@ ALTER TABLE `wb_user` ADD `uptime` BIGINT NOT NULL COMMENT '更新时间' AFTER 
 ALTER TABLE `wb_user` ADD `status` TINYINT NOT NULL DEFAULT '0' COMMENT '状态0正常，1以上不正常' AFTER `invisible`;
 ALTER TABLE `wb_user_invite` ADD `topuid` INT NOT NULL DEFAULT '0' COMMENT '父集uid' AFTER `touid`;
 
+CREATE TABLE `wb_admin_behavior_log` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `uid` int(11) NOT NULL COMMENT '用户ID',
+  `module` varchar(50) NOT NULL COMMENT '模块名',
+  `controller` varchar(50) NOT NULL COMMENT '控制器名',
+  `action` varchar(50) NOT NULL COMMENT '方法名',
+  `ip` varchar(20) DEFAULT NULL COMMENT 'IP地址',
+  `content` varchar(255) DEFAULT NULL COMMENT '操作内容描述',
+  `params` text COMMENT '操作参数JSON',
+  `create_time` int(11) NOT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`),
+  KEY `idx_uid` (`uid`),
+  KEY `idx_create_time` (`create_time`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户行为日志表';
+
+CREATE TABLE `wb_admin_system_setting` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `section` varchar(50) NOT NULL COMMENT '配置分组/节名，如app、database等',
+  `key` varchar(100) NOT NULL COMMENT '配置键名',
+  `value` text COMMENT '配置值',
+  `description` varchar(255) DEFAULT NULL COMMENT '配置项描述',
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_section_key` (`section`,`key`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='系统配置表';
+
+INSERT INTO `wb_admin_system_setting` (`id`, `section`, `key`, `value`, `description`, `created_at`, `updated_at`) VALUES (1, 'app', 'staticDomain', '', '配置CDN域名加速使用', '2025-12-04 20:15:33', '2025-12-04 20:15:33');
+INSERT INTO `wb_admin_system_setting` (`id`, `section`, `key`, `value`, `description`, `created_at`, `updated_at`) VALUES (2, 'app', 'beian', '', '填入备案号', '2025-12-04 20:15:55', '2025-12-04 20:15:55');
+INSERT INTO `wb_admin_system_setting` (`id`, `section`, `key`, `value`, `description`, `created_at`, `updated_at`) VALUES (3, 'app', 'noRegister', 'false', '是否开放注册', '2025-12-04 20:16:22', '2025-12-04 20:16:22');
+INSERT INTO `wb_admin_system_setting` (`id`, `section`, `key`, `value`, `description`, `created_at`, `updated_at`) VALUES (4, 'app', 'pubIndex', 'false', '首页是否无需登录【默认false，必须登录，可改为true】', '2025-12-04 20:17:45', '2025-12-04 20:17:45');
+INSERT INTO `wb_admin_system_setting` (`id`, `section`, `key`, `value`, `description`, `created_at`, `updated_at`) VALUES (5, 'app', 'defaultIndex', '/', '首页默认地址,如设置 app\\tools\\controller\\Nav@index 后首页为导航', '2025-12-04 20:18:53', '2025-12-04 20:18:53');
+INSERT INTO `wb_admin_system_setting` (`id`, `section`, `key`, `value`, `description`, `created_at`, `updated_at`) VALUES (6, 'app', 'picUploadSize', '4194304', '图片上传限制大小，默认： 4194304 【4M】', '2025-12-04 20:19:21', '2025-12-04 20:20:44');
+INSERT INTO `wb_admin_system_setting` (`id`, `section`, `key`, `value`, `description`, `created_at`, `updated_at`) VALUES (7, 'app', 'fileUploadSize', '62914561', '文件上传限制大小，默认：62914561 【60M】', '2025-12-04 20:20:12', '2025-12-04 20:20:12');
+INSERT INTO `wb_admin_system_setting` (`id`, `section`, `key`, `value`, `description`, `created_at`, `updated_at`) VALUES (8, 'app', 'openToolType', 'false', '打开工具类型', '2025-12-04 20:21:22', '2025-12-04 20:21:22');
+INSERT INTO `wb_admin_system_setting` (`id`, `section`, `key`, `value`, `description`, `created_at`, `updated_at`) VALUES (9, 'storage', 'type', 'File', '网盘存储配置【File或S3File】', '2025-12-04 20:23:22', '2025-12-04 20:23:22');
+INSERT INTO `wb_admin_system_setting` (`id`, `section`, `key`, `value`, `description`, `created_at`, `updated_at`) VALUES (10, 's3Config', 'awsAccessKey', 'AccessKeyAccessKeyAccessKey', '对象存储的AccessKey', '2025-12-04 20:23:59', '2025-12-04 20:24:24');
+INSERT INTO `wb_admin_system_setting` (`id`, `section`, `key`, `value`, `description`, `created_at`, `updated_at`) VALUES (11, 's3Config', 'awsSecretKey', 'awsSecretKeyawsSecretKeyawsSecret', '对象存储的awsSecretKey', '2025-12-04 20:24:45', '2025-12-04 20:31:51');
+INSERT INTO `wb_admin_system_setting` (`id`, `section`, `key`, `value`, `description`, `created_at`, `updated_at`) VALUES (12, 's3Config', 'bucket', 'aidigu', '对象存储的桶名字', '2025-12-04 20:25:19', '2025-12-04 20:25:19');
+INSERT INTO `wb_admin_system_setting` (`id`, `section`, `key`, `value`, `description`, `created_at`, `updated_at`) VALUES (13, 's3Config', 'endpoint', 'http://192.168.1.11/', '对象存储地址', '2025-12-04 20:25:45', '2025-12-04 20:25:45');
+INSERT INTO `wb_admin_system_setting` (`id`, `section`, `key`, `value`, `description`, `created_at`, `updated_at`) VALUES (14, 's3Config', 'region', '中国华北一区', '对象存储的地区', '2025-12-04 20:26:26', '2025-12-04 20:26:47');
+INSERT INTO `wb_admin_system_setting` (`id`, `section`, `key`, `value`, `description`, `created_at`, `updated_at`) VALUES (15, 'wechat', 'app_id', 'app_id', '微信公众号app_id【暂时无效】', '2025-12-04 20:27:32', '2025-12-04 20:27:32');
+INSERT INTO `wb_admin_system_setting` (`id`, `section`, `key`, `value`, `description`, `created_at`, `updated_at`) VALUES (16, 'wechat', 'secret', 'secret', '微信公众号secret【暂时无效】', '2025-12-04 20:28:12', '2025-12-04 20:28:37');
+INSERT INTO `wb_admin_system_setting` (`id`, `section`, `key`, `value`, `description`, `created_at`, `updated_at`) VALUES (17, 'wechat', 'token', 'token', '微信公众号token【暂时无效】', '2025-12-04 20:29:36', '2025-12-04 20:29:36');
+INSERT INTO `wb_admin_system_setting` (`id`, `section`, `key`, `value`, `description`, `created_at`, `updated_at`) VALUES (18, 'wechat', 'aes_key', 'aes_key', '微信公众号aes_key【暂时无效】', '2025-12-04 20:30:05', '2025-12-04 20:30:05');
+INSERT INTO `wb_admin_system_setting` (`id`, `section`, `key`, `value`, `description`, `created_at`, `updated_at`) VALUES (19, 'wechat', 'callback', '/examples/oauth_callback.php', '微信公众号callback【暂时无效】', '2025-12-04 20:30:45', '2025-12-04 20:30:45');
+
+
 SET FOREIGN_KEY_CHECKS = 1;

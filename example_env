@@ -40,6 +40,3 @@
     aes_key = ''
     callback = /examples/oauth_callback.php
 
-[caiji]
-    juheToutiaoAppkey = xxxxxxxxxxx
-    juheToutiaoToUid = 1

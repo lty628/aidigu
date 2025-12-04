@@ -4,17 +4,6 @@ use app\common\model\AdminSystemSetting;
 use think\facade\Request;
 use think\facade\View;
 
-// CREATE TABLE `wb_admin_system_setting` (
-//   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-//   `section` varchar(50) NOT NULL COMMENT '配置分组/节名，如app、database等',
-//   `key` varchar(100) NOT NULL COMMENT '配置键名',
-//   `value` text COMMENT '配置值',
-//   `description` varchar(255) DEFAULT NULL COMMENT '配置项描述',
-//   `created_at` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-//   `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-//   PRIMARY KEY (`id`),
-//   UNIQUE KEY `uk_section_key` (`section`,`key`) USING BTREE
-// ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='系统配置表';
 
 class SysSetting extends Base
 {
