@@ -14,7 +14,7 @@ function getLoginUserInfo()
 	}
 	return $info;
 }
-function checkUserCookie($rememberMe, $fields = 'uid,nickname,password,head_image,blog,status', $isCli = false)
+function checkUserCookie($rememberMe, $fields = 'uid,nickname,password,head_image,blog,status,uptime', $isCli = false)
 {
 	if (!$rememberMe) return false;
 	$rememberMe = unserialize(unserialize($rememberMe));
@@ -24,7 +24,7 @@ function checkUserCookie($rememberMe, $fields = 'uid,nickname,password,head_imag
 
 	$info = Db::name('user')->where('blog', $rememberMe['blog'])->field($fields)->find();
 	if (!$info) return false;
-	if ($info['status'] != 0 || $info['nickname'] != $rememberMe['nickname'] || $info['password'] != encryptionPass($rememberMe['password'])) return false;
+	if ($info['status'] != 0 || $info['nickname'] != $rememberMe['nickname'] || $rememberMe['password'] != encryptionPass($info['password'])) return false;
 	if ($info['uptime'] - $rememberMe['uptime'] > 86400*60) return false;
 
 	if (!$isCli) {
@@ -40,7 +40,7 @@ function checkUserCookie($rememberMe, $fields = 'uid,nickname,password,head_imag
 function getWsUserInfoByCookie($rememberMe)
 {
 	// cli模式不更新时间
-	return checkUserCookie($rememberMe, 'uid,nickname,password,head_image,blog,status', true);
+	return checkUserCookie($rememberMe, 'uid,nickname,password,head_image,blog,status,uptime', true);
 }
 
 function getLoginNickName()
