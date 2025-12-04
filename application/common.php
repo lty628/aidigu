@@ -21,9 +21,11 @@ function checkUserCookie($rememberMe, $fields = 'uid,blog,status', $isCli = fals
 	if (!isset($rememberMe['blog']) || !isset($rememberMe['nickname']) || !isset($rememberMe['uptime']) || !isset($rememberMe['password'])) {
 		return false;
 	}
-	$info = Db::name('user')->where('blog', $rememberMe['blog'])->where('nickname', $rememberMe['nickname'])->where('uptime', $rememberMe['uptime'])->field($fields)->find();
-	if (!$info && $rememberMe['password'] != encryptionPass($info['password'])) return false;
-	if ($info['status'] != 0) return false;
+
+	$info = Db::name('user')->where('blog', $rememberMe['blog'])->field($fields)->find();
+	if (!$info) return false;
+	if ($info['status'] != 0 || $info['nickname'] != $rememberMe['nickname'] || $info['password'] != encryptionPass($rememberMe['password'])) return false;
+	if ($info['uptime'] - $rememberMe['uptime'] > 86400*60) return false;
 	
 	if (!$isCli) {
 		$time = time();
