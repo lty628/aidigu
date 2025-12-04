@@ -14,7 +14,7 @@ function getLoginUserInfo()
 	}
 	return $info;
 }
-function checkUserCookie($rememberMe, $fields = 'uid,blog')
+function checkUserCookie($rememberMe, $fields = 'uid,blog,status', $isCli = false)
 {
 	if (!$rememberMe) return false;
 	$rememberMe = unserialize(unserialize($rememberMe));
@@ -24,16 +24,21 @@ function checkUserCookie($rememberMe, $fields = 'uid,blog')
 	$info = Db::name('user')->where('blog', $rememberMe['blog'])->where('nickname', $rememberMe['nickname'])->where('uptime', $rememberMe['uptime'])->field($fields)->find();
 	if (!$info && $rememberMe['password'] != encryptionPass($info['password'])) return false;
 	if ($info['status'] != 0) return false;
-	$time = time();
-	$rememberMe['uptime'] = $time;
-	Db::name('user')->where('uid', $info['uid'])->update(['uptime' => $time]);
-	cookie('rememberMe', serialize(serialize($rememberMe)), 86400*60);
-	session('userid', $info['uid']);
+	
+	if (!$isCli) {
+		$time = time();
+		$rememberMe['uptime'] = $time;
+		Db::name('user')->where('uid', $info['uid'])->update(['uptime' => $time]);
+		cookie('rememberMe', serialize(serialize($rememberMe)), 86400*60);
+		session('userid', $info['uid']);
+	}
+	
 	return $info;
 }
 function getWsUserInfoByCookie($rememberMe)
 {
-	return checkUserCookie($rememberMe, 'uid,nickname,head_image,blog');
+	// cli模式不更新时间
+	return checkUserCookie($rememberMe, 'uid,nickname,head_image,blog,status', true);
 }
 
 function getLoginNickName()

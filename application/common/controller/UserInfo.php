@@ -87,10 +87,13 @@ class UserInfo extends Controller
 		if ($result['status'] != 0) return false;
 		if (!$result || encryptionPass($password) != $result['password']) return json(['status' => 0, 'msg' => '输入的账号不存在,或密码不正确']);
 		// if (encryptionPass($password) != $result['password']) return json(['status' => 0, 'msg' => '输入的账号不存在,或密码不正确']);
-		UserModel::update(['uptime' => time()], ['uid' => $result['uid']]);
+		$time = time();
+		UserModel::update(['uptime' => $time], ['uid' => $result['uid']]);
 		setLoginUid($result['uid']);
 		// $this->rememberMe(input('get.remember'), $result->toArray());
-		$this->rememberMe(1, $result->toArray());
+		$rememberMe = $result->toArray();
+		$rememberMe['uptime'] = $time;
+		$this->rememberMe(1, $rememberMe);
 		if (!$redirectUrl) {
 			$redirectUrl = '/'.$result['blog'].'/';
 		}
