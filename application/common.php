@@ -14,7 +14,7 @@ function getLoginUserInfo()
 	}
 	return $info;
 }
-function checkUserCookie($rememberMe, $fields = 'uid,blog,status', $isCli = false)
+function checkUserCookie($rememberMe, $fields = 'uid,nickname,password,head_image,blog,status', $isCli = false)
 {
 	if (!$rememberMe) return false;
 	$rememberMe = unserialize(unserialize($rememberMe));
@@ -26,7 +26,7 @@ function checkUserCookie($rememberMe, $fields = 'uid,blog,status', $isCli = fals
 	if (!$info) return false;
 	if ($info['status'] != 0 || $info['nickname'] != $rememberMe['nickname'] || $info['password'] != encryptionPass($rememberMe['password'])) return false;
 	if ($info['uptime'] - $rememberMe['uptime'] > 86400*60) return false;
-	
+
 	if (!$isCli) {
 		$time = time();
 		$rememberMe['uptime'] = $time;
@@ -40,7 +40,7 @@ function checkUserCookie($rememberMe, $fields = 'uid,blog,status', $isCli = fals
 function getWsUserInfoByCookie($rememberMe)
 {
 	// cli模式不更新时间
-	return checkUserCookie($rememberMe, 'uid,nickname,head_image,blog,status', true);
+	return checkUserCookie($rememberMe, 'uid,nickname,password,head_image,blog,status', true);
 }
 
 function getLoginNickName()
