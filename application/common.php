@@ -218,7 +218,10 @@ function sysConfig($sectionKey, $default = null)
 		return $cacheData;
 	} else {
 		$sectionKeyArr = explode('.', $sectionKey);
-		$section = $sectionKeyArr[0] ?? 'app';
+		if (count($sectionKeyArr) != 2) {
+			return env(strtoupper($sectionKey), $default);
+		}
+		$section = $sectionKeyArr[0];
 		$key = $sectionKeyArr[1];
 		$cacheData = \app\common\model\AdminSystemSetting::getSettingValue($section, $key, null);
 		if ($cacheData !== null) {
