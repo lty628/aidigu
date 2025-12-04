@@ -160,14 +160,14 @@
                     {field: 'uid', width: 80, title: '用户ID', sort: true},
                     // {field: 'username', width: 120, title: '用户名', templet: '#usernameTpl'},
                     {field: 'type_text', width: 100, title: '文件类型'},
-                    {field: 'media_name', width: 260, title: '文件名称'},
+                    {field: 'media_name', title: '文件名称'},
                     {field: 'media_type', width: 100, title: '文件格式'},
                     {field: 'media_size', width: 100, title: '文件大小', sort: true, templet: function(d) {
                         return (d.media_size || 0) + ' MB';
                     }},
                     {field: 'media_info', width: 100, title: '文件信息', templet: '#infoTpl'},
                     {field: 'is_del', width: 80, title: '状态', templet: '#statusTpl', sort: true},
-                    {field: 'create_time', width: 160, title: '创建时间', sort: true, templet: function(d) {
+                    {field: 'create_time', title: '创建时间', sort: true, templet: function(d) {
                         return new Date(d.create_time * 1000).toLocaleString('zh-CN');
                     }},
                     {fixed: 'right', width: 150, title: '操作', toolbar: '#actionTpl'}
