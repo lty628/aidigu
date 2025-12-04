@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>行为日志管理 - 后台管理</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="/static/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="/static/admin/css/admin.css" media="all">
+</head>
+<body>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-header">行为日志管理</div>
+        <div class="layui-card-body">
+            <form class="layui-form" lay-filter="search-form">
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">用户ID</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="uid" placeholder="请输入用户ID" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">模块</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="module" placeholder="请输入模块名" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">控制器</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="controller" placeholder="请输入控制器名" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">方法</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="action" placeholder="请输入方法名" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">IP地址</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="ip" placeholder="请输入IP地址" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">开始时间</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="start_time" placeholder="请选择开始时间" autocomplete="off" class="layui-input" id="start_time">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">结束时间</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="end_time" placeholder="请选择结束时间" autocomplete="off" class="layui-input" id="end_time">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <button class="layui-btn layui-btn-normal" lay-submit lay-filter="search">查询</button>
+                        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                    </div>
+                </div>
+            </form>
+            <table id="behavior-log-table" lay-filter="behavior-log-table"></table>
+        </div>
+    </div>
+</div>
+
+<!-- 详情弹窗 -->
+<div id="detail-layer" style="display: none;">
+    <div class="layui-form" lay-filter="detail-form">
+        <div class="layui-form-item">
+            <label class="layui-form-label">操作时间</label>
+            <div class="layui-input-block">
+                <input type="text" id="detail-create_time" class="layui-input" readonly>
+            </div>
+        </div>
+        <!-- <div class="layui-form-item">
+            <label class="layui-form-label">操作用户</label>
+            <div class="layui-input-block">
+                <input type="text" id="detail-username" class="layui-input" readonly>
+            </div>
+        </div> -->
+        <div class="layui-form-item">
+            <label class="layui-form-label">用户昵称</label>
+            <div class="layui-input-block">
+                <input type="text" id="detail-nickname" class="layui-input" readonly>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">模块</label>
+            <div class="layui-input-block">
+                <input type="text" id="detail-module" class="layui-input" readonly>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">控制器</label>
+            <div class="layui-input-block">
+                <input type="text" id="detail-controller" class="layui-input" readonly>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">方法</label>
+            <div class="layui-input-block">
+                <input type="text" id="detail-action" class="layui-input" readonly>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">IP地址</label>
+            <div class="layui-input-block">
+                <input type="text" id="detail-ip" class="layui-input" readonly>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">操作内容</label>
+            <div class="layui-input-block">
+                <input type="text" id="detail-content" class="layui-input" readonly>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">操作参数</label>
+            <div class="layui-input-block">
+                <textarea id="detail-params" class="layui-textarea" readonly></textarea>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/static/layui/layui.js"></script>
+<script>
+layui.use(['form', 'table', 'laydate', 'layer'], function() {
+    var form = layui.form,
+        table = layui.table,
+        laydate = layui.laydate,
+        layer = layui.layer,
+        $ = layui.jquery;
+
+    // 初始化日期选择器
+    laydate.render({
+        elem: '#start_time',
+        type: 'datetime'
+    });
+    laydate.render({
+        elem: '#end_time',
+        type: 'datetime'
+    });
+
+    // 初始化表格
+    var tableIns = table.render({
+        elem: '#behavior-log-table',
+        url: '{:url("behaviorlog/getList")}',
+        page: true,
+        limit: 20,
+        limits: [10, 20, 50, 100],
+        cols: [[
+            {field: 'id', title: 'ID', width: 80},
+            {field: 'uid', title: '用户ID', width: 80},
+            // {field: 'username', title: '用户名', width: 120},
+            // {field: 'nickname', title: '昵称', width: 120},
+            {field: 'module', title: '模块', width: 100},
+            {field: 'controller', title: '控制器', width: 120},
+            {field: 'action', title: '方法', width: 100},
+            {field: 'ip', title: 'IP地址', width: 150},
+            {field: 'content', title: '操作内容', width: 200},
+            {field: 'create_time', title: '操作时间', width: 180, templet: function(d) {
+                return new Date(d.create_time * 1000).toLocaleString();
+            }},
+            {fixed: 'right', title: '操作', width: 100, toolbar: '<div class="layui-table-cell">' +
+            '<a class="layui-btn layui-btn-xs" lay-event="detail">详情</a>' +
+            '</div>'}
+        ]]
+    });
+
+    // 搜索
+    form.on('submit(search)', function(data) {
+        tableIns.reload({
+            where: data.field,
+            page: {curr: 1}
+        });
+        return false;
+    });
+
+    // 查看详情
+    window.showDetail = function(id) {
+        $.ajax({
+            url: '{:url("behaviorlog/detail")}',
+            type: 'post',
+            data: {id: id},
+            dataType: 'json',
+            success: function(res) {
+                if (res.code === 0) {
+                    var data = res.data;
+                    $('#detail-create_time').val(data.create_time);
+                    // $('#detail-username').val(data.username);
+                    $('#detail-nickname').val(data.nickname);
+                    $('#detail-module').val(data.module);
+                    $('#detail-controller').val(data.controller);
+                    $('#detail-action').val(data.action);
+                    $('#detail-ip').val(data.ip);
+                    $('#detail-content').val(data.content);
+                    
+                    // 格式化参数显示
+                    try {
+                        var params = JSON.parse(data.params);
+                        $('#detail-params').val(JSON.stringify(params, null, 2));
+                    } catch (e) {
+                        $('#detail-params').val(data.params);
+                    }
+                    
+                    layer.open({
+                        type: 1,
+                        title: '行为详情',
+                        area: ['600px', '500px'],
+                        content: $('#detail-layer')
+                    });
+                } else {
+                    layer.msg(res.msg, {icon: 5});
+                }
+            }
+        });
+    };
+
+    // 表格操作栏
+    table.on('tool(behavior-log-table)', function(obj) {
+        var data = obj.data;
+        if (obj.event === 'detail') {
+            showDetail(data.id);
+        }
+    });
+
+    // // 定义操作栏模板
+    // tableIns.config.cols[0].push({
+    //     fixed: 'right',
+    //     title: '操作',
+    //     width: 80,
+    //     toolbar: '<div class="layui-table-cell">' +
+    //         '<a class="layui-btn layui-btn-xs" lay-event="detail">详情</a>' +
+    //         '</div>'
+    // });
+});
+</script>
+</body>
+</html>
