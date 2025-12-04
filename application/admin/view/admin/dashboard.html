@@ -134,22 +134,22 @@
         <div class="dashboard-stats">
             <div class="stat-card">
                 <div class="stat-icon layui-icon layui-icon-username" style="color: #1E9FFF;"></div>
-                <div class="stat-value" id="total-users">0</div>
+                <div class="stat-value">{$totalUsers|default='0'}</div>
                 <div class="stat-label">总用户数</div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon layui-icon layui-icon-chart" style="color: #5FB878;"></div>
-                <div class="stat-value" id="total-content">0</div>
+                <div class="stat-value">{$totalContent|default='0'}</div>
                 <div class="stat-label">内容总数</div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon layui-icon layui-icon-comment" style="color: #FFB800;"></div>
-                <div class="stat-value" id="total-comments">0</div>
+                <div class="stat-value">{$totalComments|default='0'}</div>
                 <div class="stat-label">评论总数</div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon layui-icon layui-icon-visit" style="color: #FF5722;"></div>
-                <div class="stat-value" id="today-visits">0</div>
+                <div class="stat-value">{$todayVisits|default='0'}</div>
                 <div class="stat-label">今日访问量</div>
             </div>
         </div>
@@ -170,41 +170,28 @@
         <div class="activity-container">
             <div class="section-title">最近活动</div>
             <div class="activity-list">
+                {volist name="recentActivities" id="activity"}
                 <div class="activity-item">
-                    <div class="activity-icon layui-icon layui-icon-user" style="color: #1E9FFF;"></div>
+                    <div class="activity-icon layui-icon {$activity.type == 1 ? 'layui-icon-user' : 'layui-icon-edit'}" style="color: {$activity.type == 1 ? '#1E9FFF' : '#5FB878'};"></div>
                     <div class="activity-info">
-                        <div>用户 <span style="color: #1E9FFF;">newuser123</span> 注册成功</div>
-                        <div class="activity-time">10分钟前</div>
+                        <div>
+                            {if $activity.type == 1}
+                                用户 <span style="color: #1E9FFF;">{$activity.nickname}</span> 注册成功
+                            {else}
+                                用户 <span style="color: #5FB878;">{$activity.nickname}</span> 发布了新内容
+                            {/if}
+                        </div>
+                        <div class="activity-time">{$activity.ctime|date='Y-m-d H:i:s'}</div>
                     </div>
                 </div>
+                {/volist}
+                {empty name="recentActivities"}
                 <div class="activity-item">
-                    <div class="activity-icon layui-icon layui-icon-edit" style="color: #5FB878;"></div>
                     <div class="activity-info">
-                        <div>用户 <span style="color: #5FB878;">admin</span> 发布了新内容</div>
-                        <div class="activity-time">30分钟前</div>
+                        <div style="text-align: center; color: #999;">暂无活动记录</div>
                     </div>
                 </div>
-                <div class="activity-item">
-                    <div class="activity-icon layui-icon layui-icon-praise" style="color: #FFB800;"></div>
-                    <div class="activity-info">
-                        <div>内容 <span style="color: #FFB800;">#系统更新公告#</span> 获得了新点赞</div>
-                        <div class="activity-time">2小时前</div>
-                    </div>
-                </div>
-                <div class="activity-item">
-                    <div class="activity-icon layui-icon layui-icon-delete" style="color: #FF5722;"></div>
-                    <div class="activity-info">
-                        <div>管理员删除了违规内容</div>
-                        <div class="activity-time">5小时前</div>
-                    </div>
-                </div>
-                <div class="activity-item">
-                    <div class="activity-icon layui-icon layui-icon-set" style="color: #1E9FFF;"></div>
-                    <div class="activity-info">
-                        <div>系统设置已更新</div>
-                        <div class="activity-time">昨天</div>
-                    </div>
-                </div>
+                {/empty}
             </div>
         </div>
     </div>
@@ -215,97 +202,74 @@
         layui.use(['jquery'], function() {
             var $ = layui.jquery;
             
-            // 模拟数据 - 实际应用中应从服务器获取
-            function loadDashboardData() {
-                // 模拟统计数据
-                $('#total-users').text('1,256');
-                $('#total-content').text('3,482');
-                $('#total-comments').text('8,954');
-                $('#today-visits').text('2,345');
-                
-                // 初始化用户增长趋势图表
-                var userGrowthChart = echarts.init(document.getElementById('user-growth-chart'));
-                var userGrowthOption = {
-                    tooltip: {
-                        trigger: 'axis',
-                        axisPointer: {
-                            type: 'shadow'
-                        }
-                    },
-                    grid: {
-                        left: '3%',
-                        right: '4%',
-                        bottom: '3%',
-                        containLabel: true
-                    },
-                    xAxis: {
-                        type: 'category',
-                        data: ['1月', '2月', '3月', '4月', '5月', '6月']
-                    },
-                    yAxis: {
-                        type: 'value'
-                    },
-                    series: [{
-                        name: '新增用户',
-                        type: 'line',
-                        data: [120, 190, 300, 250, 420, 380],
-                        smooth: true,
-                        areaStyle: {
-                            opacity: 0.3
-                        }
-                    }]
-                };
-                userGrowthChart.setOption(userGrowthOption);
-                
-                // 初始化内容分类统计图表
-                var categoryChart = echarts.init(document.getElementById('content-category-chart'));
-                var categoryOption = {
-                    tooltip: {
-                        trigger: 'item'
-                    },
-                    legend: {
-                        orient: 'vertical',
-                        left: 'left'
-                    },
-                    series: [{
-                        name: '内容分类',
-                        type: 'pie',
-                        radius: '60%',
-                        data: [
-                            {value: 35, name: '文章'},
-                            {value: 25, name: '图片'},
-                            {value: 20, name: '视频'},
-                            {value: 15, name: '音频'},
-                            {value: 5, name: '其他'}
-                        ],
-                        emphasis: {
-                            itemStyle: {
-                                shadowBlur: 10,
-                                shadowOffsetX: 0,
-                                shadowColor: 'rgba(0, 0, 0, 0.5)'
-                            }
-                        }
-                    }]
-                };
-                categoryChart.setOption(categoryOption);
-                
-                // 响应式调整图表大小
-                window.addEventListener('resize', function() {
-                    userGrowthChart.resize();
-                    categoryChart.resize();
-                });
-            }
+            // 从PHP变量获取数据
+            var userGrowthData = {$userGrowthData|json_encode|raw};
+            var contentCategoryData = {$contentCategoryData|json_encode|raw};
             
-            // 页面加载完成后初始化数据
-            $(document).ready(function() {
-                loadDashboardData();
-                
-                // 可以添加定时刷新数据的功能
-                /*
-                setInterval(function() {
-                    loadDashboardData();
-                }, 60000); // 每分钟刷新一次
-                */
+            // 初始化用户增长趋势图表
+            var userGrowthChart = echarts.init(document.getElementById('user-growth-chart'));
+            var userGrowthOption = {
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'shadow'
+                    }
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'category',
+                    data: userGrowthData && userGrowthData.months ? userGrowthData.months : []
+                },
+                yAxis: {
+                    type: 'value'
+                },
+                series: [{
+                    name: '新增用户',
+                    type: 'line',
+                    data: userGrowthData && userGrowthData.data ? userGrowthData.data : [],
+                    smooth: true,
+                    areaStyle: {
+                        opacity: 0.3
+                    }
+                }]
+            };
+            userGrowthChart.setOption(userGrowthOption);
+            
+            // 初始化内容分类统计图表
+            var categoryChart = echarts.init(document.getElementById('content-category-chart'));
+            var categoryOption = {
+                tooltip: {
+                    trigger: 'item'
+                },
+                legend: {
+                    orient: 'vertical',
+                    left: 'left'
+                },
+                series: [{
+                    name: '内容分类',
+                    type: 'pie',
+                    radius: '60%',
+                    data: contentCategoryData && contentCategoryData.data ? contentCategoryData.data : [],
+                    emphasis: {
+                        itemStyle: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }]
+            };
+            categoryChart.setOption(categoryOption);
+            
+            // 响应式调整图表大小
+            window.addEventListener('resize', function() {
+                userGrowthChart.resize();
+                categoryChart.resize();
             });
         });
     </script>
