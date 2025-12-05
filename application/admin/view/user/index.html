@@ -81,12 +81,12 @@
                 cols: [[
                     {field: 'uid', title: 'ID', width: 80, sort: true},
                     {field: 'head_image', title: '头像', width: 80, templet: '#avatar-tpl'},
-                    {field: 'nickname', title: '昵称'},
+                    {field: 'nickname', title: '昵称', width: 150},
                     // {field: 'username', title: '用户名', templet: function(d) { return d.username || '-'; }},
                     {field: 'blog', title: '博客名', width: 150, templet: function(d) { return d.blog || '-'; }},
-                    {field: 'phone', title: '手机号', width: 120, templet: function(d) { return d.phone || '-'; }},
-                    {field: 'email', title: '邮箱', templet: function(d) { return d.email || '-'; }},
-                    {field: 'status', title: '状态', width: 100, templet: '#status-tpl'},
+                    {field: 'phone', title: '手机号', templet: function(d) { return d.phone || '-'; }},
+                    // {field: 'email', title: '邮箱', templet: function(d) { return d.email || '-'; }},
+                    {field: 'status', title: '状态', templet: '#status-tpl'},
                     {field: 'ctime', title: '注册时间', width: 180, templet: function(d) { return d.ctime || '-'; }},
                     {field: 'uptime', title: '更新时间', width: 160, sort: true, templet: function(d) {
                         return new Date(d.uptime * 1000).toLocaleString('zh-CN', {

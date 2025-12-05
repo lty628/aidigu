@@ -165,12 +165,12 @@
                     {field: 'media_size', width: 100, title: '文件大小', sort: true, templet: function(d) {
                         return (d.media_size || 0) + ' MB';
                     }},
-                    {field: 'media_info', width: 100, title: '文件信息', templet: '#infoTpl'},
+                    {field: 'media_info', width: 80, title: '信息', templet: '#infoTpl'},
                     {field: 'is_del', width: 80, title: '状态', templet: '#statusTpl', sort: true},
                     {field: 'create_time', title: '创建时间', sort: true, templet: function(d) {
                         return new Date(d.create_time * 1000).toLocaleString('zh-CN');
                     }},
-                    {fixed: 'right', width: 150, title: '操作', toolbar: '#actionTpl'}
+                    {fixed: 'right', width: 80, title: '操作', toolbar: '#actionTpl'}
                 ]],
                 done: function(res, curr, count) {
                     // 表格渲染完成后的回调

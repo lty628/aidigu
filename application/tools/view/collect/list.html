@@ -31,15 +31,66 @@
     function showMedia(obj) {
       var $ = layui.$;
       var url = $(obj).attr('data-url');
-      parent.layer.open({
-        type: 2,
-        title: false,
-        area: ['630px', '360px'],
-        shade: 0.8,
-        closeBtn: 0,
-        shadeClose: true,
-        content: url // video 地址
-      });
+      
+      // 判断是否有父级窗口（iframe等情况）
+      var hasParent = window.parent && window.parent !== window;
+      
+      // 获取文件名和类型
+      var fileName = url.substring(url.lastIndexOf('/') + 1);
+      var fileType = fileName.substring(fileName.lastIndexOf('.') + 1).toLowerCase();
+      
+      // 根据文件类型选择合适的预览方式
+      if (['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'].includes(fileType)) {
+        // 图片预览
+        var content = '<img src="' + url + '" style="width:100%;height:100%;object-fit:contain;">';
+        var title = '图片预览';
+        var area = ['80%', '80%'];
+      } else if (['mp4', 'avi', 'mov', 'wmv', 'flv', 'mkv'].includes(fileType)) {
+        // 视频预览
+        var content = '<video src="' + url + '" controls style="width:100%;height:100%;object-fit:contain;"></video>';
+        var title = '视频预览';
+        var area = ['80%', '80%'];
+      } else if (['mp3', 'wav', 'ogg', 'aac', 'flac'].includes(fileType)) {
+        // 音频预览
+        var content = '<audio src="' + url + '" controls style="width:100%;"></audio>';
+        var title = '音频预览';
+        var area = ['400px', '100px'];
+      } else {
+        // 其他文件类型提供下载选项
+        layer.confirm('该文件类型不支持在线预览，是否下载？', {
+          icon: 3,
+          title: '文件预览',
+          btn: ['下载', '取消']
+        }, function(index) {
+          layer.close(index);
+          window.open(url);
+        });
+        return;
+      }
+      
+      // 如果有父级窗口且父级有layer对象，则使用父级layer弹窗
+      if (hasParent && window.parent.layer) {
+        window.parent.layer.open({
+          type: 1,
+          title: title,
+          area: area,
+          content: content,
+          cancel: function() {
+            // 关闭时的回调
+          }
+        });
+      } else {
+        // 否则使用当前窗口的layer
+        layer.open({
+          type: 1,
+          title: title,
+          area: area,
+          content: content,
+          cancel: function() {
+            // 关闭时的回调
+          }
+        });
+      }
     }
     layui.use(['table', 'dropdown'], function () {
       var table = layui.table;
