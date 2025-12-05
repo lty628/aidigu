@@ -77,7 +77,7 @@ class User extends Base
         }
         
         // 密码加密
-        $data['password'] = md5($data['password']);
+        $data['password'] = encryptionPass($data['password']);
         $data['ctime'] = time();
         
         // 创建用户
@@ -176,7 +176,7 @@ class User extends Base
         }
         
         // 更新密码
-        $user->password = md5($data['password']);
+        $user->password = encryptionPass($data['password']);
         
         if ($user->save()) {
             return json(['code' => 1, 'msg' => '密码修改成功', 'url' => url('index')]);
