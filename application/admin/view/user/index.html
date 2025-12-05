@@ -87,7 +87,7 @@
                     {field: 'phone', title: '手机号', width: 120, templet: function(d) { return d.phone || '-'; }},
                     {field: 'email', title: '邮箱', templet: function(d) { return d.email || '-'; }},
                     {field: 'status', title: '状态', width: 100, templet: '#status-tpl'},
-                    {field: 'ctime', title: '注册时间', width: 160, templet: function(d) { return d.ctime || '-'; }},
+                    {field: 'ctime', title: '注册时间', width: 180, templet: function(d) { return d.ctime || '-'; }},
                     {field: 'uptime', title: '更新时间', width: 160, sort: true, templet: function(d) {
                         return new Date(d.uptime * 1000).toLocaleString('zh-CN', {
                             year: 'numeric',
@@ -98,7 +98,7 @@
                             second: '2-digit'
                         });
                     }},
-                    {fixed: 'right', title: '操作', width: 240, toolbar: '#user-toolbar'}
+                    {fixed: 'right', title: '操作', width: 180, toolbar: '#user-toolbar'}
                 ]],
                 response: {
                     statusCode: 0
