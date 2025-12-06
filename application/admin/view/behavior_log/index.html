@@ -153,7 +153,7 @@ layui.use(['form', 'table', 'laydate', 'layer'], function() {
     // 初始化表格
     var tableIns = table.render({
         elem: '#behavior-log-table',
-        url: '{:url("behaviorlog/getList")}',
+        url: '{:url("behavior_log/getList")}',
         page: true,
         limit: 20,
         limits: [10, 20, 50, 100],
@@ -188,7 +188,7 @@ layui.use(['form', 'table', 'laydate', 'layer'], function() {
     // 查看详情
     window.showDetail = function(id) {
         $.ajax({
-            url: '{:url("behaviorlog/detail")}',
+            url: '{:url("behavior_log/detail")}',
             type: 'post',
             data: {id: id},
             dataType: 'json',
