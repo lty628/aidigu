@@ -38,6 +38,10 @@ class Base extends Controller
             if (isset($params['password'])) unset($params['password']);
             if (isset($params['old_password'])) unset($params['old_password']);
             if (isset($params['new_password'])) unset($params['new_password']);
+
+            if (!$params) {
+                return false;
+            }
             
             // 自动生成操作描述
             if (empty($customContent)) {

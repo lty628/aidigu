@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <title>评论管理 - 后台管理系统</title>
+    <link rel="stylesheet" href="/static/layui/css/layui.css">
+    <link rel="stylesheet" href="/static/admin/css/style.css">
+</head>
+
+<body>
+    <div class="layui-fluid">
+        <div class="layui-card">
+            <div class="layui-card-header">
+                <h2>评论管理</h2>
+            </div>
+            <div class="layui-card-body">
+                <!-- 搜索表单 -->
+                <form class="layui-form" lay-filter="search-form">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">关键词搜索</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="keyword" placeholder="搜索评论内容" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">用户搜索</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="username" placeholder="搜索用户名" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">时间范围</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="start_time" placeholder="开始时间" class="layui-input" id="start-time">
+                            </div>
+                            <div class="layui-form-mid">-</div>
+                            <div class="layui-input-inline">
+                                <input type="text" name="end_time" placeholder="结束时间" class="layui-input" id="end-time">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <button class="layui-btn layui-btn-primary" type="button" id="reset-search">重置</button>
+                            <button class="layui-btn" lay-submit lay-filter="search-submit">搜索</button>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- 操作按钮 -->
+                <div class="layui-btn-container" style="margin-bottom: 15px;">
+                    <button class="layui-btn layui-btn-danger" id="batch-delete">
+                        <i class="layui-icon layui-icon-delete"></i> 批量删除
+                    </button>
+                </div>
+
+                <!-- 数据表格 -->
+                <table id="comment-table" lay-filter="comment-table"></table>
+            </div>
+        </div>
+    </div>
+
+    <!-- 表格行操作模板 -->
+    <script type="text/html" id="comment-toolbar">
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>
+    </script>
+
+    <script src="/static/layui/layui.js"></script>
+    <script>
+        layui.use(['layer', 'form', 'table', 'laydate'], function () {
+            var layer = layui.layer;
+            var form = layui.form;
+            var table = layui.table;
+            var laydate = layui.laydate;
+            var $ = layui.$;
+
+            // 初始化日期选择器
+            laydate.render({
+                elem: '#start-time',
+                theme: '#448aff'
+            });
+
+            laydate.render({
+                elem: '#end-time',
+                theme: '#448aff'
+            });
+
+            // 初始化表格
+            var commentTable = table.render({
+                elem: '#comment-table',
+                url: '{:url("getList")}',
+                method: 'POST',
+                page: true,
+                limit: 20,
+                limits: [10, 20, 30, 50, 100],
+                height: 'full',
+                cols: [[
+                    { type: 'checkbox', fixed: 'left' },
+                    { field: 'cid', title: 'ID', width: 80, fixed: 'left', sort: true },
+                    { field: 'fromuid', title: '评论用户ID', width: 120 },
+                    { field: 'blog', title: '用户名', width: 120 },
+                    { field: 'touid', title: '接收用户ID', width: 120 },
+                    { 
+                        field: 'msg', title: '评论内容', templet: function (d) {
+                            return d.msg || '-';
+                        }
+                    },
+                    { field: 'msg_id', title: '关联消息ID', width: 120, sort: true },
+                    { field: 'ctype', title: '评论类型', width: 100, sort: true, templet: function (d) {
+                            switch (d.ctype) {
+                                case 1:
+                                    return '评论回复';
+                                default:
+                                    return '微博回复';
+                            }
+                        } 
+                    },
+                    { 
+                        field: 'ctime', title: '评论时间', width: 180, sort: true
+                    },
+                    { fixed: 'right', title: '操作', width: 100, toolbar: '#comment-toolbar' }
+                ]],
+                response: {
+                    statusCode: 0
+                },
+                parseData: function (res) {
+                    return {
+                        "code": 0,
+                        "msg": res.msg,
+                        "count": res.count,
+                        "data": res.data
+                    };
+                }
+            });
+
+            // 搜索表单提交
+            form.on('submit(search-submit)', function (data) {
+                // 重新加载表格数据
+                commentTable.reload({
+                    where: data.field,
+                    page: {
+                        curr: 1 // 重新从第1页开始
+                    }
+                });
+                return false;
+            });
+
+            // 重置搜索
+            $('#reset-search').on('click', function () {
+                // 清空表单
+                form.val('search-form', {
+                    keyword: '',
+                    username: '',
+                    start_time: '',
+                    end_time: ''
+                });
+                // 重新加载表格数据
+                commentTable.reload({
+                    where: {},
+                    page: {
+                        curr: 1 // 重新从第1页开始
+                    }
+                });
+            });
+
+            // 表格行操作事件
+            table.on('tool(comment-table)', function (obj) {
+                var data = obj.data;
+                if (obj.event === 'delete') {
+                    // 单个删除
+                    layer.confirm('确定要删除这条评论吗？', {
+                        icon: 3,
+                        title: '删除确认'
+                    }, function (index) {
+                        $.ajax({
+                            url: '{:url("delete")}',
+                            type: 'POST',
+                            data: { cid: data.cid },
+                            dataType: 'JSON',
+                            success: function (res) {
+                                if (res.code === 0) {
+                                    layer.msg(res.msg, { icon: 1 });
+                                    obj.del(); // 删除表格行
+                                } else {
+                                    layer.msg(res.msg, { icon: 2 });
+                                }
+                            },
+                            error: function () {
+                                layer.msg('网络错误，请稍后重试', { icon: 2 });
+                            }
+                        });
+                        layer.close(index);
+                    });
+                }
+            });
+
+            // 批量删除
+            $('#batch-delete').on('click', function () {
+                var checkStatus = table.checkStatus('comment-table');
+                var data = checkStatus.data;
+                if (data.length === 0) {
+                    layer.msg('请选择要删除的评论', { icon: 2 });
+                    return;
+                }
+
+                // 获取选中的cid数组
+                var cids = [];
+                for (var i = 0; i < data.length; i++) {
+                    cids.push(data[i].cid);
+                }
+
+                layer.confirm('确定要删除选中的' + data.length + '条评论吗？', {
+                    icon: 3,
+                    title: '批量删除确认'
+                }, function (index) {
+                    $.ajax({
+                        url: '{:url("batchDelete")}',
+                        type: 'POST',
+                        data: { cids: cids.join(',') },
+                        dataType: 'JSON',
+                        success: function (res) {
+                            if (res.code === 0) {
+                                layer.msg(res.msg, { icon: 1 });
+                                // 重新加载表格
+                                commentTable.reload();
+                            } else {
+                                layer.msg(res.msg, { icon: 2 });
+                            }
+                        },
+                        error: function () {
+                            layer.msg('网络错误，请稍后重试', { icon: 2 });
+                        }
+                    });
+                    layer.close(index);
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
