@@ -385,4 +385,59 @@ class IndexInfo extends Info
 
         return json(array('status' =>  1, 'msg' => $msg));
     }
+    
+    // 聚合热门新闻
+    public function hotnews()
+    {
+        // 定义缓存键
+        $cacheKey = 'hotnews_all_data';
+        
+        // 尝试从缓存中获取数据
+        $allHotData = cache($cacheKey);
+        
+        // 如果缓存中没有数据，则从接口获取并保存到缓存
+        if (empty($allHotData)) {
+            // 获取所有平台的热搜数据，只取前10条
+            $hotSearch = new \app\tools\controller\HotSearch();
+            $allHotData = $hotSearch->getAllHotSearch(15); // 限制每个平台只显示前10条
+            
+            // 将数据保存到缓存，有效期5分钟（300秒）
+            cache($cacheKey, $allHotData, 300);
+        }
+        
+        $this->assign('allHotData', $allHotData);
+        return $this->fetch();
+    }
+
+    // // 微博热门新闻
+    // public function hotnews()
+    // {
+    //     // 获取微博热搜数据
+    //     $hotSearch = new \app\tools\controller\HotSearch();
+    //     // 使用反射调用私有方法
+    //     $reflection = new \ReflectionClass($hotSearch);
+    //     $method = $reflection->getMethod('Curl');
+    //     $method->setAccessible(true);
+        
+    //     // 构造微博热搜请求
+    //     $_md5 = md5(time());
+    //     $cookie = "Cookie: {$_md5}:FG=1";
+    //     $jsonRes = json_decode($method->invoke($hotSearch, 'https://weibo.com/ajax/side/hotSearch', null, $cookie, "https://s.weibo.com"), true);
+        
+    //     $tempArr = [];
+    //     if (isset($jsonRes['data']['realtime'])) {
+    //         foreach ($jsonRes['data']['realtime'] as $k => $v) {
+    //             array_push($tempArr, [
+    //                 'index' => $k + 1,
+    //                 'title' => $v['note'],
+    //                 'hot' => round($v['num'] / 10000, 1) . '万',
+    //                 'url' => "https://s.weibo.com/weibo?q=" . $v['note'] . "&Refer=index",
+    //                 'mobilUrl' => "https://s.weibo.com/weibo?q=" . $v['note'] . "&Refer=index"
+    //             ]);
+    //         }
+    //     }
+        
+    //     $this->assign('hotnews', $tempArr);
+    //     return $this->fetch();
+    // }
 }

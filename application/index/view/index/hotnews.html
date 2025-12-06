@@ -1,0 +1,290 @@
+{include file='index/header' /}
+<style>
+    .hotnews-container {
+        padding: 20px;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+    .hotnews-header {
+        text-align: center;
+        margin-bottom: 30px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #eee;
+    }
+    .hotnews-header h1 {
+        font-size: 28px;
+        color: #333;
+        margin-bottom: 10px;
+    }
+    .hotnews-header p {
+        color: #666;
+        font-size: 14px;
+    }
+    .platform-section {
+        margin-bottom: 40px;
+        /* border: 1px solid #eee; */
+        border-radius: 8px;
+        overflow: hidden;
+        /* box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); */
+    }
+    .platform-header {
+        background-color: #f8f9fa;
+        padding: 15px 20px;
+        border-bottom: 1px solid #eee;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .platform-header h2 {
+        margin: 0;
+        font-size: 20px;
+        color: #333;
+    }
+    .view-more-link {
+        font-size: 14px;
+        color: #ff6b6b;
+        text-decoration: none;
+    }
+    .view-more-link:hover {
+        text-decoration: underline;
+    }
+    .hotnews-list {
+        padding: 0;
+        margin: 0;
+    }
+    .hotnews-item {
+        display: flex;
+        align-items: center;
+        padding: 15px 20px;
+        border-bottom: 1px solid #f0f0f0;
+        transition: background-color 0.2s;
+    }
+    .hotnews-item:hover {
+        background-color: #fafafa;
+    }
+    .hotnews-item:last-child {
+        border-bottom: none;
+    }
+    .hotnews-rank {
+        width: 32px;
+        height: 32px;
+        line-height: 32px;
+        text-align: center;
+        font-weight: bold;
+        margin-right: 15px;
+        border-radius: 6px;
+        background-color: #f0f0f0;
+        color: #666;
+        flex-shrink: 0;
+        font-size: 14px;
+    }
+    .hotnews-rank.top3 {
+        background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
+        color: white;
+        box-shadow: 0 2px 5px rgba(255, 107, 107, 0.3);
+    }
+    .hotnews-content {
+        flex: 1;
+        min-width: 0;
+    }
+    .hotnews-title {
+        font-size: 16px;
+        color: #333;
+        text-decoration: none;
+        transition: color 0.3s;
+        display: block;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-weight: 500;
+    }
+    .hotnews-title:hover {
+        color: #ff6b6b;
+    }
+    .hotnews-desc {
+        font-size: 13px;
+        color: #666;
+        margin-top: 5px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .hotnews-hot {
+        font-size: 12px;
+        color: #ff6b6b;
+        margin-top: 5px;
+        font-weight: 500;
+    }
+    .update-time {
+        text-align: right;
+        font-size: 12px;
+        color: #999;
+        margin-top: 20px;
+        padding: 0 20px 20px;
+    }
+    .empty-message {
+        text-align: center;
+        padding: 40px;
+        color: #999;
+    }
+    /* 分类导航样式 */
+    .category-nav {
+        text-align: center;
+        margin: 20px 0;
+        padding: 10px;
+        background-color: #f8f9fa;
+        border-radius: 8px;
+    }
+    .category-nav a {
+        display: inline-block;
+        padding: 10px 20px;
+        margin: 5px;
+        background-color: #fff;
+        color: #333;
+        text-decoration: none;
+        border-radius: 6px;
+        transition: all 0.3s;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        font-weight: 500;
+    }
+    .category-nav a:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .category-nav a.active {
+        background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
+        color: white;
+        box-shadow: 0 4px 10px rgba(255, 107, 107, 0.3);
+    }
+    
+    /* 历史上的今天特殊样式 */
+    .history-event {
+        font-size: 14px;
+        color: #555;
+    }
+    .history-year {
+        font-weight: bold;
+        color: #ff6b6b;
+        margin-right: 5px;
+    }
+    
+    /* 响应式设计 */
+    @media (max-width: 768px) {
+        .hotnews-container {
+            padding: 10px;
+        }
+        .category-nav a {
+            padding: 8px 12px;
+            font-size: 14px;
+            margin: 3px;
+        }
+        .hotnews-item {
+            padding: 12px 15px;
+        }
+        .hotnews-title {
+            font-size: 15px;
+        }
+    }
+    .hotnews-list .hotnews-content a:hover {
+        padding-bottom: 0;
+    }
+</style>
+</head>
+
+<body>
+    <div class="main">
+        <div class="contents">
+            <div class="top">新闻热点</div>
+            <!-- 分类导航 -->
+            <div class="category-nav">
+                <a href="#" onclick="showPlatform('百度')" class="active">百度</a>
+                <a href="#" onclick="showPlatform('哔哩哔哩')">哔哩哔哩</a>
+                <a href="#" onclick="showPlatform('抖音')">抖音</a>
+                <a href="#" onclick="showPlatform('微博')">微博</a>
+                <a href="#" onclick="showPlatform('历史上的今天')">历史上的今天</a>
+            </div>
+            
+            <div class="hotnews-container">
+                {if isset($allHotData) && !empty($allHotData)}
+                    {foreach $allHotData as $platformData}
+                    <div class="platform-section" data-platform="{$platformData.platform}" {if $platformData.platform!='百度'}style="display:none;"{/if}>
+                        <!-- <div class="platform-header">
+                            <h2>{$platformData.title}</h2>
+                            <a href="/index/fullhotnews/platform/{$platformData.platform}.html" class="view-more-link">查看更多 ></a>
+                        </div> -->
+                        <ul class="hotnews-list">
+                            {if isset($platformData.data) && !empty($platformData.data)}
+                                {foreach $platformData.data as $item}
+                                <li class="hotnews-item">
+                                    <div class="hotnews-rank {if $item.index <= 3}top3{/if}">{$item.index}</div>
+                                    <div class="hotnews-content">
+                                        {if $platformData.platform == '历史上的今天'}
+                                            <!-- 历史上的今天的特殊显示 -->
+                                            <a href="javascript:;" class="hotnews-title history-event">
+                                                <span class="history-year">{$item.title|strstr='年',true}</span>
+                                                {$item.title|substr=strpos($item.title,'-')+1}
+                                            </a>
+                                        {else}
+                                            <a href="{$item.url}" target="_blank" class="hotnews-title">{$item.title}</a>
+                                            {if isset($item.desc) && $item.desc}
+                                            <div class="hotnews-desc">{$item.desc}</div>
+                                            {/if}
+                                            {if isset($item.hot) && $item.hot}
+                                            <div class="hotnews-hot">热度：{$item.hot}</div>
+                                            {/if}
+                                        {/if}
+                                    </div>
+                                </li>
+                                {/foreach}
+                            {else}
+                                <li class="empty-message">暂无数据</li>
+                            {/if}
+                        </ul>
+                    </div>
+                    {/foreach}
+                    <div class="update-time">更新时间：{:date('Y-m-d H:i:s')}</div>
+                {else}
+                    <div class="empty-message">暂无数据</div>
+                {/if}
+            </div>
+        </div>
+        {if !$userInfo}
+        {include file='index/sidebar_nologin' /}
+        {elseif $userInfo.isSiteUser}
+        {include file='index/sidebar_index' /}
+        {else}
+        {include file='index/sidebar_user' /}
+        {/if}
+        {include file='index/footer' /}
+    </div>
+    
+    <script>
+        // 显示特定平台的功能
+        function showPlatform(platformName) {
+            // 隐藏所有平台区块
+            var platformSections = document.querySelectorAll('.platform-section');
+            platformSections.forEach(function(section) {
+                section.style.display = 'none';
+            });
+            
+            // 显示指定平台区块
+            var targetSection = document.querySelector('.platform-section[data-platform="' + platformName + '"]');
+            if (targetSection) {
+                targetSection.style.display = 'block';
+            }
+            
+            // 更新导航链接状态
+            var navLinks = document.querySelectorAll('.category-nav a');
+            navLinks.forEach(function(link) {
+                link.classList.remove('active');
+                if (link.textContent === platformName) {
+                    link.classList.add('active');
+                }
+            });
+        }
+        
+        // 页面加载完成后，默认只显示前5条数据已经在控制器中处理了
+    </script>
+</body>
+
+</html>

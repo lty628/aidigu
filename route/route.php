@@ -35,6 +35,9 @@ Route::get('/admin/$', '/admin/admin/index');
 // Route::get('/tools/movie/$', 'tools/movie/index');
 // Route::get('/tools/onlinecar/$', 'tools/Onlinecar/index');
 
+// 微博热门新闻页面
+Route::get('/hotnews/$', 'index/Index/hotnews');
+
 // 微博
 if (isMobile()) {
 	$module = 'm';
