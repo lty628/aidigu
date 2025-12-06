@@ -19,6 +19,16 @@
                     <div class="layui-input-inline" style="width: 300px;">
                         <input type="text" name="keyword" placeholder="请输入昵称、用户名、博客名或手机号" class="layui-input">
                     </div>
+                    <div class="layui-input-inline" style="width: 120px;">
+                        <select name="update_time" lay-verify="">
+                            <option value="">更新时间</option>
+                            <option value="today">今天</option>
+                            <option value="yesterday">昨天</option>
+                            <option value="week">近一周</option>
+                            <option value="month">近一月</option>
+                            <option value="three_month">近三月</option>
+                        </select>
+                    </div>
                     <div class="layui-input-inline">
                         <button class="layui-btn layui-btn-primary" lay-submit lay-filter="search-btn">
                             <i class="layui-icon layui-icon-search"></i> 搜索
@@ -77,10 +87,10 @@
                 limit: 20,
                 limits: [10, 20, 30, 50, 100],
                 height: 'full-35',
-                 lineStyle: 'height: 50px;', // 定义表格的多行样式
+                 lineStyle: 'height: 55px;', // 定义表格的多行样式
                 cols: [[
                     {field: 'uid', title: 'ID', width: 80, sort: true},
-                    {field: 'head_image', title: '头像', width: 80, templet: '#avatar-tpl'},
+                    {field: 'head_image', title: '头像', width: 90, templet: '#avatar-tpl'},
                     {field: 'nickname', title: '昵称', width: 150},
                     // {field: 'username', title: '用户名', templet: function(d) { return d.username || '-'; }},
                     {field: 'blog', title: '博客名', width: 150, templet: function(d) { return d.blog || '-'; }},

@@ -15,6 +15,7 @@ class User extends Base
     public function getList()
     {
         $keyword = input('post.keyword', '');
+        $updateTime = input('post.update_time', ''); // 获取更新时间筛选参数
         $page = input('post.page', 1, 'intval');
         $limit = input('post.limit', 10, 'intval');
         
@@ -26,6 +27,39 @@ class User extends Base
                   ->whereOr('username', 'like', '%' . $keyword . '%')
                   ->whereOr('blog', 'like', '%' . $keyword . '%')
                   ->whereOr('phone', 'like', '%' . $keyword . '%');
+        }
+        
+        // 更新时间筛选
+        if ($updateTime) {
+            $currentTime = time();
+            switch ($updateTime) {
+                case 'today':
+                    // 今天的数据（从今天0点到现在）
+                    $startOfDay = strtotime(date('Y-m-d'));
+                    $query->where('uptime', '>=', $startOfDay);
+                    break;
+                case 'yesterday':
+                    // 昨天的数据（从昨天0点到今天0点）
+                    $startOfYesterday = strtotime('-1 day', strtotime(date('Y-m-d')));
+                    $endOfYesterday = strtotime(date('Y-m-d')) - 1;
+                    $query->whereBetween('uptime', [$startOfYesterday, $endOfYesterday]);
+                    break;
+                case 'week':
+                    // 近一周的数据
+                    $oneWeekAgo = strtotime('-1 week');
+                    $query->where('uptime', '>=', $oneWeekAgo);
+                    break;
+                case 'month':
+                    // 近一月的数据
+                    $oneMonthAgo = strtotime('-1 month');
+                    $query->where('uptime', '>=', $oneMonthAgo);
+                    break;
+                case 'three_month':
+                    // 近三月的数据
+                    $threeMonthsAgo = strtotime('-3 months');
+                    $query->where('uptime', '>=', $threeMonthsAgo);
+                    break;
+            }
         }
         
         $total = $query->count();
