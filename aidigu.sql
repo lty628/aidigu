@@ -1,4 +1,3 @@
-ALTER TABLE `wb_admin_behavior_log` CHANGE `ip` `ip` VARCHAR(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL COMMENT 'IP地址';
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
