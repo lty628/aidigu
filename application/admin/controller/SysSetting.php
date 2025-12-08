@@ -85,7 +85,7 @@ class SysSetting extends Base
             
             // 验证数据
             if (empty($data['value'])) {
-                $data['value'] = '';
+                $data['value'] = 0;
             }
             
             // 更新配置
