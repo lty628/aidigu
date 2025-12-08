@@ -187,6 +187,35 @@
     .hotnews-list .hotnews-content a:hover {
         padding-bottom: 0;
     }
+    /* 热度和讨论按钮容器 */
+    .hotnews-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 5px;
+    }
+    .hotnews-hot {
+        font-size: 12px;
+        color: #ff6b6b;
+        font-weight: 500;
+    }
+    /* 讨论按钮样式 */
+    .discussion-btn {
+        display: inline-block;
+        padding: 4px 10px;
+        background-color: #ff6b6b;
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+        font-size: 12px;
+        transition: background-color 0.3s;
+    }
+    .discussion-btn:hover {
+        background-color: #ff5252;
+        padding-bottom: 4px !important;
+        color: white; 
+    }
+
 </style>
 </head>
 
@@ -228,10 +257,15 @@
                                             {if isset($item.desc) && $item.desc}
                                             <div class="hotnews-desc">{$item.desc}</div>
                                             {/if}
+                                        {/if}
+                                        <!-- 热度和讨论按钮容器 -->
+                                        <div class="hotnews-meta">
                                             {if isset($item.hot) && $item.hot}
                                             <div class="hotnews-hot">热度：{$item.hot}</div>
                                             {/if}
-                                        {/if}
+                                            <!-- 讨论按钮 -->
+                                            <a href="/square/?topic={$item.title}" class="discussion-btn">讨论</a>
+                                        </div>
                                     </div>
                                 </li>
                                 {/foreach}

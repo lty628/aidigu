@@ -124,9 +124,12 @@ class HotSearch extends Controller
             //统计当日总数
             // $countnum = count($jsonRes[$month][$month . $day]) - 1;
             foreach ($jsonRes[$month][$month . $day] as $k => $v) {
+                $title = $v['year'] . '年-' . strip_tags(strip_tags($v['title']));
+                // 移除标题中的#号
+                $title = str_replace('#', '', $title);
                 array_push($tempArr, [
                     'index' => $k + 1,
-                    'title' => $v['year'] . '年-' . strip_tags(strip_tags($v['title'])),
+                    'title' => $title,
                     // 'url' => 'https://baike.baidu.com/item/' . urlencode(strip_tags($v['title'])),
                     // 'mobilUrl' => 'https://baike.baidu.com/item/' . urlencode(strip_tags($v['title']))
                 ]);
@@ -149,9 +152,12 @@ class HotSearch extends Controller
         $tempArr = [];
         if (isset($jsonRes['data']['realtime'])) {
             foreach ($jsonRes['data']['realtime'] as $k => $v) {
+                $title = $v['note'];
+                // 移除标题中的#号
+                $title = str_replace('#', '', $title);
                 array_push($tempArr, [
                     'index' => $k + 1,
-                    'title' => $v['note'],
+                    'title' => $title,
                     'hot' => round($v['num'] / 10000, 1) . '万',
                     'url' => "https://s.weibo.com/weibo?q=" . $v['note'] . "&Refer=index",
                     'mobilUrl' => "https://s.weibo.com/weibo?q=" . $v['note'] . "&Refer=index"
@@ -173,9 +179,12 @@ class HotSearch extends Controller
         if (isset($jsonRes['data']['cards'])) {
             foreach ($jsonRes['data']['cards'] as $v) {
                 foreach ($v['content'] as $k => $_v) {
+                    $title = $_v['word'];
+                    // 移除标题中的#号
+                    $title = str_replace('#', '', $title);
                     array_push($tempArr, [
                         'index' => $k + 1,
-                        'title' => $_v['word'],
+                        'title' => $title,
                         'desc' => $_v['desc'],
                         'pic' => $_v['img'],
                         'url' => $_v['url'],
@@ -195,9 +204,12 @@ class HotSearch extends Controller
         $tempArr = [];
         if (isset($jsonRes['data']['list'])) {
             foreach ($jsonRes['data']['list'] as $k => $v) {
+                $title = $v['keyword'];
+                // 移除标题中的#号
+                $title = str_replace('#', '', $title);
                 array_push($tempArr, [
                     'index' => $v['position'],
-                    'title' => $v['keyword'],
+                    'title' => $title,
                     'url' => 'https://search.bilibili.com/all?keyword=' . $v['keyword'] . '&order=click',
                     'mobilUrl' => 'https://search.bilibili.com/all?keyword=' . $v['keyword'] . '&order=click'
                 ]);
@@ -213,9 +225,12 @@ class HotSearch extends Controller
         $tempArr = [];
         if (isset($jsonRes['word_list'])) {
             foreach ($jsonRes['word_list'] as $k => $v) {
+                $title = $v['word'];
+                // 移除标题中的#号
+                $title = str_replace('#', '', $title);
                 array_push($tempArr, [
                     'index' => $k + 1,
-                    'title' => $v['word'],
+                    'title' => $title,
                     'hot' => round($v['hot_value'] / 10000, 1) . '万',
                     'url' => 'https://www.douyin.com/search/' . urlencode($v['word']),
                     'mobilUrl' => 'https://www.douyin.com/search/' . urlencode($v['word'])
@@ -232,9 +247,12 @@ class HotSearch extends Controller
         $tempArr = [];
         if (isset($jsonRes['data'])) {
             foreach ($jsonRes['data'] as $k => $v) {
+                $title = $v['title'];
+                // 移除标题中的#号
+                $title = str_replace('#', '', $title);
                 array_push($tempArr, [
                     'index' => $k + 1,
-                    'title' => $v['title'],
+                    'title' => $title,
                     'createdAt' => date('Y-m-d', $v['released_time']),
                     'other' => $v['author']['nickname'],
                     'like_count' => $v['like_count'],
@@ -254,10 +272,13 @@ class HotSearch extends Controller
         $tempArr = [];
         if (isset($jsonRes['data'])) {
             foreach ($jsonRes['data'] as $k => $v) {
+                $title = $v['target']['title'];
+                // 移除标题中的#号
+                $title = str_replace('#', '', $title);
                 preg_match('/\d+/',  $v['detail_text'], $hot);
                 array_push($tempArr, [
                     'index' => $k + 1,
-                    'title' => $v['target']['title'],
+                    'title' => $title,
                     'hot' => isset($hot[0]) ? $hot[0] . '万' : '',
                     'url' => 'https://www.zhihu.com/question/' . urlencode($v['target']['id']),
                     'mobilUrl' => 'https://www.zhihu.com/question/' . urlencode($v['target']['id'])
@@ -280,9 +301,12 @@ class HotSearch extends Controller
         //统计当日总数
         $countnum = count($jsonRes[$month][$month . $day]) - 1;
         foreach ($jsonRes[$month][$month . $day] as $k => $v) {
+            $title = $v['year'] . '年-' . strip_tags($v['title']);
+            // 移除标题中的#号
+            $title = str_replace('#', '', $title);
             array_push($tempArr, [
                 'index' => $k + 1,
-                'title' => $v['year'] . '年-' . strip_tags($v['title']),
+                'title' => $title,
                 'url' => 'https://baike.baidu.com/item/' . urlencode($v['title']),
                 'mobilUrl' => 'https://baike.baidu.com/item/' . urlencode($v['title'])
             ]);
@@ -303,9 +327,12 @@ class HotSearch extends Controller
         $jsonRes = json_decode($this->Curl('https://www.iesdouyin.com/web/api/v2/hotsearch/billboard/word/', null, null, "https://www.douyin.com"), true);
         $tempArr = [];
         foreach ($jsonRes['word_list'] as $k => $v) {
+            $title = $v['word'];
+            // 移除标题中的#号
+            $title = str_replace('#', '', $title);
             array_push($tempArr, [
                 'index' => $k + 1,
-                'title' => $v['word'],
+                'title' => $title,
                 'hot' => round($v['hot_value'] / 10000, 1) . '万',
                 'url' => 'https://www.douyin.com/search/' . urlencode($v['word']),
                 'mobilUrl' => 'https://www.douyin.com/search/' . urlencode($v['word'])
@@ -328,9 +355,12 @@ class HotSearch extends Controller
         $tempArr = [];
         //return $jsonRes;
         foreach ($jsonRes['data']['list'] as $k => $v) {
+            $title = $v['keyword'];
+            // 移除标题中的#号
+            $title = str_replace('#', '', $title);
             array_push($tempArr, [
                 'index' => $v['position'],
-                'title' => $v['keyword'],
+                'title' => $title,
                 'url' => 'https://search.bilibili.com/all?keyword=' . $v['keyword'] . '&order=click',
                 'mobilUrl' => 'https://search.bilibili.com/all?keyword=' . $v['keyword'] . '&order=click'
             ]);
@@ -351,10 +381,13 @@ class HotSearch extends Controller
         $jsonRes = json_decode($this->Curl('https://www.zhihu.com/api/v3/feed/topstory/hot-lists/total?limit=50&desktop=true', null, null, "https://www.zhihu.com"), true);
         $tempArr = [];
         foreach ($jsonRes['data'] as $k => $v) {
+            $title = $v['target']['title'];
+            // 移除标题中的#号
+            $title = str_replace('#', '', $title);
             preg_match('/\d+/',  $v['detail_text'], $hot);
             array_push($tempArr, [
                 'index' => $k + 1,
-                'title' => $v['target']['title'],
+                'title' => $title,
                 'hot' => $hot[0] . '万',
                 'url' => 'https://www.zhihu.com/question/' . urlencode($v['target']['id']),
                 'mobilUrl' => 'https://www.zhihu.com/question/' . urlencode($v['target']['id'])
@@ -378,9 +411,12 @@ class HotSearch extends Controller
         $jsonRes = json_decode($this->Curl('https://weibo.com/ajax/side/hotSearch', null, $cookie, "https://s.weibo.com"), true);
         $tempArr = [];
         foreach ($jsonRes['data']['realtime'] as $k => $v) {
+            $title = $v['note'];
+            // 移除标题中的#号
+            $title = str_replace('#', '', $title);
             array_push($tempArr, [
                 'index' => $k + 1,
-                'title' => $v['note'],
+                'title' => $title,
                 'hot' => round($v['num'] / 10000, 1) . '万',
                 'url' => "https://s.weibo.com/weibo?q=" . $v['note'] . "&Refer=index",
                 'mobilUrl' => "https://s.weibo.com/weibo?q=" . $v['note'] . "&Refer=index"
@@ -406,9 +442,12 @@ class HotSearch extends Controller
         $tempArr = [];
         foreach ($jsonRes['data']['cards'] as $v) {
             foreach ($v['content'] as $k => $_v) {
+                $title = $_v['word'];
+                // 移除标题中的#号
+                $title = str_replace('#', '', $title);
                 array_push($tempArr, [
                     'index' => $k + 1,
-                    'title' => $_v['word'],
+                    'title' => $title,
                     'desc' => $_v['desc'],
                     'pic' => $_v['img'],
                     'url' => $_v['url'],
@@ -433,9 +472,12 @@ class HotSearch extends Controller
         $jsonRes = json_decode($this->Curl('https://api.thepaper.cn/contentapi/nodeCont/getByChannelId?channelId=119908'), true);
         $tempArr = [];
         foreach ($jsonRes['data']['list'] as $k => $v) {
+            $title = $v['name'];
+            // 移除标题中的#号
+            $title = str_replace('#', '', $title);
             array_push($tempArr, [
                 'index' => $k + 1,
-                'title' => $v['name'],
+                'title' => $title,
                 'url' => 'https://www.thepaper.cn/newsDetail_forward_' . $v['contId'],
                 'mobilUrl' => 'https://www.thepaper.cn/newsDetail_forward_' . $v['contId']
             ]);
@@ -457,9 +499,12 @@ class HotSearch extends Controller
         $tempArr = [];
         if (isset($jsonRes['data']['list'])) {
             foreach ($jsonRes['data']['list'] as $k => $v) {
+                $title = $v['name'];
+                // 移除标题中的#号
+                $title = str_replace('#', '', $title);
                 array_push($tempArr, [
                     'index' => $k + 1,
-                    'title' => $v['name'],
+                    'title' => $title,
                     'url' => 'https://www.thepaper.cn/newsDetail_forward_' . $v['contId'],
                     'mobilUrl' => 'https://www.thepaper.cn/newsDetail_forward_' . $v['contId']
                 ]);
