@@ -515,7 +515,7 @@ a img {
 .contents .entry .avatar .imgborder {
     width: 52px;
     height: 52px;
-    background-color: var(--background-color);
+    /* background-color: var(--background-color); */
 }
 
 .contents .entry .box {
