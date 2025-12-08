@@ -34,7 +34,9 @@
                         const base64Encoded = btoa(utf8Encoded);
                         const finalEncoded = encodeURIComponent(base64Encoded);
                         window.location.href = `/search/${finalEncoded}/`; 
-                    }
+                    } else {
+						window.location.href = `/search/`; 
+					}
                 " style="padding: 5px 10px;background-color: var(--secondary-color);color: var(--primary-btn-color); border: none; border-radius: 3px; cursor: pointer;">查询</button>
 				</form>
 			</p>
