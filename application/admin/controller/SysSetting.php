@@ -83,10 +83,10 @@ class SysSetting extends Base
         if (Request::isPost()) {
             $data = Request::param();
             
-            // 验证数据
-            if (empty($data['value'])) {
-                $data['value'] = 0;
-            }
+            // // 验证数据
+            // if (empty($data['value'])) {
+            //     $data['value'] = 0;
+            // }
             
             // 更新配置
             $oldValue = $setting->value;
