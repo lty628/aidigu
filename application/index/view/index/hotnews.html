@@ -9,28 +9,29 @@
         text-align: center;
         margin-bottom: 30px;
         padding-bottom: 15px;
-        border-bottom: 1px solid #eee;
+        border-bottom: 1px solid var(--border-color);
     }
     .hotnews-header h1 {
         font-size: 28px;
-        color: #333;
+        color: var(--base-font-color);
         margin-bottom: 10px;
     }
     .hotnews-header p {
-        color: #666;
+        color: var(--base-font-color);
+        opacity: 0.7;
         font-size: 14px;
     }
     .platform-section {
         margin-bottom: 40px;
-        /* border: 1px solid #eee; */
         border-radius: 8px;
         overflow: hidden;
-        /* box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); */
+        background-color: var(--background-color);
+        box-shadow: 0 2px 10px var(--shadow-color);
     }
     .platform-header {
-        background-color: #f8f9fa;
+        background-color: var(--light-background-color);
         padding: 15px 20px;
-        border-bottom: 1px solid #eee;
+        border-bottom: 1px solid var(--border-color);
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -38,11 +39,11 @@
     .platform-header h2 {
         margin: 0;
         font-size: 20px;
-        color: #333;
+        color: var(--base-font-color);
     }
     .view-more-link {
         font-size: 14px;
-        color: #ff6b6b;
+        color: var(--primary-color);
         text-decoration: none;
     }
     .view-more-link:hover {
@@ -56,11 +57,11 @@
         display: flex;
         align-items: center;
         padding: 15px 20px;
-        /* border-bottom: 1px solid #f0f0f0; */
+        border-bottom: 1px solid var(--border-color);
         transition: background-color 0.2s;
     }
     .hotnews-item:hover {
-        background-color: hwb(0 98% 2% / 0.726);
+        background-color: var(--light-background-color);
     }
     .hotnews-item:last-child {
         border-bottom: none;
@@ -73,15 +74,15 @@
         font-weight: bold;
         margin-right: 15px;
         border-radius: 6px;
-        background-color: #f0f0f0;
-        color: #666;
+        background-color: var(--light-background-color);
+        color: var(--base-font-color);
         flex-shrink: 0;
         font-size: 14px;
     }
     .hotnews-rank.top3 {
-        background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
-        color: white;
-        box-shadow: 0 2px 5px rgba(255, 107, 107, 0.3);
+        background: linear-gradient(135deg, var(--primary-color), var(--primary-hover-color));
+        color: var(--primary-btn-color);
+        box-shadow: 0 2px 5px var(--shadow-color);
     }
     .hotnews-content {
         flex: 1;
@@ -89,7 +90,7 @@
     }
     .hotnews-title {
         font-size: 16px;
-        color: #333;
+        color: var(--base-font-color);
         text-decoration: none;
         transition: color 0.3s;
         display: block;
@@ -99,11 +100,12 @@
         font-weight: 500;
     }
     .hotnews-title:hover {
-        color: #ff6b6b;
+        color: var(--primary-color);
     }
     .hotnews-desc {
         font-size: 13px;
-        color: #666;
+        color: var(--base-font-color);
+        opacity: 0.7;
         margin-top: 5px;
         white-space: nowrap;
         overflow: hidden;
@@ -111,21 +113,23 @@
     }
     .hotnews-hot {
         font-size: 12px;
-        color: #ff6b6b;
+        color: var(--primary-color);
         margin-top: 5px;
         font-weight: 500;
     }
     .update-time {
         text-align: right;
         font-size: 12px;
-        color: #999;
+        color: var(--base-font-color);
+        opacity: 0.6;
         margin-top: 20px;
         padding: 0 20px 20px;
     }
     .empty-message {
         text-align: center;
         padding: 40px;
-        color: #999;
+        color: var(--base-font-color);
+        opacity: 0.6;
     }
     /* 分类导航样式 */
     .category-nav {
@@ -138,32 +142,33 @@
         display: inline-block;
         padding: 10px 20px;
         margin: 5px;
-        background-color: #fff;
-        color: #333;
+        background-color: var(--background-color);
+        color: var(--base-font-color);
         text-decoration: none;
         border-radius: 6px;
         transition: all 0.3s;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 1px 3px var(--shadow-color);
         font-weight: 500;
     }
     .category-nav a:hover {
         transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 4px 8px var(--shadow-color);
+        color: var(--primary-color);
     }
     .category-nav a.active {
-        background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
-        color: white;
-        box-shadow: 0 4px 10px rgba(255, 107, 107, 0.3);
+        background: linear-gradient(135deg, var(--primary-color), var(--primary-hover-color));
+        color: var(--primary-btn-color);
+        box-shadow: 0 4px 10px var(--shadow-color);
     }
     
     /* 历史上的今天特殊样式 */
     .history-event {
         font-size: 14px;
-        color: #555;
+        color: var(--base-font-color);
     }
     .history-year {
         font-weight: bold;
-        color: #ff6b6b;
+        color: var(--primary-color);
         margin-right: 5px;
     }
     
@@ -197,7 +202,7 @@
     
     .hotnews-hot {
         font-size: 12px;
-        color: #ff6b6b;
+        color: var(--primary-color);
         font-weight: 500;
         margin-right: auto; /* 推动讨论按钮靠右 */
     }
@@ -206,8 +211,8 @@
     .discussion-btn {
         display: inline-block;
         padding: 4px 10px;
-        background-color: #ff6b6b;
-        color: white;
+        background-color: var(--primary-color);
+        color: var(--primary-btn-color);
         text-decoration: none;
         border-radius: 4px;
         font-size: 12px;
@@ -216,11 +221,23 @@
     }
     
     .discussion-btn:hover {
-        background-color: #ff5252;
+        background-color: var(--primary-hover-color);
         padding-bottom: 4px !important;
-        color: white; 
+        color: var(--primary-btn-color); 
     }
 
+    /* 使用主题变量设置顶部标题样式 */
+    .top {
+        background-color: var(--background-color);
+        color: var(--base-font-color);
+        padding: 15px;
+        font-size: 20px;
+        font-weight: bold;
+        text-align: center;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 5px var(--shadow-color);
+    }
 </style>
 </head>
 
