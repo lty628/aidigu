@@ -94,7 +94,10 @@ class IndexInfo extends Info
             return json(array('status' =>  1, 'msg' => 'ok', 'data' => ['data' => handleMessage($userMessage), 'allow_delete' => 0]));
         }
         $topicTitle = input('topic');
-        $this->assign('topicTitle', "#" . $topicTitle . "#");
+        if ($topicTitle) {
+            $this->assign('topicTitle', "#" . $topicTitle . "#");
+        }
+       
         $this->assign('userMessage', []);
         return $this->fetch('index');
     }
