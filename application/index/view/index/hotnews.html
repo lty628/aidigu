@@ -190,15 +190,18 @@
     /* 热度和讨论按钮容器 */
     .hotnews-meta {
         display: flex;
-        justify-content: space-between;
+        justify-content: flex-end; /* 默认靠右对齐 */
         align-items: center;
         margin-top: 5px;
     }
+    
     .hotnews-hot {
         font-size: 12px;
         color: #ff6b6b;
         font-weight: 500;
+        margin-right: auto; /* 推动讨论按钮靠右 */
     }
+    
     /* 讨论按钮样式 */
     .discussion-btn {
         display: inline-block;
@@ -209,7 +212,9 @@
         border-radius: 4px;
         font-size: 12px;
         transition: background-color 0.3s;
+        flex-shrink: 0; /* 防止按钮被压缩 */
     }
+    
     .discussion-btn:hover {
         background-color: #ff5252;
         padding-bottom: 4px !important;
