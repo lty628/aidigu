@@ -52,7 +52,8 @@ class SysSetting extends Base
             
             // 创建配置
             $setting = AdminSystemSetting::create($data);
-            
+            $sectionKey = $data['section'] . '.' . $data['key'];
+            cache($sectionKey, $data['value'], 60);
             if ($setting) {
                 // 记录行为日志
                 // $this->recordBehavior('添加系统配置', ['section' => $data['section'], 'key' => $data['key']]);
@@ -89,6 +90,8 @@ class SysSetting extends Base
             
             // 更新配置
             $oldValue = $setting->value;
+            $sectionKey = $setting->section . '.' . $setting->key;
+            cache($sectionKey, $data['value'], 60);
             if ($setting->update($data)) {
                 // 记录行为日志
                 // $this->recordBehavior('编辑系统配置', [
