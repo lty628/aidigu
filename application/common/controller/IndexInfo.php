@@ -461,7 +461,7 @@ class IndexInfo extends Info
                 ->leftJoin([getPrefix() . 'message' => 'message'], 'message.msg_id=reminder.msg_id')
                 ->leftJoin([getPrefix() . 'user' => 'user'], 'user.uid=message.uid')
                 ->field('user.uid,user.nickname,user.head_image,user.blog,message.ctime,message.contents,message.repost,message.refrom,message.repostsum,message.media,message.media_info,message.commentsum,message.msg_id,reminder.id,reminder.ctime as remind_ctime,reminder.status,reminder.type')
-                // ->where('reminder.status', 0)
+                ->where('reminder.status', 0)
                 // ->where('reminder.type', 1)
                 ->where('reminder.touid', $uid)
                 ->order('reminder.status asc, reminder.id desc')
