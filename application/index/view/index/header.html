@@ -14,7 +14,7 @@
 <script src="/static/dplayer/js/DPlayer.min.js"></script>
 <script language="javascript" type="text/javascript" src="/static/index/js/common.js?18"></script>
 <script language="javascript" type="text/javascript" src="/static/common/js/index.js?22"></script>
-<script language="javascript" type="text/javascript" src="/static/common/js/common.js?18"></script>
+<script language="javascript" type="text/javascript" src="/static/common/js/common.js?19"></script>
 <script language="javascript" type="text/javascript" src="/static/index/js/video.js?11"></script>
 
 {if $userInfo}
@@ -66,12 +66,18 @@
 					<li><a href="/topic/">话题</a></li>
 					<!-- <li><a href="/search/">搜索</a></li> -->
 					<li><a href="/hotnews/">新闻热点</a></li>
+					{if $chatRemind['messageRemind']}
+					<li>
+						<a href="/remind/">提醒</a>
+						<span class="layui-badge-dot layui-bg-blue" id="checkmessageRemind"></span>
+					</li>
+					{/if}
 					<li>
 						<a href="/tools/">小应用</a>
 						{if $chatRemind['chatRemind']}
-						<span class="layui-badge-dot layui-bg-blue" id="checkRemind"></span>
+						<span class="layui-badge-dot layui-bg-blue" id="checkchatRemind"></span>
 						{else} 
-						<span class="layui-badge-dot layui-bg-blue" id="checkRemind" style="display: none;"></span>
+						<span class="layui-badge-dot layui-bg-blue" id="checkchatRemind" style="display: none;"></span>
 						{/if}
 					</li>
 					<!-- <li><a href="javascript:;" data-title="我的云盘" data-url="/cloud/show/" onclick="showFrameHtml(this, '80%', '80%')">网盘</a></li> -->

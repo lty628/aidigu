@@ -17,7 +17,7 @@
     <script src="/static/dplayer/js/DPlayer.min.js"></script>
     <script language="javascript" type="text/javascript" src="/static/m/js/common.js?18"></script>
     <script language="javascript" type="text/javascript" src="/static/common/js/index.js?22"></script>
-    <script language="javascript" type="text/javascript" src="/static/common/js/common.js?17"></script>
+    <script language="javascript" type="text/javascript" src="/static/common/js/common.js?19"></script>
     <script language="javascript" type="text/javascript" src="/static/m/js/video.js?12"></script>
 
     <!--[if lte IE 8]>
@@ -55,9 +55,9 @@
                 <li {if $action == 'tools'}class="current"{/if}>
 					<a href="/tools/">小应用</a>
                     {if $chatRemind['chatRemind'] || $chatRemind['messageRemind']}
-					<span class="layui-badge-dot layui-bg-blue" id="checkRemind"></span>
+					<span class="layui-badge-dot layui-bg-blue" id="checkchatRemind"></span>
 					{else} 
-					<span class="layui-badge-dot layui-bg-blue" id="checkRemind" style="display: none;"></span>
+					<span class="layui-badge-dot layui-bg-blue" id="checkchatRemind" style="display: none;"></span>
 					{/if}
 				</li>
                 {else} 

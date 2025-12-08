@@ -4,7 +4,7 @@
 <body>
     <div class="main">
         <div class="contents">
-            {if $userInfo && $userInfo.isSiteUser && request()->action() != 'collect'}
+            {if $userInfo && $userInfo.isSiteUser && request()->action() != 'collect' && request()->action() != 'remind'}
             <div class="post" id="postform" style="display:block;">
                 <div class="postad" id="wcontent">&nbsp;</div>
                 <div id="msgInput" class="text" maxlength="2800" onkeyup="check_len1()">

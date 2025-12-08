@@ -446,4 +446,35 @@ class IndexInfo extends Info
     //     $this->assign('hotnews', $tempArr);
     //     return $this->fetch();
     // }
+
+    // 提醒
+    public function remind()
+    {
+        if (request()->isAjax()) {
+         // $type 0: 转发 1: 评论 2: 回复 3: 好友 4: 私信  5: 群聊 【群聊提醒待定】
+            $uid = getLoginUid();
+            $get = input('get.');
+            $page = $get['page'] ?? 1;
+            $limit = $get['limit'] ?? 10;
+            $list = Db::name('reminder')
+                ->alias('reminder')
+                ->leftJoin([getPrefix() . 'message' => 'message'], 'message.msg_id=reminder.msg_id')
+                ->leftJoin([getPrefix() . 'user' => 'user'], 'user.uid=message.uid')
+                ->field('user.uid,user.nickname,user.head_image,user.blog,message.ctime,message.contents,message.repost,message.refrom,message.repostsum,message.media,message.media_info,message.commentsum,message.msg_id,reminder.id,reminder.ctime as remind_ctime,reminder.status,reminder.type')
+                // ->where('reminder.status', 0)
+                // ->where('reminder.type', 1)
+                ->where('reminder.touid', $uid)
+                ->order('reminder.status asc, reminder.id desc')
+                ->limit($limit)->page($page)
+                ->select();
+
+            // $userMessage = $userMessage->toArray()['data'];
+            return json(array('status' =>  1, 'msg' => 'ok', 'data' => ['data' => handleMessage($list), 'allow_delete' => 0]));
+        }
+        // $this->assign('siteUser', $this->siteUserId);
+        $this->assign('userMessage', []);
+        return $this->fetch('index');
+        // dump($list);die;
+        // return json(['code' => 0, 'data' => $list, 'count' => $count]);
+    }
 }

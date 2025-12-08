@@ -12,7 +12,12 @@ $(function(){
                 dataType: "json",
                 success: function (response) {
                     if (response.status ==1) {
-                        $("#checkRemind").show()
+                        if (response.data.chatRemind && $("checkchatRemind").length > 0) {
+                            $("#checkchatRemind").show()    
+                        }
+                        if (response.data.messageRemind && $("checkmessageRemind").length > 0) {
+                            $("#checkmessageRemind").show()    
+                        }
                         if ($("#chatAudio").length <= 0 ) {
                             $('<audio id="chatAudio"><source src="/static/chat/voices/notify.ogg" type="audio/ogg"><source src="/static/chat/voices/notify.mp3" type="audio/mpeg"><source src="/static/chat/voices/notify.wav" type="audio/wav"></audio>').appendTo('body');
                         }

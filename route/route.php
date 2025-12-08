@@ -63,6 +63,8 @@ Route::get('/topic/:page$', $module . '/Index/topicList')->pattern(['page'=>'[0-
 Route::get('/topic/:topic_id/$',$module . '/Index/topic')->pattern(['topic_id' => '[0-9]+']);
 Route::get('/square/$',$module . '/Index/blog');
 Route::get('/square/:page$',$module . '/Index/blog')->pattern(['page'=>'[0-9]+']);
+Route::get('/remind/$',$module . '/Index/remind');
+Route::get('/remind/:page$',$module . '/Index/remind')->pattern(['page'=>'[0-9]+']);
 Route::get('/$',$module . '/Index/index');
 Route::get('/:page$',$module . '/Index/index')->pattern(['page'=>'[0-9]+']);
 // Route::get('ajax', '/index/ajax/ajax/');
