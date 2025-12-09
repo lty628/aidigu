@@ -1,0 +1,211 @@
+<style>
+    .w-e-toolbar, .w-e-text-container, .w-e-menu-panel{
+        background-color: unset;
+    }
+</style>
+
+<div id="msgContent">
+    {if isset($userMessage[0])}
+    {foreach $userMessage as $message}
+    <div class="entry">
+        <div class="avatar">
+            <div class="imgborder"><a href="{:url('/'.$message.blog.'/')}"><img
+                        src="{$message.head_image}" /></a></div>
+        </div>
+        <div class="box box-main">
+            <p class="massageText">
+                <a href="{:url('/'.$message.blog.'/own/')}" id="nickname">{$message.nickname}：
+                </a>
+                {$message.contents|raw}{$message.repost|raw}
+            </p>
+            {if $message.media}
+            {if json_decode($message.media_info, true)['media_type'] == 'mp4'}
+            <p class="massageImg clear" vid="{$message.media}"><video width="400px" controls="" name="media">
+                    <source src="{$message.media}" type="video/mp4">
+                </video></p>
+            {else}
+            <p class="massageImg clear"><img width="75%" , src="{:getTypeImg($message.media_info)}"
+                    onclick="showMessageImg(this)" style="cursor:pointer;"></p>
+            {/if}
+            {/if}
+            <div class="static clear">
+                <span>
+                    <a href="{:url('/'.$message.blog.'/'.'message/'.$message.msg_id)}">查看</a> |
+                    <a href="javascript:void(0);"
+                        onclick="repost(this, {$message.uid}, {$message.msg_id})">转发{if 0 !=
+                        $message.repostsum}（{$message.repostsum}）{/if}</a> |
+                    <a href="javascript:void(0);" onclick="comment({$message.msg_id}, {$message.uid});">评论{if 0
+                        !=
+                        $message.commentsum}（{$message.commentsum}）{/if}</a>
+                    {if $userInfo.isSiteUser && request()->action()=='own'}
+                    | <a href="{:url('/'.$message.blog.'/'.'del/message/'.$message.msg_id)}">删除</a>
+                    {/if}
+                </span>
+                {$message.ctime|setMessageTime} 来自 {$message.refrom}
+            </div>
+        </div>
+        <div class="clear"></div>
+    </div>
+    {/foreach}
+    {else}
+    <!-- <div class="entry">
+        <div class="box">
+            <p>暂无微博...</p>
+        </div>
+        <div class="clear"></div>
+    </div> -->
+    {/if}
+</div>
+<div id="showMore" class="showMore">
+    <span class="loading"></span>
+    加载中...
+</div>
+
+<script>
+    /**
+     * 缓冲函数
+     * @param {Number} position 当前滚动位置
+     * @param {Number} destination 目标位置
+     * @param {Number} rate 缓动率
+     * @param {Function} callback 缓动结束回调函数 两个参数分别是当前位置和是否结束
+     */
+    var easeout = function (position, destination, rate, callback) {
+        if (position === destination || typeof destination !== 'number') {
+            return false;
+        }
+        destination = destination || 0;
+        rate = rate || 2;
+
+        // 不存在原生`requestAnimationFrame`，用`setTimeout`模拟替代
+        if (!window.requestAnimationFrame) {
+            window.requestAnimationFrame = function (fn) {
+                return setTimeout(fn, 17);
+            }
+        }
+
+        var step = function () {
+            position = position + (destination - position) / rate;
+            if (Math.abs(destination - position) < 1) {
+                callback(destination, true);
+                return;
+            }
+            callback(position, false);
+            requestAnimationFrame(step);
+        };
+        step();
+    }
+
+    var scrollTopSmooth = function (position) {
+        // 当前滚动高度
+        var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+        easeout(scrollTop, position, 5, function (val) {
+            window.scrollTo(0, val);
+        });
+    }
+
+    // $backToTop = document.querySelector('.back-to-top')
+    // $backToTop.addEventListener('click', function () {
+    // 	scrollTopSmooth(0);
+    // }, false);
+</script>
+<script>
+    var page = 0;
+    $(function () {
+        var canLoad = true
+        function initNextPage(url) {
+            if (!canLoad) return
+            page++
+            canLoad = false
+            var url = window.location.pathname
+            $.ajax({
+                type: "get",
+                url: url,
+                data: { page: page },
+                dataType: "json",
+            })
+               .done(function (json) {
+                    var data = json.data.data
+                    
+                    if (json?.code === 0) {
+					    // 显示提示信息
+					    alertMsg(json?.msg || '加载数据失败');
+					    // 2 秒后将 canLoad 设置为 true
+					    setTimeout(() => {
+					        canLoad = true;
+					    }, 2000);
+					    return;
+					}
+
+                    for (var i = 0; i < data.length; i++) {
+                        var mediaStr = '';
+                        var str = '';
+                        var delStr = '';
+                        var c1 = '';
+                        var c2 = '';
+                        if (data[i].media) {
+                            data[i].media_info = $.parseJSON(data[i].media_info)
+                            if (data[i].media_info.media_type == 'mp4' || data[i].media_info.media_type == 'm3u8') {
+                                mediaStr = '<p class="massageImg clear showVideo' + data[i].msg_id + '" vid="' + data[i].media + '"><video width="400px"  controls=""  name="media"><source src="" type="video/mp4"></video></p>';
+                            } else if (data[i].media_info.media_type == 'mp3') {
+                                mediaStr = '<p class="massageImg clear"><audio id="music_' + data[i].msg_id + '" class="music" controls="controls" loop="loop" onplay="stopOther(this)" preload="none" controlsList="nodownload" οncοntextmenu="return false" name="media"><source src="' + data[i].media + '" type="audio/mpeg"></audio></p>';
+                            } else {
+                                mediaStr = '<p  class="massageImg clear"><img class="massageImgCommon massageImg_' + data[i].media_info.media_type + '"  onclick="showMessageImg(this)" src="' + data[i].media + '"></p>';
+                            }
+                        }
+
+                        // if (0 != data[i].repostsum) {
+                        // 	c1 = '('+data[i].repostsum+')'
+                        // }
+                        if (0 != data[i].commentsum) {
+                            c2 = '(' + data[i].commentsum + ')'
+                        }
+
+                        if (json.data.allow_delete != -1) {
+                            // delStr += '<a href="/' + data[i].blog + '/message/' + data[i].msg_id + '">查看</a> |';
+                            if (json.data.allow_comment) {
+                                delStr += '<a href="javascript:;" data-title="评论" data-url="/chat/channelMessageChatId/' + data[i].msg_id + '" onclick="showFrameHtml(this, \'60%\', \'70%\')">评论' + c2 + '</a>'
+                            }
+                            // delStr += '<a href="javascript:void(0);" onclick="repost(this, '+data[i].uid+', '+data[i].msg_id+')">转发'+c1+'</a> |';
+                            // delStr += '<a href="javascript:void(0);" onclick="comment(' + data[i].msg_id + ', ' + data[i].uid + ');">评论' + c2 + '</a>';
+                            // if (!json.data.is_collect) {
+                            //     delStr += ' | <a href="javascript:void(0);" onclick="collectMsg(' + data[i].msg_id + ',0);">收藏</a>';
+                            // }
+                            if (json.data.allow_delete || json.data.userid == data[i].uid) {
+                                delStr += ' | <a href="/' + data[i].blog + '/del/channel_message/' + data[i].msg_id + '">删除</a>';
+                            } else if (json.data.is_collect) {
+                                // delStr += ' | <a href="javascript:void(0);" onclick="collectMsg(' + data[i].msg_id + ',1);">取消收藏</a>';
+                            } else {
+                                // delStr += ' | <a href="javascript:void(0);" onclick="collectMsg(' + data[i].msg_id + ',0);">收藏</a>';
+                            }
+                        }
+
+                        str = '<div class="entry"><div class="avatar"><div class="imgborder"><a href="/' + data[i].blog + '/own/"><img src="' + data[i].head_image + '" /></a></div></div><div class="box box-main"><p class="massageText"><a href="/' + data[i].blog + '/own/">' + data[i].nickname + '：</a>' + data[i].contents + data[i].repost + '</p>' + mediaStr + '<div class="static clear"><span>' + delStr + '</span>' + getDateDiff(data[i].ctime) + ' 来自 ' + data[i].refrom + '</div></div><div class="clear"></div></div>';
+                        $("#msgContent").append(str);
+                        iniVideo(data[i].msg_id)
+                    }
+
+                    if (data.length < 8) {
+						$("#showMore").hide()
+						return
+						// $("#showMore").html('没有了')
+					}
+
+                    canLoad = true
+                })
+               .always(function () {
+                })
+               .fail(function () {
+                });
+        }
+        $(window).scroll(function () {
+            var top = $(window).scrollTop();
+            var winH = $(window).height();
+            var docH = $(document).height();
+            if (docH <= (top + winH + 200)) {
+                initNextPage(page)
+            }
+        });
+        initNextPage(page)
+    })
+
+</script>

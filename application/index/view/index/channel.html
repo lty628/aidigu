@@ -1,0 +1,160 @@
+{include file='index/header' /}
+<style>
+    .channel-page-container {
+        padding: 20px;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+    .channel-header {
+        text-align: center;
+        margin-bottom: 30px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid var(--border-color);
+    }
+    .channel-header h1 {
+        font-size: 28px;
+        color: var(--base-font-color);
+        margin-bottom: 10px;
+    }
+    .channel-info {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    .channel-avatar {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        margin-bottom: 15px;
+        object-fit: cover;
+    }
+    .channel-description {
+        font-size: 16px;
+        color: var(--base-font-color);
+        opacity: 0.8;
+        margin-bottom: 20px;
+    }
+    .channel-stats {
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+        margin-bottom: 20px;
+        font-size: 14px;
+    }
+    .stat-item {
+        text-align: center;
+    }
+    .stat-value {
+        font-size: 18px;
+        font-weight: bold;
+        color: var(--primary-color);
+    }
+    .stat-label {
+        color: var(--base-font-color);
+        opacity: 0.7;
+        margin-top: 5px;
+    }
+    .channel-actions {
+        margin-bottom: 30px;
+    }
+    .action-btn {
+        display: inline-block;
+        padding: 10px 20px;
+        margin: 0 10px;
+        border-radius: 4px;
+        text-decoration: none;
+        transition: all 0.3s;
+        font-weight: 500;
+    }
+    .join-btn {
+        background-color: var(--primary-color);
+        color: var(--primary-btn-color);
+    }
+    .join-btn:hover {
+        background-color: var(--primary-hover-color);
+    }
+    .message-btn {
+        background-color: var(--secondary-color);
+        color: var(--primary-btn-color);
+    }
+    .message-btn:hover {
+        background-color: var(--secondary-hover-color);
+    }
+    .channel-messages {
+        margin-top: 30px;
+    }
+    .message-item {
+        padding: 15px;
+        border-bottom: 1px solid var(--border-color);
+        margin-bottom: 15px;
+    }
+    .message-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+    .message-author {
+        font-weight: bold;
+        color: var(--primary-color);
+    }
+    .message-time {
+        font-size: 12px;
+        color: var(--base-font-color);
+        opacity: 0.6;
+    }
+    .message-content {
+        color: var(--base-font-color);
+        line-height: 1.6;
+    }
+    .empty-message {
+        text-align: center;
+        padding: 40px;
+        color: var(--base-font-color);
+        opacity: 0.6;
+    }
+</style>
+</head>
+
+<body>
+    <div class="main">
+        <div class="contents">
+            {if $channel['allow_speak']}
+            <div class="post" id="postform" style="display:block;">
+                <div class="postad" id="wcontent">&nbsp;</div>
+                <div id="msgInput" class="text" maxlength="2800" onkeyup="check_len1()">
+                    <!-- <p>你在做什么呢</p> -->
+                </div>
+                <input type="hidden" id="topicTitle" value="{$topicTitle | default=''}">
+                <input type="hidden" id="saveAction" value="channel&channel_id={$channel['channel_id']}">
+                <div class="postnow">
+                    <span>
+                        <input type="button" value="发布" class="layui-btn" id="sendButton" />
+                    </span>
+                    你还可以发布<em id="leftlen1">2800</em>字
+                </div>
+                <div id="msgToolBar" class="toolbar" style="float: left;"></div>
+                <div class="tool-up-class" style="display: none;">
+                    <div class="imgHtml" style="display: block;border-radius: 3px;">
+                        <!-- <img src="" width="70px" alt=""> -->
+                        上传成功！
+                        <i class="layui-icon layui-icon-close-fill" onclick="removeImg(this)"
+                            style="color: red;cursor:pointer;font-size:20px!important"></i>
+                    </div>
+                    <input type="hidden" id="mediaVal">
+                </div>
+                <div class="clear"></div>
+            </div>
+            {else}
+            <div class="top" style="background-color: white;"></div>
+            {/if}
+            <input type="hidden" id="userInfo" value="{$userInfo|json_encode}" />
+            <div class="sendMsg"></div>
+            {include file='index/contents_channel' /}
+        </div>
+        {include file='index/sidebar_channel' /}
+        {include file='index/footer' /}
+    </div>
+
+</body>
+
+</html>

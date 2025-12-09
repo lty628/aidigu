@@ -611,4 +611,66 @@ INSERT INTO `wb_topic` VALUES (22, '#致回不去的青春#', 0, '2023-10-12 16:
 INSERT INTO `wb_topic` VALUES (23, '#你的头像有特殊含义吗？#', 0, '2023-11-01 17:51:50', 0);
 
 
+
+
+-- 创建频道表
+CREATE TABLE `wb_channel`  (
+  `channel_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `channel_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '频道名称',
+  `avatar` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT '' COMMENT '频道头像',
+  `avatar_info` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT '' COMMENT '头像信息',
+  `description` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT '' COMMENT '频道介绍',
+  `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT '' COMMENT '频道密码',
+  `owner_uid` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '创建者UID',
+  `invite_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '邀请码',
+  `invite_status` tinyint(3) UNSIGNED NOT NULL DEFAULT 0 COMMENT '邀请状态 0:关闭 1:开启',
+  `allow_speak` tinyint(3) UNSIGNED NOT NULL DEFAULT 1 COMMENT '是否允许发言 0:不允许 1:允许',
+  `allow_comment` tinyint(3) UNSIGNED NOT NULL DEFAULT 1 COMMENT '是否允许评论 0:不允许 1:允许',
+  `member_count` int(11) NOT NULL DEFAULT 0 COMMENT '成员数',
+  `message_count` int(11) NOT NULL DEFAULT 0 COMMENT '消息数',  -- 添加这行
+  `create_time` bigint(20) NULL DEFAULT NULL COMMENT '创建时间',
+  `update_time` bigint(20) UNSIGNED NULL DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`channel_id`) USING BTREE,
+  INDEX `idx_owner_uid`(`owner_uid`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = DYNAMIC;
+
+-- 创建频道成员表
+CREATE TABLE `wb_channel_user`  (
+  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `channel_id` bigint(20) NOT NULL COMMENT '频道ID',
+  `uid` bigint(20) NOT NULL COMMENT '用户ID',
+  `role` tinyint(3) UNSIGNED NOT NULL DEFAULT 0 COMMENT '角色 0:普通成员 1:管理员 2:创建者',
+  `message_count` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '消息计数',
+  `join_time` bigint(20) NOT NULL DEFAULT 0 COMMENT '加入时间',
+  `leave_time` bigint(20) UNSIGNED NOT NULL DEFAULT 0 COMMENT '离开时间',
+  `update_time` bigint(20) UNSIGNED NOT NULL DEFAULT 0 COMMENT '更新时间',
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `idx_channel_id`(`channel_id`) USING BTREE,
+  INDEX `idx_uid`(`uid`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = DYNAMIC;
+
+-- 删除旧表（如果需要保留数据，请先备份）
+DROP TABLE IF EXISTS `wb_channel_message`;
+
+-- 创建新表，与wb_message表结构保持一致
+CREATE TABLE `wb_channel_message`  (
+  `msg_id` mediumint(9) NOT NULL AUTO_INCREMENT,
+  `uid` mediumint(9) NOT NULL,
+  `channel_id` int(11) NOT NULL COMMENT '频道ID',
+  `contents` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+  `repost` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL,
+  `refrom` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+  `media` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
+  `media_info` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL,
+  `repostsum` int(11) NOT NULL DEFAULT 0,
+  `commentsum` int(11) NOT NULL DEFAULT 0,
+  `collectsum` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '收藏点赞数',
+  `topic_id` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '话题id',
+  `is_delete` tinyint(3) UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否删除0未删除，1已删除',
+  `ctime` int(11) NOT NULL,
+  PRIMARY KEY (`msg_id`) USING BTREE,
+  INDEX `idx_channel_id`(`channel_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = DYNAMIC;
+
+
 SET FOREIGN_KEY_CHECKS = 1;

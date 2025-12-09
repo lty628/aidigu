@@ -1,0 +1,329 @@
+{include file='index/header' /}
+<style>
+    .channel-container {
+        background: var(--base-background-color);
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        margin-top: 20px;
+    }
+    .channel-item {
+        display: flex;
+        align-items: center;
+        padding: 15px;
+        border-bottom: 1px solid #eee;
+        transition: all 0.3s ease;
+    }
+    .channel-item:hover {
+        background-color: #f9f9f9;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+    .channel-avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-right: 15px;
+    }
+    .channel-content {
+        flex: 1;
+        min-width: 0;
+    }
+    .channel-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #333;
+        text-decoration: none;
+        margin-bottom: 5px;
+        display: block;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .channel-title:hover {
+        color: #1e9fff;
+    }
+    .channel-desc {
+        color: #666;
+        font-size: 14px;
+        margin-bottom: 8px;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+    .channel-meta {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        font-size: 13px;
+        color: #999;
+    }
+    .channel-member-count {
+        background: #f0f8ff;
+        padding: 2px 8px;
+        border-radius: 12px;
+        font-size: 12px;
+    }
+    .channel-actions {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 8px;
+        margin-left: 15px;
+    }
+    .channel-password-indicator {
+        display: inline-flex;
+        align-items: center;
+        background: #fff8e1;
+        color: #ff9800;
+        padding: 4px 10px;
+        border-radius: 15px;
+        font-size: 12px;
+        font-weight: 500;
+        margin-bottom: 5px;
+    }
+    .channel-password-indicator i {
+        margin-right: 4px;
+        font-size: 14px;
+    }
+    .channel-join-btn, .channel-exit-btn {
+        display: inline-block;
+        padding: 8px 16px;
+        border-radius: 4px;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 500;
+        transition: all 0.3s;
+        border: 1px solid #1e9fff;
+        cursor: pointer;
+    }
+    .channel-join-btn {
+        background: #1e9fff;
+        color: white;
+    }
+    .channel-join-btn:hover {
+        background: #007bff;
+        border-color: #007bff;
+    }
+    .channel-exit-btn {
+        background: transparent;
+        color: #ff4d4f;
+        border-color: #ff4d4f;
+    }
+    .channel-exit-btn:hover {
+        background: #fff1f0;
+    }
+    .empty-message {
+        text-align: center;
+        padding: 60px 20px;
+        color: var(--base-font-color);
+        opacity: 0.6;
+        font-size: 16px;
+    }
+    /* 响应式设计 */
+    @media (max-width: 768px) {
+        .channel-container {
+            padding: 10px;
+        }
+        .channel-item {
+            padding: 12px 15px;
+            flex-direction: row;
+            align-items: flex-start;
+        }
+        .channel-content {
+            width: auto;
+            margin-bottom: 0;
+            flex: 1;
+        }
+        .channel-actions {
+            align-self: center;
+            flex-direction: row;
+            gap: 10px;
+            margin-left: 10px;
+        }
+        .channel-title {
+            font-size: 16px;
+        }
+        .channel-tabs {
+            flex-wrap: wrap;
+        }
+        .channel-tab {
+            flex: 1;
+            text-align: center;
+            min-width: 30%;
+        }
+        .channel-password-indicator {
+            position: absolute;
+            right: 15px;
+            top: 15px;
+        }
+        .channel-item {
+            position: relative;
+        }
+    }
+</style>
+
+<div class="main">
+    <div class="contents">
+        <div class="channel-header">
+            <h1>频道列表</h1>
+            <p>发现有趣的频道，加入精彩讨论</p>
+            <div class="channel-tabs">
+                <a href="/channel/" class="channel-tab {if $currentTab == 'all' || !isset($currentTab)}active{/if}">频道大厅</a>
+                <a href="/channel/myjoined/" class="channel-tab {if $currentTab == 'joined'}active{/if}">我加入的频道</a>
+                <a href="/channel/mycreated/" class="channel-tab {if $currentTab == 'created'}active{/if}">我创建的频道</a>
+            </div>
+        </div>
+        
+        <div class="channel-container">
+            {if isset($channelArr) && !empty($channelArr)}        
+                <ul class="channel-list">
+                    {foreach $channelArr as $channel}
+                    <li class="channel-item">
+                        <img src="{$channel.avatar|default='/static/images/default_channel_avatar.png'}" alt="{$channel.channel_name}" class="channel-avatar">
+                        <div class="channel-content">
+                            <a href="/channel/{$channel.channel_id}/" class="channel-title">{$channel.channel_name}</a>
+                            {if !empty($channel.description)}
+                            <div class="channel-desc">{$channel.description}</div>
+                            {/if}
+                            <div class="channel-meta">
+                                <span class="channel-member-count">{$channel.member_count} 成员</span>
+                                <span>{$channel.create_time|date='Y-m-d'}</span>
+                            </div>
+                        </div>
+                        <div class="channel-actions">
+                            {if !empty($channel.password)}
+                                <span class="channel-password-indicator" title="该频道需要密码">
+                                    <i class="layui-icon layui-icon-password"></i>
+                                    需密码
+                                </span>
+                            {/if}
+                            {if isset($joinedChannels) && in_array($channel.channel_id, $joinedChannels)}
+                                <!-- 已加入的频道显示退出按钮 -->
+                                <a href="javascript:void(0);" class="channel-exit-btn" data-channel-id="{$channel.channel_id}">退出频道</a>
+                                <a href="/channel/{$channel.channel_id}/" class="channel-join-btn">进入频道</a>
+                            {else}
+                                <!-- 未加入的频道显示加入按钮 -->
+                                <a href="javascript:void(0);" class="channel-join-btn" data-channel-id="{$channel.channel_id}" data-has-password="{if !empty($channel.password)}1{else}0{/if}">
+                                    {if !empty($channel.password)}加入频道{else}加入频道{/if}
+                                </a>
+                            {/if}
+                        </div>
+                    </li>
+                    {/foreach}
+                </ul>
+                <div class="pagination">
+                    {$channelArr|raw}
+                </div>
+            {else}
+                <div class="empty-message">暂无频道数据</div>
+            {/if}
+        </div>
+    </div>
+    {if !$userInfo}
+    {include file='index/sidebar_nologin' /}
+    {elseif $userInfo.isSiteUser}
+    {include file='index/sidebar_index' /}
+    {else}
+    {include file='index/sidebar_user' /}
+    {/if}
+    {include file='index/footer' /}
+</div>
+
+<!-- 加入频道模态框 -->
+<div id="joinChannelModal" class="layui-form" style="display:none;padding:20px;">
+    <div class="layui-form-item">
+        <label class="layui-form-label">频道密码</label>
+        <div class="layui-input-block">
+            <input type="password" id="channelPassword" placeholder="请输入频道密码" class="layui-input">
+        </div>
+    </div>
+</div>
+
+<script>
+layui.use(['layer', 'form'], function(){
+    var layer = layui.layer;
+    var form = layui.form;
+    
+    // 加入频道按钮点击事件
+    $(document).on('click', '.channel-join-btn[data-channel-id]', function() {
+        var channelId = $(this).data('channel-id');
+        var hasPassword = $(this).data('has-password');
+        
+        if (hasPassword == 1) {
+            // 需要密码的频道
+            layer.open({
+                type: 1,
+                title: '加入频道',
+                content: $('#joinChannelModal'),
+                area: ['400px', '200px'],
+                btn: ['确定', '取消'],
+                yes: function(index, layero) {
+                    var password = $('#channelPassword').val();
+                    if (!password) {
+                        layer.msg('请输入频道密码');
+                        return;
+                    }
+                    
+                    $.get('/index/ajax/joinChannel', {
+                        channel_id: channelId,
+                        password: password
+                    }, function(res) {
+                        if (res.status == 1) {
+                            layer.msg(res.msg, {icon: 1});
+                            setTimeout(function() {
+                                location.reload();
+                            }, 1000);
+                        } else {
+                            layer.msg(res.msg, {icon: 2});
+                        }
+                    });
+                },
+                success: function(layero, index) {
+                    $('#channelPassword').val('');
+                }
+            });
+        } else {
+            // 不需要密码的频道
+            $.get('/index/ajax/joinChannel', {
+                channel_id: channelId
+            }, function(res) {
+                if (res.status == 1) {
+                    layer.msg(res.msg, {icon: 1});
+                    setTimeout(function() {
+                        location.reload();
+                    }, 1000);
+                } else {
+                    layer.msg(res.msg, {icon: 2});
+                }
+            });
+        }
+    });
+    
+    // 退出频道按钮点击事件
+    $(document).on('click', '.channel-exit-btn', function() {
+        var channelId = $(this).data('channel-id');
+        
+        layer.confirm('确定要退出该频道吗？', {
+            title: '退出频道',
+            icon: 3
+        }, function(index) {
+            $.post('/index/ajax/quitChannel', {
+                channel_id: channelId
+            }, function(res) {
+                if (res.status == 1) {
+                    layer.msg(res.msg, {icon: 1});
+                    setTimeout(function() {
+                        location.reload();
+                    }, 1000);
+                } else {
+                    layer.msg(res.msg, {icon: 2});
+                }
+            });
+            layer.close(index);
+        });
+    });
+});
+</script>

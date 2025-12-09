@@ -135,7 +135,7 @@ function comdel(url){
 			jsonData.contents = editor.txt.html();
 			// console.log(jsonData.contents);return false;
 			var config = {};
-			config.action = 'index';
+			config.action = $("#saveAction").val() || 'index';
 			config.index = '';
 			config.additional = 1;
 			config.flush = 0;

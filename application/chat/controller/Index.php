@@ -2,6 +2,7 @@
 namespace app\chat\controller;
 use think\Controller;
 use app\chat\model\ChatPrivateLetter;
+use app\chat\model\ChannelMessage;
 use app\common\model\Message;
 use think\Db;
 
@@ -16,6 +17,7 @@ class Index extends Controller
     {
         $touid = input('private');
         $messageChatId = input('messageChatId');
+        $channelMessageChatId = input('channelMessageChatId');
         $fromuid = getLoginUid();
         $wsserver = sysConfig('app.chatSocketDomain');
 
@@ -36,11 +38,22 @@ class Index extends Controller
             $touid = $msgInfo['uid'];
             $this->checkReminder($fromuid, $touid, $messageChatId);
         }
+        
+        if ($channelMessageChatId) {
+            $channelMessageModel = new ChannelMessage();
+            $channelMsgInfo = $channelMessageModel->field('uid')->where('msg_id', $channelMessageChatId)->find();
+            if (!$channelMsgInfo) {
+                $this->error('消息不存在');
+            }
+            $touid = $channelMsgInfo['uid'];
+            $this->checkChannelReminder($fromuid, $touid, $channelMessageChatId);
+        }
 
         // $domain = 'https://'.$urlDomainRoot;
         $this->assign('wsserver', $wsserver);
         $this->assign('touid', $touid);
         $this->assign('messageChatId', $messageChatId);
+        $this->assign('channelMessageChatId', $channelMessageChatId);
         $this->assign('fromuid', $fromuid);
         return $this->fetch();
     }
@@ -76,5 +89,12 @@ class Index extends Controller
         } else {
             Db::name('reminder')->where('msg_id', $messageChatId)->where('touid', $fromuid)->update(['status' => 1]);
         }
+    }
+    
+    // 添加频道提醒检查方法（如果尚未存在）
+    protected function checkChannelReminder($fromuid, $touid, $channelMessageChatId)
+    {
+        // 这里可以添加频道提醒的逻辑
+        // 目前留空，可以根据实际需求实现
     }
 }

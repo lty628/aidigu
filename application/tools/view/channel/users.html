@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>频道成员管理</title>
+    <link href="/static/layui/css/layui.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="layui-layout">
+        <div style="padding: 16px;">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    <h3>频道成员管理</h3>
+                </div>
+                <div class="layui-card-body">
+                    <table class="layui-table" id="usersTable" lay-filter="usersTable"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/layui/layui.js"></script>
+    <script>
+        layui.use(['table', 'layer'], function () {
+            var table = layui.table;
+            var layer = layui.layer;
+            var $ = layui.$;
+
+            // 渲染表格
+            table.render({
+                elem: '#usersTable',
+                url: '/tools/channel/usersList?channel_id={$channel_id}',
+                cols: [[
+                    { field: 'uid', title: '用户ID', width: 80 },
+                    { field: 'head_image', title: '头像', width: 80, templet: '<div><img src="{{d.head_image}}" style="width: 30px; height: 30px; border-radius: 50%;"></div>' },
+                    { field: 'nickname', title: '昵称', width: 150 },
+                    { field: 'blog', title: '博客', width: 150 },
+                    { field: 'role', title: '角色', width: 100, templet: function(d) {
+                        var roles = ['普通成员', '管理员', '创建者'];
+                        return roles[d.role] || '未知';
+                    }},
+                    { title: '操作', width: 100, align: 'center', toolbar: '#actionBar', hide: {!$isOwner} }
+                ]],
+                page: true,
+                limit: 10,
+                limits: [10, 20, 30],
+                request: {
+                    pageName: 'page',
+                    limitName: 'limit'
+                },
+                response: {
+                    statusCode: 0
+                },
+                parseData: function (res) {
+                    return {
+                        "code": res.code,
+                        "msg": res.msg,
+                        "count": res.data.length,
+                        "data": res.data
+                    };
+                }
+            });
+
+            // 表格工具栏事件
+            table.on('tool(usersTable)', function (obj) {
+                var data = obj.data;
+                if (obj.event === 'delete') {
+                    deleteMember(data.uid);
+                }
+            });
+
+            // 删除成员
+            window.deleteMember = function (uid) {
+                layer.confirm('确定要将该用户移出频道吗？', function (index) {
+                    $.post('/tools/channel/delChannelUser', { 
+                        channel_id: {$channel_id}, 
+                        del_uid: uid 
+                    }, function (res) {
+                        if (res.code === 0) {
+                            layer.msg('删除成功');
+                            table.reload('usersTable');
+                        } else {
+                            layer.msg('删除失败: ' + res.msg);
+                        }
+                    }, 'json');
+                    layer.close(index);
+                });
+            };
+        });
+    </script>
+
+    <script type="text/html" id="actionBar">
+        <button class="layui-btn layui-btn-xs layui-btn-danger" lay-event="delete">移出频道</button>
+    </script>
+</body>
+
+</html>

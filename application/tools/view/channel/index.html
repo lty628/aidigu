@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>频道管理</title>
+    <link href="/static/layui/css/layui.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="layui-layout">
+        <div style="padding: 16px;">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    <h3>频道管理</h3>
+                    <button type="button" class="layui-btn layui-btn-normal" onclick="addChannel()">
+                        <i class="layui-icon">&#xe608;</i> 创建频道
+                    </button>
+                </div>
+                <div class="layui-card-body">
+                    <table class="layui-table" id="channelTable" lay-filter="channelTable"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/layui/layui.js"></script>
+    <script>
+        layui.use(['table', 'layer'], function () {
+            var table = layui.table;
+            var layer = layui.layer;
+            var $ = layui.$;
+
+            // 渲染表格
+            table.render({
+                elem: '#channelTable',
+                url: '/tools/channel/getList',
+                cols: [[
+                    { field: 'channel_id', title: 'ID', width: 80 },
+                    { field: 'channel_name', title: '频道名称', width: 150 },
+                    { field: 'avatar', title: '头像', width: 100, templet: '<div><img src="{{d.avatar}}" style="width: 30px; height: 30px; border-radius: 50%;"></div>' },
+                    { field: 'description', title: '介绍', width: 200 },
+                    { field: 'invite_status', title: '邀请开关', width: 100, templet: function (d) { return d.invite_status == 1 ? '开启' : '关闭'; } },
+                    { field: 'member_count', title: '成员数', width: 80 },
+                    { field: 'create_time', title: '创建时间', width: 180, templet: function (d) { return d.create_time ? new Date(d.create_time * 1000).toLocaleString() : ''; } },
+                    { title: '操作', width: 200, align: 'center', toolbar: '#actionBar' }
+                ]],
+                page: true,
+                limit: 10,
+                limits: [10, 20, 30],
+                request: {
+                    pageName: 'page',
+                    limitName: 'limit'
+                },
+                response: {
+                    statusCode: 0
+                },
+                parseData: function (res) {
+                    return {
+                        "code": res.code,
+                        "msg": res.msg,
+                        "count": res.data.length,
+                        "data": res.data
+                    };
+                }
+            });
+
+            // 表格工具栏事件
+            table.on('tool(channelTable)', function (obj) {
+                var data = obj.data;
+                if (obj.event === 'edit') {
+                    editChannel(data.channel_id);
+                } else if (obj.event === 'delete') {
+                    deleteChannel(data.channel_id);
+                } else if (obj.event === 'users') {
+                    manageUsers(data.channel_id);
+                }
+            });
+
+            // 创建频道
+            window.addChannel = function () {
+                layer.open({
+                    type: 2,
+                    title: '创建频道',
+                    content: '/tools/channel/add',
+                    area: ['600px', '600px'],
+                    end: function () {
+                        table.reload('channelTable');
+                    }
+                });
+            };
+
+            // 编辑频道
+            window.editChannel = function (channelId) {
+                layer.open({
+                    type: 2,
+                    title: '编辑频道',
+                    content: '/tools/channel/edit?channel_id=' + channelId,
+                    area: ['600px', '600px'],
+                    end: function () {
+                        table.reload('channelTable');
+                    }
+                });
+            };
+
+            // 删除频道
+            window.deleteChannel = function (channelId) {
+                layer.confirm('确定要删除这个频道吗？这将删除所有相关信息！', function (index) {
+                    $.post('/tools/channel/delete', { channel_id: channelId }, function (res) {
+                        if (res.code === 0) {
+                            layer.msg('删除成功');
+                            table.reload('channelTable');
+                        } else {
+                            layer.msg('删除失败: ' + res.msg);
+                        }
+                    }, 'json');
+                    layer.close(index);
+                });
+            };
+
+            // 管理成员
+            window.manageUsers = function (channelId) {
+                layer.open({
+                    type: 2,
+                    title: '频道成员管理',
+                    content: '/tools/channel/users?channel_id=' + channelId,
+                    area: ['800px', '600px']
+                });
+            };
+        });
+    </script>
+
+    <script type="text/html" id="actionBar">
+        <button class="layui-btn layui-btn-xs" lay-event="edit">编辑</button>
+        <button class="layui-btn layui-btn-xs layui-btn-normal" lay-event="users">成员</button>
+        <button class="layui-btn layui-btn-xs layui-btn-danger" lay-event="delete">删除</button>
+    </script>
+</body>
+
+</html>

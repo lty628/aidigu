@@ -1,0 +1,33 @@
+<div class="sidebar">
+    <div class="box">
+        <!-- 频道信息 -->
+        <div class="channel-info">
+            <img src="{$channel.avatar|default='/static/images/default_channel_avatar.png'}" alt="{$channel.channel_name}" class="channel-avatar">
+            <h1>{$channel.channel_name}</h1>
+            {if !empty($channel.description)}
+            <div class="channel-description">{$channel.description}</div>
+            {/if}
+            <div class="channel-stats">
+                <div class="stat-item">
+                    <div class="stat-value">{$channel.member_count}</div>
+                    <div class="stat-label">成员</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">{$message_count|default=0}</div>
+                    <div class="stat-label">消息</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">{$channel.create_time|date='Y-m-d'}</div>
+                    <div class="stat-label">创建时间</div>
+                </div>
+            </div>
+            
+            <div class="channel-actions">
+                <a href="#" class="action-btn join-btn">加入频道</a>
+                <a href="#" class="action-btn message-btn">发送消息</a>
+                <a href="#" class="action-btn quit-btn">退出频道</a>
+            </div>
+        </div>
+    </div>
+    <div class="clear"></div>
+</div>

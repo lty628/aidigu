@@ -19,6 +19,89 @@ class Api extends Base
     	if (!$data) return json(array('status' =>  0,'msg' => '发布失败'));
     	return json(array('status' =>  1,'msg' => '发表成功', 'data'=>$data));
     }
+    
+    // 频道消息发布
+    public function channel()
+    {
+        $contents = input('get.contents');
+        $mediaInfo = input('get.mediaInfo');
+        $channelId = input('get.channel_id');
+        
+        // 检查频道是否存在
+        $channel = Db::name('channel')->where('channel_id', $channelId)->find();
+        if (!$channel) {
+            return json(array('status' => 0, 'msg' => '频道不存在'));
+        }
+        
+        // 检查用户是否是频道成员
+        $userId = getLoginUid();
+        $isMember = Db::name('channel_user')->where(['channel_id' => $channelId, 'uid' => $userId])->find();
+        if (!$isMember) {
+            return json(array('status' => 0, 'msg' => '您不是该频道成员，无法发布消息'));
+        }
+        
+        // 检查频道是否允许发言
+        if ($channel['allow_speak'] == 0) {
+            return json(array('status' => 0, 'msg' => '该频道不允许发言'));
+        }
+        
+        $data = self::saveChannelMessage($contents, $mediaInfo, $channelId);
+        if (!$data) return json(array('status' => 0, 'msg' => '发布失败'));
+        
+        // 更新频道成员消息计数
+        Db::name('channel_user')->where(['channel_id' => $channelId, 'uid' => $userId])->setInc('message_count', 1);
+        
+        // 更新频道消息总数
+        Db::name('channel')->where('channel_id', $channelId)->setInc('message_count', 1);
+        
+        return json(array('status' => 1, 'msg' => '发表成功', 'data' => $data));
+    }
+    
+    // 加入频道
+    public function joinChannel()
+    {
+        $channelId = input('get.channel_id');
+        $userId = getLoginUid();
+        
+        // 检查频道是否存在
+        $channel = Db::name('channel')->where('channel_id', $channelId)->find();
+        if (!$channel) {
+            return json(array('status' => 0, 'msg' => '频道不存在'));
+        }
+        
+        // 检查用户是否已经是频道成员
+        $isMember = Db::name('channel_user')->where(['channel_id' => $channelId, 'uid' => $userId])->find();
+        if ($isMember) {
+            return json(array('status' => 0, 'msg' => '您已经是该频道成员'));
+        }
+        
+        // 检查频道是否有密码
+        $password = input('get.password');
+        if (!empty($channel['password']) && $channel['password'] !== encryptionPass($password)) {
+            return json(array('status' => 0, 'msg' => '频道密码错误'));
+        }
+        
+        // 加入频道
+        $data = [
+            'channel_id' => $channelId,
+            'uid' => $userId,
+            'role' => 0, // 普通成员
+            'message_count' => 0,
+            'join_time' => time(),
+            'update_time' => time()
+        ];
+        
+        $result = Db::name('channel_user')->insert($data);
+        if (!$result) {
+            return json(array('status' => 0, 'msg' => '加入频道失败'));
+        }
+        
+        // 更新频道成员数
+        Db::name('channel')->where('channel_id', $channelId)->setInc('member_count', 1);
+        
+        return json(array('status' => 1, 'msg' => '成功加入频道'));
+    }
+    
     public function repost()
     {
         $contents = input('get.contents');
@@ -111,6 +194,44 @@ class Api extends Base
             return false;
         }
     }
+    
+    public static function saveChannelMessage($contents, $mediaInfo, $channelId)
+    {
+        $contents = \app\common\libs\SmartVideo::parse($contents);
+        if ($mediaInfo) {
+            $mediaInfo = json_decode($mediaInfo, true);
+            if ($mediaInfo['media_type'] == 'html') {
+                $frameStr = '<iframe id="'.$mediaInfo['iframe_id'].'" sandbox="allow-same-origin allow-scripts allow-popups" src="'.$mediaInfo['media_info'].'" allowfullscreen="true" allowtransparency="true" width="95%" frameborder="0" scrolling="auto"></iframe>';
+                $contents = $contents . '<p>'.$frameStr.'</p>';
+            } else {
+                $info['media_info'] = $mediaInfo['media_info'];
+                $info['media_type'] = $mediaInfo['media_type'];
+                $data['media'] = $info['media_info'].'.'.$info['media_type'];
+                $data['media_info'] = json_encode($info);
+            }
+        }
+        if (!$contents && !$mediaInfo) return false;
+        $data['repost'] = '';
+        $data['uid'] = getLoginUid();
+        $data['channel_id'] = $channelId;
+        $data['contents'] = $contents;
+        $data['refrom'] = self::$refrom;
+        $data['ctime'] = time();
+        // $data['create_time'] = time();
+        
+        Db::startTrans();
+        try {
+            $data['msg_id'] = Db::name('channel_message')->insertGetId($data);
+            // 提交事务
+            Db::commit();
+            return $data;
+        } catch (\Exception $e) {
+            // 回滚事务
+            Db::rollback();
+            return false;
+        }
+    }
+    
     public static function saveMessage($contents, $mediaInfo)
     {
         $contents = \app\common\libs\SmartVideo::parse($contents);
@@ -221,6 +342,15 @@ class Api extends Base
     public function delMessage()
     {
         $result = Message::delMessageById((int)input('param.msg_id'), getLoginUid());
+        if (!$result) 
+            return $this->error('删除失败');
+        return $this->success('删除成功', '/'.getLoginBlog().'/own/');
+    }
+
+    public function delChannelMessage()
+    {
+        // $result = ChannelMessage::delMessageById((int)input('param.msg_id'), getLoginUid());
+        $result = Db::name('channel_message')->where('msg_id', (int)input('param.msg_id'))->update(['is_delete' => 1]);
         if (!$result) 
             return $this->error('删除失败');
         return $this->success('删除成功', '/'.getLoginBlog().'/own/');

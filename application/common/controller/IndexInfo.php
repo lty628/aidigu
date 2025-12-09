@@ -136,6 +136,99 @@ class IndexInfo extends Info
         return $this->fetch('topic');
     }
 
+    // 频道相关
+    public function channel()
+    {
+        $channelId = request()->param('channel_id');
+        if (empty($channelId)) {
+            return $this->redirect('/channel/');
+        }
+        
+        // 获取频道信息
+        $channel = Db::name('channel')->where('channel_id', $channelId)->find();
+        if (empty($channel)) {
+            return $this->error('频道不存在');
+        }
+
+        if (request()->isAjax()) {
+            
+            // 检查用户是否是频道成员
+            $member = Db::name('channel_user')->where(['channel_id' => $channelId, 'uid' => $this->userid])->find();
+            $allowDelete = 0;
+            if ($member['role'] > 0) {
+                $allowDelete = 1;
+            }
+            $allowComment = $channel['allow_comment'];
+            
+            // 获取频道消息（可根据需要添加分页）
+            $messages = Db::name('channel_message')
+                ->alias('cm')
+                ->join('user u', 'cm.uid = u.uid')
+                ->where('cm.channel_id', $channelId)
+                ->order('cm.ctime desc')
+                ->limit(20)
+                ->field('cm.*, u.nickname, u.head_image')
+                ->select();
+            return json(array('status' =>  1, 'msg' => 'ok', 'data' => ['data' => handleMessage($messages), 'allow_delete' => $allowDelete, 'allow_comment' => $allowComment, 'userid' => $this->userid]));
+
+        }
+        
+        $this->assign('channel', $channel);
+
+        return $this->fetch('channel');
+    }
+
+    // 频道列表
+    public function channelList()
+    {
+        $request = request();
+        $path = $request->pathinfo();
+        
+        // 根据URL路径确定当前标签页
+        $currentTab = 'all'; // 默认为频道大厅
+        
+        if (strpos($path, 'myjoined') !== false) {
+            $currentTab = 'joined';
+            // 获取我加入的频道
+            $channel = Db::name('channel')
+                ->alias('c')
+                ->join('channel_user cu', 'c.channel_id = cu.channel_id')
+                ->where('cu.uid', $this->userid)
+                ->order('c.channel_id desc')
+                ->paginate(30, false, ['page' => $request->param('page/d', 1), 'path' => '[PAGE].html']);
+        } elseif (strpos($path, 'mycreated') !== false) {
+            $currentTab = 'created';
+            // 获取我创建的频道
+            $channel = Db::name('channel')
+                ->where('owner_uid', $this->userid)
+                ->order('channel_id desc')
+                ->paginate(30, false, ['page' => $request->param('page/d', 1), 'path' => '[PAGE].html']);
+        } else {
+            // 默认获取所有频道
+            $channelQuery = Db::name('channel')
+                ->order('channel_id desc');
+            
+            // 获取频道列表
+            $channel = $channelQuery->paginate(30, false, ['page' => $request->param('page/d', 1), 'path' => '[PAGE].html']);
+            
+            // 获取当前用户已加入的频道ID列表
+            $joinedChannels = Db::name('channel_user')
+                ->where('uid', $this->userid)
+                ->column('channel_id');
+        }
+        
+        $this->assign('channelArr', $channel);
+        $this->assign('currentTab', $currentTab);
+        // 分配已加入的频道ID列表到模板
+        if (isset($joinedChannels)) {
+            $this->assign('joinedChannels', $joinedChannels);
+        }
+        return $this->fetch('channel_list');
+    }
+
+
+
+
     public function fans()
     {
         $userFans = $this->getMyFans($this->siteUserId, $this->userid, 20);

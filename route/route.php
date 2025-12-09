@@ -28,6 +28,8 @@ Route::get('/cloud/collection/$','upload/Index/collection');
 Route::get('chat', 'chat/index/index');
 Route::get('chat/private/:uid$', 'chat/index/index')->pattern(['uid'=>'[0-9]+']);
 Route::get('chat/messageChatId/:msgid$', 'chat/index/index')->pattern(['msgid'=>'[0-9]+']);
+Route::get('chat/channelMessageChatId/:chatmsgid$', 'chat/index/index')->pattern(['chatmsgid'=>'[0-9]+']);
+
 
 
 Route::get('/admin/$', '/admin/admin/index');
@@ -61,6 +63,11 @@ Route::get('/mytopic/:page$', $module . '/Index/myTopicList')->pattern(['page'=>
 Route::get('/topic/$',$module . '/Index/topicList');
 Route::get('/topic/:page$', $module . '/Index/topicList')->pattern(['page'=>'[0-9]+']);
 Route::get('/topic/:topic_id/$',$module . '/Index/topic')->pattern(['topic_id' => '[0-9]+']);
+Route::get('/channel/$',$module . '/Index/channelList');
+Route::get('/channel/myjoined/$',$module . '/Index/channelList');
+Route::get('/channel/mycreated/$',$module . '/Index/channelList');
+Route::get('/channel/:page$', $module . '/Index/channelList')->pattern(['page'=>'[0-9]+']);
+Route::get('/channel/:channel_id/$', $module . '/Index/channel');
 Route::get('/square/$',$module . '/Index/blog');
 Route::get('/square/:page$',$module . '/Index/blog')->pattern(['page'=>'[0-9]+']);
 Route::get('/remind/$',$module . '/Index/remind');
@@ -99,7 +106,7 @@ Route::get('/:name/newreply/$', $module . '/Index/newreply')->pattern(['name' =>
 Route::get('/:name/newreply/:page$', $module . '/Index/newreply')->pattern(['name' => '\w+', 'page'=>'[0-9]+']);
 Route::get('/:name/message/:msg_id', $module . '/Index/messageInfo')->pattern(['name' => '\w+', 'msg_id' => '[0-9]+']);
 Route::get('/:name/del/message/:msg_id', $module . '/Ajax/delMessage')->pattern(['name' => '\w+', 'msg_id' => '[0-9]+']);	
-
+Route::get('/:name/del/channel_message/:msg_id', $module . '/Ajax/delChannelMessage')->pattern(['name' => '\w+', 'msg_id' => '[0-9]+']);	
 // 绑定域名方式
 // Route::domain($url, function () {
 
