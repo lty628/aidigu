@@ -79,6 +79,7 @@ Route::get('/:page$',$module . '/Index/index')->pattern(['page'=>'[0-9]+']);
 // Route::get('/:name/$', $module . '/Index')->pattern(['name' => '\w+(?!ajax)']);
 // Route::get('/index/ajax$', $module . '/Ajax/index');
 Route::get('/login/$','index/User/login');
+Route::get('/wxlogin/$','index/User/wxlogin');
 Route::get('/register/$','index/User/register');
 Route::get('/invite/$','index/User/invite');
 Route::get('/forgot/$','index/User/forgot');
