@@ -25,6 +25,12 @@ class UserInfo extends Controller
 		$this->assign('redirectUrl', $redirectUrl);
 		return $this->fetch();
 	}
+	public function wxlogin()
+	{
+		$redirectUrl = input('get.url');
+		$this->assign('redirectUrl', $redirectUrl);
+		return $this->fetch();
+	}
 	public function register()
 	{
 		return $this->fetch();

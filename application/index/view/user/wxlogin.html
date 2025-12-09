@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html class="no-js">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>登录爱嘀咕</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="登录爱嘀咕" />
+    <meta name="keywords" content="登录爱嘀咕" />
+    <link rel="stylesheet" href="/static/user/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/user/css/animate.css">
+    <link rel="stylesheet" href="/static/user/css/style.css?2">
+
+    <!-- Modernizr JS -->
+    <script src="/static/user/js/modernizr-2.6.2.min.js"></script>
+    <!-- FOR IE9 below -->
+    <!--[if lt IE 9]>
+    <script src="/static/user/js/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body class="style-3 tech-flat-bg">
+    <!-- 添加 canvas 元素 -->
+    <canvas id="bgCanvas"></canvas>
+    <!-- 添加背景元素 -->
+    <div class="tech-bg-element"></div>
+    <!-- 添加背景装饰元素 -->
+    <div class="bg-decoration"></div>
+    <div class="bg-decoration"></div>
+    <div class="bg-decoration"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <ul class="menu">
+                    <!-- <li><a href="javascript:;">登录爱嘀咕</a></li> -->
+                </ul>
+            </div>
+        </div>
+        <div class="row align-items-center">
+            <!-- 添加网站介绍部分 -->
+            <div class="col-md-6">
+                <div class="site-introduction p-4">
+                    <h2 class="tech-flat-title fadeInUp">嘀咕～谁在这里？</h2>
+                    <p class="fadeInUp" style="animation-delay: 0.2s;">爱嘀咕是一个充满乐趣和惊喜的平台，在这里你可以：</p>
+                    <ul>
+                        <li class="fadeInUp" style="animation-delay: 0.4s;">与懂你的人相遇</li>
+                        <li class="fadeInUp" style="animation-delay: 0.6s;">分享属于你我的小秘密</li>
+                        <li class="fadeInUp" style="animation-delay: 0.8s;">分享自己的生活和故事，聊聊心里话，存下小世界</li>
+                    </ul>
+                    <p class="fadeInUp" style="animation-delay: 1s;">快来加入我们，一起在爱嘀咕的世界里畅玩吧！</p>
+                </div>
+            </div>
+            <!-- 原有的表单部分 -->
+            <div class="col-md-6">
+                <!-- 微信公众号登录 -->
+                <div class="wx-login-section mt-4 p-4 tech-flat-form animate-box" data-animate-effect="fadeInRight">
+                    <h3 class="tech-flat-title text-center">微信公众号登录</h3>
+                    <p class="text-center">关注我们的微信公众号，扫码即可登录</p>
+                    <div class="text-center">
+                        <div id="qrcode-container">
+                            <!-- 二维码将通过JavaScript动态加载 -->
+                            <div id="qrcode-placeholder" class="qrcode-placeholder">
+                                <p>正在加载二维码...</p>
+                            </div>
+                        </div>
+                        <div id="login-status" class="mt-3" style="display: none;">
+                            <p class="text-success">扫码成功，请稍候...</p>
+                        </div>
+                        <div id="login-error" class="mt-3" style="display: none;">
+                            <p class="text-danger">登录失败，请重新扫码</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- END 微信登录 -->
+                
+                <!-- END Sign In Form -->
+            </div>
+        </div>
+        {if $beian}
+        <div class="row" style="position: fixed; bottom: 0;">
+            <div class="col-md-12 text-center">
+                <p>
+                    <small>
+                        &copy; All Rights Reserved. - <a href="https://beian.miit.gov.cn/" title="{$beian}"
+                            target="_blank" style="color: #fff;">{$beian}</a>
+                    </small>
+                </p>
+            </div>
+        </div>
+        {/if}
+    </div>
+
+    <div class="row" style="height: 25px;position: fixed;top: 0px;width:100%">
+        <!-- 应用扁平风格的警告框 -->
+        <div class="alert alert-danger tech-flat-alert"></div>
+        <div class="alert alert-success tech-flat-alert"></div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="/static/user/js/jquery.min.js"></script>
+    <!-- Bootstrap -->
+    <script src="/static/user/js/bootstrap.min.js"></script>
+    <!-- Placeholder -->
+    <script src="/static/user/js/jquery.placeholder.min.js"></script>
+    <!-- Waypoints -->
+    <script src="/static/user/js/jquery.waypoints.min.js"></script>
+    <!-- Main JS -->
+    <script src="/static/user/js/main.js"></script>
+    <script src="/static/user/js/common.js?1"></script>
+
+    <script>
+        const canvas = document.getElementById('bgCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // 调整 canvas 大小以适应窗口
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        // 绘制太阳
+        function drawSun() {
+            ctx.beginPath();
+            ctx.arc(canvas.width * 0.8, canvas.height * 0.2, 50, 0, 2 * Math.PI);
+            // 修改太阳颜色为更清新的黄色
+            ctx.fillStyle = '#FFEB3B';
+            ctx.fill();
+        }
+
+        // 绘制云朵
+        function drawCloud(x, y) {
+            ctx.beginPath();
+            ctx.arc(x, y, 30, 0, 2 * Math.PI);
+            ctx.arc(x + 30, y - 20, 30, 0, 2 * Math.PI);
+            ctx.arc(x + 60, y, 30, 0, 2 * Math.PI);
+            // 修改云朵颜色为更柔和的白色
+            ctx.fillStyle = '#FFFFFF';
+            ctx.fill();
+        }
+
+        // 绘制星星
+        function drawStar(x, y, size) {
+            ctx.beginPath();
+            for (let i = 0; i < 5; i++) {
+                const angle = (i * 2 * Math.PI) / 5 - Math.PI / 2;
+                const innerAngle = ((i + 0.5) * 2 * Math.PI) / 5 - Math.PI / 2;
+                const outerX = x + size * Math.cos(angle);
+                const outerY = y + size * Math.sin(angle);
+                const innerX = x + (size / 2) * Math.cos(innerAngle);
+                const innerY = y + (size / 2) * Math.sin(innerAngle);
+                if (i === 0) {
+                    ctx.moveTo(outerX, outerY);
+                } else {
+                    ctx.lineTo(innerX, innerY);
+                    ctx.lineTo(outerX, outerY);
+                }
+            }
+            ctx.closePath();
+            // 修改星星颜色为更清新的黄色
+            ctx.fillStyle = '#FFEB3B';
+            ctx.fill();
+        }
+
+        // 绘制冰淇淋
+        function drawIceCream(x, y, size) {
+            // 绘制冰淇淋球
+            ctx.beginPath();
+            ctx.arc(x, y, size, 0, 2 * Math.PI);
+            // 修改冰淇淋球颜色为更清新的粉色
+            ctx.fillStyle = '#FF8A80';
+            ctx.fill();
+            // 绘制蛋筒
+            ctx.beginPath();
+            ctx.moveTo(x - size / 2, y);
+            ctx.lineTo(x, y + size * 2);
+            ctx.lineTo(x + size / 2, y);
+            ctx.closePath();
+            // 修改蛋筒颜色为更柔和的黄色
+            ctx.fillStyle = '#FFF9C4';
+            ctx.fill();
+        }
+
+        // 绘制糖果
+        function drawCandy(x, y, size) {
+            ctx.beginPath();
+            ctx.ellipse(x, y, size, size * 0.7, 0, 0, 2 * Math.PI);
+            // 修改糖果颜色为更清新的紫色
+            ctx.fillStyle = '#B39DDB';
+            ctx.fill();
+        }
+
+        // 主绘制函数
+        function draw() {
+            resizeCanvas();
+            drawSun();
+            drawCloud(canvas.width * 0.2, canvas.height * 0.1);
+            drawCloud(canvas.width * 0.5, canvas.height * 0.3);
+
+            // 绘制星星
+            for (let i = 0; i < 10; i++) {
+                const x = Math.random() * canvas.width;
+                const y = Math.random() * canvas.height;
+                const size = Math.random() * 20 + 10;
+                drawStar(x, y, size);
+            }
+
+            // 绘制冰淇淋
+            for (let i = 0; i < 5; i++) {
+                const x = Math.random() * canvas.width;
+                const y = Math.random() * canvas.height;
+                const size = Math.random() * 30 + 20;
+                drawIceCream(x, y, size);
+            }
+
+            // 绘制糖果
+            for (let i = 0; i < 5; i++) {
+                const x = Math.random() * canvas.width;
+                const y = Math.random() * canvas.height;
+                const size = Math.random() * 20 + 10;
+                drawCandy(x, y, size);
+            }
+        }
+
+        // 初始化绘制
+        draw();
+
+        // 监听窗口大小变化
+        window.addEventListener('resize', draw);
+        
+        // 微信登录相关代码
+        $(document).ready(function() {
+            let sceneId = null;
+            let checkInterval = null;
+            
+            // 加载二维码
+            function loadQrCode() {
+                $.ajax({
+                    url: '/wechat/index/qrcodeLogin',
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(res) {
+                        if (res.code == 1) {
+                            $('#qrcode-placeholder').html(res.data.img);
+                            sceneId = res.data.sceneId;
+                            
+                            // 开始轮询检查扫码状态
+                            startChecking();
+                        } else {
+                            $('#qrcode-placeholder').html('<p>加载二维码失败，请刷新页面重试</p>');
+                        }
+                    },
+                    error: function() {
+                        $('#qrcode-placeholder').html('<p>加载二维码失败，请刷新页面重试</p>');
+                    }
+                });
+            }
+            
+            // 开始轮询检查扫码状态
+            function startChecking() {
+                if (checkInterval) {
+                    clearInterval(checkInterval);
+                }
+                
+                checkInterval = setInterval(function() {
+                    if (sceneId) {
+                        checkScanStatus(sceneId);
+                    }
+                }, 2000); // 每2秒检查一次
+            }
+            
+            // 检查扫码状态
+            function checkScanStatus(sceneId) {
+                $.ajax({
+                    url: '/wechat/index/checkScanStatus',
+                    type: 'GET',
+                    data: { sceneId: sceneId },
+                    dataType: 'json',
+                    success: function(res) {
+                        if (res.code == 1) {
+                            // 登录成功，跳转到指定页面
+                            $('#login-status').show();
+                            clearInterval(checkInterval);
+                            window.location.href = res.data.redirectUrl || '/';
+                        } else if (res.code == 2) {
+                            // 已扫码但未确认登录
+                            $('#login-status').show().find('p').text('已扫码，请在手机上确认登录');
+                        }
+                    },
+                    error: function() {
+                        // 忽略错误，继续轮询
+                    }
+                });
+            }
+            
+            // 页面加载完成后立即加载二维码
+            loadQrCode();
+        });
+    </script>
+</body>
+
+</html>
