@@ -1313,3 +1313,8 @@ cursor: pointer;
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
     transition: all 0.3s ease;
 }
+
+.w-e-text {
+    height: 70px !important;
+    overflow-y: hidden !important;
+}

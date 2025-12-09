@@ -1194,3 +1194,7 @@ h2 span {
     color: var(--base-font-color) !important;
     opacity: 0.7;
 }
+
+.w-e-text {
+    overflow-y: hidden !important;
+}
