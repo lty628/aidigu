@@ -46,6 +46,29 @@ class ChatDbHelper
         return $info;
     }
 
+    // 频道消息在线信息
+    public static function channelMessageChatOnlineInfo($msgId, $fromuid)
+    {
+        // 获取频道中的所有用户ID（这里假设有一个频道消息提醒表或者可以通过频道成员表获取）
+        $userIds = Db::name('channel_user')
+            ->where('channel_id', $msgId)
+            ->field('uid')
+            ->select();
+            
+        $userIds = array_column($userIds, 'uid');
+        // 确保发送者也在通知列表中
+        if (!in_array($fromuid, $userIds)) {
+            array_push($userIds, $fromuid);
+        }
+        
+        $onlineInfo = Db::name('chat_online')
+            ->where('uid', 'in', $userIds)
+            ->select();
+            
+        $info['onlineInfo'] = $onlineInfo;
+        return $info;
+    }
+
     public static function saveComentChatHistory($data)
     {
         $pattern = '/@{1}(\w*[\.0-9]*[\x{4e00}-\x{9fa5}]*)([：:]){0,1}([：:\.;])*/ui';
@@ -59,6 +82,13 @@ class ChatDbHelper
             self::upComentReminder($data);
         }
         return Db::name('comment')->insert($data);
+    }
+
+    // 保存频道消息历史
+    public static function saveChannelMessageChatHistory($data)
+    {
+        // 插入频道消息到channel_message表
+        return Db::name('channel_message')->insert($data);
     }
 
     public static function upReplayReminder($data, $touid)
@@ -86,6 +116,20 @@ class ChatDbHelper
             ->limit(300)
             ->order('comment.cid', 'desc')
             ->field('user.head_image,user.nickname,comment.cid as chat_id,comment.fromuid,comment.msg_id as groupid,comment.msg as content,DATE_FORMAT(FROM_UNIXTIME(comment.ctime), "%Y-%m-%d %H:%i:%s") AS create_time')->select();
+        return $result;
+    }
+
+    // 获取频道消息历史
+    public static function getChannelMessageChatHistory($data)
+    {
+        $result = Db::name('channel_message')
+            ->alias('channel_message')
+            ->join([getPrefix() . 'user' => 'user'], 'user.uid=channel_message.fromuid')
+            ->where('msg_id', $data['msgid'])
+            ->limit(300)
+            ->order('channel_message.cid', 'desc')
+            ->field('user.head_image,user.nickname,channel_message.cid as chat_id,channel_message.fromuid,channel_message.msg_id as groupid,channel_message.msg as content,DATE_FORMAT(FROM_UNIXTIME(channel_message.ctime), "%Y-%m-%d %H:%i:%s") AS create_time')
+            ->select();
         return $result;
     }
 
@@ -194,6 +238,27 @@ class ChatDbHelper
         return $result;
     }
 
+    // 获取频道消息历史（新增方法）
+    public static function getChannelMessageHistory($data)
+    {
+        $result = Db::name('channel_message')
+            ->alias('channel_message')
+            ->join([getPrefix() . 'user' => 'user'], 'user.uid=channel_message.fromuid')
+            ->where('channel_id', $data['channel_id'])
+            ->limit(200)
+            ->order('channel_message.cid', 'desc')
+            ->field('user.head_image,user.nickname,channel_message.*')
+            ->select();
+            
+        // 更新用户在该频道的消息计数为0
+        Db::name('channel_user')
+            ->where('uid', $data['uid'])
+            ->where('channel_id', $data['channel_id'])
+            ->update(['message_count' => 0]);
+            
+        return $result;
+    }
+
     public static function getFriendList($uid, $count = 200)
     {
         return Db::name('user')
@@ -225,202 +290,4 @@ class ChatDbHelper
             ->order('chat_group_user.utime asc')
             ->limit($count)->select();
     }
-
-
-    // /**
-    //  * 登录
-    //  */
-    // public static function login($listtagid, $fd, $name, $email, $avatar)
-    // {
-    //     if ($name == "") {
-    //         $name = '游客' . time();
-    //     }
-    //     if ($email == "") {
-    //         $email = 'xxx@qq.com';
-    //     }
-    //     if (!$name || !$email) {
-
-    //         throw new Exception('Fill in all the required fields.');
-    //     }
-    //     $user = new ChatUser(array(
-    //         'listtagid'    => $listtagid,
-    //         'fd'        => $fd,
-    //         'name'        => htmlspecialchars($name),
-    //         'email'        => $email,
-    //         'avatar'    => $avatar
-    //     ));
-    //     if (!$user->save()) {
-    //         throw new Exception('This nick is in use.');
-    //     }
-    // }
-    // /**
-    //  * 获取用户在线列表
-    //  *
-    //  */
-    // public static function getOnlineUsers()
-    // {
-    //     $user = new ChatUser();
-    //     $lists = $user->getOnlineUsers();
-    //     $users = array();
-    //     foreach ($lists as $_k => $_v) {
-    //         $users[$_k] = $user->getUsers($_k, array_slice($_v, 0, 100));
-    //     }
-    //     unset($lists);
-    //     return $users;
-    // }
-
-    // public static function _p($obj = array(), $exit = 0)
-    // {
-    //     echo "<pre>";
-    //     print_r($obj);
-    //     echo "</pre>";
-    //     $exit && exit;
-    // }
-
-    // public static function logout($listtagid, $fd)
-    // {
-    //     $user = new ChatUser();
-    //     $userInfo = $user->getUser($listtagid, $fd);
-    //     return $userInfo;
-    // }
-    // public static function change($data)
-    // {
-    //     $pushMsg['code'] = 6;
-    //     $pushMsg['msg']  = '换房成功';
-    //     $user = new ChatUser();
-    //     $is_copyed = $user->changeUser($data['oldlisttagid'], $data['fd'], $data['listtagid']);
-    //     if ($is_copyed) {
-    //     }
-    //     $pushMsg['data']['oldlisttagid'] = $data['oldlisttagid'];
-    //     $pushMsg['data']['listtagid'] = $data['listtagid'];
-    //     $pushMsg['data']['mine'] = 0;
-    //     $pushMsg['data']['fd'] = $data['fd'];
-    //     $pushMsg['data']['name'] = $data['params']['name'];
-    //     $pushMsg['data']['avatar'] = $data['params']['avatar'];
-    //     $pushMsg['data']['time'] = date("H:i", time());
-    //     unset($data);
-    //     return $pushMsg;
-    // }
-    // public static function noLogin($data)
-    // {
-    //     $pushMsg['code'] = 5;
-    //     $pushMsg['msg'] = "系统不会存储您的Email，只是为了证明你是一个地球人";
-    //     if (!$data['params']['name']) {
-    //         $pushMsg['msg'] = "输入一个昵称或许可以让更多人的人了解你";
-    //     }
-    //     $pushMsg['data']['mine'] = 1;
-    //     unset($data);
-    //     return $pushMsg;
-    // }
-
-    // public static function open($data)
-    // {
-    //     $pushMsg['code'] = 4;
-    //     $pushMsg['msg'] = 'success';
-    //     $pushMsg['data']['mine'] = 0;
-    //     $pushMsg['data']['listtags'] = self::getRooms();
-    //     $pushMsg['data']['users'] = self::getOnlineUsers();
-    //     unset($data);
-    //     return $pushMsg;
-    // }
-    // public static function doLogout($data)
-    // {
-    //     //删除
-    //     File::logout($data['fd']);
-    //     $pushMsg['code'] = 3;
-    //     $pushMsg['msg'] = $data['params']['name'] . "退出了群聊";
-    //     $pushMsg['data']['fd'] = $data['fd'];
-    //     $pushMsg['data']['name'] = $data['params']['name'];
-    //     unset($data);
-    //     return $pushMsg;
-    // }
-    // //发送新消息
-    // public static function sendNewMsg($data)
-    // {
-    //     $pushMsg['code'] = 2;
-    //     $pushMsg['msg'] = "";
-    //     $pushMsg['data']['listtagid'] = $data['listtagid'];
-    //     $pushMsg['data']['fd'] = $data['fd'];
-    //     $pushMsg['data']['name'] = $data['params']['name'];
-    //     $pushMsg['data']['avatar'] = $data['params']['avatar'];
-    //     $pushMsg['data']['newmessage'] = escape(htmlspecialchars($data['message']));
-    //     $pushMsg['data']['remains'] = array();
-    //     if ($data['c'] == 'img') {
-    //         $pushMsg['data']['newmessage'] = '<img class="chat-img" onclick="preview(this)" style="display: block; max-width: 120px; max-height: 120px; visibility: visible;" src=' . $pushMsg['data']['newmessage'] . '>';
-    //     } else {
-    //         global $emotion;
-    //         foreach ($emotion as $_k => $_v) {
-    //             $pushMsg['data']['newmessage'] = str_replace($_k, $_v, $pushMsg['data']['newmessage']);
-    //         }
-    //         $tmp = self::remind($data['listtagid'], $pushMsg['data']['newmessage']);
-    //         if ($tmp) {
-    //             $pushMsg['data']['newmessage'] = $tmp['msg'];
-    //             $pushMsg['data']['remains'] = $tmp['remains'];
-    //         }
-    //         unset($tmp);
-    //     }
-    //     $pushMsg['data']['time'] = date("H:i", time());
-    //     unset($data);
-    //     return $pushMsg;
-    // }
-    // //登录
-    // public static function doLogin($data)
-    // {
-    //     $pushMsg['code'] = 1;
-    //     $pushMsg['msg'] = $data['params']['name'] . "加入了群聊";
-
-    //     $pushMsg['data']['listtagid'] = $data['listtagid'];
-    //     $pushMsg['data']['fd'] = $data['fd'];
-    //     $pushMsg['data']['name'] = $data['params']['name'];
-    //     $pushMsg['data']['avatar'] = DOMAIN . '/static/images/avatar/f1/f_' . rand(1, 12) . '.jpg';
-    //     $pushMsg['data']['time'] = date("H:i", time());
-    //     self::login($data['listtagid'], $data['fd'], $data['params']['name'], $data['params']['email'], $pushMsg['data']['avatar']);
-    //     unset($data);
-    //     return $pushMsg;
-    // }
-    // public static function getRooms()
-    // {
-    //     global $listtags;
-    //     $roomss = array();
-    //     foreach ($listtags as $_k => $_v) {
-    //         $roomss[] = array(
-    //             'listtagid'   => $_k,
-    //             'listtagname' => $_v
-    //         );
-    //     }
-    //     return $roomss;
-    // }
-
-
-    // public static function remind($listtagid, $msg)
-    // {
-    //     $data = array();
-    //     if ($msg != "") {
-    //         $data['msg'] = $msg;
-    //         //正则匹配出所有@的人来
-    //         $s = preg_match_all('~@(.+?)　~', $msg, $matches);
-    //         if ($s) {
-    //             $m1 = array_unique($matches[0]);
-    //             $m2 = array_unique($matches[1]);
-    //             $user = new ChatUser();
-    //             $users = $user->getUsersByRoom($listtagid);
-    //             $m3 = array();
-    //             foreach ($users as $_k => $_v) {
-    //                 $m3[$_v['name']] = $_v['fd'];
-    //             }
-    //             $i = 0;
-    //             foreach ($m2 as $_k => $_v) {
-    //                 if (array_key_exists($_v, $m3)) {
-    //                     $data['msg'] = str_replace($m1[$_k], '<font color="blue">' . trim($m1[$_k]) . '</font>', $data['msg']);
-    //                     $data['remains'][$i]['fd'] = $m3[$_v];
-    //                     $data['remains'][$i]['name'] = $_v;
-    //                     $i++;
-    //                 }
-    //             }
-    //             unset($users);
-    //             unset($m1, $m2, $m3);
-    //         }
-    //     }
-    //     return $data;
-    // }
 }

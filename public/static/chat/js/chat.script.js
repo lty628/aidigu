@@ -198,11 +198,16 @@ login		: false,
 			}
 			*/
 			var messageChatId = $("#messageChatId").val()
+			var channelMessageChatId = $("#channelMessageChatId").val()
 			var privateToUid = $("#privateToUid").val()
 			if (messageChatId) {
 				$("#sub-menu-pannel").hide();
 				$("#menu-pannel").hide();
 				chat.messageChat(messageChatId, privateToUid)
+			} else if (channelMessageChatId) {
+				$("#sub-menu-pannel").hide();
+				$("#menu-pannel").hide();
+				chat.channelMessageChat(channelMessageChatId, privateToUid)
 			} else if (privateToUid) {
 				$("#sub-menu-pannel").hide();
 				$("#menu-pannel").hide();
@@ -408,6 +413,14 @@ d.data[index].listtagid = d.listtagid
 				$("#content-pannel").show();
 			}
 		}
+		if ($("#channelMessageChatId").val()) {
+			chat.changeChannelMessageChatId()
+				if ($("#isMobile").val()) {
+					// $("#menu-pannel").css('display', 'none')
+					$("#sub-menu-pannel").css('display', 'none')
+					$("#content-pannel").show();
+				}
+		}
 	},
 	/**
 	 * 填充房间用户列表
@@ -478,6 +491,14 @@ d.data[index].listtagid = d.listtagid
 	changeMessageChatId:function () {
 		// window.parent.$(".layui-layer-title").text(chat.data.title);
 		var tagid = 'MessageChat'
+		$(".conv-lists").css('display',"none");
+		$(".msg-items").css('display',"none");
+		$("#conv-lists-"+tagid).css('display',"block");
+		$("#chatLineHolder-"+tagid).css('display',"block");
+	},
+	changeChannelMessageChatId:function () {
+		// window.parent.$(".layui-layer-title").text(chat.data.title);
+		var tagid = 'ChannelMessageChat'
 		$(".conv-lists").css('display',"none");
 		$(".msg-items").css('display',"none");
 		$("#conv-lists-"+tagid).css('display',"block");
@@ -591,6 +612,20 @@ d.data[index].listtagid = d.listtagid
 	messageChat:  function(msgid, touid){
 		
 		var listtagid = 'MessageChat';
+
+		//用户切换房间
+		chat.data.msgid = msgid
+		chat.data.touid = touid
+		chat.data.listtagid = listtagid
+		chat.data.fromuid = $("#privateFromUid").val()
+		chat.data.uid = chat.data.fromuid
+		var json = {"type": 3,"msgid": msgid, "touid": touid, 'fromuid': chat.data.uid, "listtagid": listtagid};
+		chat.wsSend(JSON.stringify(json));
+		$(".input-area").show()
+	},
+	channelMessageChat:  function(msgid, touid){
+		
+		var listtagid = 'ChannelMessageChat';
 
 		//用户切换房间
 		chat.data.msgid = msgid

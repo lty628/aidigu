@@ -21,13 +21,51 @@
                     <div class="stat-label">创建时间</div>
                 </div>
             </div>
-            
+            <input type="hidden" name="channel_id" value="{$channel.channel_id}">
             <div class="channel-actions">
-                <a href="#" class="action-btn join-btn">加入频道</a>
-                <a href="#" class="action-btn message-btn">发送消息</a>
-                <a href="#" class="action-btn quit-btn">退出频道</a>
+                <!-- <a href="#" class="action-btn join-btn">加入频道</a>
+                <a href="#" class="action-btn message-btn">发送消息</a> -->
+                <a href="javascript:void(0);" class="action-btn quit-btn">退出频道</a>
             </div>
         </div>
     </div>
     <div class="clear"></div>
 </div>
+
+        <script>
+            $(document).ready(function () {
+                // 退出频道按钮点击事件
+                $('.quit-btn').on('click', function (e) {
+                    e.preventDefault();
+
+                    var channelId = $('input[name="channel_id"]').val();
+
+                    if (!channelId) {
+                        layer.msg('频道信息错误');
+                        return;
+                    }
+
+                    layer.confirm('确定要退出该频道吗？', {
+                        title: '退出频道',
+                        icon: 3,
+                        btn: ['确定', '取消']
+                    }, function (index) {
+                        $.post('/index/ajax/quitChannel', {
+                            channel_id: channelId
+                        }, function (res) {
+                            if (res.status === 1) {
+                                layer.msg(res.msg, { icon: 1 });
+                                // 退出成功后刷新页面或跳转到其他页面
+                                setTimeout(function () {
+                                    window.location.href = '/channel/'; // 或者跳转到聊天主页
+                                }, 1500);
+                            } else {
+                                layer.msg(res.msg, { icon: 2 });
+                            }
+                        }, 'json');
+
+                        layer.close(index);
+                    });
+                });
+            });
+        </script>

@@ -326,7 +326,7 @@ a {
 
 a:hover {
     text-decoration: underline;
-    padding-bottom: 0.2rem; /* Use rem for padding */
+    /* padding-bottom: 0.2rem; */
     color: var(--link-hover-color);
 }
 

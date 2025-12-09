@@ -324,7 +324,7 @@
 
 		{/if}
 
-		{if $messageChatId}
+		{if $messageChatId || $channelMessageChatId}
 		#sub-menu-pannel {display: none;}
 		#menu-pannel {display: none;}
 		{/if}
@@ -412,6 +412,7 @@
 	</div>
 	<input type="hidden" value="{$touid}" id="privateToUid">
 	<input type="hidden" value="{$messageChatId}" id="messageChatId">
+	<input type="hidden" value="{$channelMessageChatId}" id="channelMessageChatId">
 	<input type="hidden" value="{$fromuid}" id="privateFromUid">
 	<input type="hidden" value="{$isMobile}" id="isMobile">
 	<input type="hidden" id="mediaVal">

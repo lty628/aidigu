@@ -672,5 +672,15 @@ CREATE TABLE `wb_channel_message`  (
   INDEX `idx_channel_id`(`channel_id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = DYNAMIC;
 
+CREATE TABLE `wb_channel_comment`  (
+  `cid` bigint(20) NOT NULL AUTO_INCREMENT,
+  `fromuid` bigint(20) NOT NULL,
+  `msg` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+  `msg_id` bigint(20) NOT NULL,
+  `touid` mediumint(9) NULL DEFAULT NULL,
+  `ctime` int(11) NOT NULL,
+  `ctype` tinyint(4) NOT NULL DEFAULT 0 COMMENT '回复类型',
+  PRIMARY KEY (`cid`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = DYNAMIC;
 
 SET FOREIGN_KEY_CHECKS = 1;

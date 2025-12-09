@@ -150,6 +150,12 @@ class IndexInfo extends Info
             return $this->error('频道不存在');
         }
 
+        $member = Db::name('channel_user')->where(['channel_id' => $channelId, 'uid' => $this->userid])->find();
+
+        if (!$member) {
+            return $this->error('您不是该频道成员，无法查看');
+        }
+
         if (request()->isAjax()) {
             
             // 检查用户是否是频道成员
@@ -196,6 +202,7 @@ class IndexInfo extends Info
                 ->where('cu.uid', $this->userid)
                 ->order('c.channel_id desc')
                 ->paginate(30, false, ['page' => $request->param('page/d', 1), 'path' => '[PAGE].html']);
+            $joinedChannels = $channel->column('channel_id');
         } elseif (strpos($path, 'mycreated') !== false) {
             $currentTab = 'created';
             // 获取我创建的频道
@@ -203,6 +210,7 @@ class IndexInfo extends Info
                 ->where('owner_uid', $this->userid)
                 ->order('channel_id desc')
                 ->paginate(30, false, ['page' => $request->param('page/d', 1), 'path' => '[PAGE].html']);
+            $joinedChannels = $channel->column('channel_id');
         } else {
             // 默认获取所有频道
             $channelQuery = Db::name('channel')

@@ -103,6 +103,11 @@ class TagInfo
                 'listtagname' => '评论',
                 'display' => 'none'
             ],
+            [
+                'listtagid' => 'ChannelMessageChat',
+                'listtagname' => '频道评论',
+                'display' => 'none'
+            ],
         ];
     }
 

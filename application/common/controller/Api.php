@@ -102,6 +102,45 @@ class Api extends Base
         return json(array('status' => 1, 'msg' => '成功加入频道'));
     }
     
+    // 退出频道
+	public function quitChannel()
+	{
+		$channelId = input('post.channel_id');
+		$userId = getLoginUid();
+		
+		if (!$channelId) {
+			return json(array('status' => 0, 'msg' => '参数错误'));
+		}
+		
+		// 检查频道是否存在
+		$channel = Db::name('channel')->where('channel_id', $channelId)->find();
+		if (!$channel) {
+			return json(array('status' => 0, 'msg' => '频道不存在'));
+		}
+		
+		// 检查用户是否是频道成员
+		$member = Db::name('channel_user')->where(['channel_id' => $channelId, 'uid' => $userId])->find();
+		if (!$member) {
+			return json(array('status' => 0, 'msg' => '您不是该频道成员'));
+		}
+		
+		// 检查是否是频道创建者
+		if ($channel['owner_uid'] == $userId) {
+			return json(array('status' => 0, 'msg' => '频道创建者无法退出频道'));
+		}
+		
+		// 删除频道成员记录
+		$result = Db::name('channel_user')->where(['channel_id' => $channelId, 'uid' => $userId])->delete();
+		if (!$result) {
+			return json(array('status' => 0, 'msg' => '退出频道失败'));
+		}
+		
+		// 更新频道成员数
+		Db::name('channel')->where('channel_id', $channelId)->setDec('member_count', 1);
+		
+		return json(array('status' => 1, 'msg' => '成功退出频道'));
+	}
+    
     public function repost()
     {
         $contents = input('get.contents');
