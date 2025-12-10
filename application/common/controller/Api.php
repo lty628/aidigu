@@ -388,7 +388,8 @@ class Api extends Base
 
     public function delChannelMessage()
     {
-        // $result = ChannelMessage::delMessageById((int)input('param.msg_id'), getLoginUid());
+        // var_dump((int)input('param.msg_id'));
+        // die;
         $uid = getLoginUid();
         $find = Db::name('channel_message')->where('msg_id', (int)input('param.msg_id'))->find();
         if (!$find) {
@@ -399,7 +400,7 @@ class Api extends Base
             $allowDelete = false;
             // channel_user中排查权限 role是否正确
             $findChannelUser = Db::name('channel_user')->where('channel_id', $find['channel_id'])->where('uid', $uid)->find();
-            if ($findChannelUser['role'] < 1) {
+            if ($findChannelUser['role'] > 0) {
                 $allowDelete = true;
             }
         }
@@ -409,7 +410,7 @@ class Api extends Base
         $result = Db::name('channel_message')->where('msg_id', (int)input('param.msg_id'))->update(['is_delete' => 1]);
         if (!$result) 
             return $this->error('删除失败');
-        return $this->success('删除成功', '/'.getLoginBlog().'/own/');
+        return $this->success('删除成功');
     }
 
     public function checkRemind()

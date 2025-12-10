@@ -171,6 +171,7 @@ class IndexInfo extends Info
                 ->alias('cm')
                 ->join('user u', 'cm.uid = u.uid')
                 ->where('cm.channel_id', $channelId)
+                ->where('cm.is_delete', 0)
                 ->order('cm.ctime desc')
                 ->limit(20)
                 ->field('cm.*, u.nickname, u.head_image,u.blog')
