@@ -158,6 +158,10 @@ class Channel extends Controller
     {
         $uid = getLoginUid();
         $inviteCode = input('get.invite_code');
+        $channelId = input('get.channel_id');
+        if (!$channelId) {
+            return $this->error('加入频道码异常，请联系频道管理员');
+        }
         if (!$uid) {
             return $this->error('未登录');
         }
@@ -165,16 +169,16 @@ class Channel extends Controller
             return $this->error('加入频道码异常，请联系频道管理员');
         }
         
-        $info = Db::name('channel')->where('invite_code', $inviteCode)->find();
+        $info = Db::name('channel')->where('channel_id', $channelId)->where('invite_code', $inviteCode)->find();
         if (!$info) return $this->error('加入频道码异常，请联系频道管理员');
 
         // 检查是否需要密码
-        if ($info['password']) {
-            $password = input('get.password', '');
-            if (!$password || encryptionPass($password) != $info['password']) {
-                return $this->error('频道密码错误');
-            }
-        }
+        // if ($info['password']) {
+        //     $password = input('get.password', '');
+        //     if (!$password || encryptionPass($password) != $info['password']) {
+        //         return $this->error('频道密码错误');
+        //     }
+        // }
 
         $hasUser = Db::name('channel_user')->where('channel_id', $info['channel_id'])->where('uid', $uid)->where('leave_time', 0)->find();
 
@@ -188,7 +192,7 @@ class Channel extends Controller
             Db::name('channel')->where('channel_id', $info['channel_id'])->setInc('member_count');
         }
 
-        return $this->success('已进入频道, 即将进入应用页', '/tools/');
+        return $this->success('已进入频道, 即将进入应用页', '/channel/' . $info['channel_id'] . '/');
     }
     
     // 删除频道

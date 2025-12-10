@@ -216,6 +216,7 @@ class IndexInfo extends Info
         } else {
             // 默认获取所有频道
             $channelQuery = Db::name('channel')
+                ->where('invite_status', 0)
                 ->order('channel_id desc');
             
             // 获取频道列表
