@@ -159,7 +159,7 @@ class IndexInfo extends Info
         if (request()->isAjax()) {
             
             // 检查用户是否是频道成员
-            $member = Db::name('channel_user')->where(['channel_id' => $channelId, 'uid' => $this->userid])->find();
+            // $member = Db::name('channel_user')->where(['channel_id' => $channelId, 'uid' => $this->userid])->find();
             $allowDelete = 0;
             if ($member['role'] > 0) {
                 $allowDelete = 1;
@@ -180,6 +180,7 @@ class IndexInfo extends Info
         }
         
         $this->assign('channel', $channel);
+        $this->assign('member', $member);
 
         return $this->fetch('channel');
     }

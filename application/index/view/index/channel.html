@@ -118,7 +118,7 @@
 <body>
     <div class="main">
         <div class="contents">
-            {if $channel['allow_speak']}
+            {if $channel['allow_speak'] || $member['role']}
             <div class="post" id="postform" style="display:block;">
                 <div class="postad" id="wcontent">&nbsp;</div>
                 <div id="msgInput" class="text" maxlength="2800" onkeyup="check_len1()">

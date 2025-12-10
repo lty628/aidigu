@@ -247,7 +247,7 @@
 <div class="main">
     <div class="contents">
         <div class="channel-header">
-            <h1>频道列表</h1>
+            <h1>频道列表<a href="javascript:void(0);"  id="createChannelBtn">+</a></h1>
             <p>发现有趣的频道，加入精彩讨论</p>
             <div class="channel-tabs">
                 <a href="/channel/" class="channel-tab {if $currentTab == 'all' || !isset($currentTab)}active{/if}">频道大厅</a>
@@ -327,6 +327,18 @@
 layui.use(['layer', 'form'], function(){
     var layer = layui.layer;
     var form = layui.form;
+    
+    // 创建频道按钮点击事件
+    $('#createChannelBtn').on('click', function() {
+        layer.open({
+            type: 2,
+            title: '创建频道',
+            content: '/tools/channel',
+            area: ['800px', '600px'],
+            maxmin: true,
+            shadeClose: true
+        });
+    });
     
     // 加入频道按钮点击事件
     $(document).on('click', '.channel-join-btn[data-channel-id]', function() {
