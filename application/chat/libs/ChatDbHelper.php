@@ -87,8 +87,19 @@ class ChatDbHelper
     // 保存频道消息历史
     public static function saveChannelMessageChatHistory($data)
     {
-        // 插入频道消息到channel_message表
-        return Db::name('channel_message')->insert($data);
+        $pattern = '/@{1}(\w*[\.0-9]*[\x{4e00}-\x{9fa5}]*)([：:]){0,1}([：:\.;])*/ui';
+        if (preg_match($pattern, $data['msg'], $matches)) {
+            $findUser = Db::name('user')->where('nickname',$matches[1])->field('uid,blog')->find();
+            if ($findUser) {
+                $data['ctype'] = 1; // 评论的回复
+            }
+        }
+        // channel_message commentsum 加一
+        Db::name('channel_message')->where('msg_id', $data['msg_id'])->update([
+            'commentsum' => Db::raw('commentsum + 1')
+        ]);
+        // 插入频道消息到channel_comment表
+        return Db::name('channel_comment')->insert($data);
     }
 
     public static function upReplayReminder($data, $touid)
@@ -122,14 +133,11 @@ class ChatDbHelper
     // 获取频道消息历史
     public static function getChannelMessageChatHistory($data)
     {
-        $result = Db::name('channel_message')
-            ->alias('channel_message')
-            ->join([getPrefix() . 'user' => 'user'], 'user.uid=channel_message.fromuid')
+        $result = Db::name('channel_comment')->alias('comment')->join([getPrefix() . 'user' => 'user'], 'user.uid=comment.fromuid')
             ->where('msg_id', $data['msgid'])
             ->limit(300)
-            ->order('channel_message.cid', 'desc')
-            ->field('user.head_image,user.nickname,channel_message.cid as chat_id,channel_message.fromuid,channel_message.msg_id as groupid,channel_message.msg as content,DATE_FORMAT(FROM_UNIXTIME(channel_message.ctime), "%Y-%m-%d %H:%i:%s") AS create_time')
-            ->select();
+            ->order('comment.cid', 'desc')
+            ->field('user.head_image,user.nickname,comment.cid as chat_id,comment.fromuid,comment.msg_id as groupid,comment.msg as content,DATE_FORMAT(FROM_UNIXTIME(comment.ctime), "%Y-%m-%d %H:%i:%s") AS create_time')->select();
         return $result;
     }
 
@@ -235,27 +243,6 @@ class ChatDbHelper
         Db::name('chat_group_user')->where('uid', $data['uid'])->where('groupid', $data['groupid'])->update([
             'message_count' => 0
         ]);
-        return $result;
-    }
-
-    // 获取频道消息历史（新增方法）
-    public static function getChannelMessageHistory($data)
-    {
-        $result = Db::name('channel_message')
-            ->alias('channel_message')
-            ->join([getPrefix() . 'user' => 'user'], 'user.uid=channel_message.fromuid')
-            ->where('channel_id', $data['channel_id'])
-            ->limit(200)
-            ->order('channel_message.cid', 'desc')
-            ->field('user.head_image,user.nickname,channel_message.*')
-            ->select();
-            
-        // 更新用户在该频道的消息计数为0
-        Db::name('channel_user')
-            ->where('uid', $data['uid'])
-            ->where('channel_id', $data['channel_id'])
-            ->update(['message_count' => 0]);
-            
         return $result;
     }
 

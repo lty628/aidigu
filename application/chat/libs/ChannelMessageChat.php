@@ -2,7 +2,7 @@
 namespace app\chat\libs;
 
 
-class MessageChat extends Base
+class ChannelMessageChat extends Base
 {
     protected static $listtagid = 'ChannelMessageChat';
 
