@@ -6,7 +6,7 @@
 <p align="center">
     <a href="https://github.com/lty628/aidigu"><img src="https://img.shields.io/badge/PHP-7.2%2B-blue?style=for-the-badge&color=%238d4bbb" alt="PHP 7.2+"></a>
     <a href="https://github.com/lty628/aidigu"><img src="https://img.shields.io/badge/STABLE-1.7.0-blue?style=for-the-badge&color=%230aa344" alt="Latest Stable Version"></a>
-    <a href="https://github.com/lty628/aidigu"><img src="https://img.shields.io/badge/UNSTABLE-1.7.x--DEV-blue?style=for-the-badge&color=%23ff0097" alt="Latest Unstable Version"></a>
+    <a href="https://github.com/lty628/aidigu"><img src="https://img.shields.io/badge/UNSTABLE-1.9.x--DEV-blue?style=for-the-badge&color=%23ff0097" alt="Latest Unstable Version"></a>
     <a href="https://github.com/lty628/aidigu"><img src="https://img.shields.io/badge/SIZE-9.3MB-blue?style=for-the-badge&color=%23f0c239" alt="Download Size"></a>
     <a href="https://raw.githubusercontent.com/lty628/aidigu/master/LICENSE"><img src="https://img.shields.io/badge/LICENSE-MIT-blue?style=for-the-badge&color=%234b5cc4" alt="MIT License"></a>
 </p>
@@ -23,9 +23,19 @@ QQ群：434615423
 
 3.用户登录后拥有专属ID
 
-4.支持表情、关注用户，网盘分享等功能
+### **主要功能特性**
 
-5.支持图片上传,视频上传,网盘存储分享
+- **微博发布**：用户可以发布文字、图片、视频等内容，支持表情符号
+- **话题讨论**：创建和参与话题讨论，增加互动性
+- **收藏功能**：收藏喜欢的内容，方便日后查看
+- **即时聊天**：支持私信和群聊功能，实时沟通交流
+- **频道系统**：创建不同类型的频道（普通、密码、邀请），组织特定群体交流
+- **关注机制**：关注感兴趣的用户，获取其最新动态
+- **导航系统**：提供便捷的网站导航功能
+- **网盘服务**：个人云存储空间，支持文件上传和分享
+- **搜索功能**：快速搜索内容、用户和话题
+- **热搜榜单**：实时显示热门搜索和话题
+- **文本阅读**：支持在线阅读文本内容
 
 ### **安装方式**
 
@@ -84,6 +94,16 @@ QQ群：434615423
 ***PHP版本需求***：建议PHP7.2+（暂不支持PHP8）  
 
 ***MySQL版本需求***：MySQL5.6+
+
+## 预览图
+![导航览图](./doc/img/nav.png)
+![频道广场](./doc/img/channel.png)  
+![个人设置](./doc/img/setting .png)
+![广场](./doc/img/square.png)
+![工具](./doc/img/tools.png)
+![手机](./doc/img/mobile.png)
+
+
 
 ## 版权信息
 
