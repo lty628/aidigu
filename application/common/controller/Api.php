@@ -407,6 +407,9 @@ class Api extends Base
         if (!$allowDelete) {
             return $this->error('无删除权限，请联系管理');
         }
+        // wb_channel wb_channel_user 中的 message_count -1
+        Db::name('channel')->where('channel_id', $find['channel_id'])->setDec('message_count', 1);
+        Db::name('channel_user')->where('channel_id', $find['channel_id'])->where('uid', $uid)->setDec('message_count', 1);
         $result = Db::name('channel_message')->where('msg_id', (int)input('param.msg_id'))->update(['is_delete' => 1]);
         if (!$result) 
             return $this->error('删除失败');
