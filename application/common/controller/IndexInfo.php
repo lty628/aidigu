@@ -173,7 +173,7 @@ class IndexInfo extends Info
                 ->where('cm.channel_id', $channelId)
                 ->order('cm.ctime desc')
                 ->limit(20)
-                ->field('cm.*, u.nickname, u.head_image')
+                ->field('cm.*, u.nickname, u.head_image,u.blog')
                 ->select();
             return json(array('status' =>  1, 'msg' => 'ok', 'data' => ['data' => handleMessage($messages), 'allow_delete' => $allowDelete, 'allow_comment' => $allowComment, 'userid' => $this->userid]));
 

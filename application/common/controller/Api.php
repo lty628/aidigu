@@ -389,6 +389,22 @@ class Api extends Base
     public function delChannelMessage()
     {
         // $result = ChannelMessage::delMessageById((int)input('param.msg_id'), getLoginUid());
+        $uid = getLoginUid();
+        $find = Db::name('channel_message')->where('msg_id', (int)input('param.msg_id'))->find();
+        if (!$find) {
+            return $this->error('错误参数');
+        }
+        $allowDelete = false;
+        if ($find['uid'] != $uid) {
+            // channel_user中排查权限 role是否正确
+            $findChannelUser = Db::name('channel_user')->where('channel_id', $find['channel_id'])->where('uid', $uid)->find();
+            if ($findChannelUser['role'] < 1) {
+                $allowDelete = true;
+            }
+        }
+        if (!$allowDelete) {
+            return $this->error('无删除权限，请联系管理');
+        }
         $result = Db::name('channel_message')->where('msg_id', (int)input('param.msg_id'))->update(['is_delete' => 1]);
         if (!$result) 
             return $this->error('删除失败');
