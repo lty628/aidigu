@@ -394,8 +394,9 @@ class Api extends Base
         if (!$find) {
             return $this->error('错误参数');
         }
-        $allowDelete = false;
+        $allowDelete = true;
         if ($find['uid'] != $uid) {
+            $allowDelete = false;
             // channel_user中排查权限 role是否正确
             $findChannelUser = Db::name('channel_user')->where('channel_id', $find['channel_id'])->where('uid', $uid)->find();
             if ($findChannelUser['role'] < 1) {
