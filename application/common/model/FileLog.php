@@ -25,6 +25,8 @@ class FileLog extends Model
             4 => '素材',
             5 => '主题',
             6 => '网盘',
+            7 => 'icon',
+            8 => '缩略图',
         ];
         return $typeMap[$data['type']] ?? '未知';
     }

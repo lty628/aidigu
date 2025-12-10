@@ -124,7 +124,7 @@
             // 单图片上传
             var uploadInst = upload.render({
                 elem: '#ID-upload-btn',
-                url: '/index/setting/chatMessage',
+                url: '/index/setting/uploadThumb',
                 before: function (obj) {
                     obj.preview(function (index, file, result) {
                         $('#ID-upload-img').attr('src', result);
@@ -138,7 +138,7 @@
                         return layer.msg('上传失败');
                     }
                     if (res.status == 1) {
-                        var avatar = res.data.media_info + '.' + res.data.media_type
+                        var avatar = res.data.middle
                         $("#avatar").val(avatar)
                     }
                     $('#ID-upload-text').html('');

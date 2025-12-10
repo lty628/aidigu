@@ -109,7 +109,7 @@
             // 单图片上传
             var uploadInst = upload.render({
                 elem: '#ID-upload-btn',
-                url: '/index/setting/chatMessage', // 实际使用时改成您自己的上传接口即可。
+                url: '/index/setting/uploadThumb', // 实际使用时改成您自己的上传接口即可。
                 before: function (obj) {
                     // 预读本地文件示例，不支持ie8
                     obj.preview(function (index, file, result) {
@@ -125,7 +125,7 @@
                         return layer.msg('上传失败');
                     }
                     if (res.status == 1) {
-                        var head_image = res.data.media_info + '.' + res.data.media_type
+                        var head_image = res.data.middle
                         $("#headImage").val(head_image)
                     } 
                     // 上传成功的一些操作

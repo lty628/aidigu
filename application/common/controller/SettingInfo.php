@@ -74,6 +74,42 @@ class SettingInfo extends Base
 			return json(['status'=>0, 'msg'=>$file->getError()]);
 		}
 	}
+
+	public function uploadThumb()
+	{
+		$path = 'uploads/'.getLoginMd5Uid().'/thumb';
+		// 4m
+		$size = sysConfig('app.picUploadSize', 4194304);
+		$file = request()->file('file');
+		// 移动到框架应用根目录/uploads/ 目录下
+		$info = $file->validate(['size'=>$size,'ext'=>'jpg,jiff,bmp,jpeg,png,gif'])->move($path);
+		// $info = $this->uploadImage($size, $path);
+		if($info){
+			// 成功上传后 获取上传信息
+			$fileFath = $path.'/'.$info->getSaveName();
+			$fileName = explode('.', $info->getSaveName())[0];
+			$image = Image::open($fileFath);
+			$image->thumb(50, 50,Image::THUMB_CENTER)->save($path.'/'.$fileName.'_small.'.$info->getExtension());
+			$image = Image::open($fileFath);
+			$image->thumb(100, 100,Image::THUMB_CENTER)->save($path.'/'.$fileName.'_middle.'.$info->getExtension());
+			$image = Image::open($fileFath);
+			$image->thumb(200, 200,Image::THUMB_CENTER)->save($path.'/'.$fileName.'_big.'.$info->getExtension());
+			$data['media_info'] = '/'.$path.'/'.$fileName;
+			$data['media_type'] = $info->getExtension();
+			$data['media_size'] = $info->getSize();
+			$data['small'] = '/'.$path.'/'.$fileName.'_small.'.$info->getExtension();
+			$data['middle'] = '/'.$path.'/'.$fileName.'_middle.'.$info->getExtension();
+			$data['big'] = '/'.$path.'/'.$fileName.'_big.'.$info->getExtension();
+			$data['media_name'] = $info->getInfo()['name'];
+			$data['media_mime'] = $info->getInfo()['type'];
+			\app\common\libs\FileLog::add(getLoginUid(), 8, $info->getExtension(), $data);
+			return json(['status'=>1, 'msg'=>'上传成功','data'=>$data]);
+		}else{
+			// 上传失败获取错误信息
+			return json(['status'=>0, 'msg'=>$file->getError()]);
+		}
+	}
+
 	public function saveUpload()
 	{
 		$saveUpload = input('get.avatarVal');
