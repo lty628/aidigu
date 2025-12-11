@@ -51,7 +51,7 @@ class UserInfo extends Controller
 	}
 	public function registerAjax()
 	{
-		$redirectUrl = input('get.redirectUrl');
+		$redirectUrl = input('post.redirectUrl');
 		$data['inviteCode'] = trim(input('post.inviteCode'));
 		if (sysConfig('app.noRegister') && !$data['inviteCode']) {
 			return json(['status' => 0, 'msg' => '本站已禁止注册']);
