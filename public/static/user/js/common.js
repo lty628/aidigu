@@ -31,6 +31,7 @@
 	        var password = $("#password").val();
 	        var rePassword = $("#re-password").val();
 	        var inviteCode = $("#invite-code").val();
+	        var redirectUrl = $("#redirectUrl").val();
 	        if (!checkAccount(account)) {
 	            return false;
 	        }
@@ -57,7 +58,7 @@
 	                url: '/index/user/registerAjax',
 	                type: 'POST',
 	                dataType: 'json',
-	                data: { account: account, nickname: nickname, password: password, inviteCode: inviteCode },
+	                data: { account: account, nickname: nickname, password: password, inviteCode: inviteCode, redirectUrl: redirectUrl },
 	            })
 	            .done(function(data) {
 	                if (data.status) {

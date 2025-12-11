@@ -33,6 +33,8 @@ class UserInfo extends Controller
 	}
 	public function register()
 	{
+		$redirectUrl = input('get.url');
+		$this->assign('redirectUrl', $redirectUrl);
 		return $this->fetch();
 	}
 
@@ -49,6 +51,7 @@ class UserInfo extends Controller
 	}
 	public function registerAjax()
 	{
+		$redirectUrl = input('get.redirectUrl');
 		$data['inviteCode'] = trim(input('post.inviteCode'));
 		if (sysConfig('app.noRegister') && !$data['inviteCode']) {
 			return json(['status' => 0, 'msg' => '本站已禁止注册']);
@@ -81,7 +84,10 @@ class UserInfo extends Controller
             'password' => $user->password
         ]);
 		Fans::create(['fromuid' => $userid, 'touid' => $userid, 'mutual_concern' => 1]);
-		return json(['status' => 1, 'msg' => '注册成功']);
+		if (!$redirectUrl) {
+			$redirectUrl = '/'.$user->blog . '/';
+		}
+		return json(['status' => 1, 'msg' => '注册成功', 'data' => $redirectUrl]);
 	}
 	public function loginAjax()
 	{

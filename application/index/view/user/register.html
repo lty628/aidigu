@@ -47,8 +47,9 @@
                         <label for="re-password" class="sr-only">确认密码</label>
                         <input type="password" class="form-control" id="re-password" placeholder="确认密码" autocomplete="off">
                     </div>
+                    <input type="hidden" id="redirectUrl" value="{$redirectUrl}">
                     <div class="form-group">
-                        <p>已有账号? <a href="/login/">点击登录</a>
+                        <p>已有账号? <a href="/login/?url={$redirectUrl}">点击登录</a>
                             <!-- | <a href="/forgot/">忘记密码?</a> -->
                         </p>
                     </div>
