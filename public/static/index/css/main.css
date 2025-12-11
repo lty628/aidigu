@@ -1,5 +1,6 @@
 /* 定义基础颜色变量 */
 :root {
+    /* 基础颜色保持不变 */
     --base-font-color: #393939;
     --link-color: #3B5999;
     --link-hover-color: #0056b3;
@@ -19,9 +20,9 @@
     --base-font-color: #FF69B4;
     --link-color: #FFB6C1;
     --link-hover-color: #FF1493;
-    --primary-color: #FF8CBA;
+    --primary-color: #FFB6C1; /* 原 secondary-color 值 */
     --primary-hover-color: #FF69B4;
-    --secondary-color: #FFB6C1;
+    --secondary-color: #FF8CBA; /* 原 primary-color 值 */
     --background-color: rgba(255, 240, 245, 0.8); /* 增加透明度 */
     --primary-btn-color: rgba(255, 240, 245, 0.8); /* 增加透明度 */
     --light-background-color: rgba(255, 245, 238, 0.8); /* 增加透明度 */
@@ -35,9 +36,9 @@
     --base-font-color: #2E8B57;
     --link-color: #3CB371;
     --link-hover-color: #008000;
-    --primary-color: #66CDAA;
+    --primary-color: #228B22; /* 原 secondary-color 值 */
     --primary-hover-color: #5F9EA0;
-    --secondary-color: #228B22;
+    --secondary-color: #66CDAA; /* 原 primary-color 值 */
     --background-color: rgba(240, 255, 240, 0.8); /* 增加透明度 */
     --primary-btn-color: rgba(240, 255, 240, 0.8); /* 增加透明度 */
     --light-background-color: rgba(224, 255, 255, 0.8); /* 增加透明度 */
@@ -51,9 +52,9 @@
     --base-font-color: #7B68EE;
     --link-color: #9370DB;
     --link-hover-color: #8A2BE2;
-    --primary-color: #D2B48C;
+    --primary-color: #DEB887; /* 原 secondary-color 值 */
     --primary-hover-color: #BC8F8F;
-    --secondary-color: #DEB887;
+    --secondary-color: #D2B48C; /* 原 primary-color 值 */
     --background-color: rgba(245, 245, 220, 0.8); /* 增加透明度 */
     --primary-btn-color: rgba(245, 245, 220, 0.8); /* 增加透明度 */
     --light-background-color: rgba(250, 235, 215, 0.8); /* 增加透明度 */
@@ -67,9 +68,9 @@
     --base-font-color: #008B8B;
     --link-color: #00BFFF;
     --link-hover-color: #1E90FF;
-    --primary-color: #4682B4;
+    --primary-color: #87CEFA; /* 原 secondary-color 值 */
     --primary-hover-color: #6495ED;
-    --secondary-color: #87CEFA;
+    --secondary-color: #4682B4; /* 原 primary-color 值 */
     --background-color: rgba(240, 255, 255, 0.8); /* 增加透明度 */
     --primary-btn-color: rgba(240, 255, 255, 0.8); /* 增加透明度 */
     --light-background-color: rgba(224, 255, 255, 0.8); /* 增加透明度 */
@@ -83,9 +84,9 @@
     --base-font-color: #8B4513;
     --link-color: #D2691E;
     --link-hover-color: #A0522D;
-    --primary-color: #CD853F;
+    --primary-color: #FFD700; /* 原 secondary-color 值 */
     --primary-hover-color: #DAA520;
-    --secondary-color: #FFD700;
+    --secondary-color: #CD853F; /* 原 primary-color 值 */
     --background-color: rgba(255, 248, 220, 0.8); /* 增加透明度 */
     --primary-btn-color: rgba(255, 248, 220, 0.8); /* 增加透明度 */
     --light-background-color: rgba(255, 228, 181, 0.8); /* 增加透明度 */
@@ -99,9 +100,9 @@
     --base-font-color: #FFA500;
     --link-color: #FF4500;
     --link-hover-color: #FF6347;
-    --primary-color: #FFD700;
+    --primary-color: #FF69B4; /* 原 secondary-color 值 */
     --primary-hover-color: #FFC107;
-    --secondary-color: #FF69B4;
+    --secondary-color: #FFD700; /* 原 primary-color 值 */
     --background-color: rgba(255, 255, 224, 0.8); /* 增加透明度 */
     --primary-btn-color: rgba(255, 255, 224, 0.8); /* 增加透明度 */
     --light-background-color: rgba(255, 250, 205, 0.8); /* 增加透明度 */
@@ -115,9 +116,9 @@
     --base-font-color: #2F4F4F;
     --link-color: #4682B4;
     --link-hover-color: #00008B;
-    --primary-color: #006400;
+    --primary-color: #2E8B57; /* 原 secondary-color 值 */
     --primary-hover-color: #008000;
-    --secondary-color: #2E8B57;
+    --secondary-color: #006400; /* 原 primary-color 值 */
     --background-color: rgba(245, 245, 245, 0.8); /* 增加透明度 */
     --primary-btn-color: rgba(245, 245, 245, 0.8); /* 增加透明度 */
     --light-background-color: rgba(224, 224, 224, 0.8); /* 增加透明度 */
@@ -131,9 +132,9 @@
     --base-font-color: #212121;
     --link-color: #00BCD4;
     --link-hover-color: #0097A7;
-    --primary-color: #607D8B;
+    --primary-color: #9E9E9E; /* 原 secondary-color 值 */
     --primary-hover-color: #546E7A;
-    --secondary-color: #9E9E9E;
+    --secondary-color: #607D8B; /* 原 primary-color 值 */
     --background-color: rgba(250, 250, 250, 0.8); /* 增加透明度 */
     --primary-btn-color: rgba(250, 250, 250, 0.8); /* 增加透明度 */
     --light-background-color: rgba(245, 245, 245, 0.8); /* 增加透明度 */
@@ -147,9 +148,9 @@
     --base-font-color: #8B4513;
     --link-color: #9ACD32;
     --link-hover-color: #6B8E23;
-    --primary-color: #FFA07A;
+    --primary-color: #F0E68C; /* 原 secondary-color 值 */
     --primary-hover-color: #FF7F50;
-    --secondary-color: #F0E68C;
+    --secondary-color: #FFA07A; /* 原 primary-color 值 */
     --background-color: rgba(253, 245, 230, 0.8); /* 增加透明度 */
     --primary-btn-color: rgba(107, 142, 35, 0.8); /* 增加透明度 */
     --light-background-color: rgba(255, 250, 205, 0.8); /* 增加透明度 */
@@ -163,9 +164,9 @@
     --base-font-color: #FFD700; /* 修改为金色，与中国红更搭配 */
     --link-color: #FFD700; /* 修改为金色，与中国红更搭配 */
     --link-hover-color: #FFFF00; /* 修改为黄色，增强悬停效果 */
-    --primary-color: #DC143C; /* 修改为成果红（猩红色） */
+    --primary-color: #FFA500; /* 原 secondary-color 值 */
     --primary-hover-color: #FF4500; /* 修改为橙红色 */
-    --secondary-color: #FFA500; /* 修改为橙色 */
+    --secondary-color: #DC143C; /* 原 primary-color 值 */
     --background-color: rgba(220, 20, 60, 0.9); /* 修改为成果红（猩红色）并增加透明度 */
     --primary-btn-color: #FFD700; /* 修改为金色，与中国红更搭配 */
     --light-background-color: #FFD700; /* 修改为金色 */
@@ -179,9 +180,9 @@
     --base-font-color: #87CEFA;
     --link-color: #00BFFF;
     --link-hover-color: #1E90FF;
-    --primary-color: #4B0082;
+    --primary-color: #9400D3; /* 原 secondary-color 值 */
     --primary-hover-color: #8A2BE2;
-    --secondary-color: #9400D3;
+    --secondary-color: #4B0082; /* 原 primary-color 值 */
     --background-color: rgba(0, 0, 0, 0.85); /* 修改为带0.95透明度的黑色 */
     --primary-btn-color: #000000;
     --light-background-color: #191970;
@@ -195,9 +196,9 @@
     --base-font-color: #333333;
     --link-color: #666666;
     --link-hover-color: #999999;
-    --primary-color: linear-gradient(45deg, #FF6B6B, #556270);
+    --primary-color: linear-gradient(45deg, #FFD166, #06D6A0); /* 原 secondary-color 值 */
     --primary-hover-color: linear-gradient(45deg, #FF8E8E, #778899);
-    --secondary-color: linear-gradient(45deg, #FFD166, #06D6A0);
+    --secondary-color: linear-gradient(45deg, #FF6B6B, #556270); /* 原 primary-color 值 */
     --background-color: linear-gradient(135deg, #F4F4F4, #E0E0E0);
     --primary-btn-color: linear-gradient(45deg, #FF6B6B, #556270);
     --light-background-color: linear-gradient(135deg, #FFFFFF, #F5F5F5);
@@ -211,9 +212,9 @@
     --base-font-color: #333333;
     --link-color: #666666;
     --link-hover-color: #999999;
-    --primary-color: #FFFFFF;
+    --primary-color: #E0E0E0; /* 原 secondary-color 值 */
     --primary-hover-color: #F5F5F5;
-    --secondary-color: #E0E0E0;
+    --secondary-color: #FFFFFF; /* 原 primary-color 值 */
     --background-color: rgba(255, 255, 255, 0.8); /* 修改为带0.8透明度的白色 */
     --primary-btn-color: rgba(90, 89, 89, 0.8); /* 修改为带0.8透明度的白色 */
     --light-background-color: rgba(245, 245, 245, 0.8); /* 修改为带0.8透明度的背景色 */
@@ -224,12 +225,12 @@
 
 /* 新增主题：暗黑科技主题 */
 :root.dark-tech {
-    --base-font-color: #f0f0f0;
+    --base-font-color: #e9ecef; /* 使用更亮的文字颜色 */
     --link-color: #00FFFF;
     --link-hover-color: #00FFCC;
-    --primary-color: #1E1E1E;
+    --primary-color: #333333; /* 原 secondary-color 值 */
     --primary-hover-color: #2A2A2A;
-    --secondary-color: #333333;
+    --secondary-color: #1E1E1E; /* 原 primary-color 值 */
     --background-color: rgba(18, 18, 18, 0.95); /* 修改为带0.8透明度的背景色 */
     --primary-btn-color: #f0f0f0;
     --light-background-color: rgba(33, 33, 33, 0.95); /* 修改为带0.8透明度的浅色背景色 */
@@ -243,9 +244,9 @@
     --base-font-color: #FF33CC;
     --link-color: #FF66FF;
     --link-hover-color: #FF00FF;
-    --primary-color: #FFCCFF;
+    --primary-color: #f799ff; /* 原 secondary-color 值 */
     --primary-hover-color: #FF99FF;
-    --secondary-color: #f799ff;
+    --secondary-color: #FFCCFF; /* 原 primary-color 值 */
     --background-color: rgba(255, 240, 255, 0.8); /* 修改为带0.8透明度的背景色 */
     --primary-btn-color: #FF00FF;
     --light-background-color: rgba(255, 255, 204, 0.8); /* 修改为带0.8透明度的浅色背景色 */
@@ -259,9 +260,9 @@
     --base-font-color: #006400;
     --link-color: #32CD32;
     --link-hover-color: #00FF00;
-    --primary-color: #228B22;
+    --primary-color: #556B2F; /* 原 secondary-color 值 */
     --primary-hover-color: #008000;
-    --secondary-color: #556B2F;
+    --secondary-color: #228B22; /* 原 primary-color 值 */
     --background-color: rgba(240, 255, 240, 0.8); /* 修改为带0.8透明度的背景色 */
     --primary-btn-color: rgba(240, 255, 240, 0.8); /* 修改为带0.8透明度的按钮背景色 */
     --light-background-color: rgba(224, 255, 224, 0.8); /* 修改为带0.8透明度的浅色背景色 */
@@ -275,9 +276,9 @@
     --base-font-color: #65370f; /* 更深的铁锈色基础字体颜色 */
     --link-color: #854425; /* 更深的铁锈色链接颜色 */
     --link-hover-color: #743a10; /* 更深的铁锈色链接悬停颜色 */
-    --primary-color: #696969; /* 金属灰色主色调 */
+    --primary-color: #808080; /* 原 secondary-color 值 */
     --primary-hover-color: #555555; /* 加深的主色调悬停颜色 */
-    --secondary-color: #808080; /* 金属灰色次色调 */
+    --secondary-color: #696969; /* 原 primary-color 值 */
     --background-color: rgba(105, 105, 105, 0.8); /* 金属灰色背景，透明度0.8 */
     --primary-btn-color: #D3D3D3; /* 浅灰色按钮颜色，与金属色搭配 */
     --light-background-color: rgba(169, 169, 169, 0.2); /* 浅金属灰色背景 */
@@ -862,9 +863,10 @@ th.center {
 }
 
 /* 帖子按钮样式 */
+/* 确保按钮有足够的对比度 */
 .button {
     background-color: var(--primary-color);
-    color: #fff;
+    color: white; /* 固定为白色以确保对比度 */
     border: none;
     border-radius: 4px;
     padding: 10px 20px;
@@ -876,68 +878,13 @@ th.center {
     background-color: var(--primary-hover-color);
 }
 
-/* 加载更多样式 */
-.showMore {
-    text-align: center;
-    padding: 20px;
-}
-
-.loading {
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    border: 2px solid #999;
-    border-bottom-color: transparent;
-    border-radius: 50%;
-    animation: loading 0.75s linear infinite;
-    margin-right: 10px;
-    vertical-align: middle;
-}
-
-@keyframes loading {
-    0% {
-        transform: rotate(0deg);
-    }
-    100% {
-        transform: rotate(360deg);
-    }
-}
-
-pre code {
-    background: #2d2d2d;
-    color: #e0e0e0;
-    border-radius: 5px;
-    display: block;
-    padding: 15px;
-    overflow-x: auto;
-    font-family: 'Courier New', Courier, monospace;
-    box-shadow: 0 2px 4px var(--shadow-color);
-    clear: both;
-}
-
-i.warning {
-    color: var(--warning-color);
-}
-
-.postad i {
-    font-weight: bold;
-    padding-right: 10px;
-}
-
-/* 分页样式 */
-.pagination {
-    padding: 15px;
-    margin: 15px;
-    display: flex;
-    justify-content: center;
-}
-
+/* 确保分页元素有足够的对比度 */
 .pagination li {
     float: left;
     padding: 10px 15px;
     margin: 5px;
     border: 1px solid #ccc;
-    color: var(--secondary-color);
+    color: var(--primary-color); /* 使用主色而非secondary-color */
     text-decoration: none;
     font-size: 16px;
     border-radius: 5px;
@@ -947,7 +894,7 @@ i.warning {
 }
 
 .pagination li:hover {
-    background-color: var(--secondary-color);
+    background-color: var(--primary-color);
     color: white;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
