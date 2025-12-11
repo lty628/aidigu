@@ -167,7 +167,7 @@
     --primary-color: #FFA500; /* 原 secondary-color 值 */
     --primary-hover-color: #FF4500; /* 修改为橙红色 */
     --secondary-color: #DC143C; /* 原 primary-color 值 */
-    --background-color: rgba(220, 20, 60, 0.9); /* 修改为成果红（猩红色）并增加透明度 */
+    --background-color: rgba(220, 200, 20, 0.9); /* 修改为成果红（猩红色）并增加透明度 */
     --primary-btn-color: #FFD700; /* 修改为金色，与中国红更搭配 */
     --light-background-color: #FFD700; /* 修改为金色 */
     --border-color: #FFD700; /* 修改为金色，与中国红更搭配 */
