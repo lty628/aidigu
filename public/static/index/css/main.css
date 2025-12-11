@@ -863,10 +863,9 @@ th.center {
 }
 
 /* 帖子按钮样式 */
-/* 确保按钮有足够的对比度 */
 .button {
     background-color: var(--primary-color);
-    color: white; /* 固定为白色以确保对比度 */
+    color: #fff;
     border: none;
     border-radius: 4px;
     padding: 10px 20px;
@@ -878,13 +877,68 @@ th.center {
     background-color: var(--primary-hover-color);
 }
 
-/* 确保分页元素有足够的对比度 */
+/* 加载更多样式 */
+.showMore {
+    text-align: center;
+    padding: 20px;
+}
+
+.loading {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #999;
+    border-bottom-color: transparent;
+    border-radius: 50%;
+    animation: loading 0.75s linear infinite;
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
+@keyframes loading {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+pre code {
+    background: #2d2d2d;
+    color: #e0e0e0;
+    border-radius: 5px;
+    display: block;
+    padding: 15px;
+    overflow-x: auto;
+    font-family: 'Courier New', Courier, monospace;
+    box-shadow: 0 2px 4px var(--shadow-color);
+    clear: both;
+}
+
+i.warning {
+    color: var(--warning-color);
+}
+
+.postad i {
+    font-weight: bold;
+    padding-right: 10px;
+}
+
+/* 分页样式 */
+.pagination {
+    padding: 15px;
+    margin: 15px;
+    display: flex;
+    justify-content: center;
+}
+
 .pagination li {
     float: left;
     padding: 10px 15px;
     margin: 5px;
     border: 1px solid #ccc;
-    color: var(--primary-color); /* 使用主色而非secondary-color */
+    color: var(--secondary-color);
     text-decoration: none;
     font-size: 16px;
     border-radius: 5px;
@@ -894,7 +948,7 @@ th.center {
 }
 
 .pagination li:hover {
-    background-color: var(--primary-color);
+    background-color: var(--secondary-color);
     color: white;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
