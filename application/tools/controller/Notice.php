@@ -1,12 +1,12 @@
 <?php
 namespace app\tools\controller;
-use think\Controller;
+use app\common\controller\Base;
 use think\Db;
 
 /**
  * 站内消息
  */
-class Notice extends Controller
+class Notice extends Base
 {	
 	public function list()
     {

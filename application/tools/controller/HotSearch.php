@@ -2,9 +2,9 @@
 
 namespace app\tools\controller;
 
-use think\Controller;
+use app\common\controller\Base;
 
-class HotSearch extends Controller
+class HotSearch extends Base
 {
     // 获取所有平台的热搜数据
     public function getAllHotSearch($limit = null)

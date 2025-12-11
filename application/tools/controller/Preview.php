@@ -1,9 +1,9 @@
 <?php
 namespace app\tools\controller;
-use think\Controller;
+use app\common\controller\Base;
 use think\Db;
 
-class Preview extends Controller
+class Preview extends Base
 {
     /**
      * 获取媒体资源路径列表

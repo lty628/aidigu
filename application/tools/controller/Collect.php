@@ -1,12 +1,12 @@
 <?php
 namespace app\tools\controller;
-use think\Controller;
 use think\Db;
+use app\common\controller\Base;
 
 /**
  * 收藏管理
  */
-class Collect extends Controller
+class Collect extends Base
 {	
 	public function list()
     {

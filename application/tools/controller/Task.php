@@ -1,11 +1,11 @@
 <?php
 namespace app\tools\controller;
 
-use think\Controller;
+use app\common\controller\Base;
 use think\Request;
 use think\Db;
 
-class Task extends Controller
+class Task extends Base
 {
     /**
      * 显示任务列表页面

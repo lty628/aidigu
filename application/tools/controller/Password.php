@@ -1,9 +1,9 @@
 <?php
 namespace app\tools\controller;
-use think\Controller;
+use app\common\controller\Base;
 use think\Db;
 
-class Password extends Controller
+class Password extends Base
 {	
     protected $uid;
 

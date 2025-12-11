@@ -1,23 +1,16 @@
 <?php
 namespace app\tools\controller;
-use think\Controller;
+use app\common\controller\Base;
 use think\Db;
 
 
-class Sourcematerial extends Controller
+class Sourcematerial extends Base
 {	
     public function initialize()
     {
         $isMobile = isMobile();
         $this->assign('isMobile', $isMobile);
-        if (!getLoginUid()) {
-            $pubIndex = sysConfig('app.pubIndex', '');
-            if (!$pubIndex || $isMobile) {
-                // 无逻辑处理
-                $this->error('未登录', '/login/');
-            }
-        }
-        
+        parent::initialize();   
     }
 
     public function list()

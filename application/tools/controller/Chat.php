@@ -1,10 +1,11 @@
 <?php
 namespace app\tools\controller;
-use think\Controller;
 use think\Db;
+use app\common\controller\Base;
 
 
-class Chat extends Controller
+
+class Chat extends Base
 {	
 	public function list()
     {

@@ -1,9 +1,9 @@
 <?php
 namespace app\tools\controller;
-use think\Controller;
 use think\Db;
+use app\common\controller\Base;
 
-class Channel extends Controller
+class Channel extends Base
 {	
     // 频道列表页面
 	public function index()
@@ -161,9 +161,6 @@ class Channel extends Controller
         $channelId = input('get.channel_id');
         if (!$channelId) {
             return $this->error('加入频道码异常，请联系频道管理员');
-        }
-        if (!$uid) {
-            return $this->error('未登录');
         }
         if (!$inviteCode) {
             return $this->error('加入频道码异常，请联系频道管理员');

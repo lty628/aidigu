@@ -1,9 +1,9 @@
 <?php
 namespace app\tools\controller;
-use think\Controller;
+use app\common\controller\Base;
 
 
-class Fortune extends Controller
+class Fortune extends Base
 {	
     // 秤骨算命
 	public function cg()

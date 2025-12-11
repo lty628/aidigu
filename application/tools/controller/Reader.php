@@ -1,10 +1,10 @@
 <?php
 namespace app\tools\controller;
-use think\Controller;
+use app\common\controller\Base;
 use think\Db;
 
 
-class Reader extends Controller
+class Reader extends Base
 {	
 	public function index()
     {

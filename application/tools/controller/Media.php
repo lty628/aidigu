@@ -2,10 +2,10 @@
 
 namespace app\tools\controller;
 
-use think\Controller;
+use app\common\controller\Base;
 use think\Db;
 
-class Media extends Controller
+class Media extends Base
 {
     public function video()
     {

@@ -1,9 +1,9 @@
 <?php
 namespace app\tools\controller;
-use think\Controller;
+use app\common\controller\Base;
 use think\Db;
 
-class Nav extends Controller
+class Nav extends Base
 {	
     // ALTER TABLE `wb_app` ADD COLUMN `fromuid` int UNSIGNED NOT NULL DEFAULT 0 COMMENT '创建用户' AFTER `app_url`;
     // ALTER TABLE `wb_app` MODIFY COLUMN `app_status` tinyint NOT NULL DEFAULT 1 COMMENT '0关闭，1开启（默认）' AFTER `fromuid`;
@@ -13,8 +13,8 @@ class Nav extends Controller
 	// 导航页
     public function initialize()
     {
+        parent::initialize();
         $this->userInfo = getLoginUserInfo();
-        if (!$this->userInfo) $this->error('请先登录');
         $this->uid = $this->userInfo['uid'];
     }
 

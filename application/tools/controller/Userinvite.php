@@ -1,10 +1,10 @@
 <?php
 namespace app\tools\controller;
-use think\Controller;
+use app\common\controller\Base;
 use think\Db;
 
 
-class Userinvite extends Controller
+class Userinvite extends Base
 {	
 	public function list()
     {
