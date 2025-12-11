@@ -23,7 +23,7 @@ class UserInfo extends Controller
 	{
 		$redirectUrl = input('get.url');
 		if ($redirectUrl){
-			$redirectUrl = str_replace('?', '&', request()->url());
+			$redirectUrl = str_replace('?', '&', $redirectUrl);
 		}
 		$this->assign('redirectUrl', $redirectUrl);
 		return $this->fetch();
@@ -32,7 +32,7 @@ class UserInfo extends Controller
 	{
 		$redirectUrl = input('get.url');
 		if ($redirectUrl){
-			$redirectUrl = str_replace('?', '&', request()->url());
+			$redirectUrl = str_replace('?', '&', $redirectUrl);
 		}
 		$this->assign('redirectUrl', $redirectUrl);
 		return $this->fetch();
@@ -41,7 +41,7 @@ class UserInfo extends Controller
 	{
 		$redirectUrl = input('get.url');
 		if ($redirectUrl){
-			$redirectUrl = str_replace('?', '&', request()->url());
+			$redirectUrl = str_replace('?', '&', $redirectUrl);
 		}
 		$this->assign('redirectUrl', $redirectUrl);
 		return $this->fetch();

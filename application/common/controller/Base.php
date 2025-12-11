@@ -29,7 +29,7 @@ class Base extends Controller
 					if ($url == '' || $url == '/') {
 						$redirectUrl = '';
 					} else {
-						$redirectUrl = '?url='.$url;
+						$redirectUrl = '?url='.str_replace('?', '&', $url);
 					}
 					return $this->redirect('/login/' . $redirectUrl);
 				}
