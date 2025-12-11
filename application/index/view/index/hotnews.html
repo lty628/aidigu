@@ -107,8 +107,8 @@
         color: var(--base-font-color);
         opacity: 0.7;
         margin-top: 5px;
-        white-space: nowrap;
-        overflow: hidden;
+        /* white-space: nowrap;
+        overflow: hidden; */
         text-overflow: ellipsis;
     }
     .hotnews-hot {
@@ -270,10 +270,13 @@
                                     <div class="hotnews-content">
                                         {if $platformData.platform == '历史上的今天'}
                                             <!-- 历史上的今天的特殊显示 -->
-                                            <a href="javascript:;" class="hotnews-title history-event">
+                                            <a target="_blank" href="{$item.url}" class="hotnews-title history-event">
                                                 <span class="history-year">{$item.title|strstr='年',true}</span>
                                                 {$item.title|substr=strpos($item.title,'-')+1}
                                             </a>
+                                             {if isset($item.desc) && $item.desc}
+                                            <div class="hotnews-desc">{$item.desc | raw}</div>
+                                            {/if}
                                         {else}
                                             <a href="{$item.url}" target="_blank" class="hotnews-title">{$item.title}</a>
                                             {if isset($item.desc) && $item.desc}

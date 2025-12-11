@@ -124,13 +124,14 @@ class HotSearch extends Base
             //统计当日总数
             // $countnum = count($jsonRes[$month][$month . $day]) - 1;
             foreach ($jsonRes[$month][$month . $day] as $k => $v) {
-                $title = $v['year'] . '年-' . strip_tags(strip_tags($v['title']));
+                $title = $v['year'] . '年-' . strip_tags($v['title']);
                 // 移除标题中的#号
                 $title = str_replace('#', '', $title);
                 array_push($tempArr, [
                     'index' => $k + 1,
                     'title' => $title,
-                    // 'url' => 'https://baike.baidu.com/item/' . urlencode(strip_tags($v['title'])),
+                    'url' => $v['link'],
+                    'desc' => $v['desc'],
                     // 'mobilUrl' => 'https://baike.baidu.com/item/' . urlencode(strip_tags($v['title']))
                 ]);
             }
