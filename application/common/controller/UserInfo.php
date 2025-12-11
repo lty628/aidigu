@@ -22,18 +22,27 @@ class UserInfo extends Controller
 	public function login()
 	{
 		$redirectUrl = input('get.url');
+		if ($redirectUrl){
+			$redirectUrl = str_replace('?', '&', $redirectUrl);
+		}
 		$this->assign('redirectUrl', $redirectUrl);
 		return $this->fetch();
 	}
 	public function wxlogin()
 	{
 		$redirectUrl = input('get.url');
+		if ($redirectUrl){
+			$redirectUrl = str_replace('?', '&', $redirectUrl);
+		}
 		$this->assign('redirectUrl', $redirectUrl);
 		return $this->fetch();
 	}
 	public function register()
 	{
 		$redirectUrl = input('get.url');
+		if ($redirectUrl){
+			$redirectUrl = str_replace('?', '&', $redirectUrl);
+		}
 		$this->assign('redirectUrl', $redirectUrl);
 		return $this->fetch();
 	}
