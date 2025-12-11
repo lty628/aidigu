@@ -849,7 +849,7 @@ th.center {
 .formsubmit input,.formsubmit button {
     padding: 10px 20px;
     background-color: var(--secondary-color);
-    color: white;
+    color: var(--base-font-color);
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -865,7 +865,7 @@ th.center {
 /* 帖子按钮样式 */
 .button {
     background-color: var(--primary-color);
-    color: #fff;
+    color: var(--base-font-color);
     border: none;
     border-radius: 4px;
     padding: 10px 20px;
