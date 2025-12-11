@@ -8,7 +8,7 @@
 	            return false;
 	        }
 	        if (!password) {
-	            alertInfo($(".alert-danger"), $("#password"), '昵称不能为空！');
+	            alertInfo($(".alert-danger"), $("#password"), '密码不能为空！');
 	            return false;
 	        }
 	        $.ajax({
