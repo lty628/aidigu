@@ -22,27 +22,18 @@ class UserInfo extends Controller
 	public function login()
 	{
 		$redirectUrl = input('get.url');
-		if ($redirectUrl){
-			$redirectUrl = str_replace('?', '&', $redirectUrl);
-		}
 		$this->assign('redirectUrl', $redirectUrl);
 		return $this->fetch();
 	}
 	public function wxlogin()
 	{
 		$redirectUrl = input('get.url');
-		if ($redirectUrl){
-			$redirectUrl = str_replace('?', '&', $redirectUrl);
-		}
 		$this->assign('redirectUrl', $redirectUrl);
 		return $this->fetch();
 	}
 	public function register()
 	{
 		$redirectUrl = input('get.url');
-		if ($redirectUrl){
-			$redirectUrl = str_replace('?', '&', $redirectUrl);
-		}
 		$this->assign('redirectUrl', $redirectUrl);
 		return $this->fetch();
 	}
@@ -95,6 +86,8 @@ class UserInfo extends Controller
 		Fans::create(['fromuid' => $userid, 'touid' => $userid, 'mutual_concern' => 1]);
 		if (!$redirectUrl) {
 			$redirectUrl = '/'.$user->blog . '/';
+		} else {
+			$redirectUrl = base64_decode($redirectUrl);
 		}
 		return json(['status' => 1, 'msg' => '注册成功', 'data' => $redirectUrl]);
 	}
@@ -117,6 +110,8 @@ class UserInfo extends Controller
 		$this->rememberMe(1, $rememberMe);
 		if (!$redirectUrl) {
 			$redirectUrl = '/'.$result['blog'].'/';
+		} else {
+			$redirectUrl = base64_decode($redirectUrl);
 		}
 		return json(['status' => 1, 'msg' => '登录成功', 'data' => $redirectUrl]);
 	}
