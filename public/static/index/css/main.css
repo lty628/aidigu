@@ -1088,6 +1088,7 @@ i.warning {
     top: 2px;
     transition: border-color 0.3s ease; /* 增加过渡效果 */
     border: 1px solid var(--border-color);
+    box-shadow: unset;
 }
 
 .formitem input[type="radio"]:checked {

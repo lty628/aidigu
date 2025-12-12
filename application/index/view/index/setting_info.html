@@ -21,6 +21,7 @@
 				<p class="formitem"><span>隐身模式：</span>
 					<input name="invisible" type="radio" value="0" {if $userInfo.invisible==0}checked{/if}>否
 					<input name="invisible" type="radio" value="1" {if $userInfo.invisible==1}checked{/if}>是
+					<span class="tips-icon" title="设置隐身后发布的内容广场不可见，仅好友能通过您的个人首页查看信息" style="cursor: pointer; margin-left: 10px; color: #666; border: 1px solid #ccc; border-radius: 50%; width: 18px; height: 18px; display: inline-flex; align-items: center; justify-content: center; font-size: 12px;" onclick="layui.layer.msg('设置隐身后发布的内容广场不可见，仅好友能通过您的个人首页查看信息')">?</span>
 				</p>
 				<!-- <div class="formhr"></div> -->
 				<script language=javascript src="/static/index/js/city.js"></script>
