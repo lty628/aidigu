@@ -1202,7 +1202,7 @@ cursor: pointer;
         padding-left: 17px;
         padding-right: 17px;
     }
-    .post { padding: 12px 16px; }
+    .post { padding: 12px 16px 6px 16px }
     .post-info-i small { font-size: 13px; }
     .post-text { font-size: 14px; }
 }
