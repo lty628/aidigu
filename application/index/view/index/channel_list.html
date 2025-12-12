@@ -57,7 +57,7 @@
     .channel-item {
         display: flex;
         align-items: center;
-        padding: 10px;
+        padding: 10px 35px;
         transition: all 0.3s ease;
     }
     
@@ -166,7 +166,7 @@
     .channel-exit-btn {
         background: transparent;
         color: var(--warning-color);
-        border: 1px solid var(--warning-color);
+        /* border: 1px solid var(--warning-color); */
     }
     
     .channel-exit-btn:hover {
@@ -386,7 +386,7 @@ layui.use(['layer', 'form'], function(){
                 if (res.status == 1) {
                     layer.msg(res.msg, {icon: 1});
                     setTimeout(function() {
-                        location.reload();
+                        window.location.href='/channel/'+channelId+'/';
                     }, 1000);
                 } else {
                     layer.msg(res.msg, {icon: 2});
