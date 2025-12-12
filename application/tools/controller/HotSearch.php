@@ -10,9 +10,15 @@ class HotSearch extends Base
     public function getAllHotSearch($limit = null)
     {
         $allData = [];
-
+    
         // 获取百度热点
-        $baiduData = $this->getBaiduHotSearch();
+        $baiduCacheKey = 'baidu_hot_search';
+        $baiduData = cache($baiduCacheKey);
+        if ($baiduData === false) {
+            $baiduData = $this->getBaiduHotSearch();
+            // 缓存10分钟
+            cache($baiduCacheKey, $baiduData, mt_rand(200, 300));
+        }
         if (!empty($baiduData)) {
             // 如果设置了限制数量，则只取前几条
             if ($limit !== null && is_numeric($limit)) {
@@ -26,7 +32,13 @@ class HotSearch extends Base
         }
         
         // 获取微博热搜
-        $weiboData = $this->getWeiboHotSearch();
+        $weiboCacheKey = 'weibo_hot_search';
+        $weiboData = cache($weiboCacheKey);
+        if ($weiboData === false) {
+            $weiboData = $this->getWeiboHotSearch();
+            // 缓存10分钟
+            cache($weiboCacheKey, $weiboData, mt_rand(200, 300));
+        }
         if (!empty($weiboData)) {
             // 如果设置了限制数量，则只取前几条
             if ($limit !== null && is_numeric($limit)) {
@@ -41,7 +53,13 @@ class HotSearch extends Base
         
         
         // 获取哔哩哔哩热搜
-        $bilibiliData = $this->getBilibiliHotSearch();
+        $bilibiliCacheKey = 'bilibili_hot_search';
+        $bilibiliData = cache($bilibiliCacheKey);
+        if ($bilibiliData === false) {
+            $bilibiliData = $this->getBilibiliHotSearch();
+            // 缓存10分钟
+            cache($bilibiliCacheKey, $bilibiliData, mt_rand(200, 300));
+        }
         if (!empty($bilibiliData)) {
             // 如果设置了限制数量，则只取前几条
             if ($limit !== null && is_numeric($limit)) {
@@ -55,7 +73,13 @@ class HotSearch extends Base
         }
         
         // 获取抖音热搜
-        $douyinData = $this->getDouyinHotSearch();
+        $douyinCacheKey = 'douyin_hot_search';
+        $douyinData = cache($douyinCacheKey);
+        if ($douyinData === false) {
+            $douyinData = $this->getDouyinHotSearch();
+            // 缓存10分钟
+            cache($douyinCacheKey, $douyinData, mt_rand(200, 300));
+        }
         if (!empty($douyinData)) {
             // 如果设置了限制数量，则只取前几条
             if ($limit !== null && is_numeric($limit)) {
@@ -69,7 +93,13 @@ class HotSearch extends Base
         }
         
         // 获取少数派热门文章
-        $sspaiData = $this->getSspaiHotSearch();
+        $sspaiCacheKey = 'sspai_hot_search';
+        $sspaiData = cache($sspaiCacheKey);
+        if ($sspaiData === false) {
+            $sspaiData = $this->getSspaiHotSearch();
+            // 缓存10分钟
+            cache($sspaiCacheKey, $sspaiData, mt_rand(200, 300));
+        }
         if (!empty($sspaiData)) {
             // 如果设置了限制数量，则只取前几条
             if ($limit !== null && is_numeric($limit)) {
