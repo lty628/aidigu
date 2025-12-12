@@ -68,6 +68,20 @@ class HotSearch extends Base
             ];
         }
         
+        // 获取少数派热门文章
+        $sspaiData = $this->getSspaiHotSearch();
+        if (!empty($sspaiData)) {
+            // 如果设置了限制数量，则只取前几条
+            if ($limit !== null && is_numeric($limit)) {
+                $sspaiData = array_slice($sspaiData, 0, $limit);
+            }
+            $allData[] = [
+                'platform' => '少数派',
+                'title' => '热门文章',
+                'data' => $sspaiData
+            ];
+        }
+        
         // 获取历史上的今天
         $historyData = $this->getHistoryData();
         if (!empty($historyData)) {
@@ -240,7 +254,7 @@ class HotSearch extends Base
         }
         return $tempArr;
     }
-    
+
     // 少数派 热榜 (保留方法但不在聚合中使用)
     public function getSspaiHotSearch()
     {
@@ -251,13 +265,11 @@ class HotSearch extends Base
                 $title = $v['title'];
                 // 移除标题中的#号
                 $title = str_replace('#', '', $title);
-                array_push($tempArr, [
+                array_push($tempArr,[
                     'index' => $k + 1,
                     'title' => $title,
-                    'createdAt' => date('Y-m-d', $v['released_time']),
-                    'other' => $v['author']['nickname'],
-                    'like_count' => $v['like_count'],
-                    'comment_count' => $v['comment_count'],
+                    'desc' =>$v['summary'], // 添加文章摘要
+                    'hot' => $v['like_count'] . '赞 ' . $v['comment_count'] . '评', // 统一热度显示
                     'url' => 'https://sspai.com/post/' . $v['id'],
                     'mobilUrl' => 'https://sspai.com/post/' . $v['id']
                 ]);
@@ -467,32 +479,7 @@ class HotSearch extends Base
         dump($result);
     }
 
-    // 澎湃新闻 热榜
-    public function thepaper()
-    {
-        $jsonRes = json_decode($this->Curl('https://api.thepaper.cn/contentapi/nodeCont/getByChannelId?channelId=119908'), true);
-        $tempArr = [];
-        foreach ($jsonRes['data']['list'] as $k => $v) {
-            $title = $v['name'];
-            // 移除标题中的#号
-            $title = str_replace('#', '', $title);
-            array_push($tempArr, [
-                'index' => $k + 1,
-                'title' => $title,
-                'url' => 'https://www.thepaper.cn/newsDetail_forward_' . $v['contId'],
-                'mobilUrl' => 'https://www.thepaper.cn/newsDetail_forward_' . $v['contId']
-            ]);
-        }
-        $result = [
-            'success' => true,
-            'title' => '澎湃新闻',
-            'subtitle' => '热榜',
-            'update_time' => date('Y-m-d h:i:s', time()),
-            'data' => $tempArr
-        ];
-        dump($result);
-    }
-        // 获取澎湃新闻热榜数据
+    // 获取澎湃新闻热榜数据
     public function getThePaperHotSearch()
     {
         // 澎湃新闻热榜API
