@@ -279,11 +279,13 @@
                             </div>
                         </div>
                         <div class="channel-actions">
-                            {if isset($joinedChannels) && in_array($channel.channel_id, $joinedChannels)}
+                            {if (isset($joinedChannels) && in_array($channel.channel_id, $joinedChannels))}
                                 <!-- 已加入的频道显示退出按钮 -->
                                 {if $currentTab != 'created'}
                                 <a href="javascript:void(0);" class="channel-exit-btn" data-channel-id="{$channel.channel_id}">退出频道</a>
                                 {/if}
+                                <a href="/channel/{$channel.channel_id}/" class="channel-join-btn">进入频道</a>
+                            {elseif !$channel['password']}
                                 <a href="/channel/{$channel.channel_id}/" class="channel-join-btn">进入频道</a>
                             {else}
                                 <!-- 未加入的频道显示加入按钮 -->

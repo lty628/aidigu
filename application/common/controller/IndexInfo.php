@@ -152,7 +152,7 @@ class IndexInfo extends Info
 
         $member = Db::name('channel_user')->where(['channel_id' => $channelId, 'uid' => $this->userid])->find();
 
-        if (!$member) {
+        if (!$member && $channel['password']) {
             return $this->error('您不是该频道成员，无法查看');
         }
 
