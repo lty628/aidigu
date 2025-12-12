@@ -198,16 +198,26 @@
 
     function showVideoPopup(obj) {
       var videoUrl = $(obj).attr('data-src');
+  
+      if (parent.layer) {
+        var layer = parent.layer
+        try {
+          parent.stopOther(obj);
+        } catch (e) {
+          console.warn('调用 parent.stopOther 失败:', e);
+          // 即使出错也继续执行
+        }
+      }
       // 修改视频标签样式，让高度达到 100% 并保持比例
       // 调整视频样式，让视频根据高度缩放并居中
       // var videoHtml = '<video autoplay controls name="media" style="max-height: 90vh; max-width: 90vw; margin: auto; display: block;"><source src="' + videoUrl + '" type="video/mp4"></video>';
       // 保持容器样式不变，限制最大和最小宽高，并添加居中样式
       // var centerDiv = '<div style="display: flex; justify-content: center; align-items: center; height: 100vh;">' + videoHtml + '</div>';
   
-      if (parent.layer) {
-        var layer = parent.layer
-        parent.stopOther(obj)
-      }
+      // if (parent.layer) {
+      //   var layer = parent.layer
+      //   parent.stopOther(obj)
+      // }
 
       var isMobile = $("#isMobile").val()
       if (isMobile) {
