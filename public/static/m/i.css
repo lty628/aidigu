@@ -437,7 +437,7 @@ p.more {
 
 .post-content a:hover { border-bottom: 1px solid var(--primary-color); }
 
-.post-content p { padding: 0.2em 0 0.5em 0; }
+/* .post-content p { padding: 0.2em 0 0.5em 0; } */
 
 .post-content p br { line-height: 0; }
 
