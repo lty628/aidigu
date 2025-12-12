@@ -112,7 +112,7 @@ class FileLog extends Base
         }
         
         // 执行软删除
-        $result = Db::name('wb_file_log')
+        $result = Db::name('file_log')
             ->where('id', $id)
             ->update(['is_del' => 1]);
         
@@ -136,7 +136,7 @@ class FileLog extends Base
         }
         
         // 执行批量软删除
-        $result = Db::name('wb_file_log')
+        $result = Db::name('file_log')
             ->where('id', 'in', $ids)
             ->update(['is_del' => 1]);
         
@@ -160,7 +160,7 @@ class FileLog extends Base
         }
         
         // 执行恢复操作
-        $result = Db::name('wb_file_log')
+        $result = Db::name('file_log')
             ->where('id', $id)
             ->update(['is_del' => 0]);
         
@@ -184,7 +184,7 @@ class FileLog extends Base
         }
         
         // 执行批量恢复操作
-        $result = Db::name('wb_file_log')
+        $result = Db::name('file_log')
             ->where('id', 'in', $ids)
             ->update(['is_del' => 0]);
         
