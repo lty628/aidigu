@@ -1200,3 +1200,6 @@ h2 span {
 .w-e-text {
     overflow-y: hidden !important;
 }
+.w-e-toolbar .w-e-menu:hover {
+    background-color: unset !important;
+}
