@@ -233,7 +233,7 @@ class App extends Base
         if ($result) {
             // 记录操作日志
             $this->log('批量删除应用，ID：' . implode(',', $ids));
-            return json(['code' => 1, 'msg' => '删除成功，共删除 ' . $result . ' 个应用']);
+            return json(['code' => 1, 'msg' => '删除成功']);
         } else {
             return json(['code' => 0, 'msg' => '删除失败']);
         }
