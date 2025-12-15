@@ -98,7 +98,7 @@ class HotSearch extends Base
         if ($sspaiData === false) {
             $sspaiData = $this->getSspaiHotSearch();
             // 缓存10分钟
-            cache($sspaiCacheKey, $sspaiData, mt_rand(200, 300));
+            cache($sspaiCacheKey, $sspaiData, mt_rand(20000, 30000));
         }
         if (!empty($sspaiData)) {
             // 如果设置了限制数量，则只取前几条
