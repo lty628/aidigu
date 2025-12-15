@@ -309,10 +309,8 @@
         </div>
         {if !$userInfo}
         {include file='index/sidebar_nologin' /}
-        {elseif $userInfo.isSiteUser}
-        {include file='index/sidebar_index' /}
         {else}
-        {include file='index/sidebar_user' /}
+            {include file='index/sidebar_square' /}
         {/if}
         {include file='index/footer' /}
     </div>
