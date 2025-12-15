@@ -99,7 +99,7 @@ class IndexInfo extends Info
             $this->assign('topicTitle', "#" . $topicTitle . "#");
         }
 
-        $topicArr = Db::name('topic')->order('count desc')->order('topic_id desc')->limit(10)->select();
+        $topicArr = Db::name('topic')->order('topic_id desc')->limit(10)->select();
         $this->assign('topicArr', $topicArr);
        
         $this->assign('userMessage', []);
@@ -126,8 +126,8 @@ class IndexInfo extends Info
     // 话题
     public function topicList()
     {
-        // $topic = Db::name('topic')->order('count desc')->order('topic_id desc')->paginate(30, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
-        $topic = Db::name('topic')->order('topic_id desc')->paginate(30, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
+        $topic = Db::name('topic')->order('count desc')->order('topic_id desc')->paginate(30, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
+        // $topic = Db::name('topic')->order('topic_id desc')->paginate(30, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
         $this->assign('topicArr', $topic);
         return $this->fetch('topic');
     }
