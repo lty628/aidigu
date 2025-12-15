@@ -237,10 +237,11 @@
                                 layer.close(loading);
                                 if (res.code === 1) {
                                     layer.msg(res.msg, { icon: 1 });
+                                    table.reload('fileLogTable');
                                     // 更新行数据
-                                    obj.update({
-                                        is_del: 1
-                                    });
+                                    // obj.update({
+                                    //     is_del: 1
+                                    // });
                                 } else {
                                     layer.msg(res.msg, { icon: 2 });
                                 }
@@ -271,10 +272,11 @@
                                 layer.close(loading);
                                 if (res.code === 1) {
                                     layer.msg(res.msg, { icon: 1 });
+                                    table.reload('fileLogTable');
                                     // 更新行数据
-                                    obj.update({
-                                        is_del: 0
-                                    });
+                                    // obj.update({
+                                    //     is_del: 0
+                                    // });
                                 } else {
                                     layer.msg(res.msg, { icon: 2 });
                                 }
@@ -289,8 +291,10 @@
                 
                 // 预览文件
                 if (obj.event === 'preview') {
+
+                    previewFile(data);
                     // 使用正确的字段名
-                    previewFile(data.media_info || data.path, data.file_type, data.file_name);
+                    // previewFile(data.media_info || data.path, data.file_type, data.file_name);
                 }
             });
 
@@ -394,16 +398,16 @@
                 }
             }
 
-            // 监听表格工具条中的预览事件
-            table.on('tool(fileLogTable)', function(obj) {
-                var data = obj.data;
+            // // 监听表格工具条中的预览事件
+            // table.on('tool(fileLogTable)', function(obj) {
+            //     var data = obj.data;
                 
-                // 预览
-                if (obj.event === 'preview') {
-                    previewFile(data);
-                }
-                // ... 其他事件处理
-            });
+            //     // 预览
+            //     if (obj.event === 'preview') {
+            //         previewFile(data);
+            //     }
+            //     // ... 其他事件处理
+            // });
 
             // 批量删除
             $('#batch-delete').on('click', function () {

@@ -38,27 +38,28 @@ class FileLog extends Base
         }
         
         if (!empty($uid)) {
-            $where['uid'] = $uid;
+            $where[] = ['uid', '=', $uid];
         }
         
-        if ($type !== '') {
-            $where['type'] = $type;
+        if ($type) {
+            $where[] = ['type', '=', $type];
         }
         
         if ($is_del !== '') {
-            $where['is_del'] = $is_del;
+            $where[] = ['is_del', '=', $is_del];
         }
         
-        if (!empty($start_time)) {
-            $where['create_time'] = ['>=', strtotime($start_time)];
-        }
-        
-        if (!empty($end_time)) {
-            if (isset($where['create_time'])) {
-                $where['create_time'][1] = ['<=', strtotime($end_time) + 86400];
-            } else {
-                $where['create_time'] = ['<=', strtotime($end_time) + 86400];
-            }
+        // 正确处理时间范围查询
+        if (!empty($start_time) && !empty($end_time)) {
+            // 同时有开始和结束时间，使用区间查询
+            $where[] = ['create_time', '>=', strtotime($start_time)];
+            $where[] = ['create_time', '<=', strtotime($end_time) + 86400];
+        } elseif (!empty($start_time)) {
+            // 只有开始时间
+            $where[] = ['create_time', '>=', strtotime($start_time)];
+        } elseif (!empty($end_time)) {
+            // 只有结束时间
+            $where[] = ['create_time', '<=', strtotime($end_time) + 86400];
         }
         
         // 获取分页参数
