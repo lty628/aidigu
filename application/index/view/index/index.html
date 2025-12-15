@@ -38,10 +38,14 @@
         </div>
         {if !$userInfo}
         {include file='index/sidebar_nologin' /}
-        {elseif $userInfo.isSiteUser}
-        {include file='index/sidebar_index' /}
         {else}
-        {include file='index/sidebar_user' /}
+            {if request()->action() == 'blog'}
+            {include file='index/sidebar_square' /}
+            {elseif $userInfo.isSiteUser}
+            {include file='index/sidebar_index' /}
+            {else}
+            {include file='index/sidebar_user' /}
+            {/if}
         {/if}
         {include file='index/footer' /}
     </div>

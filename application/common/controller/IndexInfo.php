@@ -98,6 +98,9 @@ class IndexInfo extends Info
         if ($topicTitle) {
             $this->assign('topicTitle', "#" . $topicTitle . "#");
         }
+
+        $topicArr = Db::name('topic')->order('count desc')->order('topic_id desc')->limit(10)->select();
+        $this->assign('topicArr', $topicArr);
        
         $this->assign('userMessage', []);
         return $this->fetch('index');
