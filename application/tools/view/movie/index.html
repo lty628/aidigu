@@ -42,7 +42,7 @@
             background: radial-gradient(circle at top right, var(--bg-primary) 0%, #020617 100%);
             background-attachment: fixed;
             font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: var(--text-primary);
+            /* color: var(--text-primary); */
             line-height: 1.6;
             padding: 20px;
             min-height: 100vh;
@@ -78,7 +78,7 @@
         }
 
         /* 视频播放区域 - 使用16:9响应式比例 */
-        .video-container {
+.video-container {
             width: 100%;
             background: var(--bg-secondary);
             border-radius: var(--border-radius-lg);
@@ -234,7 +234,7 @@
         }
 
         .btn-primary:hover {
-            background: linear-gradient(135deg, var(--primary-light), var(--primary-color));
+background: linear-gradient(135deg, var(--primary-light), var(--primary-color));
             transform: translateY(-2px);
             box-shadow: 0 6px 20px 0 rgba(79, 70, 229, 0.5);
         }
@@ -247,6 +247,22 @@
             opacity: 0.6;
             cursor: not-allowed;
             transform: none;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, var(--success-color), var(--success-dark));
+            color: white;
+            box-shadow: 0 4px 14px 0 rgba(34, 197, 94, 0.39);
+        }
+
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, var(--success-light), var(--success-color));
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px 0 rgba(34, 197, 94, 0.5);
+        }
+
+        .btn-secondary:active {
+            transform: translateY(0);
         }
 
         .btn-icon i {
@@ -314,7 +330,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
+margin-bottom: 15px;
         }
 
         .history-title {
@@ -338,7 +354,7 @@
             background: rgba(79, 70, 229, 0.1);
         }
 
-        .history-list {
+.history-list {
             background: var(--bg-tertiary);
 border-radius: var(--border-radius-md);
             padding: 10px;
@@ -346,7 +362,7 @@ border-radius: var(--border-radius-md);
             overflow-y: auto;
         }
 
-        .history-item {
+.history-item {
             padding: 8px 12px;
             margin-bottom: 5px;
             background: var(--bg-secondary);
@@ -387,6 +403,18 @@ border-radius: var(--border-radius-md);
             opacity: 1;
         }
 
+        .history-share {
+            color: var(--primary-color);
+            cursor: pointer;
+            opacity: 0.6;
+            transition: var(--transition);
+            margin-right: 8px;
+        }
+
+        .history-share:hover {
+            opacity: 1;
+        }
+
         /* 响应式设计 */
         @media (max-width: 768px) {
             body {
@@ -400,8 +428,7 @@ border-radius: var(--border-radius-md);
             .parse-form {
                 flex-direction: column;
                 gap: 15px;
-            }
-
+}
             .form-group,
             .form-group.full-width {
                 flex: none;
@@ -431,7 +458,6 @@ border-radius: var(--border-radius-md);
             .page-header h1 {
                 font-size: 1.8rem;
             }
-
             .page-header p {
                 font-size: 1rem;
             }
@@ -522,6 +548,14 @@ border-radius: var(--border-radius-md);
                             placeholder="输入播放地址或视频名称【支持链接部分支持名称】"
                         >
                     </div>
+
+                    <button 
+                        type="button" 
+                        class="btn btn-secondary btn-icon" 
+                        id="shareButton"
+                    >
+                        <i class="layui-icon layui-icon-share"></i> 站内分享
+                    </button>
                     
                     <button 
                         type="button" 
@@ -574,7 +608,7 @@ border-radius: var(--border-radius-md);
             }
             
             // 保存到历史记录
-            saveToHistory(videoUrl);
+            saveToHistory(videoUrl, selectedLine);
             
             // 显示加载状态
             parseButton.disabled = true;
@@ -594,14 +628,21 @@ border-radius: var(--border-radius-md);
         }
         
         // 保存到历史记录
-        function saveToHistory(url) {
+        function saveToHistory(url, selectedLine) {
             let history = JSON.parse(localStorage.getItem('videoParseHistory') || '[]');
             
-            // 移除重复项
-            history = history.filter(item => item !== url);
+            // 创建历史记录对象
+            const historyItem = {
+                url: url,
+                line: selectedLine,
+                timestamp: new Date().getTime()
+            };
+            
+            // 移除重复项（基于URL）
+            history = history.filter(item => item.url !== url);
             
             // 添加到开头
-            history.unshift(url);
+            history.unshift(historyItem);
             
             // 最多保存10条
             if (history.length > 10) {
@@ -624,18 +665,29 @@ border-radius: var(--border-radius-md);
             
             historyList.innerHTML = '';
             
-            history.forEach((url, index) => {
-                const item = document.createElement('div');
-                item.className = 'history-item';
+            history.forEach((item, index) => {
+                const historyItem = document.createElement('div');
+                historyItem.className = 'history-item';
                 
                 const urlSpan = document.createElement('span');
                 urlSpan.className = 'history-url';
-                urlSpan.textContent = url;
-                urlSpan.title = url;
+                urlSpan.textContent = item.url;
+                urlSpan.title = item.url;
                 urlSpan.addEventListener('click', () => {
-                    // 修复：填充URL后自动触发解析
-                    document.getElementById('url').value = url;
-                    parseVideo(); // 添加这一行，自动触发解析
+                    // 填充URL后自动触发解析
+                    document.getElementById('url').value = item.url;
+                    // 设置对应的线路
+                    document.getElementById('jk').value = item.line;
+                    parseVideo(); // 自动触发解析
+                });
+                
+                const shareBtn = document.createElement('span');
+                shareBtn.className = 'history-share';
+                shareBtn.innerHTML = '站内分享↗';
+                shareBtn.title = '站内分享';
+                shareBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    siteUrlShare(item.url, item.line);
                 });
                 
                 const deleteBtn = document.createElement('span');
@@ -646,9 +698,10 @@ border-radius: var(--border-radius-md);
                     deleteHistoryItem(index);
                 });
                 
-                item.appendChild(urlSpan);
-                item.appendChild(deleteBtn);
-                historyList.appendChild(item);
+                historyItem.appendChild(urlSpan);
+                historyItem.appendChild(shareBtn);
+                historyItem.appendChild(deleteBtn);
+                historyList.appendChild(historyItem);
             });
         }
         
@@ -667,11 +720,59 @@ border-radius: var(--border-radius-md);
                 renderHistory();
             }
         }
-        
+        function siteUrlShare(url, jk) {
+            if (!url || !jk) {
+                layer.msg('请填写完整的视频地址和选择线路');
+                return false;
+            }
+            
+            layer.confirm('确定要分享到站内吗？', function(index){
+                // 显示加载状态
+                layer.load(1);
+                
+                $.ajax({
+                    type: "GET",
+                    url: "/upload/index/siteUrlShare",
+                    data: {'url': jk+url, 'title': url},
+                    dataType: "json",
+                    success: function (response) {
+                        layer.closeAll('loading');
+                        if (response.code === 200) {
+                            layer.msg(response.msg);
+                        } else {
+                            layer.msg(response.msg || '分享失败');
+                        }
+                    },
+                    error: function() {
+                        layer.closeAll('loading');
+                        layer.msg('网络错误，请重试');
+                    }
+                });
+                
+                // 关闭确认框
+                layer.close(index);
+            });
+        }
         // 初始化
         document.addEventListener('DOMContentLoaded', function() {
             // 绑定解析按钮事件
             document.getElementById('parseButton').addEventListener('click', parseVideo);
+            
+            // 绑定站内分享按钮事件
+            document.getElementById('shareButton').addEventListener('click', function() {
+                const urlInput = document.getElementById('url');
+                const jkSelect = document.getElementById('jk');
+                
+                const videoUrl = urlInput.value.trim();
+                const selectedLine = jkSelect.value;
+                
+                if (!videoUrl) {
+                    alert('请输入视频地址或名称');
+                    return;
+                }
+                
+                siteUrlShare(videoUrl, selectedLine);
+            });
             
             // 绑定清空历史按钮事件
             document.getElementById('clearHistory').addEventListener('click', clearHistory);
