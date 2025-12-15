@@ -2,22 +2,14 @@
 		<div class="box">
 
 			<div class="info">
-				<div class="avatar"><a href="javascript:;" data-title="私信" data-url="/chat/private/{$userInfo.uid}" onclick="showFrameHtml(this, '60%', '70%')"><img src="{$userInfo.head_image}" /></a></div>
-				<div class="detail"><p><a href="javascript:;" data-title="私信" data-url="/chat/private/{$userInfo.uid}" onclick="showFrameHtml(this, '60%', '70%')">{$userInfo.nickname}</a></p><p>{$userInfo.city}</p>
-					<p><b>
-						{if $userInfo.is_concern}
-						<a href="javascript:;"  onclick="fansFollow({$userInfo.uid}, 'unfollow')" onmouseover="blurToUnfollow(this,{$userInfo.uid})">已关注</a>
-						{else}
-						<a href="javascript:;" onclick="fansFollow({$userInfo.uid}, 'addFollow')">+关注</a>
-						{/if}
-					</b></p>
-				</div>
+				<div class="avatar"><a href="{:url('/'.$userInfo.blog.'/')}"><img src="{$userInfo.head_image}" /></a></div>
+				<div class="detail"><p><a href="{:url('/'.$userInfo.blog.'/')}">{$userInfo.nickname}</a></p><p>{$userInfo.area}</p></div>
 				<div class="clear"></div>
 			</div>
 			<div class="counter">
-				<div class="counterbox"><strong>{$userInfo.follownum}</strong><br /><a href="{:url('/'.$userInfo.blog.'/concern/')}">{$userInfo.sex|getPerson}关注的</a></div>
-				<div class="counterbox"><strong>{$userInfo.fansnum}</strong><br /><a href="{:url('/'.$userInfo.blog.'/fans/')}">关注{$userInfo.sex|getPerson}的</a></div>
-				<div class="counterbox"><strong>{$userInfo.message_sum}</strong><br /><a href="{:url('/'.$userInfo.blog.'/own/')}">{$userInfo.sex|getPerson}的微博</a></div>
+				<div class="counterbox"><strong>{$userInfo.follownum}</strong><br /><a href="{:url('/'.$userInfo.blog.'/concern/')}">我关注的</a></div>
+				<div class="counterbox"><strong>{$userInfo.fansnum}</strong><br /><a href="{:url('/'.$userInfo.blog.'/fans/')}">关注我的</a></div>
+				<div class="counterbox"><strong id="messageSum">{$userInfo.message_sum}</strong><br /><a href="{:url('/'.$userInfo.blog.'/own/')}">我的微博</a></div>
 			</div>
 			<h2><a href="javascript:;">签名</a></h2>
 			<p>{$userInfo.intro|raw|default="暂无签名"}</p>
