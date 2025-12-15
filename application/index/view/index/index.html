@@ -39,7 +39,7 @@
         {if !$userInfo}
         {include file='index/sidebar_nologin' /}
         {else}
-            {if request()->action() == 'blog'}
+            {if request()->action() == 'blog' || request()->action() == 'hotnews'}
             {include file='index/sidebar_square' /}
             {elseif $userInfo.isSiteUser}
             {include file='index/sidebar_index' /}

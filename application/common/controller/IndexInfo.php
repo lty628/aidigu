@@ -518,6 +518,9 @@ class IndexInfo extends Info
         //     // 将数据保存到缓存，有效期5分钟（300秒）
         //     cache($cacheKey, $allHotData, 300);
         // }
+
+        $topicArr = Db::name('topic')->order('topic_id desc')->limit(10)->select();
+        $this->assign('topicArr', $topicArr);
         
         $this->assign('allHotData', $allHotData);
         return $this->fetch();
