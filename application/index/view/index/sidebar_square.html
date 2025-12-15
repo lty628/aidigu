@@ -27,7 +27,7 @@
                     };
                     // 过滤掉值为空的参数
                     const filteredParams = Object.entries(params).filter(([_, value]) => value !== '');
-                    // 拼接过滤后的参数为查询字符串
+                    // 拼接过滤后的参数为搜索字符串
                     const keyword = filteredParams.map(([key, value]) => `${key}=${encodeURIComponent(value)}`).join('&');
                     if (keyword) {
                         const utf8Encoded = encodeURIComponent(keyword).replace(/%([0-9A-F]{2})/g, (match, p1) => {
@@ -39,7 +39,7 @@
                     } else {
 						window.location.href = `/search/`; 
 					}
-                " style="padding: 5px 10px;background-color: var(--secondary-color);color: var(--primary-btn-color); border: none; border-radius: 3px; cursor: pointer;">查询</button>
+                " style="padding: 5px 10px;background-color: var(--secondary-color);color: var(--primary-btn-color); border: none; border-radius: 3px; cursor: pointer;">搜索</button>
 				</form>
 			</p>
 			<h3>最新话题</h3>
