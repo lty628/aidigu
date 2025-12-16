@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>表白墙 - 爱嘀咕</title>
+    <link rel="stylesheet" href="/static/layui/css/layui.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #ffafbd, #ffc3a0);
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .love-wall-container {
+            max-width: 100%;
+            margin: 0 auto;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #fff;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            padding: 20px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .publish-btn-container {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .publish-btn {
+            background: linear-gradient(to right, #ff6b6b, #ff8e8e);
+            border: none;
+            color: white;
+            font-weight: bold;
+            padding: 12px 30px;
+            font-size: 1.1em;
+            border-radius: 50px;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .publish-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.6);
+        }
+
+        .publish-btn:active {
+            transform: translateY(1px);
+        }
+
+        .confession-wall {
+            position: relative;
+            min-height: 600px;
+            width: 100%;
+            margin: 20px 0;
+        }
+
+        .confession-card {
+            background: rgba(255, 255, 255, 0.85);
+            border-radius: 15px;
+            padding: 20px;
+            position: absolute;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 280px;
+            transform-origin: center;
+        }
+
+        .confession-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            z-index: 100;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed #eee;
+        }
+
+        .publisher {
+            font-weight: bold;
+            color: #ff6b6b;
+            font-size: 0.9em;
+        }
+
+        .time {
+            color: #999;
+            font-size: 0.8em;
+        }
+
+        .to-name {
+            font-size: 1.2em;
+            color: #ff6b6b;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+
+        .content {
+            font-size: 1em;
+            line-height: 1.5;
+            color: #333;
+            white-space: pre-wrap;
+            max-height: 150px;
+            overflow: hidden;
+        }
+
+        .anonymous-tag {
+            background: #ffd3d3;
+            color: #ff6b6b;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.7em;
+        }
+
+        .heart-icon {
+            color: #ff6b6b;
+            font-size: 1.2em;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9em;
+            padding: 20px;
+        }
+
+        .rotate-1 {
+            transform: rotate(-3deg);
+        }
+
+        .rotate-2 {
+            transform: rotate(2deg);
+        }
+
+        .rotate-3 {
+            transform: rotate(-1deg);
+        }
+
+        .rotate-4 {
+            transform: rotate(1deg);
+        }
+
+        .rotate-5 {
+            transform: rotate(-2deg);
+        }
+
+        .rotate-6 {
+            transform: rotate(3deg);
+        }
+
+        /* 美化后的弹窗样式 */
+        .publish-popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .popup-content {
+            background: linear-gradient(135deg, #fff5f5, #ffecec);
+            border-radius: 20px;
+            width: 90%;
+            max-width: 500px;
+            padding: 40px;
+            box-shadow: 0 15px 40px rgba(255, 107, 107, 0.3);
+            position: relative;
+            border: 2px solid #ffb6c1;
+            animation: popupShow 0.3s ease-out;
+        }
+
+        @keyframes popupShow {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 28px;
+            cursor: pointer;
+            color: #ff6b6b;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .close-btn:hover {
+            background: rgba(255, 107, 107, 0.1);
+            transform: rotate(90deg);
+        }
+
+        .popup-title {
+            text-align: center;
+            color: #ff6b6b;
+            margin-bottom: 30px;
+            font-size: 1.8em;
+            font-weight: bold;
+            position: relative;
+        }
+
+        .popup-title::after {
+            content: '';
+            display: block;
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(to right, #ff6b6b, #ff8e8e);
+            margin: 10px auto;
+            border-radius: 3px;
+        }
+
+        .layui-form-item {
+            margin-bottom: 25px;
+        }
+
+        .layui-form-label {
+            color: #ff6b6b;
+            font-weight: bold;
+            width: 100px;
+        }
+
+        .layui-input-block {
+            margin-left: 130px;
+        }
+
+        .layui-input,
+        .layui-textarea {
+            border: 2px solid #ffd3d3;
+            border-radius: 12px;
+            padding: 12px 15px;
+            transition: all 0.3s ease;
+        }
+
+        .layui-input:focus,
+        .layui-textarea:focus {
+            border-color: #ff6b6b;
+            box-shadow: 0 0 10px rgba(255, 107, 107, 0.3);
+        }
+
+        .layui-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            background: linear-gradient(to right, #ff6b6b, #ff8e8e);
+            border: none;
+            color: white;
+            font-weight: bold;
+            padding: 12px 30px;
+            font-size: 1.1em;
+            border-radius: 50px;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.6);
+        }
+
+        .submit-btn:active {
+            transform: translateY(1px);
+        }
+
+        .layui-form-mid {
+            color: #ff9aaa;
+        }
+
+        /* 下拉加载更多提示 */
+        .load-more-container {
+            text-align: center;
+            padding: 20px;
+            display: none;
+        }
+
+        .load-more-text {
+            color: #fff;
+            font-size: 1.1em;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, .3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .confession-card {
+                width: calc(100% - 40px);
+                left: 20px !important;
+            }
+
+            .popup-content {
+                width: 95%;
+                padding: 25px;
+            }
+
+            .layui-input-block {
+                margin-left: 0;
+            }
+
+            .layui-form-label {
+                width: 100%;
+                text-align: left;
+                margin-bottom: 8px;
+            }
+
+            /* 添加表单对齐修复 */
+            .layui-form-item {
+                display: flex;
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="love-wall-container">
+        <div class="header">
+            <h1>❤️ 表白墙 ❤️</h1>
+            <p>勇敢表达爱意，让心意传达给TA</p>
+        </div>
+
+        <!-- 发布按钮 -->
+        <div class="publish-btn-container">
+            <button class="publish-btn" id="open-publish-popup">
+                <i class="layui-icon layui-icon-add-1"></i> 发布我的表白
+            </button>
+        </div>
+
+        <!-- 表白墙展示区域 -->
+        <div class="confession-wall" id="confession-wall">
+            <!-- 表白卡片将通过JS随机分布显示 -->
+        </div>
+
+        <!-- 加载更多提示 -->
+        <div class="load-more-container" id="load-more-container">
+            <div class="load-more-text">
+                <span class="loading-spinner"></span>
+                正在加载更多表白...
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>© 2023 爱嘀咕表白墙 | 勇敢表达，不留遗憾</p>
+        </div>
+    </div>
+
+    <!-- 发布表白弹窗 -->
+    <div class="publish-popup" id="publish-popup">
+        <div class="popup-content">
+            <span class="close-btn" id="close-popup">&times;</span>
+            <div class="popup-title">
+                <i class="layui-icon layui-icon-release"></i> 发布你的表白
+            </div>
+            <form class="layui-form" action="" lay-filter="publishForm" id="publish-form">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">表白对象</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="to_name" required lay-verify="required" placeholder="请输入对方姓名/昵称"
+                            autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">表白内容</label>
+                    <div class="layui-input-block">
+                        <textarea name="content" required lay-verify="required" placeholder="请输入你的表白内容..."
+                            class="layui-textarea"></textarea>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">匿名发布</label>
+                    <div class="layui-input-block">
+                        <input type="checkbox" name="is_anonymous" lay-skin="switch" lay-text="是|否" value="1">
+                        <div class="layui-form-mid layui-word-aux">开启后将隐藏你的身份信息</div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn submit-btn" lay-submit lay-filter="publish" id="publish-btn">❤️
+                            发布表白</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="/static/layui/layui.js"></script>
+    <script>
+        layui.use(['form', 'jquery'], function () {
+            var form = layui.form;
+            var $ = layui.jquery;
+
+            // 页面状态变量
+            var pageState = {
+                page: 1,
+                limit: 50,  // 修改为50，与后端保持一致
+                loading: false,
+                hasMore: true,
+                totalLoaded: 0,
+                allDataCount: 0
+            };
+
+            // 打开发布弹窗
+            $('#open-publish-popup').on('click', function () {
+                $('#publish-popup').css('display', 'flex');
+                // 重新渲染表单，确保表单元素正确初始化
+                form.render();
+            });
+
+            // 关闭发布弹窗
+            $('#close-popup, #publish-popup').on('click', function (e) {
+                if (e.target.id === 'close-popup' || e.target.id === 'publish-popup') {
+                    $('#publish-popup').hide();
+                }
+            });
+
+            // 阻止点击弹窗内容时关闭
+            $('.popup-content').on('click', function (e) {
+                e.stopPropagation();
+            });
+
+            // 阻止表单默认提交行为
+            $('#publish-form').on('submit', function (e) {
+                e.preventDefault(); // 阻止默认提交
+                console.log('表单提交被拦截');
+                return false;
+            });
+
+            // 发布表白 - 使用按钮点击事件替代form.submit
+            $('#publish-btn').on('click', function (e) {
+                e.preventDefault(); // 阻止默认提交
+
+                // 获取表单数据
+                var formData = {
+                    to_name: $('input[name="to_name"]').val(),
+                    content: $('textarea[name="content"]').val(),
+                    is_anonymous: $('input[name="is_anonymous"]').is(':checked') ? 1 : 0
+                };
+
+                console.log('准备提交数据:', formData);
+
+                // 验证必填字段
+                if (!formData.to_name) {
+                    layer.msg('请输入表白对象', { icon: 2 });
+                    return false;
+                }
+
+                if (!formData.content) {
+                    layer.msg('请输入表白内容', { icon: 2 });
+                    return false;
+                }
+
+                // 发送AJAX请求
+                $.ajax({
+                    url: '/tools/lovewall/publish',
+                    type: 'POST',
+                    data: formData,
+                    dataType: 'json',
+                    success: function (res) {
+                        console.log('服务器响应:', res);
+
+                        if (res.code === 0) {
+                            layer.msg(res.msg, { icon: 1 });
+                            // 清空表单
+                            $('textarea[name="content"]').val('');
+                            $('input[name="to_name"]').val('');
+                            $('input[name="is_anonymous"]').prop('checked', false);
+                            form.render('checkbox');
+                            // 关闭弹窗
+                            $('#publish-popup').hide();
+                            // 重置页面状态并重新加载表白列表
+                            pageState.page = 1;
+                            pageState.totalLoaded = 0;
+                            pageState.hasMore = true;
+                            window.location.reload();
+                            // resetAndLoadConfessions();
+                        } else {
+                            layer.msg(res.msg, { icon: 2 });
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.log('请求失败:', xhr, status, error);
+                        layer.msg('网络错误，请重试', { icon: 2 });
+                    }
+                });
+
+                return false; // 阻止默认行为
+            });
+
+            // 全屏智能分布算法，不限制列数，充分利用屏幕空间
+            function fullscreenPositioning(cards, containerWidth, containerHeight) {
+                const positions = [];
+                const cardWidth = 280;
+                const cardHeight = 200;
+                const padding = 25;
+                const maxAttempts = 100;
+
+                // 计算可以容纳的最大行列数（不严格限制）
+                const maxCols = Math.ceil(containerWidth / (cardWidth + padding));
+                const maxRows = Math.ceil(containerHeight / (cardHeight + padding));
+
+                // 创建虚拟网格用于跟踪占用区域
+                const grid = [];
+                for (let i = 0; i < maxRows; i++) {
+                    grid[i] = [];
+                    for (let j = 0; j < maxCols; j++) {
+                        grid[i][j] = false;
+                    }
+                }
+
+                cards.each(function (index) {
+                    let placed = false;
+                    let attempts = 0;
+
+                    while (!placed && attempts < maxAttempts) {
+                        // 在整个容器范围内随机生成位置
+                        let left = Math.random() * (containerWidth - cardWidth - padding);
+                        let top = Math.random() * (containerHeight - cardHeight - padding);
+
+                        // 确保不会超出边界
+                        left = Math.max(padding, Math.min(left, containerWidth - cardWidth - padding));
+                        top = Math.max(padding, Math.min(top, containerHeight - cardHeight - padding));
+
+                        // 检查与已有卡片的重叠情况
+                        let overlap = false;
+                        for (let pos of positions) {
+                            // 计算两个矩形是否重叠
+                            if (!(left > pos.left + cardWidth + padding / 2 ||
+                                left + cardWidth + padding / 2 < pos.left ||
+                                top > pos.top + cardHeight + padding / 2 ||
+                                top + cardHeight + padding / 2 < pos.top)) {
+                                overlap = true;
+                                break;
+                            }
+                        }
+
+                        // 如果没有重叠或者已经是最后一次尝试，则放置卡片
+                        if (!overlap || attempts >= maxAttempts - 1) {
+                            positions.push({ left, top });
+                            $(this).css({
+                                left: left + 'px',
+                                top: top + 'px'
+                            });
+                            placed = true;
+                        }
+
+                        attempts++;
+                    }
+
+                    // 如果所有尝试都失败了，强制放置在安全位置
+                    if (!placed) {
+                        const safeLeft = Math.random() * (containerWidth - cardWidth - 40) + 20;
+                        const safeTop = Math.random() * (containerHeight - cardHeight - 40) + 20;
+                        positions.push({ left: safeLeft, top: safeTop });
+                        $(this).css({
+                            left: safeLeft + 'px',
+                            top: safeTop + 'px'
+                        });
+                    }
+                });
+            }
+
+            // 加载表白列表并智能分布显示
+            function loadConfessions(isAppend = false) {
+                if (pageState.loading || !pageState.hasMore) return;
+
+                pageState.loading = true;
+
+                // 显示加载提示
+                $('#load-more-container').show();
+
+                $.get('/tools/lovewall/getList', {
+                    page: pageState.page,
+                    limit: pageState.limit
+                }, function (res) {
+                    if (res.code === 0) {
+                        var wall = $('#confession-wall');
+
+                        // 获取容器尺寸（全屏利用）
+                        var containerWidth = $(window).width() - 40; // 留一些边距
+
+                        // 预定义旋转样式类
+                        var rotateClasses = ['rotate-1', 'rotate-2', 'rotate-3', 'rotate-4', 'rotate-5', 'rotate-6'];
+
+                        // 记录新添加的卡片元素，用于后续定位
+                        var newCards = $();
+
+                        $.each(res.data, function (index, item) {
+                            // 检查是否已存在该卡片（防止重复）
+                            if ($(`.confession-card[data-id="${item.id}"]`).length > 0) {
+                                return true; // 跳过当前循环
+                            }
+
+                            // 随机旋转样式
+                            var rotateClass = rotateClasses[Math.floor(Math.random() * rotateClasses.length)];
+
+                            // 随机颜色主题
+                            var colorThemes = [
+                                'rgba(255, 235, 238, 0.85)',
+                                'rgba(255, 248, 220, 0.85)',
+                                'rgba(240, 248, 255, 0.85)',
+                                'rgba(255, 240, 245, 0.85)',
+                                'rgba(245, 245, 245, 0.85)'
+                            ];
+                            var bgColor = colorThemes[Math.floor(Math.random() * colorThemes.length)];
+
+                            var cardHtml = `
+                                <div class="confession-card ${rotateClass}" 
+                                     style="background: ${bgColor};"
+                                     data-id="${item.id}">
+                                    <div class="card-header">
+                                        <div>
+                                            <span class="publisher">${item.publisher}</span>
+                                            ${item.is_anonymous == 1 ? '<span class="anonymous-tag">匿名</span>' : ''}
+                                        </div>
+                                        <div class="time">${item.create_time_format}</div>
+                                    </div>
+                                    <div class="to-name">❤️ 致 ${item.to_name}</div>
+                                    <div class="content">${item.content}</div>
+                                </div>
+                            `;
+
+                            var $card = $(cardHtml);
+                            wall.append($card);
+                            newCards = newCards.add($card);
+                        });
+
+                        // 如果不是追加模式，清空之前的内容
+                        if (!isAppend) {
+                            // 移除旧的卡片，只保留新添加的
+                            $('.confession-card').not(newCards).remove();
+                        }
+
+                        // 更新总数信息
+                        pageState.allDataCount = res.count;
+
+                        // 动态计算容器高度，确保能容纳所有卡片
+                        var baseHeight = $(window).height() - 200;
+                        var cardsPerRow = Math.floor(containerWidth / 320); // 每行可容纳卡片数(考虑卡片宽度+间距)
+                        var totalCards = pageState.totalLoaded + res.data.length;
+                        var estimatedRows = Math.ceil(totalCards / cardsPerRow);
+                        var estimatedHeight = estimatedRows * 250; // 每行高度估计值
+
+                        // 容器高度应该是窗口高度和估算内容高度的最大值，确保有足够的空间放置卡片
+                        var containerHeight = Math.max(baseHeight, estimatedHeight, 800);
+
+                        wall.css({
+                            'height': containerHeight + 'px',
+                            'width': '100%'
+                        });
+
+                        // 更新已加载数量
+                        pageState.totalLoaded += res.data.length;
+
+                        // 判断是否还有更多数据
+                        pageState.hasMore = pageState.totalLoaded < res.count;
+
+                        // 使用全屏智能分布算法对新卡片进行定位
+                        if (newCards.length > 0) {
+                            fullscreenPositioning(newCards, containerWidth, containerHeight);
+                        }
+
+                        // 为所有卡片添加点击查看详情功能（无论是否追加模式都需要绑定事件）
+                        $('.confession-card').off('click').on('click', function () {
+                            var content = $(this).find('.content').text();
+                            var publisher = $(this).find('.publisher').text();
+                            var toName = $(this).find('.to-name').text().replace('❤️ 致 ', '');
+                            var time = $(this).find('.time').text();
+
+                            layer.open({
+                                type: 1,
+                                title: '表白详情',
+                                area: ['500px', '400px'],
+                                shadeClose: true,
+                                content: `
+                                    <div style="padding: 20px;">
+                                        <div style="margin-bottom: 15px; color: #ff6b6b; font-weight: bold;">
+                                            ❤️ 致 ${toName}
+                                        </div>
+                                        <div style="margin-bottom: 15px; background: #f8f9fa; padding: 15px; border-radius: 10px; line-height: 1.6;">
+                                            ${content.replace(/\n/g, '<br>')}
+                                        </div>
+                                        <div style="display: flex; justify-content: space-between; color: #666; font-size: 0.9em;">
+                                            <span>来自: ${publisher}</span>
+                                            <span>${time}</span>
+                                        </div>
+                                    </div>
+                                `
+                            });
+                        });
+
+                        // 更新页面状态
+                        pageState.page++;
+                    }
+
+                    // 隐藏加载提示
+                    $('#load-more-container').hide();
+                    pageState.loading = false;
+                }, 'json');
+            }
+
+            // 重置并重新加载表白列表
+            function resetAndLoadConfessions() {
+                pageState.page = 1;
+                pageState.totalLoaded = 0;
+                pageState.hasMore = true;
+                loadConfessions(false);
+            }
+
+            // 检查是否需要加载更多
+            function checkScroll() {
+                if (pageState.loading || !pageState.hasMore) return;
+
+                // 获取页面滚动位置
+                var scrollTop = $(window).scrollTop();
+                var windowHeight = $(window).height();
+                var documentHeight = $(document).height();
+
+                // 当滚动到底部附近时加载更多（提前1/3屏幕高度开始加载）
+                var triggerThreshold = windowHeight / 3;
+                if (scrollTop + windowHeight >= documentHeight - triggerThreshold) {
+                    loadConfessions(true);
+                }
+            }
+
+            // 节流处理的滚动监听
+            var throttleTimer = null;
+            $(window).on('scroll', function () {
+                if (!throttleTimer) {
+                    throttleTimer = setTimeout(function () {
+                        checkScroll();
+                        throttleTimer = null;
+                    }, 100); // 100ms节流间隔
+                }
+            });
+
+            // 初始化加载
+            resetAndLoadConfessions();
+
+            // 窗口大小改变时重新布局
+            $(window).on('resize', function () {
+                resetAndLoadConfessions();
+            });
+        });
+    </script>
+</body>
+
+</html>
