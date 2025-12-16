@@ -26,6 +26,9 @@ use think\Request;
 //   INDEX `idx_uid`(`uid`) USING BTREE,
 //   INDEX `idx_config_type`(`config_type`) USING BTREE
 // ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
+//
+// -- 添加自定义配置名称字段
+// ALTER TABLE `wb_game_config` ADD COLUMN `config_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '自定义配置名称';
 
 class Games extends Base
 {	
@@ -109,6 +112,180 @@ class Games extends Base
         }
         
         return $this->fetch();
+    }
+    
+    /**
+     * 获取用户的所有游戏配置列表
+     */
+    public function getUserGameConfigs($gameKey)
+    {
+        try {
+            // 获取当前用户ID
+            $uid = getLoginUid();
+            
+            if ($uid == 0) {
+                return json(['code' => 0, 'msg' => '请先登录']);
+            }
+            
+            // 获取用户的所有配置
+            $configs = GameConfig::where('game_key', $gameKey)
+                ->where('uid', $uid)
+                ->where('config_type', 2) // 只获取用户自定义配置
+                ->select();
+            
+            $result = [];
+            foreach ($configs as $config) {
+                $result[] = [
+                    'id' => $config->id,
+                    'config_name' => $config->config_name,
+                    'game_name' => $config->game_name,
+                    'game_desc' => $config->game_desc,
+                    'created_at' => $config->created_at,
+                    'updated_at' => $config->updated_at
+                ];
+            }
+            
+            return json(['code' => 1, 'data' => $result]);
+        } catch (\Exception $e) {
+            return json(['code' => 0, 'msg' => '获取配置列表失败：' . $e->getMessage()]);
+        }
+    }
+    
+    /**
+     * 保存带自定义名称的游戏配置
+     */
+    public function saveNamedGameConfig(Request $request)
+    {
+        try {
+            // 获取当前用户ID
+            $uid = getLoginUid();
+            
+            if ($uid == 0) {
+                return json(['code' => 0, 'msg' => '请先登录']);
+            }
+            
+            // 获取参数
+            $gameKey = $request->param('game_key', '');
+            $configName = $request->param('config_name', '');
+            $gameName = $request->param('game_name', '');
+            $gameDesc = $request->param('game_desc', '');
+            $configData = $request->param('config_data', []);
+            
+            if (empty($gameKey)) {
+                return json(['code' => 0, 'msg' => '游戏标识符不能为空']);
+            }
+            
+            if (empty($configName)) {
+                return json(['code' => 0, 'msg' => '配置名称不能为空']);
+            }
+            
+            if (empty($configData)) {
+                return json(['code' => 0, 'msg' => '配置数据不能为空']);
+            }
+            
+            // 创建新配置
+            GameConfig::create([
+                'config_name' => $configName,
+                'game_name' => $gameName ?: $gameKey,
+                'game_key' => $gameKey,
+                'game_desc' => $gameDesc ?: $gameName ?: $gameKey,
+                'config_data' => json_encode($configData, JSON_UNESCAPED_UNICODE),
+                'config_type' => 2, // 用户自定义
+                'uid' => $uid,
+                'status' => 1
+            ]);
+            
+            return json(['code' => 1, 'msg' => '配置保存成功']);
+        } catch (\Exception $e) {
+            return json(['code' => 0, 'msg' => '保存失败：' . $e->getMessage()]);
+        }
+    }
+    
+    /**
+     * 更新指定ID的游戏配置
+     */
+    public function updateGameConfig(Request $request)
+    {
+        try {
+            // 获取当前用户ID
+            $uid = getLoginUid();
+            
+            if ($uid == 0) {
+                return json(['code' => 0, 'msg' => '请先登录']);
+            }
+            
+            // 获取参数
+            $id = $request->param('id', 0);
+            $configName = $request->param('config_name', '');
+            $gameName = $request->param('game_name', '');
+            $gameDesc = $request->param('game_desc', '');
+            $configData = $request->param('config_data', []);
+            
+            if (empty($id)) {
+                return json(['code' => 0, 'msg' => '配置ID不能为空']);
+            }
+            
+            if (empty($configName)) {
+                return json(['code' => 0, 'msg' => '配置名称不能为空']);
+            }
+            
+            if (empty($configData)) {
+                return json(['code' => 0, 'msg' => '配置数据不能为空']);
+            }
+            
+            // 查找配置
+            $gameConfig = GameConfig::where('id', $id)
+                ->where('uid', $uid)
+                ->find();
+            
+            if (!$gameConfig) {
+                return json(['code' => 0, 'msg' => '配置不存在或无权限修改']);
+            }
+            
+            // 更新配置
+            $gameConfig->config_name = $configName;
+            $gameConfig->game_name = $gameName ?: $gameConfig->game_key;
+            $gameConfig->game_desc = $gameDesc ?: $gameName ?: $gameConfig->game_key;
+            $gameConfig->config_data = json_encode($configData, JSON_UNESCAPED_UNICODE);
+            $gameConfig->save();
+            
+            return json(['code' => 1, 'msg' => '配置更新成功']);
+        } catch (\Exception $e) {
+            return json(['code' => 0, 'msg' => '更新失败：' . $e->getMessage()]);
+        }
+    }
+    
+    /**
+     * 删除指定ID的游戏配置
+     */
+    public function deleteNamedGameConfig($id)
+    {
+        try {
+            // 获取当前用户ID
+            $uid = getLoginUid();
+            
+            if ($uid == 0) {
+                return json(['code' => 0, 'msg' => '请先登录']);
+            }
+            
+            if (empty($id)) {
+                return json(['code' => 0, 'msg' => '配置ID不能为空']);
+            }
+            
+            // 删除配置
+            $result = GameConfig::where('id', $id)
+                ->where('uid', $uid)
+                ->where('config_type', 2) // 只能删除用户自定义配置
+                ->delete();
+            
+            if ($result) {
+                return json(['code' => 1, 'msg' => '配置删除成功']);
+            } else {
+                return json(['code' => 0, 'msg' => '删除失败或配置不存在']);
+            }
+        } catch (\Exception $e) {
+            return json(['code' => 0, 'msg' => '删除失败：' . $e->getMessage()]);
+        }
     }
     
     /**
