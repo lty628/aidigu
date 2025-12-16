@@ -6,21 +6,6 @@ use think\Db;
 /**
  * 表白墙控制器
  */
-// CREATE TABLE `wb_love_wall` (
-//   `id` int UNSIGNED NOT NULL,
-//   `uid` int UNSIGNED NOT NULL DEFAULT '0' COMMENT '发布用户ID',
-//   `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '表白内容',
-//   `to_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '表白对象姓名',
-//   `is_anonymous` tinyint UNSIGNED NOT NULL DEFAULT '0' COMMENT '是否匿名 0:否 1:是',
-//   `status` tinyint UNSIGNED NOT NULL DEFAULT '1' COMMENT '状态 0:删除 1:正常',
-//   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-//   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间'
-// ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='表白墙表' ROW_FORMAT=DYNAMIC;
-// ALTER TABLE `wb_love_wall`
-//   ADD PRIMARY KEY (`id`) USING BTREE,
-//   ADD KEY `idx_uid` (`uid`) USING BTREE,
-//   ADD KEY `idx_status` (`status`) USING BTREE,
-//   ADD KEY `idx_create_time` (`create_time`) USING BTREE;
 
 class LoveWall extends Base
 {	
@@ -38,6 +23,19 @@ class LoveWall extends Base
         $get = input('get.');
         $page = $get['page'] ?? 1;
         $limit = $get['limit'] ?? 50; // 增加到50条，适应墙式展示
+
+
+        $count = Db::name('love_wall')
+            ->where('status', 1)
+            ->count();
+
+        if (!$count) {
+            return json(['code' => 0, 'data' => [], 'count' => 0]);
+        }
+
+        if ($count > 50) {
+            $count = 50;
+        }
         
         // 获取表白墙列表，按时间倒序排列
         $list = Db::name('love_wall')
@@ -47,9 +45,7 @@ class LoveWall extends Base
             ->page($page)
             ->select();
             
-        // $count = Db::name('love_wall')
-        //     ->where('status', 1)
-        //     ->count();
+        
         
         // 格式化时间
         foreach ($list as &$item) {
@@ -63,7 +59,7 @@ class LoveWall extends Base
             }
         }
         
-        return json(['code' => 0, 'data' => $list, 'count' => 50]);
+        return json(['code' => 0, 'data' => $list, 'count' => $count]);
     }
 
     /**

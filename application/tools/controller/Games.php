@@ -5,31 +5,6 @@ use app\common\model\GameConfig;
 use think\Request;
 
 
-// -- ----------------------------
-// -- Table structure for wb_game_config
-// -- ----------------------------
-// DROP TABLE IF EXISTS `wb_game_config`;
-// CREATE TABLE `wb_game_config`  (
-//   `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-//   `game_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '游戏名称',
-//   `game_key` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '游戏标识符',
-//   `game_desc` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '游戏描述',
-//   `config_data` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '配置数据（JSON格式）',
-//   `config_type` tinyint(3) UNSIGNED NOT NULL DEFAULT 1 COMMENT '配置类型：1-系统默认，2-用户自定义',
-//   `uid` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '用户ID（系统默认配置为0）',
-//   `status` tinyint(3) UNSIGNED NOT NULL DEFAULT 1 COMMENT '状态：0-禁用，1-启用',
-//   `sort_order` int(11) NOT NULL DEFAULT 0 COMMENT '排序',
-//   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-//   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-//   PRIMARY KEY (`id`) USING BTREE,
-//   INDEX `idx_game_key`(`game_key`) USING BTREE,
-//   INDEX `idx_uid`(`uid`) USING BTREE,
-//   INDEX `idx_config_type`(`config_type`) USING BTREE
-// ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
-//
-// -- 添加自定义配置名称字段
-// ALTER TABLE `wb_game_config` ADD COLUMN `config_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '自定义配置名称';
-
 class Games extends Base
 {	
 	public function index()
@@ -50,7 +25,7 @@ class Games extends Base
         
         // 如果有配置，解析配置数据
         if ($gameConfig) {
-            $configData = $gameConfig->getConfigDataArrayAttr(null, $gameConfig->getData());
+            $configData = $gameConfig->config_data_array;
             $this->assign('config_data', json_encode($configData));
         } else {
             // 默认配置将由前端处理
@@ -76,7 +51,7 @@ class Games extends Base
         
         // 如果有配置，解析配置数据
         if ($gameConfig) {
-            $configData = $gameConfig->getConfigDataArrayAttr(null, $gameConfig->getData());
+            $configData = $gameConfig->config_data_array;
             $this->assign('truths', isset($configData['truths']) ? json_encode($configData['truths']) : '[]');
             $this->assign('dares', isset($configData['dares']) ? json_encode($configData['dares']) : '[]');
         } else {
@@ -362,7 +337,7 @@ class Games extends Base
             $gameConfig = GameConfig::getConfigByGameKey($gameKey, $uid);
             
             if ($gameConfig) {
-                $configData = $gameConfig->getConfigDataArrayAttr(null, $gameConfig->getData());
+                $configData = $gameConfig->config_data_array;
                 return json(['code' => 1, 'data' => $configData]);
             } else {
                 return json(['code' => 0, 'msg' => '暂无配置']);
@@ -400,5 +375,47 @@ class Games extends Base
         }
     }
     
+    /**
+     * 根据配置ID获取游戏配置
+     */
+    public function getGameConfigById($id)
+    {
+        try {
+            // 获取当前用户ID
+            $uid = getLoginUid();
+            
+            if ($uid == 0) {
+                return json(['code' => 0, 'msg' => '请先登录']);
+            }
+            
+            if (empty($id)) {
+                return json(['code' => 0, 'msg' => '配置ID不能为空']);
+            }
+            
+            // 获取配置
+            $gameConfig = GameConfig::where('id', $id)
+                ->where('uid', $uid)
+                ->find();
+            
+            if ($gameConfig) {
+                // 正确的方式获取配置数据数组
+                $configData = $gameConfig->config_data_array;
+                
+                // 确保configData是数组
+                if (!is_array($configData)) {
+                    $configData = [];
+                }
+                
+                // 添加配置名称到返回数据中
+                $configData['config_name'] = $gameConfig->config_name;
+                
+                return json(['code' => 1, 'data' => $configData]);
+            } else {
+                return json(['code' => 0, 'msg' => '配置不存在或无权限查看']);
+            }
+        } catch (\Exception $e) {
+            return json(['code' => 0, 'msg' => '获取配置失败：' . $e->getMessage()]);
+        }
+    }
     
 }

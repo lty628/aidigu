@@ -6,74 +6,126 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>真心话大冒险</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
+        * {
             margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
             padding: 20px;
-            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .container {
             max-width: 600px;
-            margin: 0 auto;
-            background-color: white;
+            width: 100%;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             text-align: center;
         }
 
         h1 {
-            color: #e91e63;
+            color: #4a5568;
+            margin-bottom: 20px;
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .question-box {
-            background-color: #f8f9fa;
-            border-radius: 8px;
-            padding: 20px;
-            margin: 20px 0;
-            min-height: 100px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin: 30px 0;
+            min-height: 150px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 18px;
-            color: #333;
+            font-size: 1.3rem;
+            line-height: 1.6;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .config-section {
+            margin-bottom: 25px;
+        }
+
+        .config-section label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #4a5568;
+        }
+
+        .config-select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            background-color: #f7fafc;
+            transition: border-color 0.3s ease;
+        }
+
+        .config-select:focus {
+            outline: none;
+            border-color: #667eea;
         }
 
         .buttons {
-            margin: 20px 0;
+            margin: 30px 0;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
         }
 
         button {
-            background-color: #e91e63;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border: none;
-            padding: 12px 24px;
-            margin: 0 10px;
-            border-radius: 4px;
+            padding: 12px 25px;
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
 
         button:hover {
-            background-color: #c2185b;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        button:active {
+            transform: translateY(0);
         }
 
         .config-btn {
-            background-color: #2196F3;
-        }
-
-        .config-btn:hover {
-            background-color: #0b7dda;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
         }
 
         .result {
             margin-top: 20px;
-            padding: 15px;
-            border-radius: 4px;
-            background-color: #e8f5e9;
-            color: #2e7d32;
+            padding: 15px 20px;
+            border-radius: 8px;
+            background-color: #e6fffa;
+            color: #2b6cb0;
+            font-weight: 600;
+            display: none;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
         }
 
         /* 配置模态框样式 */
@@ -86,18 +138,19 @@
             width: 100%;
             height: 100%;
             background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
         }
 
         .modal-content {
-            background-color: #fefefe;
-            margin: 5% auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-            max-width: 600px;
-            border-radius: 8px;
-            max-height: 80vh;
+            background-color: white;
+            margin: 3% auto;
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 700px;
+            max-height: 90vh;
             overflow-y: auto;
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.2);
         }
 
         .close {
@@ -106,71 +159,76 @@
             font-size: 28px;
             font-weight: bold;
             cursor: pointer;
+            transition: color 0.3s ease;
         }
 
         .close:hover,
         .close:focus {
-            color: black;
+            color: #333;
         }
 
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             text-align: left;
         }
 
         .form-group label {
             display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #4a5568;
         }
 
         .form-group input[type="text"] {
             width: 100%;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+            padding: 12px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input[type="text"]:focus {
+            outline: none;
+            border-color: #667eea;
         }
 
         .form-group textarea {
             width: 100%;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+            padding: 12px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
             resize: vertical;
-            min-height: 100px;
+            min-height: 120px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
         }
 
         .form-actions {
             text-align: center;
-            margin-top: 20px;
-        }
-
-        .form-actions button {
-            margin: 0 10px;
+            margin-top: 30px;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
         }
 
         .save-btn {
-            background-color: #4CAF50;
-        }
-
-        .save-btn:hover {
-            background-color: #45a049;
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
         }
 
         .cancel-btn {
-            background-color: #f44336;
-        }
-
-        .cancel-btn:hover {
-            background-color: #da190b;
+            background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
         }
 
         .delete-btn {
-            background-color: #ff9800;
-        }
-
-        .delete-btn:hover {
-            background-color: #e68900;
+            background: linear-gradient(135deg, #ed8936 0%, #dd6b20 100%);
         }
 
         /* 配置列表样式 */
@@ -179,92 +237,160 @@
             text-align: left;
         }
 
+        .config-list h3 {
+            margin-bottom: 15px;
+            color: #4a5568;
+        }
+
         .config-item {
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            margin-bottom: 10px;
+            padding: 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            margin-bottom: 12px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            transition: all 0.3s ease;
+            background-color: #f7fafc;
+        }
+
+        .config-item:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
 
         .config-item.active {
-            border-color: #2196F3;
-            background-color: #e3f2fd;
+            border-color: #667eea;
+            background-color: #ebf8ff;
         }
 
         .config-info {
             flex-grow: 1;
         }
 
+        .config-info strong {
+            display: block;
+            margin-bottom: 5px;
+            color: #2d3748;
+        }
+
+        .config-info small {
+            color: #718096;
+        }
+
         .config-actions {
             display: flex;
-            gap: 5px;
+            gap: 10px;
         }
 
         .switch-btn {
-            background-color: #9c27b0;
-            padding: 5px 10px;
-            font-size: 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 8px 15px;
+            font-size: 0.875rem;
         }
 
-        .switch-btn:hover {
-            background-color: #7b1fa2;
+        .edit-btn {
+            background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+            padding: 8px 15px;
+            font-size: 0.875rem;
         }
 
         .delete-config-btn {
-            background-color: #f44336;
-            padding: 5px 10px;
-            font-size: 14px;
+            background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
+            padding: 8px 15px;
+            font-size: 0.875rem;
         }
 
-        .delete-config-btn:hover {
-            background-color: #d32f2f;
-        }
+        /* 响应式设计 */
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
 
-        /* 配置选择下拉菜单样式 */
-        .config-select {
-            margin: 10px 0;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 16px;
-        }
+            h1 {
+                font-size: 2rem;
+            }
 
-        /* 编辑按钮样式 */
-        .edit-btn {
-            background-color: #2196F3;
-            padding: 5px 10px;
-            font-size: 14px;
-        }
+            .buttons {
+                flex-direction: column;
+                align-items: center;
+            }
 
-        .edit-btn:hover {
-            background-color: #0b7dda;
+            button {
+                width: 100%;
+                max-width: 300px;
+            }
+
+            .form-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .config-actions {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .config-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
         }
+        .back-btn {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.back-btn:hover {
+    transform: translateX(-5px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
     </style>
 </head>
 
 <body>
     <div class="container">
+        <div class="container">
+    <a href="{:url('games/index')}" class="back-btn">
+        ← 返回游戏中心
+    </a>
+    <!-- 页面其他内容保持不变 -->
         <h1>真心话大冒险</h1>
-        <div class="question-box" id="questionBox">
-            点击下方按钮开始游戏
-        </div>
-        <!-- 配置选择下拉菜单 -->
-        <div style="margin: 20px 0;">
+        <div class="config-section">
             <label for="configSelect">选择配置：</label>
             <select id="configSelect" class="config-select">
                 <option value="default">默认配置</option>
                 <!-- 其他配置项将通过JavaScript动态添加 -->
             </select>
         </div>
+        <div class="question-box" id="questionBox">
+            点击下方按钮开始游戏
+        </div>
+        
+        
+        
         <div class="buttons">
             <button onclick="getTruth()">真心话</button>
             <button onclick="getDare()">大冒险</button>
             <button class="config-btn" onclick="openConfig()">配置选项</button>
         </div>
-        <div id="result" class="result" style="display:none;"></div>
+        
+        <div id="result" class="result"></div>
     </div>
 
     <!-- 配置模态框 -->
@@ -277,7 +403,7 @@
             <div class="config-list" id="configList">
                 <h3>我的配置列表</h3>
                 <div id="configItems"></div>
-                <button class="save-btn" onclick="createNewConfig()" style="margin-top: 10px;">+ 新建配置</button>
+                <button class="save-btn" onclick="createNewConfig()" style="margin-top: 15px;">+ 新建配置</button>
             </div>
 
             <!-- 配置编辑表单 -->
@@ -289,18 +415,17 @@
                 </div>
                 <div class="form-group">
                     <label for="truths">真心话问题（每行一个）:</label>
-                    <textarea id="truths"
-                        placeholder="请输入真心话问题，每行一个&#10;例如：&#10;你最近一次撒谎是什么时候？&#10;你最尴尬的经历是什么？&#10;..."></textarea>
+                    <textarea id="truths" 
+                        placeholder="请输入真心话问题，每行一个\n例如：\n你最近一次撒谎是什么时候？\n你最尴尬的经历是什么？\n..."></textarea>
                 </div>
                 <div class="form-group">
                     <label for="dares">大冒险任务（每行一个）:</label>
-                    <textarea id="dares" placeholder="请输入大冒险任务，每行一个&#10;例如：&#10;大声唱一首歌&#10;做10个俯卧撑&#10;..."></textarea>
+                    <textarea id="dares" placeholder="请输入大冒险任务，每行一个\n例如：\n大声唱一首歌\n做10个俯卧撑\n..."></textarea>
                 </div>
                 <div class="form-actions">
                     <button class="save-btn" onclick="saveConfig()">保存配置</button>
                     <button class="cancel-btn" onclick="cancelEditConfig()">取消</button>
-                    <button class="delete-btn" onclick="deleteCurrentConfig()" id="deleteConfigBtn"
-                        style="display: none;">删除配置</button>
+                    <button class="delete-btn" onclick="deleteCurrentConfig()" id="deleteConfigBtn" style="display: none;">删除配置</button>
                 </div>
             </div>
         </div>
@@ -343,7 +468,6 @@
 
         // 页面加载时尝试从服务器获取用户配置
         window.onload = function () {
-            fetchUserConfig();
             fetchUserConfigs(); // 获取配置列表
         };
 
@@ -361,21 +485,7 @@
                     console.error('获取配置列表失败:', error);
                 });
         }
-        // 获取用户的所有配置列表
-        function fetchUserConfigs() {
-            fetch('/tools/games/getUserGameConfigs?game_key=' + gameKey)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.code === 1 && data.data) {
-                        renderConfigList(data.data);
-                    }
-                })
-                .catch(error => {
-                    console.error('获取配置列表失败:', error);
-                });
-        }
 
-        // 渲染配置列表
         // 渲染配置列表
         function renderConfigList(configs) {
             const container = document.getElementById('configItems');
@@ -385,14 +495,14 @@
             const defaultConfigItem = document.createElement('div');
             defaultConfigItem.className = 'config-item';
             defaultConfigItem.innerHTML = `
-        <div class="config-info">
-            <strong>默认配置</strong><br>
-            <small>系统内置配置</small>
-        </div>
-        <div class="config-actions">
-            <button class="switch-btn" onclick="switchToConfig('default')">切换</button>
-        </div>
-    `;
+                <div class="config-info">
+                    <strong>默认配置</strong><br>
+                    <small>系统内置配置</small>
+                </div>
+                <div class="config-actions">
+                    <button class="switch-btn" onclick="switchToConfig('default')">切换</button>
+                </div>
+            `;
             container.appendChild(defaultConfigItem);
 
             // 添加用户自定义配置项
@@ -401,20 +511,20 @@
                     const configItem = document.createElement('div');
                     configItem.className = 'config-item';
                     configItem.innerHTML = `
-                <div class="config-info">
-                    <strong>${config.config_name}</strong><br>
-                    <small>创建于: ${config.created_at}</small>
-                </div>
-                <div class="config-actions">
-                    <button class="switch-btn" onclick="switchToConfig(${config.id})">切换</button>
-                    <button class="edit-btn" onclick="editConfig(${config.id}, '${config.config_name}')">编辑</button>
-                    <button class="delete-config-btn" onclick="deleteConfig(${config.id})">删除</button>
-                </div>
-            `;
+                        <div class="config-info">
+                            <strong>${config.config_name}</strong><br>
+                            <small>创建于: ${config.created_at}</small>
+                        </div>
+                        <div class="config-actions">
+                            <button class="switch-btn" onclick="switchToConfig(${config.id})">切换</button>
+                            <button class="edit-btn" onclick="editConfig(${config.id})">编辑</button>
+                            <button class="delete-config-btn" onclick="deleteConfig(${config.id})">删除</button>
+                        </div>
+                    `;
                     container.appendChild(configItem);
                 });
             } else {
-                container.innerHTML += '<p style="margin-top: 10px;">暂无自定义配置</p>';
+                container.innerHTML += '<p style="margin-top: 10px; color: #718096;">暂无自定义配置</p>';
             }
         }
 
@@ -442,16 +552,20 @@
                 switchToConfig(this.value);
             };
         }
+
+        // 获取随机项
         function getRandomItem(arr) {
             return arr[Math.floor(Math.random() * arr.length)];
         }
 
+        // 获取真心话
         function getTruth() {
             const question = getRandomItem(truths);
             document.getElementById('questionBox').innerHTML = `<strong>真心话：</strong>${question}`;
             document.getElementById('result').style.display = 'none';
         }
 
+        // 获取大冒险
         function getDare() {
             const dare = getRandomItem(dares);
             document.getElementById('questionBox').innerHTML = `<strong>大冒险：</strong>${dare}`;
@@ -493,19 +607,30 @@
         }
 
         // 编辑配置
-        function editConfig(configId, configName, configTruths, configDares) {
-            // 隐藏配置列表，显示表单
-            document.getElementById('configList').style.display = 'none';
-            document.getElementById('configForm').style.display = 'block';
+        function editConfig(configId) {
+            // 获取配置详情
+            fetch('/tools/games/getGameConfigById?id=' + configId)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.code === 1 && data.data) {
+                        // 隐藏配置列表，显示表单
+                        document.getElementById('configList').style.display = 'none';
+                        document.getElementById('configForm').style.display = 'block';
 
-            // 填充表单
-            document.getElementById('configId').value = configId;
-            document.getElementById('configName').value = configName;
-            document.getElementById('truths').value = configTruths.join('\n');
-            document.getElementById('dares').value = configDares.join('\n');
+                        // 填充表单
+                        document.getElementById('configId').value = configId;
+                        document.getElementById('configName').value = data.data.config_name;
+                        document.getElementById('truths').value = data.data.config_data.truths.join('\n');
+                        document.getElementById('dares').value = data.data.config_data.dares.join('\n');
 
-            // 显示删除按钮
-            document.getElementById('deleteConfigBtn').style.display = 'inline-block';
+                        // 显示删除按钮
+                        document.getElementById('deleteConfigBtn').style.display = 'inline-block';
+                    }
+                })
+                .catch(error => {
+                    console.error('获取配置详情失败:', error);
+                    showMessage('获取配置详情失败，请稍后重试', 'error');
+                });
         }
 
         // 取消编辑配置
@@ -525,7 +650,7 @@
 
             // 检查配置名称
             if (!configName) {
-                alert('请输入配置名称！');
+                showMessage('请输入配置名称！', 'error');
                 return;
             }
 
@@ -535,7 +660,7 @@
 
             // 检查是否有内容
             if (newTruths.length === 0 || newDares.length === 0) {
-                alert('真心话和大冒险都至少需要一个选项！');
+                showMessage('真心话和大冒险都至少需要一个选项！', 'error');
                 return;
             }
 
@@ -664,11 +789,11 @@
                     .then(response => response.json())
                     .then(data => {
                         if (data.code === 1 && data.data) {
-                            if (data.data.truths && data.data.truths.length > 0) {
-                                truths = data.data.truths;
+                            if (data.data.config_data.truths && data.data.config_data.truths.length > 0) {
+                                truths = data.data.config_data.truths;
                             }
-                            if (data.data.dares && data.data.dares.length > 0) {
-                                dares = data.data.dares;
+                            if (data.data.config_data.dares && data.data.config_data.dares.length > 0) {
+                                dares = data.data.config_data.dares;
                             }
                             showMessage('已切换到配置：' + data.data.config_name, 'success');
                             // 更新下拉菜单选择
@@ -725,11 +850,11 @@
             resultElement.style.display = 'block';
 
             if (type === 'success') {
-                resultElement.style.backgroundColor = '#e8f5e9';
-                resultElement.style.color = '#2e7d32';
+                resultElement.style.backgroundColor = '#e6fffa';
+                resultElement.style.color = '#2b6cb0';
             } else {
-                resultElement.style.backgroundColor = '#ffebee';
-                resultElement.style.color = '#c62828';
+                resultElement.style.backgroundColor = '#fed7d7';
+                resultElement.style.color = '#c53030';
             }
 
             // 3秒后隐藏消息
