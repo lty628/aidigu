@@ -1,10 +1,4 @@
 
-SET NAMES utf8mb4;
-SET FOREIGN_KEY_CHECKS = 0;
-
--- ----------------------------
--- Table structure for wb_admin_behavior_log
--- ----------------------------
 DROP TABLE IF EXISTS `wb_admin_behavior_log`;
 CREATE TABLE `wb_admin_behavior_log`  (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -19,11 +13,7 @@ CREATE TABLE `wb_admin_behavior_log`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_uid`(`uid`) USING BTREE,
   INDEX `idx_create_time`(`create_time`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户行为日志表' ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of wb_admin_behavior_log
--- ----------------------------
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户行为日志表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for wb_admin_system_setting
@@ -39,8 +29,7 @@ CREATE TABLE `wb_admin_system_setting`  (
   `updated_at` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `uk_section_key`(`section`, `key`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '系统配置表' ROW_FORMAT = Dynamic;
-
+) ENGINE = InnoDB AUTO_INCREMENT = 20 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '系统配置表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for wb_app
@@ -60,7 +49,7 @@ CREATE TABLE `wb_app`  (
   `create_time` datetime NOT NULL COMMENT '创建时间',
   `update_time` datetime NOT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 55 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for wb_badword
@@ -74,8 +63,84 @@ CREATE TABLE `wb_badword`  (
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
--- Records of wb_badword
+-- Table structure for wb_channel
 -- ----------------------------
+DROP TABLE IF EXISTS `wb_channel`;
+CREATE TABLE `wb_channel`  (
+  `channel_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `channel_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '频道名称',
+  `avatar` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT '' COMMENT '频道头像',
+  `avatar_info` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT '' COMMENT '头像信息',
+  `description` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT '' COMMENT '频道介绍',
+  `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT '' COMMENT '频道密码',
+  `owner_uid` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '创建者UID',
+  `invite_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '邀请码',
+  `invite_status` tinyint(3) UNSIGNED NOT NULL DEFAULT 0 COMMENT '邀请状态 0:关闭 1:开启',
+  `allow_speak` tinyint(3) UNSIGNED NOT NULL DEFAULT 1 COMMENT '是否允许发言 0:不允许 1:允许',
+  `allow_comment` tinyint(3) UNSIGNED NOT NULL DEFAULT 1 COMMENT '是否允许评论 0:不允许 1:允许',
+  `member_count` int(11) NOT NULL DEFAULT 0 COMMENT '成员数',
+  `message_count` int(11) NOT NULL DEFAULT 0 COMMENT '消息数',
+  `create_time` bigint(20) NULL DEFAULT NULL COMMENT '创建时间',
+  `update_time` bigint(20) UNSIGNED NULL DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`channel_id`) USING BTREE,
+  INDEX `idx_owner_uid`(`owner_uid`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Table structure for wb_channel_comment
+-- ----------------------------
+DROP TABLE IF EXISTS `wb_channel_comment`;
+CREATE TABLE `wb_channel_comment`  (
+  `cid` bigint(20) NOT NULL AUTO_INCREMENT,
+  `fromuid` bigint(20) NOT NULL,
+  `msg` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+  `msg_id` bigint(20) NOT NULL,
+  `touid` mediumint(9) NULL DEFAULT NULL,
+  `ctime` int(11) NOT NULL,
+  `ctype` tinyint(4) NOT NULL DEFAULT 0 COMMENT '回复类型',
+  PRIMARY KEY (`cid`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Table structure for wb_channel_message
+-- ----------------------------
+DROP TABLE IF EXISTS `wb_channel_message`;
+CREATE TABLE `wb_channel_message`  (
+  `msg_id` mediumint(9) NOT NULL AUTO_INCREMENT,
+  `uid` mediumint(9) NOT NULL,
+  `channel_id` int(11) NOT NULL COMMENT '频道ID',
+  `contents` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+  `repost` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL,
+  `refrom` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+  `media` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
+  `media_info` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL,
+  `repostsum` int(11) NOT NULL DEFAULT 0,
+  `commentsum` int(11) NOT NULL DEFAULT 0,
+  `collectsum` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '收藏点赞数',
+  `topic_id` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '话题id',
+  `is_delete` tinyint(3) UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否删除0未删除，1已删除',
+  `ctime` int(11) NOT NULL,
+  PRIMARY KEY (`msg_id`) USING BTREE,
+  INDEX `idx_channel_id`(`channel_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Table structure for wb_channel_user
+-- ----------------------------
+DROP TABLE IF EXISTS `wb_channel_user`;
+CREATE TABLE `wb_channel_user`  (
+  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `channel_id` bigint(20) NOT NULL COMMENT '频道ID',
+  `uid` bigint(20) NOT NULL COMMENT '用户ID',
+  `role` tinyint(3) UNSIGNED NOT NULL DEFAULT 0 COMMENT '角色 0:普通成员 1:管理员 2:创建者',
+  `message_count` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '消息计数',
+  `join_time` bigint(20) NOT NULL DEFAULT 0 COMMENT '加入时间',
+  `leave_time` bigint(20) UNSIGNED NOT NULL DEFAULT 0 COMMENT '离开时间',
+  `update_time` bigint(20) UNSIGNED NOT NULL DEFAULT 0 COMMENT '更新时间',
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `idx_channel_id`(`channel_id`) USING BTREE,
+  INDEX `idx_uid`(`uid`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for wb_chat_friends
@@ -93,10 +158,6 @@ CREATE TABLE `wb_chat_friends`  (
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
--- Records of wb_chat_friends
--- ----------------------------
-
--- ----------------------------
 -- Table structure for wb_chat_friends_history
 -- ----------------------------
 DROP TABLE IF EXISTS `wb_chat_friends_history`;
@@ -110,10 +171,6 @@ CREATE TABLE `wb_chat_friends_history`  (
   `create_time` datetime NOT NULL COMMENT '消息时间',
   PRIMARY KEY (`chat_id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of wb_chat_friends_history
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for wb_chat_group
@@ -136,10 +193,6 @@ CREATE TABLE `wb_chat_group`  (
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
--- Records of wb_chat_group
--- ----------------------------
-
--- ----------------------------
 -- Table structure for wb_chat_group_history
 -- ----------------------------
 DROP TABLE IF EXISTS `wb_chat_group_history`;
@@ -152,10 +205,6 @@ CREATE TABLE `wb_chat_group_history`  (
   `create_time` datetime NOT NULL COMMENT '消息时间',
   PRIMARY KEY (`chat_id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of wb_chat_group_history
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for wb_chat_group_user
@@ -173,10 +222,6 @@ CREATE TABLE `wb_chat_group_user`  (
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
--- Records of wb_chat_group_user
--- ----------------------------
-
--- ----------------------------
 -- Table structure for wb_chat_online
 -- ----------------------------
 DROP TABLE IF EXISTS `wb_chat_online`;
@@ -188,10 +233,6 @@ CREATE TABLE `wb_chat_online`  (
   `offline_time` bigint(20) UNSIGNED NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of wb_chat_online
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for wb_chat_private_letter
@@ -209,10 +250,6 @@ CREATE TABLE `wb_chat_private_letter`  (
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
--- Records of wb_chat_private_letter
--- ----------------------------
-
--- ----------------------------
 -- Table structure for wb_chat_private_letter_history
 -- ----------------------------
 DROP TABLE IF EXISTS `wb_chat_private_letter_history`;
@@ -226,10 +263,6 @@ CREATE TABLE `wb_chat_private_letter_history`  (
   `create_time` datetime NOT NULL COMMENT '消息时间',
   PRIMARY KEY (`chat_id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of wb_chat_private_letter_history
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for wb_comment
@@ -247,10 +280,6 @@ CREATE TABLE `wb_comment`  (
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
--- Records of wb_comment
--- ----------------------------
-
--- ----------------------------
 -- Table structure for wb_fans
 -- ----------------------------
 DROP TABLE IF EXISTS `wb_fans`;
@@ -262,10 +291,6 @@ CREATE TABLE `wb_fans`  (
   `ctime` bigint(20) NOT NULL DEFAULT 0,
   PRIMARY KEY (`fansid`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of wb_fans
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for wb_file
@@ -288,10 +313,6 @@ CREATE TABLE `wb_file`  (
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
--- Records of wb_file
--- ----------------------------
-
--- ----------------------------
 -- Table structure for wb_file_dir
 -- ----------------------------
 DROP TABLE IF EXISTS `wb_file_dir`;
@@ -305,10 +326,6 @@ CREATE TABLE `wb_file_dir`  (
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`dir_id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '文件目录表' ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of wb_file_dir
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for wb_file_log
@@ -329,8 +346,46 @@ CREATE TABLE `wb_file_log`  (
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
--- Records of wb_file_log
+-- Table structure for wb_game_config
 -- ----------------------------
+DROP TABLE IF EXISTS `wb_game_config`;
+CREATE TABLE `wb_game_config`  (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `game_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '游戏名称',
+  `game_key` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '游戏标识符',
+  `game_desc` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '游戏描述',
+  `config_data` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '配置数据（JSON格式）',
+  `config_type` tinyint(3) UNSIGNED NOT NULL DEFAULT 1 COMMENT '配置类型：1-系统默认，2-用户自定义',
+  `uid` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '用户ID（系统默认配置为0）',
+  `status` tinyint(3) UNSIGNED NOT NULL DEFAULT 1 COMMENT '状态：0-禁用，1-启用',
+  `sort_order` int(11) NOT NULL DEFAULT 0 COMMENT '排序',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `config_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '自定义配置名称',
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `idx_game_key`(`game_key`) USING BTREE,
+  INDEX `idx_uid`(`uid`) USING BTREE,
+  INDEX `idx_config_type`(`config_type`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Table structure for wb_love_wall
+-- ----------------------------
+DROP TABLE IF EXISTS `wb_love_wall`;
+CREATE TABLE `wb_love_wall`  (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `uid` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '发布用户ID',
+  `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '表白内容',
+  `to_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '表白对象姓名',
+  `is_anonymous` tinyint(3) UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否匿名 0:否 1:是',
+  `status` tinyint(3) UNSIGNED NOT NULL DEFAULT 1 COMMENT '状态 0:删除 1:正常',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `idx_uid`(`uid`) USING BTREE,
+  INDEX `idx_status`(`status`) USING BTREE,
+  INDEX `idx_create_time`(`create_time`) USING BTREE
+) ENGINE = InnoDB891 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '表白墙表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for wb_message
@@ -354,10 +409,6 @@ CREATE TABLE `wb_message`  (
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
--- Records of wb_message
--- ----------------------------
-
--- ----------------------------
 -- Table structure for wb_password
 -- ----------------------------
 DROP TABLE IF EXISTS `wb_password`;
@@ -375,10 +426,6 @@ CREATE TABLE `wb_password`  (
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '密码表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
--- Records of wb_password
--- ----------------------------
-
--- ----------------------------
 -- Table structure for wb_reminder
 -- ----------------------------
 DROP TABLE IF EXISTS `wb_reminder`;
@@ -394,10 +441,6 @@ CREATE TABLE `wb_reminder`  (
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
--- Records of wb_reminder
--- ----------------------------
-
--- ----------------------------
 -- Table structure for wb_search
 -- ----------------------------
 DROP TABLE IF EXISTS `wb_search`;
@@ -409,10 +452,6 @@ CREATE TABLE `wb_search`  (
   `count` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '搜索数量',
   PRIMARY KEY (`search_id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of wb_search
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for wb_source_material
@@ -428,10 +467,6 @@ CREATE TABLE `wb_source_material`  (
   `share_msg_id` bigint(20) UNSIGNED NOT NULL DEFAULT 0 COMMENT '内容id',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of wb_source_material
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for wb_source_material_relation
@@ -450,10 +485,6 @@ CREATE TABLE `wb_source_material_relation`  (
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
--- Records of wb_source_material_relation
--- ----------------------------
-
--- ----------------------------
 -- Table structure for wb_topic
 -- ----------------------------
 DROP TABLE IF EXISTS `wb_topic`;
@@ -464,7 +495,7 @@ CREATE TABLE `wb_topic`  (
   `create_time` datetime NOT NULL COMMENT '创建时间',
   `count` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '话题数量',
   PRIMARY KEY (`topic_id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 40 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for wb_user
@@ -496,10 +527,6 @@ CREATE TABLE `wb_user`  (
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
--- Records of wb_user
--- ----------------------------
-
--- ----------------------------
 -- Table structure for wb_user_collect
 -- ----------------------------
 DROP TABLE IF EXISTS `wb_user_collect`;
@@ -511,10 +538,6 @@ CREATE TABLE `wb_user_collect`  (
   `delete_time` bigint(20) UNSIGNED NOT NULL DEFAULT 0,
   PRIMARY KEY (`collect_id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of wb_user_collect
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for wb_user_invite
@@ -609,78 +632,3 @@ INSERT INTO `wb_topic` VALUES (20, '#你最喜欢的明星是谁#', 0, '2023-10-
 INSERT INTO `wb_topic` VALUES (21, '#女生喜欢你的暗示有什么#', 0, '2023-10-12 16:46:19', 0);
 INSERT INTO `wb_topic` VALUES (22, '#致回不去的青春#', 0, '2023-10-12 16:49:57', 0);
 INSERT INTO `wb_topic` VALUES (23, '#你的头像有特殊含义吗？#', 0, '2023-11-01 17:51:50', 0);
-
-
-
-
--- 创建频道表
-CREATE TABLE `wb_channel`  (
-  `channel_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `channel_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '频道名称',
-  `avatar` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT '' COMMENT '频道头像',
-  `avatar_info` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT '' COMMENT '头像信息',
-  `description` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT '' COMMENT '频道介绍',
-  `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT '' COMMENT '频道密码',
-  `owner_uid` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '创建者UID',
-  `invite_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '邀请码',
-  `invite_status` tinyint(3) UNSIGNED NOT NULL DEFAULT 0 COMMENT '邀请状态 0:关闭 1:开启',
-  `allow_speak` tinyint(3) UNSIGNED NOT NULL DEFAULT 1 COMMENT '是否允许发言 0:不允许 1:允许',
-  `allow_comment` tinyint(3) UNSIGNED NOT NULL DEFAULT 1 COMMENT '是否允许评论 0:不允许 1:允许',
-  `member_count` int(11) NOT NULL DEFAULT 0 COMMENT '成员数',
-  `message_count` int(11) NOT NULL DEFAULT 0 COMMENT '消息数',  -- 添加这行
-  `create_time` bigint(20) NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` bigint(20) UNSIGNED NULL DEFAULT NULL COMMENT '更新时间',
-  PRIMARY KEY (`channel_id`) USING BTREE,
-  INDEX `idx_owner_uid`(`owner_uid`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = DYNAMIC;
-
--- 创建频道成员表
-CREATE TABLE `wb_channel_user`  (
-  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `channel_id` bigint(20) NOT NULL COMMENT '频道ID',
-  `uid` bigint(20) NOT NULL COMMENT '用户ID',
-  `role` tinyint(3) UNSIGNED NOT NULL DEFAULT 0 COMMENT '角色 0:普通成员 1:管理员 2:创建者',
-  `message_count` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '消息计数',
-  `join_time` bigint(20) NOT NULL DEFAULT 0 COMMENT '加入时间',
-  `leave_time` bigint(20) UNSIGNED NOT NULL DEFAULT 0 COMMENT '离开时间',
-  `update_time` bigint(20) UNSIGNED NOT NULL DEFAULT 0 COMMENT '更新时间',
-  PRIMARY KEY (`id`) USING BTREE,
-  INDEX `idx_channel_id`(`channel_id`) USING BTREE,
-  INDEX `idx_uid`(`uid`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = DYNAMIC;
-
--- 删除旧表（如果需要保留数据，请先备份）
-DROP TABLE IF EXISTS `wb_channel_message`;
-
--- 创建新表，与wb_message表结构保持一致
-CREATE TABLE `wb_channel_message`  (
-  `msg_id` mediumint(9) NOT NULL AUTO_INCREMENT,
-  `uid` mediumint(9) NOT NULL,
-  `channel_id` int(11) NOT NULL COMMENT '频道ID',
-  `contents` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
-  `repost` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL,
-  `refrom` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
-  `media` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
-  `media_info` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL,
-  `repostsum` int(11) NOT NULL DEFAULT 0,
-  `commentsum` int(11) NOT NULL DEFAULT 0,
-  `collectsum` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '收藏点赞数',
-  `topic_id` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '话题id',
-  `is_delete` tinyint(3) UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否删除0未删除，1已删除',
-  `ctime` int(11) NOT NULL,
-  PRIMARY KEY (`msg_id`) USING BTREE,
-  INDEX `idx_channel_id`(`channel_id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = DYNAMIC;
-
-CREATE TABLE `wb_channel_comment`  (
-  `cid` bigint(20) NOT NULL AUTO_INCREMENT,
-  `fromuid` bigint(20) NOT NULL,
-  `msg` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
-  `msg_id` bigint(20) NOT NULL,
-  `touid` mediumint(9) NULL DEFAULT NULL,
-  `ctime` int(11) NOT NULL,
-  `ctype` tinyint(4) NOT NULL DEFAULT 0 COMMENT '回复类型',
-  PRIMARY KEY (`cid`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = DYNAMIC;
-
-SET FOREIGN_KEY_CHECKS = 1;
