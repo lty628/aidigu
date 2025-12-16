@@ -7,7 +7,7 @@ use think\Db;
  * 表白墙控制器
  */
 
-class LoveWall extends Base
+class Lovewall extends Base
 {	
 	public function index()
     {
