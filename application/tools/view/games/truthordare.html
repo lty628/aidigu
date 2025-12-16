@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>真心话大冒险</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        h1 {
+            color: #e91e63;
+        }
+        .question-box {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: #333;
+        }
+        .buttons {
+            margin: 20px 0;
+        }
+        button {
+            background-color: #e91e63;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            margin: 0 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #c2185b;
+        }
+        .config-btn {
+            background-color: #2196F3;
+        }
+        .config-btn:hover {
+            background-color: #0b7dda;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 4px;
+            background-color: #e8f5e9;
+            color: #2e7d32;
+        }
+        /* 配置模态框样式 */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 8px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+        }
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .form-group textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            resize: vertical;
+            min-height: 100px;
+        }
+        .form-actions {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .form-actions button {
+            margin: 0 10px;
+        }
+        .save-btn {
+            background-color: #4CAF50;
+        }
+        .save-btn:hover {
+            background-color: #45a049;
+        }
+        .cancel-btn {
+            background-color: #f44336;
+        }
+        .cancel-btn:hover {
+            background-color: #da190b;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>真心话大冒险</h1>
+        <div class="question-box" id="questionBox">
+            点击下方按钮开始游戏
+        </div>
+        <div class="buttons">
+            <button onclick="getTruth()">真心话</button>
+            <button onclick="getDare()">大冒险</button>
+            <button class="config-btn" onclick="openConfig()">配置选项</button>
+        </div>
+        <div id="result" class="result" style="display:none;"></div>
+    </div>
+
+    <!-- 配置模态框 -->
+    <div id="configModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeConfig()">&times;</span>
+            <h2>配置真心话大冒险选项</h2>
+            <div class="form-group">
+                <label for="truths">真心话问题（每行一个）:</label>
+                <textarea id="truths" placeholder="请输入真心话问题，每行一个&#10;例如：&#10;你最近一次撒谎是什么时候？&#10;你最尴尬的经历是什么？&#10;..."></textarea>
+            </div>
+            <div class="form-group">
+                <label for="dares">大冒险任务（每行一个）:</label>
+                <textarea id="dares" placeholder="请输入大冒险任务，每行一个&#10;例如：&#10;大声唱一首歌&#10;做10个俯卧撑&#10;..."></textarea>
+            </div>
+            <div class="form-actions">
+                <button class="save-btn" onclick="saveConfig()">保存配置</button>
+                <button class="cancel-btn" onclick="closeConfig()">取消</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 默认真心话问题库
+        let truths = [
+            "你最近一次撒谎是什么时候？",
+            "你最尴尬的经历是什么？",
+            "如果你可以拥有任何超能力，你会选择什么？",
+            "你最害怕的事情是什么？",
+            "你最喜欢的童年记忆是什么？",
+            "如果你能成为任何人，你会选择谁？",
+            "你最大的秘密是什么？",
+            "你最想去哪里旅行？",
+            "你最讨厌的食物是什么？",
+            "你做过最疯狂的事情是什么？"
+        ];
+        
+        // 默认大冒险任务库
+        let dares = [
+            "大声唱一首歌",
+            "做10个俯卧撑",
+            "给你的朋友发一条奇怪的信息",
+            "模仿一位名人说话",
+            "用方言讲一个笑话",
+            "闭眼单脚站立30秒",
+            "向陌生人问好",
+            "做一个搞笑的表情并拍照",
+            "说出你最近做的梦",
+            "跳一段舞"
+        ];
+        
+        // 游戏标识符
+        const gameKey = 'truthordare';
+        
+        // 页面加载时尝试从服务器获取用户配置
+        window.onload = function() {
+            fetchUserConfig();
+        };
+        
+        // 从服务器获取用户配置（改为通用接口）
+        function fetchUserConfig() {
+            // 发送请求获取用户配置
+            fetch('/tools/games/getGameConfig?game_key=' + gameKey)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.code === 1 && data.data) {
+                        if (data.data.truths && data.data.truths.length > 0) {
+                            truths = data.data.truths;
+                        }
+                        if (data.data.dares && data.data.dares.length > 0) {
+                            dares = data.data.dares;
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error('获取配置失败:', error);
+                });
+        }
+        
+        function getRandomItem(arr) {
+            return arr[Math.floor(Math.random() * arr.length)];
+        }
+        
+        function getTruth() {
+            const question = getRandomItem(truths);
+            document.getElementById('questionBox').innerHTML = `<strong>真心话：</strong>${question}`;
+            document.getElementById('result').style.display = 'none';
+        }
+        
+        function getDare() {
+            const dare = getRandomItem(dares);
+            document.getElementById('questionBox').innerHTML = `<strong>大冒险：</strong>${dare}`;
+            document.getElementById('result').style.display = 'none';
+        }
+        
+        // 打开配置模态框
+        function openConfig() {
+            // 将当前配置填充到文本框中
+            document.getElementById('truths').value = truths.join('\n');
+            document.getElementById('dares').value = dares.join('\n');
+            
+            // 显示模态框
+            document.getElementById('configModal').style.display = 'block';
+        }
+        
+        // 关闭配置模态框
+        function closeConfig() {
+            document.getElementById('configModal').style.display = 'none';
+        }
+        
+        // 保存配置
+        function saveConfig() {
+            // 获取用户输入的内容
+            const truthsInput = document.getElementById('truths').value;
+            const daresInput = document.getElementById('dares').value;
+            
+            // 分割成数组并过滤空行
+            const newTruths = truthsInput.split('\n').filter(item => item.trim() !== '');
+            const newDares = daresInput.split('\n').filter(item => item.trim() !== '');
+            
+            // 检查是否有内容
+            if (newTruths.length === 0 || newDares.length === 0) {
+                alert('真心话和大冒险都至少需要一个选项！');
+                return;
+            }
+            
+            // 更新全局变量
+            truths = newTruths;
+            dares = newDares;
+            
+            // 保存到服务器（改为通用接口）
+            saveConfigToServer(newTruths, newDares);
+            
+            // 关闭模态框
+            closeConfig();
+        }
+        
+        // 保存配置到服务器（改为通用接口）
+        function saveConfigToServer(truths, dares) {
+            // 创建FormData对象
+            const formData = new FormData();
+            formData.append('game_key', gameKey);
+            formData.append('game_name', '真心话大冒险');
+            formData.append('game_desc', '真心话大冒险游戏配置');
+            // 构造配置数据对象
+            const configData = {
+                truths: truths,
+                dares: dares
+            };
+            formData.append('config_data', JSON.stringify(configData));
+            
+            // 发送请求保存配置
+            fetch('/tools/games/saveGameConfig', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.code === 1) {
+                    showMessage('配置已保存成功！', 'success');
+                } else {
+                    showMessage('保存失败：' + data.msg, 'error');
+                }
+            })
+            .catch(error => {
+                console.error('保存配置失败:', error);
+                showMessage('保存配置失败，请稍后重试', 'error');
+            });
+        }
+        
+        // 显示消息
+        function showMessage(message, type) {
+            const resultElement = document.getElementById('result');
+            resultElement.innerHTML = message;
+            resultElement.style.display = 'block';
+            
+            if (type === 'success') {
+                resultElement.style.backgroundColor = '#e8f5e9';
+                resultElement.style.color = '#2e7d32';
+            } else {
+                resultElement.style.backgroundColor = '#ffebee';
+                resultElement.style.color = '#c62828';
+            }
+            
+            // 3秒后隐藏消息
+            setTimeout(() => {
+                resultElement.style.display = 'none';
+            }, 3000);
+        }
+        
+        // 点击模态框外部关闭
+        window.onclick = function(event) {
+            const modal = document.getElementById('configModal');
+            if (event.target == modal) {
+                closeConfig();
+            }
+        }
+    </script>
+</body>
+</html>
