@@ -221,12 +221,49 @@
             const resultBox = document.getElementById('resultBox');
             const resultText = document.getElementById('resultText');
 
-            const side = ['左边', '右边'];
+            // 俏皮文案数组
+            const selfTexts = [
+                '恭喜你中奖啦！今天的单就由你来买咯~ 😊',
+                '哎呀，命运选中了你！钱包准备好，请客啦~ 🎉',
+                '缘分到了！今天的快乐由你买单，大家都会记住你的好~ 😘',
+                '天选之子就是你！今天的饭钱就靠你承包了~ 🍻',
+                '幸运儿出现！今天的账单归你所有，准备展现你的大方吧~ 💸'
+            ];
+            
+            const otherTexts = [
+                '左边',
+                '右边',
+                '对面',
+                '旁边',
+                '斜对面'
+            ];
+            
+            const countTexts = [
+                '第 <strong>${count}</strong> 位',
+                '第 <strong>${count}</strong> 个',
+                '那位 <strong>${count}</strong> 号选手',
+                '位置 <strong>${count}</strong> 的朋友',
+                '<strong>${count}</strong> 号幸运儿'
+            ];
+            
+            const actionTexts = [
+                '请客吃饭啦！',
+                '买单走一波~',
+                '准备掏钱包吧！',
+                '今天的单由你包了！',
+                '轮到你展现绅士/淑女风范啦~'
+            ];
 
             if (winner == 1) {
-                resultText.innerHTML = `你自己买单`;
+                // 自己买单
+                const randomSelfText = selfTexts[Math.floor(Math.random() * selfTexts.length)];
+                resultText.innerHTML = randomSelfText;
             } else {
-                resultText.innerHTML = side[Math.floor(winner / 2)] + `第 <strong>${winner}</strong> 个人买单！`;
+                // 别人买单
+                const randomOtherText = otherTexts[Math.floor(Math.random() * otherTexts.length)];
+                const randomCountText = countTexts[Math.floor(Math.random() * countTexts.length)].replace('${count}', winner);
+                const randomActionText = actionTexts[Math.floor(Math.random() * actionTexts.length)];
+                resultText.innerHTML = `${randomOtherText} ${randomCountText} ${randomActionText}`;
             }
             
             resultBox.style.display = 'flex';
