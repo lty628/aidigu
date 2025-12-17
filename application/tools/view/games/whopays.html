@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>谁买单</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 1000px;
+            width: 100%;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #4a5568;
+            margin-bottom: 20px;
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .result-box {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin: 30px 0;
+            min-height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            line-height: 1.6;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .config-section {
+            margin-bottom: 25px;
+        }
+
+        .config-section label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #4a5568;
+        }
+
+        .config-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            background-color: #f7fafc;
+            transition: border-color 0.3s ease;
+        }
+
+        .config-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .buttons {
+            margin: 30px 0;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .result {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2000;
+            padding: 15px 20px;
+            border-radius: 8px;
+            background-color: #e6fffa;
+            color: #2b6cb0;
+            font-weight: 600;
+            display: none;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            max-width: 90%;
+            text-align: center;
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .back-btn:hover {
+            transform: translateX(-5px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            button {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="container">
+            <a href="{:url('games/index')}" class="back-btn">
+                ← 返回游戏中心
+            </a>
+            <h1>谁买单</h1>
+            
+            <div class="config-section">
+                <label for="peopleCount">参与人数：</label>
+                <input type="number" id="peopleCount" class="config-input" min="1" max="100" placeholder="请输入参与人数">
+            </div>
+            
+            <div class="buttons">
+                <button onclick="whoPays()">确定</button>
+            </div>
+            
+            <div class="result-box" id="resultBox">
+                <span id="resultText">点击确定按钮开始游戏</span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="result" id="result"></div>
+
+    <script>
+        // 谁买单游戏主函数
+        function whoPays() {
+            // 获取用户输入的人数
+            const peopleCountInput = document.getElementById('peopleCount');
+            const peopleCount = parseInt(peopleCountInput.value);
+            
+            // 验证输入
+            if (isNaN(peopleCount) || peopleCount < 1) {
+                showMessage('请输入有效的参与人数（至少1人）', 'error');
+                return;
+            }
+            
+            // 随机生成一个1到peopleCount之间的数字
+            const winner = Math.floor(Math.random() * peopleCount) + 1;
+            
+            // 显示结果
+            const resultBox = document.getElementById('resultBox');
+            const resultText = document.getElementById('resultText');
+
+            const side = ['左边', '右边'];
+
+            if (winner == 1) {
+                resultText.innerHTML = `你自己买单`;
+            } else {
+                resultText.innerHTML = side[Math.floor(winner / 2)] + `第 <strong>${winner}</strong> 个人买单！`;
+            }
+            
+            resultBox.style.display = 'flex';
+            
+            // 显示成功消息
+            showMessage('结果已生成', 'success');
+        }
+        
+        // 显示消息
+        function showMessage(message, type) {
+            const resultElement = document.getElementById('result');
+            resultElement.innerHTML = message;
+            resultElement.style.display = 'block';
+            
+            if (type === 'success') {
+                resultElement.style.backgroundColor = '#e6fffa';
+                resultElement.style.color = '#2b6cb0';
+            } else {
+                resultElement.style.backgroundColor = '#fed7d7';
+                resultElement.style.color = '#c53030';
+            }
+            
+            // 3秒后隐藏消息
+            setTimeout(() => {
+                resultElement.style.display = 'none';
+            }, 3000);
+        }
+    </script>
+</body>
+
+</html>

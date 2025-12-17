@@ -37,6 +37,11 @@ class Games extends Base
         
         return $this->fetch('game');
     }
+
+    public function whopays()
+    {
+        return $this->fetch('whopays');
+    }
     
     /**
      * 真心话大冒险游戏页面（保持兼容性）
