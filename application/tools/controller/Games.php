@@ -164,7 +164,7 @@ class Games extends Base
                 'game_name' => $gameName ?: $gameKey,
                 'game_key' => $gameKey,
                 'game_desc' => $gameDesc ?: $gameName ?: $gameKey,
-                'config_data' => json_encode($configData, JSON_UNESCAPED_UNICODE),
+                'config_data' => $configData,
                 'config_type' => 2, // 用户自定义
                 'uid' => $uid,
                 'status' => 1
@@ -221,7 +221,7 @@ class Games extends Base
             $gameConfig->config_name = $configName;
             $gameConfig->game_name = $gameName ?: $gameConfig->game_key;
             $gameConfig->game_desc = $gameDesc ?: $gameName ?: $gameConfig->game_key;
-            $gameConfig->config_data = json_encode($configData, JSON_UNESCAPED_UNICODE);
+            $gameConfig->config_data = $configData;
             $gameConfig->save();
             
             return json(['code' => 1, 'msg' => '配置更新成功']);
@@ -297,7 +297,7 @@ class Games extends Base
             
             if ($gameConfig) {
                 // 更新配置
-                $gameConfig->config_data = json_encode($configData, JSON_UNESCAPED_UNICODE);
+                $gameConfig->config_data = $configData;
                 $gameConfig->config_type = 2; // 用户自定义
                 $gameConfig->status = 1;
                 $gameConfig->save();
@@ -307,7 +307,7 @@ class Games extends Base
                     'game_name' => $gameName ?: $gameKey,
                     'game_key' => $gameKey,
                     'game_desc' => $gameDesc ?: $gameName ?: $gameKey,
-                    'config_data' => json_encode($configData, JSON_UNESCAPED_UNICODE),
+                    'config_data' => $configData,
                     'config_type' => 2, // 用户自定义
                     'uid' => $uid,
                     'status' => 1

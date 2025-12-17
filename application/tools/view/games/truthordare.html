@@ -23,7 +23,7 @@
         }
 
         .container {
-            max-width: 600px;
+            max-width: 1000px;
             width: 100%;
             background: white;
             border-radius: 15px;
@@ -118,7 +118,14 @@
         }
 
         .result {
-            margin-top: 20px;
+            /* 改为固定定位，使其成为全局样式 */
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            /* 设置更高的 z-index，确保在模态框上方显示 */
+            z-index: 2000;
+            /* 保留原有的样式 */
             padding: 15px 20px;
             border-radius: 8px;
             background-color: #e6fffa;
@@ -126,6 +133,10 @@
             font-weight: 600;
             display: none;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            /* 添加最大宽度，防止在小屏幕上太宽 */
+            max-width: 90%;
+            /* 确保文本居中 */
+            text-align: center;
         }
 
         /* 配置模态框样式 */
@@ -338,163 +349,165 @@
                 gap: 15px;
             }
         }
-        .back-btn {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 1rem;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    transition: all 0.3s ease;
-    text-decoration: none;
-}
 
-.back-btn:hover {
-    transform: translateX(-5px);
-    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-}
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .back-btn:hover {
+            transform: translateX(-5px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
     </style>
 </head>
 
 <body>
     <div class="container">
         <div class="container">
-    <a href="{:url('games/index')}" class="back-btn">
-        ← 返回游戏中心
-    </a>
-    <!-- 页面其他内容保持不变 -->
-        <h1>真心话大冒险</h1>
-        <div class="config-section">
-            <label for="configSelect">选择配置：</label>
-            <select id="configSelect" class="config-select">
-                <option value="default">默认配置</option>
-                <!-- 其他配置项将通过JavaScript动态添加 -->
-            </select>
-        </div>
-        <div class="question-box" id="questionBox">
-            点击下方按钮开始游戏
-        </div>
-        
-        
-        
-        <div class="buttons">
-            <button onclick="getTruth()">真心话</button>
-            <button onclick="getDare()">大冒险</button>
-            <button class="config-btn" onclick="openConfig()">配置选项</button>
-        </div>
-        
-        <div id="result" class="result"></div>
-    </div>
-
-    <!-- 配置模态框 -->
-    <div id="configModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeConfig()">&times;</span>
-            <h2>配置真心话大冒险选项</h2>
-
-            <!-- 配置列表 -->
-            <div class="config-list" id="configList">
-                <h3>我的配置列表</h3>
-                <div id="configItems"></div>
-                <button class="save-btn" onclick="createNewConfig()" style="margin-top: 15px;">+ 新建配置</button>
+            <a href="{:url('games/index')}" class="back-btn">
+                ← 返回游戏中心
+            </a>
+            <!-- 页面其他内容保持不变 -->
+            <h1>真心话大冒险</h1>
+            <div class="config-section">
+                <label for="configSelect">选择配置：</label>
+                <select id="configSelect" class="config-select">
+                    <option value="default">默认配置</option>
+                    <!-- 其他配置项将通过JavaScript动态添加 -->
+                </select>
+            </div>
+            <div class="question-box" id="questionBox">
+                点击下方按钮开始游戏
             </div>
 
-            <!-- 配置编辑表单 -->
-            <div id="configForm" style="display: none;">
-                <input type="hidden" id="configId" value="">
-                <div class="form-group">
-                    <label for="configName">配置名称:</label>
-                    <input type="text" id="configName" placeholder="请输入配置名称">
+
+
+            <div class="buttons">
+                <button onclick="getTruth()">真心话</button>
+                <button onclick="getDare()">大冒险</button>
+                <button class="config-btn" onclick="openConfig()">配置选项</button>
+            </div>
+
+            <div id="result" class="result"></div>
+        </div>
+
+        <!-- 配置模态框 -->
+        <div id="configModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeConfig()">&times;</span>
+                <h2>配置真心话大冒险选项</h2>
+
+                <!-- 配置列表 -->
+                <div class="config-list" id="configList">
+                    <h3>我的配置列表</h3>
+                    <div id="configItems"></div>
+                    <button class="save-btn" onclick="createNewConfig()" style="margin-top: 15px;">+ 新建配置</button>
                 </div>
-                <div class="form-group">
-                    <label for="truths">真心话问题（每行一个）:</label>
-                    <textarea id="truths" 
-                        placeholder="请输入真心话问题，每行一个\n例如：\n你最近一次撒谎是什么时候？\n你最尴尬的经历是什么？\n..."></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="dares">大冒险任务（每行一个）:</label>
-                    <textarea id="dares" placeholder="请输入大冒险任务，每行一个\n例如：\n大声唱一首歌\n做10个俯卧撑\n..."></textarea>
-                </div>
-                <div class="form-actions">
-                    <button class="save-btn" onclick="saveConfig()">保存配置</button>
-                    <button class="cancel-btn" onclick="cancelEditConfig()">取消</button>
-                    <button class="delete-btn" onclick="deleteCurrentConfig()" id="deleteConfigBtn" style="display: none;">删除配置</button>
+
+                <!-- 配置编辑表单 -->
+                <div id="configForm" style="display: none;">
+                    <input type="hidden" id="configId" value="">
+                    <div class="form-group">
+                        <label for="configName">配置名称:</label>
+                        <input type="text" id="configName" placeholder="请输入配置名称(必填)">
+                    </div>
+                    <div class="form-group">
+                        <label for="truths">真心话问题（每行一个）:</label>
+                        <textarea id="truths"
+                            placeholder="请输入真心话问题，每行一个\n例如：\n你最近一次撒谎是什么时候？\n你最尴尬的经历是什么？\n..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="dares">大冒险任务（每行一个）:</label>
+                        <textarea id="dares" placeholder="请输入大冒险任务，每行一个\n例如：\n大声唱一首歌\n做10个俯卧撑\n..."></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button class="save-btn" onclick="saveConfig()">保存配置</button>
+                        <button class="cancel-btn" onclick="cancelEditConfig()">取消</button>
+                        <button class="delete-btn" onclick="deleteCurrentConfig()" id="deleteConfigBtn"
+                            style="display: none;">删除配置</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <script>
-        // 默认真心话问题库
-        let truths = [
-            "你最近一次撒谎是什么时候？",
-            "你最尴尬的经历是什么？",
-            "如果你可以拥有任何超能力，你会选择什么？",
-            "你最害怕的事情是什么？",
-            "你最喜欢的童年记忆是什么？",
-            "如果你能成为任何人，你会选择谁？",
-            "你最大的秘密是什么？",
-            "你最想去哪里旅行？",
-            "你最讨厌的食物是什么？",
-            "你做过最疯狂的事情是什么？"
-        ];
+        <script>
+            // 默认真心话问题库
+            let truths = [
+                "你最近一次撒谎是什么时候？",
+                "你最尴尬的经历是什么？",
+                "如果你可以拥有任何超能力，你会选择什么？",
+                "你最害怕的事情是什么？",
+                "你最喜欢的童年记忆是什么？",
+                "如果你能成为任何人，你会选择谁？",
+                "你最大的秘密是什么？",
+                "你最想去哪里旅行？",
+                "你最讨厌的食物是什么？",
+                "你做过最疯狂的事情是什么？"
+            ];
 
-        // 默认大冒险任务库
-        let dares = [
-            "大声唱一首歌",
-            "做10个俯卧撑",
-            "给你的朋友发一条奇怪的信息",
-            "模仿一位名人说话",
-            "用方言讲一个笑话",
-            "闭眼单脚站立30秒",
-            "向陌生人问好",
-            "做一个搞笑的表情并拍照",
-            "说出你最近做的梦",
-            "跳一段舞"
-        ];
+            // 默认大冒险任务库
+            let dares = [
+                "大声唱一首歌",
+                "做10个俯卧撑",
+                "给你的朋友发一条奇怪的信息",
+                "模仿一位名人说话",
+                "用方言讲一个笑话",
+                "闭眼单脚站立30秒",
+                "向陌生人问好",
+                "做一个搞笑的表情并拍照",
+                "说出你最近做的梦",
+                "跳一段舞"
+            ];
 
-        // 当前配置ID
-        let currentConfigId = null;
+            // 当前配置ID
+            let currentConfigId = null;
 
-        // 游戏标识符
-        const gameKey = 'truthordare';
+            // 游戏标识符
+            const gameKey = 'truthordare';
 
-        // 页面加载时尝试从服务器获取用户配置
-        window.onload = function () {
-            fetchUserConfigs(); // 获取配置列表
-        };
+            // 页面加载时尝试从服务器获取用户配置
+            window.onload = function () {
+                fetchUserConfigs(); // 获取配置列表
+            };
 
-        // 获取用户的所有配置列表
-        function fetchUserConfigs() {
-            fetch('/tools/games/getUserGameConfigs?game_key=' + gameKey)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.code === 1 && data.data) {
-                        renderConfigList(data.data);
-                        updateConfigSelect(data.data); // 更新配置选择下拉菜单
-                    }
-                })
-                .catch(error => {
-                    console.error('获取配置列表失败:', error);
-                });
-        }
+            // 获取用户的所有配置列表
+            function fetchUserConfigs() {
+                fetch('/tools/games/getUserGameConfigs?game_key=' + gameKey)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.code === 1 && data.data) {
+                            renderConfigList(data.data);
+                            updateConfigSelect(data.data); // 更新配置选择下拉菜单
+                        }
+                    })
+                    .catch(error => {
+                        console.error('获取配置列表失败:', error);
+                    });
+            }
 
-        // 渲染配置列表
-        function renderConfigList(configs) {
-            const container = document.getElementById('configItems');
-            container.innerHTML = '';
+            // 渲染配置列表
+            function renderConfigList(configs) {
+                const container = document.getElementById('configItems');
+                container.innerHTML = '';
 
-            // 添加默认配置项
-            const defaultConfigItem = document.createElement('div');
-            defaultConfigItem.className = 'config-item';
-            defaultConfigItem.innerHTML = `
+                // 添加默认配置项
+                const defaultConfigItem = document.createElement('div');
+                defaultConfigItem.className = 'config-item';
+                defaultConfigItem.innerHTML = `
                 <div class="config-info">
                     <strong>默认配置</strong><br>
                     <small>系统内置配置</small>
@@ -503,14 +516,14 @@
                     <button class="switch-btn" onclick="switchToConfig('default')">切换</button>
                 </div>
             `;
-            container.appendChild(defaultConfigItem);
+                container.appendChild(defaultConfigItem);
 
-            // 添加用户自定义配置项
-            if (configs.length > 0) {
-                configs.forEach(config => {
-                    const configItem = document.createElement('div');
-                    configItem.className = 'config-item';
-                    configItem.innerHTML = `
+                // 添加用户自定义配置项
+                if (configs.length > 0) {
+                    configs.forEach(config => {
+                        const configItem = document.createElement('div');
+                        configItem.className = 'config-item';
+                        configItem.innerHTML = `
                         <div class="config-info">
                             <strong>${config.config_name}</strong><br>
                             <small>创建于: ${config.created_at}</small>
@@ -521,356 +534,365 @@
                             <button class="delete-config-btn" onclick="deleteConfig(${config.id})">删除</button>
                         </div>
                     `;
-                    container.appendChild(configItem);
-                });
-            } else {
-                container.innerHTML += '<p style="margin-top: 10px; color: #718096;">暂无自定义配置</p>';
-            }
-        }
-
-        // 更新配置选择下拉菜单
-        function updateConfigSelect(configs) {
-            const select = document.getElementById('configSelect');
-
-            // 清空除默认配置外的所有选项
-            while (select.length > 1) {
-                select.remove(1);
+                        container.appendChild(configItem);
+                    });
+                } else {
+                    container.innerHTML += '<p style="margin-top: 10px; color: #718096;">暂无自定义配置</p>';
+                }
             }
 
-            // 添加用户自定义配置
-            if (configs.length > 0) {
-                configs.forEach(config => {
-                    const option = document.createElement('option');
-                    option.value = config.id;
-                    option.textContent = config.config_name;
-                    select.appendChild(option);
-                });
+            // 更新配置选择下拉菜单
+            function updateConfigSelect(configs) {
+                const select = document.getElementById('configSelect');
+
+                // 清空除默认配置外的所有选项
+                while (select.length > 1) {
+                    select.remove(1);
+                }
+
+                // 添加用户自定义配置
+                if (configs.length > 0) {
+                    configs.forEach(config => {
+                        const option = document.createElement('option');
+                        option.value = config.id;
+                        option.textContent = config.config_name;
+                        select.appendChild(option);
+                    });
+                }
+
+                // 添加事件监听器
+                select.onchange = function () {
+                    switchToConfig(this.value);
+                };
             }
 
-            // 添加事件监听器
-            select.onchange = function () {
-                switchToConfig(this.value);
-            };
-        }
-
-        // 获取随机项
-        function getRandomItem(arr) {
-            return arr[Math.floor(Math.random() * arr.length)];
-        }
-
-        // 获取真心话
-        function getTruth() {
-            const question = getRandomItem(truths);
-            document.getElementById('questionBox').innerHTML = `<strong>真心话：</strong>${question}`;
-            document.getElementById('result').style.display = 'none';
-        }
-
-        // 获取大冒险
-        function getDare() {
-            const dare = getRandomItem(dares);
-            document.getElementById('questionBox').innerHTML = `<strong>大冒险：</strong>${dare}`;
-            document.getElementById('result').style.display = 'none';
-        }
-
-        // 打开配置模态框
-        function openConfig() {
-            // 显示配置列表
-            document.getElementById('configList').style.display = 'block';
-            document.getElementById('configForm').style.display = 'none';
-
-            // 获取最新的配置列表
-            fetchUserConfigs();
-
-            // 显示模态框
-            document.getElementById('configModal').style.display = 'block';
-        }
-
-        // 关闭配置模态框
-        function closeConfig() {
-            document.getElementById('configModal').style.display = 'none';
-        }
-
-        // 新建配置
-        function createNewConfig() {
-            // 隐藏配置列表，显示表单
-            document.getElementById('configList').style.display = 'none';
-            document.getElementById('configForm').style.display = 'block';
-
-            // 清空表单
-            document.getElementById('configId').value = '';
-            document.getElementById('configName').value = '';
-            document.getElementById('truths').value = truths.join('\n');
-            document.getElementById('dares').value = dares.join('\n');
-
-            // 隐藏删除按钮
-            document.getElementById('deleteConfigBtn').style.display = 'none';
-        }
-
-        // 编辑配置
-        function editConfig(configId) {
-            // 获取配置详情
-            fetch('/tools/games/getGameConfigById?id=' + configId)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.code === 1 && data.data) {
-                        // 隐藏配置列表，显示表单
-                        document.getElementById('configList').style.display = 'none';
-                        document.getElementById('configForm').style.display = 'block';
-
-                        // 填充表单
-                        document.getElementById('configId').value = configId;
-                        document.getElementById('configName').value = data.data.config_name;
-                        document.getElementById('truths').value = data.data.config_data.truths.join('\n');
-                        document.getElementById('dares').value = data.data.config_data.dares.join('\n');
-
-                        // 显示删除按钮
-                        document.getElementById('deleteConfigBtn').style.display = 'inline-block';
-                    }
-                })
-                .catch(error => {
-                    console.error('获取配置详情失败:', error);
-                    showMessage('获取配置详情失败，请稍后重试', 'error');
-                });
-        }
-
-        // 取消编辑配置
-        function cancelEditConfig() {
-            // 显示配置列表，隐藏表单
-            document.getElementById('configList').style.display = 'block';
-            document.getElementById('configForm').style.display = 'none';
-        }
-
-        // 保存配置
-        function saveConfig() {
-            // 获取用户输入的内容
-            const configId = document.getElementById('configId').value;
-            const configName = document.getElementById('configName').value.trim();
-            const truthsInput = document.getElementById('truths').value;
-            const daresInput = document.getElementById('dares').value;
-
-            // 检查配置名称
-            if (!configName) {
-                showMessage('请输入配置名称！', 'error');
-                return;
+            // 获取随机项
+            function getRandomItem(arr) {
+                return arr[Math.floor(Math.random() * arr.length)];
             }
 
-            // 分割成数组并过滤空行
-            const newTruths = truthsInput.split('\n').filter(item => item.trim() !== '');
-            const newDares = daresInput.split('\n').filter(item => item.trim() !== '');
-
-            // 检查是否有内容
-            if (newTruths.length === 0 || newDares.length === 0) {
-                showMessage('真心话和大冒险都至少需要一个选项！', 'error');
-                return;
+            // 获取真心话
+            function getTruth() {
+                const question = getRandomItem(truths);
+                document.getElementById('questionBox').innerHTML = `<strong>真心话：</strong>${question}`;
+                document.getElementById('result').style.display = 'none';
             }
 
-            // 保存到服务器
-            if (configId) {
-                // 更新现有配置
-                updateConfigToServer(configId, configName, newTruths, newDares);
-            } else {
-                // 保存新配置
-                saveNewConfigToServer(configName, newTruths, newDares);
+            // 获取大冒险
+            function getDare() {
+                const dare = getRandomItem(dares);
+                document.getElementById('questionBox').innerHTML = `<strong>大冒险：</strong>${dare}`;
+                document.getElementById('result').style.display = 'none';
             }
-        }
 
-        // 保存新配置到服务器
-        function saveNewConfigToServer(configName, truths, dares) {
-            // 创建FormData对象
-            const formData = new FormData();
-            formData.append('game_key', gameKey);
-            formData.append('config_name', configName);
-            formData.append('game_name', '真心话大冒险');
-            formData.append('game_desc', '真心话大冒险游戏配置');
-            // 构造配置数据对象
-            const configData = {
-                truths: truths,
-                dares: dares
-            };
-            formData.append('config_data', JSON.stringify(configData));
+            // 打开配置模态框
+            function openConfig() {
+                // 显示配置列表
+                document.getElementById('configList').style.display = 'block';
+                document.getElementById('configForm').style.display = 'none';
 
-            // 发送请求保存配置
-            fetch('/tools/games/saveNamedGameConfig', {
-                method: 'POST',
-                body: formData
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.code === 1) {
-                        showMessage('配置已保存成功！', 'success');
-                        // 刷新配置列表
-                        fetchUserConfigs();
-                        // 返回配置列表视图
-                        cancelEditConfig();
-                    } else {
-                        showMessage('保存失败：' + data.msg, 'error');
-                    }
-                })
-                .catch(error => {
-                    console.error('保存配置失败:', error);
-                    showMessage('保存配置失败，请稍后重试', 'error');
-                });
-        }
+                // 获取最新的配置列表
+                fetchUserConfigs();
 
-        // 更新配置到服务器
-        function updateConfigToServer(configId, configName, truths, dares) {
-            // 创建FormData对象
-            const formData = new FormData();
-            formData.append('id', configId);
-            formData.append('config_name', configName);
-            formData.append('game_name', '真心话大冒险');
-            formData.append('game_desc', '真心话大冒险游戏配置');
-            // 构造配置数据对象
-            const configData = {
-                truths: truths,
-                dares: dares
-            };
-            formData.append('config_data', JSON.stringify(configData));
+                // 显示模态框
+                document.getElementById('configModal').style.display = 'block';
+            }
 
-            // 发送请求更新配置
-            fetch('/tools/games/updateGameConfig', {
-                method: 'POST',
-                body: formData
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.code === 1) {
-                        showMessage('配置已更新成功！', 'success');
-                        // 刷新配置列表
-                        fetchUserConfigs();
-                        // 返回配置列表视图
-                        cancelEditConfig();
-                    } else {
-                        showMessage('更新失败：' + data.msg, 'error');
-                    }
-                })
-                .catch(error => {
-                    console.error('更新配置失败:', error);
-                    showMessage('更新配置失败，请稍后重试', 'error');
-                });
-        }
+            // 关闭配置模态框
+            function closeConfig() {
+                document.getElementById('configModal').style.display = 'none';
+            }
 
-        // 切换到指定配置
-        function switchToConfig(configId) {
-            if (configId === 'default') {
-                // 切换到默认配置
-                truths = [
-                    "你最近一次撒谎是什么时候？",
-                    "你最尴尬的经历是什么？",
-                    "如果你可以拥有任何超能力，你会选择什么？",
-                    "你最害怕的事情是什么？",
-                    "你最喜欢的童年记忆是什么？",
-                    "如果你能成为任何人，你会选择谁？",
-                    "你最大的秘密是什么？",
-                    "你最想去哪里旅行？",
-                    "你最讨厌的食物是什么？",
-                    "你做过最疯狂的事情是什么？"
-                ];
+            // 新建配置
+            function createNewConfig() {
+                // 隐藏配置列表，显示表单
+                document.getElementById('configList').style.display = 'none';
+                document.getElementById('configForm').style.display = 'block';
 
-                dares = [
-                    "大声唱一首歌",
-                    "做10个俯卧撑",
-                    "给你的朋友发一条奇怪的信息",
-                    "模仿一位名人说话",
-                    "用方言讲一个笑话",
-                    "闭眼单脚站立30秒",
-                    "向陌生人问好",
-                    "做一个搞笑的表情并拍照",
-                    "说出你最近做的梦",
-                    "跳一段舞"
-                ];
+                // 清空表单
+                document.getElementById('configId').value = '';
+                document.getElementById('configName').value = '新配置';
+                document.getElementById('truths').value = truths.join('\n');
+                document.getElementById('dares').value = dares.join('\n');
 
-                showMessage('已切换到默认配置', 'success');
-                // 更新下拉菜单选择
-                document.getElementById('configSelect').value = 'default';
-            } else {
-                // 切换到用户自定义配置
+                // 隐藏删除按钮
+                document.getElementById('deleteConfigBtn').style.display = 'none';
+            }
+
+            function editConfig(configId) {
+                // 获取配置详情
                 fetch('/tools/games/getGameConfigById?id=' + configId)
                     .then(response => response.json())
                     .then(data => {
                         if (data.code === 1 && data.data) {
-                            if (data.data.config_data.truths && data.data.config_data.truths.length > 0) {
-                                truths = data.data.config_data.truths;
-                            }
-                            if (data.data.config_data.dares && data.data.config_data.dares.length > 0) {
-                                dares = data.data.config_data.dares;
-                            }
-                            showMessage('已切换到配置：' + data.data.config_name, 'success');
-                            // 更新下拉菜单选择
-                            document.getElementById('configSelect').value = configId;
+                            // 隐藏配置列表，显示表单
+                            document.getElementById('configList').style.display = 'none';
+                            document.getElementById('configForm').style.display = 'block';
+
+                            // 填充表单
+                            document.getElementById('configId').value = configId;
+                            document.getElementById('configName').value = data.data.config_name || '';
+                            // 修复：直接访问data.data而不是data.data.config_data
+                            document.getElementById('truths').value = (Array.isArray(data.data.truths) ? data.data.truths : []).join('\n');
+                            document.getElementById('dares').value = (Array.isArray(data.data.dares) ? data.data.dares : []).join('\n');
+
+                            // 显示删除按钮
+                            document.getElementById('deleteConfigBtn').style.display = 'inline-block';
+                        } else {
+                            showMessage('配置不存在或已失效', 'error');
                         }
                     })
                     .catch(error => {
-                        console.error('切换配置失败:', error);
-                        showMessage('切换配置失败，请稍后重试', 'error');
+                        console.error('获取配置详情失败:', error);
+                        showMessage('获取配置详情失败，请稍后重试', 'error');
                     });
             }
-        }
 
-        // 删除当前编辑的配置
-        function deleteCurrentConfig() {
-            const configId = document.getElementById('configId').value;
-            if (configId && confirm('确定要删除这个配置吗？')) {
-                deleteConfig(configId);
-            }
-        }
-
-        // 删除配置
-        function deleteConfig(configId) {
-            if (!confirm('确定要删除这个配置吗？')) {
-                return;
+            // 取消编辑配置
+            function cancelEditConfig() {
+                // 显示配置列表，隐藏表单
+                document.getElementById('configList').style.display = 'block';
+                document.getElementById('configForm').style.display = 'none';
             }
 
-            // 发送请求删除配置
-            fetch('/tools/games/deleteNamedGameConfig?id=' + configId)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.code === 1) {
-                        showMessage('配置已删除成功！', 'success');
-                        // 刷新配置列表
-                        fetchUserConfigs();
-                        // 如果正在编辑被删除的配置，则返回列表视图
-                        if (document.getElementById('configId').value == configId) {
-                            cancelEditConfig();
-                        }
-                    } else {
-                        showMessage('删除失败：' + data.msg, 'error');
-                    }
+            // 保存配置
+            function saveConfig() {
+                // 获取用户输入的内容
+                const configId = document.getElementById('configId').value;
+                const configName = document.getElementById('configName').value.trim();
+                const truthsInput = document.getElementById('truths').value;
+                const daresInput = document.getElementById('dares').value;
+
+                // 检查配置名称
+                if (!configName) {
+                    showMessage('请输入配置名称！', 'error');
+                    return;
+                }
+
+                // 分割成数组并过滤空行
+                const newTruths = truthsInput.split('\n').filter(item => item.trim() !== '');
+                const newDares = daresInput.split('\n').filter(item => item.trim() !== '');
+
+                // 检查是否有内容
+                if (newTruths.length === 0 || newDares.length === 0) {
+                    showMessage('真心话和大冒险都至少需要一个选项！', 'error');
+                    return;
+                }
+
+                // 保存到服务器
+                if (configId) {
+                    // 更新现有配置
+                    updateConfigToServer(configId, configName, newTruths, newDares);
+                } else {
+                    // 保存新配置
+                    saveNewConfigToServer(configName, newTruths, newDares);
+                }
+            }
+
+            // 保存新配置到服务器
+            function saveNewConfigToServer(configName, truths, dares) {
+                // 创建FormData对象
+                const formData = new FormData();
+                formData.append('game_key', gameKey);
+                formData.append('config_name', configName);
+                formData.append('game_name', '真心话大冒险');
+                formData.append('game_desc', '真心话大冒险游戏配置');
+                // 构造配置数据对象
+                const configData = {
+                    truths: truths,
+                    dares: dares
+                };
+                formData.append('config_data', JSON.stringify(configData));
+
+                // 发送请求保存配置
+                fetch('/tools/games/saveNamedGameConfig', {
+                    method: 'POST',
+                    body: formData
                 })
-                .catch(error => {
-                    console.error('删除配置失败:', error);
-                    showMessage('删除配置失败，请稍后重试', 'error');
-                });
-        }
-
-        // 显示消息
-        function showMessage(message, type) {
-            const resultElement = document.getElementById('result');
-            resultElement.innerHTML = message;
-            resultElement.style.display = 'block';
-
-            if (type === 'success') {
-                resultElement.style.backgroundColor = '#e6fffa';
-                resultElement.style.color = '#2b6cb0';
-            } else {
-                resultElement.style.backgroundColor = '#fed7d7';
-                resultElement.style.color = '#c53030';
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.code === 1) {
+                            showMessage('配置已保存成功！', 'success');
+                            // 刷新配置列表
+                            fetchUserConfigs();
+                            // 返回配置列表视图
+                            cancelEditConfig();
+                        } else {
+                            showMessage('保存失败：' + data.msg, 'error');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('保存配置失败:', error);
+                        showMessage('保存配置失败，请稍后重试', 'error');
+                    });
             }
 
-            // 3秒后隐藏消息
-            setTimeout(() => {
-                resultElement.style.display = 'none';
-            }, 3000);
-        }
+            // 更新配置到服务器
+            function updateConfigToServer(configId, configName, truths, dares) {
+                // 创建FormData对象
+                const formData = new FormData();
+                formData.append('id', configId);
+                formData.append('config_name', configName);
+                formData.append('game_name', '真心话大冒险');
+                formData.append('game_desc', '真心话大冒险游戏配置');
+                // 构造配置数据对象
+                const configData = {
+                    truths: truths,
+                    dares: dares
+                };
+                formData.append('config_data', JSON.stringify(configData));
 
-        // 点击模态框外部关闭
-        window.onclick = function (event) {
-            const modal = document.getElementById('configModal');
-            if (event.target == modal) {
-                closeConfig();
+                // 发送请求更新配置
+                fetch('/tools/games/updateGameConfig', {
+                    method: 'POST',
+                    body: formData
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.code === 1) {
+                            showMessage('配置已更新成功！', 'success');
+                            // 刷新配置列表
+                            fetchUserConfigs();
+                            // 返回配置列表视图
+                            cancelEditConfig();
+                        } else {
+                            showMessage('更新失败：' + data.msg, 'error');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('更新配置失败:', error);
+                        showMessage('更新配置失败，请稍后重试', 'error');
+                    });
             }
-        }
-    </script>
+
+            // 切换到指定配置
+            function switchToConfig(configId) {
+                if (configId === 'default') {
+                    // 切换到默认配置
+                    truths = [
+                        "你最近一次撒谎是什么时候？",
+                        "你最尴尬的经历是什么？",
+                        "如果你可以拥有任何超能力，你会选择什么？",
+                        "你最害怕的事情是什么？",
+                        "你最喜欢的童年记忆是什么？",
+                        "如果你能成为任何人，你会选择谁？",
+                        "你最大的秘密是什么？",
+                        "你最想去哪里旅行？",
+                        "你最讨厌的食物是什么？",
+                        "你做过最疯狂的事情是什么？"
+                    ];
+
+                    dares = [
+                        "大声唱一首歌",
+                        "做10个俯卧撑",
+                        "给你的朋友发一条奇怪的信息",
+                        "模仿一位名人说话",
+                        "用方言讲一个笑话",
+                        "闭眼单脚站立30秒",
+                        "向陌生人问好",
+                        "做一个搞笑的表情并拍照",
+                        "说出你最近做的梦",
+                        "跳一段舞"
+                    ];
+
+                    showMessage('已切换到默认配置', 'success');
+                    // 更新下拉菜单选择
+                    document.getElementById('configSelect').value = 'default';
+                } else {
+                    // 切换到用户自定义配置
+                    fetch('/tools/games/getGameConfigById?id=' + configId)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.code === 1 && data.data) {
+                                // 修复：直接访问data.data而不是data.data.config_data
+                                if (Array.isArray(data.data.truths) && data.data.truths.length > 0) {
+                                    truths = data.data.truths;
+                                } else {
+                                    truths = [];
+                                }
+                                if (Array.isArray(data.data.dares) && data.data.dares.length > 0) {
+                                    dares = data.data.dares;
+                                } else {
+                                    dares = [];
+                                }
+                                showMessage('已切换到配置：' + (data.data.config_name || '自定义配置'), 'success');
+                                // 更新下拉菜单选择
+                                document.getElementById('configSelect').value = configId;
+                            } else {
+                                showMessage('配置不存在或已失效', 'error');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('切换配置失败:', error);
+                            showMessage('切换配置失败，请稍后重试', 'error');
+                        });
+                }
+            }
+
+            // 删除当前编辑的配置
+            function deleteCurrentConfig() {
+                const configId = document.getElementById('configId').value;
+                if (configId) {
+                    deleteConfig(configId);
+                }
+            }
+
+            // 删除配置
+            function deleteConfig(configId) {
+                if (!confirm('确定要删除这个配置吗？')) {
+                    return;
+                }
+
+                // 发送请求删除配置
+                fetch('/tools/games/deleteNamedGameConfig?id=' + configId)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.code === 1) {
+                            showMessage('配置已删除成功！', 'success');
+                            // 刷新配置列表
+                            fetchUserConfigs();
+                            // 如果正在编辑被删除的配置，则返回列表视图
+                            if (document.getElementById('configId').value == configId) {
+                                cancelEditConfig();
+                            }
+                        } else {
+                            showMessage('删除失败：' + data.msg, 'error');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('删除配置失败:', error);
+                        showMessage('删除配置失败，请稍后重试', 'error');
+                    });
+            }
+
+            // 显示消息
+            function showMessage(message, type) {
+                const resultElement = document.getElementById('result');
+                resultElement.innerHTML = message;
+                resultElement.style.display = 'block';
+
+                if (type === 'success') {
+                    resultElement.style.backgroundColor = '#e6fffa';
+                    resultElement.style.color = '#2b6cb0';
+                } else {
+                    resultElement.style.backgroundColor = '#fed7d7';
+                    resultElement.style.color = '#c53030';
+                }
+
+                // 3秒后隐藏消息
+                setTimeout(() => {
+                    resultElement.style.display = 'none';
+                }, 3000);
+            }
+
+            // 点击模态框外部关闭
+            window.onclick = function (event) {
+                const modal = document.getElementById('configModal');
+                if (event.target == modal) {
+                    closeConfig();
+                }
+            }
+        </script>
 </body>
 
 </html>
