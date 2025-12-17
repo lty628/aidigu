@@ -49,6 +49,32 @@ class Games extends Base
     }
     
     /**
+     * 飞行棋游戏页面
+     */
+    public function airplanegame()
+    {
+        // 获取当前用户ID（假设从session中获取）
+        $uid = getLoginUid();
+        
+        // 获取飞行棋游戏的配置
+        $gameConfig = GameConfig::getConfigByGameKey('airplanegame', $uid);
+        
+        // 如果有配置，解析配置数据
+        if ($gameConfig) {
+            $configData = $gameConfig->config_data_array;
+            $this->assign('players', isset($configData['players']) ? json_encode($configData['players']) : '[]');
+            $this->assign('levels', isset($configData['levels']) ? $configData['levels'] : 3);
+        } else {
+            // 默认配置：2人游戏，3个关卡，4个玩家名称
+            $defaultPlayers = ["玩家1", "玩家2", "玩家3", "玩家4"];
+            $this->assign('players', json_encode($defaultPlayers));
+            $this->assign('levels', 3);
+        }
+        
+        return $this->fetch();
+    }
+    
+    /**
      * 真心话大冒险游戏页面（保持兼容性）
      */
     public function truthordare()
