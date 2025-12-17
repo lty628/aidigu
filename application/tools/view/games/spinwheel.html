@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>大转盘游戏</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 1000px;
+            width: 100%;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #4a5568;
+            margin-bottom: 20px;
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .wheel-container {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            margin: 0 auto 30px;
+        }
+
+        .wheel {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            position: relative;
+            overflow: hidden;
+            transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            border: 5px solid #fff;
+        }
+
+        .segment {
+            position: absolute;
+            width: 50%;
+            height: 50%;
+            transform-origin: bottom right;
+            left: 0;
+            top: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .segment-content {
+            transform: rotate(45deg);
+            width: 140px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 14px;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            margin-left: -40px;
+            margin-top: 20px;
+        }
+
+        .pointer {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 40px;
+            background: #ff4757;
+            clip-path: polygon(50% 100%, 0 0, 100% 0);
+            z-index: 10;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .center-circle {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 60px;
+            background: #fff;
+            border-radius: 50%;
+            z-index: 5;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .result-box {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin: 30px 0;
+            min-height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            line-height: 1.6;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .config-section {
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        .config-section label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #4a5568;
+        }
+
+        .config-select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            background-color: #f7fafc;
+            transition: border-color 0.3s ease;
+        }
+
+        .config-select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .buttons {
+            margin: 30px 0;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .config-btn {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .result {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2000;
+            padding: 15px 20px;
+            border-radius: 8px;
+            background-color: #e6fffa;
+            color: #2b6cb0;
+            font-weight: 600;
+            display: none;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            max-width: 90%;
+            text-align: center;
+        }
+
+        /* 配置模态框样式 */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 3% auto;
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 700px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.2);
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #4a5568;
+        }
+
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            background-color: #f7fafc;
+            transition: border-color 0.3s ease;
+            min-height: 150px;
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .save-btn {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+        }
+
+        .cancel-btn {
+            background: linear-gradient(135deg, #a0aec0 0%, #718096 100%);
+        }
+
+        .delete-btn {
+            background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
+        }
+
+        .config-list {
+            margin-bottom: 30px;
+        }
+
+        .config-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            background-color: #f7fafc;
+        }
+
+        .config-info {
+            flex: 1;
+            text-align: left;
+        }
+
+        .config-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .switch-btn {
+            background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+            padding: 8px 15px;
+            font-size: 0.875rem;
+        }
+
+        .edit-btn {
+            background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+            padding: 8px 15px;
+            font-size: 0.875rem;
+        }
+
+        .delete-config-btn {
+            background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
+            padding: 8px 15px;
+            font-size: 0.875rem;
+        }
+
+        /* 返回按钮样式 */
+         .back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .back-btn:hover {
+            transform: translateX(-5px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .probability-section {
+            margin-top: 15px;
+            padding: 15px;
+            background-color: #f0f4f8;
+            border-radius: 8px;
+        }
+
+        .probability-input {
+            width: 60px;
+            padding: 5px 10px;
+            border: 1px solid #cbd5e0;
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            button {
+                width: 100%;
+                max-width: 300px;
+            }
+
+            .form-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .config-actions {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .config-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="{:url('games/index')}" class="back-btn">
+            ← 返回游戏中心
+        </a>
+        
+        <h1>🎡 大转盘游戏</h1>
+        
+        <div class="config-section">
+            <label for="configSelect">选择配置：</label>
+            <select id="configSelect" class="config-select">
+                <option value="default">默认配置</option>
+                <!-- 其他配置项将通过JavaScript动态添加 -->
+            </select>
+        </div>
+        
+        <div class="wheel-container">
+            <div class="wheel" id="wheel">
+                <!-- 转盘分区将通过JavaScript动态生成 -->
+            </div>
+            <div class="pointer"></div>
+            <div class="center-circle">GO</div>
+        </div>
+        
+        <div class="result-box" id="resultBox">
+            <span id="resultText">点击转盘开始游戏</span>
+        </div>
+        
+        <div class="buttons">
+            <button id="spinBtn">开始转盘</button>
+            <button class="config-btn" onclick="openConfig()">配置选项</button>
+        </div>
+        
+        <div id="result" class="result"></div>
+    </div>
+
+    <!-- 配置模态框 -->
+    <div id="configModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeConfig()">&times;</span>
+            <h2>配置大转盘选项</h2>
+
+            <!-- 配置列表 -->
+            <div class="config-list" id="configList">
+                <h3>我的配置列表</h3>
+                <div id="configItems"></div>
+                <button class="save-btn" onclick="createNewConfig()" style="margin-top: 15px;">+ 新建配置</button>
+            </div>
+
+            <!-- 配置编辑表单 -->
+            <div id="configForm" style="display: none;">
+                <input type="hidden" id="configId" value="">
+                <div class="form-group">
+                    <label for="configName">配置名称:</label>
+                    <input type="text" id="configName" class="config-select" placeholder="请输入配置名称(必填)">
+                </div>
+                <div class="form-group">
+                    <label for="options">转盘选项（每行一个）:</label>
+                    <textarea id="options" placeholder="请输入转盘选项，每行一个&#10;例如：&#10;唱歌&#10;跳舞&#10;讲笑话&#10;..."></textarea>
+                </div>
+                <div class="form-group probability-section">
+                    <label>选项概率设置（可选，默认等概率）:</label>
+                    <div id="probabilityInputs"></div>
+                    <small>注：概率值为相对权重，如选项A设为2，选项B设为1，则A被选中的概率是B的两倍</small>
+                </div>
+                <div class="form-actions">
+                    <button class="save-btn" onclick="saveConfig()">保存配置</button>
+                    <button class="cancel-btn" onclick="cancelEditConfig()">取消</button>
+                    <button class="delete-btn" onclick="deleteCurrentConfig()" id="deleteConfigBtn" style="display: none;">删除配置</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 默认选项
+        let options = [
+            "唱歌",
+            "跳舞",
+            "讲笑话",
+            "做俯卧撑",
+            "喝水",
+            "拍抖音"
+        ];
+        
+        // 概率设置（默认等概率）
+        let probabilities = {};
+        
+        // 当前配置ID
+        let currentConfigId = null;
+        
+        // 游戏标识符
+        const gameKey = 'spinwheel';
+        
+        // 页面加载时尝试从服务器获取用户配置
+        window.onload = function () {
+            fetchUserConfigs(); // 获取配置列表
+        };
+        
+        // 获取用户的所有配置列表
+        function fetchUserConfigs() {
+            fetch('/tools/games/getUserGameConfigs?game_key=' + gameKey)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.code === 1 && data.data) {
+                        renderConfigList(data.data);
+                        updateConfigSelect(data.data); // 更新配置选择下拉菜单
+                    }
+                })
+                .catch(error => {
+                    console.error('获取配置列表失败:', error);
+                });
+        }
+        
+        // 渲染配置列表
+        function renderConfigList(configs) {
+            const container = document.getElementById('configItems');
+            container.innerHTML = '';
+            
+            // 添加默认配置项
+            const defaultConfigItem = document.createElement('div');
+            defaultConfigItem.className = 'config-item';
+            defaultConfigItem.innerHTML = `
+                <div class="config-info">
+                    <strong>默认配置</strong><br>
+                    <small>系统内置配置</small>
+                </div>
+                <div class="config-actions">
+                    <button class="switch-btn" onclick="switchToConfig('default')">切换</button>
+                </div>
+            `;
+            container.appendChild(defaultConfigItem);
+            
+            // 添加用户自定义配置项
+            if (configs.length > 0) {
+                configs.forEach(config => {
+                    const configItem = document.createElement('div');
+                    configItem.className = 'config-item';
+                    configItem.innerHTML = `
+                        <div class="config-info">
+                            <strong>${config.config_name}</strong><br>
+                            <small>创建于: ${config.created_at}</small>
+                        </div>
+                        <div class="config-actions">
+                            <button class="switch-btn" onclick="switchToConfig(${config.id})">切换</button>
+                            <button class="edit-btn" onclick="editConfig(${config.id})">编辑</button>
+                            <button class="delete-config-btn" onclick="deleteConfig(${config.id})">删除</button>
+                        </div>
+                    `;
+                    container.appendChild(configItem);
+                });
+            } else {
+                container.innerHTML += '<p style="margin-top: 10px; color: #718096;">暂无自定义配置</p>';
+            }
+        }
+        
+        // 更新配置选择下拉菜单
+        function updateConfigSelect(configs) {
+            const select = document.getElementById('configSelect');
+            // 保留默认选项
+            select.innerHTML = '<option value="default">默认配置</option>';
+            
+            // 添加用户自定义配置选项
+            configs.forEach(config => {
+                const option = document.createElement('option');
+                option.value = config.id;
+                option.textContent = config.config_name;
+                select.appendChild(option);
+            });
+        }
+        
+        // 打开配置模态框
+        function openConfig() {
+            document.getElementById('configModal').style.display = 'block';
+        }
+        
+        // 关闭配置模态框
+        function closeConfig() {
+            document.getElementById('configModal').style.display = 'none';
+        }
+        
+        // 创建新配置
+        function createNewConfig() {
+            // 显示表单，隐藏列表
+            document.getElementById('configList').style.display = 'none';
+            document.getElementById('configForm').style.display = 'block';
+            
+            // 清空表单
+            document.getElementById('configId').value = '';
+            document.getElementById('configName').value = '';
+            document.getElementById('options').value = options.join('\n');
+            document.getElementById('deleteConfigBtn').style.display = 'none';
+            
+            // 更新概率输入框
+            updateProbabilityInputs();
+        }
+        
+        // 编辑配置
+        function editConfig(configId) {
+            // 发送请求获取配置详情
+            fetch('/tools/games/getGameConfigById?id=' + configId)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.code === 1 && data.data) {
+                        // 显示表单，隐藏列表
+                        document.getElementById('configList').style.display = 'none';
+                        document.getElementById('configForm').style.display = 'block';
+                        
+                        // 填充表单数据
+                        document.getElementById('configId').value = configId;
+                        document.getElementById('configName').value = data.data.config_name || '';
+                        
+                        // 填充选项
+                        if (data.data.options && Array.isArray(data.data.options)) {
+                            document.getElementById('options').value = data.data.options.join('\n');
+                            
+                            // 初始化概率设置
+                            if (data.data.probabilities && typeof data.data.probabilities === 'object') {
+                                probabilities = data.data.probabilities;
+                            } else {
+                                probabilities = {};
+                            }
+                        } else {
+                            document.getElementById('options').value = '';
+                            probabilities = {};
+                        }
+                        
+                        // 显示删除按钮
+                        document.getElementById('deleteConfigBtn').style.display = 'inline-block';
+                        
+                        // 更新概率输入框
+                        updateProbabilityInputs();
+                    } else {
+                        alert('获取配置失败：' + (data.msg || '未知错误'));
+                    }
+                })
+                .catch(error => {
+                    console.error('获取配置失败:', error);
+                    alert('获取配置失败，请稍后重试');
+                });
+        }
+        
+        // 更新概率输入框
+        function updateProbabilityInputs() {
+            const container = document.getElementById('probabilityInputs');
+            const optionsText = document.getElementById('options').value;
+            const optionLines = optionsText.split('\n').filter(line => line.trim() !== '');
+            
+            if (optionLines.length > 0) {
+                container.innerHTML = '';
+                
+                optionLines.forEach((option, index) => {
+                    const wrapper = document.createElement('div');
+                    wrapper.style.display = 'flex';
+                    wrapper.style.alignItems = 'center';
+                    wrapper.style.marginBottom = '10px';
+                    wrapper.style.gap = '10px';
+                    
+                    const label = document.createElement('label');
+                    label.textContent = option.substring(0, 20) + (option.length > 20 ? '...' : '') + ':';
+                    label.style.flex = '1';
+                    label.style.textAlign = 'right';
+                    
+                    const input = document.createElement('input');
+                    input.type = 'number';
+                    input.min = '0';
+                    input.step = '0.1';
+                    input.className = 'probability-input';
+                    input.value = probabilities[index] || '1';
+                    input.onchange = function() {
+                        probabilities[index] = parseFloat(this.value) || 1;
+                    };
+                    
+                    wrapper.appendChild(label);
+                    wrapper.appendChild(input);
+                    container.appendChild(wrapper);
+                });
+            } else {
+                container.innerHTML = '<p>请先添加选项</p>';
+            }
+        }
+        
+        // 监听选项文本域变化，动态更新概率输入框
+        document.getElementById('options').addEventListener('input', updateProbabilityInputs);
+        
+        // 取消编辑配置
+        function cancelEditConfig() {
+            // 显示配置列表，隐藏表单
+            document.getElementById('configList').style.display = 'block';
+            document.getElementById('configForm').style.display = 'none';
+        }
+        
+        // 保存配置
+        function saveConfig() {
+            // 获取用户输入的内容
+            const configId = document.getElementById('configId').value;
+            const configName = document.getElementById('configName').value.trim();
+            const optionsInput = document.getElementById('options').value;
+            
+            // 检查配置名称
+            if (!configName) {
+                showMessage('请输入配置名称！', 'error');
+                return;
+            }
+            
+            // 分割成数组并过滤空行
+            const newOptions = optionsInput.split('\n').filter(item => item.trim() !== '');
+            
+            // 检查是否有内容
+            if (newOptions.length < 2) {
+                showMessage('至少需要两个选项！', 'error');
+                return;
+            }
+            
+            // 保存到服务器
+            if (configId) {
+                // 更新现有配置
+                updateConfigToServer(configId, configName, newOptions);
+            } else {
+                // 保存新配置
+                saveNewConfigToServer(configName, newOptions);
+            }
+        }
+        
+        // 保存新配置到服务器
+        function saveNewConfigToServer(configName, options) {
+            // 创建FormData对象
+            const formData = new FormData();
+            formData.append('game_key', gameKey);
+            formData.append('config_name', configName);
+            formData.append('game_name', '大转盘游戏');
+            formData.append('game_desc', '大转盘游戏配置');
+            // 构造配置数据对象
+            const configData = {
+                options: options,
+                probabilities: probabilities
+            };
+            formData.append('config_data', JSON.stringify(configData));
+            
+            // 发送请求保存配置
+            fetch('/tools/games/saveNamedGameConfig', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.code === 1) {
+                        showMessage('配置已保存成功！', 'success');
+                        // 刷新配置列表
+                        fetchUserConfigs();
+                        // 返回配置列表视图
+                        cancelEditConfig();
+                    } else {
+                        showMessage('保存失败：' + data.msg, 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('保存配置失败:', error);
+                    showMessage('保存配置失败，请稍后重试', 'error');
+                });
+        }
+        
+        // 更新配置到服务器
+        function updateConfigToServer(configId, configName, options) {
+            // 创建FormData对象
+            const formData = new FormData();
+            formData.append('id', configId);
+            formData.append('config_name', configName);
+            formData.append('game_name', '大转盘游戏');
+            formData.append('game_desc', '大转盘游戏配置');
+            // 构造配置数据对象
+            const configData = {
+                options: options,
+                probabilities: probabilities
+            };
+            formData.append('config_data', JSON.stringify(configData));
+            
+            // 发送请求更新配置
+            fetch('/tools/games/updateGameConfig', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.code === 1) {
+                        showMessage('配置已更新成功！', 'success');
+                        // 刷新配置列表
+                        fetchUserConfigs();
+                        // 返回配置列表视图
+                        cancelEditConfig();
+                    } else {
+                        showMessage('更新失败：' + data.msg, 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('更新配置失败:', error);
+                    showMessage('更新配置失败，请稍后重试', 'error');
+                });
+        }
+        
+        // 删除当前编辑的配置
+        function deleteCurrentConfig() {
+            const configId = document.getElementById('configId').value;
+            if (configId) {
+                deleteConfig(configId);
+            }
+        }
+        
+        // 删除配置
+        function deleteConfig(configId) {
+            if (!confirm('确定要删除这个配置吗？')) {
+                return;
+            }
+            
+            // 发送请求删除配置
+            fetch('/tools/games/deleteNamedGameConfig?id=' + configId)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.code === 1) {
+                        showMessage('配置已删除成功！', 'success');
+                        // 刷新配置列表
+                        fetchUserConfigs();
+                        // 如果正在编辑被删除的配置，则返回列表视图
+                        if (document.getElementById('configId').value == configId) {
+                            cancelEditConfig();
+                        }
+                    } else {
+                        showMessage('删除失败：' + data.msg, 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('删除配置失败:', error);
+                    showMessage('删除配置失败，请稍后重试', 'error');
+                });
+        }
+        
+        // 显示消息
+        function showMessage(message, type) {
+            const resultElement = document.getElementById('result');
+            resultElement.innerHTML = message;
+            resultElement.style.display = 'block';
+            
+            if (type === 'success') {
+                resultElement.style.backgroundColor = '#e6fffa';
+                resultElement.style.color = '#2b6cb0';
+            } else {
+                resultElement.style.backgroundColor = '#fed7d7';
+                resultElement.style.color = '#c53030';
+            }
+            
+            // 3秒后隐藏消息
+            setTimeout(() => {
+                resultElement.style.display = 'none';
+            }, 3000);
+        }
+        
+        // 点击模态框外部关闭
+        window.onclick = function (event) {
+            const modal = document.getElementById('configModal');
+            if (event.target == modal) {
+                closeConfig();
+            }
+        }
+        
+        // 根据索引和概率计算随机结果
+        function getRandomIndexWithProbability(probabilities, length) {
+            // 计算总权重
+            let totalWeight = 0;
+            for (let i = 0; i < length; i++) {
+                totalWeight += probabilities[i] || 1; // 默认权重为1
+            }
+            
+            // 生成0到总权重之间的随机数
+            let random = Math.random() * totalWeight;
+            
+            // 找到对应的索引
+            let cumulativeWeight = 0;
+            for (let i = 0; i < length; i++) {
+                cumulativeWeight += probabilities[i] || 1;
+                if (random <= cumulativeWeight) {
+                    return i;
+                }
+            }
+            
+            // 默认返回最后一个（理论上不会执行到这里）
+            return length - 1;
+        }
+        
+        // 初始化转盘
+        function updateWheel() {
+            const wheel = document.getElementById('wheel');
+            wheel.innerHTML = '';
+            
+            const numSegments = options.length;
+            const segmentAngle = 360 / numSegments;
+            
+            options.forEach((option, index) => {
+                const segment = document.createElement('div');
+                segment.className = 'segment';
+                segment.style.transform = `rotate(${index * segmentAngle}deg)`;
+                segment.style.backgroundColor = getColor(index);
+                
+                const content = document.createElement('div');
+                content.className = 'segment-content';
+                content.textContent = option;
+                content.style.transform = `rotate(${segmentAngle / 2}deg)`;
+                
+                segment.appendChild(content);
+                wheel.appendChild(segment);
+            });
+        }
+        
+        // 获取颜色
+        function getColor(index) {
+            const colors = [
+                '#FF6B6B', '#4ECDC4', '#45B7D1', '#FFBE0B', '#FB5607', '#8338EC',
+                '#3A86FF', '#FF006E', '#8AC926', '#1982C4', '#6A4C93', '#F15BB5'
+            ];
+            return colors[index % colors.length];
+        }
+        
+        // 开始旋转转盘
+        function spinWheel() {
+            const wheel = document.getElementById('wheel');
+            const resultBox = document.getElementById('resultBox');
+            const resultText = document.getElementById('resultText');
+            const spinBtn = document.getElementById('spinBtn');
+            
+            // 禁用按钮
+            spinBtn.disabled = true;
+            spinBtn.textContent = '旋转中...';
+            
+            // 重置转盘样式
+            wheel.style.transition = 'transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99)';
+            wheel.style.transform = 'rotate(0deg)';
+            
+            // 强制重排以确保重置生效
+            wheel.offsetHeight;
+            
+            // 计算随机结果
+            const selectedIndex = getRandomIndexWithProbability(probabilities, options.length);
+            const selectedOption = options[selectedIndex];
+            
+            // 计算旋转角度（至少5圈加上选中项的角度偏移）
+            const segmentAngle = 360 / options.length;
+            const extraRotation = 5 * 360; // 至少5圈
+            const targetRotation = extraRotation + (360 - (selectedIndex * segmentAngle + segmentAngle / 2));
+            
+            // 应用旋转
+            wheel.style.transform = `rotate(${targetRotation}deg)`;
+            
+            // 旋转结束后显示结果
+            setTimeout(() => {
+                resultText.textContent = `结果：${selectedOption}`;
+                resultBox.style.animation = 'none';
+                resultBox.offsetHeight; // 触发重排
+                resultBox.style.animation = 'pulse 0.5s';
+                
+                // 启用按钮
+                spinBtn.disabled = false;
+                spinBtn.textContent = '开始转盘';
+            }, 4000);
+        }
+        
+        // 切换到指定配置
+        function switchToConfig(configId) {
+            if (configId === 'default') {
+                // 切换到默认配置
+                options = [
+                    "唱歌",
+                    "跳舞",
+                    "讲笑话",
+                    "做俯卧撑",
+                    "喝水",
+                    "拍抖音"
+                ];
+                probabilities = {}; // 重置概率
+                
+                showMessage('已切换到默认配置', 'success');
+                // 更新下拉菜单选择
+                document.getElementById('configSelect').value = 'default';
+            } else {
+                // 切换到用户自定义配置
+                fetch('/tools/games/getGameConfigById?id=' + configId)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.code === 1 && data.data) {
+                            if (Array.isArray(data.data.options) && data.data.options.length > 0) {
+                                options = data.data.options;
+                                
+                                // 设置概率
+                                if (data.data.probabilities && typeof data.data.probabilities === 'object') {
+                                    probabilities = data.data.probabilities;
+                                } else {
+                                    probabilities = {};
+                                }
+                                
+                                showMessage('已切换到配置：' + (data.data.config_name || '自定义配置'), 'success');
+                                // 更新下拉菜单选择
+                                document.getElementById('configSelect').value = configId;
+                            } else {
+                                showMessage('配置数据无效', 'error');
+                                return;
+                            }
+                        } else {
+                            showMessage('配置不存在或已失效', 'error');
+                            return;
+                        }
+                    })
+                    .catch(error => {
+                        console.error('切换配置失败:', error);
+                        showMessage('切换配置失败，请稍后重试', 'error');
+                        return;
+                    });
+            }
+            
+            // 更新转盘显示
+            setTimeout(() => {
+                updateWheel();
+            }, 100);
+        }
+        
+        // 绑定事件
+        document.getElementById('spinBtn').onclick = spinWheel;
+        document.getElementById('configSelect').onchange = function() {
+            switchToConfig(this.value);
+        };
+        
+        // 添加脉冲动画样式
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes pulse {
+                0% { transform: scale(1); }
+                50% { transform: scale(1.05); }
+                100% { transform: scale(1); }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // 初始化转盘
+        updateWheel();
+    </script>
+</body>
+</html>

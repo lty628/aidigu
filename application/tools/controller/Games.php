@@ -42,6 +42,11 @@ class Games extends Base
     {
         return $this->fetch('whopays');
     }
+
+    public function spinwheel()
+    {
+        return $this->fetch('spinwheel');
+    }
     
     /**
      * 真心话大冒险游戏页面（保持兼容性）
