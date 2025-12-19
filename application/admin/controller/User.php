@@ -15,7 +15,7 @@ class User extends Base
     public function getList()
     {
         $keyword = input('post.keyword', '');
-        $updateTime = input('post.update_time', ''); // 获取更新时间筛选参数
+        $updateTime = input('post.update_time', 'today'); // 获取更新时间筛选参数
         $page = input('post.page', 1, 'intval');
         $limit = input('post.limit', 10, 'intval');
         
@@ -41,8 +41,7 @@ class User extends Base
                 case 'yesterday':
                     // 昨天的数据（从昨天0点到今天0点）
                     $startOfYesterday = strtotime('-1 day', strtotime(date('Y-m-d')));
-                    $endOfYesterday = strtotime(date('Y-m-d')) - 1;
-                    $query->whereBetween('uptime', [$startOfYesterday, $endOfYesterday]);
+                    $query->where('uptime', '>', $startOfYesterday);
                     break;
                 case 'week':
                     // 近一周的数据

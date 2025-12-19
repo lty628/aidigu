@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>频道内容管理</title>
+    <link href="/static/layui/css/layui.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="layui-layout">
+        <div style="padding: 16px;">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    <h3>{$channel.channel_name} - 内容管理</h3>
+                </div>
+                <div class="layui-card-body">
+                    <table class="layui-table" id="contentTable" lay-filter="contentTable"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/layui/layui.js"></script>
+    <script>
+        layui.use(['table', 'layer'], function () {
+            var table = layui.table;
+            var layer = layui.layer;
+            var $ = layui.$;
+
+            // 获取频道ID
+            var channelId = getQueryVariable('channel_id');
+
+            // 渲染表格
+            table.render({
+                elem: '#contentTable',
+                url: '/admin/channel/getContentList?channel_id=' + channelId,
+                cols: [[
+                    { field: 'msg_id', title: '消息ID', width: 80 },
+                    { field: 'nickname', title: '发送者', width: 120 },
+                    { field: 'head_image', title: '头像', width: 80, templet: '<div><img src="{{d.head_image}}" style="width: 30px; height: 30px; border-radius: 50%;"></div>' },
+                    { field: 'contents', title: '内容' },
+                    { field: 'ctime_format', title: '发送时间', width: 180 },
+                    { title: '操作', width: 100, align: 'center', toolbar: '#actionBar' }
+                ]],
+                page: true,
+                limit: 10,
+                limits: [10, 20, 30],
+                request: {
+                    pageName: 'page',
+                    limitName: 'limit'
+                },
+                response: {
+                    statusCode: 0
+                },
+                parseData: function (res) {
+                    return {
+                        "code": res.code,
+                        "msg": res.msg,
+                        "count": res.count,
+                        "data": res.data
+                    };
+                }
+            });
+
+            // 表格工具栏事件
+            table.on('tool(contentTable)', function (obj) {
+                var data = obj.data;
+                if (obj.event === 'delete') {
+                    deleteMessage(data.msg_id, obj);
+                }
+            });
+
+            // 删除消息
+            function deleteMessage(msgId, obj) {
+                layer.confirm('确定要删除这条消息吗？', function (index) {
+                    $.post('/admin/channel/deleteMessage', { msg_id: msgId }, function (res) {
+                        if (res.code === 0) {
+                            layer.msg('删除成功');
+                            obj.del();
+                        } else {
+                            layer.msg('删除失败: ' + res.msg);
+                        }
+                    }, 'json');
+                    layer.close(index);
+                });
+            }
+
+            // 获取URL参数
+            function getQueryVariable(variable) {
+                var query = window.location.search.substring(1);
+                var vars = query.split("&");
+                for (var i = 0; i < vars.length; i++) {
+                    var pair = vars[i].split("=");
+                    if (pair[0] == variable) {
+                        return pair[1];
+                    }
+                }
+                return false;
+            }
+        });
+    </script>
+
+    <script type="text/html" id="actionBar">
+        <button class="layui-btn layui-btn-xs layui-btn-danger" lay-event="delete">删除</button>
+    </script>
+</body>
+
+</html>

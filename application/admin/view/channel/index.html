@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>频道管理</title>
+    <link href="/static/layui/css/layui.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="layui-layout">
+        <div style="padding: 16px;">
+            <div class="layui-card">
+                <div class="layui-card-header" style="height: unset;">
+                    <h3>频道管理</h3>
+                    <button type="button" class="layui-btn layui-btn-normal" onclick="addChannel()">
+                        <i class="layui-icon">&#xe608;</i> 创建频道
+                    </button>
+                    <div class="layui-inline" style="margin-left: 15px;">
+                        <i class="layui-icon layui-icon-tips" style="color: #1E9FFF;"></i>
+                        <span style="font-size: 12px; color: #999;">可以创建三种频道：普通频道（任何人可随意进入）、密码频道（加入需要密码）、邀请频道（在频道广场不显示，请注意修改频道信息后邀请码会更新）</span>
+                    </div>
+                </div>
+                <div class="layui-card-body">
+                    <table class="layui-table" id="channelTable" lay-filter="channelTable"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/layui/layui.js"></script>
+    <script>
+        layui.use(['table', 'layer'], function () {
+            var table = layui.table;
+            var layer = layui.layer;
+            var $ = layui.$;
+
+            // 渲染表格
+            table.render({
+                elem: '#channelTable',
+                url: '/admin/channel/getList',
+                cols: [[
+                    { field: 'channel_id', title: 'ID', width: 80 },
+                    { field: 'channel_name', title: '频道名称', width: 150 },
+                    { field: 'avatar', title: '头像', width: 100, templet: '<div><img src="{{d.avatar}}" style="width: 30px; height: 30px; border-radius: 50%;"></div>' },
+                    { field: 'description', title: '介绍', width: 200 },
+                    { field: 'invite_status', title: '邀请开关', width: 100, templet: function (d) { 
+                        return d.invite_status == 1 ? '<button class="layui-btn layui-btn-primary layui-btn-xs" onclick="copyInviteCode(\'' + d.channel_id + '\', \'' + d.invite_code + '\')">点击复制</button>' : '关闭'; } 
+                    },
+                    { field: 'member_count', title: '成员数', width: 80 },
+                    { field: 'message_count', title: '消息数', width: 80 },
+                    { field: 'create_time', title: '创建时间', width: 180, templet: function (d) { return d.create_time ? new Date(d.create_time * 1000).toLocaleString() : ''; } },
+                    { title: '操作', width: 200, align: 'center', toolbar: '#actionBar' }
+                ]],
+                page: true,
+                limit: 10,
+                limits: [10, 20, 30],
+                request: {
+                    pageName: 'page',
+                    limitName: 'limit'
+                },
+                response: {
+                    statusCode: 0
+                },
+                parseData: function (res) {
+                    return {
+                        "code": res.code,
+                        "msg": res.msg,
+                        "count": res.count,
+                        "data": res.data
+                    };
+                }
+            });
+
+            // 表格工具栏事件
+            table.on('tool(channelTable)', function (obj) {
+                var data = obj.data;
+                if (obj.event === 'edit') {
+                    editChannel(data.channel_id);
+                } else if (obj.event === 'delete') {
+                    deleteChannel(data.channel_id);
+                } else if (obj.event === 'users') {
+                    manageUsers(data.channel_id);
+                } else if (obj.event === 'content') {
+                    viewContent(data.channel_id);
+                }
+            });
+
+            // 查看频道内容
+            window.viewContent = function (channelId) {
+                layer.open({
+                    type: 2,
+                    title: '频道内容管理',
+                    content: '/admin/channel/content?channel_id=' + channelId,
+                    area: ['90%', '90%']
+                });
+            };
+
+            // 创建频道
+            window.addChannel = function () {
+                layer.open({
+                    type: 2,
+                    title: '创建频道',
+                    content: '/admin/channel/add',
+                    area: ['600px', '600px'],
+                    end: function () {
+                        table.reload('channelTable');
+                    }
+                });
+            };
+
+            // 编辑频道
+            window.editChannel = function (channelId) {
+                layer.open({
+                    type: 2,
+                    title: '编辑频道',
+                    content: '/admin/channel/edit?channel_id=' + channelId,
+                    area: ['600px', '600px'],
+                    end: function () {
+                        table.reload('channelTable');
+                    }
+                });
+            };
+
+            // 删除频道
+            window.deleteChannel = function (channelId) {
+                layer.confirm('确定要删除这个频道吗？这将删除所有相关信息！', function (index) {
+                    $.post('/admin/channel/delete', { channel_id: channelId }, function (res) {
+                        if (res.code === 0) {
+                            layer.msg('删除成功');
+                            table.reload('channelTable');
+                        } else {
+                            layer.msg('删除失败: ' + res.msg);
+                        }
+                    }, 'json');
+                    layer.close(index);
+                });
+            };
+
+            // 管理成员
+            window.manageUsers = function (channelId) {
+                layer.open({
+                    type: 2,
+                    title: '频道成员管理',
+                    content: '/admin/channel/users?channel_id=' + channelId,
+                    area: ['800px', '600px']
+                });
+            };
+
+            // 复制邀请码功能
+            window.copyInviteCode = function (channelId, inviteCode) {
+                // 构造邀请链接
+                var inviteLink = window.location.origin + '/tools/channel/join/?channel_id=' + channelId + '&invite_code=' + inviteCode;
+                
+                // 使用 Clipboard API 复制到剪贴板
+                if (navigator.clipboard) {
+                    navigator.clipboard.writeText(inviteLink).then(function() {
+                        layer.msg('邀请链接已复制到剪贴板');
+                    }).catch(function(err) {
+                        // 如果 Clipboard API 失败，使用备选方案
+                        fallbackCopyTextToClipboard(inviteLink);
+                    });
+                } else {
+                    // 如果浏览器不支持 Clipboard API，使用备选方案
+                    fallbackCopyTextToClipboard(inviteLink);
+                }
+            };
+
+            // 备选复制方案
+            function fallbackCopyTextToClipboard(text) {
+                var textarea = document.createElement("textarea");
+                textarea.textContent = text;
+                textarea.style.position = "fixed";  // 避免滚动到底部
+                document.body.appendChild(textarea);
+                textarea.select();
+                
+                try {
+                    var successful = document.execCommand('copy');
+                    var msg = successful ? '邀请链接已复制到剪贴板' : '复制失败';
+                    layer.msg(msg);
+                } catch (err) {
+                    layer.msg('复制失败，请手动复制链接');
+                }
+                
+                document.body.removeChild(textarea);
+            }
+        });
+    </script>
+
+    <script type="text/html" id="actionBar">
+        <button class="layui-btn layui-btn-xs layui-btn-normal" lay-event="users">成员</button>
+        <button class="layui-btn layui-btn-xs layui-btn-warm" lay-event="content">内容</button>
+        <!-- <button class="layui-btn layui-btn-xs layui-btn-danger" lay-event="delete">删除</button> -->
+    </script>
+</body>
+
+</html>

@@ -22,8 +22,8 @@
                     <div class="layui-input-inline" style="width: 120px;">
                         <select name="update_time" lay-verify="">
                             <option value="">更新时间</option>
-                            <option value="today">今天</option>
-                            <option value="yesterday">昨天</option>
+                            <option selected value="today">今天</option>
+                            <option value="yesterday">近两天</option>
                             <option value="week">近一周</option>
                             <option value="month">近一月</option>
                             <option value="three_month">近三月</option>
@@ -93,7 +93,9 @@
                     {field: 'head_image', title: '头像', width: 90, templet: '#avatar-tpl'},
                     {field: 'nickname', title: '昵称', width: 150},
                     // {field: 'username', title: '用户名', templet: function(d) { return d.username || '-'; }},
-                    {field: 'blog', title: '博客名', width: 150, templet: function(d) { return d.blog || '-'; }},
+                    {field: 'blog', title: '博客名', width: 150, templet: function(d) { 
+                        return '<a href="/' + d.blog + '/own/" target="_blank">' + d.blog + '</a>';
+                     }},
                     {field: 'phone', title: '手机号', templet: function(d) { return d.phone || '-'; }},
                     // {field: 'email', title: '邮箱', templet: function(d) { return d.email || '-'; }},
                     {field: 'status', title: '状态', templet: '#status-tpl'},
