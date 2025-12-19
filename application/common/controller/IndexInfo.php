@@ -174,11 +174,12 @@ class IndexInfo extends Info
             $messages = Db::name('channel_message')
                 ->alias('cm')
                 ->join('user u', 'cm.uid = u.uid')
+                ->join('channel_user cu', 'cm.uid = cu.uid AND cm.channel_id = cu.channel_id', 'LEFT')
                 ->where('cm.channel_id', $channelId)
                 ->where('cm.is_delete', 0)
                 ->order('cm.ctime desc')
                 ->limit(20)
-                ->field('cm.*, u.nickname, u.head_image,u.blog')
+                ->field('cm.*, u.nickname, u.head_image, u.blog, cu.role')
                 ->select();
             return json(array('status' =>  1, 'msg' => 'ok', 'data' => ['data' => handleMessage($messages), 'allow_delete' => $allowDelete, 'allow_comment' => $allowComment, 'userid' => $this->userid]));
 

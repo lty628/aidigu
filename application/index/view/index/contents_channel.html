@@ -2,12 +2,27 @@
     .w-e-toolbar, .w-e-text-container, .w-e-menu-panel{
         background-color: unset;
     }
+    .admin-tag {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        background-color: #ff6b6b;
+        color: white;
+        padding: 2px 6px;
+        border-radius: 3px;
+        font-size: 12px;
+        z-index: 10;
+    }
 </style>
 
 <div id="msgContent">
     {if isset($userMessage[0])}
     {foreach $userMessage as $message}
-    <div class="entry">
+    <div class="entry" style="position: relative;">
+        <!-- 管理员/创建者标记 -->
+        {if isset($message.role) && ($message.role == 1 || $message.role == 2)}
+        <span class="admin-tag">{if $message.role == 2}创建者{else}管理员{/if}</span>
+        {/if}
         <div class="avatar">
             <div class="imgborder"><a href="{:url('/'.$message.blog.'/')}"><img
                         src="{$message.head_image}" /></a></div>
@@ -142,6 +157,7 @@
                         var delStr = '';
                         var c1 = '';
                         var c2 = '';
+                        var adminTag = '';
                         if (data[i].media) {
                             data[i].media_info = $.parseJSON(data[i].media_info)
                             if (data[i].media_info.media_type == 'mp4' || data[i].media_info.media_type == 'm3u8') {
@@ -158,6 +174,11 @@
                         // }
                         if (0 != data[i].commentsum) {
                             c2 = '(' + data[i].commentsum + ')'
+                        }
+                        
+                        // 角色 0:普通成员 1:管理员 2:频道主
+                        if (data[i].role == 1 || data[i].role == 2) {
+                            adminTag = '<span class="admin-tag">' + (data[i].role == 2 ? '频道主' : '管理员') + '</span>';
                         }
 
                         if (json.data.allow_delete != -1) {
@@ -179,7 +200,7 @@
                             }
                         }
 
-                        str = '<div class="entry"><div class="avatar"><div class="imgborder"><a href="/' + data[i].blog + '/own/"><img src="' + data[i].head_image + '" /></a></div></div><div class="box box-main"><p class="massageText"><a href="/' + data[i].blog + '/own/">' + data[i].nickname + '：</a>' + data[i].contents + data[i].repost + '</p>' + mediaStr + '<div class="static clear"><span>' + delStr + '</span>' + getDateDiff(data[i].ctime) + ' 来自 ' + data[i].refrom + '</div></div><div class="clear"></div></div>';
+                        str = '<div class="entry" style="position: relative;">' + adminTag + '<div class="avatar"><div class="imgborder"><a href="/' + data[i].blog + '/own/"><img src="' + data[i].head_image + '" /></a></div></div><div class="box box-main"><p class="massageText"><a href="/' + data[i].blog + '/own/">' + data[i].nickname + '：</a>' + data[i].contents + data[i].repost + '</p>' + mediaStr + '<div class="static clear"><span>' + delStr + '</span>' + getDateDiff(data[i].ctime) + ' 来自 ' + data[i].refrom + '</div></div><div class="clear"></div></div>';
                         $("#msgContent").append(str);
                         iniVideo(data[i].msg_id)
                     }
