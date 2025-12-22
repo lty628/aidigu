@@ -10,7 +10,7 @@
 // +----------------------------------------------------------------------
 
 // 推广页
-Route::domain(config('app.url_domain_root'), function () {
+Route::domain(env('app.urlDomainRoot', 'aidigu.cn'), function () {
     Route::get('/', 'tools/home/index');
 });
 
