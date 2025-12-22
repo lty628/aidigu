@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>爱嘀咕</title>
+
+    <style>
+        :root {
+            --primary-color: #00BCD4; /* 改为科技蓝 */
+            --secondary-color: #607D8B;
+            --background-color: #ffffff; /* 背景改为暗黑灰色 */
+            --text-color: #607D8B; /* 白色文字 */
+            --light-background: #ffffff;
+            --shadow-color: rgba(255, 255, 255, 0.05); /* 阴影更淡 */
+            --hover-shadow: rgba(0, 188, 212, 0.1); /* 悬停阴影更淡 */
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text-color);
+            background-color: var(--background-color);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* 导航栏样式 */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 1rem 2rem;
+            background: var(--light-background);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 1px 3px var(--shadow-color);
+            z-index: 1000;
+        }
+
+        .navbar-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .navbar-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .navbar-links a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .navbar-links a:hover {
+            color: var(--primary-color);
+        }
+
+        /* 通用容器样式 */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem 2rem;
+        }
+
+        h2 {
+            font-size: 2.8rem;
+            margin-bottom: 2.5rem;
+            text-align: center;
+            color: var(--text-color);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .hero {
+            height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        /* 新增 canvas 样式 */
+        #heroCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .hero::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .hero-content {
+            text-align: center;
+            color: var(--text-color);
+            z-index: 1;
+            animation: fadeInUp 1s ease-out;
+            width: 70%;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .hero-content p {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 2rem;
+            background: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            box-shadow: 0 4px 6px -1px var(--shadow-color);
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #00796b;
+            transform: scale(1.1);
+        }
+
+        /* 功能介绍样式 */
+        .feature-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2.5rem;
+            margin-top: 4rem;
+        }
+
+        .feature-item {
+            background-color: var(--light-background);
+            padding: 2.5rem;
+            /* border: 2px solid var(--secondary-color); */
+            border-radius: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px -1px var(--shadow-color), 0 2px 4px -1px var(--shadow-color);
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInItem 0.8s ease-out forwards;
+        }
+
+        .feature-item:nth-child(1) {
+            animation-delay: 0.2s;
+        }
+
+        .feature-item:nth-child(2) {
+            animation-delay: 0.4s;
+        }
+
+        .feature-item:nth-child(3) {
+            animation-delay: 0.6s;
+        }
+
+        .feature-item:nth-child(4) {
+            animation-delay: 0.8s;
+        }
+
+        .feature-item:nth-child(5) {
+            animation-delay: 1s;
+        }
+
+        .feature-item:nth-child(6) {
+            animation-delay: 1.2s;
+        }
+
+        .feature-item:hover {
+            transform: rotate(0deg) translateY(-8px);
+            box-shadow: 0 10px 15px -3px var(--hover-shadow), 0 4px 6px -2px var(--hover-shadow);
+        }
+
+        .feature-item i {
+            font-size: 3.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-item h3 {
+            font-size: 1.7rem;
+            margin-bottom: 1rem;
+            color: var(--text-color);
+            font-weight: 600;
+        }
+
+        .feature-item p {
+            font-size: 1rem;
+            color: var(--secondary-color);
+        }
+
+        /* 地址块样式 */
+        .address-container {
+            margin-top: 4rem;
+        }
+
+        .address-block {
+            background-color: var(--light-background);
+            padding: 2rem;
+            border-radius: 20px;
+            /* border: 2px solid var(--secondary-color); */
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.8rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px -1px var(--shadow-color);
+        }
+
+        .address-block:last-child {
+            margin-bottom: 0;
+        }
+
+        .address-block:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 15px -3px var(--hover-shadow), 0 4px 6px -2px var(--hover-shadow);
+        }
+
+        .address-block i {
+            font-size: 2.2rem;
+            margin-right: 1.8rem;
+            color: var(--primary-color);
+            transition: transform 0.3s ease;
+        }
+
+        .address-block:hover i {
+            transform: scale(1.1);
+        }
+
+        .address-block a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-size: 1.4rem;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .address-block a:hover {
+            color: #0056b3;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 1rem;
+            }
+
+            .navbar-links {
+                gap: 1.2rem;
+            }
+
+            .container {
+                padding: 1rem 1rem 1rem;
+            }
+
+            h2 {
+                font-size: 2.2rem;
+            }
+
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-content p {
+                font-size: 1.2rem;
+            }
+
+            .feature-container {
+                grid-template-columns: 1fr;
+            }
+
+            .address-block {
+                padding: 1.5rem;
+            }
+
+            .address-block i {
+                font-size: 1.8rem;
+            }
+
+            .address-block a {
+                font-size: 1.2rem;
+            }
+        }
+
+        .footer {
+            background: linear-gradient(to bottom, var(--light-background), #e0e0e0);
+            box-shadow: 0 -2px 4px var(--shadow-color);
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 4rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-links a {
+            color: var(--text-color);
+            text-decoration: none;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .footer-links a::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: -2px;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary-color);
+            transition: width 0.3s ease;
+        }
+
+        .footer-links a:hover::after {
+            width: 100%;
+        }
+
+        .footer p {
+            color: var(--secondary-color);
+            font-size: 0.9rem;
+        }
+
+        /* 更新预览图样式 */
+        .preview-images {
+            max-width: 1200px;
+            margin: 4rem auto;
+        }
+
+        /* 修改 preview-row 样式 */
+        .preview-row {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: var(--light-background);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .preview-row:hover {
+            box-shadow: 0 10px 15px -3px var(--hover-shadow), 0 4px 6px -2px var(--hover-shadow);
+        }
+
+        /* 移除 preview-item 的边框和背景样式 */
+        .preview-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 30px;
+            align-items: center;
+            text-align: center;
+        }
+
+        .preview-item-width {
+            padding: 0;
+        }
+
+        .preview-item span {
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .preview-item.tall {
+            flex: 1.5;
+        }
+
+        .preview-item img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+        }
+
+        .preview-description {
+            text-align: center;
+            color: var(--secondary-color);
+            font-size: 1.1rem;
+        }
+
+        @media (max-width: 768px) {
+            .preview-row {
+                flex-direction: column;
+            }
+
+            .preview-item.tall {
+                flex: 1;
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInItem {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes changeBackground {
+            0% {
+                background-color: #FFC0CB;
+            }
+            50% {
+                background-color: #FFB6C1;
+            }
+            100% {
+                background-color: #FFC0CB;
+            }
+        }
+
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* 新增样式 */
+        .hero-btn-group {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+        }
+
+        .hero-btn-github {
+            background: #24292e;
+            border-radius: 30px;
+            padding: 1rem 2.5rem;
+        }
+
+        .hero-btn-test {
+            background: #4CAF50;
+            border-radius: 30px;
+            padding: 1rem 2.5rem;
+        }
+
+        .hero-btn-official {
+            background: #2196F3;
+            border-radius: 30px;
+            padding: 1rem 2.5rem;
+        }
+
+        .play-item {
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .play-item a {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: var(--text-color);
+            text-align: center;
+        }
+
+        .play-item i {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 0.8rem;
+        }
+
+        .play-item span {
+            font-weight: 600;
+        }
+
+        .section-title {
+            color: var(--primary-color);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 顶部导航 -->
+    <div class="navbar">
+        <a href="javascript:;" class="navbar-logo">爱嘀咕</a>
+        <div class="navbar-links">
+            <a href="/">首页</a>
+            <!-- 修改为预览图部分的 ID -->
+            <a href="#preview-images">预览图</a>
+            <a href="#features">功能介绍</a>
+        </div>
+    </div>
+
+    <!-- 英雄部分 -->
+    <div id="home" class="hero">
+        <!-- 新增 canvas 元素 -->
+        <canvas id="heroCanvas"></canvas>
+        <div class="hero-content">
+            <h1>AIDIGU</h1>
+            <p id="typing-text"></p>
+            <div class="hero-btn-group">
+                <a href="https://github.com/lty628/aidigu" class="btn hero-btn-github">Github</a>
+                <a href="http://t.aidigu.cn" class="btn hero-btn-test">测试地址</a>
+                <a href="https://aidigu.com" class="btn hero-btn-official">正式地址</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 优化后的打字效果脚本 -->
+    <script>
+        // 减少文案内容
+        const text = "探索开源世界，多样功能等您体验！";
+        const typingText = document.getElementById('typing-text');
+        let index = 0;
+        const typingSpeed = 40; // 调整打字速度
+    
+        function type() {
+            if (index < text.length) {
+                typingText.innerHTML += text.charAt(index);
+                index++;
+                setTimeout(type, typingSpeed);
+            } else {
+                // 打字完成后添加闪烁光标效果
+                const cursor = document.createElement('span');
+                cursor.id = 'cursor';
+                cursor.style.animation = 'blink 1s infinite';
+                cursor.textContent = '|';
+                typingText.appendChild(cursor);
+            }
+        }
+    
+        // 定义闪烁光标动画
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes blink {
+                0% { opacity: 1; }
+                50% { opacity: 0; }
+                100% { opacity: 1; }
+            }
+        `;
+        document.head.appendChild(style);
+    
+        type();
+    
+        // 粒子背景动画代码
+        const canvas = document.getElementById('heroCanvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        let mouse = { x: null, y: null };
+    
+        // 窗口大小改变时调整画布大小
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight * 0.8; // 对应 .hero 的 80vh
+        }
+    
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+    
+        // 鼠标移动事件监听
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+        });
+    
+        // 粒子类
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 1;
+                this.speedX = Math.random() * 2 - 1;
+                this.speedY = Math.random() * 2 - 1;
+                // 修改粒子颜色为小清新的浅蓝色
+                this.color = 'rgba(135, 206, 250, 0.8)'; 
+            }
+    
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.size > 0.2) this.size -= 0.1;
+    
+                // 鼠标交互
+                const dx = mouse.x - this.x;
+                const dy = mouse.y - this.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                if (distance < 100) {
+                    this.size = 5;
+                }
+    
+                // 边界检测
+                if (this.x < 0 || this.x > canvas.width) {
+                    this.speedX = -this.speedX;
+                }
+                if (this.y < 0 || this.y > canvas.height) {
+                    this.speedY = -this.speedY;
+                }
+            }
+    
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+    
+        // 初始化粒子
+        function init() {
+            particles = [];
+            for (let i = 0; i < 100; i++) {
+                particles.push(new Particle());
+            }
+        }
+    
+        // 绘制连线
+        function drawLines() {
+            const opacityValue = 0.1;
+            for (let a = 0; a < particles.length; a++) {
+                for (let b = a; b < particles.length; b++) {
+                    const dx = particles[a].x - particles[b].x;
+                    const dy = particles[a].y - particles[b].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    if (distance < 100) {
+                        // 修改连线颜色为小清新的浅蓝色
+                        ctx.strokeStyle = `rgba(135, 206, 250, ${1 - distance / 100})`; 
+                        ctx.lineWidth = 0.5;
+                        ctx.beginPath();
+                        ctx.moveTo(particles[a].x, particles[a].y);
+                        ctx.lineTo(particles[b].x, particles[b].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+    
+        // 动画循环
+        function animate() {
+            // 设置 canvas 背景为小清新的淡蓝色
+            ctx.fillStyle = '#e6f7ff'; 
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+            }
+            drawLines();
+            requestAnimationFrame(animate);
+        }
+    
+        init();
+        animate();
+    </script>
+
+    <div id="open-source" class="container">
+        <h2 class="section-title">玩法推荐</h2>
+        <div class="address-container">
+            <div class="address-block" style="justify-content: space-around; padding: 2.5rem; border-radius: 25px; display: flex; flex-wrap: wrap; gap: 1rem;">
+                <!-- 需求备忘录 -->
+                <span class="play-item">
+                    <a href="javascript:;">
+                        <i class="fas fa-sticky-note"></i>
+                        <span>需求备忘录</span>
+                    </a>
+                </span>
+
+                <!-- 资源分享 -->
+                <span class="play-item">
+                    <a href="javascript:;">
+                        <i class="fas fa-share-alt"></i>
+                        <span>资源分享</span>
+                    </a>
+                </span>
+
+                <!-- 信息发布 -->
+                <span class="play-item">
+                    <a href="javascript:;">
+                        <i class="fas fa-bullhorn"></i>
+                        <span>信息发布</span>
+                    </a>
+                </span>
+                <!-- 私有微博 -->
+                <span class="play-item">
+                    <a href="javascript:;">
+                        <i class="fab fa-weibo"></i>
+                        <span>私有微博</span>
+                    </a>
+                </span>
+                <!-- NAS日记 -->
+                <span class="play-item">
+                    <a href="javascript:;">
+                        <i class="fas fa-book"></i>
+                        <span>私有日记</span>
+                    </a>
+                </span>
+
+                <!-- NAS导航 -->
+                <span class="play-item">
+                    <a href="javascript:;">
+                        <i class="fas fa-sitemap"></i>
+                        <span>私有导航</span>
+                    </a>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 网站预览图 -->
+    <div id="preview-images" class="preview-images">
+        <h2 class="section-title">网站预览图</h2>
+        <!-- 导航预览 -->
+        <div class="preview-row">
+            <div class="preview-item tall">
+                <img src="/static/tools/common/home/dh.png" alt="导航">
+            </div>
+            <div class="preview-item">
+                <p class="preview-description">导航支持个性化配置，可设为首页，助您高效开启网络之旅。</p>
+            </div>
+        </div>
+        <!-- 广场预览 -->
+        <div class="preview-row">
+            <div class="preview-item">
+                <p class="preview-description">广场实时汇聚用户动态，为您提供结识有趣伙伴、畅聊互动的平台。</p>
+            </div>
+            <div class="preview-item tall">
+                <img src="/static/tools/common/home/gc.png" alt="微博广场">
+            </div>
+        </div>
+        <!-- 工具预览 -->
+        <div class="preview-row">
+            <div class="preview-item preview-item-width">
+                <p class="preview-description" style="margin-bottom: 15px;">站内工具丰富多样，包含收藏、群管、云盘等，满足您多样需求。</p>
+                <img src="/static/tools/common/home/gj.png" alt="工具">
+            </div>
+        </div>
+        <!-- 话题预览 -->
+        <div class="preview-row">
+            <div class="preview-item tall">
+                <img src="/static/tools/common/home/ht.png" alt="话题">
+            </div>
+            <div class="preview-item">
+                <p class="preview-description">话题可同步广场，邀请众多用户参与，开启热烈讨论交流。</p>
+            </div>
+        </div>
+        <!-- 云盘预览 -->
+        <div class="preview-row">
+            <div class="preview-item">
+                <p class="preview-description">云盘提供多类型文件上传与分享服务，安全可靠有保障。</p>
+            </div>
+            <div class="preview-item tall">
+                <img src="/static/tools/common/home/yp.png" alt="消息中心预览">
+            </div>
+        </div>
+    </div>
+
+    <!-- 功能介绍 -->
+    <div id="features" class="container">
+        <h2 class="section-title">功能介绍</h2>
+        <div class="feature-container">
+            <div class="feature-item">
+                <i class="fas fa-comments"></i>
+                <h3>私信</h3>
+                <p>用户可以与其他用户进行一对一的私密交流。</p>
+            </div>
+            <div class="feature-item">
+                <i class="fas fa-hashtag"></i>
+                <h3>话题</h3>
+                <p>用户可以创建和参与各种话题讨论，分享自己的观点和经验。</p>
+            </div>
+            <div class="feature-item">
+                <i class="fas fa-cloud"></i>
+                <h3>网盘</h3>
+                <p>提供安全可靠的云存储服务，方便用户存储和分享文件。</p>
+            </div>
+            <div class="feature-item">
+                <i class="fas fa-star"></i>
+                <h3>收藏</h3>
+                <p>用户可以收藏感兴趣的内容，方便后续查看。</p>
+            </div>
+            <div class="feature-item">
+                <i class="fas fa-compass"></i>
+                <h3>导航</h3>
+                <p>提供便捷的导航功能，帮助用户快速找到所需的服务和内容。</p>
+            </div>
+            <!-- 新增搜索功能介绍 -->
+            <div class="feature-item">
+                <i class="fas fa-search"></i>
+                <h3>搜索</h3>
+                <p>支持多种搜索方式，可快速找到用户、话题、内容等信息。</p>
+            </div>
+            <!-- 新增关注功能介绍 -->
+            <div class="feature-item">
+                <i class="fas fa-user-plus"></i>
+                <h3>关注</h3>
+                <p>用户可以关注感兴趣的人，及时获取他们的最新动态。</p>
+            </div>
+            <!-- 新增隐身功能介绍 -->
+            <div class="feature-item">
+                <i class="fas fa-eye-slash"></i>
+                <h3>隐身</h3>
+                <p>开启隐身模式后，用户的在线状态将对其他用户隐藏。</p>
+            </div>
+            <!-- 新增广场功能介绍 -->
+            <div class="feature-item">
+                <i class="fas fa-globe"></i>
+                <h3>广场</h3>
+                <p>汇聚各类热门话题和动态，用户可以浏览和参与讨论。</p>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <!-- 新增友情链接 -->
+        <div class="footer-links">
+            <a href="https://www.thinkphp.cn/">ThinkPHP</a>
+            <span style="color: var(--secondary-color);">|</span>
+            <a href="https://rustfs.com/">RustFS</a>
+            <span style="color: var(--secondary-color);">|</span>
+            <a href="https://aidigu.com">爱嘀咕</a>
+            <a href="https://nas.org.cn">NAS中文社区</a>
+        </div>
+        <hr style="border: 0; height: 1px; background-color: var(--secondary-color); opacity: 0.3; margin: 1rem 0;">
+        {if $beian}
+        <p>备案号：<a href="https://beian.miit.gov.cn/" target="_blank">{$beian}</a></p>
+        {/if}
+        <p>&copy; 2025 爱嘀咕. 保留所有权利。</p>
+    </footer>
+</body>
+
+</html>
