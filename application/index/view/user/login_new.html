@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html class="no-js">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>登录爱嘀咕</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="登录爱嘀咕" />
+    <meta name="keywords" content="登录爱嘀咕" />
+    <style>
+        :root {
+            --primary: #FF6B6B;
+            --secondary: #4ECDC4;
+            --accent: #FFD166;
+            --dark: #1A535C;
+            --light: #F7FFF7;
+            --pink: #FF8EDF;
+            --purple: #B57BF9;
+            --sky-blue: #64B5F6;
+            --mint: #81C784;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background: linear-gradient(135deg, #F7FFF7 0%, #E3FDFD 100%);
+            color: var(--dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .login-container {
+            display: flex;
+            width: 100%;
+            max-width: 900px;
+            background: white;
+            border-radius: 25px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px rgba(26, 83, 92, 0.15);
+            margin: 40px 0;
+        }
+
+        .login-intro {
+            flex: 1;
+            background: linear-gradient(135deg, var(--primary), var(--pink));
+            color: white;
+            padding: 60px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .login-intro h2 {
+            font-size: 2.5rem;
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .login-intro h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: white;
+            border-radius: 2px;
+        }
+
+        .login-intro p {
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .login-intro ul {
+            margin: 25px 0;
+            padding-left: 20px;
+        }
+
+        .login-intro li {
+            margin-bottom: 12px;
+            font-size: 1.1rem;
+        }
+
+        .login-form-section {
+            flex: 1;
+            padding: 60px 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .login-header h2 {
+            font-size: 2.2rem;
+            color: var(--dark);
+            margin-bottom: 10px;
+        }
+
+        .login-header p {
+            color: var(--dark);
+            opacity: 0.7;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--dark);
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: #f9f9f9;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.2);
+            outline: none;
+            background: white;
+        }
+
+        .btn {
+            padding: 15px 28px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            font-size: 16px;
+            display: inline-block;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--pink));
+            color: white;
+            box-shadow: 0 12px 25px rgba(255, 107, 107, 0.35);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 18px 30px rgba(255, 107, 107, 0.5);
+        }
+
+        .login-links {
+            text-align: center;
+            margin-top: 20px;
+            color: var(--dark);
+        }
+
+        .login-links a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .login-links a:hover {
+            color: var(--dark);
+            text-decoration: underline;
+        }
+
+        .divider {
+            height: 1px;
+            background: #eee;
+            margin: 30px 0;
+        }
+
+        .logo-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo-header h1 {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .logo-header p {
+            color: var(--secondary);
+            font-size: 1.1rem;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .alert-danger {
+            background: #ffebee;
+            color: #c62828;
+            border: 1px solid #ffcdd2;
+        }
+
+        .alert-success {
+            background: #e8f5e9;
+            color: #2e7d32;
+            border: 1px solid #c8e6c9;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 992px) {
+            .login-container {
+                flex-direction: column;
+            }
+
+            .login-intro {
+                padding: 40px 30px;
+            }
+
+            .login-form-section {
+                padding: 40px 30px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 20px;
+            }
+
+            .login-intro h2 {
+                font-size: 2rem;
+            }
+
+            .login-header h2 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="login-container">
+            <!-- 网站介绍部分 -->
+            <div class="login-intro">
+                <h2>嘀咕～谁在这里？</h2>
+                <p>爱嘀咕是一个充满乐趣和惊喜的平台，在这里你可以：</p>
+                <ul>
+                    <li>与懂你的人相遇</li>
+                    <li>分享属于你我的小秘密</li>
+                    <li>分享自己的生活和故事，聊聊心里话，存下小世界</li>
+                </ul>
+                <p>快来加入我们，一起在爱嘀咕的世界里畅玩吧！</p>
+            </div>
+            
+            <!-- 登录表单部分 -->
+            <div class="login-form-section">
+                <div class="logo-header">
+                    <h1>爱<span style="color: var(--secondary);">嘀咕</span></h1>
+                    <p>发现有趣的灵魂</p>
+                </div>
+                
+                <div class="login-header">
+                    <h2>登录</h2>
+                    <p>欢迎回来，很高兴再次见到你</p>
+                </div>
+                
+                <div class="alert alert-danger"></div>
+                <div class="alert alert-success"></div>
+                
+                <!-- 登录表单 -->
+                <form action="#" id="loginForm">
+                    <div class="form-group">
+                        <label for="username">账号</label>
+                        <input type="text" class="form-control" id="username" placeholder="请输入账号或昵称" autocomplete="off">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">密码</label>
+                        <input type="password" class="form-control" id="password" placeholder="请输入密码" autocomplete="off">
+                    </div>
+                    <input type="hidden" id="redirectUrl" value="{$redirectUrl}">
+                    <div class="form-group">
+                        <input type="button" value="登录" id="login" class="btn btn-primary">
+                    </div>
+                </form>
+                
+                <div class="divider"></div>
+                
+                <div class="login-links">
+                    {if !$noRegister}
+                    <p>没有注册? <a href="/register/?url={$redirectUrl}">点击注册</a></p>
+                    {else}
+                    <p>没有账号? <a href="javascript:;"> 抱歉，目前仅限受邀用户！</a></p>
+                    {/if}
+                    <p><a href="/forgot/">忘记密码?</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 页面加载完成后执行
+        document.addEventListener('DOMContentLoaded', function() {
+            // 登录按钮点击事件
+            document.getElementById('login').addEventListener('click', function() {
+                const username = document.getElementById('username').value;
+                const password = document.getElementById('password').value;
+                
+                if (!username || !password) {
+                    showErrorMessage('请填写完整信息');
+                    return;
+                }
+                
+                // 这里应该是实际的登录逻辑
+                console.log('登录信息:', {username, password});
+                
+                // 模拟登录请求
+                setTimeout(function() {
+                    showSuccessMessage('登录成功，正在跳转...');
+                    // 实际项目中这里会跳转页面
+                    // window.location.href = document.getElementById('redirectUrl').value || '/';
+                }, 1000);
+            });
+            
+            // 显示错误信息
+            function showErrorMessage(message) {
+                const errorAlert = document.querySelector('.alert-danger');
+                errorAlert.textContent = message;
+                errorAlert.style.display = 'block';
+                
+                // 3秒后自动隐藏
+                setTimeout(function() {
+                    errorAlert.style.display = 'none';
+                }, 3000);
+            }
+            
+            // 显示成功信息
+            function showSuccessMessage(message) {
+                const successAlert = document.querySelector('.alert-success');
+                successAlert.textContent = message;
+                successAlert.style.display = 'block';
+            }
+            
+            // 输入框焦点效果
+            const inputs = document.querySelectorAll('.form-control');
+            inputs.forEach(input => {
+                input.addEventListener('focus', function() {
+                    this.parentElement.classList.add('focused');
+                });
+                
+                input.addEventListener('blur', function() {
+                    this.parentElement.classList.remove('focused');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
