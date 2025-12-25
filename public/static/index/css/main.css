@@ -1176,7 +1176,7 @@ h2 span {
 .search-formitem button {
     padding: 12px 25px;
     background-color: var(--secondary-color);;
-    color: white;
+    color: var(--primary-btn-color);
     border: none;
     border-radius: 8px;
     cursor: pointer;
