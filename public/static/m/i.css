@@ -758,9 +758,9 @@ cursor: pointer;
 
 /* 导航栏样式 - 合并优化 */
 .top-bar-body {
-    padding: 0;
-    margin: 0 0 15px 0;
-    background: linear-gradient(135deg, var(--background-primary), var(--background-secondary));
+    padding: 5px;
+    /* margin: 0 0 15px 0; */
+    /* background: linear-gradient(135deg, var(--background-primary), var(--background-secondary)); */
     border-radius: var(--radius-lg);
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
     backdrop-filter: blur(10px);
