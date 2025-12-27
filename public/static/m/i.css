@@ -1157,7 +1157,7 @@ cursor: pointer;
 /* 响应式设计 */
 @media screen and (max-width: 1000px) {
     .c-min { max-width: 800px; }
-    .article-list { width: 580px; }
+    /* .article-list { width: 580px; } */
     .sidebar { width: 200px; }
     blockquote { margin-right: -15px; }
 }
