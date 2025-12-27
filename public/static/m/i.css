@@ -1165,7 +1165,7 @@ cursor: pointer;
 @media screen and (max-width: 830px) {
     .c-min { max-width: 600px; }
     .article-list { width: 390px; }
-    .post-article { margin-left: 40px; }
+    .post-article { margin-left: 65px; }
     .post-head {
         width: 45px;
         height: 45px;
