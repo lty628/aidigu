@@ -391,7 +391,7 @@ a img {
 
 .navigation li {
     display: inline;
-    padding: 0 1rem; /* Use rem for padding */
+    padding: 0.8rem; /* Use rem for padding */
 }
 
 .main {
