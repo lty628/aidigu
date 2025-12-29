@@ -1,4 +1,3 @@
-
 var playIngMusicId = '';
 var playIngVideoId = -1;
 var DP = [];
@@ -75,6 +74,54 @@ function iniVideo(i)
 
 		}
 	})
+	
+	// // 为音频元素添加滚动监听，当音频不在视野中时暂停
+	// var audioElements = document.querySelectorAll('.music');
+	// audioElements.forEach(function(audioElement) {
+	// 	if (!audioElement.id.includes("music_"+i)) return;
+		
+	// 	var audioId = audioElement.id;
+	// 	var audioFlag = true;
+		
+	// 	// 检查元素是否在视窗内
+	// 	function isElementInViewport(el) {
+	// 		var rect = el.getBoundingClientRect();
+	// 		var windowHeight = (window.innerHeight || document.documentElement.clientHeight);
+	// 		var windowWidth = (window.innerWidth || document.documentElement.clientWidth);
+			
+	// 		return (
+	// 			rect.top >= 0 &&
+	// 			rect.left >= 0 &&
+	// 			rect.bottom <= windowHeight &&
+	// 			rect.right <= windowWidth
+	// 		);
+	// 	}
+		
+	// 	// 滚动处理函数
+	// 	function handleScroll() {
+	// 		var audioEl = document.getElementById(audioId);
+	// 		if (!audioEl) return;
+			
+	// 		var inViewport = isElementInViewport(audioEl);
+			
+	// 		if (inViewport) {
+	// 			// 音频在视野内且之前是暂停状态，可以继续播放
+	// 			audioFlag = false;
+	// 		} else {
+	// 			// 音频不在视野内，暂停音频
+	// 			if (!audioFlag && !audioEl.paused) {
+	// 				audioEl.pause();
+	// 				audioFlag = true;
+	// 			}
+	// 		}
+	// 	}
+		
+	// 	// 添加滚动事件监听器
+	// 	$(window).on('scroll', handleScroll);
+		
+	// 	// 初始检查
+	// 	handleScroll();
+	// });
 }
 // $(function () {
 //     $(".massageImg").each(function (index) {
