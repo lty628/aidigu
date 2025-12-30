@@ -1,4 +1,5 @@
-const E = window.wangEditor
+if (window.wangEditor && document.getElementById('msgToolBar') && document.getElementById('msgInput')) {
+	const E = window.wangEditor
 	const editor = new E("#msgToolBar", "#msgInput")
 	editor.config.placeholder = ''
 	editor.config.uploadImgServer = '/index/setting/chatMessage'
@@ -90,8 +91,8 @@ const E = window.wangEditor
 			'video'
 		]
 	}
-	
-	
+
+
 	editor.config.showFullScreen = false
 	editor.config.emotions = [
 		{
@@ -240,7 +241,7 @@ const E = window.wangEditor
 			const ctx = canvas.getContext('2d');
 			const img = new Image();
 
-			img.onload = function() {
+			img.onload = function () {
 				// 计算缩放比例
 				const maxWidth = 1920;
 				const maxHeight = 1080;
@@ -275,16 +276,16 @@ const E = window.wangEditor
 					// 使用二分法寻找合适的压缩质量
 					const binarySearchQuality = (min, max, attempts = 0) => {
 						if (attempts > 10) return (min + max) / 2; // 防止无限循环
-						
+
 						const midQuality = (min + max) / 2;
-						
+
 						return new Promise((resolveQuality) => {
-							canvas.toBlob(function(blob) {
+							canvas.toBlob(function (blob) {
 								if (!blob) {
 									resolveQuality(midQuality);
 									return;
 								}
-								
+
 								if (blob.size <= targetSize || max - min < 0.05) {
 									resolveQuality(midQuality);
 								} else if (blob.size > targetSize) {
@@ -301,15 +302,15 @@ const E = window.wangEditor
 					// 同步执行二分查找
 					binarySearchQuality(minQuality, maxQuality).then(quality => {
 						finalQuality = quality;
-						
+
 						// 使用最终确定的质量生成最终文件
-						canvas.toBlob(function(blob) {
+						canvas.toBlob(function (blob) {
 							if (blob) {
 								const compressedFile = new File([blob], file.name, {
 									type: 'image/jpeg',
 									lastModified: Date.now()
 								});
-								
+
 								// console.log(`压缩详情 - 原始大小: ${(fileSize / 1024).toFixed(2)} KB, 目标大小: ${(targetSize / 1024).toFixed(2)} KB, 最终大小: ${(compressedFile.size / 1024).toFixed(2)} KB, 压缩质量: ${finalQuality.toFixed(2)}`);
 								resolve(compressedFile);
 							} else {
@@ -321,13 +322,13 @@ const E = window.wangEditor
 				}
 
 				// 对于小文件，直接使用确定的质量
-				canvas.toBlob(function(blob) {
+				canvas.toBlob(function (blob) {
 					if (blob) {
 						const compressedFile = new File([blob], file.name, {
 							type: 'image/jpeg',
 							lastModified: Date.now()
 						});
-						
+
 						// console.log(`压缩详情 - 原始大小: ${(fileSize / 1024).toFixed(2)} KB, 目标大小: ${(targetSize / 1024).toFixed(2)} KB, 最终大小: ${(compressedFile.size / 1024).toFixed(2)} KB, 压缩质量: ${finalQuality.toFixed(2)}`);
 						resolve(compressedFile);
 					} else {
@@ -336,15 +337,15 @@ const E = window.wangEditor
 				}, 'image/jpeg', finalQuality);
 			};
 
-			img.onerror = function() {
+			img.onerror = function () {
 				reject(new Error('图片加载失败'));
 			};
 
 			const reader = new FileReader();
-			reader.onload = function(e) {
+			reader.onload = function (e) {
 				img.src = e.target.result;
 			};
-			reader.onerror = function() {
+			reader.onerror = function () {
 				reject(new Error('文件读取失败'));
 			};
 			reader.readAsDataURL(file);
@@ -354,15 +355,15 @@ const E = window.wangEditor
 	const originalXHROpen = XMLHttpRequest.prototype.open;
 	const originalXHRSend = XMLHttpRequest.prototype.send;
 
-	XMLHttpRequest.prototype.open = function() {
+	XMLHttpRequest.prototype.open = function () {
 		this._requestURL = arguments[1];
 		return originalXHROpen.apply(this, arguments);
 	};
 
-	XMLHttpRequest.prototype.send = function(data) {
+	XMLHttpRequest.prototype.send = function (data) {
 		const self = this;
 		const requestURL = this._requestURL;
-		
+
 		// 检查是否是图片上传请求
 		if (requestURL && requestURL.includes('/index/setting/chatMessage')) {
 
@@ -374,10 +375,10 @@ const E = window.wangEditor
 						if (files.length === 0) {
 							return originalXHRSend.call(self, data);
 						}
-						
+
 						let hasCompressed = false;
 						const processedFormData = new FormData();
-						
+
 						// 复制所有字段（包括非文件字段）
 						for (const [key, value] of data.entries()) {
 							if (value instanceof File) {
@@ -398,24 +399,24 @@ const E = window.wangEditor
 								processedFormData.append(key, value);
 							}
 						}
-						
+
 						if (hasCompressed) {
 							return originalXHRSend.call(self, processedFormData);
 						} else {
 							return originalXHRSend.call(self, data);
 						}
-						
+
 					} catch (error) {
 						return originalXHRSend.call(self, data);
 					}
 				})();
-				
+
 				return; // 阻止原始send执行
 			} else {
 				// console.log('ℹ️ 非FormData请求，正常处理');
 			}
 		}
-		
+
 		// 非图片上传请求，正常处理
 		return originalXHRSend.call(this, data);
 	};
@@ -470,7 +471,7 @@ const E = window.wangEditor
 	// 第一，菜单 class ，Button 菜单继承 BtnMenu class
 	class AlertCloud extends BtnMenu {
 		constructor(editor) {
-		// data-title属性表示当鼠标悬停在该按钮上时提示该按钮的功能简述
+			// data-title属性表示当鼠标悬停在该按钮上时提示该按钮的功能简述
 			const $elem = E.$(
 				`<div class="w-e-menu" data-title="云盘分享">
 					<i class="layui-icon layui-icon-file"></i> 
@@ -499,10 +500,10 @@ const E = window.wangEditor
 				shadeClose: true,
 				content: '/cloud/share/',
 				zIndex: layer.zIndex, //重点1
-				success: function(layero){
+				success: function (layero) {
 					layer.setTop(layero); //重点2
 				},
-				end: function(){ 
+				end: function () {
 					var htmlStr = ''
 					var cloudShare = layui.sessionData('cloudShare')
 					if (!cloudShare.data) {
@@ -514,17 +515,17 @@ const E = window.wangEditor
 					if (type == 'video') {
 						htmlStr = '<p>分享视频-' + data.file_name + '</p><p class="massageImg clear showVideo' + data.file_id + '" vid="' + data.file_path + '"><video width="90%"  controls=""  name="media"><source src="' + data.file_path + '" type="video/mp4"></video></p>'
 					} else if (type == 'audio') {
-						htmlStr = '<p>分享音乐-' + data.file_name + '</p><p class="massageImg clear"><audio id="music_'+data.file_id+'" class="music" controls="controls" width="90%" loop="loop" onplay="stopOther(this)" preload="none" controlsList="nodownload" οncοntextmenu="return false" name="media"><source src="'+data.file_path+'" type="audio/mpeg"></audio></p>'
+						htmlStr = '<p>分享音乐-' + data.file_name + '</p><p class="massageImg clear"><audio id="music_' + data.file_id + '" class="music" controls="controls" width="90%" loop="loop" onplay="stopOther(this)" preload="none" controlsList="nodownload" οncοntextmenu="return false" name="media"><source src="' + data.file_path + '" type="audio/mpeg"></audio></p>'
 					} else if (type == 'image') {
-						htmlStr = '<p>分享图片-' + data.file_name + '</p><p  class="massageImg clear"><img  width="90%" class="massageImgCommon massageImg_'+type+'"  onclick="showMessageImg(this)" src="' + data.file_path + '"></p>'
+						htmlStr = '<p>分享图片-' + data.file_name + '</p><p  class="massageImg clear"><img  width="90%" class="massageImgCommon massageImg_' + type + '"  onclick="showMessageImg(this)" src="' + data.file_path + '"></p>'
 					} else if (type == 'text') {
-						htmlStr = '<p>分享文本-点击<a href="javascript:;" data-url="/tools/reader?file_id='+data.id+'" data-title="'+ data.file_name +'"  onclick="showFrameHtml(this, \'100%\', \'100%\')">' + data.file_name + '</a>阅读</p>'
+						htmlStr = '<p>分享文本-点击<a href="javascript:;" data-url="/tools/reader?file_id=' + data.id + '" data-title="' + data.file_name + '"  onclick="showFrameHtml(this, \'100%\', \'100%\')">' + data.file_name + '</a>阅读</p>'
 					} else {
-						htmlStr = '<p>分享文件-点击<a href="'+data.file_path+'">《'+data.file_name +'》</a>下载</p>'
+						htmlStr = '<p>分享文件-点击<a href="' + data.file_path + '">《' + data.file_name + '》</a>下载</p>'
 					}
 					editor.txt.html(htmlStr)
 					layui.sessionData('cloudShare', null)
-				} 
+				}
 			});
 		}
 		// 菜单是否被激活（如果不需要，这个函数可以空着）
@@ -577,9 +578,9 @@ const E = window.wangEditor
 	// 				if (!sourcematerial.data) {
 	// 					return false
 	// 				}
-	
+
 	// 				var data = sourcematerial.data
-	
+
 	// 				// $(".tool-up-class").show();
 	// 				$("#mediaVal").val(JSON.stringify(data));
 	// 				if (data.media_title) {
@@ -590,7 +591,7 @@ const E = window.wangEditor
 	// 						editor.txt.html(data.media_title)
 	// 					}
 	// 				}
-					
+
 	// 				layui.sessionData('sourcematerial', null)
 	// 			}
 	// 		});
@@ -603,7 +604,7 @@ const E = window.wangEditor
 	// 		// 1. 菜单 DOM 节点会增加一个 .w-e-active 的 css class
 	// 		// 2. this.this.isActive === true
 	// 		// this.active()
-	
+
 	// 		// // 取消激活菜单
 	// 		// // 1. 菜单 DOM 节点会删掉 .w-e-active
 	// 		// // 2. this.this.isActive === false
@@ -612,11 +613,11 @@ const E = window.wangEditor
 	// }
 
 	if (!$("#messageChatId").val()) {
-		const menuKey1 = 'AlertCloud' 
+		const menuKey1 = 'AlertCloud'
 		editor.menus.extend(menuKey1, AlertCloud)
 		editor.config.menus = editor.config.menus.concat(menuKey1)
 	}
-	
+
 	// const menuKey2 = 'AlertMaterial' 
 	// editor.menus.extend(menuKey2, AlertMaterial)
 	// editor.config.menus = editor.config.menus.concat(menuKey2)
@@ -628,3 +629,5 @@ const E = window.wangEditor
 	if (topicTitle) {
 		editor.txt.html(topicTitle + "&nbsp;")
 	}
+
+}
