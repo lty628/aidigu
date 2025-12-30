@@ -1,0 +1,195 @@
+{include file='index/header' /}
+<div class="main">
+	<div class="contents">
+		<div class="sendMsg"></div>
+		<div id="msgContent">
+			{foreach $userMessage as $message}
+			<div class="entry">
+				<!-- <div class="avatar"><div class="imgborder"><a href="{:url('/'.$message.blog.'/')}"><img src="{$message.head_image}" /></a></div></div> -->
+				<div class="box">
+					<div>
+						<p>
+							<a href="{:url('/'.$message.blog.'/')}" id="nickname">{$message.nickname} </a>
+							{if $message.type == 0}
+								转发了您的微博
+							{elseif $message.type == 1}
+								评论了您的微博
+							{elseif $message.type == 2}
+								回复了您的微博
+							{elseif $message.type == 6}
+								在微博中提到了您
+							{else}
+								{$message.type|getReminderTypeName}了微博
+							{/if}
+							：
+							<span style="float: right;">
+								<a href="{:url('/'.$loginUserInfo.blog.'/'.'message/'.$message.msg_id)}">查看</a>
+								<a href="javascript:;" data-title="评论" data-url="/chat/messageChatId/{$message.msg_id}" onclick="showFrameHtml(this, '60%', '70%')">评论({$message.commentsum})</a>
+							</span>
+						</p>
+					</div>
+					
+					<div class="block">
+						<div class="block_top"></div>
+						<div class="block_body">
+							<div class="repost">
+								{$message.contents|raw}{$message.repost|raw}
+								{if $message.media}
+									{if json_decode($message.media_info, true)['media_type'] == 'mp4'}
+									<p  class="massageImg"><video width="400px"  controls=""  name="media"><source src="{$message.media}" type="video/mp4"></video></p>
+									{else}
+									<p class="massageImg"><img width="75%" src="{:getTypeImg($message.media_info)}" onclick="showMessageImg(this)" style="cursor:pointer;"></p>
+									{/if}
+								{/if}
+							</div>
+							<div class="block_static">
+								{$message.ctime|date='Y-m-d H:i:s'}
+							</div>
+						</div>
+						<div class="block_bottom"></div>
+					</div>
+					
+				</div>
+
+				<div class="clear"></div>
+			</div>
+			{/foreach}
+		</div>
+		<div id="showMore" style="text-align: center; padding: 20px; display: block;">
+			加载更多...
+		</div>
+	</div>
+	{if $userInfo.isSiteUser}
+		{include file='index/sidebar_index' /}
+	{else}
+		{include file='index/sidebar_user' /}
+	{/if}
+{include file='index/footer' /}
+<script>
+    var page = 0; // 从第一页开始，因为第0页已经通过模板显示
+    $(function () {
+        var canLoad = true;
+        
+        function initNextPage() {
+            if (!canLoad) return;
+            page++;
+            canLoad = false;
+            
+            var url = window.location.pathname;
+            $.ajax({
+                type: "get",
+                url: url,
+                data: { page: page },
+                dataType: "json",
+            })
+            .done(function (json) {
+                if (json && json.code === 0) {
+                    // 显示提示信息
+                    alertMsg(json.msg || '加载数据失败');
+                    // 2 秒后将 canLoad 设置为 true
+                    setTimeout(() => {
+                        canLoad = true;
+                    }, 2000);
+                    return;
+                }
+                
+                if (!json || !json.data || !json.data.data) {
+                    canLoad = true;
+                    $("#showMore").html('没有更多数据');
+                    return;
+                }
+                
+                var data = json.data.data;
+                
+                for (var i = 0; i < data.length; i++) {
+                    var mediaStr = '';
+                    var str = '';
+                    var delStr = '';
+                    var typeText = '';
+
+					// type 0: 转发 1: 评论 2: 回复 3: 好友 4: 私信  5: 群聊 6: 提到
+					if (data[i].type == 0) {
+						typeText = '转发了您的微博';
+					} else if (data[i].type == 1) {
+						typeText = '评论了您的微博';
+					} else if (data[i].type == 2) {
+						typeText = '回复了您的微博';
+					} else if (data[i].type == 6) {
+						typeText = '在微博中提到了您';
+					} else {
+						typeText = (data[i].type_text || '发布了微博');
+					}
+                    
+                    // 处理媒体内容
+                    if (data[i].media) {
+                        var media_info = typeof data[i].media_info === 'string' ? JSON.parse(data[i].media_info) : data[i].media_info;
+                        if (media_info.media_type == 'mp4') {
+                            mediaStr = '<p  class="massageImg"><video width="400px"  controls=""  name="media"><source src="' + data[i].media + '" type="video/mp4"></video></p>';
+                        } else {
+                            // 使用与PHP模板中相同的getTypeImg函数逻辑
+                            mediaStr = '<p class="massageImg"><img width="75%" src="' + data[i].media + '" onclick="showMessageImg(this)" style="cursor:pointer;"></p>';
+                        }
+                    }
+
+                    // 使用与PHP模板中相同的HTML结构
+                    str = '<div class="entry">' +
+                        // '<div class="avatar"><div class="imgborder"><a href="/' + data[i].blog + '/"><img src="' + data[i].head_image + '" /></a></div></div>' +
+                        '<div class="box">' +
+                            '<div>' +
+                                '<p>' +
+                                    '<a href="/' + data[i].blog + '/" id="nickname">' + data[i].nickname + ' </a>' + typeText + '： ' +
+                                    '<span style="float: right;">' +
+                                        '<a href="/' + data[i].blog + '/message/' + data[i].msg_id + '">查看</a> ' +
+                                        '<a href="javascript:;" data-title="评论" data-url="/chat/messageChatId/' + data[i].msg_id + '" onclick="showFrameHtml(this, \'60%\', \'70%\')">评论(' + (data[i].commentsum || 0) + ')</a>' +
+                                    '</span>' +
+                                '</p>' +
+                            '</div>' +
+                            '<div class="block">' +
+                                '<div class="block_top"></div>' +
+                                '<div class="block_body">' +
+                                    '<div class="repost">' + (data[i].contents || '') + (data[i].repost || '') + mediaStr + '</div>' +
+                                    '<div class="block_static">' + data[i].ctime + '</div>' +
+                                '</div>' +
+                                '<div class="block_bottom"></div>' +
+                            '</div>' +
+                        '</div>' +
+                        '<div class="clear"></div>' +
+                        '</div>';
+                        
+                    $("#msgContent").append(str);
+                    
+                    if (typeof iniVideo === 'function') {
+                        iniVideo(data[i].msg_id);
+                    }
+                }
+
+                if (data.length < 8) {
+                    $("#showMore").html('没有更多了');
+                    return;
+                }
+
+                canLoad = true;
+            })
+            .always(function () {
+                // 无论成功或失败，都可以重新加载
+                canLoad = true;
+            })
+            .fail(function (xhr, status, error) {
+                console.error('AJAX请求失败:', error);
+                // 出错时也允许重新加载
+                setTimeout(() => {
+                    canLoad = true;
+                }, 2000);
+            });
+        }
+        initNextPage()
+        $(window).scroll(function () {
+            var top = $(window).scrollTop();
+            var winH = $(window).height();
+            var docH = $(document).height();
+            if (docH <= (top + winH + 200)) {
+                initNextPage();
+            }
+        });
+    });
+</script>
