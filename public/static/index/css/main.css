@@ -948,7 +948,7 @@ i.warning {
 }
 
 .pagination li:hover {
-    background-color: var(--secondary-color);
+    /* background-color: var(--secondary-color); */
     color: white;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
