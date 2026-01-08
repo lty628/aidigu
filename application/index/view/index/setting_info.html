@@ -11,7 +11,7 @@
 				<p class="formitem"><span>姓名：</span><input type="text" name="username" class="input" value="{$userInfo.username|default='无'}"><u>(保密)</u></p>
 				<p class="formitem"><span>账号：</span><input type="text" name="blog" onfocusout="checkInfo2(this, 1)" class="input" value="{$userInfo.blog}"><u>(必填)</u></p>
 				<p class="formitem"><span>昵称：</span>	<input type="text" name="nickname"onfocusout="checkInfo2(this, 1)" class="input" value="{$userInfo.nickname}"><u>(必填)</u></p>
-				<p class="formitem"><span>手机号：</span><input type="text" name="phone" class="input" value="{$userInfo.phone}"><u>(保密)</u></p>
+				<p class="formitem"><span>手机号：</span><input type="text" name="phone" class="input" value="{$userInfo.phone ?: ''}"><u>(保密)</u></p>
 				<p class="formitem"><span>电子邮件：</span><input type="text" name="email" class="input" value="{$userInfo.email|default=''}"><u>(保密)</u></p>
 				<p class="formitem"><span>性别：</span>
 					<input name="sex" type="radio" value="0" {if $userInfo.sex==0}checked{/if}>保密
