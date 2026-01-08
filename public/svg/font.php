@@ -172,5 +172,5 @@ SVG;
 
 // 设置HTTP头并输出
 header('Content-Type: image/svg+xml');
-// header('Cache-Control: public, max-age=31536000');
+header('Cache-Control: public, max-age=31536000');
 echo $svg;
