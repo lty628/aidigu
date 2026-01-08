@@ -22,14 +22,12 @@
   </div>
 </script>
 
-  <input type="hidden" value="" id="copyLink">
-
   <script type="text/html" id="barLineInfo">
   <div class="layui-clear-space">
     {{# if(d.is_added == 1) { }}
     <a class="layui-btn layui-btn-xs layui-btn-disabled">已添加</a>
     {{# } else { }}
-    <a class="layui-btn layui-btn-xs layui-btn-success" lay-event="addToMyApp">添加到我的应用</a>
+    <a class="layui-btn layui-btn-xs layui-btn-success" lay-event="addToMyApp">添加</a>
     {{# } }}
   </div>
 </script>
@@ -37,17 +35,7 @@
 
 
   <script src="/static/layui/layui.js"></script>
-  <script src="/static/common/js/clipboard.min.js"></script>
   <script>
-    function copyLink(obj) {
-      var $ = layui.$;
-      var invite_code = $(obj).attr('data-url');
-      $("#copyLink").attr('data-clipboard-text', window.location.protocol + '//' + window.location.host + '/tools/nav/joinGroup?invite_code=' + invite_code);
-      var clipboard = new ClipboardJS('#copyLink')
-      $("#copyLink").trigger('click');
-      clipboard.destroy();
-      layer.msg('链接已复制，分享好友就可以进行群聊天啦');
-    }
     
     layui.use(['table', 'dropdown'], function () {
       var table = layui.table;
