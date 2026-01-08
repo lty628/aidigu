@@ -102,11 +102,15 @@ class Nav extends Base
             ['app_name' => '腾讯视频', 'app_url' => 'https://v.qq.com', 'bg_color' => '#FF0000'],
         ];
         
+        // 一次性获取用户已添加的所有应用名称
+        $userAddedApps = Db::name('app')->where('fromuid', $this->uid)->column('app_name');
+        $userAddedAppsSet = array_flip($userAddedApps); // 转换为键值对，方便快速查找
+        
         // 生成默认应用列表
         $defaultApps = [];
         foreach ($apps as $app) {
-            // 检查用户是否已经添加该应用
-            $isAdded = Db::name('app')->where('app_name', $app['app_name'])->where('fromuid', $this->uid)->find();
+            // 检查用户是否已经添加该应用 - 在PHP中快速检查
+            $isAdded = isset($userAddedAppsSet[$app['app_name']]);
             
             // 生成SVG图像URL
             $app_image = '/svg/font.php?text=' . urlencode($app['app_name']) . '&color=ffffff&bgcolor=' . ltrim($app['bg_color'], '#') . '&width=64&height=64&size=24';
