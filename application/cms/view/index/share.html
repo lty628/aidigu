@@ -22,7 +22,7 @@
 							
 							<div class="card-header">
 								
-								<div class="card-title">分享面试题得红包</div>
+								<div class="card-title">分享文件下载得红包</div>
 								
 							</div>
 							
@@ -41,7 +41,7 @@
 										
 										<div class="form-col">
 											<input type="text" name="file-name" class="form-input"
-												value="" placeholder="请输入面试题标题" />
+												value="" placeholder="请输入文件下载标题" />
 										</div>
 									</div>
 									
@@ -92,7 +92,8 @@
 															<div class="form-col">
 																<label class="form-label">内
 																	容：</label>
-																<div id="test-editormd" class="editor-container">
+																<div id="msgToolBar" class="editor-toolbar"></div>
+																<div id="msgInput" class="editor-container">
 																	<textarea style="display:none;" class="editor-textarea"></textarea>
 																</div>
 
@@ -147,62 +148,8 @@
 
 </html>
 
-
-<script>
-	/*
-	var myDropzone = new Dropzone("#kt_dropzonejs_example_1", {
-		url: "/upload", // Set the url for your upload script location
-		paramName: "file", // The name that will be used to transfer the file
-		maxFiles: 1,
-		maxFilesize: 10, // MB
-		addRemoveLinks: true,
-		success: function (file, json) {
-			if (!json.code) {
-				alertMsg(json.msg)
-				return
-			}
-			// alertMsg(json.data)
-			$('input[name="attach-path"]').val(json.data)
-		}
-	});
-
-	*/
-
-</script>
-
-<script type="text/javascript">
-	var testEditor;
-
-	$(function () {
-		testEditor = editormd("test-editormd", {
-			width: "100%",
-			height: 540,
-			syncScrolling: "single",
-			path: "{{$Think.STATIC_URL}}static/cms/editor/lib/",
-			toolbarIcons: function () {
-				return [
-					"undo", "redo", "|",
-					"bold", "del", "italic", "quote", "uppercase", "lowercase", "|",
-					"h1", "h2", "h3", "h4", "h5", "h6", "|",
-					"list-ul", "list-ol", "hr", "|",
-					"watch", "preview", "|",
-					"table", "reference-link", "image", "code", "preformatted-text", "code-block"
-				]
-			},
-
-		});
-
-		/*
-		// or
-		testEditor = editormd({
-			id      : "test-editormd",
-			width   : "90%",
-			height  : 640,
-			path    : "../lib/"
-		});
-		*/
-	});
-</script>
+<script type="text/javascript" src="{{$Think.STATIC_URL}}static/common/js/wangEditor.min.js"></script>
+<script src="{{$Think.STATIC_URL}}static/cms/js/edit.js"></script>
 
 <script>
 	$(function () {
@@ -212,10 +159,10 @@
 			info.category_id = $('input[name="category-id"]').val();
 			info.attach_content_filtered = $('textarea[name="attach_content"]').val();
 			info.attach_path = $('input[name="attach-path"]').val();
-			info.attach_content = $('.editormd-preview').html();
+			info.attach_content = editor.txt.html();;
 			console.log(info)
 			if (!info.attach_title) {
-				alertMsg("请输入面试题标题")
+				alertMsg("请输入文件下载标题")
 				return
 			}
 			if (!info.category_id) {
@@ -223,7 +170,7 @@
 				return
 			}
 			if (!info.attach_path && !info.attach_content) {
-				alertMsg("请上传面试题或者编辑面试题")
+				alertMsg("请上传文件下载或者编辑文件下载")
 				return
 			}
 			$.ajax({

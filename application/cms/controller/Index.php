@@ -68,7 +68,7 @@ class Index extends Base
         $this->assign([
             'content' => $content
         ]);
-        // 自动截取面试题
+        // 自动截取文件下载
         $content['attach_content'] = cutAutoLen($content['attach_content']);
         return $this->fetch('download_details');
     }

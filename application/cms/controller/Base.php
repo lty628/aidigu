@@ -39,7 +39,7 @@ class Base extends Controller
         return $this->userInfo['uid'] ?? '';
     }
 
-    // 页面右侧面试题（部分页面调用使用）
+    // 页面右侧文件下载（部分页面调用使用）
     public function aside()
     {
         $attachmentModel = new AttachmentModel();
