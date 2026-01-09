@@ -1,0 +1,122 @@
+{{include file='layout/header' /}}
+
+<body id="kt_body" data-bs-spy="scroll">
+    
+    <div class="main-container">
+        
+        <div class="page-container">
+            
+            <div id="kt_wrapper">
+                {{include file='layout/kt_header' /}}
+                
+                
+                <div id="kt_content" class="content-container">
+                    
+                    <div id="kt_post" class="post-container">
+                        
+                        <div class="container">
+                            <div class="main-layout">
+                                
+                                <div class="articles-layout">
+                                    {{volist name="list" id="vo"}}
+                                    <article class="article-item card">
+                                        <a href="/blog/article/{{$vo.content_id}}.html" class="article-link text-decoration-none">
+                                            <div class="article-content card-body">
+                                                <header class="article-header">
+                                                    <div class="author-info d-flex align-items-center justify-content-between">
+                                                        
+                                                        <div class="author-avatar">
+                                                            <img src="{{$vo.user.head_image}}" alt="author avatar" class="rounded-circle" />
+                                                        </div>
+                                                        
+                                                        
+                                                        <div class="author-profile flex-grow-1 ms-3">
+                                                            <h2 class="article-title h5 mb-1">{{$vo.title}}</h2>
+                                                            <span class="article-date text-muted">{{$vo.create_time | formatTime}}</span>
+                                                        </div>
+                                                        
+                                                    </div>
+                                                    <span class="article-category badge bg-primary">{{$vo.category.category_name}}</span>
+                                                </header>
+                                                
+                                                
+                                                <div class="article-body row mt-3">
+                                                    <div class="article-image col-md-4 mb-3 mb-md-0">
+                                                        <img src="{{$Think.STATIC_URL}}static/cms/media/stock/900x600/20.jpg" alt="article image" class="img-fluid rounded" />
+                                                    </div>
+                                                    <div class="article-excerpt-container col-md-8">
+                                                        <p class="article-excerpt mb-0">
+                                                            {{if mb_strlen($vo.content) > 200}}{{$vo.content | strip_tags | mb_substr=0,200}}...{{else}}{{$vo.content | strip_tags}}{{/if}}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                
+                                                
+                                                
+                                                <footer class="article-footer mt-3 pt-2 border-top">
+                                                    <div class="article-actions d-flex justify-content-between align-items-center">
+                                                        <small class="text-muted">0 次浏览</small>
+                                                        <a href="/blog/article/{{$vo.content_id}}.html#pinglun" class="action-link comment-link btn btn-sm btn-outline-secondary">
+                                                            <span class="action-icon me-1">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                                                                    <path opacity="0.3" d="M20 3H4C2.89543 3 2 3.89543 2 5V16C2 17.1046 2.89543 18 4 18H4.5C5.05228 18 5.5 18.4477 5.5 19V21.5052C5.5 22.1441 6.21212 22.5253 6.74376 22.1708L11.4885 19.0077C12.4741 18.3506 13.6321 18 14.8167 18H20C21.1046 18 22 17.1046 22 16V5C22 3.89543 21.1046 3 20 3Z" fill="currentColor"></path>
+                                                                    <rect x="6" y="12" width="7" height="2" rx="1" fill="currentColor"></rect>
+                                                                    <rect x="6" y="7" width="12" height="2" rx="1" fill="currentColor"></rect>
+                                                                </svg>
+                                                            </span>
+                                                            <span class="action-count">{{$vo.comment_num}} 条评论</span>
+                                                        </a>
+                                                    </div>
+                                                </footer>
+                                                
+                                            </div>
+                                        </a>
+                                    </article>
+                                    {{/volist}}
+
+                                    <div class="pagination-container mt-5 d-flex justify-content-center">
+                                        <nav aria-label="Page navigation">
+                                            <ul class="pagination">
+                                                {{$page | raw}}
+                                            </ul>
+                                        </nav>
+                                    </div>
+                                </div>
+                                
+
+                                {{include file='layout/aside' /}}
+                            </div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                
+
+                {{include file='layout/footer' /}}
+            </div>
+            
+        </div>
+        
+    </div>
+    
+</body>
+
+
+</html>
+<script>
+    function addLike(content_id) {
+        $.ajax({
+            type: "POST",
+            url: "/cms/commit/addLike",
+            data: { content_id: content_id },
+            dataType: "json",
+            success: function (json) {
+                alertMsg(json.msg)
+                if (json.code == 1) {
+                    $("#likeNum").text(json.data)
+                }
+            }
+        });
+    }
+</script>

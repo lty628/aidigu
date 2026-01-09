@@ -1,0 +1,184 @@
+{{include file='layout/header' /}}
+
+<body id="kt_body">
+
+
+	<div class="create-container">
+
+		<div class="create-page">
+
+
+			<div id="kt_wrapper">
+				{{include file='layout/kt_header' /}}
+
+				<div id="kt_content" class="create-content">
+
+
+					<div id="kt_post" class="create-post">
+
+						<div class="container">
+
+
+							<div class="create-card">
+
+								<div class="card-header">
+
+									<div class="card-title">标题标题</div>
+
+								</div>
+
+
+								<div class="card-body">
+
+
+									<div class="form-row type-row">
+
+
+										<div class="form-col">
+											<label class="form-label">类型</label>
+											<input type="radio" name="type" id="option1" value="1" autocomplete="off"
+												checked class="form-radio">
+											<label for="option1" class="radio-label">问题</label>
+											<input type="radio" name="type" id="option2" value="2" autocomplete="off"
+												class="form-radio">
+											<label for="option2" class="radio-label">经验分享</label>
+										</div>
+									</div>
+
+
+
+									<div class="form-row title-row">
+
+
+										<div class="form-col">
+											<label class="form-label">标题</label>
+											<input type="text" name="title" class="form-input" value=""
+												placeholder="请输入标题" autocomplete="off" />
+										</div>
+									</div>
+
+
+
+									<div class="form-row content-row">
+
+
+										<div class="form-col">
+											<label class="form-label">内容</label>
+											<div id="test-editormd" class="editor-container">
+												<textarea style="display:none;" class="editor-textarea"></textarea>
+											</div>
+
+										</div>
+									</div>
+
+
+
+
+								</div>
+
+
+								<div class="card-footer">
+									<button type="submit" id="kt_commit_submit" class="submit-btn">发表</button>
+								</div>
+
+							</div>
+
+						</div>
+
+					</div>
+
+				</div>
+
+				{{include file='layout/footer' /}}
+			</div>
+
+		</div>
+
+	</div>
+
+
+</body>
+
+
+</html>
+<script type="text/javascript">
+	var testEditor;
+
+	$(function () {
+		testEditor = editormd("test-editormd", {
+			width: "100%",
+			height: 540,
+			syncScrolling: "single",
+			path: "{{$Think.STATIC_URL}}static/cms/editor/lib/",
+			toolbarIcons: function () {
+				return [
+					"undo", "redo", "|",
+					"bold", "del", "italic", "quote", "uppercase", "lowercase", "|",
+					"h1", "h2", "h3", "h4", "h5", "h6", "|",
+					"list-ul", "list-ol", "hr", "|",
+					"watch", "preview", "|",
+					"table", "reference-link", "image", "code", "preformatted-text", "code-block"
+				]
+			},
+
+		});
+
+		/*
+		// or
+		testEditor = editormd({
+			id      : "test-editormd",
+			width   : "90%",
+			height  : 640,
+			path    : "../lib/"
+		});
+		*/
+	});
+</script>
+
+<script>
+	$(function () {
+		$("#kt_commit_submit").click(function () {
+			var info = {}
+			info.type = $("input[name='type']").val()
+			info.content_filtered = $("textarea[name='test-editormd-markdown-doc']").val()
+			info.content = $('.editormd-preview').html()
+			info.title = $("input[name='title']").val()
+
+			if (!info.type) {
+				alertMsg("请选择类型")
+				return
+			}
+
+			if (!info.title) {
+				alertMsg("请填写标题")
+				return
+			}
+
+			if (!info.content) {
+				alertMsg("请填写内容")
+				return
+			}
+
+
+
+			$.ajax({
+				type: "POST",
+				url: "/cms/commit/commit",
+				data: { info: info },
+				dataType: "json",
+				success: function (json) {
+					if (!json.code) {
+						alertMsg(json.msg)
+					} else {
+						alertMsg("发表成功")
+					}
+				}
+			})
+				.always(function () {
+					alertLoading()
+				}).complete(function () {
+					layer.closeAll('loading', function () { });
+				});
+		})
+	})
+</script>

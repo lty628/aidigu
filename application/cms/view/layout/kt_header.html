@@ -1,0 +1,57 @@
+<div id="kt_header" class="header-container">
+    <div class="header-content">
+
+        <div class="header-main">
+            <div class="logo-section">
+                <a href="/blog/" class="logo-link">
+                    <img src="{{$Think.STATIC_URL}}static/cms/media/logos/logo1.png" class="logo-img" />
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <ul class="nav-menu">
+                    
+                    <li class="nav-item">
+                        <a class="{{if '' == 'cms/index/index'}}active{{/if}} nav-link" href="/blog/">首页</a>
+                    </li>
+                    
+                    
+                    <li class="nav-item">
+                        <a class="{{if '' == 'cms/index/filelist'}}active{{/if}} nav-link"
+                            href="/blog/filelist.html">文件下载</a>
+                    </li>
+                    
+                </ul>
+            </div>
+
+
+            <div class="user-section">
+                <div class="user-actions">
+                    {{if $userInfo}}
+                    <div class="user-info">
+                        <a href="javascript:;" title="头像" class="avatar-link">
+                            <img src="{{$userInfo['head_image']}}" class="user-avatar" />
+                        </a>
+                        <!-- <li> -->
+                        <a style="color: darkgrey;" href="/blog/index/user/logout/" class="logout-link">退出</a>
+                        <!-- </li> -->
+
+                    </div>
+                    {{else}}
+                    <a href="/blog/login.html" class="login-link">登录</a>
+                    {{/if}}
+                </div>
+
+            </div>
+        </div>
+
+
+
+
+
+
+    </div>
+
+
+
+</div>
