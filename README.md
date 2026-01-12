@@ -11,18 +11,6 @@
     <a href="https://raw.githubusercontent.com/lty628/aidigu/master/LICENSE"><img src="https://img.shields.io/badge/LICENSE-MIT-blue?style=for-the-badge&color=%234b5cc4" alt="MIT License"></a>
 </p>
 
-
-
-## **PHP开发的开源微博系统**
-
-QQ群：434615423
-
-1.测试地址 http://t.aidigu.cn
-
-2.采用PHP + MySQL开发，框架采用ThinkPHP5.1
-
-3.用户登录后拥有专属ID
-
 ### **主要功能特性**
 
 - **微博发布**：用户可以发布文字、图片、视频等内容，支持表情符号
