@@ -12,18 +12,12 @@
 
 
 Route::get('/blog/$', 'cms/Index/index');
+Route::get('/blog/filelist$', 'cms/Index/index');
+Route::get('/blog/category/:category_name/$', 'cms/Index/index');
 Route::get('/blog/commit$', 'cms/Index/commit');
 Route::get('/blog/commit/edit/:id$', 'cms/Index/commitEdit')->pattern(['id' => '[0-9]+']);;
 Route::get('/blog/article/:id$', 'cms/Index/details')->pattern(['id' => '[0-9]+']);
-Route::get('/blog/filelist$', 'cms/Index/download');
-Route::get('/blog/filelist/:category_name/:company_name/$', 'cms/Index/download');
-Route::get('/blog/filelistxiazai/:id$', 'cms/Index/downloadDetails')->pattern(['id' => '[0-9]+']);
-Route::get('/blog/password$', 'cms/Index/password');
-Route::get('/blog/verify$', 'cms/Index/verify');
-Route::get('/blog/share$', 'cms/Index/share');
-Route::get('/blog/password-reset$', 'cms/Index/passwordReset');
-Route::get('/blog/profile$', 'cms/Index/profile');
-Route::get('/blog/settings$', 'cms/Index/settings');
+
 
 Route::get('/blog/login$', 'cms/Index/login');
 Route::get('/blog/register$', 'cms/Index/register');

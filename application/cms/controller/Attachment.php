@@ -11,7 +11,7 @@ class Attachment extends Controller
     // 发表文章
     public function add(AttachmentModel $attachment)
     {
-        $userId = getUserIdd();
+        $userId = getUserId();
         if (!$userId) return ajaxJson(0, '未登录');
         $info = input('post.info');
         $info['uid'] = $userId;
@@ -25,7 +25,7 @@ class Attachment extends Controller
 
     public function readCount(AttachmentModel $attachment)
     {
-        $userId = getUserIdd();
+        $userId = getUserId();
         $attachId = input('post.attach_id');
         if (!$attachId) return ajaxJson(0, '参数不正确');
         if (!$userId) return ajaxJson(0, '未登录');
@@ -36,7 +36,7 @@ class Attachment extends Controller
     public function download()
     {
         $attachId = input('get.attach_id');
-        $userId = getUserIdd();
+        $userId = getUserId();
         if (!$userId) return $this->error('未登录');
         $attachment = new AttachmentModel();
         $info = $attachment->getOne(['attach_id' => $attachId]);

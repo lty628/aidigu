@@ -9,8 +9,13 @@ class Commit
 	public function commit(Content $content)
     {
         $info = input('post.info');
+        $article_img = input('post.article_img');
         // 此处有 bug 待完善 unfinish
-        $info['uid'] = getUserIdd();
+        $info['uid'] = getUserId();
+        $info['content_extra'] = '';
+        if ($article_img) {
+            $info['content_extra'] = json_encode(['article_img' => $article_img]);
+        }
         $result = $content->add($info);
         if (!$result) return ajaxJson(0, '添加失败'); 
         // $contentId = $content->id;
@@ -20,8 +25,20 @@ class Commit
     public function commitEdit(Content $content)
     {
         $info = input('post.info');
+        $article_img = input('post.article_img');
+        $contentId = $info['content_id'];
+        if (!$contentId) return ajaxJson(0, '参数不正确！'); 
+        $find = $content->getOne(['content_id' => $contentId]);
+        if (!$find) return ajaxJson(0, '参数不正确！'); 
+        $info['uid'] = getUserId();
+        if ($find['uid'] != $info['uid']) return ajaxJson(0, '您没有权限编辑！'); 
+        $info['content_extra'] = '';
+        if ($article_img) {
+            $info['content_extra'] = json_encode(['article_img' => $article_img]);
+        }
+        
         // 此处有 bug 待完善 unfinish
-        $where['uid'] = getUserIdd();
+        $where['uid'] = $info['uid'];
         $result = $content->edit($where, $info);
         if (!$result) return ajaxJson(0, '编辑失败'); 
         // $contentId = $content->id;
@@ -32,7 +49,7 @@ class Commit
     {
         $contentId = input('post.content_id');
         if (!$contentId) return ajaxJson(0, '参数不正确！'); 
-        if (!getUserIdd()) return ajaxJson(0, '点赞失败，请先登录！'); 
+        if (!getUserId()) return ajaxJson(0, '点赞失败，请先登录！'); 
         $info = $content->getOne(['content_id' => $contentId]);
         if (!$info)  return ajaxJson(0, '参数不正确'); 
         $num = $info['like_num'] + 1;

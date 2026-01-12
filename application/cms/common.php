@@ -85,7 +85,7 @@ function cutAutoLen($html)
     // 总长度
     $len = mb_strlen(strip_tags($html));
     // 长度过小或者已登录显示所有
-    if ($len < 200 || getUserIdd()) {
+    if ($len < 200 || getUserId()) {
         return $html;
     } else {
         $subLen = ceil($len / 3);
@@ -131,7 +131,7 @@ function getRegisterHeadImage()
     return '/static/index/media/avatars/150-'. mt_rand(1, 26) .'.jpg';
 }
 
-function getUserIdd()
+function getUserId()
 {
     return getLoginUid();
 }

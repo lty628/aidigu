@@ -1175,29 +1175,29 @@ body {
     }
 }
 /* 下载详情页面整体样式 */
-.download-details-container {
+.index-details-container {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
 }
 
-.download-details-page {
+.index-details-page {
     flex: 1;
     display: flex;
     flex-direction: column;
 }
 
-.download-details-content {
+.index-details-content {
     flex: 1;
     background-color: #f8f9fa;
     padding: 2rem 0;
 }
 
-.download-details-post {
+.index-details-post {
     padding: 0;
 }
 
-.download-details-layout {
+.index-details-layout {
     display: grid;
     grid-template-columns: 2fr 1fr;
     gap: 2rem;
@@ -1205,18 +1205,18 @@ body {
 }
 
 /* 下载内容卡片样式 */
-.download-content {
+.index-content {
     background: white;
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     overflow: hidden;
 }
 
-.download-card {
+.index-card {
     padding: 1.5rem;
 }
 
-.download-overview {
+.index-overview {
     width: 100%;
 }
 
@@ -1226,7 +1226,7 @@ body {
 }
 
 /* 下载头部样式 */
-.download-header {
+.index-header {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
@@ -1235,18 +1235,18 @@ body {
     border-bottom: 1px solid #eee;
 }
 
-.download-info {
+.index-info {
     display: flex;
     align-items: center;
     flex: 1;
 }
 
-.download-profile {
+.index-profile {
     display: flex;
     align-items: center;
 }
 
-.download-cover {
+.index-cover {
     margin-right: 1rem;
 }
 
@@ -1259,23 +1259,23 @@ body {
     border: 1px solid #eee;
 }
 
-.download-title a {
+.index-title a {
     text-decoration: none;
     color: inherit;
 }
 
-.download-title {
+.index-title {
     font-size: 1.5rem;
     font-weight: 600;
     margin: 0;
     color: #333;
 }
 
-.download-title:hover {
+.index-title:hover {
     color: #0d6efd;
 }
 
-.download-stats {
+.index-stats {
     margin: 0.5rem 0 0;
     font-size: 0.9rem;
     color: #6c757d;
@@ -1291,26 +1291,26 @@ body {
 }
 
 /* 分隔线 */
-.download-separator {
+.index-separator {
     height: 1px;
     background-color: #eee;
     margin: 1.5rem 0;
 }
 
 /* 下载操作区域 */
-.download-action-row {
+.index-action-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 1.5rem;
 }
 
-.download-action {
+.index-action {
     display: flex;
     gap: 1rem;
 }
 
-.download-btn {
+.index-btn {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
@@ -1326,12 +1326,12 @@ body {
     text-decoration: none;
 }
 
-.download-btn:hover {
+.index-btn:hover {
     background-color: #157347;
     transform: translateY(-2px);
 }
 
-.download-btn:disabled {
+.index-btn:disabled {
     background-color: #6c757d;
     cursor: not-allowed;
 }
@@ -1341,7 +1341,7 @@ body {
 }
 
 /* 下载说明卡片 */
-.download-description {
+.index-description {
     margin-top: 1.5rem;
 }
 
@@ -1403,42 +1403,42 @@ body {
 
 /* 响应式设计 */
 @media (max-width: 768px) {
-    .download-details-layout {
+    .index-details-layout {
         grid-template-columns: 1fr;
     }
     
-    .download-header {
+    .index-header {
         flex-direction: column;
         align-items: flex-start;
         gap: 1rem;
     }
     
-    .download-info {
+    .index-info {
         flex-direction: column;
         align-items: flex-start;
         gap: 1rem;
     }
     
-    .download-profile {
+    .index-profile {
         flex-direction: column;
         align-items: flex-start;
     }
     
-    .download-cover {
+    .index-cover {
         margin-right: 0;
     }
     
-    .download-action-row {
+    .index-action-row {
         flex-direction: column;
         gap: 1rem;
         align-items: stretch;
     }
     
-    .download-action {
+    .index-action {
         justify-content: center;
     }
     
-    .download-card {
+    .index-card {
         padding: 1rem;
     }
     
@@ -1447,30 +1447,30 @@ body {
     }
 }
 /* 下载列表页面整体样式 */
-.download-list-container {
+.index-list-container {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
 }
 
-.download-list-page {
+.index-list-page {
     flex: 1;
     display: flex;
     flex-direction: column;
 }
 
-.download-list-content {
+.index-list-content {
     flex: 1;
     background-color: #f8f9fa;
     padding: 2rem 0;
 }
 
-.download-list-post {
+.index-list-post {
     padding: 0;
 }
 
 /* 工具栏样式 */
-.download-toolbar {
+.index-toolbar {
     background-color: white;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     margin-bottom: 2rem;
@@ -1564,25 +1564,25 @@ body {
 }
 
 /* 下载列表网格样式 */
-.download-tab-content {
+.index-tab-content {
     margin-bottom: 2rem;
 }
 
-.download-grid {
+.index-grid {
     margin-top: 1.5rem;
 }
 
-.download-row {
+.index-row {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 1.5rem;
 }
 
-.download-item {
+.index-item {
     margin-bottom: 0;
 }
 
-.download-card-link {
+.index-card-link {
     display: block;
     text-decoration: none;
     color: inherit;
@@ -1593,12 +1593,12 @@ body {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.download-card-link:hover {
+.index-card-link:hover {
     transform: translateY(-5px);
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
 }
 
-.download-card-header {
+.index-card-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -1626,7 +1626,7 @@ body {
     color: #6c757d;
 }
 
-.download-card-body {
+.index-card-body {
     padding: 1.5rem;
 }
 
@@ -1663,7 +1663,7 @@ body {
     color: #6c757d;
 }
 
-.download-progress {
+.index-progress {
     height: 4px;
     background-color: #e9ecef;
     overflow: hidden;
@@ -1732,11 +1732,11 @@ body {
 
 /* 响应式设计 */
 @media (max-width: 768px) {
-    .download-row {
+    .index-row {
         grid-template-columns: 1fr;
     }
     
-    .download-toolbar {
+    .index-toolbar {
         margin-bottom: 1rem;
     }
     
@@ -1744,7 +1744,7 @@ body {
         flex-direction: column;
     }
     
-    .download-card-header {
+    .index-card-header {
         flex-direction: column;
         gap: 0.5rem;
         align-items: flex-start;
@@ -1759,7 +1759,7 @@ body {
         margin-bottom: 0.5rem;
     }
     
-    .download-list-content {
+    .index-list-content {
         padding: 1rem 0;
     }
 }
@@ -2504,5 +2504,305 @@ body {
     
     .menu-link {
         font-size: 0.9rem;
+    }
+}
+
+/* 全局样式重置和基础设置 */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f8f9fa;
+}
+
+/* 主要容器 */
+.index-list-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.index-list-page {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+/* 工具栏 */
+.index-toolbar {
+    background-color: #f0f2f5;
+    padding: 15px 20px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.toolbar-info {
+    margin-bottom: 10px;
+}
+
+.toolbar-actions {
+    text-align: right;
+}
+
+.toolbar-btn {
+    display: inline-block;
+    padding: 8px 16px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    margin-left: 10px;
+    transition: background-color 0.3s;
+}
+
+.toolbar-btn:hover {
+    background-color: #0056b3;
+}
+
+/* 分类筛选区 */
+.category-filter {
+    padding: 20px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.filter-heading {
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+    color: #495057;
+}
+
+.filter-nav {
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+}
+
+.filter-item {
+    margin-right: 15px;
+    margin-bottom: 10px;
+}
+
+.filter-link {
+    text-decoration: none;
+    color: #6c757d;
+    padding: 5px 10px;
+    border-radius: 4px;
+    transition: all 0.3s;
+}
+
+.filter-link:hover {
+    background-color: #e9ecef;
+    color: #495057;
+}
+
+/* 文章列表网格 */
+.index-grid {
+    padding: 20px;
+}
+
+.index-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 25px;
+}
+
+/* 文章卡片 */
+.index-item {
+    transition: transform 0.3s;
+}
+
+.index-item:hover {
+    transform: translateY(-5px);
+}
+
+.index-card-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+}
+
+.index-card {
+    position: relative;
+    background-color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.index-card:hover {
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* 分类标签 */
+.category-tag {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: #007bff;
+    color: white;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    z-index: 1;
+}
+
+/* 文章卡片内容 */
+.index-card-body {
+    padding: 20px;
+    flex: 1;
+}
+
+.article-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #343a40;
+    line-height: 1.4;
+}
+
+.author-nickname {
+    font-size: 0.9rem;
+    font-weight: 400;
+    color: #6c757d;
+}
+
+/* 多媒体内容 */
+.article-media {
+    margin-bottom: 15px;
+}
+
+.article-image img {
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
+}
+
+.article-video video {
+    width: 100%;
+    border-radius: 4px;
+}
+
+/* 文章摘要 */
+.article-excerpt {
+    font-size: 0.9rem;
+    color: #6c757d;
+    line-height: 1.5;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
+
+/* 文章卡片底部 */
+.index-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background-color: #f8f9fa;
+    border-top: 1px solid #e9ecef;
+}
+
+/* 用户信息 */
+.author-info {
+    display: flex;
+    align-items: center;
+}
+
+.author-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-right: 8px;
+}
+
+.author-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.author-name {
+    font-size: 0.9rem;
+    color: #495057;
+}
+
+/* 统计信息 */
+.card-stats {
+    display: flex;
+    gap: 15px;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-value {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #495057;
+}
+
+.stat-label {
+    font-size: 0.8rem;
+    color: #6c757d;
+}
+
+/* 分页区域 */
+.pagination-section {
+    padding: 20px;
+    text-align: center;
+}
+
+.pages {
+    display: inline-block;
+}
+
+.pages a, .pages span {
+    display: inline-block;
+    padding: 8px 12px;
+    margin: 0 2px;
+    text-decoration: none;
+    color: #007bff;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    transition: all 0.3s;
+}
+
+.pages a:hover {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+.pages .current {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .index-row {
+        grid-template-columns: 1fr;
+    }
+    
+    .toolbar-actions {
+        text-align: center;
+    }
+    
+    .filter-nav {
+        justify-content: center;
     }
 }

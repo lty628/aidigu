@@ -31,7 +31,7 @@
                                                         
                                                         
                                                         <div class="author-profile flex-grow-1 ms-3">
-                                                            <h2 class="article-title h5 mb-1">{{$vo.title}}</h2>
+                                                            <h2 class="article-title h5 mb-1">{{$vo.user.nickname}}</h2>
                                                             <span class="article-date text-muted">{{$vo.create_time | formatTime}}</span>
                                                         </div>
                                                         
@@ -41,16 +41,25 @@
                                                 
                                                 
                                                 <div class="article-body row mt-3">
-                                                    <div class="article-image col-md-4 mb-3 mb-md-0">
-                                                        <img src="{{$Think.STATIC_URL}}static/cms/media/stock/900x600/20.jpg" alt="article image" class="img-fluid rounded" />
+                                                    {{if $vo.content_extra.article_img}}
+                                                    <div class="article-image col-md-4 mb-3 mb-md-0">    
+                                                        <img src="{{$vo.content_extra.article_img}}" alt="article image" class="img-fluid rounded" />
                                                     </div>
+                                                    {{/if}}
                                                     <div class="article-excerpt-container col-md-8">
+                                                        <h3 class="article-title h6">
+                                                            <a href="/blog/article/{{$vo.content_id}}.html" class="text-decoration-none">
+                                                                {{$vo.title}}
+                                                            </a>
+                                                        </h3>
                                                         <p class="article-excerpt mb-0">
                                                             {{if mb_strlen($vo.content) > 200}}{{$vo.content | strip_tags | mb_substr=0,200}}...{{else}}{{$vo.content | strip_tags}}{{/if}}
                                                         </p>
                                                     </div>
                                                 </div>
                                                 
+                                                
+                                            
                                                 
                                                 
                                                 <footer class="article-footer mt-3 pt-2 border-top">

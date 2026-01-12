@@ -10,9 +10,13 @@ class Content extends BaseModel
 		return $this->hasOne('User','uid','uid')->bind('uid,nickname,head_image');
 	}
 
-    // 关联企业名称表
     public function category()
 	{
 		return $this->hasOne('Category','category_id','category_id')->bind('category_name');
 	}
+
+	public function getContentExtraAttr($value, $content)
+    {
+		return json_decode($content['content_extra'], true);
+    }
 }

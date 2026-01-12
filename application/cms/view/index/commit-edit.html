@@ -35,13 +35,12 @@
 
 
 										<div class="form-col">
-											<label class="form-label">类型</label>
-											<input type="radio" name="type" id="option1" value="1" autocomplete="off"
-												 class="form-radio">
-											<label for="option1" class="radio-label">问题</label>
-											<input type="radio" name="type" id="option2" value="2" autocomplete="off"
-												 class="form-radio">
-											<label for="option2" class="radio-label">经验分享</label>
+											<label class="form-label">分类</label>
+												<select name="category-id" class="form-select">
+													{{volist name="categoryList" id="vo"}}
+													<option value="{{$vo.category_id}}" {{$vo.category_id == $article.category.category_id ? 'selected' : ''}}>{{$vo.category_name}}</option>
+													{{/volist}}
+												</select>
 										</div>
 									</div>
 
@@ -83,6 +82,7 @@
 
 								</div>
 
+								<input type="hidden" id="mediaVal" value="{{$article.content_extra.article_img}}">
 
 								<div class="card-footer">
 									<button type="submit" id="kt_commit_submit" class="submit-btn">发表</button>
@@ -117,16 +117,11 @@
 	$(function () {
 		$("#kt_commit_submit").click(function () {
 			var info = {}
-			info.type = $("input[name='type']").val()
-			info.content_filtered = $("textarea[name='test-editormd-markdown-doc']").val()
+			info.content_filtered = editor.txt.text()
 			info.content = editor.txt.html();
 			info.title = $("input[name='title']").val()
-
-
-			if (!info.type) {
-				alertMsg("请选择类型")
-				return
-			}
+			info.category_id = $("select[name='category-id']").val()
+			var article_img = $("#mediaVal").val()
 
 
 			if (!info.title) {
@@ -144,7 +139,7 @@
 			$.ajax({
 				type: "POST",
 				url: "/cms/commit/commitEdit",
-				data: { info: info },
+				data: { info: info, article_img: article_img },
 				dataType: "json",
 				success: function (json) {
 					if (!json.code) {

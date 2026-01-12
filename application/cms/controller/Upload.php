@@ -1,10 +1,11 @@
 <?php
-namespace app\upload\controller;
+namespace app\cms\controller;
+use app\cms\controller\Base;
 
 /**
  * 通用上传
  */
-class Index
+class Upload 
 {
     protected $validate = [];
     protected $dir = '';
@@ -38,7 +39,16 @@ class Index
         $info = $file->rule($this->rule)->validate($this->validate)->move($this->dir);
         if ($info) {
             $linkPath = rtrim($this->url, '/') . '/' . $this->dir . '/' . $info->getSaveName();
-            return ajaxJson(1, 'ok', $linkPath);
+            return json([
+                'errno' => 0,
+                'data' => [
+                    [
+                        'url' => $linkPath,
+                        'alt' => $info->getFilename(),
+                        'href' => $linkPath
+                    ]
+                ]
+            ]);
         } else {
             // 上传失败获取错误信息
             return ajaxJson(0, $file->getError());

@@ -1,0 +1,165 @@
+{{include file='layout/header' /}}
+
+<body id="kt_body">
+    
+    
+    <div class="index-list-container">
+        
+        <div class="index-list-page">
+            
+            
+            <div id="kt_wrapper">
+                {{include file='layout/kt_header' /}}
+                
+                <div id="kt_content" class="index-list-content">
+                    
+                    <div id="kt_toolbar" class="index-toolbar">
+                        <div class="container">
+                            
+                            <div class="toolbar-info">
+                                
+                            </div>
+                            
+                            
+                            <div class="toolbar-actions">
+                                <a href="/blog/commit.html" class="toolbar-btn commit-btn">发文章</a>
+                                <!-- <a href="/blog/share" class="toolbar-btn share-btn">上传文件</a> -->
+                            </div>
+                            
+                        </div>
+                    </div>
+                    
+                    
+                    <div id="kt_post" class="index-list-post">
+                        
+                        <div class="container">
+                            
+                            <div id="category" class="category-filter">
+                                
+                                <h2 class="filter-heading">分类</h2>
+                                    
+
+                                <div class="filter-options">
+                                    
+                                    <ul class="filter-nav">
+                                        {{volist name="categoryList" id="vo"}}
+                                        
+                                        <li class="filter-item">
+                                            <a href="/blog/category/{{$vo.category_name}}/" data-category-id="{{$vo.category_id}}"
+                                                class="filter-link">{{$vo.category_name}}</a>
+                                        </li>
+                                        {{/volist}}
+                                    </ul>
+                                        
+
+                                </div>
+
+                            </div>
+
+                            
+                            <div class="index-tab-content">
+                                
+                                <div id="kt_projects_list_grid" class="index-grid">
+                                    
+                                    <div class="index-row">
+                                        {{volist name="list" id="vo"}}
+                                        <div class="index-item">
+                                            
+                                            <a href="/blog/filelistxiazai/{{$vo.content_id}}.html" class="index-card-link">
+                                                
+                                                <div class="index-card">
+                                                    <!-- 分类标签 - 左上角 -->
+                                                    <div class="category-tag">
+                                                        {{$vo.category.category_name}}
+                                                    </div>
+                                                    
+                                                    <!-- 文章内容：标题、多媒体内容和摘要 -->
+                                                    <div class="index-card-body">
+                                                        <h3 class="article-title">
+                                                            {{$vo.title}}
+                                                            <span class="author-nickname"> - {{$vo.user.nickname}}</span>
+                                                        </h3>
+                                                        
+                                                        <!-- 多媒体内容区域 -->
+                                                        <div class="article-media">
+                                                            <!-- 文章图片 -->
+                                                            {{if isset($vo.content_extra.article_img) && $vo.content_extra.article_img }}
+                                                            <div class="article-image mb-3">
+                                                                <img src="{{$vo.content_extra.article_img}}" alt="article image" class="img-fluid rounded" />
+                                                            </div>
+                                                            {{/if}}
+                                                            
+                                                            <!-- 文章视频 -->
+                                                            {{if isset($vo.content_extra.article_video) && $vo.content_extra.article_video }}
+                                                            <div class="article-video mb-3">
+                                                                <video controls class="w-100 rounded">
+                                                                    <source src="{{$vo.content_extra.article_video}}" type="video/mp4">
+                                                                    您的浏览器不支持视频播放
+                                                                </video>
+                                                            </div>
+                                                            {{/if}}
+                                                        </div>
+                                                        
+                                                        <p class="article-excerpt">
+                                                            {{if mb_strlen($vo.content) > 200}}{{$vo.content | strip_tags | mb_substr=0,200}}...{{else}}{{$vo.content | strip_tags}}{{/if}}
+                                                        </p>
+                                                    </div>
+                                                    
+                                                    <!-- 文章底部：用户信息和统计数据 -->
+                                                    <div class="index-card-footer">
+                                                        <!-- 用户信息 - 左下角 -->
+                                                        <div class="author-info">
+                                                            <div class="author-avatar">
+                                                                <img src="{{$vo.user.head_image}}" alt="author avatar" class="rounded-circle" />
+                                                            </div>
+                                                            <div class="author-name">{{$vo.user.nickname}}</div>
+                                                        </div>
+                                                        
+                                                        <!-- 统计信息 - 右下角 -->
+                                                        <div class="card-stats">
+                                                            <div class="stat-item">
+                                                                <div class="stat-value">0次</div>
+                                                                <div class="stat-label">查看</div>
+                                                            </div>
+                                                            <div class="stat-item">
+                                                                <div class="stat-value">{{$vo.comment_num}}次</div>
+                                                                <div class="stat-label">评论</div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                            </a>
+                                            
+                                        </div>
+                                        {{/volist}}
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                            
+                            
+                            
+                            <div class="pagination-section">
+                                <div class="pages">{{$page | raw}}</div>
+                            </div>
+                            
+                        
+                            
+                            
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                
+                {{include file='layout/footer' /}}
+            </div>
+            
+        </div>
+        
+    </div>
+    
+</body>
+
+</html>

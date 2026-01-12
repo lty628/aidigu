@@ -4,9 +4,9 @@ const editor = new E("#msgToolBar", "#msgInput")
 
 // 设置随机占位符
 editor.config.placeholder = '请输入内容';
-editor.config.uploadImgServer = '/index/setting/msgInputImg'
+editor.config.uploadImgServer = '/cms/upload/index'
 editor.config.uploadFileName = 'file'
-editor.config.uploadVideoServer = '/index/setting/msgInputImg'
+editor.config.uploadVideoServer = '/cms/upload/index'
 editor.config.uploadVideoName = 'file'
 editor.config.uploadImgHooks = {
     // 图片上传并返回了结果，图片插入已成功
@@ -37,7 +37,11 @@ editor.config.uploadImgHooks = {
         // }
         // return
         // // insertImgFn 可把图片插入到编辑器，传入图片 src ，执行函数即可
-        insertImgFn(result.data['media_info'] + '.' + result.data['media_type'])
+        if (!$("#mediaVal").val()) {
+            $("#mediaVal").val(res.data[0].url);
+        }
+        insertImgFn(res.data[0].url)
+        // insertImgFn(result.data['media_info'] + '.' + result.data['media_type'])
     }
 }
 editor.config.uploadVideoHooks = {
@@ -71,7 +75,8 @@ editor.config.uploadVideoHooks = {
         // return
         // console.log('customInsert', result)
         // // insertVideoFn 可把视频插入到编辑器，传入视频 src ，执行函数即可
-        insertVideoFn(result.data['media_info'] + '.' + result.data['media_type'])
+        insertVideoFn(res.data.url)
+        // insertVideoFn(result.data['media_info'] + '.' + result.data['media_type'])
     }
 }
 editor.config.menus = [
@@ -372,7 +377,7 @@ XMLHttpRequest.prototype.send = function (data) {
     const requestURL = this._requestURL;
 
     // 检查是否是图片上传请求
-    if (requestURL && requestURL.includes('/index/setting/msgInputImg')) {
+    if (requestURL && requestURL.includes('/cms/upload/index')) {
 
         if (data instanceof FormData) {
             // 异步处理FormData压缩

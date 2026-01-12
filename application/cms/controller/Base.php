@@ -12,7 +12,7 @@ class Base extends Controller
 
     public function initialize()
     {
-        $userid = getUserIdd();
+        $userid = getUserId();
         $info = [];
         if ($userid) {
             $info = Db::table('wb_user')->field('uid,nickname,head_image,blog,status,uptime,theme')->where('uid', $userid)->find();
@@ -25,6 +25,7 @@ class Base extends Controller
             ]
         );
         $this->aside();
+        $this->getCategory();
         // dump(strtolower(request()->routeInfo()["route"]));die;
         // 未登录用户在特定路由下给提示
         $this->redirectLogin();
@@ -33,10 +34,18 @@ class Base extends Controller
         );
     }
 
-    public function getUserIdd()
+    public function getUserId()
     {
 
         return $this->userInfo['uid'] ?? '';
+    }
+
+    public function getCategory()
+    {
+        $categoryList = Db::name('category')->select();
+        $this->assign([
+            'categoryList' => $categoryList
+        ]);
     }
 
     // 页面右侧文件下载（部分页面调用使用）

@@ -13,7 +13,7 @@ class Comment
         $info = input('post.info');
         if (time() - session('commit_expire_time') < 60) return ajaxJson(0, '评论间隔1分钟，请不要频繁评论'); 
         session('commit_expire_time', time());
-        $info['uid'] = getUserIdd();
+        $info['uid'] = getUserId();
         $result = $comment->add($info);
         if (!$result) return ajaxJson(0, '评论失败'); 
         $content->where(['content_id' => $info['content_id']])->setInc('comment_num');
