@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>信件功能 - 爱嘀咕</title>
+    <style>
+        /* 全局样式重置 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* 动态渐变背景 */
+        body {
+            background: linear-gradient(-45deg, #ffafbd, #ffc3a0, #a8edea, #fed6e3);
+            background-size: 400% 400%;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            animation: gradientBG 15s ease infinite;
+        }
+
+        @keyframes gradientBG {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* 粒子背景效果 */
+        .particle-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: rgba(255, 107, 107, 0.3);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px) rotate(0deg);
+                opacity: 0.8;
+            }
+            50% {
+                transform: translateY(-30px) rotate(180deg);
+                opacity: 0.4;
+            }
+        }
+
+        /* 主容器 */
+        .letter-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* 页头 */
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: #fff;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            /* padding: 40px 20px; */
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 15px;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+
+        .header p {
+            font-size: 1.3em;
+            opacity: 0.95;
+            line-height: 1.6;
+        }
+
+        /* 主要内容区域 */
+        .main-content {
+            display: flex;
+            gap: 20px;
+            min-height: 600px;
+        }
+
+        /* 左侧面板 - 信件列表 */
+        .left-panel {
+            width: 350px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 写信按钮 */
+        .write-btn {
+            background: linear-gradient(135deg, #ff6b6b, #ff8e8e, #ffd93d);
+            background-size: 200% 200%;
+            border: none;
+            color: white;
+            font-weight: bold;
+            padding: 15px 40px;
+            font-size: 1.2em;
+            border-radius: 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            animation: gradientButton 3s ease infinite;
+            margin: 15px;
+            border-radius: 50px;
+        }
+
+        @keyframes gradientButton {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .write-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 35px rgba(255, 107, 107, 0.6);
+        }
+
+        /* 信件列表 */
+        .letter-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0 15px 15px;
+        }
+
+        .letter-item {
+            padding: 15px;
+            border-bottom: 1px solid #f6f6f6;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            background: rgba(255, 255, 255, 0.7);
+        }
+
+        .letter-item:hover {
+            background-color: #f8f8f8;
+            transform: translateX(5px);
+        }
+
+        .letter-item.active {
+            background-color: #e6f7ff;
+            border-left: 3px solid #1890ff;
+        }
+
+        .new-badge {
+            color: #ff4d4f;
+            font-weight: bold;
+            margin-left: 10px;
+            font-size: 0.8em;
+        }
+
+        .letter-meta {
+            font-size: 12px;
+            color: #999;
+            margin-top: 5px;
+        }
+
+        /* 右侧面板 - 信件详情 */
+        .right-panel {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 30px;
+            overflow-y: auto;
+        }
+
+        /* 信件详情 */
+        .letter-detail {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .letter-detail h2 {
+            color: #ff6b6b;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px dashed #ffd3d3;
+        }
+
+        .letter-info {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .letter-info p {
+            margin-bottom: 5px;
+            color: #666;
+        }
+
+        .letter-content {
+            line-height: 1.8;
+            white-space: pre-line;
+            font-size: 1.1em;
+            color: #333;
+            background: rgba(255, 240, 245, 0.5);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #ff6b6b;
+        }
+
+        /* 写信弹窗 */
+        .write-popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .popup-content {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #999;
+            transition: color 0.3s;
+        }
+
+        .close-btn:hover {
+            color: #ff6b6b;
+        }
+
+        .popup-title {
+            font-size: 2em;
+            color: #ff6b6b;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        /* 表单样式 */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #666;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ffd3d3;
+            border-radius: 10px;
+            font-size: 1em;
+            transition: all 0.3s;
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #ff6b6b;
+            box-shadow: 0 0 10px rgba(255, 107, 107, 0.3);
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 150px;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 20px;
+        }
+
+        .radio-group label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+        }
+
+        /* 提交按钮 */
+        .submit-btn {
+            background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
+            border: none;
+            color: white;
+            font-weight: bold;
+            padding: 15px 40px;
+            font-size: 1.2em;
+            border-radius: 50px;
+            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255, 107, 107, 0.6);
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+
+            .left-panel {
+                width: 100%;
+                max-height: 400px;
+            }
+
+            .header h1 {
+                font-size: 2.2em;
+            }
+
+            .header p {
+                font-size: 1.1em;
+            }
+        }
+
+        /* 加载状态 */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: #ff6b6b;
+        }
+
+        .loading::after {
+            content: '';
+            width: 20px;
+            height: 20px;
+            border: 2px solid #ff6b6b;
+            border-top: 2px solid transparent;
+            border-radius: 50%;
+            margin-left: 10px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 粒子背景 -->
+    <div class="particle-bg" id="particle-bg"></div>
+
+    <div class="letter-container">
+        <div class="header">
+            <h1>💌 一封信</h1>
+            <!-- <p>在这里，你可以发送和接收信件，传递你的心意</p> -->
+        </div>
+
+        <div class="main-content">
+            <!-- 左侧面板 - 信件列表 -->
+            <div class="left-panel">
+                <button class="write-btn" id="btnWrite">✏️ 写信</button>
+                <div class="letter-list" id="letterList">
+                    <div class="loading">加载中...</div>
+                </div>
+            </div>
+
+            <!-- 右侧面板 - 信件详情 -->
+            <div class="right-panel">
+                <div class="letter-detail" id="letterDetail">
+                    <h2 style="color: #666;">请选择查看信件</h2>
+                    <p style="color: #999;">点击左侧信件标题查看内容</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 写信弹窗 -->
+    <div class="write-popup" id="writeModal">
+        <div class="popup-content">
+            <span class="close-btn" id="closeBtn">&times;</span>
+            <!-- <h2 class="popup-title">📝 写信</h2> -->
+            <form id="letterForm">
+                <div class="form-group">
+                    <label for="receiver">收信人</label>
+                    <input type="text" id="receiver" name="receiver" placeholder="请输入收信人姓名" required>
+                </div>
+                <div class="form-group">
+                    <label for="title">主题</label>
+                    <input type="text" id="title" name="title" placeholder="请输入信件主题" required>
+                </div>
+                <div class="form-group">
+                    <label for="content">内容</label>
+                    <textarea id="content" name="content" placeholder="请输入信件内容" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label>收信时间</label>
+                    <div class="radio-group">
+                        <label>
+                            <input type="radio" name="time_type" value="now" checked> 立即收到
+                        </label>
+                        <label>
+                            <input type="radio" name="time_type" value="future"> 未来收到
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group" id="futureTimeDiv" style="display: none;">
+                    <label for="receive_time">指定时间</label>
+                    <input type="datetime-local" id="receive_time" name="receive_time">
+                </div>
+                <button type="submit" class="submit-btn">💝 发送</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.staticfile.org/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        // 初始化粒子背景
+        function initParticles() {
+            const particleBg = document.getElementById('particle-bg');
+            const particleCount = Math.min(30, Math.floor(window.innerWidth / 100));
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 6 + 's';
+                particle.style.animationDuration = (Math.random() * 4 + 4) + 's';
+                particleBg.appendChild(particle);
+            }
+        }
+
+        // 加载信件列表
+        function loadLetterList() {
+            $.get('/tools/letter/getList', function(res) {
+                if (res.code === 0) {
+                    let html = '';
+                    res.data.forEach(function(item) {
+                        html += `
+                            <div class="letter-item" data-id="${item.id}">
+                                <strong>${item.title}</strong>
+                                ${item.status == 0 ? '<span class="new-badge">新</span>' : ''}
+                                <div class="letter-meta">
+                                    来自：${item.sender_name || item.receiver} | ${formatDate(item.created_at)}
+                                </div>
+                            </div>
+                        `;
+                    });
+                    $('#letterList').html(html);
+                }
+            });
+        }
+
+        // 显示信件详情
+        function showLetterDetail(id) {
+            $.get(`/tools/letter/getDetail/?id=${id}`, function(res) {
+                if (res.code === 0) {
+                    const letter = res.data;
+                    $('#letterDetail').html(`
+                        <h2>${letter.title}</h2>
+                        <div class="letter-info">
+                            <p><strong>发信人：</strong>${letter.sender_name || letter.receiver}</p>
+                            <p><strong>收信人：</strong>${letter.receiver}</p>
+                            <p><strong>时间：</strong>${formatDate(letter.created_at)}</p>
+                        </div>
+                        <div class="letter-content">${letter.content}</div>
+                    `);
+                }
+            });
+        }
+
+        // 格式化日期
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleString('zh-CN');
+        }
+
+        // 初始化弹窗交互
+        function initPopup() {
+            // 打开写信弹窗
+            $('#btnWrite').click(function() {
+                $('#writeModal').css('display', 'flex');
+                // 重置表单
+                $('#letterForm')[0].reset();
+                $('#futureTimeDiv').hide();
+            });
+
+            // 关闭写信弹窗
+            $('#closeBtn').click(function() {
+                $('#writeModal').hide();
+            });
+
+            // 点击弹窗外部关闭
+            $('#writeModal').click(function(e) {
+                if (e.target === this) {
+                    $(this).hide();
+                }
+            });
+
+            // 时间类型切换
+            $('input[name="time_type"]').change(function() {
+                if ($(this).val() === 'future') {
+                    $('#futureTimeDiv').show();
+                } else {
+                    $('#futureTimeDiv').hide();
+                }
+            });
+
+            // 提交信件
+            $('#letterForm').submit(function(e) {
+                e.preventDefault();
+                
+                var formData = {
+                    receiver: $('#receiver').val(),
+                    title: $('#title').val(),
+                    content: $('#content').val()
+                };
+                
+                // 处理时间
+                if ($('input[name="time_type"]:checked').val() === 'future') {
+                    formData.receive_time = $('#receive_time').val();
+                }
+                
+                $.post('/tools/letter/send', formData, function(res) {
+                    if (res.code === 0) {
+                        alert('发送成功');
+                        $('#writeModal').hide();
+                        loadLetterList(); // 刷新列表
+                    } else {
+                        alert(res.msg);
+                    }
+                });
+            });
+        }
+
+        // 初始化函数
+        function init() {
+            initParticles();
+            loadLetterList();
+            initPopup();
+        }
+
+        // 页面加载完成后初始化
+        $(document).ready(function() {
+            init();
+
+            // 点击信件项显示详情
+            $(document).on('click', '.letter-item', function() {
+                $('.letter-item').removeClass('active');
+                $(this).addClass('active');
+                const id = $(this).data('id');
+                showLetterDetail(id);
+            });
+        });
+    </script>
+</body>
+
+</html>
