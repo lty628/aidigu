@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>通用评论回复功能</title>
+    <link href="/static/layui/css/layui.css" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -22,7 +24,7 @@
             margin: 0 auto;
             background: white;
             border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             overflow: hidden;
         }
 
@@ -148,7 +150,7 @@
             color: #666;
             font-size: 14px;
         }
-        
+
         /* 匿名用户名样式 */
         .anonymous-user {
             color: #666;
@@ -156,12 +158,13 @@
         }
     </style>
 </head>
+
 <body>
     <div class="comment-container">
         <!-- <div class="comment-header">
             <h2>评论区</h2>
         </div> -->
-        
+
         <div class="comment-form">
             <div class="form-group">
                 <label for="commentContent">评论内容</label>
@@ -184,7 +187,7 @@
                     这是一个很棒的功能！期待看到更多类似的创新设计。这个评论系统的用户体验应该会很好。
                 </div>
                 <button class="reply-btn">回复</button>
-                
+
                 <!-- 回复表单 - 默认隐藏 -->
                 <div class="reply-form">
                     <div class="form-group">
@@ -208,17 +211,18 @@
                             @匿名用户 谢谢您的认可！我们会继续努力改进功能。
                         </div>
                         <button class="reply-btn">回复</button>
-                        
+
                         <!-- 嵌套回复表单 -->
                         <div class="reply-form">
                             <div class="form-group">
                                 <textarea class="form-control" placeholder="输入您的回复..."></textarea>
                             </div>
                             <button class="btn send-reply">发送回复</button>
-                            <button class="btn cancel-reply" style="background-color: #999; margin-left: 10px;">取消</button>
+                            <button class="btn cancel-reply"
+                                style="background-color: #999; margin-left: 10px;">取消</button>
                         </div>
                     </div>
-                    
+
                     <div class="comment-item">
                         <div class="comment-header-info">
                             <div>
@@ -231,14 +235,15 @@
                             @匿名用户 @匿名用户 这个功能确实不错，希望能增加一些表情功能。
                         </div>
                         <button class="reply-btn">回复</button>
-                        
+
                         <!-- 嵌套回复表单 -->
                         <div class="reply-form">
                             <div class="form-group">
                                 <textarea class="form-control" placeholder="输入您的回复..."></textarea>
                             </div>
                             <button class="btn send-reply">发送回复</button>
-                            <button class="btn cancel-reply" style="background-color: #999; margin-left: 10px;">取消</button>
+                            <button class="btn cancel-reply"
+                                style="background-color: #999; margin-left: 10px;">取消</button>
                         </div>
                     </div>
                 </div>
@@ -257,7 +262,7 @@
                     设计得很简洁，很喜欢这种风格。不过建议增加一些自定义选项，让每个人都能个性化设置。
                 </div>
                 <button class="reply-btn">回复</button>
-                
+
                 <div class="reply-form">
                     <div class="form-group">
                         <textarea class="form-control" placeholder="输入您的回复..."></textarea>
@@ -268,10 +273,10 @@
             </div>
         </div>
     </div>
-
+    <script src="/static/layui/layui.js"></script>
     <script>
         // 事件委托方式处理回复按钮点击事件
-        document.addEventListener('click', function(e) {
+        document.addEventListener('click', function (e) {
             // 处理回复按钮点击
             if (e.target.classList.contains('reply-btn')) {
                 const form = e.target.nextElementSibling;
@@ -284,19 +289,19 @@
                     form.style.display = form.style.display === 'none' ? 'block' : 'block';
                 }
             }
-            
+
             // 处理取消按钮点击
             if (e.target.classList.contains('cancel-reply')) {
                 const form = e.target.closest('.reply-form');
                 form.style.display = 'none';
             }
-            
+
             // 处理发送回复按钮点击
             if (e.target.classList.contains('send-reply')) {
                 const form = e.target.closest('.reply-form');
                 const textarea = form.querySelector('textarea');
                 const content = textarea.value.trim();
-                
+
                 if (content) {
                     alert('回复已提交！');
                     textarea.value = '';
@@ -307,9 +312,9 @@
                 }
             }
         });
-        
+
         // 提交主评论功能
-        document.querySelector('.comment-form .btn').addEventListener('click', function() {
+        document.querySelector('.comment-form .btn').addEventListener('click', function () {
             const content = document.getElementById('commentContent').value.trim();
             if (content) {
                 alert('评论已提交！');
@@ -320,4 +325,5 @@
         });
     </script>
 </body>
+
 </html>
