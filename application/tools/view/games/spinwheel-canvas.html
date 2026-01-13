@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -49,40 +48,12 @@
             margin: 0 auto 30px;
         }
 
-        .wheel {
+        #wheelCanvas {
             width: 100%;
             height: 100%;
             border-radius: 50%;
-            position: relative;
-            overflow: hidden;
-            transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99);
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
             border: 5px solid #fff;
-        }
-
-        .segment {
-            position: absolute;
-            width: 50%;
-            height: 50%;
-            transform-origin: bottom right;
-            left: 0;
-            top: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-        }
-
-        .segment-content {
-            transform: rotate(45deg);
-            width: 140px;
-            text-align: center;
-            font-weight: bold;
-            font-size: 14px;
-            color: white;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-            margin-left: -40px;
-            margin-top: 20px;
         }
 
         .pointer {
@@ -298,47 +269,10 @@
             background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
         }
 
-        .config-list {
-            margin-bottom: 30px;
-        }
-
-        .config-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            background-color: #f7fafc;
-        }
-
-        .config-info {
-            flex: 1;
-            text-align: left;
-        }
-
-        .config-actions {
-            display: flex;
-            gap: 10px;
-        }
-
-        .switch-btn {
-            background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
-            padding: 8px 15px;
-            font-size: 0.875rem;
-        }
-
-        .edit-btn {
-            background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
-            padding: 8px 15px;
-            font-size: 0.875rem;
-        }
-
-        .delete-config-btn {
-            background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
-            padding: 8px 15px;
-            font-size: 0.875rem;
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
         }
 
         /* 返回按钮样式 */
@@ -364,61 +298,8 @@
             transform: translateX(-5px);
             box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
         }
-
-        .probability-section {
-            margin-top: 15px;
-            padding: 15px;
-            background-color: #f0f4f8;
-            border-radius: 8px;
-        }
-
-        .probability-input {
-            width: 60px;
-            padding: 5px 10px;
-            border: 1px solid #cbd5e0;
-            border-radius: 4px;
-            text-align: center;
-        }
-
-        /* 响应式设计 */
-        @media (max-width: 600px) {
-            .container {
-                padding: 20px;
-            }
-
-            h1 {
-                font-size: 2rem;
-            }
-
-            .buttons {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            button {
-                width: 100%;
-                max-width: 300px;
-            }
-
-            .form-actions {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .config-actions {
-                flex-direction: column;
-                gap: 8px;
-            }
-
-            .config-item {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 15px;
-            }
-        }
     </style>
 </head>
-
 <body>
     <div class="container">
         <a href="{:url('games/index')}" class="back-btn">
@@ -431,14 +312,12 @@
             <label for="configSelect">选择配置：</label>
             <select id="configSelect" class="config-select">
                 <option value="default">默认配置</option>
-                <!-- 其他配置项将通过JavaScript动态添加 -->
             </select>
+            <button class="config-btn" onclick="openConfig()">管理配置</button>
         </div>
 
         <div class="wheel-container">
-            <div class="wheel" id="wheel">
-                <!-- 转盘分区将通过JavaScript动态生成 -->
-            </div>
+            <canvas id="wheelCanvas" width="300" height="300"></canvas>
             <div class="pointer"></div>
             <div class="center-circle">GO</div>
         </div>
@@ -449,7 +328,6 @@
 
         <div class="buttons">
             <button id="spinBtn">开始转盘</button>
-            <button class="config-btn" onclick="openConfig()">配置选项</button>
         </div>
 
         <div id="result" class="result"></div>
@@ -480,22 +358,20 @@
                     <textarea id="options" placeholder="请输入转盘选项，每行一个&#10;例如：&#10;唱歌&#10;跳舞&#10;讲笑话&#10;..."></textarea>
                 </div>
                 <div class="form-group probability-section">
-                    <label>选项概率设置（可选，默认等概率）:</label>
+                    <label>概率设置（可选，留空表示等概率）:</label>
                     <div id="probabilityInputs"></div>
-                    <small>注：概率值为相对权重，如选项A设为2，选项B设为1，则A被选中的概率是B的两倍</small>
                 </div>
                 <div class="form-actions">
                     <button class="save-btn" onclick="saveConfig()">保存配置</button>
-                    <button class="cancel-btn" onclick="cancelEditConfig()">取消</button>
-                    <button class="delete-btn" onclick="deleteCurrentConfig()" id="deleteConfigBtn"
-                        style="display: none;">删除配置</button>
+                    <button class="cancel-btn" onclick="cancelEdit()">取消</button>
+                    <button class="delete-btn" id="deleteConfigBtn" onclick="deleteConfig()" style="display: none;">删除配置</button>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // 默认选项
+        // 转盘选项
         let options = [
             "唱歌",
             "跳舞",
@@ -514,9 +390,126 @@
         // 游戏标识符
         const gameKey = 'spinwheel';
 
+        // 转盘相关变量
+        const canvas = document.getElementById('wheelCanvas');
+        const ctx = canvas.getContext('2d');
+        const spinBtn = document.getElementById('spinBtn');
+        const resultText = document.getElementById('resultText');
+        let isSpinning = false;
+
+        // 绘制转盘
+        function drawWheel() {
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            const radius = Math.min(centerX, centerY) - 10;
+            const segmentAngle = (2 * Math.PI) / options.length;
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // 绘制扇区
+            options.forEach((option, index) => {
+                const startAngle = index * segmentAngle - Math.PI / 2; // 从顶部开始
+                const endAngle = (index + 1) * segmentAngle - Math.PI / 2;
+
+                // 绘制扇区
+                ctx.beginPath();
+                ctx.moveTo(centerX, centerY);
+                ctx.arc(centerX, centerY, radius, startAngle, endAngle);
+                ctx.closePath();
+                
+                // 设置颜色
+                const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFBE0B', '#FB5607', '#8338EC'];
+                ctx.fillStyle = colors[index % colors.length];
+                ctx.fill();
+                ctx.strokeStyle = '#fff';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+
+                // 绘制文字
+                ctx.save();
+                ctx.translate(centerX, centerY);
+                ctx.rotate(startAngle + segmentAngle / 2);
+                ctx.textAlign = 'center';
+                ctx.fillStyle = 'white';
+                ctx.font = 'bold 14px Arial';
+                ctx.shadowColor = 'rgba(0,0,0,0.5)';
+                ctx.shadowBlur = 3;
+                ctx.fillText(option, radius - 30, 5);
+                ctx.restore();
+            });
+
+            // 绘制中心圆
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, 30, 0, 2 * Math.PI);
+            ctx.fillStyle = 'white';
+            ctx.fill();
+            ctx.strokeStyle = '#ccc';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            // 绘制GO文字
+            ctx.fillStyle = '#333';
+            ctx.font = 'bold 16px Arial';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('GO', centerX, centerY);
+        }
+
+        // 旋转转盘
+        function spinWheel() {
+            if (isSpinning) return;
+
+            isSpinning = true;
+            spinBtn.disabled = true;
+            spinBtn.textContent = '旋转中...';
+
+            // 计算随机结果
+            const selectedIndex = getRandomIndexWithProbability(probabilities, options.length);
+            const selectedOption = options[selectedIndex];
+
+            // 计算旋转角度（至少5圈加上选中项的角度）
+            const segmentAngle = 360 / options.length;
+            const extraRotation = 5 * 360;
+            const targetRotation = extraRotation + (360 - (selectedIndex * segmentAngle + segmentAngle / 2));
+
+            // 应用旋转动画
+            canvas.style.transition = 'transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99)';
+            canvas.style.transform = `rotate(${targetRotation}deg)`;
+
+            // 旋转结束后显示结果
+            setTimeout(() => {
+                resultText.textContent = `结果：${selectedOption}`;
+                document.getElementById('resultBox').style.animation = 'pulse 0.5s';
+
+                isSpinning = false;
+                spinBtn.disabled = false;
+                spinBtn.textContent = '开始转盘';
+            }, 4000);
+        }
+
+        // 概率随机函数
+        function getRandomIndexWithProbability(probabilities, length) {
+            let totalWeight = 0;
+            for (let i = 0; i < length; i++) {
+                totalWeight += probabilities[i] || 1;
+            }
+
+            let random = Math.random() * totalWeight;
+            let cumulativeWeight = 0;
+            
+            for (let i = 0; i < length; i++) {
+                cumulativeWeight += probabilities[i] || 1;
+                if (random <= cumulativeWeight) {
+                    return i;
+                }
+            }
+            return length - 1;
+        }
+
         // 页面加载时尝试从服务器获取用户配置
         window.onload = function () {
             fetchUserConfigs(); // 获取配置列表
+            drawWheel(); // 初始化转盘
         };
 
         // 获取用户的所有配置列表
@@ -653,12 +646,12 @@
                         // 更新概率输入框
                         updateProbabilityInputs();
                     } else {
-                        alert('获取配置失败：' + (data.msg || '未知错误'));
+                        showMessage('获取配置失败：' + (data.msg || '未知错误'), 'error');
                     }
                 })
                 .catch(error => {
                     console.error('获取配置失败:', error);
-                    alert('获取配置失败，请稍后重试');
+                    showMessage('获取配置失败，请稍后重试', 'error');
                 });
         }
 
@@ -698,153 +691,94 @@
                     container.appendChild(wrapper);
                 });
             } else {
-                container.innerHTML = '<p>请先添加选项</p>';
+                container.innerHTML = '<p style="color: #718096;">请先输入选项</p>';
             }
-        }
-
-        // 监听选项文本域变化，动态更新概率输入框
-        document.getElementById('options').addEventListener('input', updateProbabilityInputs);
-
-        // 取消编辑配置
-        function cancelEditConfig() {
-            // 显示配置列表，隐藏表单
-            document.getElementById('configList').style.display = 'block';
-            document.getElementById('configForm').style.display = 'none';
         }
 
         // 保存配置
         function saveConfig() {
-            // 获取用户输入的内容
             const configId = document.getElementById('configId').value;
             const configName = document.getElementById('configName').value.trim();
-            const optionsInput = document.getElementById('options').value;
+            const optionsText = document.getElementById('options').value;
+            const optionLines = optionsText.split('\n').filter(line => line.trim() !== '');
 
-            // 检查配置名称
+            // 验证表单
             if (!configName) {
-                showMessage('请输入配置名称！', 'error');
+                showMessage('请输入配置名称', 'error');
                 return;
             }
 
-            // 分割成数组并过滤空行
-            const newOptions = optionsInput.split('\n').filter(item => item.trim() !== '');
-
-            // 检查是否有内容
-            if (newOptions.length < 2) {
-                showMessage('至少需要两个选项！', 'error');
+            if (optionLines.length < 2) {
+                showMessage('至少需要输入2个选项', 'error');
                 return;
             }
 
-            // 保存到服务器
-            if (configId) {
-                // 更新现有配置
-                updateConfigToServer(configId, configName, newOptions);
-            } else {
-                // 保存新配置
-                saveNewConfigToServer(configName, newOptions);
-            }
-        }
-
-        // 保存新配置到服务器
-        function saveNewConfigToServer(configName, options) {
-            // 创建FormData对象
-            const formData = new FormData();
-            formData.append('game_key', gameKey);
-            formData.append('config_name', configName);
-            formData.append('game_name', '大转盘游戏');
-            formData.append('game_desc', '大转盘游戏配置');
-            // 构造配置数据对象
-            const configData = {
-                options: options,
+            // 准备数据
+            const data = {
+                config_name: configName,
+                game_key: gameKey,
+                options: optionLines,
                 probabilities: probabilities
             };
-            formData.append('config_data', JSON.stringify(configData));
 
-            // 发送请求保存配置
-            fetch('/tools/games/saveNamedGameConfig', {
-                method: 'POST',
-                body: formData
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.code === 1) {
-                        showMessage('配置已保存成功！', 'success');
-                        // 刷新配置列表
-                        fetchUserConfigs();
-                        // 返回配置列表视图
-                        cancelEditConfig();
-                    } else {
-                        showMessage('保存失败：' + data.msg, 'error');
-                    }
-                })
-                .catch(error => {
-                    console.error('保存配置失败:', error);
-                    showMessage('保存配置失败，请稍后重试', 'error');
-                });
-        }
-
-        // 更新配置到服务器
-        function updateConfigToServer(configId, configName, options) {
-            // 创建FormData对象
-            const formData = new FormData();
-            formData.append('id', configId);
-            formData.append('config_name', configName);
-            formData.append('game_name', '大转盘游戏');
-            formData.append('game_desc', '大转盘游戏配置');
-            // 构造配置数据对象
-            const configData = {
-                options: options,
-                probabilities: probabilities
-            };
-            formData.append('config_data', JSON.stringify(configData));
-
-            // 发送请求更新配置
-            fetch('/tools/games/updateGameConfig', {
-                method: 'POST',
-                body: formData
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.code === 1) {
-                        showMessage('配置已更新成功！', 'success');
-                        // 刷新配置列表
-                        fetchUserConfigs();
-                        // 返回配置列表视图
-                        cancelEditConfig();
-                    } else {
-                        showMessage('更新失败：' + data.msg, 'error');
-                    }
-                })
-                .catch(error => {
-                    console.error('更新配置失败:', error);
-                    showMessage('更新配置失败，请稍后重试', 'error');
-                });
-        }
-
-        // 删除当前编辑的配置
-        function deleteCurrentConfig() {
-            const configId = document.getElementById('configId').value;
+            // 发送请求
+            const url = configId ? '/tools/games/updateGameConfig' : '/tools/games/saveGameConfig';
             if (configId) {
-                deleteConfig(configId);
+                data.id = configId;
             }
+
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(responseData => {
+                if (responseData.code === 1) {
+                    showMessage(configId ? '配置更新成功' : '配置保存成功', 'success');
+                    closeConfig();
+                    fetchUserConfigs(); // 重新获取配置列表
+                } else {
+                    showMessage('保存失败：' + (responseData.msg || '未知错误'), 'error');
+                }
+            })
+            .catch(error => {
+                console.error('保存配置失败:', error);
+                showMessage('保存配置失败，请稍后重试', 'error');
+            });
         }
 
         // 删除配置
         function deleteConfig(configId) {
-            if (!confirm('确定要删除这个配置吗？')) {
+            if (!configId) {
+                configId = document.getElementById('configId').value;
+            }
+
+            if (!configId) {
+                showMessage('无效的配置ID', 'error');
                 return;
             }
 
-            // 发送请求删除配置
-            fetch('/tools/games/deleteNamedGameConfig?id=' + configId)
+            if (confirm('确定要删除此配置吗？')) {
+                fetch('/tools/games/deleteGameConfig', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ id: configId })
+                })
                 .then(response => response.json())
                 .then(data => {
                     if (data.code === 1) {
-                        showMessage('配置已删除成功！', 'success');
-                        // 刷新配置列表
-                        fetchUserConfigs();
-                        // 如果正在编辑被删除的配置，则返回列表视图
-                        if (document.getElementById('configId').value == configId) {
-                            cancelEditConfig();
+                        showMessage('配置删除成功', 'success');
+                        closeConfig();
+                        fetchUserConfigs(); // 重新获取配置列表
+                        
+                        // 如果删除的是当前使用的配置，切换到默认配置
+                        if (configId == currentConfigId) {
+                            switchToConfig('default');
                         }
                     } else {
                         showMessage('删除失败：' + data.msg, 'error');
@@ -854,6 +788,13 @@
                     console.error('删除配置失败:', error);
                     showMessage('删除配置失败，请稍后重试', 'error');
                 });
+            }
+        }
+
+        // 取消编辑
+        function cancelEdit() {
+            document.getElementById('configList').style.display = 'block';
+            document.getElementById('configForm').style.display = 'none';
         }
 
         // 显示消息
@@ -874,131 +815,6 @@
             setTimeout(() => {
                 resultElement.style.display = 'none';
             }, 3000);
-        }
-
-        // 点击模态框外部关闭
-        window.onclick = function (event) {
-            const modal = document.getElementById('configModal');
-            if (event.target == modal) {
-                closeConfig();
-            }
-        }
-
-        // 根据索引和概率计算随机结果
-        function getRandomIndexWithProbability(probabilities, length) {
-            // 计算总权重
-            let totalWeight = 0;
-            for (let i = 0; i < length; i++) {
-                totalWeight += probabilities[i] || 1; // 默认权重为1
-            }
-
-            // 生成0到总权重之间的随机数
-            let random = Math.random() * totalWeight;
-
-            // 找到对应的索引
-            let cumulativeWeight = 0;
-            for (let i = 0; i < length; i++) {
-                cumulativeWeight += probabilities[i] || 1;
-                if (random <= cumulativeWeight) {
-                    return i;
-                }
-            }
-
-            // 默认返回最后一个（理论上不会执行到这里）
-            return length - 1;
-        }
-
-        // 初始化转盘
-        function updateWheel() {
-            const wheel = document.getElementById('wheel');
-            wheel.innerHTML = '';
-
-            const numSegments = options.length;
-            const segmentAngle = 360 / numSegments;
-
-            options.forEach((option, index) => {
-                const segment = document.createElement('div');
-                segment.className = 'segment';
-                segment.style.transform = `rotate(${index * segmentAngle}deg)`;
-                segment.style.backgroundColor = getColor(index);
-
-                const content = document.createElement('div');
-                content.className = 'segment-content';
-                content.textContent = option;
-                content.style.transform = `rotate(${segmentAngle / 2}deg)`;
-
-                segment.appendChild(content);
-                wheel.appendChild(segment);
-            });
-        }
-
-        // 获取颜色
-        function getColor(index) {
-            const colors = [
-                '#FF6B6B', '#4ECDC4', '#45B7D1', '#FFBE0B', '#FB5607', '#8338EC',
-                '#3A86FF', '#FF006E', '#8AC926', '#1982C4', '#6A4C93', '#F15BB5'
-            ];
-            return colors[index % colors.length];
-        }
-
-        // 开始旋转转盘
-        function spinWheel() {
-            const wheel = document.getElementById('wheel');
-            const resultBox = document.getElementById('resultBox');
-            const resultText = document.getElementById('resultText');
-            const spinBtn = document.getElementById('spinBtn');
-
-            // 防止重复点击
-            if (spinBtn.disabled) {
-                return;
-            }
-
-            // 禁用按钮
-            spinBtn.disabled = true;
-            spinBtn.textContent = '旋转中...';
-
-            // 重置转盘样式，清除之前的过渡效果
-            wheel.style.transition = 'none';
-            const currentTransform = getComputedStyle(wheel).transform;
-            const matrix = new DOMMatrix(currentTransform);
-            const currentRotation = matrix.m42 ? Math.round(Math.atan2(matrix.m42, matrix.m41) * 180 / Math.PI) : 0;
-
-            // 将当前旋转角度归零但保持状态
-            wheel.style.transform = `rotate(${currentRotation}deg)`;
-            wheel.offsetHeight; // 强制重排
-
-            // 计算随机结果
-            const selectedIndex = getRandomIndexWithProbability(probabilities, options.length);
-            const selectedOption = options[selectedIndex];
-
-            // 计算旋转角度（至少5圈加上选中项的角度偏移）
-            const segmentAngle = 360 / options.length;
-            // 计算正确的结束角度，使指针指向扇区中心
-            const extraRotation = 5 * 360; // 至少5圈
-
-            // 由于扇区是从右上角开始绘制的，我们需要调整计算
-            // 扇区中心角度 = 选中索引 * 每个扇区角度 + 每个扇区角度的一半
-            // 由于扇区从右上角开始，所以需要加上45度的偏移
-            const sectorCenterAngle = (selectedIndex * segmentAngle + segmentAngle) / 2;
-            // 计算转盘需要旋转的角度，使选中扇区的中心对准指针
-            // 指针在顶部（0度），所以需要旋转到使扇区中心对准指针
-            const targetRotation = extraRotation + (360 - sectorCenterAngle - 45) + currentRotation;
-
-            // 重新设置过渡效果并应用旋转
-            wheel.style.transition = 'transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99)';
-            wheel.style.transform = `rotate(${targetRotation}deg)`;
-
-            // 旋转结束后显示结果
-            setTimeout(() => {
-                resultText.textContent = `结果：${selectedOption}`;
-                resultBox.style.animation = 'none';
-                resultBox.offsetHeight; // 触发重排
-                resultBox.style.animation = 'pulse 0.5s';
-
-                // 启用按钮
-                spinBtn.disabled = false;
-                spinBtn.textContent = '开始转盘';
-            }, 4000);
         }
 
         // 切换到指定配置
@@ -1055,30 +871,23 @@
 
             // 更新转盘显示
             setTimeout(() => {
-                updateWheel();
+                drawWheel();
             }, 100);
         }
 
         // 绑定事件
-        document.getElementById('spinBtn').onclick = spinWheel;
+        spinBtn.addEventListener('click', spinWheel);
         document.getElementById('configSelect').onchange = function () {
             switchToConfig(this.value);
         };
 
-        // 添加脉冲动画样式
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes pulse {
-                0% { transform: scale(1); }
-                50% { transform: scale(1.05); }
-                100% { transform: scale(1); }
+        // 点击模态框外部关闭
+        window.onclick = function (event) {
+            const modal = document.getElementById('configModal');
+            if (event.target == modal) {
+                closeConfig();
             }
-        `;
-        document.head.appendChild(style);
-
-        // 初始化转盘
-        updateWheel();
+        }
     </script>
 </body>
-
 </html>
