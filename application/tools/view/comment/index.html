@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>通用评论回复功能</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+
+        .comment-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .comment-header {
+            padding: 20px;
+            background-color: #4a90e2;
+            color: white;
+            text-align: center;
+        }
+
+        .comment-form {
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        textarea.form-control {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .btn {
+            background-color: #4a90e2;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .btn:hover {
+            background-color: #3a7bc8;
+        }
+
+        .comments-list {
+            padding: 20px;
+        }
+
+        .comment-item {
+            border-bottom: 1px solid #eee;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+        }
+
+        .comment-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .comment-header-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .comment-author {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .comment-time {
+            color: #999;
+            font-size: 12px;
+        }
+
+        .comment-content {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .reply-btn {
+            background: none;
+            border: none;
+            color: #4a90e2;
+            cursor: pointer;
+            font-size: 12px;
+            padding: 0;
+        }
+
+        .reply-form {
+            margin-top: 15px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 4px;
+        }
+
+        .replies {
+            margin-left: 30px;
+            margin-top: 15px;
+        }
+
+        .avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: #ccc;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            color: #666;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="comment-container">
+        <div class="comment-header">
+            <h2>评论区</h2>
+        </div>
+        
+        <div class="comment-form">
+            <div class="form-group">
+                <label for="commentName">姓名</label>
+                <input type="text" id="commentName" class="form-control" placeholder="请输入您的姓名">
+            </div>
+            <div class="form-group">
+                <label for="commentEmail">邮箱</label>
+                <input type="email" id="commentEmail" class="form-control" placeholder="请输入您的邮箱">
+            </div>
+            <div class="form-group">
+                <label for="commentContent">评论内容</label>
+                <textarea id="commentContent" class="form-control" placeholder="请输入您的评论..."></textarea>
+            </div>
+            <button class="btn">发表评论</button>
+        </div>
+
+        <div class="comments-list">
+            <!-- 主评论 -->
+            <div class="comment-item">
+                <div class="comment-header-info">
+                    <div>
+                        <span class="avatar">张</span>
+                        <span class="comment-author">张三</span>
+                    </div>
+                    <div class="comment-time">2023年4月15日 14:30</div>
+                </div>
+                <div class="comment-content">
+                    这是一个很棒的功能！期待看到更多类似的创新设计。这个评论系统的用户体验应该会很好。
+                </div>
+                <button class="reply-btn">回复</button>
+                
+                <!-- 回复表单 - 默认隐藏 -->
+                <div class="reply-form" style="display: none;">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="您的姓名">
+                    </div>
+                    <div class="form-group">
+                        <textarea class="form-control" placeholder="输入您的回复..."></textarea>
+                    </div>
+                    <button class="btn">发送回复</button>
+                    <button class="btn" style="background-color: #999; margin-left: 10px;">取消</button>
+                </div>
+
+                <!-- 回复列表 -->
+                <div class="replies">
+                    <div class="comment-item">
+                        <div class="comment-header-info">
+                            <div>
+                                <span class="avatar">李</span>
+                                <span class="comment-author">李四</span>
+                            </div>
+                            <div class="comment-time">2023年4月15日 15:20</div>
+                        </div>
+                        <div class="comment-content">
+                            @张三 谢谢您的认可！我们会继续努力改进功能。
+                        </div>
+                        <button class="reply-btn">回复</button>
+                    </div>
+                    
+                    <div class="comment-item">
+                        <div class="comment-header-info">
+                            <div>
+                                <span class="avatar">王</span>
+                                <span class="comment-author">王五</span>
+                            </div>
+                            <div class="comment-time">2023年4月15日 16:45</div>
+                        </div>
+                        <div class="comment-content">
+                            @张三 @李四 这个功能确实不错，希望能增加一些表情功能。
+                        </div>
+                        <button class="reply-btn">回复</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 另一个主评论 -->
+            <div class="comment-item">
+                <div class="comment-header-info">
+                    <div>
+                        <span class="avatar">赵</span>
+                        <span class="comment-author">赵六</span>
+                    </div>
+                    <div class="comment-time">2023年4月14日 20:15</div>
+                </div>
+                <div class="comment-content">
+                    设计得很简洁，很喜欢这种风格。不过建议增加一些自定义选项，让每个人都能个性化设置。
+                </div>
+                <button class="reply-btn">回复</button>
+                
+                <div class="reply-form" style="display: none;">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="您的姓名">
+                    </div>
+                    <div class="form-group">
+                        <textarea class="form-control" placeholder="输入您的回复..."></textarea>
+                    </div>
+                    <button class="btn">发送回复</button>
+                    <button class="btn" style="background-color: #999; margin-left: 10px;">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 回复按钮点击事件
+        document.querySelectorAll('.reply-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const form = this.nextElementSibling;
+                if (form && form.classList.contains('reply-form')) {
+                    form.style.display = form.style.display === 'none' ? 'block' : 'none';
+                }
+            });
+        });
+
+        // 取消按钮事件
+        document.querySelectorAll('.reply-form .btn').forEach(button => {
+            if (button.textContent === '取消') {
+                button.addEventListener('click', function() {
+                    const form = this.closest('.reply-form');
+                    form.style.display = 'none';
+                });
+            }
+        });
+    </script>
+</body>
+</html>
