@@ -14,14 +14,39 @@ class Letter extends Base
     }
     
     // 获取信件列表
-    public function getList()
+    public function getList(Request $request)
     {
-        $list = Db::name('tools_letters')->where('receiver', getLoginNickName())
+        $status = $request->param('status'); // 0未读，1已读，空则全部
+        $page = $request->param('page', 1); // 当前页码
+        $limit = $request->param('limit', 10); // 每页数量
+        
+        $query = Db::name('tools_letters')->where('receiver', getLoginNickName());
+        
+        // 根据status参数进行筛选
+        if ($status !== null && $status !== '') {
+            $query = $query->where('status', $status);
+        }
+        
+        // 计算总数用于分页
+        $totalCount = $query->count();
+        
+        $list = $query
             ->order('created_at desc')
             ->field('id, sender_name, title, content, receive_time, status, created_at')
-            ->limit(10)
+            ->page($page, $limit)
             ->select();
-        return json(['code' => 0, 'data' => $list]);
+            
+        // 返回分页信息
+        return json([
+            'code' => 0, 
+            'data' => $list,
+            'pagination' => [
+                'currentPage' => (int)$page,
+                'perPage' => (int)$limit,
+                'total' => (int)$totalCount,
+                'totalPages' => ceil($totalCount / $limit)
+            ]
+        ]);
     }
     
     // 获取信件详情
