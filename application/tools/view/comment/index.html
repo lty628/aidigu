@@ -511,6 +511,8 @@
                         if (response.code === 200) {
                             renderComments(response.data.list, response.data.userList);
                             renderPagination(response.data.total, page, limit);
+                            // 调整父集窗口高度
+                            adjustParentWindow(msgId);
                         } else {
                             $('#commentsContainer').html('<div class="error-message">加载失败: ' + response.msg + '</div>');
                         }
@@ -674,6 +676,8 @@
                                 appendRepliesList(commentId, response.data.list, response.data.userList);
                                 // 移除初次加载标记
                                 repliesContainer.data('initial-load', false);
+                                // 调整父集窗口高度
+                                adjustParentWindow(msgId);
                             } else {
                                 // 更新回复列表
                                 appendRepliesList(commentId, response.data.list, response.data.userList);
@@ -893,23 +897,18 @@
                     layer.close(index);
                 });
             }
+            // 调整父集窗口函数
+            function adjustParentWindow(msgId) {
+                if (parent && parent.$) {
+                    var $ = layui.jquery;
+                    var flowDivHeight = Math.max($('html').height(), $('body').height()) + 15;
+                    // var msgId = $('#msgId').val();
+                    // 父窗口中指定 msgId 的 iframe 的高度
+                    parent.$('#iframe-comment-' + msgId).height(flowDivHeight);
+                }
+            }
         });
 
-        // 检查父窗口和 jQuery 是否可用
-        if (parent && parent.$) {
-            // 本页面onload结束后执行下面的代码
-            window.onload = function () {
-                var $ = layui.jquery;
-                var flowDivHeight = Math.min($('html').height(), $('body').height()) + 15;
-                var msgId = $('#msgId').val();
-                console.log(flowDivHeight);
-                console.log("#iframe-comment-" + msgId);
-                // 设置父窗口中指定 id 的 iframe 的高度
-                parent.$('#iframe-comment-' + msgId).height(flowDivHeight);
-                // 父集的overflow hidden
-                // parent.$('#iframe-sourcematerial-' + id).parent().css('overflow', 'hidden');
-            }
-        }
     </script>
 </body>
 

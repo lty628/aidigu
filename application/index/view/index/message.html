@@ -26,24 +26,8 @@
 
 {$message.ctime|date='Y-m-d H:i:s'} 来自 {$message.refrom}
 				</div>
-				{if isset($messageBlock[0])}
-				<div class="block">
-					<div class="block_top"></div>
-					
-					{foreach $messageBlock as $block}
-					<div class="block_body"><div class="repost"><span><a href="{:url('/'.$block.blog.'/')}">{$block.nickname}:</a>{$block.msg|raw}</span></div><div class="block_static">
-					{$block.ctime|date='Y-m-d H:i:s'}
-						<!-- {if $block.fromuid!=getLoginUid()}
-						<a href="javascript:void(0);" onclick="reply(this,{$block.msg_id}, {$block.fromuid});">回复</a>
-						{/if} -->
-					</div></div>
-					{/foreach}
-					{$messageBlock|raw}
-					
-					<div class="block_bottom"></div>
-				
-				</div>
-				{/if}
+				<iframe id="iframe-comment-{$message.msg_id}" style="width: 100%;border:none;min-height: 600px;" name="commentFrame" src="/tools/comment/index/?msg_id={$message.msg_id}"></iframe>
+
 			</div>
 
 			<div class="clear"></div>
