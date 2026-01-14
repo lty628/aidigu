@@ -98,16 +98,17 @@ class TagInfo
                 'listtagname' => '群聊',
                 'display' => 'block'
             ],
-            [
-                'listtagid' => 'MessageChat',
-                'listtagname' => '评论',
-                'display' => 'none'
-            ],
-            [
-                'listtagid' => 'ChannelMessageChat',
-                'listtagname' => '频道评论',
-                'display' => 'none'
-            ],
+            // 启用新评论系统原实时评论取消
+            // [
+            //     'listtagid' => 'MessageChat',
+            //     'listtagname' => '评论',
+            //     'display' => 'none'
+            // ],
+            // [
+            //     'listtagid' => 'ChannelMessageChat',
+            //     'listtagname' => '频道评论',
+            //     'display' => 'none'
+            // ],
         ];
     }
 
