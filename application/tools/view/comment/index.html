@@ -198,8 +198,8 @@
             color: #007bff;
             cursor: pointer;
             font-size: 13px;
-            padding: 6px 10px;
-            margin-right: 12px;
+            padding: 6px 6px;
+            /* margin-right: 12px; */
             border-radius: 4px;
             transition: all 0.2s ease;
             display: inline-flex;
@@ -392,7 +392,9 @@
     <script src="/static/layui/layui.js"></script>
     <script>
         layui.use(['layer', 'laypage'], function () {
-            const layer = layui.layer;
+            if (parent.layer) {
+                var layer = parent.layer
+            }
             const laypage = layui.laypage;
             const $ = layui.$;
             // 全局变量
@@ -447,27 +449,27 @@
                     sendReply(commentId, replyContent, touid);
                 });
 
-                // 展开/收起回复
-                $(document).on('click', '.reply-toggle', function () {
-                    const commentId = $(this).data('comment-id');
-                    const repliesContainer = $('#replies-' + commentId);
+                // // 展开/收起回复
+                // $(document).on('click', '.reply-toggle', function () {
+                //     const commentId = $(this).data('comment-id');
+                //     const repliesContainer = $('#replies-' + commentId);
 
-                    if (repliesContainer.hasClass('collapsed')) {
-                        repliesContainer.removeClass('collapsed');
-                        $(this).text('收起回复');
+                //     if (repliesContainer.hasClass('collapsed')) {
+                //         repliesContainer.removeClass('collapsed');
+                //         $(this).text('收起回复');
 
-                        // 如果还没有加载过回复，则加载回复
-                        if (!repliesContainer.data('loaded')) {
-                            // 使用loadMoreReplies函数，并添加标记表示是初次加载
-                            repliesContainer.data('initial-load', true);
-                            loadMoreReplies(commentId, 1);
-                            repliesContainer.data('loaded', true);
-                        }
-                    } else {
-                        repliesContainer.addClass('collapsed');
-                        $(this).text('展开回复');
-                    }
-                });
+                //         // 如果还没有加载过回复，则加载回复
+                //         if (!repliesContainer.data('loaded')) {
+                //             // 使用loadMoreReplies函数，并添加标记表示是初次加载
+                //             repliesContainer.data('initial-load', true);
+                //             loadMoreReplies(commentId, 1);
+                //             repliesContainer.data('loaded', true);
+                //         }
+                //     } else {
+                //         repliesContainer.addClass('collapsed');
+                //         $(this).text('展开回复');
+                //     }
+                // });
 
                 // 加载更多回复
                 $(document).on('click', '.load-more-replies', function () {
@@ -507,7 +509,7 @@
                         comment_id: commentId,
                         type: type,
                         page: page,
-                        limit: limit
+                        limit: 5
                     },
                     success: function (response) {
                         if (response.code === 200) {
@@ -551,6 +553,7 @@
                             <div>
                                 ${avatar}
                                 <a href="/${user.blog}/" class="user-link comment-author">${user.nickname}</a>
+                                <button class="reply-btn" data-touid="${comment.fromuid}" data-comment-id="${comment.cid}">💬 回复</button>
                                 ${isOwnComment ? `<button class="delete-btn delete-comment" data-comment-id="${comment.cid}">🗑️ 删除</button>` : ''}
                             </div>
                             <div class="comment-time">${formatTime(comment.ctime)}</div>
@@ -558,12 +561,13 @@
                         <div class="comment-content">
                             ${comment.msg}
                         </div>
+                        <!-- 移除展开功能
                         <div class="action-buttons">
-                            <button class="reply-btn" data-touid="${comment.fromuid}" data-comment-id="${comment.cid}">💬 回复</button>
                             ${comment.reply_count > 0 ? `<button class="reply-toggle" data-comment-id="${comment.cid}" data-total-replies="${comment.reply_count}">
                                 💬 <span class="comment-count">${comment.reply_count}</span> 条回复
                             </button>` : ''}
                         </div>
+                        -->
 
                         <!-- 回复表单 - 默认隐藏 -->
                         <div class="reply-form" id="replyForm-${comment.cid}" style="display: none;">
@@ -596,7 +600,8 @@
                                     <div>
                                         ${replyAvatar}
                                         <a href="/${replyUser.blog}/" class="user-link comment-author">${replyUser.nickname}</a>
-                                        ${isOwnReply ? `<button class="delete-btn delete-reply" data-reply-id="${reply.cid}" data-comment-id="${comment.cid}">🗑️ 删除</button>` : ''}
+                                        <button class="reply-btn" data-comment-id="${comment.cid}" data-reply-id="${reply.cid}">💬 回复</button>
+                                        ${isOwnReply ? `<button class="delete-btn delete-reply" data-reply-id="${reply.rid}" data-comment-id="${comment.cid}">🗑️ 删除</button>` : ''}
                                     </div>
                                     <div class="comment-time">${formatTime(reply.ctime)}</div>
                                 </div>
@@ -604,7 +609,7 @@
                                     ${replyPrefix} ${reply.msg}
                                 </div>
                                 <div class="action-buttons">
-                                    <button class="reply-btn" data-comment-id="${comment.cid}" data-reply-id="${reply.cid}">💬 回复</button>
+                                    
                                 </div>
                             </div>
                             `;
@@ -728,7 +733,8 @@
                             <div>
                                 ${replyAvatar}
                                 <a href="/${replyUser.blog}/" class="user-link comment-author">${replyUser.nickname}</a>
-                                ${isOwnReply ? `<button class="delete-btn delete-reply" data-reply-id="${reply.cid}" data-comment-id="${commentId}">🗑️ 删除</button>` : ''}
+                                <button class="reply-btn" data-comment-id="${commentId}" data-reply-id="${reply.cid}">💬 回复</button>
+                                ${isOwnReply ? `<button class="delete-btn delete-reply" data-reply-id="${reply.rid}" data-comment-id="${commentId}">🗑️ 删除</button>` : ''}
                             </div>
                             <div class="comment-time">${formatTime(reply.ctime)}</div>
                         </div>
@@ -736,7 +742,7 @@
                             ${replyPrefix} ${reply.msg}
                         </div>
                         <div class="action-buttons">
-                            <button class="reply-btn" data-comment-id="${commentId}" data-reply-id="${reply.cid}">💬 回复</button>
+                            
                         </div>
                     </div>
                     `;

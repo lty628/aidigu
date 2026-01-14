@@ -123,7 +123,7 @@ class Comment extends Controller
         $msgId = input('msg_id');
         $commentId = input('comment_id');
         $type = input('type');
-        $limit = input('limit', 10);
+        $limit = input('limit', 5);
         $page = input('page', 1);
         $order = input('order', 'desc'); // 按热度，按时间降序
 
