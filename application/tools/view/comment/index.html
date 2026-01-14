@@ -8,33 +8,52 @@
     <link rel="stylesheet" href="/static/layui/css/layui.css">
     <style>
         body {
-            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            font-family: 'Segoe UI', 'Microsoft YaHei', Arial, sans-serif;
             line-height: 1.6;
             color: #333;
-            background-color: #f8f9fa;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             margin: 0;
             padding: 20px;
+            min-height: 100vh;
         }
 
         .comment-container {
             max-width: 800px;
             margin: 0 auto;
             background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .comment-title {
-            font-size: 20px;
-            font-weight: bold;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #eee;
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f2f5;
+            color: #1d2129;
+            position: relative;
+        }
+
+        .comment-title::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 50px;
+            height: 2px;
+            background: linear-gradient(90deg, #007bff, #6c757d);
         }
 
         .comment-form {
             margin-bottom: 30px;
+            background: #fafbfc;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
         }
 
         .form-group {
@@ -43,29 +62,55 @@
 
         .form-control {
             width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+            padding: 12px 15px;
+            border: 1px solid #e1e5e9;
+            border-radius: 6px;
             resize: vertical;
             font-size: 14px;
+            background-color: #fff;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #80bdff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
         }
 
         .btn {
-            padding: 8px 15px;
+            padding: 10px 20px;
             border: none;
-            border-radius: 4px;
+            border-radius: 6px;
             cursor: pointer;
             font-size: 14px;
-            transition: background-color 0.3s;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .btn-primary {
-            background-color: #007bff;
+            background: linear-gradient(135deg, #007bff 0%, #0062cc 100%);
             color: white;
+            border: none;
         }
 
         .btn-primary:hover {
-            background-color: #0069d9;
+            background: linear-gradient(135deg, #0069d9 0%, #005cbf 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid #ccc;
+            color: #666;
+        }
+
+        .btn-outline:hover {
+            background-color: #f8f9fa;
+            border-color: #adb5bd;
         }
 
         .comments-list {
@@ -73,8 +118,9 @@
         }
 
         .comment-item {
-            border-bottom: 1px solid #eee;
-            padding: 15px 0;
+            border-bottom: 1px solid #f0f2f5;
+            padding: 20px 0;
+            transition: background-color 0.2s ease;
         }
 
         .comment-item:last-child {
@@ -84,13 +130,14 @@
         .comment-header-info {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
+            align-items: center;
         }
 
         .user-link {
             text-decoration: none;
             color: #333;
-            font-weight: bold;
+            font-weight: 600;
         }
 
         .user-link:hover {
@@ -98,18 +145,20 @@
         }
 
         .avatar {
-            width: 40px;
-            height: 40px;
+            width: 42px;
+            height: 42px;
             border-radius: 50%;
-            margin-right: 10px;
+            margin-right: 12px;
             vertical-align: middle;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            background-color: #f0f0f0;
-            color: #666;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
             font-weight: bold;
-            font-size: 18px;
+            font-size: 16px;
+            flex-shrink: 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
         .avatar img {
@@ -121,16 +170,25 @@
 
         .comment-author {
             margin-right: 10px;
+            font-size: 14px;
         }
 
         .comment-time {
-            color: #999;
+            color: #8a9ca4;
             font-size: 12px;
         }
 
         .comment-content {
             margin: 10px 0;
-            padding-left: 50px;
+            padding-left: 55px;
+            color: #333;
+            line-height: 1.7;
+            font-size: 15px;
+        }
+
+        .action-buttons {
+            margin-top: 12px;
+            padding-left: 55px;
         }
 
         .reply-btn,
@@ -140,35 +198,55 @@
             border: none;
             color: #007bff;
             cursor: pointer;
-            font-size: 12px;
-            padding: 0;
-            margin-right: 10px;
+            font-size: 13px;
+            padding: 6px 10px;
+            margin-right: 12px;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
         }
 
         .reply-btn:hover,
         .reply-toggle:hover {
-            text-decoration: underline;
+            background-color: #f8f9fa;
+            color: #0056b3;
+            text-decoration: none;
         }
 
         .delete-btn {
             color: #dc3545;
         }
 
+        .delete-btn:hover {
+            background-color: #f8d7da;
+            color: #c82333;
+        }
+
         .reply-form {
-            margin: 10px 0 10px 50px;
-            padding: 10px;
+            margin: 15px 0 15px 55px;
+            padding: 15px;
             background-color: #f8f9fa;
-            border-radius: 4px;
+            border-radius: 8px;
+            border-left: 3px solid #007bff;
         }
 
         .replies {
-            margin-left: 50px;
-            margin-top: 10px;
+            margin-left: 55px;
+            margin-top: 15px;
+            background-color: #fafafa;
+            border-radius: 8px;
+            padding: 10px;
         }
 
         .replies .comment-item {
-            padding: 10px 0;
-            border-bottom: 1px dashed #eee;
+            padding: 15px 0;
+            border-bottom: 1px dashed #e9ecef;
+            background-color: white;
+            margin-bottom: 8px;
+            border-radius: 6px;
+            padding-left: 15px;
+            padding-right: 15px;
         }
 
         .replies .comment-item:last-child {
@@ -177,6 +255,11 @@
 
         .replies .comment-content {
             padding-left: 50px;
+            font-size: 14px;
+        }
+
+        .replies .comment-header-info {
+            margin-bottom: 8px;
         }
 
         .replies .reply-form {
@@ -187,46 +270,105 @@
         .no-replies {
             text-align: center;
             color: #999;
-            padding: 20px 0;
+            padding: 30px 0;
+            font-size: 14px;
         }
 
         .pagination {
-            margin: 20px 0;
+            margin: 30px 0;
             text-align: center;
         }
 
         .load-more-replies {
-            margin: 10px 0 10px 50px;
-            background-color: #f8f9fa;
-            border: 1px solid #ddd;
-            color: #007bff;
+            margin: 15px 0 15px 55px;
+            background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
+            border: none;
+            color: white;
             cursor: pointer;
-            font-size: 12px;
-            padding: 5px 10px;
-            border-radius: 4px;
+            font-size: 13px;
+            padding: 8px 15px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
         }
 
         .load-more-replies:hover {
-            background-color: #e9ecef;
+            background: linear-gradient(135deg, #5a6268 0%, #495057 100%);
+            transform: translateY(-1px);
         }
 
         .loading {
             text-align: center;
-            padding: 20px;
+            padding: 30px;
             color: #999;
+            font-size: 14px;
         }
 
         .error-message {
             color: #dc3545;
             text-align: center;
-            padding: 20px;
+            padding: 30px;
+            background-color: #f8d7da;
+            border-radius: 6px;
+            margin: 10px 0;
+        }
+
+        .comment-count {
+            background-color: #007bff;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            margin-left: 5px;
+        }
+
+        .highlight {
+            animation: highlight 1s ease;
+        }
+
+        @keyframes highlight {
+            0% { background-color: #fff3cd; }
+            100% { background-color: transparent; }
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .comment-container {
+                padding: 20px;
+            }
+            
+            .comment-content,
+            .action-buttons {
+                padding-left: 0;
+            }
+            
+            .replies {
+                margin-left: 0;
+            }
+            
+            .avatar {
+                width: 36px;
+                height: 36px;
+                font-size: 14px;
+            }
+            
+            .comment-header-info {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
         }
     </style>
 </head>
 
 <body>
     <div class="comment-container">
-        <h2 class="comment-title">评论列表</h2>
+        <h2 class="comment-title">💬 评论互动</h2>
 
         <!-- 评论表单 -->
         <div class="comment-form">
@@ -238,7 +380,7 @@
 
         <!-- 评论列表容器 -->
         <div class="comments-list" id="commentsContainer">
-            <div class="loading">加载中...</div>
+            <div class="loading">⏳ 加载中...</div>
         </div>
 
         <!-- 分页容器 -->
@@ -360,7 +502,7 @@
                 const type = $('#type').val();
                 const commentId = $('#commentId').val() || 0;
 
-                $('#commentsContainer').html('<div class="loading">加载中...</div>');
+                $('#commentsContainer').html('<div class="loading">⏳ 加载中...</div>');
 
                 $.ajax({
                     url: '/tools/comment/getCommentList',
@@ -412,28 +554,28 @@
                             <div>
                                 ${avatar}
                                 <a href="/${user.blog}/" class="user-link comment-author">${user.nickname}</a>
-                                ${isOwnComment ? `<button class="delete-btn delete-comment" data-comment-id="${comment.cid}">删除</button>` : ''}
+                                ${isOwnComment ? `<button class="delete-btn delete-comment" data-comment-id="${comment.cid}">🗑️ 删除</button>` : ''}
                             </div>
                             <div class="comment-time">${formatTime(comment.ctime)}</div>
                         </div>
                         <div class="comment-content">
                             ${comment.msg}
                         </div>
-                        <button class="reply-btn" data-touid="${comment.fromuid}" data-comment-id="${comment.cid}">回复</button>
+                        <div class="action-buttons">
+                            <button class="reply-btn" data-touid="${comment.fromuid}" data-comment-id="${comment.cid}">💬 回复</button>
+                            <button class="reply-toggle" data-comment-id="${comment.cid}" data-total-replies="${comment.reply_count}">
+                                💬 <span class="comment-count">${comment.reply_count}</span> 条回复
+                            </button>
+                        </div>
 
                         <!-- 回复表单 - 默认隐藏 -->
                         <div class="reply-form" id="replyForm-${comment.cid}" style="display: none;">
                             <div class="form-group">
                                 <textarea class="form-control reply-content" placeholder="请输入回复内容..." data-comment-id="${comment.cid}"></textarea>
                             </div>
-                            <button class="btn send-reply" data-comment-id="${comment.cid}">发送回复</button>
-                            <button class="btn cancel-reply" style="background-color: #999; margin-left: 10px;" data-comment-id="${comment.cid}">取消</button>
+                            <button class="btn btn-primary send-reply" data-comment-id="${comment.cid}">发送回复</button>
+                            <button class="btn btn-outline cancel-reply" style="margin-left: 10px;" data-comment-id="${comment.cid}">取消</button>
                         </div>
-
-                        <!-- 回复数量按钮 -->
-                        <button class="reply-toggle" data-comment-id="${comment.cid}" data-total-replies="${comment.reply_count}">
-                            共${comment.reply_count}条回复
-                        </button>
 
                         <!-- 回复列表 -->
                         <div class="replies collapsed" id="replies-${comment.cid}">
@@ -457,14 +599,16 @@
                                     <div>
                                         ${replyAvatar}
                                         <a href="/${replyUser.blog}/" class="user-link comment-author">${replyUser.nickname}</a>
-                                        ${isOwnReply ? `<button class="delete-btn delete-reply" data-reply-id="${reply.cid}" data-comment-id="${comment.cid}">删除</button>` : ''}
+                                        ${isOwnReply ? `<button class="delete-btn delete-reply" data-reply-id="${reply.cid}" data-comment-id="${comment.cid}">🗑️ 删除</button>` : ''}
                                     </div>
                                     <div class="comment-time">${formatTime(reply.ctime)}</div>
                                 </div>
                                 <div class="comment-content">
                                     ${replyPrefix} ${reply.msg}
                                 </div>
-                                <button class="reply-btn" data-comment-id="${comment.cid}" data-reply-id="${reply.cid}">回复</button>
+                                <div class="action-buttons">
+                                    <button class="reply-btn" data-comment-id="${comment.cid}" data-reply-id="${reply.cid}">💬 回复</button>
+                                </div>
                             </div>
                             `;
                         });
@@ -473,7 +617,7 @@
                         if (comment.reply_count > comment.replies.length) {
                             html += `
                             <button class="load-more-replies" data-comment-id="${comment.cid}" data-current-page="0">
-                                点击加载更多回复 (${comment.reply_count - comment.replies.length} 条未显示)
+                                更多回复 ({comment.reply_count - comment.replies.length}条未显示) ↘️
                             </button>
                             `;
                         }
@@ -550,7 +694,7 @@
                                 loadMoreBtn.hide();
                             } else {
                                 loadMoreBtn.data('current-page', page);
-                                loadMoreBtn.text(`点击加载更多回复 (${response.data.total - totalLoaded} 条未显示)`);
+                                loadMoreBtn.text(`更多回复 (${response.data.total - totalLoaded}条未显示) ↘️`);
                             }
                         } else {
                             console.error('加载回复失败:', response.msg);
@@ -585,14 +729,16 @@
                             <div>
                                 ${replyAvatar}
                                 <a href="/${replyUser.blog}/" class="user-link comment-author">${replyUser.nickname}</a>
-                                ${isOwnReply ? `<button class="delete-btn delete-reply" data-reply-id="${reply.cid}" data-comment-id="${commentId}">删除</button>` : ''}
+                                ${isOwnReply ? `<button class="delete-btn delete-reply" data-reply-id="${reply.cid}" data-comment-id="${commentId}">🗑️ 删除</button>` : ''}
                             </div>
                             <div class="comment-time">${formatTime(reply.ctime)}</div>
                         </div>
                         <div class="comment-content">
                             ${replyPrefix} ${reply.msg}
                         </div>
-                        <button class="reply-btn" data-comment-id="${commentId}" data-reply-id="${reply.cid}">回复</button>
+                        <div class="action-buttons">
+                            <button class="reply-btn" data-comment-id="${commentId}" data-reply-id="${reply.cid}">💬 回复</button>
+                        </div>
                     </div>
                     `;
                 });
