@@ -31,24 +31,31 @@ use app\common\helper\Reminder;
 
 class Comment extends Controller
 {
+    // $type  1: 微博评论 2: 微博回复，3频道评论，4频道回复 5: 好友关注 6: 取消关注  7: 提到@了您 8收藏了微博， 9收藏了频道微博
     protected $typeRelationArr = [
         'default' => [
             'table' => 'comment',
             'reply_table' => 'comment_reply',
             'content_table' => 'message',
             'type' => 'default',
+            'comment_type' => 1,
+            'rely_type' => 2,
         ],
         'message' => [
             'table' => 'comment',
             'reply_table' => 'comment_reply',
             'content_table' => 'message',
             'type' => 'message',
+            'comment_type' => 1,
+            'rely_type' => 2,
         ],
         'channel' => [
             'table' => 'channel_comment',
             'reply_table' => 'channel_comment_reply',
             'content_table' => 'channel_message',
             'type' => 'channel',
+            'comment_type' => 3,
+            'rely_type' => 4,
         ]
     ];
     // 创建回复表
@@ -328,7 +335,7 @@ class Comment extends Controller
             $result = Db::name($commentTable)->insertGetId($data);
             Db::name($contentTable)->where('msg_id', $msgId)->setInc('commentsum');
             if ($result) {
-                Reminder::saveReminder($data['msg_id'], $uid, (int)$data['touid'], 1);
+                Reminder::saveReminder($msgId , $uid, (int)$data['touid'], $this->typeRelationArr[$type]['comment_type']);
                 return json([
                     'code' => 200,
                     'msg' => '评论成功',
@@ -350,9 +357,10 @@ class Comment extends Controller
         $type = input('type');
         $msg = input('msg');
         $touid = input('touid', 0);
+        $msgId = input('msg_id');
 
         // 参数验证 - 修正：移除未定义的$msgId变量
-        if (empty($commentId) || empty($type) || empty($msg)) {
+        if (empty($commentId) || empty($type) || empty($msg) || empty($msgId)) {
             return json(['code' => 400, 'msg' => '参数不能为空']);
         }
 
@@ -412,7 +420,7 @@ class Comment extends Controller
                 // 提交事务
                 Db::commit();
                 // 保存提醒
-                Reminder::saveReminder($data['msg_id'], $uid, (int)$data['touid'], 2);
+                Reminder::saveReminder($msgId , $uid, (int)$data['touid'], $this->typeRelationArr[$type]['rely_type']);
                 return json([
                     'code' => 200,
                     'msg' => '回复成功',
