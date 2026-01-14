@@ -8,17 +8,16 @@
     <link rel="stylesheet" href="/static/layui/css/layui.css">
     <style>
         body {
-            font-family: 'Segoe UI', 'Microsoft YaHei', Arial, sans-serif;
             line-height: 1.6;
             color: #333;
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             margin: 0;
-            padding: 20px;
+            /* padding: 20px; */
             min-height: 100vh;
         }
 
         .comment-container {
-            max-width: 800px;
+            /* max-width: 800px; */
             margin: 0 auto;
             background-color: #fff;
             padding: 30px;
@@ -61,11 +60,11 @@
         }
 
         .form-control {
-            width: 100%;
+            width: 96%;
             padding: 12px 15px;
             border: 1px solid #e1e5e9;
             border-radius: 6px;
-            resize: vertical;
+            resize: none;
             font-size: 14px;
             background-color: #fff;
             transition: all 0.3s ease;
@@ -228,7 +227,7 @@
             padding: 15px;
             background-color: #f8f9fa;
             border-radius: 8px;
-            border-left: 3px solid #007bff;
+            /* border-left: 3px solid #007bff; */
         }
 
         .replies {
@@ -236,13 +235,13 @@
             margin-top: 15px;
             background-color: #fafafa;
             border-radius: 8px;
-            padding: 10px;
+            /* padding: 10px; */
         }
 
         .replies .comment-item {
             padding: 15px 0;
             border-bottom: 1px dashed #e9ecef;
-            background-color: white;
+            /* background-color: white; */
             margin-bottom: 8px;
             border-radius: 6px;
             padding-left: 15px;
@@ -259,7 +258,7 @@
         }
 
         .replies .comment-header-info {
-            margin-bottom: 8px;
+margin-bottom: 8px;
         }
 
         .replies .reply-form {
@@ -316,7 +315,7 @@
 
         .comment-count {
             background-color: #007bff;
-            color: white;
+color: white;
             padding: 2px 8px;
             border-radius: 12px;
             font-size: 12px;
@@ -368,7 +367,7 @@
 
 <body>
     <div class="comment-container">
-        <h2 class="comment-title">💬 评论互动</h2>
+        <!-- <h2 class="comment-title">💬 评论互动</h2> -->
 
         <!-- 评论表单 -->
         <div class="comment-form">
@@ -563,9 +562,9 @@
                         </div>
                         <div class="action-buttons">
                             <button class="reply-btn" data-touid="${comment.fromuid}" data-comment-id="${comment.cid}">💬 回复</button>
-                            <button class="reply-toggle" data-comment-id="${comment.cid}" data-total-replies="${comment.reply_count}">
+                            ${comment.reply_count > 0 ? `<button class="reply-toggle" data-comment-id="${comment.cid}" data-total-replies="${comment.reply_count}">
                                 💬 <span class="comment-count">${comment.reply_count}</span> 条回复
-                            </button>
+                            </button>` : ''}
                         </div>
 
                         <!-- 回复表单 - 默认隐藏 -->
@@ -617,7 +616,7 @@
                         if (comment.reply_count > comment.replies.length) {
                             html += `
                             <button class="load-more-replies" data-comment-id="${comment.cid}" data-current-page="0">
-                                更多回复 ({comment.reply_count - comment.replies.length}条未显示) ↘️
+                                更多回复 (${comment.reply_count - comment.replies.length}条未显示) ↘️
                             </button>
                             `;
                         }
