@@ -168,6 +168,29 @@
         .main-editor-container {
             margin-bottom: 15px;
         }
+        
+        /* 回复展开/收起按钮样式 */
+        .reply-toggle {
+            margin-top: 10px;
+            padding: 5px 10px;
+            background: none;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            color: #666;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        
+        .reply-toggle:hover {
+            background-color: #f5f5f5;
+            border-color: #4a90e2;
+            color: #4a90e2;
+        }
+        
+        /* 隐藏的回复列表 */
+        .replies.collapsed {
+            display: none;
+        }
     </style>
 </head>
 
@@ -212,6 +235,9 @@
                     <button class="btn send-reply" data-editor-id="reply-editor-1">发送回复</button>
                     <button class="btn cancel-reply" style="background-color: #999; margin-left: 10px;">取消</button>
                 </div>
+
+                <!-- 回复数量按钮 -->
+                <button class="reply-toggle" data-total-replies="2">共2条回复</button>
 
                 <!-- 回复列表 -->
                 <div class="replies">
@@ -309,6 +335,12 @@
                 const textId = `replyText${index + 1}`;
                 createReplyEditor(toolbarId, textId);
             });
+            
+            // 初始化回复列表状态 - 默认收起
+            const repliesList = document.querySelectorAll('.replies');
+            repliesList.forEach(replies => {
+                replies.classList.add('collapsed');
+            });
         });
 
         // 事件委托方式处理回复按钮点击事件
@@ -323,6 +355,21 @@
                     });
                     // 显示当前回复表单
                     form.style.display = 'block';
+                }
+            }
+            
+            // 处理回复展开/收起按钮点击
+            if (e.target.classList.contains('reply-toggle')) {
+                const repliesContainer = e.target.nextElementSibling;
+                if (repliesContainer && repliesContainer.classList.contains('replies')) {
+                    if (repliesContainer.classList.contains('collapsed')) {
+                        repliesContainer.classList.remove('collapsed');
+                        e.target.textContent = '收起回复';
+                    } else {
+                        repliesContainer.classList.add('collapsed');
+                        const totalReplies = e.target.getAttribute('data-total-replies');
+                        e.target.textContent = `共${totalReplies}条回复`;
+                    }
                 }
             }
 

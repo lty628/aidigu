@@ -172,7 +172,60 @@ class Comment extends Controller
     }
 
     public function getReplyList()
-    { 
+    {
+        // 获取回复列表
+        $msgId = input('msg_id');
+        $type = input('type');
+        $limit = input('limit', 10);
+        $page = input('page', 1);
+        $order = input('order', 'desc'); // 按热度，按时间降序
+        // 验证参数
+        if (empty($msgId)) {
+            return json(['code' => 400, 'msg' => 'msg_id不能为空']);
+        }
+        // 确定排序方式
+        $orderField = $order == 'hot' ? 'reply_count' : 'ctime';
+        $orderDirection = $order == 'asc' ? 'asc' : 'desc';
+        // 计算偏移量
+        $offset = ($page - 1) * $limit;
+        // 根据类型获取回复
+        if ($type == 'channel') {
+            $replyTable = 'channel_comment_reply';
+        } else {
+            $replyTable = 'comment_reply';
+        }
+        
+        // 获取回复列表
+        $list = Db::name($replyTable)
+            ->where('msg_id', $msgId)
+            ->order($orderField, $orderDirection)
+            ->limit($offset, $limit)
+            ->select();
+        if (empty($list)) {
+            return json()->data([
+                'code' => 200,
+                'msg' => '获取成功',
+                'data' => [
+                    'list' => [],
+                    'total' => 0,
+                ],
+            ]);
+        }
+        $uidArr = array_column($list, 'fromuid');   
+        $userList = Db::name('user')->field('uid, nickname, blog, head_image')->whereIn('uid', $uidArr)->select();
+        $userList = array_column($userList, null, 'uid');
+        return json([
+            'code' => 200,
+            'msg' => '获取成功',
+            'data' => [
+                'list' => $list,
+                'userList' => $userList,
+                'total' => Db::name($replyTable)->where('msg_id', $msgId)->count(),
+                'page' => $page,
+                'limit' => $limit
+            ]
+        ]);
+        
     }
 
     public function addComment() {}
