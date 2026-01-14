@@ -29,6 +29,7 @@ use think\Db;
 
 class Comment extends Controller
 {
+    // 创建回复表
     public function createReplyTable()
     {
         $sql1 = "DROP TABLE IF EXISTS `wb_channel_comment_reply`; CREATE TABLE IF NOT EXISTS `wb_channel_comment_reply`  (
@@ -62,16 +63,19 @@ class Comment extends Controller
         Db::query($sql5);
         Db::query($sql6);
     }
+
     public function index()
     {
-        $type = input('type');
+        // 分配类型变量
+        $type = input('type', 'article');
         $this->assign('type', $type);
-        return $this->fetch('index');
+        
+        // 渲染视图
+        return $this->fetch();
     }
 
     public function getCommentList()
     {
-        // 获取评论 每条评论获取10个回复
         $msgId = input('msg_id');
         $type = input('type');
         $limit = input('limit', 10);
@@ -79,8 +83,8 @@ class Comment extends Controller
         $order = input('order', 'desc'); // 按热度，按时间降序
         
         // 参数验证
-        if (empty($msgId)) {
-            return json(['code' => 400, 'msg' => 'msg_id不能为空']);
+        if (empty($msgId) || empty($type)) {
+            return json(['code' => 400, 'msg' => '参数不能为空']);
         }
         
         // 确定排序方式
@@ -105,20 +109,24 @@ class Comment extends Controller
             ->order($orderField, $orderDirection)
             ->limit($offset, $limit)
             ->select();
+            
         if (empty($list)) {
-            return json()->data([
+            return json([
                 'code' => 200,
                 'msg' => '获取成功',
                 'data' => [
                     'list' => [],
+                    'userList' => [],
                     'total' => 0,
+                    'page' => $page,
+                    'limit' => $limit
                 ],
             ]);
         }
 
         $uidArr = array_column($list, 'fromuid');
             
-        // 获取所有评论的ID
+        // 获取所有评论的relation_reply_id
         $replyIds = array_column($list, 'relation_reply_id');
         $replyIdArr = [];
         if ($replyIds) {
@@ -129,32 +137,35 @@ class Comment extends Controller
             }
         }
         $replyIdArr = array_filter($replyIdArr);
+        
         // 初始化回复列表数组
         $replyList = [];
         if ($replyIdArr) {
             // 获取每条评论的回复（最多10条）
             $replies = Db::name($replyTable)
-                ->whereIn('msg_id', $replyIdArr)
+                ->whereIn('rid', $replyIdArr) // 修正：使用rid而不是msg_id
                 ->order('ctime', 'desc')
                 ->select();
+                
             // 按评论ID分组回复
             foreach ($replies as $reply) {
-                $commentId = $reply['msg_id'];
+                $commentId = $reply['cid']; // 修正：使用cid而不是msg_id
                 
                 // 如果该评论的回复数量未达到限制，则添加到回复列表
-                if (!isset($replyList[$commentId]) || count($replyList[$commentId]) < 10) {
+                if (!isset($replyList[$commentId]) || count($replyList[$commentId]) < 5) {
                     $replyList[$commentId][] = $reply;
                 }
             }
-
         }
         
         foreach ($list as $key => $comment) {
             $commentId = $comment['cid'];
             $list[$key]['replies'] = $replyList[$commentId] ?? [];
         }
+        
         $userList = Db::name('user')->field('uid, nickname, blog, head_image')->whereIn('uid', $uidArr)->select();
         $userList = array_column($userList, null, 'uid');
+        
         // 获取总数
         $total = Db::name($commentTable)->where('msg_id', $msgId)->count();
         
@@ -180,15 +191,19 @@ class Comment extends Controller
         $limit = input('limit', 10);
         $page = input('page', 1);
         $order = input('order', 'desc'); // 按热度，按时间降序
-        // 验证参数
-        if (empty($msgId)) {
+        
+        // 参数验证 - 修正：使用$commentId而不是$msgId
+        if (empty($commentId)) {
             return json(['code' => 400, 'msg' => 'comment_id不能为空']);
         }
+        
         // 确定排序方式
         $orderField = $order == 'hot' ? 'reply_count' : 'ctime';
         $orderDirection = $order == 'asc' ? 'asc' : 'desc';
+        
         // 计算偏移量
         $offset = ($page - 1) * $limit;
+        
         // 根据类型获取回复
         if ($type == 'channel') {
             $replyTable = 'channel_comment_reply';
@@ -196,14 +211,15 @@ class Comment extends Controller
             $replyTable = 'comment_reply';
         }
         
-        // 获取回复列表 - 修正查询条件，应该是cid而不是rid
+        // 获取回复列表
         $list = Db::name($replyTable)
             ->where('cid', $commentId)
             ->order($orderField, $orderDirection)
             ->limit($offset, $limit)
             ->select();
+            
         if (empty($list)) {
-            return json()->data([
+            return json([
                 'code' => 200,
                 'msg' => '获取成功',
                 'data' => [
@@ -212,24 +228,26 @@ class Comment extends Controller
                 ],
             ]);
         }
+        
         $uidArr = array_column($list, 'fromuid');
         $toUidArr = array_column($list, 'touid');
         $uidArr = array_merge($uidArr, $toUidArr);
         $uidArr = array_filter($uidArr);
         $userList = Db::name('user')->field('uid, nickname, blog, head_image')->whereIn('uid', $uidArr)->select();
         $userList = array_column($userList, null, 'uid');
+        
+        // 修正：使用cid而不是msg_id查询总数
         return json([
             'code' => 200,
             'msg' => '获取成功',
             'data' => [
                 'list' => $list,
                 'userList' => $userList,
-                'total' => Db::name($replyTable)->where('msg_id', $msgId)->count(),
+                'total' => Db::name($replyTable)->where('cid', $commentId)->count(),
                 'page' => $page,
                 'limit' => $limit
             ]
         ]);
-        
     }
 
     public function addComment()
@@ -290,8 +308,8 @@ class Comment extends Controller
         $msg = input('msg');
         $touid = input('touid', 0);
     
-        // 参数验证
-        if (empty($msgId) || empty($type) || empty($commentId) || empty($msg)) {
+        // 参数验证 - 修正：移除未定义的$msgId变量
+        if (empty($commentId) || empty($type) || empty($msg)) {
             return json(['code' => 400, 'msg' => '参数不能为空']);
         }
     

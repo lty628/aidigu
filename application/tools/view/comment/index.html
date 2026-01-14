@@ -3,152 +3,114 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>通用评论回复功能</title>
-    <link href="/static/layui/css/layui.css" rel="stylesheet">
+    <title>评论系统</title>
+    <link rel="stylesheet" href="/static/layui/css/layui.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f5f5f5;
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 20px;
         }
-
+        
         .comment-container {
             max-width: 800px;
-            margin: 0 auto;
-            background: white;
+margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
         }
-
-        .comment-header {
-            padding: 20px;
-            background-color: #4a90e2;
-            color: white;
-            text-align: center;
-        }
-
-        .comment-form {
-padding: 20px;
+        
+        .comment-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
             border-bottom: 1px solid #eee;
         }
-
+        
+        .comment-form {
+            margin-bottom: 30px;
+        }
+        
         .form-group {
             margin-bottom: 15px;
         }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-
+        
         .form-control {
             width: 100%;
             padding: 10px;
             border: 1px solid #ddd;
             border-radius: 4px;
+            resize: vertical;
             font-size: 14px;
         }
-
-        textarea.form-control {
-            min-height: 100px;
-            resize: vertical;
-        }
-
+        
         .btn {
-            background-color: #4a90e2;
-            color: white;
+            padding: 8px 15px;
             border: none;
-            padding: 10px 20px;
             border-radius: 4px;
             cursor: pointer;
             font-size: 14px;
+            transition: background-color 0.3s;
         }
-
-        .btn:hover {
-            background-color: #3a7bc8;
+        
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
         }
-
+        
+        .btn-primary:hover {
+            background-color: #0069d9;
+        }
+        
         .comments-list {
-            padding: 20px;
+            margin-top: 20px;
         }
-
+        
         .comment-item {
             border-bottom: 1px solid #eee;
-            padding-bottom: 15px;
-            margin-bottom: 15px;
+            padding: 15px 0;
         }
-
+        
         .comment-item:last-child {
             border-bottom: none;
-            margin-bottom: 0;
-            padding-bottom: 0;
         }
-
+        
         .comment-header-info {
             display: flex;
             justify-content: space-between;
-            align-items: center;
             margin-bottom: 10px;
         }
-
-        .comment-author {
-            font-weight: bold;
+        
+        .user-link {
+            text-decoration: none;
             color: #333;
+            font-weight: bold;
         }
-
-        .comment-time {
-            color: #999;
-            font-size: 12px;
+        
+        .user-link:hover {
+            color: #007bff;
         }
-
-        .comment-content {
-            color: #555;
-            line-height: 1.6;
-            margin-bottom: 10px;
-        }
-
-        .reply-btn {
-            background: none;
-            border: none;
-            color: #4a90e2;
-            cursor: pointer;
-            font-size: 12px;
-            padding: 0;
-        }
-
-        .reply-form {
-            margin-top: 15px;
-            padding: 15px;
-            background-color: #f9f9f9;
-            border-radius: 4px;
-            display: none;
-        }
-
-        .replies {
-            margin-left: 30px;
-            margin-top: 15px;
-        }
-
+        
         .avatar {
-            width: 32px;
-            height: 32px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
-            background-color: #ccc;
+            margin-right: 10px;
+            vertical-align: middle;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            margin-right: 10px;
+            background-color: #f0f0f0;
             color: #666;
-            font-size: 14px;
+            font-weight: bold;
+            font-size: 18px;
         }
-
+        
         .avatar img {
             width: 100%;
             height: 100%;
@@ -156,611 +118,633 @@ padding: 20px;
             object-fit: cover;
         }
         
-        /* 回复展开/收起按钮样式 */
-        .reply-toggle {
-            margin-top: 10px;
-            padding: 5px 10px;
-            background: none;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            color: #666;
+        .comment-author {
+            margin-right: 10px;
+        }
+        
+        .comment-time {
+            color: #999;
             font-size: 12px;
+        }
+        
+        .comment-content {
+            margin: 10px 0;
+            padding-left: 50px;
+        }
+        
+        .reply-btn, .reply-toggle, .delete-btn {
+            background: none;
+            border: none;
+            color: #007bff;
             cursor: pointer;
+            font-size: 12px;
+            padding: 0;
+            margin-right: 10px;
         }
         
-        .reply-toggle:hover {
-            background-color: #f5f5f5;
-            border-color: #4a90e2;
-            color: #4a90e2;
+        .reply-btn:hover, .reply-toggle:hover {
+            text-decoration: underline;
         }
         
-        /* 隐藏的回复列表 */
-        .replies.collapsed {
-            display: none;
+        .delete-btn {
+            color: #dc3545;
         }
         
-        /* 加载更多按钮样式 */
+        .reply-form {
+            margin: 10px 0 10px 50px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+        }
+        
+        .replies {
+            margin-left: 50px;
+            margin-top: 10px;
+        }
+        
+        .replies .comment-item {
+            padding: 10px 0;
+            border-bottom: 1px dashed #eee;
+        }
+        
+        .replies .comment-item:last-child {
+            border-bottom: none;
+        }
+        
+        .replies .comment-content {
+            padding-left: 50px;
+        }
+        
+        .replies .reply-form {
+            margin-left: 0;
+        }
+        
+        .no-comments, .no-replies {
+            text-align: center;
+            color: #999;
+            padding: 20px 0;
+        }
+        
+        .pagination {
+            margin: 20px 0;
+            text-align: center;
+        }
+        
         .load-more-replies {
-            margin-top: 10px;
-            padding: 5px 10px;
-            background: none;
+            margin: 10px 0 10px 50px;
+            background-color: #f8f9fa;
             border: 1px solid #ddd;
-            border-radius: 4px;
-            color: #666;
-            font-size: 12px;
+            color: #007bff;
             cursor: pointer;
+            font-size: 12px;
+            padding: 5px 10px;
+            border-radius: 4px;
         }
         
         .load-more-replies:hover {
-            background-color: #f5f5f5;
-            border-color: #4a90e2;
-            color: #4a90e2;
+            background-color: #e9ecef;
         }
         
-        /* 分页样式 */
-        .pagination {
-            text-align: center;
-            margin-top: 20px;
-        }
-        
-        .layui-laypage {
-            display: inline-block;
-        }
-        
-        /* 加载动画 */
         .loading {
             text-align: center;
             padding: 20px;
             color: #999;
         }
         
-        /* 错误提示 */
         .error-message {
-            color: #ff4d4f;
-            font-size: 12px;
-            margin-top: 5px;
-        }
-        
-        /* 删除按钮样式 */
-        .delete-btn {
-            background: none;
-            border: none;
-            color: #ff4d4f;
-            cursor: pointer;
-            font-size: 12px;
-            padding: 0;
-            margin-left: 10px;
-        }
-        
-        /* 用户链接样式 */
-        .user-link {
-            text-decoration: none;
-            color: inherit;
-        }
-        
-        .user-link:hover {
-            color: #4a90e2;
-            text-decoration: underline;
+            color: #dc3545;
+            text-align: center;
+            padding: 20px;
         }
     </style>
 </head>
-
 <body>
     <div class="comment-container">
-        <div class="comment-header">
-            <h2>评论区</h2>
-        </div>
-
+        <h2 class="comment-title">评论列表</h2>
+        
+        <!-- 评论表单 -->
         <div class="comment-form">
             <div class="form-group">
-                <label>评论内容</label>
-                <textarea class="form-control" id="mainContent" placeholder="请输入评论内容..."></textarea>
+                <textarea class="form-control" id="mainContent" rows="4" placeholder="写下你的评论..."></textarea>
             </div>
-            <button class="btn" id="submitCommentBtn">发表评论</button>
+            <button class="btn btn-primary" id="submitComment">发表评论</button>
         </div>
-
-        <div class="comments-list">
-            <div id="commentsContainer">
-                <!-- 评论列表将通过AJAX动态加载 -->
-            </div>
-            
-            <div class="pagination" id="paginationContainer">
-                <!-- 分页将通过AJAX动态加载 -->
-            </div>
+        
+        <!-- 评论列表容器 -->
+        <div class="comments-list" id="commentsContainer">
+            <div class="loading">加载中...</div>
         </div>
+        
+        <!-- 分页容器 -->
+        <div class="pagination" id="paginationContainer"></div>
     </div>
 
-    <input type="hidden" id="type" value="{ $type }">
-    <input type="hidden" id="msgId" value="1"> <!-- 这里需要根据实际场景传入msgId -->
-    <input type="hidden" id="currentUid" value="{ $current_user.uid }"> <!-- 当前登录用户的ID -->
-    
+    <!-- 隐藏字段 -->
+    <input type="hidden" id="msgId" value="{$msgId|default=1}">
+    <input type="hidden" id="type" value="{$type|default='article'}">
+    <input type="hidden" id="currentUid" value="{$uid|default=0}">
+
     <script src="/static/layui/layui.js"></script>
     <script>
-        // 全局变量
-        let currentPage = 1;
-        const limit = 10;
-        let order = 'desc'; // 排序方式：'desc', 'asc', 'hot'
-        
-        var laypage = layui.laypage;
-        var $ = layui.jquery;
-        
-        // 页面加载完成后获取评论列表
-        loadComments(currentPage);
-        
-        // 绑定事件
-        bindEvents();
-
-        // 绑定事件
-        function bindEvents() {
-            // 提交主评论
-            $('#submitCommentBtn').on('click', function() {
-                submitComment();
+        layui.use(['layer', 'laypage'], function() {
+            const layer = layui.layer;
+            const laypage = layui.laypage;
+            const $ = layui.$;
+            // 全局变量
+            let currentPage = 1;
+            const limit = 10; // 每页显示的评论数
+            
+            // 页面加载完成后加载评论
+            $(document).ready(function() {
+                loadComments(1);
+                bindEvents();
             });
             
-            // 使用事件委托绑定动态生成的元素事件
-            $(document).on('click', '.reply-btn', function() {
-                const commentId = $(this).data('comment-id');
-                const replyId = $(this).data('reply-id');
-                const form = $('#replyForm-' + commentId);
+            // 绑定事件
+            function bindEvents() {
+                // 提交评论
+                $('#submitComment').on('click', submitComment);
                 
-                // 隐藏其他所有回复表单
-                $('.reply-form').hide();
-                
-                // 显示当前回复表单
-                form.show();
-                
-                // 如果是回复某个具体回复，自动添加@用户名
-                if(replyId) {
-                    const parentComment = $(this).closest('.comment-item');
-                    const replyAuthor = parentComment.find('.comment-author').text();
-                    const replyInput = form.find('.reply-content');
-                    replyInput.val('@' + replyAuthor + ' ');
-                    replyInput.focus();
-                } else {
-                    const replyInput = form.find('.reply-content');
-                    replyInput.focus();
-                }
-            });
-            
-            // 处理回复展开/收起按钮点击
-            $(document).on('click', '.reply-toggle', function() {
-                const commentId = $(this).data('comment-id');
-                const repliesContainer = $('#replies-' + commentId);
-                const totalReplies = parseInt($(this).data('total-replies'));
-                const buttonText = $(this).text();
-                
-                if(buttonText.indexOf('收起回复') !== -1) {
-                    // 当前是展开状态，收起回复
-                    repliesContainer.addClass('collapsed');
-                    $(this).text('共' + totalReplies + '条回复');
-                } else {
-                    // 当前是收起状态，需要展开并加载回复
-                    if(repliesContainer.find('.no-replies').length > 0 || repliesContainer.children().length === 0) {
-                        // 如果还没有加载过回复，则先加载回复
-                        loadReplies(commentId, 1);
+                // 回复按钮点击事件（使用事件委托）
+                $(document).on('click', '.reply-btn', function() {
+                    const commentId = $(this).data('comment-id');
+                    const replyId = $(this).data('reply-id');
+                    const replyForm = $('#replyForm-' + commentId);
+                    
+                    // 显示回复表单
+                    replyForm.toggle();
+// 如果是回复某条回复，则设置@用户
+                    if (replyId) {
+                        const replyContent = replyForm.find('.reply-content');
+                        const replyItem = $(this).closest('.comment-item');
+                        const authorName = replyItem.find('.comment-author').text();
+                        replyContent.val('@' + authorName + ' ');
+                        replyContent.focus();
                     }
-                    repliesContainer.removeClass('collapsed');
-                    $(this).text('收起回复');
-                }
-            });
-            
-            // 处理发送回复按钮点击
-            $(document).on('click', '.send-reply', function() {
-                const commentId = $(this).data('comment-id');
-                const replyInput = $('#replyForm-' + commentId + ' .reply-content');
-                const replyContent = replyInput.val().trim();
+                });
                 
-                sendReply(commentId, replyContent);
-            });
-            
-            // 处理取消按钮点击
-            $(document).on('click', '.cancel-reply', function() {
-                const commentId = $(this).data('comment-id');
-                $('#replyForm-' + commentId).hide();
-            });
-            
-            // 处理删除评论按钮点击
-            $(document).on('click', '.delete-comment', function() {
-                const commentId = $(this).data('comment-id');
-                deleteComment(commentId);
-            });
-            
-            // 处理删除回复按钮点击
-            $(document).on('click', '.delete-reply', function() {
-                const replyId = $(this).data('reply-id');
-                const commentId = $(this).data('comment-id');
-                deleteReply(replyId, commentId);
-            });
-        }
-        
-        // 加载评论列表
-        function loadComments(page) {
-            const msgId = $('#msgId').val() || 1; // 默认值，需要根据实际情况调整
-            const type = $('#type').val();
-            
-            // 显示加载动画
-            $('#commentsContainer').html('<div class="loading">正在加载评论...</div>');
-            
-            $.ajax({
-                url: '/tools/comment/getCommentList',
-                method: 'GET',
-                data: {
-                    msg_id: msgId,
-                    type: type,
-                    page: page,
-                    limit: limit,
-                    order: order
-                },
-                success: function(response) {
-                    if(response.code === 200) {
-                        renderComments(response.data.list, response.data.userList);
+                // 取消回复
+                $(document).on('click', '.cancel-reply', function() {
+                    const commentId = $(this).data('comment-id');
+                    $('#replyForm-' + commentId).hide();
+                    $('#replyForm-' + commentId + ' .reply-content').val('');
+                });
+                
+                // 发送回复
+                $(document).on('click', '.send-reply', function() {
+                    const commentId = $(this).data('comment-id');
+                    const replyContent = $('#replyForm-' + commentId + ' .reply-content').val();
+                    
+                    // 提取@用户信息
+                    let touid = 0;
+                    if (replyContent.startsWith('@')) {
+                        const match = replyContent.match(/^@([^ ]+) /);
+                        if (match) {
+                            // 这里需要根据用户名查找用户ID，简化处理
+                            // 实际项目中应该通过AJAX请求获取用户ID
+                        }
+                    }
+                    
+                    sendReply(commentId, replyContent, touid);
+                });
+                
+                // 展开/收起回复
+                $(document).on('click', '.reply-toggle', function() {
+                    const commentId = $(this).data('comment-id');
+                    const repliesContainer = $('#replies-' + commentId);
+                    
+                    if (repliesContainer.hasClass('collapsed')) {
+                        repliesContainer.removeClass('collapsed');
+                        $(this).text('收起回复');
                         
-                        // 渲染分页
-                        renderPagination(response.data.total, page, limit);
+                        // 如果还没有加载过回复，则加载回复
+                        if (!repliesContainer.data('loaded')) {
+                            // 使用loadMoreReplies函数，并添加标记表示是初次加载
+                            repliesContainer.data('initial-load', true);
+                            loadMoreReplies(commentId, 1);
+                            repliesContainer.data('loaded', true);
+                        }
                     } else {
-                        $('#commentsContainer').html('<div class="error-message">加载失败: ' + response.msg + '</div>');
+                        repliesContainer.addClass('collapsed');
+                        $(this).text('展开回复');
                     }
-                },
-                error: function() {
-                    $('#commentsContainer').html('<div class="error-message">网络错误，请稍后重试</div>');
-                }
-            });
-        }
-        
-        // 渲染评论列表
-        function renderComments(comments, userList) {
-            let html = '';
-            
-            if(comments.length === 0) {
-                html = '<div class="no-comments">暂无评论，快来抢沙发吧！</div>';
-                $('#commentsContainer').html(html);
-                return;
+                });
+                
+                // 加载更多回复
+                $(document).on('click', '.load-more-replies', function() {
+                    const commentId = $(this).data('comment-id');
+                    const currentPage = parseInt($(this).data('current-page')) || 0;
+                    loadMoreReplies(commentId, currentPage + 1);
+                });
+                
+                // 删除评论
+                $(document).on('click', '.delete-comment', function() {
+                    const commentId = $(this).data('comment-id');
+                    deleteComment(commentId);
+                });
+                
+                // 删除回复
+                $(document).on('click', '.delete-reply', function() {
+                    const replyId = $(this).data('reply-id');
+                    const commentId = $(this).data('comment-id');
+                    deleteReply(replyId, commentId);
+                });
             }
             
-            const currentUid = parseInt($('#currentUid').val()) || 0;
+            // 加载评论列表
+            function loadComments(page) {
+                currentPage = page;
+                const msgId = $('#msgId').val() || 1;
+                const type = $('#type').val();
+                
+                $('#commentsContainer').html('<div class="loading">加载中...</div>');
+                
+                $.ajax({
+                    url: '/tools/comment/getCommentList',
+                    method: 'GET',
+                    data: {
+                        msg_id: msgId,
+                        type: type,
+                        page: page,
+                        limit: limit
+                    },
+                    success: function(response) {
+                        if (response.code === 200) {
+                            renderComments(response.data.list, response.data.userList);
+                            renderPagination(response.data.total, page, limit);
+                        } else {
+                            $('#commentsContainer').html('<div class="error-message">加载失败: ' + response.msg + '</div>');
+                        }
+                    },
+                    error: function() {
+                        $('#commentsContainer').html('<div class="error-message">网络错误，请稍后重试</div>');
+                    }
+                });
+            }
             
-            comments.forEach(function(comment) {
-                const user = userList[comment.fromuid] || {nickname: '未知用户', head_image: '', blog: ''};
-                const isOwnComment = comment.fromuid == currentUid;
+            // 渲染评论列表
+            function renderComments(comments, userList) {
+                let html = '';
                 
-                const avatar = user.head_image ? 
-                    `<a href="/${user.blog}/" class="user-link"><img src="${user.head_image}" class="avatar" alt="头像"></a>` : 
-                    `<a href="/${user.blog}/" class="user-link"><span class="avatar">${user.nickname.charAt(0).toUpperCase()}</span></a>`;
+                if(comments.length === 0) {
+                    html = '<div class="no-comments">暂无评论，快来抢沙发吧！</div>';
+                    $('#commentsContainer').html(html);
+                    return;
+                }
                 
-                html += `
-                <div class="comment-item" data-cid="${comment.cid}">
-                    <div class="comment-header-info">
-                        <div>
-                            ${avatar}
-                            <a href="/${user.blog}/" class="user-link comment-author">${user.nickname}</a>
-                            ${isOwnComment ? `<button class="delete-btn delete-comment" data-comment-id="${comment.cid}">删除</button>` : ''}
+                const currentUid = parseInt($('#currentUid').val()) || 0;
+                
+                comments.forEach(function(comment) {
+                    const user = userList[comment.fromuid] || {nickname: '未知用户', head_image: '', blog: ''};
+                    const isOwnComment = comment.fromuid == currentUid;
+                    
+                    const avatar = user.head_image ? 
+                        `<a href="/${user.blog}/" class="user-link"><img src="${user.head_image}" class="avatar" alt="头像"></a>` : 
+                        `<a href="/${user.blog}/" class="user-link"><span class="avatar">${user.nickname.charAt(0).toUpperCase()}</span></a>`;
+                    
+                    html += `
+                    <div class="comment-item" data-cid="${comment.cid}">
+                        <div class="comment-header-info">
+                            <div>
+                                ${avatar}
+                                <a href="/${user.blog}/" class="user-link comment-author">${user.nickname}</a>
+                                ${isOwnComment ? `<button class="delete-btn delete-comment" data-comment-id="${comment.cid}">删除</button>` : ''}
+                            </div>
+                            <div class="comment-time">${formatTime(comment.ctime)}</div>
                         </div>
-                        <div class="comment-time">${formatTime(comment.ctime)}</div>
-                    </div>
-                    <div class="comment-content">
-                        ${comment.msg}
-                    </div>
-                    <button class="reply-btn" data-comment-id="${comment.cid}">回复</button>
-
-                    <!-- 回复表单 - 默认隐藏 -->
-                    <div class="reply-form" id="replyForm-${comment.cid}" style="display: none;">
-                        <div class="form-group">
-                            <textarea class="form-control reply-content" placeholder="请输入回复内容..." data-comment-id="${comment.cid}"></textarea>
+                        <div class="comment-content">
+                            ${comment.msg}
                         </div>
-                        <button class="btn send-reply" data-comment-id="${comment.cid}">发送回复</button>
-                        <button class="btn cancel-reply" style="background-color: #999; margin-left: 10px;" data-comment-id="${comment.cid}">取消</button>
-                    </div>
+                        <button class="reply-btn" data-comment-id="${comment.cid}">回复</button>
 
-                    <!-- 回复数量按钮 -->
-                    <button class="reply-toggle" data-comment-id="${comment.cid}" data-total-replies="${comment.reply_count}">
-                        共${comment.reply_count}条回复
-                    </button>
+                        <!-- 回复表单 - 默认隐藏 -->
+                        <div class="reply-form" id="replyForm-${comment.cid}" style="display: none;">
+                            <div class="form-group">
+                                <textarea class="form-control reply-content" placeholder="请输入回复内容..." data-comment-id="${comment.cid}"></textarea>
+                            </div>
+                            <button class="btn send-reply" data-comment-id="${comment.cid}">发送回复</button>
+                            <button class="btn cancel-reply" style="background-color: #999; margin-left: 10px;" data-comment-id="${comment.cid}">取消</button>
+                        </div>
 
-                    <!-- 回复列表 -->
-                    <div class="replies collapsed" id="replies-${comment.cid}">
-                `;
-                
-                // 渲染回复
-                if(comment.replies && comment.replies.length > 0) {
-                    comment.replies.forEach(function(reply, index) {
-                        const replyUser = userList[reply.fromuid] || {nickname: '未知用户', head_image: '', blog: ''};
-                        const isOwnReply = reply.fromuid == currentUid;
-                        const toUser = userList[reply.touid] ? userList[reply.touid].nickname : '';
-                        const replyPrefix = toUser ? `@${toUser}` : '';
-                        
-                        const replyAvatar = replyUser.head_image ? 
-                            `<a href="/${replyUser.blog}/" class="user-link"><img src="${replyUser.head_image}" class="avatar" alt="头像"></a>` : 
-                            `<a href="/${replyUser.blog}/" class="user-link"><span class="avatar">${replyUser.nickname.charAt(0).toUpperCase()}</span></a>`;
-                        
-                        html += `
-                        <div class="comment-item">
-                            <div class="comment-header-info">
-                                <div>
-                                    ${replyAvatar}
-                                    <a href="/${replyUser.blog}/" class="user-link comment-author">${replyUser.nickname}</a>
-                                    ${isOwnReply ? `<button class="delete-btn delete-reply" data-reply-id="${reply.cid}" data-comment-id="${comment.cid}">删除</button>` : ''}
+                        <!-- 回复数量按钮 -->
+                        <button class="reply-toggle" data-comment-id="${comment.cid}" data-total-replies="${comment.reply_count}">
+                            共${comment.reply_count}条回复
+                        </button>
+
+                        <!-- 回复列表 -->
+                        <div class="replies collapsed" id="replies-${comment.cid}">
+                    `;
+                    
+                    // 渲染relation_reply_id对应的回复
+                    if(comment.replies && comment.replies.length > 0) {
+                        comment.replies.forEach(function(reply, index) {
+                            const replyUser = userList[reply.fromuid] || {nickname: '未知用户', head_image: '', blog: ''};
+                            const isOwnReply = reply.fromuid == currentUid;
+                            const toUser = userList[reply.touid] ? userList[reply.touid].nickname : '';
+                            const replyPrefix = toUser ? `@${toUser}` : '';
+                            
+                            const replyAvatar = replyUser.head_image ? 
+                                `<a href="/${replyUser.blog}/" class="user-link"><img src="${replyUser.head_image}" class="avatar" alt="头像"></a>` : 
+                                `<a href="/${replyUser.blog}/" class="user-link"><span class="avatar">${replyUser.nickname.charAt(0).toUpperCase()}</span></a>`;
+                            
+                            html += `
+                            <div class="comment-item">
+                                <div class="comment-header-info">
+                                    <div>
+                                        ${replyAvatar}
+                                        <a href="/${replyUser.blog}/" class="user-link comment-author">${replyUser.nickname}</a>
+                                        ${isOwnReply ? `<button class="delete-btn delete-reply" data-reply-id="${reply.cid}" data-comment-id="${comment.cid}">删除</button>` : ''}
+                                    </div>
+                                    <div class="comment-time">${formatTime(reply.ctime)}</div>
                                 </div>
-                                <div class="comment-time">${formatTime(reply.ctime)}</div>
+                                <div class="comment-content">
+                                    ${replyPrefix} ${reply.msg}
+                                </div>
+                                <button class="reply-btn" data-comment-id="${comment.cid}" data-reply-id="${reply.cid}">回复</button>
                             </div>
-                            <div class="comment-content">
-                                ${replyPrefix} ${reply.msg}
-                            </div>
-                            <button class="reply-btn" data-comment-id="${comment.cid}" data-reply-id="${reply.cid}">回复</button>
+                            `;
+                        });
+                        
+                        // 如果回复数大于relation_reply_id数量，显示"点击加载更多"
+                        if(comment.reply_count > comment.replies.length) {
+                            html += `
+                            <button class="load-more-replies" data-comment-id="${comment.cid}" data-current-page="0">
+                                点击加载更多回复 (${comment.reply_count - comment.replies.length} 条未显示)
+                            </button>
+                            `;
+                        }
+                    } else {
+                        html += '<div class="no-replies">暂无回复</div>';
+                    }
+                    
+                    html += `
                         </div>
-                        `;
+                    </div>
+                    `;
+                });
+                
+                $('#commentsContainer').html(html);
+            }
+            
+            // 渲染分页
+            function renderPagination(total, currentPage, limit) {
+                const laypage = layui.laypage;
+                
+                laypage.render({
+                    elem: 'paginationContainer',
+                    count: total,
+                    limit: limit,
+                    curr: currentPage,
+                    layout: ['prev', 'page', 'next', 'skip'],
+                    jump: function(obj, first) {
+                        if(!first) {
+                            loadComments(obj.curr);
+                        }
+                    }
+                });
+            }
+            
+            // 加载更多回复
+            function loadMoreReplies(commentId, page) {
+                const msgId = $('#msgId').val() || 1;
+                const type = $('#type').val();
+                const repliesContainer = $('#replies-' + commentId);
+                const isInitialLoad = repliesContainer.data('initial-load') || false;
+                
+                $.ajax({
+                    url: '/tools/comment/getReplyList',
+                    method: 'GET',
+                    data: {
+                        comment_id: commentId,
+                        msg_id: msgId,
+                        type: type,
+                        page: page,
+                        limit: limit
+                    },
+                    success: function(response) {
+                        if (response.code === 200) {
+                            // 如果是初次加载，则替换整个回复列表
+                            if (isInitialLoad) {
+                                // 清空现有内容
+                                repliesContainer.empty();
+                                // 添加回复内容
+                                appendRepliesList(commentId, response.data.list, response.data.userList);
+                                // 移除初次加载标记
+                                repliesContainer.data('initial-load', false);
+                            } else {
+                                // 更新回复列表
+                                appendRepliesList(commentId, response.data.list, response.data.userList);
+                            }
+                            
+                            // 更新"加载更多"按钮
+                            const loadMoreBtn = $('.load-more-replies[data-comment-id="' + commentId + '"]');
+                            const totalLoaded = $('#replies-' + commentId + ' .comment-item').length;
+                            
+                            if (totalLoaded >= response.data.total) {
+                                loadMoreBtn.hide();
+                            } else {
+                                loadMoreBtn.data('current-page', page);
+                                loadMoreBtn.text(`点击加载更多回复 (${response.data.total - totalLoaded} 条未显示)`);
+                            }
+                        } else {
+                            console.error('加载回复失败:', response.msg);
+                        }
+                    },
+                    error: function() {
+                        console.error('网络错误，加载回复失败');
+                    }
+                });
+            }
+            
+            // 追加回复列表
+            function appendRepliesList(commentId, replies, userList) {
+                const currentUid = parseInt($('#currentUid').val()) || 0;
+                const repliesContainer = $('#replies-' + commentId);
+                const isInitialLoad = repliesContainer.data('initial-load') || false;
+                let html = '';
+                
+                replies.forEach(function(reply) {
+                    const replyUser = userList[reply.fromuid] || {nickname: '未知用户', head_image: '', blog: ''};
+                    const isOwnReply = reply.fromuid == currentUid;
+                    const toUser = userList[reply.touid] ? userList[reply.touid].nickname : '';
+                    const replyPrefix = toUser ? `@${toUser}` : '';
+                    
+                    const replyAvatar = replyUser.head_image ? 
+                        `<a href="/${replyUser.blog}/" class="user-link"><img src="${replyUser.head_image}" class="avatar" alt="头像"></a>` : 
+                        `<a href="/${replyUser.blog}/" class="user-link"><span class="avatar">${replyUser.nickname.charAt(0).toUpperCase()}</span></a>`;
+                    
+                    html += `
+                    <div class="comment-item">
+                        <div class="comment-header-info">
+                            <div>
+                                ${replyAvatar}
+                                <a href="/${replyUser.blog}/" class="user-link comment-author">${replyUser.nickname}</a>
+                                ${isOwnReply ? `<button class="delete-btn delete-reply" data-reply-id="${reply.cid}" data-comment-id="${commentId}">删除</button>` : ''}
+                            </div>
+                            <div class="comment-time">${formatTime(reply.ctime)}</div>
+                        </div>
+                        <div class="comment-content">
+                            ${replyPrefix} ${reply.msg}
+                        </div>
+                        <button class="reply-btn" data-comment-id="${commentId}" data-reply-id="${reply.cid}">回复</button>
+                    </div>
+                    `;
+                });
+                
+                // 如果是初次加载，直接添加内容
+                if (isInitialLoad) {
+                    repliesContainer.append(html);
+                } else {
+                    // 将新回复添加到"加载更多"按钮之前
+                    const loadMoreBtn = $('.load-more-replies[data-comment-id="' + commentId + '"]');
+                    if (loadMoreBtn.length > 0) {
+                        loadMoreBtn.before(html);
+                    } else {
+                        repliesContainer.append(html);
+                    }
+                }
+            }
+            
+            // 格式化时间
+            function formatTime(timestamp) {
+                const date = new Date(timestamp * 1000);
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                const hours = String(date.getHours()).padStart(2, '0');
+                const minutes = String(date.getMinutes()).padStart(2, '0');
+                
+                return `${year}年${month}月${day}日 ${hours}:${minutes}`;
+            }
+            
+            // 发表评论
+            function submitComment() {
+                const content = $('#mainContent').val().trim();
+                const msgId = $('#msgId').val() || 1; // 默认值
+                const type = $('#type').val();
+                
+                if(!content) {
+                    layer.msg('请输入评论内容', {icon: 2});
+                    return;
+                }
+                
+                $.ajax({
+                    url: '/tools/comment/addComment',
+                    method: 'POST',
+                    data: {
+                        msg_id: msgId,
+                        type: type,
+                        msg: content
+                    },
+                    success: function(response) {
+                        if(response.code === 200) {
+                            layer.msg('评论成功', {icon: 1});
+                            $('#mainContent').val('');
+                            loadComments(1); // 重新加载第一页
+                        } else {
+                            layer.msg(response.msg, {icon: 2});
+                        }
+                    },
+                    error: function() {
+                        layer.msg('网络错误，请稍后重试', {icon: 2});
+                    }
+                });
+            }
+            
+            // 发送回复
+            function sendReply(commentId, replyContent, touid = 0) {
+                const msgId = $('#msgId').val() || 1; // 默认值
+                const type = $('#type').val();
+                
+                if(!replyContent) {
+                    layer.msg('请输入回复内容', {icon: 2});
+                    return;
+                }
+                
+                $.ajax({
+                    url: '/tools/comment/addReply',
+                    method: 'POST',
+                    data: {
+                        msg_id: msgId,
+                        type: type,
+                        comment_id: commentId,
+                        msg: replyContent,
+                        touid: touid
+                    },
+                    success: function(response) {
+                        if(response.code === 200) {
+                            layer.msg('回复成功', {icon: 1});
+                            $('#replyForm-' + commentId + ' .reply-content').val('');
+                            $('#replyForm-' + commentId).hide();
+                            loadComments(currentPage); // 重新加载当前页
+                        } else {
+                            layer.msg(response.msg, {icon: 2});
+                        }
+                    },
+                    error: function() {
+                        layer.msg('网络错误，请稍后重试', {icon: 2});
+                    }
+                });
+            }
+            
+            // 删除评论
+            function deleteComment(commentId) {
+                layer.confirm('确定要删除这条评论吗？', {
+                    icon: 3,
+                    title: '删除确认'
+                }, function(index) {
+                    $.ajax({
+                        url: '/tools/comment/deleteComment',
+                        method: 'POST',
+                        data: {
+                            comment_id: commentId
+                        },
+                        success: function(response) {
+                            if(response.code === 200) {
+                                layer.msg('删除成功', {icon: 1});
+                                loadComments(currentPage); // 重新加载当前页
+                            } else {
+                                layer.msg(response.msg, {icon: 2});
+                            }
+                        },
+                        error: function() {
+                            layer.msg('网络错误，请稍后重试', {icon: 2});
+                        }
                     });
                     
-                    // 添加回复分页容器
-                    if(comment.reply_count > comment.replies.length) {
-                        html += `
-                        <div class="pagination" id="reply-pagination-${comment.cid}">
-                            <!-- 回复分页将通过AJAX动态加载 -->
-                        </div>
-                        `;
-                    }
-                } else {
-                    html += '<div class="no-replies">暂无回复</div>';
-                }
-                
-                html += `
-                    </div>
-                </div>
-                `;
-            });
-            
-            $('#commentsContainer').html(html);
-        }
-        
-        // 渲染分页
-        function renderPagination(total, currentPage, limit) {
-            const laypage = layui.laypage;
-            
-            laypage.render({
-                elem: 'paginationContainer',
-                count: total,
-                limit: limit,
-                curr: currentPage,
-                layout: ['prev', 'page', 'next', 'skip'],
-                jump: function(obj, first) {
-                    if(!first) {
-                        loadComments(obj.curr);
-                    }
-                }
-            });
-        }
-        
-        // 渲染回复分页
-        function renderReplyPagination(commentId, total, currentPage, limit) {
-            const laypage = layui.laypage;
-            
-            laypage.render({
-                elem: 'reply-pagination-' + commentId,
-                count: total,
-                limit: limit,
-                curr: currentPage,
-                layout: ['prev', 'page', 'next'],
-                jump: function(obj, first) {
-                    if(!first) {
-                        loadReplies(commentId, obj.curr);
-                    }
-                }
-            });
-        }
-        
-        // 加载回复列表
-        function loadReplies(commentId, page) {
-            const msgId = $('#msgId').val() || 1;
-            const type = $('#type').val();
-            
-            $.ajax({
-                url: '/tools/comment/getReplyList',
-                method: 'GET',
-                data: {
-                    comment_id: commentId,
-                    msg_id: msgId,
-                    type: type,
-                    page: page,
-                    limit: limit
-                },
-                success: function(response) {
-                    if(response.code === 200) {
-                        // 更新回复列表
-                        updateRepliesList(commentId, response.data.list, response.data.userList);
-                        
-                        // 渲染回复分页
-                        renderReplyPagination(commentId, response.data.total, page, limit);
-                    } else {
-                        console.error('加载回复失败:', response.msg);
-                    }
-                },
-                error: function() {
-                    console.error('网络错误，加载回复失败');
-                }
-            });
-        }
-        
-        // 更新回复列表
-        function updateRepliesList(commentId, replies, userList) {
-            const currentUid = parseInt($('#currentUid').val()) || 0;
-            let html = '';
-            
-            if(replies.length === 0) {
-                html = '<div class="no-replies">暂无回复</div>';
-                $('#replies-' + commentId).html(html);
-                return;
-            }
-            
-            replies.forEach(function(reply) {
-                const replyUser = userList[reply.fromuid] || {nickname: '未知用户', head_image: '', blog: ''};
-                const isOwnReply = reply.fromuid == currentUid;
-                const toUser = userList[reply.touid] ? userList[reply.touid].nickname : '';
-                const replyPrefix = toUser ? `@${toUser}` : '';
-                
-                const replyAvatar = replyUser.head_image ? 
-                    `<a href="/${replyUser.blog}/" class="user-link"><img src="${replyUser.head_image}" class="avatar" alt="头像"></a>` : 
-                    `<a href="/${replyUser.blog}/" class="user-link"><span class="avatar">${replyUser.nickname.charAt(0).toUpperCase()}</span></a>`;
-                
-                html += `
-                <div class="comment-item">
-                    <div class="comment-header-info">
-                        <div>
-                            ${replyAvatar}
-                            <a href="/${replyUser.blog}/" class="user-link comment-author">${replyUser.nickname}</a>
-                            ${isOwnReply ? `<button class="delete-btn delete-reply" data-reply-id="${reply.cid}" data-comment-id="${commentId}">删除</button>` : ''}
-                        </div>
-                        <div class="comment-time">${formatTime(reply.ctime)}</div>
-                    </div>
-                    <div class="comment-content">
-                        ${replyPrefix} ${reply.msg}
-                    </div>
-                    <button class="reply-btn" data-comment-id="${commentId}" data-reply-id="${reply.cid}">回复</button>
-                </div>
-                `;
-            });
-            
-            $('#replies-' + commentId).html(html);
-        }
-        
-        // 格式化时间
-        function formatTime(timestamp) {
-            const date = new Date(timestamp * 1000);
-            const year = date.getFullYear();
-            const month = String(date.getMonth() + 1).padStart(2, '0');
-            const day = String(date.getDate()).padStart(2, '0');
-            const hours = String(date.getHours()).padStart(2, '0');
-            const minutes = String(date.getMinutes()).padStart(2, '0');
-            
-            return `${year}年${month}月${day}日 ${hours}:${minutes}`;
-        }
-        
-        // 发表评论
-        function submitComment() {
-            const content = $('#mainContent').val().trim();
-            const msgId = $('#msgId').val() || 1; // 默认值
-            const type = $('#type').val();
-            
-            if(!content) {
-                layer.msg('请输入评论内容', {icon: 2});
-                return;
-            }
-            
-            $.ajax({
-                url: '/tools/comment/addComment',
-                method: 'POST',
-                data: {
-                    msg_id: msgId,
-                    type: type,
-                    msg: content
-                },
-                success: function(response) {
-                    if(response.code === 200) {
-                        layer.msg('评论成功', {icon: 1});
-                        $('#mainContent').val('');
-                        loadComments(1); // 重新加载第一页
-                    } else {
-                        layer.msg(response.msg, {icon: 2});
-                    }
-                },
-                error: function() {
-                    layer.msg('网络错误，请稍后重试', {icon: 2});
-                }
-            });
-        }
-        
-        // 发送回复
-        function sendReply(commentId, replyContent, touid = 0) {
-            const msgId = $('#msgId').val() || 1; // 默认值
-            const type = $('#type').val();
-            
-            if(!replyContent) {
-                layer.msg('请输入回复内容', {icon: 2});
-                return;
-            }
-            
-            $.ajax({
-                url: '/tools/comment/addReply',
-                method: 'POST',
-                data: {
-                    msg_id: msgId,
-                    type: type,
-                    comment_id: commentId,
-                    msg: replyContent,
-                    touid: touid
-                },
-                success: function(response) {
-                    if(response.code === 200) {
-                        layer.msg('回复成功', {icon: 1});
-                        $('#replyForm-' + commentId + ' .reply-content').val('');
-                        $('#replyForm-' + commentId).hide();
-                        loadComments(currentPage); // 重新加载当前页
-                    } else {
-                        layer.msg(response.msg, {icon: 2});
-                    }
-                },
-                error: function() {
-                    layer.msg('网络错误，请稍后重试', {icon: 2});
-                }
-            });
-        }
-        
-        // 删除评论
-        function deleteComment(commentId) {
-            layer.confirm('确定要删除这条评论吗？', {
-                icon: 3,
-                title: '删除确认'
-            }, function(index) {
-                $.ajax({
-                    url: '/tools/comment/deleteComment',
-                    method: 'POST',
-                    data: {
-                        comment_id: commentId
-                    },
-                    success: function(response) {
-                        if(response.code === 200) {
-                            layer.msg('删除成功', {icon: 1});
-                            loadComments(currentPage); // 重新加载当前页
-                        } else {
-                            layer.msg(response.msg, {icon: 2});
-                        }
-                    },
-                    error: function() {
-                        layer.msg('网络错误，请稍后重试', {icon: 2});
-                    }
+                    layer.close(index);
                 });
-                
-                layer.close(index);
-            });
-        }
-        
-        // 删除回复
-        function deleteReply(replyId, commentId) {
-            layer.confirm('确定要删除这条回复吗？', {
-                icon: 3,
-                title: '删除确认'
-            }, function(index) {
-                $.ajax({
-                    url: '/tools/comment/deleteReply',
-                    method: 'POST',
-                    data: {
-                        reply_id: replyId
-                    },
-                    success: function(response) {
-                        if(response.code === 200) {
-                            layer.msg('删除成功', {icon: 1});
-                            loadComments(currentPage); // 重新加载当前页
-                        } else {
-                            layer.msg(response.msg, {icon: 2});
+            }
+            
+            // 删除回复
+            function deleteReply(replyId, commentId) {
+                layer.confirm('确定要删除这条回复吗？', {
+                    icon: 3,
+                    title: '删除确认'
+                }, function(index) {
+                    $.ajax({
+                        url: '/tools/comment/deleteReply',
+                        method: 'POST',
+                        data: {
+                            reply_id: replyId
+                        },
+                        success: function(response) {
+                            if(response.code === 200) {
+                                layer.msg('删除成功', {icon: 1});
+                                loadComments(currentPage); // 重新加载当前页
+                            } else {
+                                layer.msg(response.msg, {icon: 2});
+                            }
+                        },
+                        error: function() {
+                            layer.msg('网络错误，请稍后重试', {icon: 2});
                         }
-                    },
-                    error: function() {
-                        layer.msg('网络错误，请稍后重试', {icon: 2});
-                    }
+                    });
+                    
+                    layer.close(index);
                 });
-                
-                layer.close(index);
-            });
-        }
+            }
+        });
     </script>
 </body>
-
 </html>
