@@ -35,7 +35,7 @@ class Comment extends Controller
             `rid` bigint(20) NOT NULL AUTO_INCREMENT,
             `fromuid` bigint(20) NOT NULL,
             `msg` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
-            `msg_id` bigint(20) NOT NULL,
+            `cid` bigint(20) NOT NULL,
             `touid` mediumint(9) NULL DEFAULT NULL,
             `ctime` int(11) NOT NULL,
             PRIMARY KEY (`rid`) USING BTREE
@@ -44,7 +44,7 @@ class Comment extends Controller
             `rid` bigint(20) NOT NULL AUTO_INCREMENT,
             `fromuid` bigint(20) NOT NULL,
             `msg` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
-            `msg_id` bigint(20) NOT NULL,
+            `cid` bigint(20) NOT NULL,
             `touid` mediumint(9) NULL DEFAULT NULL,
             `ctime` int(11) NOT NULL,  
             PRIMARY KEY (`rid`) USING BTREE
@@ -175,14 +175,14 @@ class Comment extends Controller
     public function getReplyList()
     {
         // 获取回复列表
-        $msgId = input('msg_id');
+        $commentId = input('comment_id');
         $type = input('type');
         $limit = input('limit', 10);
         $page = input('page', 1);
         $order = input('order', 'desc'); // 按热度，按时间降序
         // 验证参数
         if (empty($msgId)) {
-            return json(['code' => 400, 'msg' => 'msg_id不能为空']);
+            return json(['code' => 400, 'msg' => 'comment_id不能为空']);
         }
         // 确定排序方式
         $orderField = $order == 'hot' ? 'reply_count' : 'ctime';
@@ -196,9 +196,9 @@ class Comment extends Controller
             $replyTable = 'comment_reply';
         }
         
-        // 获取回复列表
+        // 获取回复列表 - 修正查询条件，应该是cid而不是rid
         $list = Db::name($replyTable)
-            ->where('rid', $msgId)
+            ->where('cid', $commentId)
             ->order($orderField, $orderDirection)
             ->limit($offset, $limit)
             ->select();
@@ -285,9 +285,8 @@ class Comment extends Controller
 
     public function addReply()
     {
-        $msgId = input('msg_id');
-        $type = input('type');
         $commentId = input('comment_id');
+        $type = input('type');
         $msg = input('msg');
         $touid = input('touid', 0);
     
@@ -312,7 +311,7 @@ class Comment extends Controller
         $data = [
             'fromuid' => $uid,
             'msg' => htmlspecialchars($msg),
-            'msg_id' => $commentId, // 回复对应的是评论ID
+            'cid' => $commentId, // 回复对应的是评论ID
             'touid' => $touid,
             'ctime' => time()
         ];
