@@ -305,7 +305,7 @@
 
                     // 提取@用户信息
                     let touid = $(this).data('touid');
-                    
+
 
                     sendReply(commentId, replyContent, touid);
                 });
@@ -705,7 +705,8 @@
                         url: '/tools/comment/deleteComment',
                         method: 'POST',
                         data: {
-                            comment_id: commentId
+                            comment_id: commentId,
+                            type: $('#type').val()
                         },
                         success: function (response) {
                             if (response.code === 200) {
@@ -734,7 +735,8 @@
                         url: '/tools/comment/deleteReply',
                         method: 'POST',
                         data: {
-                            reply_id: replyId
+                            reply_id: replyId,
+                            type: $('#type').val()
                         },
                         success: function (response) {
                             if (response.code === 200) {

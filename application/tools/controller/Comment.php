@@ -418,12 +418,136 @@ class Comment extends Controller
     }
 
     public function deleteComment()
-    { 
+    {
+        $commentId = input('comment_id');
+        $type = input('type', 'default');
 
+        // 参数验证
+        if (empty($commentId)) {
+            return json(['code' => 400, 'msg' => 'comment_id不能为空']);
+        }
+
+        $commentTable = $this->typeRelationArr[$type]['table'] ?? '';
+        $replyTable = $this->typeRelationArr[$type]['reply_table'] ?? '';
+        if (empty($commentTable) || empty($replyTable)) {
+            return json(['code' => 400, 'msg' => '类型不存在']);
+        }
+
+        // 获取当前登录用户ID
+        $currentUid = getLoginUid() ?: 0;
+        if ($currentUid <= 0) {
+            return json(['code' => 401, 'msg' => '请先登录']);
+        }
+
+        try {
+            // 查询评论信息
+            $commentInfo = Db::name($commentTable)->where('cid', $commentId)->find();
+            if (!$commentInfo) {
+                return json(['code' => 404, 'msg' => '评论不存在']);
+            }
+
+            // 检查权限：只能删除自己的评论
+            if ($commentInfo['fromuid'] != $currentUid) {
+                return json(['code' => 403, 'msg' => '您没有权限删除此评论']);
+            }
+
+            // 开始事务
+            Db::startTrans();
+
+            // 删除评论
+            $result = Db::name($commentTable)->where('cid', $commentId)->delete();
+
+            if ($result) {
+                // 同时删除相关的回复
+                Db::name($replyTable)->where('cid', $commentId)->delete();
+
+                // 提交事务
+                Db::commit();
+
+                return json(['code' => 200, 'msg' => '删除成功']);
+            } else {
+                Db::rollback();
+                return json(['code' => 500, 'msg' => '删除失败']);
+            }
+        } catch (\Exception $e) {
+            Db::rollback();
+            return json(['code' => 500, 'msg' => '数据库错误: ' . $e->getMessage()]);
+        }
     }
 
     public function deleteReply()
-    { 
+    {
+        $replyId = input('reply_id');
+        $type = input('type', 'default');
 
+        // 参数验证
+        if (empty($replyId)) {
+            return json(['code' => 400, 'msg' => 'reply_id不能为空']);
+        }
+
+        $commentTable = $this->typeRelationArr[$type]['table'] ?? '';
+        $replyTable = $this->typeRelationArr[$type]['reply_table'] ?? '';
+        if (empty($commentTable) || empty($replyTable)) {
+            return json(['code' => 400, 'msg' => '类型不存在']);
+        }
+
+        // 获取当前登录用户ID
+        $currentUid = getLoginUid() ?: 0;
+        if ($currentUid <= 0) {
+            return json(['code' => 401, 'msg' => '请先登录']);
+        }
+
+        try {
+            // 查询回复信息
+            $replyInfo = Db::name($replyTable)->where('rid', $replyId)->find();
+            if (!$replyInfo) {
+                return json(['code' => 404, 'msg' => '回复不存在']);
+            }
+
+            // 检查权限：只能删除自己的回复
+            if ($replyInfo['fromuid'] != $currentUid) {
+                return json(['code' => 403, 'msg' => '您没有权限删除此回复']);
+            }
+
+            // 开始事务
+            Db::startTrans();
+
+            // 获取回复所属的评论ID
+            $commentId = $replyInfo['cid'];
+
+            // 删除回复
+            $result = Db::name($replyTable)->where('rid', $replyId)->delete();
+
+            if ($result) {
+                // 更新评论表中的回复数和相关回复ID
+                // 查询该评论的所有回复
+                $remainingReplies = Db::name($replyTable)->where('cid', $commentId)->select();
+                $replyCount = count($remainingReplies);
+                
+                // 更新评论表中的回复数
+                Db::name($commentTable)->where('cid', $commentId)->update([
+                    'reply_count' => $replyCount
+                ]);
+                
+                // 更新关联的回复ID列表
+                $replyIds = array_column($remainingReplies, 'rid');
+                $relationReplyIds = implode(',', array_slice($replyIds, 0, 3)); // 只保留前3个
+                
+                Db::name($commentTable)->where('cid', $commentId)->update([
+                    'relation_reply_id' => $relationReplyIds
+                ]);
+
+                // 提交事务
+                Db::commit();
+
+                return json(['code' => 200, 'msg' => '删除成功']);
+            } else {
+                Db::rollback();
+                return json(['code' => 500, 'msg' => '删除失败']);
+            }
+        } catch (\Exception $e) {
+            Db::rollback();
+            return json(['code' => 500, 'msg' => '数据库错误: ' . $e->getMessage()]);
+        }
     }
 }
