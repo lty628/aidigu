@@ -79,9 +79,9 @@ class Comment extends Controller
         $order = input('order', 'desc'); // 按热度，按时间降序
         
         // 参数验证
-        // if (empty($msgId)) {
-        //     return json(['code' => 400, 'msg' => 'msg_id不能为空']);
-        // }
+        if (empty($msgId)) {
+            return json(['code' => 400, 'msg' => 'msg_id不能为空']);
+        }
         
         // 确定排序方式
         $orderField = $order == 'hot' ? 'reply_count' : 'ctime';
@@ -123,17 +123,18 @@ class Comment extends Controller
         $commentIdArr = [];
         if ($commentIds) {
             foreach ($commentIds as $commentId) {
-                $commentIdArr = array_merge($commentIdArr, explode(',', $commentId));
+                if (!empty($commentId)) {
+                    $commentIdArr = array_merge($commentIdArr, explode(',', $commentId));
+                }
             }
         }
         $commentIdArr = array_filter($commentIdArr);
         // 初始化回复列表数组
         $replyList = [];
         if ($commentIdArr) {
-            $uidArr = array_merge($uidArr, array_column($commentIdArr, 'fromuid'));
             // 获取每条评论的回复（最多10条）
             $replies = Db::name($replyTable)
-                ->whereIn('cid', $commentIdArr)
+                ->whereIn('msg_id', $commentIdArr)
                 ->order('ctime', 'desc')
                 ->select();
             // 按评论ID分组回复
@@ -211,7 +212,10 @@ class Comment extends Controller
                 ],
             ]);
         }
-        $uidArr = array_column($list, 'fromuid');   
+        $uidArr = array_column($list, 'fromuid');
+        $toUidArr = array_column($list, 'touid');
+        $uidArr = array_merge($uidArr, $toUidArr);
+        $uidArr = array_filter($uidArr);
         $userList = Db::name('user')->field('uid, nickname, blog, head_image')->whereIn('uid', $uidArr)->select();
         $userList = array_column($userList, null, 'uid');
         return json([
@@ -228,7 +232,123 @@ class Comment extends Controller
         
     }
 
-    public function addComment() {}
+    public function addComment()
+    {
+        $msgId = input('msg_id');
+        $type = input('type');
+        $msg = input('msg');
+        
+        // 参数验证
+        if (empty($msgId) || empty($type) || empty($msg)) {
+            return json(['code' => 400, 'msg' => '参数不能为空']);
+        }
+        
+        // 确定评论表
+        if ($type == 'channel') {
+            $commentTable = 'channel_comment';
+        } else {
+            $commentTable = 'comment';
+        }
+        
+        // 获取用户ID
+        $uid = session('uid') ?: 0;
+        
+        // 构建插入数据
+        $data = [
+            'fromuid' => $uid,
+            'msg' => htmlspecialchars($msg),
+            'msg_id' => $msgId,
+            'ctime' => time(),
+            'ctype' => 0, // 默认类型
+            'reply_count' => 0,
+            'relation_reply_id' => ''
+        ];
+        
+        try {
+            $result = Db::name($commentTable)->insertGetId($data);
+            
+            if ($result) {
+                return json([
+                    'code' => 200,
+                    'msg' => '评论成功',
+                    'data' => [
+                        'cid' => $result
+                    ]
+                ]);
+            } else {
+                return json(['code' => 500, 'msg' => '评论失败']);
+            }
+        } catch (\Exception $e) {
+            return json(['code' => 500, 'msg' => '数据库错误: ' . $e->getMessage()]);
+        }
+    }
 
-    public function addReply() {}
+    public function addReply()
+    {
+        $msgId = input('msg_id');
+        $type = input('type');
+        $commentId = input('comment_id');
+        $msg = input('msg');
+        $touid = input('touid', 0);
+        
+        // 参数验证
+        if (empty($msgId) || empty($type) || empty($commentId) || empty($msg)) {
+            return json(['code' => 400, 'msg' => '参数不能为空']);
+        }
+        
+        // 确定回复表
+        if ($type == 'channel') {
+            $replyTable = 'channel_comment_reply';
+            $commentTable = 'channel_comment';
+        } else {
+            $replyTable = 'comment_reply';
+            $commentTable = 'comment';
+        }
+        
+        // 获取用户ID
+        $uid = session('uid') ?: 0;
+        
+        // 构建插入数据
+        $data = [
+            'fromuid' => $uid,
+            'msg' => htmlspecialchars($msg),
+            'msg_id' => $commentId, // 回复对应的是评论ID
+            'touid' => $touid,
+            'ctime' => time()
+        ];
+        
+        try {
+            // 开始事务
+            Db::startTrans();
+            
+            // 插入回复记录
+            $result = Db::name($replyTable)->insertGetId($data);
+            
+            if ($result) {
+                // 更新评论表中的回复数
+                Db::name($commentTable)
+                    ->where('cid', $commentId)
+                    ->inc('reply_count')
+                    ->exp('relation_reply_id', "CONCAT(COALESCE(relation_reply_id, ''), CASE WHEN relation_reply_id = '' THEN '{$result}' ELSE ',{$result}' END)")
+                    ->update();
+                
+                // 提交事务
+                Db::commit();
+                
+                return json([
+                    'code' => 200,
+                    'msg' => '回复成功',
+                    'data' => [
+                        'cid' => $result
+                    ]
+                ]);
+            } else {
+                Db::rollback();
+                return json(['code' => 500, 'msg' => '回复失败']);
+            }
+        } catch (\Exception $e) {
+            Db::rollback();
+            return json(['code' => 500, 'msg' => '数据库错误: ' . $e->getMessage()]);
+        }
+    }
 }

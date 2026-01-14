@@ -150,23 +150,11 @@
             font-size: 14px;
         }
 
-        /* 匿名用户名样式 */
-        .anonymous-user {
-            color: #666;
-            font-style: italic;
-        }
-        
-        /* WangEditor 容器样式 */
-        .w-e-text-container {
-            height: 150px !important;
-        }
-        
-        .editor-container {
-            margin-bottom: 15px;
-        }
-        
-        .main-editor-container {
-            margin-bottom: 15px;
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
         }
         
         /* 回复展开/收起按钮样式 */
@@ -191,6 +179,48 @@
         .replies.collapsed {
             display: none;
         }
+        
+        /* 加载更多按钮样式 */
+        .load-more-replies {
+            margin-top: 10px;
+            padding: 5px 10px;
+            background: none;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            color: #666;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        
+        .load-more-replies:hover {
+            background-color: #f5f5f5;
+            border-color: #4a90e2;
+            color: #4a90e2;
+        }
+        
+        /* 分页样式 */
+        .pagination {
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .layui-laypage {
+            display: inline-block;
+        }
+        
+        /* 加载动画 */
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #999;
+        }
+        
+        /* 错误提示 */
+        .error-message {
+            color: #ff4d4f;
+            font-size: 12px;
+            margin-top: 5px;
+        }
     </style>
 </head>
 
@@ -203,214 +233,325 @@
         <div class="comment-form">
             <div class="form-group">
                 <label>评论内容</label>
-                <div class="main-editor-container">
-                    <div id="mainToolbar"></div>
-                    <div id="mainText"></div>
-                </div>
+                <textarea class="form-control" id="mainContent" placeholder="请输入评论内容..."></textarea>
             </div>
             <button class="btn" id="submitCommentBtn">发表评论</button>
         </div>
 
         <div class="comments-list">
-            <!-- 主评论 -->
-            <div class="comment-item">
-                <div class="comment-header-info">
-                    <div>
-                        <span class="avatar">A</span>
-                        <span class="comment-author anonymous-user">匿名用户</span>
-                    </div>
-                    <div class="comment-time">2023年4月15日 14:30</div>
-                </div>
-                <div class="comment-content">
-                    这是一个很棒的功能！期待看到更多类似的创新设计。这个评论系统的用户体验应该会很好。
-                </div>
-                <button class="reply-btn">回复</button>
-
-                <!-- 回复表单 - 默认隐藏 -->
-                <div class="reply-form" data-editor-id="reply-editor-1">
-                    <div class="editor-container">
-                        <div class="reply-toolbar" id="replyToolbar1"></div>
-                        <div class="reply-text" id="replyText1"></div>
-                    </div>
-                    <button class="btn send-reply" data-editor-id="reply-editor-1">发送回复</button>
-                    <button class="btn cancel-reply" style="background-color: #999; margin-left: 10px;">取消</button>
-                </div>
-
-                <!-- 回复数量按钮 -->
-                <button class="reply-toggle" data-total-replies="2">共2条回复</button>
-
-                <!-- 回复列表 -->
-                <div class="replies">
-                    <div class="comment-item">
-                        <div class="comment-header-info">
-                            <div>
-                                <span class="avatar">B</span>
-                                <span class="comment-author anonymous-user">匿名用户</span>
-                            </div>
-                            <div class="comment-time">2023年4月15日 15:20</div>
-                        </div>
-                        <div class="comment-content">
-                            @匿名用户 谢谢您的认可！我们会继续努力改进功能。
-                        </div>
-                        <button class="reply-btn">回复</button>
-
-                        <!-- 嵌套回复表单 -->
-                        <div class="reply-form" data-editor-id="reply-editor-2">
-                            <div class="editor-container">
-                                <div class="reply-toolbar" id="replyToolbar2"></div>
-                                <div class="reply-text" id="replyText2"></div>
-                            </div>
-                            <button class="btn send-reply" data-editor-id="reply-editor-2">发送回复</button>
-                            <button class="btn cancel-reply" style="background-color: #999; margin-left: 10px;">取消</button>
-                        </div>
-                    </div>
-
-                    <div class="comment-item">
-                        <div class="comment-header-info">
-                            <div>
-                                <span class="avatar">C</span>
-                                <span class="comment-author anonymous-user">匿名用户</span>
-                            </div>
-                            <div class="comment-time">2023年4月15日 16:45</div>
-                        </div>
-                        <div class="comment-content">
-                            @匿名用户 @匿名用户 这个功能确实不错，希望能增加一些表情功能。
-                        </div>
-                        <button class="reply-btn">回复</button>
-
-                        <!-- 嵌套回复表单 -->
-                        <div class="reply-form" data-editor-id="reply-editor-3">
-                            <div class="editor-container">
-                                <div class="reply-toolbar" id="replyToolbar3"></div>
-                                <div class="reply-text" id="replyText3"></div>
-                            </div>
-                            <button class="btn send-reply" data-editor-id="reply-editor-3">发送回复</button>
-                            <button class="btn cancel-reply" style="background-color: #999; margin-left: 10px;">取消</button>
-                        </div>
-                    </div>
-                </div>
+            <div id="commentsContainer">
+                <!-- 评论列表将通过AJAX动态加载 -->
             </div>
-
-            <!-- 另一个主评论 -->
-            <div class="comment-item">
-                <div class="comment-header-info">
-                    <div>
-                        <span class="avatar">D</span>
-                        <span class="comment-author anonymous-user">匿名用户</span>
-                    </div>
-                    <div class="comment-time">2023年4月14日 20:15</div>
-                </div>
-                <div class="comment-content">
-                    设计得很简洁，很喜欢这种风格。不过建议增加一些自定义选项，让每个人都能个性化设置。
-                </div>
-                <button class="reply-btn">回复</button>
-
-                <div class="reply-form" data-editor-id="reply-editor-4">
-                    <div class="editor-container">
-                        <div class="reply-toolbar" id="replyToolbar4"></div>
-                        <div class="reply-text" id="replyText4"></div>
-                    </div>
-                    <button class="btn send-reply" data-editor-id="reply-editor-4">发送回复</button>
-                    <button class="btn cancel-reply" style="background-color: #999; margin-left: 10px;">取消</button>
-                </div>
+            
+            <div class="pagination" id="paginationContainer">
+                <!-- 分页将通过AJAX动态加载 -->
             </div>
         </div>
     </div>
 
     <input type="hidden" id="type" value="{ $type }">
+    <input type="hidden" id="msgId" value="1"> <!-- 这里需要根据实际场景传入msgId -->
     
     <script src="/static/layui/layui.js"></script>
-    <script type="text/javascript" src="/static/common/js/wangEditor.min.js"></script>
-    <script src="/static/tools/comment/js/edit.js"></script>
     <script>
-        // 初始化所有编辑器
-        document.addEventListener('DOMContentLoaded', function() {
-            // 初始化主编辑器
-            initMainEditor();
+        // 全局变量
+        let currentPage = 1;
+        const limit = 10;
+        let order = 'desc'; // 排序方式：'desc', 'asc', 'hot'
+        
+        var laypage = layui.laypage;
+            var $ = layui.jquery;
             
-            // 为每个回复表单创建编辑器
-            const replyForms = document.querySelectorAll('.reply-form');
-            replyForms.forEach((form, index) => {
-                const toolbarId = `replyToolbar${index + 1}`;
-                const textId = `replyText${index + 1}`;
-                createReplyEditor(toolbarId, textId);
+            // 页面加载完成后获取评论列表
+            loadComments(currentPage);
+            
+            // 绑定事件
+            bindEvents();
+        
+        // 绑定事件
+        function bindEvents() {
+            // 提交主评论
+            $('#submitCommentBtn').on('click', function() {
+                submitComment();
             });
             
-            // 初始化回复列表状态 - 默认收起
-            const repliesList = document.querySelectorAll('.replies');
-            repliesList.forEach(replies => {
-                replies.classList.add('collapsed');
-            });
-        });
-
-        // 事件委托方式处理回复按钮点击事件
-        document.addEventListener('click', function (e) {
-            // 处理回复按钮点击
-            if (e.target.classList.contains('reply-btn')) {
-                const form = e.target.nextElementSibling;
-                if (form && form.classList.contains('reply-form')) {
-                    // 隐藏其他所有回复表单
-                    document.querySelectorAll('.reply-form').forEach(f => {
-                        f.style.display = 'none';
-                    });
-                    // 显示当前回复表单
-                    form.style.display = 'block';
+            // 使用事件委托绑定动态生成的元素事件
+            $(document).on('click', '.reply-btn', function() {
+                const commentId = $(this).data('comment-id');
+                const replyId = $(this).data('reply-id');
+                const form = $('#replyForm-' + commentId);
+                
+                // 隐藏其他所有回复表单
+                $('.reply-form').hide();
+                
+                // 显示当前回复表单
+                form.show();
+                
+                // 如果是回复某个具体回复，自动添加@用户名
+                if(replyId) {
+                    const parentComment = $(this).closest('.comment-item');
+                    const replyAuthor = parentComment.find('.comment-author').text();
+                    const replyInput = form.find('.reply-content');
+                    replyInput.val('@' + replyAuthor + ' ');
+                    replyInput.focus();
+                } else {
+                    const replyInput = form.find('.reply-content');
+                    replyInput.focus();
                 }
-            }
+            });
             
             // 处理回复展开/收起按钮点击
-            if (e.target.classList.contains('reply-toggle')) {
-                const repliesContainer = e.target.nextElementSibling;
-                if (repliesContainer && repliesContainer.classList.contains('replies')) {
-                    if (repliesContainer.classList.contains('collapsed')) {
-                        repliesContainer.classList.remove('collapsed');
-                        e.target.textContent = '收起回复';
-                    } else {
-                        repliesContainer.classList.add('collapsed');
-                        const totalReplies = e.target.getAttribute('data-total-replies');
-                        e.target.textContent = `共${totalReplies}条回复`;
-                    }
-                }
-            }
-
-            // 处理取消按钮点击
-            if (e.target.classList.contains('cancel-reply')) {
-                const form = e.target.closest('.reply-form');
-                form.style.display = 'none';
-            }
-
-            // 处理发送回复按钮点击
-            if (e.target.classList.contains('send-reply')) {
-                const form = e.target.closest('.reply-form');
-                const editorId = form.getAttribute('data-editor-id');
-                const editorNum = editorId.split('-')[2]; // 获取数字部分
-                const editorElement = document.getElementById(`replyText${editorNum}`);
+            $(document).on('click', '.reply-toggle', function() {
+                const commentId = $(this).data('comment-id');
+                const repliesContainer = $('#replies-' + commentId);
+                const totalReplies = parseInt($(this).data('total-replies'));
                 
-                // 获取编辑器实例并获取内容
-                const editor = editorElement.__wang_editor_instance__; // 获取编辑器实例
-                const content = editor.txt.html().trim(); // 获取HTML内容
-                
-                if (content && content !== '<p><br></p>') { // 检查是否为空内容
-                    alert('回复已提交！');
-                    editor.txt.clear(); // 清空编辑器内容
-                    form.style.display = 'none';
+                if(repliesContainer.hasClass('collapsed')) {
+                    repliesContainer.removeClass('collapsed');
+                    $(this).text('收起回复');
                 } else {
-                    alert('请输入回复内容！');
+                    repliesContainer.addClass('collapsed');
+                    $(this).text('共' + totalReplies + '条回复');
                 }
+            });
+            
+            // 处理发送回复按钮点击
+            $(document).on('click', '.send-reply', function() {
+                const commentId = $(this).data('comment-id');
+                const replyInput = $('#replyForm-' + commentId + ' .reply-content');
+                const replyContent = replyInput.val().trim();
+                
+                sendReply(commentId, replyContent);
+            });
+            
+            // 处理取消按钮点击
+            $(document).on('click', '.cancel-reply', function() {
+                const commentId = $(this).data('comment-id');
+                $('#replyForm-' + commentId).hide();
+            });
+        }
+        
+        // 加载评论列表
+        function loadComments(page) {
+            const msgId = $('#msgId').val() || 1; // 默认值，需要根据实际情况调整
+            const type = $('#type').val();
+            
+            // 显示加载动画
+            $('#commentsContainer').html('<div class="loading">正在加载评论...</div>');
+            
+            $.ajax({
+                url: '/tools/comment/getCommentList',
+                method: 'GET',
+                data: {
+                    msg_id: msgId,
+                    type: type,
+                    page: page,
+                    limit: limit,
+                    order: order
+                },
+                success: function(response) {
+                    if(response.code === 200) {
+                        renderComments(response.data.list, response.data.userList);
+                        
+                        // 渲染分页
+                        renderPagination(response.data.total, page, limit);
+                    } else {
+                        $('#commentsContainer').html('<div class="error-message">加载失败: ' + response.msg + '</div>');
+                    }
+                },
+                error: function() {
+                    $('#commentsContainer').html('<div class="error-message">网络错误，请稍后重试</div>');
+                }
+            });
+        }
+        
+        // 渲染评论列表
+        function renderComments(comments, userList) {
+            let html = '';
+            
+            if(comments.length === 0) {
+                html = '<div class="no-comments">暂无评论，快来抢沙发吧！</div>';
+                $('#commentsContainer').html(html);
+                return;
             }
             
-            // 处理主评论提交
-            if (e.target.id === 'submitCommentBtn') {
-                const content = mainEditor.txt.html().trim();
+            comments.forEach(function(comment) {
+                const user = userList[comment.fromuid] || {nickname: '未知用户', head_image: '', blog: ''};
+                const avatar = user.head_image ? 
+                    `<img src="${user.head_image}" class="avatar" alt="头像">` : 
+                    `<span class="avatar">${user.nickname.charAt(0).toUpperCase()}</span>`;
                 
-                if (content && content !== '<p><br></p>') {
-                    alert('评论已提交！');
-                    mainEditor.txt.clear(); // 清空主编辑器内容
+                html += `
+                <div class="comment-item" data-cid="${comment.cid}">
+                    <div class="comment-header-info">
+                        <div>
+                            ${avatar}
+                            <span class="comment-author">${user.nickname}</span>
+                        </div>
+                        <div class="comment-time">${formatTime(comment.ctime)}</div>
+                    </div>
+                    <div class="comment-content">
+                        ${comment.msg}
+                    </div>
+                    <button class="reply-btn" data-comment-id="${comment.cid}">回复</button>
+
+                    <!-- 回复表单 - 默认隐藏 -->
+                    <div class="reply-form" id="replyForm-${comment.cid}" style="display: none;">
+                        <div class="form-group">
+                            <textarea class="form-control reply-content" placeholder="请输入回复内容..." data-comment-id="${comment.cid}"></textarea>
+                        </div>
+                        <button class="btn send-reply" data-comment-id="${comment.cid}">发送回复</button>
+                        <button class="btn cancel-reply" style="background-color: #999; margin-left: 10px;" data-comment-id="${comment.cid}">取消</button>
+                    </div>
+
+                    <!-- 回复数量按钮 -->
+                    <button class="reply-toggle" data-comment-id="${comment.cid}" data-total-replies="${comment.reply_count}">
+                        共${comment.reply_count}条回复
+                    </button>
+
+                    <!-- 回复列表 -->
+                    <div class="replies collapsed" id="replies-${comment.cid}">
+                `;
+                
+                // 渲染回复
+                if(comment.replies && comment.replies.length > 0) {
+                    comment.replies.forEach(function(reply, index) {
+                        const replyUser = userList[reply.fromuid] || {nickname: '未知用户', head_image: '', blog: ''};
+                        const replyAvatar = replyUser.head_image ? 
+                            `<img src="${replyUser.head_image}" class="avatar" alt="头像">` : 
+                            `<span class="avatar">${replyUser.nickname.charAt(0).toUpperCase()}</span>`;
+                        
+                        const toUser = userList[reply.touid] ? userList[reply.touid].nickname : '';
+                        const replyPrefix = toUser ? `@${toUser}` : '';
+                        
+                        html += `
+                        <div class="comment-item">
+                            <div class="comment-header-info">
+                                <div>
+                                    ${replyAvatar}
+                                    <span class="comment-author">${replyUser.nickname}</span>
+                                </div>
+                                <div class="comment-time">${formatTime(reply.ctime)}</div>
+                            </div>
+                            <div class="comment-content">
+                                ${replyPrefix} ${reply.msg}
+                            </div>
+                            <button class="reply-btn" data-comment-id="${comment.cid}" data-reply-id="${reply.cid}">回复</button>
+                        </div>
+                        `;
+                    });
                 } else {
-                    alert('请输入评论内容！');
+                    html += '<div class="no-replies">暂无回复</div>';
                 }
+                
+                html += `
+                    </div>
+                </div>
+                `;
+            });
+            
+            $('#commentsContainer').html(html);
+        }
+        
+        // 渲染分页
+        function renderPagination(total, currentPage, limit) {
+            const laypage = layui.laypage;
+            
+            laypage.render({
+                elem: 'paginationContainer',
+                count: total,
+                limit: limit,
+                curr: currentPage,
+                layout: ['prev', 'page', 'next', 'skip'],
+                jump: function(obj, first) {
+                    if(!first) {
+                        loadComments(obj.curr);
+                    }
+                }
+            });
+        }
+        
+        // 格式化时间
+        function formatTime(timestamp) {
+            const date = new Date(timestamp * 1000);
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            const hours = String(date.getHours()).padStart(2, '0');
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+            
+            return `${year}年${month}月${day}日 ${hours}:${minutes}`;
+        }
+        
+        // 发表评论
+        function submitComment() {
+            const content = $('#mainContent').val().trim();
+            const msgId = $('#msgId').val() || 1; // 默认值
+            const type = $('#type').val();
+            
+            if(!content) {
+                layer.msg('请输入评论内容', {icon: 2});
+                return;
             }
-        });
+            
+            $.ajax({
+                url: '/tools/comment/addComment',
+                method: 'POST',
+                data: {
+                    msg_id: msgId,
+                    type: type,
+                    msg: content
+                },
+                success: function(response) {
+                    if(response.code === 200) {
+                        layer.msg('评论成功', {icon: 1});
+                        $('#mainContent').val('');
+                        loadComments(1); // 重新加载第一页
+                    } else {
+                        layer.msg(response.msg, {icon: 2});
+                    }
+                },
+                error: function() {
+                    layer.msg('网络错误，请稍后重试', {icon: 2});
+                }
+            });
+        }
+        
+        // 发送回复
+        function sendReply(commentId, replyContent, touid = 0) {
+            const msgId = $('#msgId').val() || 1; // 默认值
+            const type = $('#type').val();
+            
+            if(!replyContent) {
+                layer.msg('请输入回复内容', {icon: 2});
+                return;
+            }
+            
+            $.ajax({
+                url: '/tools/comment/addReply',
+                method: 'POST',
+                data: {
+                    msg_id: msgId,
+                    type: type,
+                    comment_id: commentId,
+                    msg: replyContent,
+                    touid: touid
+                },
+                success: function(response) {
+                    if(response.code === 200) {
+                        layer.msg('回复成功', {icon: 1});
+                        $('#replyForm-' + commentId + ' .reply-content').val('');
+                        $('#replyForm-' + commentId).hide();
+                        loadComments(currentPage); // 重新加载当前页
+                    } else {
+                        layer.msg(response.msg, {icon: 2});
+                    }
+                },
+                error: function() {
+                    layer.msg('网络错误，请稍后重试', {icon: 2});
+                }
+            });
+        }
     </script>
 </body>
 
