@@ -241,8 +241,9 @@ margin: 0 auto;
 
     <!-- 隐藏字段 -->
     <input type="hidden" id="msgId" value="{$msgId|default=1}">
-    <input type="hidden" id="type" value="{$type|default='article'}">
-    <input type="hidden" id="currentUid" value="{$uid|default=0}">
+    <input type="hidden" id="commentId" value="{$commentId|default=0}">
+    <input type="hidden" id="type" value="{$type|default='default'}">
+    <input type="hidden" id="currentUid" value="{$currentUid|default=0}">
 
     <script src="/static/layui/layui.js"></script>
     <script>
@@ -356,6 +357,7 @@ margin: 0 auto;
                 currentPage = page;
                 const msgId = $('#msgId').val() || 1;
                 const type = $('#type').val();
+                const commentId = $('#commentId').val() || 0;
                 
                 $('#commentsContainer').html('<div class="loading">加载中...</div>');
                 
@@ -364,6 +366,7 @@ margin: 0 auto;
                     method: 'GET',
                     data: {
                         msg_id: msgId,
+                        comment_id: commentId,
                         type: type,
                         page: page,
                         limit: limit
@@ -474,7 +477,7 @@ margin: 0 auto;
                             `;
                         }
                     } else {
-                        html += '<div class="no-replies">暂无回复</div>';
+                        // html += '<div class="no-replies">暂无回复</div>';
                     }
                     
                     html += `
@@ -489,7 +492,9 @@ margin: 0 auto;
             // 渲染分页
             function renderPagination(total, currentPage, limit) {
                 const laypage = layui.laypage;
-                
+                if (total <= limit) {
+                    return;
+                }
                 laypage.render({
                     elem: 'paginationContainer',
                     count: total,

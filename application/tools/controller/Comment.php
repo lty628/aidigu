@@ -29,6 +29,18 @@ use think\Db;
 
 class Comment extends Controller
 {
+    protected $typeRelationArr = [
+        'default' => [
+            'table' => 'comment',
+            'reply_table' => 'comment_reply',
+            'type' => 'default',
+        ],
+        'channel' => [
+            'table' => 'channel_comment',
+            'reply_table' => 'channel_comment_reply',
+            'type' => 'channel',
+        ]
+    ];
     // 创建回复表
     public function createReplyTable()
     {
@@ -67,8 +79,16 @@ class Comment extends Controller
     public function index()
     {
         // 分配类型变量
-        $type = input('type', 'article');
+        $type = input('type', 'default');
+        $msgId = input('msg_id');
+        $commentId = input('comment_id');
+        $currentUid = getLoginUid();
+        // dump($commentId);die;
+        // $this->assign('title', $type == 'channel' ? '频道评论' : '文章评论');
+        $this->assign('msgId', $msgId);
+        $this->assign('commentId', $commentId);
         $this->assign('type', $type);
+        $this->assign('currentUid', $currentUid);
         
         // 渲染视图
         return $this->fetch();
@@ -77,6 +97,7 @@ class Comment extends Controller
     public function getCommentList()
     {
         $msgId = input('msg_id');
+        $commentId = input('comment_id');
         $type = input('type');
         $limit = input('limit', 10);
         $page = input('page', 1);
@@ -94,18 +115,23 @@ class Comment extends Controller
         // 计算偏移量
         $offset = ($page - 1) * $limit;
         
-        // 根据类型获取评论
-        if ($type == 'channel') {
-            $commentTable = 'channel_comment';
-            $replyTable = 'channel_comment_reply';
-        } else {
-            $commentTable = 'comment';
-            $replyTable = 'comment_reply';
+        $commentTable = $this->typeRelationArr[$type]['table'] ?? '';
+        $replyTable = $this->typeRelationArr[$type]['reply_table'] ?? '';
+        if (empty($commentTable) || empty($replyTable)) {
+            return json(['code' => 400, 'msg' => '类型不存在']);
+        }
+
+        $where = [];
+        if ($commentId) {
+            $where[] = ['cid', '=', $commentId];
+        } 
+        if ($msgId) {
+            $where[] = ['msg_id', '=', $msgId];
         }
         
         // 获取评论列表
         $list = Db::name($commentTable)
-            // ->where('msg_id', $msgId)
+            ->where($where)
             ->order($orderField, $orderDirection)
             ->limit($offset, $limit)
             ->select();
@@ -152,7 +178,7 @@ class Comment extends Controller
                 $commentId = $reply['cid']; // 修正：使用cid而不是msg_id
                 
                 // 如果该评论的回复数量未达到限制，则添加到回复列表
-                if (!isset($replyList[$commentId]) || count($replyList[$commentId]) < 5) {
+                if (!isset($replyList[$commentId]) || count($replyList[$commentId]) < 3) {
                     $replyList[$commentId][] = $reply;
                 }
             }
@@ -187,7 +213,7 @@ class Comment extends Controller
     {
         // 获取回复列表
         $commentId = input('comment_id');
-        $type = input('type');
+        $type = input('type', 'default');
         $limit = input('limit', 10);
         $page = input('page', 1);
         $order = input('order', 'desc'); // 按热度，按时间降序
@@ -204,13 +230,11 @@ class Comment extends Controller
         // 计算偏移量
         $offset = ($page - 1) * $limit;
         
-        // 根据类型获取回复
-        if ($type == 'channel') {
-            $replyTable = 'channel_comment_reply';
-        } else {
-            $replyTable = 'comment_reply';
+        $replyTable = $this->typeRelationArr[$type]['reply_table'] ?? '';
+        if (empty($replyTable)) {
+            return json(['code' => 400, 'msg' => '参数错误']);
         }
-        
+
         // 获取回复列表
         $list = Db::name($replyTable)
             ->where('cid', $commentId)
@@ -260,14 +284,12 @@ class Comment extends Controller
         if (empty($msgId) || empty($type) || empty($msg)) {
             return json(['code' => 400, 'msg' => '参数不能为空']);
         }
-        
-        // 确定评论表
-        if ($type == 'channel') {
-            $commentTable = 'channel_comment';
-        } else {
-            $commentTable = 'comment';
+
+        $commentTable = $this->typeRelationArr[$type]['table'] ?? '';
+        if (empty($commentTable)) {
+            return json(['code' => 400, 'msg' => '类型不存在']);
         }
-        
+       
         // 获取用户ID
         $uid = session('uid') ?: 0;
         
@@ -313,15 +335,12 @@ class Comment extends Controller
             return json(['code' => 400, 'msg' => '参数不能为空']);
         }
     
-        // 确定回复表
-        if ($type == 'channel') {
-            $replyTable = 'channel_comment_reply';
-            $commentTable = 'channel_comment';
-        } else {
-            $replyTable = 'comment_reply';
-            $commentTable = 'comment';
+        $commentTable = $this->typeRelationArr[$type]['table'] ?? '';
+        $replyTable = $this->typeRelationArr[$type]['reply_table'] ?? '';
+        if (empty($commentTable) || empty($replyTable)) {
+            return json(['code' => 400, 'msg' => '类型不存在']);
         }
-    
+
         // 获取用户ID
         $uid = session('uid') ?: 0;
     
@@ -353,9 +372,9 @@ class Comment extends Controller
                     $idsArray = explode(',', $currentIds);
                     $idsArray[] = (string)$result; // 添加新ID
     
-                    // 只保留最后5个ID
-                    if (count($idsArray) > 5) {
-                        $idsArray = array_slice($idsArray, -5);
+                    // 只保留最后3个ID
+                    if (count($idsArray) > 3) {
+                        $idsArray = array_slice($idsArray, -3);
                     }
     
                     $newIds = implode(',', $idsArray);
