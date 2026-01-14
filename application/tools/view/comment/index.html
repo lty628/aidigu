@@ -118,7 +118,7 @@
 
         .comment-item {
             border-bottom: 1px solid #f0f2f5;
-            padding: 20px 0;
+            padding: 10px 0;
             transition: background-color 0.2s ease;
         }
 
@@ -239,13 +239,14 @@
         }
 
         .replies .comment-item {
-            padding: 15px 0;
+            padding: 5px 15px;
             border-bottom: 1px dashed #e9ecef;
             /* background-color: white; */
             margin-bottom: 8px;
+            margin-top: 10px;
             border-radius: 6px;
-            padding-left: 15px;
-            padding-right: 15px;
+            /* padding-left: 15px;
+            padding-right: 15px; */
         }
 
         .replies .comment-item:last-child {
@@ -279,8 +280,9 @@
         }
 
         .load-more-replies {
-            margin: 15px 0 15px 55px;
-            background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
+            width: 100%;
+            margin: auto;
+            background: #9e9e9e7d;
             border: none;
             color: white;
             cursor: pointer;
@@ -288,7 +290,7 @@
             padding: 8px 15px;
             border-radius: 6px;
             transition: all 0.3s ease;
-            display: inline-flex;
+            /* display: inline-flex; */
             align-items: center;
         }
 
@@ -612,7 +614,7 @@
                         if (comment.reply_count > comment.replies.length) {
                             html += `
                             <button class="load-more-replies" data-comment-id="${comment.cid}" data-current-page="0">
-                                更多回复 (${comment.reply_count - comment.replies.length}条未显示) ↘️
+                                更多回复 (${comment.reply_count - comment.replies.length}条未显示)
                             </button>
                             `;
                         }
