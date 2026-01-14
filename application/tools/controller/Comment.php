@@ -35,6 +35,11 @@ class Comment extends Controller
             'reply_table' => 'comment_reply',
             'type' => 'default',
         ],
+        'message' => [
+            'table' => 'comment',
+            'reply_table' => 'comment_reply',
+            'type' => 'message',
+        ],
         'channel' => [
             'table' => 'channel_comment',
             'reply_table' => 'channel_comment_reply',

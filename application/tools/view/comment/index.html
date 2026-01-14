@@ -10,10 +10,10 @@
         body {
             line-height: 1.6;
             color: #333;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            /* background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); */
             margin: 0;
             /* padding: 20px; */
-            min-height: 100vh;
+            /* min-height: 100vh; */
         }
 
         .comment-container {
@@ -22,7 +22,7 @@
             background-color: #fff;
             padding: 30px;
             border-radius: 12px;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+            /* box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12); */
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
@@ -258,7 +258,7 @@
         }
 
         .replies .comment-header-info {
-margin-bottom: 8px;
+            margin-bottom: 8px;
         }
 
         .replies .reply-form {
@@ -269,7 +269,7 @@ margin-bottom: 8px;
         .no-replies {
             text-align: center;
             color: #999;
-            padding: 30px 0;
+            /* padding: 30px 0; */
             font-size: 14px;
         }
 
@@ -315,7 +315,7 @@ margin-bottom: 8px;
 
         .comment-count {
             background-color: #007bff;
-color: white;
+            color: white;
             padding: 2px 8px;
             border-radius: 12px;
             font-size: 12px;
@@ -327,40 +327,42 @@ color: white;
         }
 
         @keyframes highlight {
-            0% { background-color: #fff3cd; }
-            100% { background-color: transparent; }
+            0% {
+                background-color: #fff3cd;
+            }
+
+            100% {
+                background-color: transparent;
+            }
         }
 
         /* 响应式设计 */
         @media (max-width: 768px) {
-            body {
-                padding: 10px;
-            }
-            
+
             .comment-container {
                 padding: 20px;
             }
-            
+
             .comment-content,
             .action-buttons {
-                padding-left: 0;
+                padding-left: 20px;
             }
-            
+
             .replies {
                 margin-left: 0;
             }
-            
+
             .avatar {
                 width: 36px;
                 height: 36px;
                 font-size: 14px;
             }
-            
-            .comment-header-info {
+
+            /* .comment-header-info {
                 flex-direction: column;
                 align-items: flex-start;
                 gap: 8px;
-            }
+            } */
         }
     </style>
 </head>
@@ -387,7 +389,7 @@ color: white;
     </div>
 
     <!-- 隐藏字段 -->
-    <input type="hidden" id="msgId" value="{$msgId|default=1}">
+    <input type="hidden" id="msgId" value="{$msgId|default=0}">
     <input type="hidden" id="commentId" value="{$commentId|default=0}">
     <input type="hidden" id="type" value="{$type|default='default'}">
     <input type="hidden" id="currentUid" value="{$currentUid|default=0}">
@@ -900,6 +902,22 @@ color: white;
                 });
             }
         });
+
+        // 检查父窗口和 jQuery 是否可用
+        if (parent && parent.$) {
+            // 本页面onload结束后执行下面的代码
+            window.onload = function () {
+                var $ = layui.jquery;
+                var flowDivHeight = Math.min($('html').height(), $('body').height()) + 15;
+                var msgId = $('#msgId').val();
+                console.log(flowDivHeight);
+                console.log("#iframe-comment-" + msgId);
+                // 设置父窗口中指定 id 的 iframe 的高度
+                parent.$('#iframe-comment-' + msgId).height(flowDivHeight);
+                // 父集的overflow hidden
+                // parent.$('#iframe-sourcematerial-' + id).parent().css('overflow', 'hidden');
+            }
+        }
     </script>
 </body>
 

@@ -69,6 +69,36 @@ function showMessageImg(obj) {
 
 }
 
+
+function toggleCommentIframe(msgId, type) {
+    var iframeId = 'iframe-comment-' + msgId;
+    var existingIframe = document.getElementById(iframeId);
+    
+    if (existingIframe) {
+        // 如果已存在，则切换显示/隐藏
+        if (existingIframe.style.display === 'none') {
+            existingIframe.style.display = 'block';
+        } else {
+            existingIframe.style.display = 'none';
+        }
+    } else {
+        // 创建新的 iframe 并插入到对应的评论区域
+        var iframe = document.createElement('iframe');
+        iframe.id = iframeId;
+        iframe.src = '/tools/comment/index?msg_id=' + msgId + '&type=' + type;
+        iframe.style.width = '100%';
+        iframe.style.minHeight = '230px';
+        iframe.style.border = 'none';
+        iframe.style.marginTop = '10px';
+        
+        // 找到对应的消息项并插入 iframe
+        var entryDiv = document.querySelector('.entry:has([href*="' + msgId + '"])');
+        if (entryDiv) {
+            entryDiv.appendChild(iframe);
+        }
+    }
+}
+
 // 显示网盘
 var showFrame = false;
 var currentLayerIndex = null;
