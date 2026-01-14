@@ -250,6 +250,7 @@
     <input type="hidden" id="commentId" value="{$commentId|default=0}">
     <input type="hidden" id="type" value="{$type|default='default'}">
     <input type="hidden" id="currentUid" value="{$currentUid|default=0}">
+    <input type="hidden" id="msgUid" value="{$msgUid|default=0}">
 
     <script src="/static/layui/layui.js"></script>
     <script>
@@ -303,14 +304,8 @@
                     const replyContent = $('#replyForm-' + commentId + ' .reply-content').val();
 
                     // 提取@用户信息
-                    let touid = 0;
-                    if (replyContent.startsWith('@')) {
-                        const match = replyContent.match(/^@([^ ]+) /);
-                        if (match) {
-                            // 这里需要根据用户名查找用户ID，简化处理
-                            // 实际项目中应该通过AJAX请求获取用户ID
-                        }
-                    }
+                    let touid = $(this).data('touid');
+                    
 
                     sendReply(commentId, replyContent, touid);
                 });
@@ -424,7 +419,7 @@
                         <div class="comment-content">
                             ${comment.msg}
                         </div>
-                        <button class="reply-btn" data-comment-id="${comment.cid}">回复</button>
+                        <button class="reply-btn" data-touid="${comment.fromuid}" data-comment-id="${comment.cid}">回复</button>
 
                         <!-- 回复表单 - 默认隐藏 -->
                         <div class="reply-form" id="replyForm-${comment.cid}" style="display: none;">
@@ -633,6 +628,7 @@
                 const content = $('#mainContent').val().trim();
                 const msgId = $('#msgId').val() || 1; // 默认值
                 const type = $('#type').val();
+                const msgUid = $('#msgUid').val() || 0; // 默认值
 
                 if (!content) {
                     layer.msg('请输入评论内容', { icon: 2 });
@@ -644,6 +640,7 @@
                     method: 'POST',
                     data: {
                         msg_id: msgId,
+                        msg_uid: msgUid,
                         type: type,
                         msg: content
                     },

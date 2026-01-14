@@ -83,10 +83,17 @@ class Comment extends Controller
         $msgId = input('msg_id');
         $commentId = input('comment_id');
         $currentUid = getLoginUid();
+
+        $commentTable = $this->typeRelationArr[$type]['table'] ?? '';
+        if (empty($commentTable)) {
+            return json(['code' => 400, 'msg' => '类型不存在']);
+        }
+        $msgUid = Db::name($commentTable)->where('cid', $commentId)->value('fromuid');
         // dump($commentId);die;
         // $this->assign('title', $type == 'channel' ? '频道评论' : '文章评论');
         $this->assign('msgId', $msgId);
         $this->assign('commentId', $commentId);
+        $this->assign('msgUid', $msgUid);
         $this->assign('type', $type);
         $this->assign('currentUid', $currentUid);
 
@@ -254,8 +261,8 @@ class Comment extends Controller
         }
 
         $uidArr = array_column($list, 'fromuid');
-        $toUidArr = array_column($list, 'touid');
-        $uidArr = array_merge($uidArr, $toUidArr);
+        // $toUidArr = array_column($list, 'touid');
+        // $uidArr = array_merge($uidArr, $toUidArr);
         $uidArr = array_filter($uidArr);
         $userList = Db::name('user')->field('uid, nickname, blog, head_image')->whereIn('uid', $uidArr)->select();
         $userList = array_column($userList, null, 'uid');
@@ -279,6 +286,7 @@ class Comment extends Controller
         $msgId = input('msg_id');
         $type = input('type');
         $msg = input('msg');
+        $msgUid = input('msg_uid', 0);
 
         // 参数验证
         if (empty($msgId) || empty($type) || empty($msg)) {
@@ -291,13 +299,14 @@ class Comment extends Controller
         }
 
         // 获取用户ID
-        $uid = session('uid') ?: 0;
+        $uid = getLoginUid() ?: 0;
 
         // 构建插入数据
         $data = [
             'fromuid' => $uid,
             'msg' => htmlspecialchars($msg),
             'msg_id' => $msgId,
+            'touid' => $msgUid,
             'ctime' => time(),
             'ctype' => 0, // 默认类型
             'reply_count' => 0,
@@ -342,7 +351,7 @@ class Comment extends Controller
         }
 
         // 获取用户ID
-        $uid = session('uid') ?: 0;
+        $uid = getLoginUid() ?: 0;
 
         // 构建插入数据
         $data = [
@@ -406,5 +415,15 @@ class Comment extends Controller
             Db::rollback();
             return json(['code' => 500, 'msg' => '数据库错误: ' . $e->getMessage()]);
         }
+    }
+
+    public function deleteComment()
+    { 
+
+    }
+
+    public function deleteReply()
+    { 
+
     }
 }
