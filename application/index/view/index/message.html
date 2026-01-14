@@ -26,9 +26,10 @@
 
 {$message.ctime|date='Y-m-d H:i:s'} 来自 {$message.refrom}
 				</div>
-				<iframe id="iframe-comment-{$message.msg_id}" style="width: 100%;border:none;min-height: 600px;" name="commentFrame" src="/tools/comment/index/?msg_id={$message.msg_id}"></iframe>
-
+				
 			</div>
+			
+			<iframe id="iframe-comment-{$message.msg_id}" style="width: 100%;border:none;min-height: 600px;" name="commentFrame" src="/tools/comment/index/?msg_id={$message.msg_id}"></iframe>
 
 			<div class="clear"></div>
 
