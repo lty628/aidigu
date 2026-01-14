@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -35,7 +34,7 @@
         }
 
         .comment-form {
-            padding: 20px;
+padding: 20px;
             border-bottom: 1px solid #eee;
         }
 
@@ -221,6 +220,28 @@
             font-size: 12px;
             margin-top: 5px;
         }
+        
+        /* 删除按钮样式 */
+        .delete-btn {
+            background: none;
+            border: none;
+            color: #ff4d4f;
+            cursor: pointer;
+            font-size: 12px;
+            padding: 0;
+            margin-left: 10px;
+        }
+        
+        /* 用户链接样式 */
+        .user-link {
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        .user-link:hover {
+            color: #4a90e2;
+            text-decoration: underline;
+        }
     </style>
 </head>
 
@@ -251,6 +272,7 @@
 
     <input type="hidden" id="type" value="{ $type }">
     <input type="hidden" id="msgId" value="1"> <!-- 这里需要根据实际场景传入msgId -->
+    <input type="hidden" id="currentUid" value="{ $current_user.uid }"> <!-- 当前登录用户的ID -->
     
     <script src="/static/layui/layui.js"></script>
     <script>
@@ -260,14 +282,14 @@
         let order = 'desc'; // 排序方式：'desc', 'asc', 'hot'
         
         var laypage = layui.laypage;
-            var $ = layui.jquery;
-            
-            // 页面加载完成后获取评论列表
-            loadComments(currentPage);
-            
-            // 绑定事件
-            bindEvents();
+        var $ = layui.jquery;
         
+        // 页面加载完成后获取评论列表
+        loadComments(currentPage);
+        
+        // 绑定事件
+        bindEvents();
+
         // 绑定事件
         function bindEvents() {
             // 提交主评论
@@ -305,13 +327,20 @@
                 const commentId = $(this).data('comment-id');
                 const repliesContainer = $('#replies-' + commentId);
                 const totalReplies = parseInt($(this).data('total-replies'));
+                const buttonText = $(this).text();
                 
-                if(repliesContainer.hasClass('collapsed')) {
-                    repliesContainer.removeClass('collapsed');
-                    $(this).text('收起回复');
-                } else {
+                if(buttonText.indexOf('收起回复') !== -1) {
+                    // 当前是展开状态，收起回复
                     repliesContainer.addClass('collapsed');
                     $(this).text('共' + totalReplies + '条回复');
+                } else {
+                    // 当前是收起状态，需要展开并加载回复
+                    if(repliesContainer.find('.no-replies').length > 0 || repliesContainer.children().length === 0) {
+                        // 如果还没有加载过回复，则先加载回复
+                        loadReplies(commentId, 1);
+                    }
+                    repliesContainer.removeClass('collapsed');
+                    $(this).text('收起回复');
                 }
             });
             
@@ -328,6 +357,19 @@
             $(document).on('click', '.cancel-reply', function() {
                 const commentId = $(this).data('comment-id');
                 $('#replyForm-' + commentId).hide();
+            });
+            
+            // 处理删除评论按钮点击
+            $(document).on('click', '.delete-comment', function() {
+                const commentId = $(this).data('comment-id');
+                deleteComment(commentId);
+            });
+            
+            // 处理删除回复按钮点击
+            $(document).on('click', '.delete-reply', function() {
+                const replyId = $(this).data('reply-id');
+                const commentId = $(this).data('comment-id');
+                deleteReply(replyId, commentId);
             });
         }
         
@@ -375,18 +417,23 @@
                 return;
             }
             
+            const currentUid = parseInt($('#currentUid').val()) || 0;
+            
             comments.forEach(function(comment) {
                 const user = userList[comment.fromuid] || {nickname: '未知用户', head_image: '', blog: ''};
+                const isOwnComment = comment.fromuid == currentUid;
+                
                 const avatar = user.head_image ? 
-                    `<img src="${user.head_image}" class="avatar" alt="头像">` : 
-                    `<span class="avatar">${user.nickname.charAt(0).toUpperCase()}</span>`;
+                    `<a href="/${user.blog}/" class="user-link"><img src="${user.head_image}" class="avatar" alt="头像"></a>` : 
+                    `<a href="/${user.blog}/" class="user-link"><span class="avatar">${user.nickname.charAt(0).toUpperCase()}</span></a>`;
                 
                 html += `
                 <div class="comment-item" data-cid="${comment.cid}">
                     <div class="comment-header-info">
                         <div>
                             ${avatar}
-                            <span class="comment-author">${user.nickname}</span>
+                            <a href="/${user.blog}/" class="user-link comment-author">${user.nickname}</a>
+                            ${isOwnComment ? `<button class="delete-btn delete-comment" data-comment-id="${comment.cid}">删除</button>` : ''}
                         </div>
                         <div class="comment-time">${formatTime(comment.ctime)}</div>
                     </div>
@@ -417,19 +464,21 @@
                 if(comment.replies && comment.replies.length > 0) {
                     comment.replies.forEach(function(reply, index) {
                         const replyUser = userList[reply.fromuid] || {nickname: '未知用户', head_image: '', blog: ''};
-                        const replyAvatar = replyUser.head_image ? 
-                            `<img src="${replyUser.head_image}" class="avatar" alt="头像">` : 
-                            `<span class="avatar">${replyUser.nickname.charAt(0).toUpperCase()}</span>`;
-                        
+                        const isOwnReply = reply.fromuid == currentUid;
                         const toUser = userList[reply.touid] ? userList[reply.touid].nickname : '';
                         const replyPrefix = toUser ? `@${toUser}` : '';
+                        
+                        const replyAvatar = replyUser.head_image ? 
+                            `<a href="/${replyUser.blog}/" class="user-link"><img src="${replyUser.head_image}" class="avatar" alt="头像"></a>` : 
+                            `<a href="/${replyUser.blog}/" class="user-link"><span class="avatar">${replyUser.nickname.charAt(0).toUpperCase()}</span></a>`;
                         
                         html += `
                         <div class="comment-item">
                             <div class="comment-header-info">
                                 <div>
                                     ${replyAvatar}
-                                    <span class="comment-author">${replyUser.nickname}</span>
+                                    <a href="/${replyUser.blog}/" class="user-link comment-author">${replyUser.nickname}</a>
+                                    ${isOwnReply ? `<button class="delete-btn delete-reply" data-reply-id="${reply.cid}" data-comment-id="${comment.cid}">删除</button>` : ''}
                                 </div>
                                 <div class="comment-time">${formatTime(reply.ctime)}</div>
                             </div>
@@ -440,6 +489,15 @@
                         </div>
                         `;
                     });
+                    
+                    // 添加回复分页容器
+                    if(comment.reply_count > comment.replies.length) {
+                        html += `
+                        <div class="pagination" id="reply-pagination-${comment.cid}">
+                            <!-- 回复分页将通过AJAX动态加载 -->
+                        </div>
+                        `;
+                    }
                 } else {
                     html += '<div class="no-replies">暂无回复</div>';
                 }
@@ -469,6 +527,98 @@
                     }
                 }
             });
+        }
+        
+        // 渲染回复分页
+        function renderReplyPagination(commentId, total, currentPage, limit) {
+            const laypage = layui.laypage;
+            
+            laypage.render({
+                elem: 'reply-pagination-' + commentId,
+                count: total,
+                limit: limit,
+                curr: currentPage,
+                layout: ['prev', 'page', 'next'],
+                jump: function(obj, first) {
+                    if(!first) {
+                        loadReplies(commentId, obj.curr);
+                    }
+                }
+            });
+        }
+        
+        // 加载回复列表
+        function loadReplies(commentId, page) {
+            const msgId = $('#msgId').val() || 1;
+            const type = $('#type').val();
+            
+            $.ajax({
+                url: '/tools/comment/getReplyList',
+                method: 'GET',
+                data: {
+                    comment_id: commentId,
+                    msg_id: msgId,
+                    type: type,
+                    page: page,
+                    limit: limit
+                },
+                success: function(response) {
+                    if(response.code === 200) {
+                        // 更新回复列表
+                        updateRepliesList(commentId, response.data.list, response.data.userList);
+                        
+                        // 渲染回复分页
+                        renderReplyPagination(commentId, response.data.total, page, limit);
+                    } else {
+                        console.error('加载回复失败:', response.msg);
+                    }
+                },
+                error: function() {
+                    console.error('网络错误，加载回复失败');
+                }
+            });
+        }
+        
+        // 更新回复列表
+        function updateRepliesList(commentId, replies, userList) {
+            const currentUid = parseInt($('#currentUid').val()) || 0;
+            let html = '';
+            
+            if(replies.length === 0) {
+                html = '<div class="no-replies">暂无回复</div>';
+                $('#replies-' + commentId).html(html);
+                return;
+            }
+            
+            replies.forEach(function(reply) {
+                const replyUser = userList[reply.fromuid] || {nickname: '未知用户', head_image: '', blog: ''};
+                const isOwnReply = reply.fromuid == currentUid;
+                const toUser = userList[reply.touid] ? userList[reply.touid].nickname : '';
+                const replyPrefix = toUser ? `@${toUser}` : '';
+                
+                const replyAvatar = replyUser.head_image ? 
+                    `<a href="/${replyUser.blog}/" class="user-link"><img src="${replyUser.head_image}" class="avatar" alt="头像"></a>` : 
+                    `<a href="/${replyUser.blog}/" class="user-link"><span class="avatar">${replyUser.nickname.charAt(0).toUpperCase()}</span></a>`;
+                
+                html += `
+                <div class="comment-item">
+                    <div class="comment-header-info">
+                        <div>
+                            ${replyAvatar}
+                            <a href="/${replyUser.blog}/" class="user-link comment-author">${replyUser.nickname}</a>
+                            ${isOwnReply ? `<button class="delete-btn delete-reply" data-reply-id="${reply.cid}" data-comment-id="${commentId}">删除</button>` : ''}
+                        </div>
+                        <div class="comment-time">${formatTime(reply.ctime)}</div>
+                    </div>
+                    <div class="comment-content">
+                        ${replyPrefix} ${reply.msg}
+                    </div>
+                    <button class="reply-btn" data-comment-id="${commentId}" data-reply-id="${reply.cid}">回复</button>
+                </div>
+                `;
+            });
+            
+            $('#replies-' + commentId).html(html);
         }
         
         // 格式化时间
@@ -550,6 +700,64 @@
                 error: function() {
                     layer.msg('网络错误，请稍后重试', {icon: 2});
                 }
+            });
+        }
+        
+        // 删除评论
+        function deleteComment(commentId) {
+            layer.confirm('确定要删除这条评论吗？', {
+                icon: 3,
+                title: '删除确认'
+            }, function(index) {
+                $.ajax({
+                    url: '/tools/comment/deleteComment',
+                    method: 'POST',
+                    data: {
+                        comment_id: commentId
+                    },
+                    success: function(response) {
+                        if(response.code === 200) {
+                            layer.msg('删除成功', {icon: 1});
+                            loadComments(currentPage); // 重新加载当前页
+                        } else {
+                            layer.msg(response.msg, {icon: 2});
+                        }
+                    },
+                    error: function() {
+                        layer.msg('网络错误，请稍后重试', {icon: 2});
+                    }
+                });
+                
+                layer.close(index);
+            });
+        }
+        
+        // 删除回复
+        function deleteReply(replyId, commentId) {
+            layer.confirm('确定要删除这条回复吗？', {
+                icon: 3,
+                title: '删除确认'
+            }, function(index) {
+                $.ajax({
+                    url: '/tools/comment/deleteReply',
+                    method: 'POST',
+                    data: {
+                        reply_id: replyId
+                    },
+                    success: function(response) {
+                        if(response.code === 200) {
+                            layer.msg('删除成功', {icon: 1});
+                            loadComments(currentPage); // 重新加载当前页
+                        } else {
+                            layer.msg(response.msg, {icon: 2});
+                        }
+                    },
+                    error: function() {
+                        layer.msg('网络错误，请稍后重试', {icon: 2});
+                    }
+                });
+                
+                layer.close(index);
             });
         }
     </script>

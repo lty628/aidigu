@@ -31,23 +31,23 @@ class Comment extends Controller
 {
     public function createReplyTable()
     {
-        $sql1 = "CREATE TABLE IF NOT EXISTS `wb_channel_comment_reply`  (
-            `cid` bigint(20) NOT NULL AUTO_INCREMENT,
+        $sql1 = "DROP TABLE IF EXISTS `wb_channel_comment_reply`; CREATE TABLE IF NOT EXISTS `wb_channel_comment_reply`  (
+            `rid` bigint(20) NOT NULL AUTO_INCREMENT,
             `fromuid` bigint(20) NOT NULL,
             `msg` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
             `msg_id` bigint(20) NOT NULL,
             `touid` mediumint(9) NULL DEFAULT NULL,
             `ctime` int(11) NOT NULL,
-            PRIMARY KEY (`cid`) USING BTREE
+            PRIMARY KEY (`rid`) USING BTREE
             ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = DYNAMIC;";
-        $sql2 = "CREATE TABLE IF NOT EXISTS `wb_comment_reply`  (
-            `cid` bigint(20) NOT NULL AUTO_INCREMENT,
+        $sql2 = "DROP TABLE IF EXISTS `wb_comment_reply`; CREATE TABLE IF NOT EXISTS `wb_comment_reply`  (
+            `rid` bigint(20) NOT NULL AUTO_INCREMENT,
             `fromuid` bigint(20) NOT NULL,
             `msg` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
             `msg_id` bigint(20) NOT NULL,
             `touid` mediumint(9) NULL DEFAULT NULL,
             `ctime` int(11) NOT NULL,  
-            PRIMARY KEY (`cid`) USING BTREE
+            PRIMARY KEY (`rid`) USING BTREE
             ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = DYNAMIC;";
         // 修改评论表增加回复数
         $sql3 = "ALTER TABLE `wb_comment` ADD COLUMN `reply_count` int(11) NOT NULL DEFAULT 0 COMMENT '回复数' AFTER `touid`;";
@@ -119,22 +119,22 @@ class Comment extends Controller
         $uidArr = array_column($list, 'fromuid');
             
         // 获取所有评论的ID
-        $commentIds = array_column($list, 'relation_reply_id');
-        $commentIdArr = [];
-        if ($commentIds) {
-            foreach ($commentIds as $commentId) {
+        $replyIds = array_column($list, 'relation_reply_id');
+        $replyIdArr = [];
+        if ($replyIds) {
+            foreach ($replyIds as $commentId) {
                 if (!empty($commentId)) {
-                    $commentIdArr = array_merge($commentIdArr, explode(',', $commentId));
+                    $replyIdArr = array_merge($replyIdArr, explode(',', $commentId));
                 }
             }
         }
-        $commentIdArr = array_filter($commentIdArr);
+        $replyIdArr = array_filter($replyIdArr);
         // 初始化回复列表数组
         $replyList = [];
-        if ($commentIdArr) {
+        if ($replyIdArr) {
             // 获取每条评论的回复（最多10条）
             $replies = Db::name($replyTable)
-                ->whereIn('msg_id', $commentIdArr)
+                ->whereIn('msg_id', $replyIdArr)
                 ->order('ctime', 'desc')
                 ->select();
             // 按评论ID分组回复
@@ -198,7 +198,7 @@ class Comment extends Controller
         
         // 获取回复列表
         $list = Db::name($replyTable)
-            ->where('msg_id', $msgId)
+            ->where('rid', $msgId)
             ->order($orderField, $orderDirection)
             ->limit($offset, $limit)
             ->select();
@@ -290,12 +290,12 @@ class Comment extends Controller
         $commentId = input('comment_id');
         $msg = input('msg');
         $touid = input('touid', 0);
-        
+    
         // 参数验证
         if (empty($msgId) || empty($type) || empty($commentId) || empty($msg)) {
             return json(['code' => 400, 'msg' => '参数不能为空']);
         }
-        
+    
         // 确定回复表
         if ($type == 'channel') {
             $replyTable = 'channel_comment_reply';
@@ -304,10 +304,10 @@ class Comment extends Controller
             $replyTable = 'comment_reply';
             $commentTable = 'comment';
         }
-        
+    
         // 获取用户ID
         $uid = session('uid') ?: 0;
-        
+    
         // 构建插入数据
         $data = [
             'fromuid' => $uid,
@@ -316,25 +316,45 @@ class Comment extends Controller
             'touid' => $touid,
             'ctime' => time()
         ];
-        
+    
         try {
             // 开始事务
             Db::startTrans();
-            
+    
             // 插入回复记录
             $result = Db::name($replyTable)->insertGetId($data);
-            
+    
             if ($result) {
-                // 更新评论表中的回复数
+                // 先查询当前的relation_reply_id
+                $commentInfo = Db::name($commentTable)->field('relation_reply_id')->where('cid', $commentId)->find();
+                $currentIds = isset($commentInfo['relation_reply_id']) ? $commentInfo['relation_reply_id'] : '';
+    
+                // 处理ID列表，确保不超过5个
+                if (empty($currentIds)) {
+                    $newIds = (string)$result;
+                } else {
+                    $idsArray = explode(',', $currentIds);
+                    $idsArray[] = (string)$result; // 添加新ID
+    
+                    // 只保留最后5个ID
+                    if (count($idsArray) > 5) {
+                        $idsArray = array_slice($idsArray, -5);
+                    }
+    
+                    $newIds = implode(',', $idsArray);
+                }
+    
+                // 更新评论表中的回复数和相关回复ID
                 Db::name($commentTable)
                     ->where('cid', $commentId)
-                    ->inc('reply_count')
-                    ->exp('relation_reply_id', "CONCAT(COALESCE(relation_reply_id, ''), CASE WHEN relation_reply_id = '' THEN '{$result}' ELSE ',{$result}' END)")
-                    ->update();
-                
+                    ->update([
+                        'reply_count' => Db::raw('reply_count + 1'),
+                        'relation_reply_id' => $newIds
+                    ]);
+    
                 // 提交事务
                 Db::commit();
-                
+    
                 return json([
                     'code' => 200,
                     'msg' => '回复成功',
