@@ -4,6 +4,8 @@ namespace app\tools\controller;
 
 use think\Controller;
 use think\Db;
+use app\common\helper\Reminder;
+
 // CREATE TABLE `wb_channel_comment`  (
 //   `cid` bigint(20) NOT NULL AUTO_INCREMENT,
 //   `fromuid` bigint(20) NOT NULL,
@@ -33,16 +35,19 @@ class Comment extends Controller
         'default' => [
             'table' => 'comment',
             'reply_table' => 'comment_reply',
+            'content_table' => 'message',
             'type' => 'default',
         ],
         'message' => [
             'table' => 'comment',
             'reply_table' => 'comment_reply',
+            'content_table' => 'message',
             'type' => 'message',
         ],
         'channel' => [
             'table' => 'channel_comment',
             'reply_table' => 'channel_comment_reply',
+            'content_table' => 'channel_message',
             'type' => 'channel',
         ]
     ];
@@ -89,11 +94,11 @@ class Comment extends Controller
         $commentId = input('comment_id');
         $currentUid = getLoginUid();
 
-        $commentTable = $this->typeRelationArr[$type]['table'] ?? '';
-        if (empty($commentTable)) {
+        $content_table = $this->typeRelationArr[$type]['content_table'] ?? '';
+        if (empty($content_table)) {
             return json(['code' => 400, 'msg' => '类型不存在']);
         }
-        $msgUid = Db::name($commentTable)->where('cid', $commentId)->value('fromuid');
+        $msgUid = Db::name($content_table)->where('msg_id', $msgId)->value('uid');
         // dump($commentId);die;
         // $this->assign('title', $type == 'channel' ? '频道评论' : '文章评论');
         $this->assign('msgId', $msgId);
@@ -299,7 +304,8 @@ class Comment extends Controller
         }
 
         $commentTable = $this->typeRelationArr[$type]['table'] ?? '';
-        if (empty($commentTable)) {
+        $contentTable = $this->typeRelationArr[$type]['content_table'] ?? '';
+        if (empty($contentTable) || empty($commentTable)) {
             return json(['code' => 400, 'msg' => '类型不存在']);
         }
 
@@ -320,8 +326,9 @@ class Comment extends Controller
 
         try {
             $result = Db::name($commentTable)->insertGetId($data);
-
+            Db::name($contentTable)->where('msg_id', $msgId)->setInc('commentsum');
             if ($result) {
+                Reminder::saveReminder($data['msg_id'], $uid, (int)$data['touid'], 1);
                 return json([
                     'code' => 200,
                     'msg' => '评论成功',
@@ -404,7 +411,8 @@ class Comment extends Controller
 
                 // 提交事务
                 Db::commit();
-
+                // 保存提醒
+                Reminder::saveReminder($data['msg_id'], $uid, (int)$data['touid'], 2);
                 return json([
                     'code' => 200,
                     'msg' => '回复成功',

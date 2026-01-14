@@ -166,7 +166,7 @@ class Api extends Base
         Db::startTrans();
         try {
             Db::name('comment')->insert($data);
-            if (getLoginUid()!=(int)input('get.uid'))
+            // if (getLoginUid()!=(int)input('get.uid'))
             Reminder::saveReminder($data['msg_id'], getLoginUid(), (int)input('get.uid'), 2);
             // 提交事务
             Db::commit();
@@ -222,7 +222,7 @@ class Api extends Base
         try {
             Db::name('message')->where('msg_id',$data['msg_id'])->setInc('commentsum',1);
             Db::name('comment')->insert($data);
-            if (getLoginUid()!=(int)input('get.uid'))
+            // if (getLoginUid()!=(int)input('get.uid'))
                 Reminder::saveReminder($data['msg_id'], getLoginUid(), (int)input('get.uid'), 1);
             // 提交事务
             Db::commit();
@@ -305,7 +305,7 @@ class Api extends Base
             if ($msgId) {
                 Db::name('message')->where('msg_id', $msgId)->setInc('repostsum',1);
             }
-            if ($repost && getLoginUid()!=(int)input('get.fromuid')) {
+            if ($repost) {
                 Reminder::saveReminder($msgId, getLoginUid(), (int)input('get.fromuid'), 0);
             }
             self::updateUserMessageSum();
