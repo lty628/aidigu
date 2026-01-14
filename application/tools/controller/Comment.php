@@ -206,6 +206,7 @@ class Comment extends Controller
                     $replyList[$commentId][] = $reply;
                 }
             }
+            $uidArr = array_merge($uidArr, array_column($replies, 'fromuid'));
         }
 
         foreach ($list as $key => $comment) {
@@ -372,7 +373,7 @@ class Comment extends Controller
 
         // 获取用户ID
         $uid = getLoginUid() ?: 0;
-
+    // dump($uid);
         // 构建插入数据
         $data = [
             'fromuid' => $uid,

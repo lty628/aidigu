@@ -441,7 +441,7 @@
                     // 提取@用户信息
                     let touid = $(this).data('touid');
 
-
+                    console.log('touid:', touid);
                     sendReply(commentId, replyContent, touid);
                 });
 
@@ -568,7 +568,7 @@
                             <div class="form-group">
                                 <textarea class="form-control reply-content" placeholder="请输入回复内容..." data-comment-id="${comment.cid}"></textarea>
                             </div>
-                            <button class="btn btn-primary send-reply" data-comment-id="${comment.cid}">发送回复</button>
+                            <button class="btn btn-primary send-reply" data-touid="${comment.fromuid}" data-comment-id="${comment.cid}">发送回复</button>
                             <button class="btn btn-outline cancel-reply" style="margin-left: 10px;" data-comment-id="${comment.cid}">取消</button>
                         </div>
 

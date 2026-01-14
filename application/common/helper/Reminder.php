@@ -26,7 +26,7 @@ class Reminder
         }
 
 
-        return self::{'saveReminderType'.$type}($msgId, $fromuid, $touid, $content_extra);
+        // return self::{'saveReminderType'.$type}($msgId, $fromuid, $touid, $content_extra);
         
         if (ReminderModel::where(['msg_id'=>$msgId, 'fromuid'=>$fromuid, 'touid'=>$touid, 'type'=>$type])->find()) {
             return ReminderModel::where(['msg_id'=>$msgId, 'fromuid'=>$fromuid, 'touid'=>$touid, 'type'=>$type])->update([
