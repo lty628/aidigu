@@ -708,13 +708,15 @@
     <input type="hidden" id="msgUid" value="{$msgUid|default=0}">
 
     <script src="/static/layui/layui.js"></script>
+    <script>const $ = layui.$;</script>
+    <script type="text/javascript" src="/static/common/js/wangEditor.min.js"></script>
+    <script type="text/javascript" src="/static/index/js/edit.js?v=11">	</script>
     <script>
         layui.use(['layer', 'laypage'], function () {
             if (parent.layer) {
                 var layer = parent.layer
             }
             const laypage = layui.laypage;
-            const $ = layui.$;
             // 全局变量
             let currentPage = 1;
             const limit = 10; // 每页显示的评论数
