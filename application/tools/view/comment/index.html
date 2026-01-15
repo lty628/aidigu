@@ -416,33 +416,12 @@
             background-color: rgba(0, 123, 255, 0.1);
         }
 
-        .pagination {
-            display: flex;
-            justify-content: center;
-        }
-
-        /* Layui 分页样式覆盖 */
-        .layui-laypage {
-            display: flex !important;
-            justify-content: center;
-            align-items: center;
-            gap: 6px; /* 减小间距 */
-            margin: 0;
-        }
 
         .layui-laypage a,
         .layui-laypage span {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: auto; /* 减小宽度 */
-            margin: 0;
             border: 1px solid var(--border-color) !important;
             background-color: var(--background-color) !important;
             color: var(--base-font-color) !important;
-            font-size: 13px; /* 减小字体 */
-            border-radius: 6px; /* 减小圆角 */
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .layui-laypage a:hover {
@@ -453,7 +432,6 @@
         .layui-laypage .layui-laypage-curr .layui-laypage-em {
             background-color: var(--primary-color) !important;
             color: var(--primary-btn-color) !important;
-            border-radius: 6px; /* 减小圆角 */
         }
 
         .layui-laypage .layui-laypage-curr .layui-laypage-em,
@@ -462,9 +440,8 @@
             color: var(--primary-btn-color) !important;
         }
         .layui-laypage-skip {
-            padding-left: 10px!important;
+            padding-left: 10px !important;
         }
-
         .no-comments {
             text-align: center;
             padding: 40px 20px; /* 减小内边距 */
@@ -564,31 +541,6 @@
 
             .replies {
                 padding-left: 10px;
-            }
-
-            .layui-laypage a,
-            .layui-laypage span {
-                width: 30px;
-                height: 30px;
-                font-size: 12px !important;
-            }
-
-            .layui-laypage .layui-laypage-curr .layui-laypage-em {
-                width: 30px;
-                height: 30px;
-            }
-        
-
-            .layui-laypage a,
-            .layui-laypage span {
-                width: 36px;
-                height: 36px;
-                font-size: 12px !important;
-            }
-
-            .layui-laypage .layui-laypage-curr .layui-laypage-em {
-                width: 36px;
-                height: 36px;
             }
         }
     </style>
