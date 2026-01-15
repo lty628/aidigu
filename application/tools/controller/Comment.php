@@ -64,7 +64,8 @@ class Comment extends Controller
         $sql1 = "DROP TABLE IF EXISTS `wb_channel_comment_reply`; CREATE TABLE IF NOT EXISTS `wb_channel_comment_reply`  (
             `rid` bigint(20) NOT NULL AUTO_INCREMENT,
             `fromuid` bigint(20) NOT NULL,
-            `msg` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+            `msg` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL comment '回复内容',
+            `msg_id` bigint(20) NOT NULL comment '关联内容msgid',
             `cid` bigint(20) NOT NULL,
             `touid` mediumint(9) NULL DEFAULT NULL,
             `ctime` int(11) NOT NULL,
@@ -73,7 +74,8 @@ class Comment extends Controller
         $sql2 = "DROP TABLE IF EXISTS `wb_comment_reply`; CREATE TABLE IF NOT EXISTS `wb_comment_reply`  (
             `rid` bigint(20) NOT NULL AUTO_INCREMENT,
             `fromuid` bigint(20) NOT NULL,
-            `msg` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+            `msg` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL comment '回复内容',
+            `msg_id` bigint(20) NOT NULL comment '关联内容msgid',
             `cid` bigint(20) NOT NULL,
             `touid` mediumint(9) NULL DEFAULT NULL,
             `ctime` int(11) NOT NULL,  
@@ -338,7 +340,15 @@ class Comment extends Controller
             $result = Db::name($commentTable)->insertGetId($data);
             Db::name($contentTable)->where('msg_id', $msgId)->setInc('commentsum');
             if ($result) {
-                Reminder::saveReminder($msgId , $uid, (int)$data['touid'], $this->typeRelationArr[$type]['comment_type']);
+                Reminder::saveReminder($msgId , $uid, (int)$data['touid'], $this->typeRelationArr[$type]['comment_type'],
+                [
+                    'comment_id' => $result,
+                    'msg' => $data['msg'],
+                    'msg_id' => $msgId,
+                    'touid' => $data['touid'],
+                    'fromuid' => $uid,
+                    'ctime' => $data['ctime'],
+                ]);
                 return json([
                     'code' => 200,
                     'msg' => '评论成功',
@@ -380,6 +390,7 @@ class Comment extends Controller
         $data = [
             'fromuid' => $uid,
             'msg' => htmlspecialchars($msg),
+            'msg_id' => $msgId,
             'cid' => $commentId, // 回复对应的是评论ID
             'touid' => $touid,
             'ctime' => time()
@@ -423,7 +434,15 @@ class Comment extends Controller
                 // 提交事务
                 Db::commit();
                 // 保存提醒
-                Reminder::saveReminder($msgId , $uid, (int)$data['touid'], $this->typeRelationArr[$type]['rely_type']);
+                Reminder::saveReminder($msgId , $uid, (int)$data['touid'], $this->typeRelationArr[$type]['rely_type'], [
+                    'rid' => $result,
+                    'fromuid' => $data['fromuid'],
+                    'touid' => $data['touid'],
+                    'msg' => $data['msg'],
+                    'ctime' => $data['ctime'],
+                    'cid' => $commentId,
+                    'msg_id' => $data['msg_id'],
+                ]);
                 return json([
                     'code' => 200,
                     'msg' => '回复成功',

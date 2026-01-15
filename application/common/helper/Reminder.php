@@ -4,6 +4,8 @@ namespace app\common\helper;
 use think\Db;
 use app\common\model\Reminder as ReminderModel;
 
+
+// DROP TABLE IF EXISTS `wb_reminder`;
 // CREATE TABLE `wb_reminder`  (
 //   `id` bigint(20) NOT NULL AUTO_INCREMENT,
 //   `msg_id` bigint(20) NULL DEFAULT NULL,
@@ -14,49 +16,61 @@ use app\common\model\Reminder as ReminderModel;
 //   `ctime` bigint(20) NOT NULL,
 //   PRIMARY KEY (`id`) USING BTREE
 // ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = DYNAMIC;
-// alter table wb_reminder change msg_id content text;
-// alter table wb_reminder add column content_extra text after content;
+
+// alter table wb_reminder add column note text comment '提示语' after msg_id;
+// alter table wb_reminder add column extra text comment '额外信息'  after status;
 class Reminder
 { 
     // $type  1: 微博评论 2: 微博回复，3频道评论，4频道回复 5: 好友关注 6: 取消关注  7: 提到@了您 8收藏了微博， 9收藏了频道微博
-    public static function saveReminder($msgId, $fromuid, $touid, $type, $content_extra = [])
+    public static function saveReminder($msgId, $fromuid, $touid, $type, $extra = [])
     {
         if ($fromuid == $touid) {
             return false;
         }
 
-
-        // return self::{'saveReminderType'.$type}($msgId, $fromuid, $touid, $content_extra);
-        
-        if (ReminderModel::where(['msg_id'=>$msgId, 'fromuid'=>$fromuid, 'touid'=>$touid, 'type'=>$type])->find()) {
+        $data = self::{'saveReminderType'.$type}($msgId, $fromuid, $touid, $extra);
+        if (!$data) {
+            return false;
+        }
+        // 传了msgId代表消息可能多条，应避免因此需要判断
+        if ($msgId && ReminderModel::where(['msg_id'=>$msgId, 'fromuid'=>$fromuid, 'touid'=>$touid, 'type'=>$type])->find()) {
             return ReminderModel::where(['msg_id'=>$msgId, 'fromuid'=>$fromuid, 'touid'=>$touid, 'type'=>$type])->update([
                 'status' => 0
             ]);
         }
-        return ReminderModel::create(['msg_id'=>$msgId, 'fromuid'=>$fromuid, 'touid'=>$touid, 'type'=>$type]);
+        return ReminderModel::create([
+            'msg_id'=>$msgId ,
+            'fromuid'=>$fromuid,
+            'touid'=>$touid,
+            'type'=>$type,
+            'extra' => json_encode($data, 320),
+            'status' => 0,
+            'ctime' => time(),
+            'note' => $data['note']
+        ]);
     }
 
 
-    // public static function saveReminderType1($msgId, $fromuid, $touid, array $content_extra = [])
-    // {
-    //     $messageInfo = Db::name('message')->field('content, ctime')->where('msg_id', $msgId)->find();
-    //     if (!$messageInfo) {
-    //         return false;
-    //     }
-        
-    //     $userInfo = self::getUserInfo($fromuid);
+    public static function saveReminderType1($msgId, $fromuid, $touid, array $extra = [])
+    {
+        $messageInfo = Db::name('message')->field('content, ctime')->where('msg_id', $msgId)->find();
+        if (!$messageInfo) {
+            return false;
+        }
+        $userInfo = self::getUserInfo($fromuid);
+        $extra['content'] = $messageInfo['content'];
+        $extra['content_time'] = $messageInfo['ctime'];
+        $extra['from_nickname'] = $userInfo['nickname'];
+        $extra['from_head_image'] = $userInfo['head_image'];
+        $extra['from_blog'] = $userInfo['blog'];
 
-    //     $content_extra['content'] = $messageInfo['content'];
-    //     $content_extra['content_time'] = $messageInfo['ctime'];
-    //     $content_extra['from_nickname'] = $userInfo['nickname'];
-    //     $content_extra['from_head_image'] = $userInfo['head_image'];
-    //     $content_extra['from_blog'] = $userInfo['blog'];
+        $data['msgId'] = $msgId;
+        $data['note'] = '';
+        return $data;
+    }
 
-    //     return ReminderModel::create(['content'=>$msg, 'content_extra'=>json_encode($content_extra, 320), 'fromuid'=>$fromuid, 'touid'=>$touid, 'type'=>1]);
-    // }
-
-    // protected static function getUserInfo($userid)
-    // {
-    //     return Db::name('user')->field('uid, blog, nickname, head_image')->where('uid', $userid)->find();
-    // }
+    protected static function getUserInfo($userid)
+    {
+        return Db::name('user')->field('uid, blog, nickname, head_image')->where('uid', $userid)->find();
+    }
 }
