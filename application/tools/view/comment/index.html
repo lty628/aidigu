@@ -54,10 +54,10 @@
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             line-height: 1.5; /* 减小行高 */
             color: var(--base-font-color);
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            background: linear-gradient(135deg, #f5f7fa96 0%, #c3cfe263 100%);
             margin: 0;
             padding: 10px; /* 减小页面内边距 */
-            min-height: 100vh;
+            /* min-height: 100vh; */
         }
 
         .comment-container {
@@ -1122,7 +1122,7 @@
             function adjustParentWindow(msgId) {
                 if (parent && parent.$) {
                     var $ = layui.jquery;
-                    var flowDivHeight = Math.max($('html').height(), $('body').height()) + 15;
+                    var flowDivHeight = Math.max($('html').height(), $('body').height());
                     // var msgId = $('#msgId').val();
                     // 父窗口中指定 msgId 的 iframe 的高度
                     parent.$('#iframe-comment-' + msgId).height(flowDivHeight);
