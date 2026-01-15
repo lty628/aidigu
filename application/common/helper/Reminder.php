@@ -28,10 +28,10 @@ class Reminder
             return false;
         }
 
-        $data = self::{'saveReminderType'.$type}($msgId, $fromuid, $touid, $extra);
-        if (!$data) {
-            return false;
-        }
+        // $data = self::{'saveReminderType'.$type}($msgId, $fromuid, $touid, $extra);
+        // if (!$data) {
+        //     return false;
+        // }
         // 传了msgId代表消息可能多条，应避免因此需要判断
         if ($msgId && ReminderModel::where(['msg_id'=>$msgId, 'fromuid'=>$fromuid, 'touid'=>$touid, 'type'=>$type])->find()) {
             return ReminderModel::where(['msg_id'=>$msgId, 'fromuid'=>$fromuid, 'touid'=>$touid, 'type'=>$type])->update([
@@ -43,34 +43,34 @@ class Reminder
             'fromuid'=>$fromuid,
             'touid'=>$touid,
             'type'=>$type,
-            'extra' => json_encode($data, 320),
+            // 'extra' => json_encode($data['extra'], 320),
             'status' => 0,
             'ctime' => time(),
-            'note' => $data['note']
+            // 'note' => $data['note']
         ]);
     }
 
 
-    public static function saveReminderType1($msgId, $fromuid, $touid, array $extra = [])
-    {
-        $messageInfo = Db::name('message')->field('content, ctime')->where('msg_id', $msgId)->find();
-        if (!$messageInfo) {
-            return false;
-        }
-        $userInfo = self::getUserInfo($fromuid);
-        $extra['content'] = $messageInfo['content'];
-        $extra['content_time'] = $messageInfo['ctime'];
-        $extra['from_nickname'] = $userInfo['nickname'];
-        $extra['from_head_image'] = $userInfo['head_image'];
-        $extra['from_blog'] = $userInfo['blog'];
+    // public static function saveReminderType1($msgId, $fromuid, $touid, array $extra = [])
+    // {
+    //     $messageInfo = Db::name('message')->field('content, ctime')->where('msg_id', $msgId)->find();
+    //     if (!$messageInfo) {
+    //         return false;
+    //     }
+    //     $userInfo = self::getUserInfo($fromuid);
+    //     $extra['content'] = $messageInfo['content'];
+    //     $extra['content_time'] = $messageInfo['ctime'];
+    //     $extra['from_nickname'] = $userInfo['nickname'];
+    //     $extra['from_head_image'] = $userInfo['head_image'];
+    //     $extra['from_blog'] = $userInfo['blog'];
 
-        $data['msgId'] = $msgId;
-        $data['note'] = '';
-        return $data;
-    }
+    //     $data['msgId'] = $msgId;
+    //     $data['note'] = '';
+    //     return $data;
+    // }
 
-    protected static function getUserInfo($userid)
-    {
-        return Db::name('user')->field('uid, blog, nickname, head_image')->where('uid', $userid)->find();
-    }
+    // protected static function getUserInfo($userid)
+    // {
+    //     return Db::name('user')->field('uid, blog, nickname, head_image')->where('uid', $userid)->find();
+    // }
 }
