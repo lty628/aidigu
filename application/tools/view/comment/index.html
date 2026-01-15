@@ -1004,7 +1004,7 @@ padding: 12px 16px; /* 减小内边距 */
                     },
                     success: function (response) {
                         if (response.code === 200) {
-                            layer.msg('评论成功', { icon: 1 });
+                            layer.msg('评论成功');
                             $('#mainContent').val('');
                             loadComments(1); // 重新加载第一页
                         } else {
@@ -1045,7 +1045,7 @@ padding: 12px 16px; /* 减小内边距 */
                     },
                     success: function (response) {
                         if (response.code === 200) {
-                            layer.msg('回复成功', { icon: 1 });
+                            layer.msg('回复成功');
                             $('#replyForm-' + commentId + ' .reply-content').val('');
                             $('#replyForm-' + commentId).removeClass('active');
                             loadComments(currentPage); // 重新加载当前页
@@ -1074,7 +1074,7 @@ padding: 12px 16px; /* 减小内边距 */
                         },
                         success: function (response) {
                             if (response.code === 200) {
-                                layer.msg('删除成功', { icon: 1 });
+                                layer.msg('删除成功');
                                 loadComments(currentPage); // 重新加载当前页
                             } else {
                                 layer.msg(response.msg);
@@ -1104,7 +1104,7 @@ padding: 12px 16px; /* 减小内边距 */
                         },
                         success: function (response) {
                             if (response.code === 200) {
-                                layer.msg('删除成功', { icon: 1 });
+                                layer.msg('删除成功');
                                 loadComments(currentPage); // 重新加载当前页
                             } else {
                                 layer.msg(response.msg);
