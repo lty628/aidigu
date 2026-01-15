@@ -328,7 +328,7 @@
 
         .comment-content {
             margin: 12px 0; /* 减小外边距 */
-            padding: 12px 16px; /* 减小内边距 */
+padding: 12px 16px; /* 减小内边距 */
             border-radius: 6px; /* 减小圆角 */
             font-size: 15px; /* 减小字体 */
             line-height: 1.6; /* 减小行高 */
@@ -593,6 +593,7 @@
     <input type="hidden" id="type" value="{$type|default='default'}">
     <input type="hidden" id="currentUid" value="{$currentUid|default=0}">
     <input type="hidden" id="msgUid" value="{$msgUid|default=0}">
+    <input type="hidden" id="replyToUid" value="">
 
     <script src="/static/layui/layui.js"></script>
     <script>const $ = layui.$;</script>
@@ -624,9 +625,10 @@
                     const commentId = $(this).data('comment-id');
                     const replyId = $(this).data('reply-id');
                     const replyForm = $('#replyForm-' + commentId);
-
                     // 显示回复表单
                     replyForm.toggleClass('active');
+                    const touid = $(this).data('touid');  // 获取被回复用户的ID
+                    $("#replyToUid").val(touid);
                     // 如果是回复某条回复，则设置@用户
                     if (replyId) {
                         const replyContent = replyForm.find('.reply-content');
@@ -648,12 +650,7 @@
                 $(document).on('click', '.send-reply', function () {
                     const commentId = $(this).data('comment-id');
                     const replyContent = $('#replyForm-' + commentId + ' .reply-content').val();
-
-                    // 提取@用户信息
-                    let touid = $(this).data('touid');
-
-                    console.log('touid:', touid);
-                    sendReply(commentId, replyContent, touid);
+                    sendReply(commentId, replyContent);
                 });
 
                 // 加载更多回复
@@ -756,8 +753,7 @@
                         </div>
                         <div class="action-buttons">
                             <button class="action-btn reply-btn" data-touid="${comment.fromuid}" data-comment-id="${comment.cid}">
-                                <i class="fas fa-reply"></i> 回复
-                            </button>
+                                <i class="fas fa-reply"></i> 回复                            </button>
                             ${comment.reply_count > 0 ? `<button class="action-btn">
                                 <i class="fas fa-comments"></i> <span class="comment-count">${comment.reply_count}</span> 条回复
                             </button>` : ''}
@@ -813,9 +809,8 @@
                                     ${replyPrefix} ${reply.msg}
                                 </div>
                                 <div class="action-buttons">
-                                    <button class="action-btn reply-btn" data-comment-id="${comment.cid}" data-reply-id="${reply.cid}">
-                                        <i class="fas fa-reply"></i> 回复
-                                    </button>
+                                    <button class="action-btn reply-btn" data-touid="${reply.fromuid}" data-comment-id="${comment.cid}" data-reply-id="${reply.cid}">
+                                        <i class="fas fa-reply"></i> 回复                                    </button>
                                     ${isOwnReply ? `<button class="action-btn delete-btn delete-reply" data-reply-id="${reply.rid}" data-comment-id="${comment.cid}">
                                         <i class="fas fa-trash"></i> 删除
                                     </button>` : ''}
@@ -924,7 +919,6 @@
                 const repliesContainer = $('#replies-' + commentId);
                 const isInitialLoad = repliesContainer.data('initial-load') || false;
                 let html = '';
-
                 replies.forEach(function (reply) {
                     const replyUser = userList[reply.fromuid] || { nickname: '未知用户', head_image: '', blog: '' };
                     const isOwnReply = reply.fromuid == currentUid;
@@ -950,7 +944,7 @@
                             ${replyPrefix} ${reply.msg}
                         </div>
                         <div class="action-buttons">
-                            <button class="action-btn reply-btn" data-comment-id="${commentId}" data-reply-id="${reply.cid}">
+                            <button class="action-btn reply-btn" data-touid="${reply.fromuid}" data-comment-id="${commentId}" data-reply-id="${reply.rid}">
                                 <i class="fas fa-reply"></i> 回复
                             </button>
                             ${isOwnReply ? `<button class="action-btn delete-btn delete-reply" data-reply-id="${reply.rid}" data-comment-id="${commentId}">
@@ -995,7 +989,7 @@
                 const msgUid = $('#msgUid').val() || 0; // 默认值
 
                 if (!content) {
-                    layer.msg('请输入评论内容', { icon: 2 });
+                    layer.msg('请输入评论内容');
                     return;
                 }
 
@@ -1014,22 +1008,28 @@
                             $('#mainContent').val('');
                             loadComments(1); // 重新加载第一页
                         } else {
-                            layer.msg(response.msg, { icon: 2 });
+                            layer.msg(response.msg);
                         }
                     },
                     error: function () {
-                        layer.msg('网络错误，请稍后重试', { icon: 2 });
+                        layer.msg('网络错误，请稍后重试');
                     }
                 });
             }
 
             // 发送回复
-            function sendReply(commentId, replyContent, touid = 0) {
+            function sendReply(commentId, replyContent) {
                 const msgId = $('#msgId').val() || 1; // 默认值
                 const type = $('#type').val();
+                const touid = $('#replyToUid').val() || 0;
+
+                if (!touid) {
+                    layer.msg('请选择回复用户');
+                    return;
+                }   
 
                 if (!replyContent) {
-                    layer.msg('请输入回复内容', { icon: 2 });
+                    layer.msg('请输入回复内容');
                     return;
                 }
 
@@ -1050,11 +1050,11 @@
                             $('#replyForm-' + commentId).removeClass('active');
                             loadComments(currentPage); // 重新加载当前页
                         } else {
-                            layer.msg(response.msg, { icon: 2 });
+                            layer.msg(response.msg);
                         }
                     },
                     error: function () {
-                        layer.msg('网络错误，请稍后重试', { icon: 2 });
+                        layer.msg('网络错误，请稍后重试');
                     }
                 });
             }
@@ -1077,11 +1077,11 @@
                                 layer.msg('删除成功', { icon: 1 });
                                 loadComments(currentPage); // 重新加载当前页
                             } else {
-                                layer.msg(response.msg, { icon: 2 });
+                                layer.msg(response.msg);
                             }
                         },
                         error: function () {
-                            layer.msg('网络错误，请稍后重试', { icon: 2 });
+                            layer.msg('网络错误，请稍后重试');
                         }
                     });
 
@@ -1107,11 +1107,11 @@
                                 layer.msg('删除成功', { icon: 1 });
                                 loadComments(currentPage); // 重新加载当前页
                             } else {
-                                layer.msg(response.msg, { icon: 2 });
+                                layer.msg(response.msg);
                             }
                         },
                         error: function () {
-                            layer.msg('网络错误，请稍后重试', { icon: 2 });
+                            layer.msg('网络错误，请稍后重试');
                         }
                     });
 
