@@ -6,110 +6,258 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>评论系统</title>
     <link rel="stylesheet" href="/static/layui/css/layui.css">
+    <link rel="stylesheet" href="/static/index/css/main.css?38" type="text/css" media="screen" />
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"> -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 从 localStorage 中读取保存的主题
+            // var selectedTheme = localStorage.getItem('selectedTheme');
+            var selectedTheme = '{$theme}';
+            if (selectedTheme) {
+                if (selectedTheme === 'default') {
+                    document.documentElement.className = '';
+                } else {
+                    document.documentElement.className = selectedTheme;
+                }
+                var header = document.getElementById('header');
+                if (header) {
+                    if (selectedTheme === 'default') {
+                        header.className = '';
+                    } else {
+                        header.className = selectedTheme;
+                    }
+                }
+            }
+        });
+    </script>
     <style>
+        :root {
+            --primary-color: #5e72e4;
+            --secondary-color: #f5365c;
+            --success-color: #2dce89;
+            --warning-color: #fb6340;
+            --info-color: #11cdef;
+            --dark-color: #172b4d;
+            --light-color: #f8f9fe;
+            --white-color: #ffffff;
+            --gray-color: #8898aa;
+            --border-radius: 12px;
+            --box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+            --box-shadow-hover: 0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
         body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             line-height: 1.6;
-            color: #333;
-            /* background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); */
+            color: var(--dark-color);
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             margin: 0;
-            /* padding: 20px; */
-            /* min-height: 100vh; */
+            padding: 20px;
+            min-height: 100vh;
         }
 
         .comment-container {
-            /* max-width: 800px; */
+            max-width: 800px;
             margin: 0 auto;
-            background-color: #ffffff66;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: inset 0px 0px 20px 0px rgb(0 0 0 / 5%);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background-color: var(--white-color);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .comment-container:hover {
+            box-shadow: var(--box-shadow-hover);
+            transform: translateY(-2px);
+        }
+
+        .comment-header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #667eea 100%);
+            color: var(--white-color);
+            padding: 24px 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .comment-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23ffffff" fill-opacity="0.1" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,154.7C960,171,1056,181,1152,165.3C1248,149,1344,107,1392,85.3L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') no-repeat bottom;
+            background-size: cover;
+            opacity: 0.3;
         }
 
         .comment-title {
-            font-size: 24px;
-            font-weight: 600;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #f0f2f5;
-            color: #1d2129;
+            font-size: 28px;
+            font-weight: 700;
+            margin: 0;
             position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
 
-        .comment-title::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 0;
-            width: 50px;
-            height: 2px;
-            background: linear-gradient(90deg, #007bff, #6c757d);
+        .comment-title i {
+            font-size: 24px;
+        }
+
+        .comment-stats {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-top: 10px;
+            position: relative;
+            z-index: 1;
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .comment-stats-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .comment-body {
+            padding: 30px;
         }
 
         .comment-form {
+            background-color: var(--light-color);
+            border-radius: var(--border-radius);
+            padding: 24px;
             margin-bottom: 30px;
-            /* background: #fafbfc; */
-            padding: 20px;
-            border-radius: 8px;
-            border: 1px solid #e5e7eb;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .comment-form::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--primary-color), #667eea);
         }
 
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .form-group:last-child {
+            margin-bottom: 0;
         }
 
         .form-control {
-            width: 96%;
-            padding: 12px 15px;
-            border: 1px solid #e1e5e9;
-            border-radius: 6px;
+            width: 100%;
+            padding: 16px 20px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
             resize: none;
-            font-size: 14px;
-            background-color: unset;
-            transition: all 0.3s ease;
+            font-size: 16px;
+            background-color: var(--white-color);
+            color: var(--dark-color);
+            transition: var(--transition);
+            font-family: inherit;
         }
 
         .form-control:focus {
             outline: none;
-            border-color: #80bdff;
-            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(94, 114, 228, 0.1);
         }
 
         .btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: all 0.3s ease;
-            font-weight: 500;
             display: inline-flex;
             align-items: center;
             justify-content: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: var(--transition);
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn:active::before {
+            width: 300px;
+            height: 300px;
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #007bff 0%, #0062cc 100%);
-            color: white;
-            border: none;
+            background: linear-gradient(135deg, var(--primary-color) 0%, #667eea 100%);
+            color: var(--white-color);
+            box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
         }
 
         .btn-primary:hover {
-            background: linear-gradient(135deg, #0069d9 0%, #005cbf 100%);
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+            box-shadow: 0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
         }
 
         .btn-outline {
-            background: transparent;
-            border: 1px solid #ccc;
-            color: #666;
+            background-color: transparent;
+            color: var(--gray-color);
+            border: 1px solid rgba(0, 0, 0, 0.1);
         }
 
         .btn-outline:hover {
-            background-color: #f8f9fa;
-            border-color: #adb5bd;
+            background-color: var(--light-color);
+            color: var(--dark-color);
+        }
+
+        .btn-danger {
+            background-color: var(--secondary-color);
+            color: var(--white-color);
+        }
+
+        .btn-danger:hover {
+            background-color: #ec0c38;
+            transform: translateY(-2px);
+        }
+
+        .comments-section {
+            margin-top: 30px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--dark-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .comments-list {
@@ -117,269 +265,439 @@
         }
 
         .comment-item {
-            border-bottom: 1px solid #f0f2f5;
-            padding: 10px 0;
-            transition: background-color 0.2s ease;
+            background-color: var(--white-color);
+            border-radius: var(--border-radius);
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            transition: var(--transition);
+            position: relative;
         }
 
-        .comment-item:last-child {
-            border-bottom: none;
+        .comment-item:hover {
+            box-shadow: var(--box-shadow);
+            transform: translateY(-2px);
         }
 
         .comment-header-info {
             display: flex;
+            align-items: flex-start;
             justify-content: space-between;
-            margin-bottom: 12px;
+            margin-bottom: 16px;
+        }
+
+        .user-info {
+            display: flex;
             align-items: center;
-        }
-
-        .user-link {
-            text-decoration: none;
-            color: #333;
-            font-weight: 600;
-        }
-
-        .user-link:hover {
-            color: #007bff;
+            gap: 12px;
         }
 
         .avatar {
-            width: 42px;
-            height: 42px;
+            width: 48px;
+            height: 48px;
             border-radius: 50%;
-            margin-right: 12px;
-            vertical-align: middle;
-            display: inline-flex;
+            display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            font-weight: bold;
-            font-size: 16px;
+            font-weight: 700;
+            font-size: 18px;
+            color: var(--white-color);
+            background: linear-gradient(135deg, var(--primary-color) 0%, #667eea 100%);
             flex-shrink: 0;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
         }
 
         .avatar img {
             width: 100%;
             height: 100%;
-            border-radius: 50%;
             object-fit: cover;
         }
 
-        .comment-author {
-            margin-right: 10px;
-            font-size: 14px;
+        .user-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user-link {
+            font-weight: 600;
+            color: var(--dark-color);
+            text-decoration: none;
+            font-size: 16px;
+            transition: var(--transition);
+        }
+
+        .user-link:hover {
+            color: var(--primary-color);
         }
 
         .comment-time {
-            color: #8a9ca4;
-            font-size: 12px;
+            font-size: 14px;
+            color: var(--gray-color);
+            margin-top: 4px;
         }
 
         .comment-content {
-            margin: 10px 0;
-            padding-left: 55px;
-            color: #333;
+            margin: 16px 0;
+            padding: 16px 20px;
+            background-color: var(--light-color);
+            border-radius: 8px;
+            font-size: 16px;
             line-height: 1.7;
-            font-size: 15px;
+            color: var(--dark-color);
+            border-left: 4px solid var(--primary-color);
         }
 
         .action-buttons {
-            margin-top: 12px;
-            padding-left: 55px;
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
         }
 
-        .reply-btn,
-        .reply-toggle,
-        .delete-btn {
-            background: none;
-            border: none;
-            color: #007bff;
-            cursor: pointer;
-            font-size: 13px;
-            padding: 6px 6px;
-            /* margin-right: 12px; */
-            border-radius: 4px;
-            transition: all 0.2s ease;
+        .action-btn {
             display: inline-flex;
             align-items: center;
-        }
-
-        .reply-btn:hover,
-        .reply-toggle:hover {
-            background-color: #f8f9fa;
-            color: #0056b3;
+            gap: 6px;
+            padding: 8px 16px;
+            background-color: transparent;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 20px;
+            color: var(--gray-color);
+            font-size: 14px;
+            cursor: pointer;
+            transition: var(--transition);
             text-decoration: none;
         }
 
-        .delete-btn {
-            color: #dc3545;
+        .action-btn:hover {
+            background-color: var(--light-color);
+            color: var(--primary-color);
+            border-color: var(--primary-color);
         }
 
-        .delete-btn:hover {
-            background-color: #f8d7da;
-            color: #c82333;
+        .action-btn i {
+            font-size: 14px;
         }
 
         .reply-form {
-            margin: 15px 0 15px 55px;
-            padding: 15px;
-            /* background-color: #f8f9fa; */
-            border-radius: 8px;
-            /* border-left: 3px solid #007bff; */
+            margin-top: 20px;
+            padding: 20px;
+            background-color: var(--light-color);
+            border-radius: var(--border-radius);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            display: none;
+        }
+
+        .reply-form.active {
+            display: block;
+        }
+
+        .reply-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            margin-top: 16px;
         }
 
         .replies {
-            margin-left: 55px;
-            margin-top: 15px;
-            background-color: #fafafa80;
-            border-radius: 8px;
-            /* padding: 10px; */
+            margin-top: 20px;
+            padding-left: 20px;
+            border-left: 2px dashed rgba(0, 0, 0, 0.1);
         }
 
         .replies .comment-item {
-            padding: 5px 15px;
-            border-bottom: 1px dashed #e9ecef;
-            /* background-color: white; */
-            margin-bottom: 8px;
-            margin-top: 10px;
-            border-radius: 6px;
-            /* padding-left: 15px;
-            padding-right: 15px; */
-        }
-
-        .replies .comment-item:last-child {
-            border-bottom: none;
+            padding: 16px;
+            margin-bottom: 16px;
+            background-color: var(--light-color);
         }
 
         .replies .comment-content {
-            padding-left: 50px;
-            font-size: 14px;
-        }
-
-        .replies .comment-header-info {
-            margin-bottom: 8px;
-        }
-
-        .replies .reply-form {
-            margin-left: 0;
-        }
-
-        .no-comments,
-        .no-replies {
-            text-align: center;
-            color: #999;
-            /* padding: 30px 0; */
-            font-size: 14px;
-        }
-
-        .pagination {
-            margin: 30px 0;
-            text-align: center;
+            background-color: var(--white-color);
         }
 
         .load-more-replies {
             width: 100%;
-            margin: auto;
-            background: #9e9e9e7d;
-            border: none;
-            color: white;
+            padding: 12px;
+            background-color: transparent;
+            border: 1px dashed var(--primary-color);
+            border-radius: 8px;
+            color: var(--primary-color);
+            font-weight: 600;
             cursor: pointer;
-            font-size: 13px;
-            padding: 8px 15px;
-            border-radius: 6px;
-            transition: all 0.3s ease;
-            /* display: inline-flex; */
-            align-items: center;
+            transition: var(--transition);
+            margin-top: 16px;
         }
 
         .load-more-replies:hover {
-            background: linear-gradient(135deg, #5a6268 0%, #495057 100%);
-            transform: translateY(-1px);
+            background-color: rgba(94, 114, 228, 0.1);
+        }
+
+        .pagination {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+        }
+
+        /* Layui 分页样式覆盖 */
+        .layui-laypage {
+            display: flex !important;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin: 0;
+        }
+
+        .layui-laypage a,
+        .layui-laypage span {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            margin: 0;
+            border: 1px solid rgba(0, 0, 0, 0.1) !important;
+            background-color: var(--white-color) !important;
+            color: var(--dark-color) !important;
+            text-decoration: none;
+            border-radius: 50% !important;
+            transition: var(--transition) !important;
+            font-size: 14px !important;
+            font-weight: 600 !important;
+        }
+
+        .layui-laypage a:hover {
+            background-color: var(--primary-color) !important;
+            color: var(--white-color) !important;
+            border-color: var(--primary-color) !important;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(94, 114, 228, 0.3);
+        }
+
+        .layui-laypage .layui-laypage-curr .layui-laypage-em {
+            position: static;
+            background-color: var(--primary-color) !important;
+            border-color: var(--primary-color) !important;
+            color: var(--white-color) !important;
+            border-radius: 50% !important;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 8px rgba(94, 114, 228, 0.3);
+        }
+
+        .layui-laypage-prev,
+        .layui-laypage-next {
+            background-color: var(--light-color) !important;
+            border-color: rgba(0, 0, 0, 0.1) !important;
+            color: var(--dark-color) !important;
+        }
+
+        .layui-laypage-prev:hover,
+        .layui-laypage-next:hover {
+            background-color: var(--primary-color) !important;
+            color: var(--white-color) !important;
+            border-color: var(--primary-color) !important;
+        }
+
+        .layui-laypage-spr {
+            border: none !important;
+            background: transparent !important;
+            color: var(--gray-color) !important;
+        }
+
+        .layui-laypage input[type=text],
+        .layui-laypage select {
+            padding: 8px 12px;
+            border: 1px solid rgba(0, 0, 0, 0.1) !important;
+            border-radius: 8px !important;
+            font-size: 14px !important;
+            background-color: var(--white-color) !important;
+            color: var(--dark-color) !important;
+            margin: 0 8px;
+        }
+
+        .layui-laypage button {
+            padding: 8px 16px !important;
+            border: none !important;
+            background-color: var(--primary-color) !important;
+            color: var(--white-color) !important;
+            border-radius: 8px !important;
+            cursor: pointer;
+            font-size: 14px !important;
+            font-weight: 600 !important;
+            transition: var(--transition) !important;
+        }
+
+        .layui-laypage button:hover {
+            background-color: #4c63d2 !important;
+            transform: translateY(-2px);
         }
 
         .loading {
             text-align: center;
-            padding: 30px;
-            color: #999;
-            font-size: 14px;
+            padding: 40px;
+            color: var(--gray-color);
+            font-size: 16px;
+        }
+
+        .no-comments {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--gray-color);
+            font-size: 18px;
+        }
+
+        .no-comments i {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.5;
         }
 
         .error-message {
-            color: #dc3545;
+            color: var(--secondary-color);
             text-align: center;
-            padding: 30px;
-            background-color: #f8d7da;
-            border-radius: 6px;
-            margin: 10px 0;
+            padding: 20px;
+            background-color: rgba(245, 54, 92, 0.1);
+            border-radius: 8px;
+            margin: 20px 0;
+            border: 1px solid rgba(245, 54, 92, 0.2);
         }
 
         .comment-count {
-            background-color: #007bff;
-            color: white;
-            padding: 2px 8px;
-            border-radius: 12px;
+            background-color: var(--primary-color);
+            color: var(--white-color);
+            padding: 4px 10px;
+            border-radius: 20px;
             font-size: 12px;
-            margin-left: 5px;
+            font-weight: 600;
+            margin-left: 6px;
+        }
+
+        @keyframes highlight {
+            0% { background-color: rgba(251, 99, 64, 0.2); }
+            100% { background-color: transparent; }
         }
 
         .highlight {
-            animation: highlight 1s ease;
+            animation: highlight 1.5s ease;
         }
-
-
 
         /* 响应式设计 */
         @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
 
             .comment-container {
-                padding: 30px;
+                border-radius: 8px;
             }
 
-            .comment-content,
-            .action-buttons {
-                padding-left: 20px;
+            .comment-header {
+                padding: 20px;
             }
 
-            .replies {
-                margin-left: 0;
+            .comment-title {
+                font-size: 24px;
+            }
+
+            .comment-body {
+                padding: 20px;
+            }
+
+            .comment-form {
+                padding: 20px;
+            }
+
+            .comment-item {
+                padding: 16px;
             }
 
             .avatar {
-                width: 36px;
-                height: 36px;
+                width: 40px;
+                height: 40px;
+                font-size: 16px;
+            }
+
+            .user-link {
                 font-size: 14px;
             }
 
-            /* .comment-header-info {
-                flex-direction: column;
-                align-items: flex-start;
+            .comment-content {
+                padding: 12px 16px;
+                font-size: 14px;
+            }
+
+            .action-buttons {
+                flex-wrap: wrap;
                 gap: 8px;
-            } */
+            }
+
+            .action-btn {
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+
+            .replies {
+                padding-left: 10px;
+            }
+
+            .layui-laypage a,
+            .layui-laypage span {
+                width: 36px;
+                height: 36px;
+                font-size: 12px !important;
+            }
+
+            .layui-laypage .layui-laypage-curr .layui-laypage-em {
+                width: 36px;
+                height: 36px;
+            }
         }
     </style>
 </head>
 
 <body>
     <div class="comment-container">
-        <!-- <h2 class="comment-title">💬 评论互动</h2> -->
-
-        <!-- 评论表单 -->
-        <div class="comment-form">
-            <div class="form-group">
-                <textarea class="form-control" id="mainContent" rows="4" placeholder="写下你的评论..."></textarea>
+        <div class="comment-header">
+            <h2 class="comment-title"><i class="fas fa-comments"></i> 评论区</h2>
+            <div class="comment-stats">
+                <div class="comment-stats-item">
+                    <i class="fas fa-comment"></i>
+                    <span id="totalComments">0</span> 条评论
+                </div>
+                <div class="comment-stats-item">
+                    <i class="fas fa-users"></i>
+                    <span id="totalUsers">0</span> 位参与者
+                </div>
             </div>
-            <button class="btn btn-primary" id="submitComment">发表评论</button>
         </div>
 
-        <!-- 评论列表容器 -->
-        <div class="comments-list" id="commentsContainer">
-            <div class="loading">⏳ 加载中...</div>
-        </div>
+        <div class="comment-body">
+            <div class="comment-form">
+                <div class="form-group">
+                    <textarea class="form-control" id="mainContent" rows="4" placeholder="分享你的想法..."></textarea>
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-primary" id="submitComment">
+                        <i class="fas fa-paper-plane"></i> 发表评论
+                    </button>
+                </div>
+            </div>
 
-        <!-- 分页容器 -->
-        <div class="pagination" id="paginationContainer"></div>
+            <div class="comments-section">
+                <h3 class="section-title"><i class="fas fa-comments"></i> 最新评论</h3>
+                <div class="comments-list" id="commentsContainer">
+                    <div class="loading">
+                        <i class="fas fa-spinner fa-spin"></i> 加载中...
+                    </div>
+                </div>
+            </div>
+
+            <div class="pagination" id="paginationContainer"></div>
+        </div>
     </div>
 
     <!-- 隐藏字段 -->
@@ -419,7 +737,7 @@
                     const replyForm = $('#replyForm-' + commentId);
 
                     // 显示回复表单
-                    replyForm.toggle();
+                    replyForm.toggleClass('active');
                     // 如果是回复某条回复，则设置@用户
                     if (replyId) {
                         const replyContent = replyForm.find('.reply-content');
@@ -433,7 +751,7 @@
                 // 取消回复
                 $(document).on('click', '.cancel-reply', function () {
                     const commentId = $(this).data('comment-id');
-                    $('#replyForm-' + commentId).hide();
+                    $('#replyForm-' + commentId).removeClass('active');
                     $('#replyForm-' + commentId + ' .reply-content').val('');
                 });
 
@@ -448,28 +766,6 @@
                     console.log('touid:', touid);
                     sendReply(commentId, replyContent, touid);
                 });
-
-                // // 展开/收起回复
-                // $(document).on('click', '.reply-toggle', function () {
-                //     const commentId = $(this).data('comment-id');
-                //     const repliesContainer = $('#replies-' + commentId);
-
-                //     if (repliesContainer.hasClass('collapsed')) {
-                //         repliesContainer.removeClass('collapsed');
-                //         $(this).text('收起回复');
-
-                //         // 如果还没有加载过回复，则加载回复
-                //         if (!repliesContainer.data('loaded')) {
-                //             // 使用loadMoreReplies函数，并添加标记表示是初次加载
-                //             repliesContainer.data('initial-load', true);
-                //             loadMoreReplies(commentId, 1);
-                //             repliesContainer.data('loaded', true);
-                //         }
-                //     } else {
-                //         repliesContainer.addClass('collapsed');
-                //         $(this).text('展开回复');
-                //     }
-                // });
 
                 // 加载更多回复
                 $(document).on('click', '.load-more-replies', function () {
@@ -499,7 +795,7 @@
                 const type = $('#type').val();
                 const commentId = $('#commentId').val() || 0;
 
-                $('#commentsContainer').html('<div class="loading">⏳ 加载中...</div>');
+                $('#commentsContainer').html('<div class="loading"><i class="fas fa-spinner fa-spin"></i> 加载中...</div>');
 
                 $.ajax({
                     url: '/tools/comment/getCommentList',
@@ -515,16 +811,24 @@
                         if (response.code === 200) {
                             renderComments(response.data.list, response.data.userList);
                             renderPagination(response.data.total, page, limit);
+                            // 更新统计信息
+                            updateStats(response.data.total, Object.keys(response.data.userList).length);
                             // 调整父集窗口高度
                             adjustParentWindow(msgId);
                         } else {
-                            $('#commentsContainer').html('<div class="error-message">加载失败: ' + response.msg + '</div>');
+                            $('#commentsContainer').html('<div class="error-message"><i class="fas fa-exclamation-circle"></i> 加载失败: ' + response.msg + '</div>');
                         }
                     },
                     error: function () {
-                        $('#commentsContainer').html('<div class="error-message">网络错误，请稍后重试</div>');
+                        $('#commentsContainer').html('<div class="error-message"><i class="fas fa-exclamation-circle"></i> 网络错误，请稍后重试</div>');
                     }
                 });
+            }
+
+            // 更新统计信息
+            function updateStats(commentCount, userCount) {
+                $('#totalComments').text(commentCount);
+                $('#totalUsers').text(userCount);
             }
 
             // 渲染评论列表
@@ -532,7 +836,7 @@
                 let html = '';
 
                 if (comments.length === 0) {
-                    html = '<div class="no-comments">暂无评论，快来抢沙发吧！</div>';
+                    html = '<div class="no-comments"><i class="fas fa-comment-slash"></i><p>暂无评论，快来抢沙发吧！</p></div>';
                     $('#commentsContainer').html(html);
                     return;
                 }
@@ -550,36 +854,46 @@
                     html += `
                     <div class="comment-item" data-cid="${comment.cid}">
                         <div class="comment-header-info">
-                            <div>
+                            <div class="user-info">
                                 ${avatar}
-                                <a href="/${user.blog}/" class="user-link comment-author">${user.nickname}</a>
-                                <button class="reply-btn" data-touid="${comment.fromuid}" data-comment-id="${comment.cid}">💬 回复</button>
-                                ${isOwnComment ? `<button class="delete-btn delete-comment" data-comment-id="${comment.cid}">🗑️ 删除</button>` : ''}
+                                <div class="user-details">
+                                    <a href="/${user.blog}/" class="user-link comment-author">${user.nickname}</a>
+                                    <div class="comment-time">${formatTime(comment.ctime)}</div>
+                                </div>
                             </div>
-                            <div class="comment-time">${formatTime(comment.ctime)}</div>
                         </div>
                         <div class="comment-content">
                             ${comment.msg}
                         </div>
-                        <!-- 移除展开功能
                         <div class="action-buttons">
-                            ${comment.reply_count > 0 ? `<button class="reply-toggle" data-comment-id="${comment.cid}" data-total-replies="${comment.reply_count}">
-                                💬 <span class="comment-count">${comment.reply_count}</span> 条回复
+                            <button class="action-btn reply-btn" data-touid="${comment.fromuid}" data-comment-id="${comment.cid}">
+                                <i class="fas fa-reply"></i> 回复
+                            </button>
+                            ${comment.reply_count > 0 ? `<button class="action-btn">
+                                <i class="fas fa-comments"></i> <span class="comment-count">${comment.reply_count}</span> 条回复
+                            </button>` : ''}
+                            ${isOwnComment ? `<button class="action-btn delete-btn delete-comment" data-comment-id="${comment.cid}">
+                                <i class="fas fa-trash"></i> 删除
                             </button>` : ''}
                         </div>
-                        -->
 
                         <!-- 回复表单 - 默认隐藏 -->
-                        <div class="reply-form" id="replyForm-${comment.cid}" style="display: none;">
+                        <div class="reply-form" id="replyForm-${comment.cid}">
                             <div class="form-group">
-                                <textarea class="form-control reply-content" placeholder="请输入回复内容..." data-comment-id="${comment.cid}"></textarea>
+                                <textarea class="form-control reply-content" rows="3" placeholder="请输入回复内容..." data-comment-id="${comment.cid}"></textarea>
                             </div>
-                            <button class="btn btn-primary send-reply" data-touid="${comment.fromuid}" data-comment-id="${comment.cid}">发送回复</button>
-                            <button class="btn btn-outline cancel-reply" style="margin-left: 10px;" data-comment-id="${comment.cid}">取消</button>
+                            <div class="reply-buttons">
+                                <button class="btn btn-outline cancel-reply" data-comment-id="${comment.cid}">
+                                    <i class="fas fa-times"></i> 取消
+                                </button>
+                                <button class="btn btn-primary send-reply" data-touid="${comment.fromuid}" data-comment-id="${comment.cid}">
+                                    <i class="fas fa-paper-plane"></i> 发送回复
+                                </button>
+                            </div>
                         </div>
 
                         <!-- 回复列表 -->
-                        <div class="replies collapsed" id="replies-${comment.cid}">
+                        <div class="replies" id="replies-${comment.cid}">
                     `;
 
                     // 渲染relation_reply_id对应的回复
@@ -597,19 +911,24 @@
                             html += `
                             <div class="comment-item">
                                 <div class="comment-header-info">
-                                    <div>
+                                    <div class="user-info">
                                         ${replyAvatar}
-                                        <a href="/${replyUser.blog}/" class="user-link comment-author">${replyUser.nickname}</a>
-                                        <button class="reply-btn" data-comment-id="${comment.cid}" data-reply-id="${reply.cid}">💬 回复</button>
-                                        ${isOwnReply ? `<button class="delete-btn delete-reply" data-reply-id="${reply.rid}" data-comment-id="${comment.cid}">🗑️ 删除</button>` : ''}
+                                        <div class="user-details">
+                                            <a href="/${replyUser.blog}/" class="user-link comment-author">${replyUser.nickname}</a>
+                                            <div class="comment-time">${formatTime(reply.ctime)}</div>
+                                        </div>
                                     </div>
-                                    <div class="comment-time">${formatTime(reply.ctime)}</div>
                                 </div>
                                 <div class="comment-content">
                                     ${replyPrefix} ${reply.msg}
                                 </div>
                                 <div class="action-buttons">
-                                    
+                                    <button class="action-btn reply-btn" data-comment-id="${comment.cid}" data-reply-id="${reply.cid}">
+                                        <i class="fas fa-reply"></i> 回复
+                                    </button>
+                                    ${isOwnReply ? `<button class="action-btn delete-btn delete-reply" data-reply-id="${reply.rid}" data-comment-id="${comment.cid}">
+                                        <i class="fas fa-trash"></i> 删除
+                                    </button>` : ''}
                                 </div>
                             </div>
                             `;
@@ -619,12 +938,10 @@
                         if (comment.reply_count > comment.replies.length) {
                             html += `
                             <button class="load-more-replies" data-comment-id="${comment.cid}" data-current-page="0">
-                                更多回复 (${comment.reply_count - comment.replies.length}条未显示)
+                                <i class="fas fa-chevron-down"></i> 更多回复 (${comment.reply_count - comment.replies.length}条未显示)
                             </button>
                             `;
                         }
-                    } else {
-                        // html += '<div class="no-replies">暂无回复</div>';
                     }
 
                     html += `
@@ -640,6 +957,7 @@
             function renderPagination(total, currentPage, limit) {
                 const laypage = layui.laypage;
                 if (total <= limit) {
+                    $('#paginationContainer').empty();
                     return;
                 }
                 laypage.render({
@@ -698,7 +1016,7 @@
                                 loadMoreBtn.hide();
                             } else {
                                 loadMoreBtn.data('current-page', page);
-                                loadMoreBtn.text(`更多回复 (${response.data.total - totalLoaded}条未显示) ↘️`);
+                                loadMoreBtn.html(`<i class="fas fa-chevron-down"></i> 更多回复 (${response.data.total - totalLoaded}条未显示)`);
                             }
                         } else {
                             console.error('加载回复失败:', response.msg);
@@ -730,19 +1048,24 @@
                     html += `
                     <div class="comment-item">
                         <div class="comment-header-info">
-                            <div>
+                            <div class="user-info">
                                 ${replyAvatar}
-                                <a href="/${replyUser.blog}/" class="user-link comment-author">${replyUser.nickname}</a>
-                                <button class="reply-btn" data-comment-id="${commentId}" data-reply-id="${reply.cid}">💬 回复</button>
-                                ${isOwnReply ? `<button class="delete-btn delete-reply" data-reply-id="${reply.rid}" data-comment-id="${commentId}">🗑️ 删除</button>` : ''}
+                                <div class="user-details">
+                                    <a href="/${replyUser.blog}/" class="user-link comment-author">${replyUser.nickname}</a>
+                                    <div class="comment-time">${formatTime(reply.ctime)}</div>
+                                </div>
                             </div>
-                            <div class="comment-time">${formatTime(reply.ctime)}</div>
                         </div>
                         <div class="comment-content">
                             ${replyPrefix} ${reply.msg}
                         </div>
                         <div class="action-buttons">
-                            
+                            <button class="action-btn reply-btn" data-comment-id="${commentId}" data-reply-id="${reply.cid}">
+                                <i class="fas fa-reply"></i> 回复
+                            </button>
+                            ${isOwnReply ? `<button class="action-btn delete-btn delete-reply" data-reply-id="${reply.rid}" data-comment-id="${commentId}">
+                                <i class="fas fa-trash"></i> 删除
+                            </button>` : ''}
                         </div>
                     </div>
                     `;
@@ -834,7 +1157,7 @@
                         if (response.code === 200) {
                             layer.msg('回复成功', { icon: 1 });
                             $('#replyForm-' + commentId + ' .reply-content').val('');
-                            $('#replyForm-' + commentId).hide();
+                            $('#replyForm-' + commentId).removeClass('active');
                             loadComments(currentPage); // 重新加载当前页
                         } else {
                             layer.msg(response.msg, { icon: 2 });
