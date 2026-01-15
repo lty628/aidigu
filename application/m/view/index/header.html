@@ -54,10 +54,10 @@
                 <!-- <li><a href="javascript:;" data-title="我的云盘" data-url="/cloud/show/" onclick="showFrameHtml(this, '100%', '100%')">网盘</a></li> -->
                 <li {if $action == 'tools'}class="current"{/if}>
 					<a href="/tools/">小应用</a>
-                    {if $chatRemind['chatRemind'] || $chatRemind['messageRemind']}
-					<span class="layui-badge-dot layui-bg-blue" id="checkchatRemind"></span>
+                    {if $checkRemind['chatRemind'] || $checkRemind['messageRemind']}
+					<span class="layui-badge-dot layui-bg-blue" id="checkRemind"></span>
 					{else} 
-					<span class="layui-badge-dot layui-bg-blue" id="checkchatRemind" style="display: none;"></span>
+					<span class="layui-badge-dot layui-bg-blue" id="checkRemind" style="display: none;"></span>
 					{/if}
 				</li>
                 {else} 

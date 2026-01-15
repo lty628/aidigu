@@ -12,8 +12,8 @@ $(function(){
                 dataType: "json",
                 success: function (response) {
                     if (response.status ==1) {
-                        if (response.data.chatRemind && $("checkchatRemind").length > 0) {
-                            $("#checkchatRemind").show()    
+                        if (response.data.chatRemind && $("checkRemind").length > 0) {
+                            $("#checkRemind").show()    
                         }
                         if (response.data.messageRemind && $("checkmessageRemind").length > 0) {
                             $("#checkmessageRemind").show()    
