@@ -839,7 +839,8 @@
                             const replyUser = userList[reply.fromuid] || { nickname: '未知用户', head_image: '', blog: '' };
                             const isOwnReply = reply.fromuid == currentUid;
                             const toUser = userList[reply.touid] ? userList[reply.touid].nickname : '';
-                            const replyPrefix = toUser ? `@${toUser}` : '';
+                            // const replyPrefix = toUser ? `@${toUser}` : '';
+                            const replyPrefix = '';
 
                             const replyAvatar = replyUser.head_image ?
                                 `<a href="/${replyUser.blog}/" class="user-link"><img src="${replyUser.head_image}" class="avatar" alt="头像"></a>` :
