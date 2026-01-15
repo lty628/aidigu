@@ -27,8 +27,9 @@ use app\common\helper\Reminder;
 //   `ctype` tinyint(4) NOT NULL DEFAULT 0 COMMENT '回复类型',
 //   PRIMARY KEY (`cid`) USING BTREE
 // ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = DYNAMIC;
-
-
+// 删除评论
+// ALTER TABLE `wb_channel_comment` DROP `ctype`;
+// ALTER TABLE `wb_comment` DROP `ctype`;
 class Comment extends Controller
 {
     // $type  1: 微博评论 2: 微博回复，3频道评论，4频道回复 5: 好友关注 6: 取消关注  7: 提到@了您 8收藏了微博， 9收藏了频道微博
@@ -331,7 +332,6 @@ class Comment extends Controller
             'msg_id' => $msgId,
             'touid' => $msgUid,
             'ctime' => time(),
-            'ctype' => 0, // 默认类型
             'reply_count' => 0,
             'relation_reply_id' => ''
         ];

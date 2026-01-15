@@ -81,6 +81,9 @@ class ChatDbHelper
         } else {
             self::upComentReminder($data);
         }
+        if ($data['ctype'] = 1) {
+            return Db::name('comment_reply')->insert($data);
+        }
         return Db::name('comment')->insert($data);
     }
 
