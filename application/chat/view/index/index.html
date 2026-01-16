@@ -191,313 +191,205 @@
 			margin-left: 0px !important;
 		}
 
-		/* 在index.html的<style>标签内添加或修改以下CSS */
+		#content-pannel {
+			background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+			flex: 1;
+			display: flex;
+			flex-direction: column;
+			transition: all 0.3s ease;
+		}
 
-/* 聊天内容区域现代化优化 */
-#content-pannel {
-    background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    transition: all 0.3s ease;
-}
+		#content-pannel .content-pannel-head {
+			background: rgba(255, 255, 255, 0.9);
+			padding: 20px;
+			border-bottom: 1px solid #e2e8f0;
+			box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+		}
 
-#content-pannel .content-pannel-head {
-    background: rgba(255, 255, 255, 0.9);
-    padding: 20px;
-    border-bottom: 1px solid #e2e8f0;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
+		#content-pannel .content-pannel-body {
+			flex: 1;
+			padding: 20px;
+			overflow-y: auto;
+			background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+			display: flex;
+			flex-direction: column;
+		}
 
-#content-pannel .content-pannel-body {
-    flex: 1;
-    padding: 20px;
-    overflow-y: auto;
-    background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
-    display: flex;
-    flex-direction: column;
-}
+		/* 优化聊天框容器 */
+		.chat-box-new {
+			flex: 1;
+			display: flex;
+			flex-direction: column;
+			min-height: 0;
+		}
 
-/* 优化聊天框容器 */
-.chat-box-new {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    min-height: 0;
-}
+		.main-chat {
+			flex: 1;
+			overflow-y: auto;
+			padding: 10px 0;
+			display: flex;
+			flex-direction: column;
+		}
 
-.main-chat {
-    flex: 1;
-    overflow-y: auto;
-    padding: 10px 0;
-    display: flex;
-    flex-direction: column;
-}
+		.msg-items {
+			flex: 1;
+			display: flex;
+			flex-direction: column;
+		}
 
-.msg-items {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-}
+		/* 消息项优化 */
+		.msg-item {
+			margin: 15px 0;
+			display: flex;
+			align-items: flex-start;
+			animation: fadeInUp 0.5s ease;
+			width: 100%;
+		}
 
-/* 消息项优化 */
-.msg-item {
-    margin: 15px 0;
-    display: flex;
-    align-items: flex-start;
-    animation: fadeInUp 0.5s ease;
-    width: 100%;
-}
+		.msg-item.left {
+			justify-content: flex-start;
+		}
 
-.msg-item.left {
-    justify-content: flex-start;
-}
+		.msg-item.right {
+			justify-content: flex-end;
+		}
 
-.msg-item.right {
-    justify-content: flex-end;
-}
+		.msg-item .msg-avatar {
+			width: 40px;
+			height: 40px;
+			border-radius: 50%;
+			margin: 0 10px;
+			flex-shrink: 0;
+			object-fit: cover;
+			border: 2px solid #e2e8f0;
+		}
 
-.msg-item .msg-avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    margin: 0 10px;
-    flex-shrink: 0;
-    object-fit: cover;
-    border: 2px solid #e2e8f0;
-}
+		.msg-item.left .msg-avatar {
+			margin-right: 15px;
+		}
 
-.msg-item.left .msg-avatar {
-    margin-right: 15px;
-}
+		.msg-item.right .msg-avatar {
+			margin-left: 15px;
+			order: 2;
+		}
 
-.msg-item.right .msg-avatar {
-    margin-left: 15px;
-    order: 2;
-}
+		/* 消息内容包装器 - 使时间和内容更紧凑 */
+		.msg-content-wrapper {
+			display: flex;
+			flex-direction: column;
+			max-width: 70%;
+			align-items: flex-start;
+		}
 
-/* 消息内容包装器 - 使时间和内容更紧凑 */
-.msg-content-wrapper {
-    display: flex;
-    flex-direction: column;
-    max-width: 70%;
-    align-items: flex-start;
-}
+		.msg-item.right .msg-content-wrapper {
+			align-items: flex-end;
+		}
 
-.msg-item.right .msg-content-wrapper {
-    align-items: flex-end;
-}
+		/* 时间显示优化 - 放在内容旁边 */
+		.msg-item .msg-time {
+			font-size: 11px;
+			color: #94a3b8;
+			margin-top: 2px;
+			opacity: 0.8;
+			white-space: nowrap;
+		}
 
-/* 时间显示优化 - 放在内容旁边 */
-.msg-item .msg-time {
-    font-size: 11px;
-    color: #94a3b8;
-    margin-top: 2px;
-    opacity: 0.8;
-    white-space: nowrap;
-}
+		/* 右侧消息时间对齐 */
+		.msg-item.right .msg-time {
+			text-align: right;
+			margin-right: 0;
+		}
 
-/* 右侧消息时间对齐 */
-.msg-item.right .msg-time {
-    text-align: right;
-    margin-right: 0;
-}
+		/* 左侧消息时间对齐 */
+		.msg-item.left .msg-time {
+			/* text-align: left; */
+			margin-left: 0;
+		}
 
-/* 左侧消息时间对齐 */
-.msg-item.left .msg-time {
-    /* text-align: left; */
-    margin-left: 0;
-}
+		/* 消息气泡间距调整 */
+		.msg-item .msg-bubble {
+			margin-bottom: 2px;
+		}
 
-/* 消息气泡间距调整 */
-.msg-item .msg-bubble {
-    margin-bottom: 2px;
-}
+		.msg-item .msg-bubble {
+			max-width: 70%;
+			padding: 12px 16px;
+			border-radius: 18px;
+			box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+			position: relative;
+			word-wrap: break-word;
+			flex: 0 1 auto;
+		}
 
-.msg-item .msg-bubble {
-    max-width: 70%;
-    padding: 12px 16px;
-    border-radius: 18px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    position: relative;
-    word-wrap: break-word;
-    flex: 0 1 auto;
-}
+		.msg-item.left .msg-bubble {
+			background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+			border: 1px solid #e2e8f0;
+			margin-left: 0;
+		}
 
-.msg-item.left .msg-bubble {
-    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-    border: 1px solid #e2e8f0;
-    margin-left: 0;
-}
+		.msg-item.right .msg-bubble {
+			background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+			color: white;
+			margin-right: 0;
+			text-align: left;
+		}
 
-.msg-item.right .msg-bubble {
-    background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
-    color: white;
-    margin-right: 0;
-    text-align: left;
-}
+		.msg-item .msg-time {
+			font-size: 12px;
+			color: #94a3b8;
+			margin-top: 5px;
+			text-align: center;
+			width: 100%;
+		}
 
-.msg-item .msg-time {
-    font-size: 12px;
-    color: #94a3b8;
-    margin-top: 5px;
-    text-align: center;
-    width: 100%;
-}
+		.msg-item.left .msg-time {
+			/* margin-left: 55px; */
+			text-align: left;
+		}
 
-.msg-item.left .msg-time {
-    /* margin-left: 55px; */
-    text-align: left;
-}
+		.msg-item.right .msg-time {
+			/* margin-right: 55px; */
+			text-align: right;
+			align-self: flex-end;
+		}
 
-.msg-item.right .msg-time {
-    /* margin-right: 55px; */
-    text-align: right;
-    align-self: flex-end;
-}
+		/* 系统消息样式 */
+		.chat-status {
+			text-align: center;
+			padding: 10px;
+			margin: 10px 0;
+			background: #f1f5f9;
+			border-radius: 8px;
+			font-size: 14px;
+			color: #64748b;
+		}
 
-/* 系统消息样式 */
-.chat-status {
-    text-align: center;
-    padding: 10px;
-    margin: 10px 0;
-    background: #f1f5f9;
-    border-radius: 8px;
-    font-size: 14px;
-    color: #64748b;
-}
+		/* 消息输入区域优化 */
+		.send-msg-box-wrapper {
+			margin-top: auto;
+			background: rgba(255, 255, 255, 0.9);
+			border-top: 1px solid #e2e8f0;
+			backdrop-filter: blur(10px);
+		}
 
-/* 消息输入区域优化 */
-.send-msg-box-wrapper {
-    margin-top: auto;
-    background: rgba(255, 255, 255, 0.9);
-    border-top: 1px solid #e2e8f0;
-    backdrop-filter: blur(10px);
-}
-
-.input-area {
-    display: flex !important;
-    flex-direction: column;
-    border: 1px solid #e2e8f0;
-    border-radius: 12px;
-    overflow: hidden;
-    background: white;
-    transition: all 0.3s ease;
-}
-
-.input-area:focus-within {
-    border-color: #4a90e2;
-    box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
-}
-
-.tool-bar {
-    display: flex;
-    border-bottom: 1px solid #e2e8f0;
-    padding: 8px 12px;
-    background: #f8fafc;
-}
-
-.tool-item {
-    padding: 8px 12px;
-    border-radius: 8px;
-    background: #f1f5f9;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    margin-right: 5px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.tool-item:hover {
-    background: #4a90e2;
-    color: white;
-    transform: translateY(-2px);
-}
-
-.user-guide {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 5px;
-    font-size: 12px;
-    color: #64748b;
-}
-
-/* 消息气泡内的内容样式 */
-.msg-bubble p {
-    margin: 0;
-    line-height: 1.5;
-}
-
-.msg-bubble img {
-    max-width: 100%;
-    border-radius: 8px;
-    margin: 5px 0;
-}
-
-/* 媒体内容样式 */
-.massageImg {
-    max-width: 200px;
-    border-radius: 8px;
-    margin: 5px 0;
-}
-
-/* 响应式设计优化 */
-@media (max-width: 1000px) {
-    #content-pannel .content-pannel-body {
-        padding: 15px;
-    }
-
-    .msg-item .msg-bubble {
-        max-width: 85%;
-    }
-
-    .msg-item .msg-avatar {
-        width: 35px;
-        height: 35px;
-    }
-    
-    .tool-bar {
-        padding: 5px 8px;
-    }
-    
-    .tool-item {
-        padding: 6px 10px;
-        margin-right: 3px;
-    }
-}
-
-/* 滚动到顶部加载更多功能的样式 */
-.history-loading {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 10px;
-    color: #64748b;
-    font-size: 14px;
-}
-
-.loading-spinner {
-    width: 20px;
-    height: 20px;
-    border: 2px solid #e2e8f0;
-    border-top: 2px solid #4a90e2;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    margin-right: 10px;
-}
-.conv-avatar {
-	flex: 0 0 38px; margin-right: 7px; width: 38px; height: 38px;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
+		.input-area {
+			display: flex !important;
+			flex-direction: column;
+			border: 1px solid #e2e8f0;
+			border-radius: 12px;
+			/* overflow: hidden; */
+			background: white;
+			transition: all 0.3s ease;
+		}
+		.conv-avatar {
+			flex: 0 0 38px; margin-right: 7px; width: 38px; height: 38px; 
+		}
+		.massageImg {
+			max-width: 200px;
+		}
 
 		/* 响应式设计 - 1000px以内手机端优化 */
 		@media (max-width: 1000px) {
@@ -725,7 +617,7 @@
 	</script>
 	<script src="/static/chat/js/jquery.min.js"></script>
 	<!-- <script src="/static/chat/js/face.js?v=3345"></script> -->
-	<script src="/static/chat/js/create.div.js?v=34"></script>
+	<script src="/static/chat/js/create.div.js?v=35"></script>
 	<script src="/static/chat/js/chat.script.js?v=43"></script>
 	<script src="/static/chat/js/functions.js?v=2115"></script>
 	<!-- <script src="/static/chat/js/xlyjs.js?v=215"></script> -->
