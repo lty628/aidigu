@@ -1,920 +1,923 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI对话助手</title>
-    <link rel="stylesheet" href="/static/layui/css/layui.css?t=1" type="text/css" media="screen" />
-    <style>
-        /* 全局重置和基础设置 */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>AI对话助手</title>
+	<link rel="stylesheet" href="/static/layui/css/layui.css?t=1" type="text/css" media="screen" />
+	<style>
+		/* 全局重置和基础设置 */
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
 
-        /* CSS变量定义 */
-        :root {
-            --primary-color: #4f46e5;
-            --secondary-color: #8b5cf6;
-            --background-color: #f8fafc;
-            --surface-color: #ffffff;
-            --border-color: #e2e8f0;
-            --text-primary: #1e293b;
-            --text-secondary: #64748b;
-            --success-color: #10b981;
-            --warning-color: #f59e0b;
-            --error-color: #ef4444;
-            --shadow-light: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
-            --shadow-medium: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            --shadow-heavy: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-            --radius-small: 4px;
-            --radius-medium: 8px;
-            --radius-large: 12px;
-            --transition-fast: 0.2s ease;
-            --transition-medium: 0.3s ease;
-            --transition-slow: 0.5s ease;
-        }
+		/* CSS变量定义 */
+		:root {
+			--primary-color: #4f46e5;
+			--secondary-color: #8b5cf6;
+			--background-color: #f8fafc;
+			--surface-color: #ffffff;
+			--border-color: #e2e8f0;
+			--text-primary: #1e293b;
+			--text-secondary: #64748b;
+			--success-color: #10b981;
+			--warning-color: #f59e0b;
+			--error-color: #ef4444;
+			--shadow-light: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+			--shadow-medium: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+			--shadow-heavy: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+			--radius-small: 4px;
+			--radius-medium: 8px;
+			--radius-large: 12px;
+			--transition-fast: 0.2s ease;
+			--transition-medium: 0.3s ease;
+			--transition-slow: 0.5s ease;
+		}
 
-        /* 深色模式支持 */
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --background-color: #0f172a;
-                --surface-color: #1e293b;
-                --border-color: #334155;
-                --text-primary: #f1f5f9;
-                --text-secondary: #94a3b8;
-            }
-        }
+		/* 深色模式支持 */
+		@media (prefers-color-scheme: dark) {
+			:root {
+				--background-color: #0f172a;
+				--surface-color: #1e293b;
+				--border-color: #334155;
+				--text-primary: #f1f5f9;
+				--text-secondary: #94a3b8;
+			}
+		}
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background-color: var(--background-color);
-            color: var(--text-primary);
-            line-height: 1.6;
-            height: 100vh;
-            overflow: hidden;
-        }
+		body {
+			font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+			background-color: var(--background-color);
+			color: var(--text-primary);
+			line-height: 1.6;
+			height: 100vh;
+			overflow: hidden;
+		}
 
-        /* 主容器布局 */
-        .chat-container {
-            display: flex;
-            height: 100vh;
-            max-width: 1600px;
-            margin: 0 auto;
-            background-color: var(--surface-color);
-            box-shadow: var(--shadow-medium);
-            position: relative;
-        }
+		/* 主容器布局 */
+		.chat-container {
+			display: flex;
+			height: 100vh;
+			max-width: 1600px;
+			margin: 0 auto;
+			background-color: var(--surface-color);
+			box-shadow: var(--shadow-medium);
+			position: relative;
+		}
 
-        /* 菜单面板 */
-        .menu-panel {
-            width: 320px;
-            background-color: var(--surface-color);
-            border-right: 1px solid var(--border-color);
-            display: flex;
-            flex-direction: column;
-            z-index: 10;
-            transition: transform var(--transition-medium);
-        }
+		/* 菜单面板 */
+		.menu-panel {
+			width: 320px;
+			background-color: var(--surface-color);
+			border-right: 1px solid var(--border-color);
+			display: flex;
+			flex-direction: column;
+			z-index: 10;
+			transition: transform var(--transition-medium);
+		}
 
-        /* 移动端菜单处理 */
-        @media (max-width: 768px) {
-            .menu-panel {
-                position: absolute;
-                left: 0;
-                top: 0;
-                height: 100%;
-                transform: translateX(-100%);
-            }
-            
-            .menu-panel.active {
-                transform: translateX(0);
-            }
-        }
+		/* 移动端菜单处理 */
+		@media (max-width: 768px) {
+			.menu-panel {
+				position: absolute;
+				left: 0;
+				top: 0;
+				height: 100%;
+				transform: translateX(-100%);
+			}
 
-        /* 头部样式 */
-        .header {
-            padding: 16px;
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background-color: var(--surface-color);
-            position: relative;
-            z-index: 20;
-        }
+			.menu-panel.active {
+				transform: translateX(0);
+			}
+		}
 
-        .header-title {
-            font-size: 18px;
-            font-weight: 600;
-            color: var(--text-primary);
-        }
+		/* 头部样式 */
+		.header {
+			padding: 16px;
+			border-bottom: 1px solid var(--border-color);
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			background-color: var(--surface-color);
+			position: relative;
+			z-index: 20;
+		}
 
-        .mobile-back-btn {
-            display: none;
-            background: none;
-            border: none;
-            font-size: 20px;
-            cursor: pointer;
-            color: var(--text-primary);
-            padding: 8px;
-            border-radius: var(--radius-small);
-        }
+		.header-title {
+			font-size: 18px;
+			font-weight: 600;
+			color: var(--text-primary);
+		}
 
-        .mobile-back-btn:hover {
-            background-color: var(--border-color);
-        }
+		.mobile-back-btn {
+			display: none;
+			background: none;
+			border: none;
+			font-size: 20px;
+			cursor: pointer;
+			color: var(--text-primary);
+			padding: 8px;
+			border-radius: var(--radius-small);
+		}
 
-        @media (max-width: 768px) {
-            .mobile-back-btn {
-                display: block;
-            }
-        }
+		.mobile-back-btn:hover {
+			background-color: var(--border-color);
+		}
 
-        /* 对话列表 */
-        .conversation-list {
-            flex: 1;
-            overflow-y: auto;
-            padding: 16px;
-        }
+		@media (max-width: 768px) {
+			.mobile-back-btn {
+				display: block;
+			}
+		}
 
-        .conversation-item {
-            padding: 12px 16px;
-            border-radius: var(--radius-medium);
-            margin-bottom: 8px;
-            cursor: pointer;
-            transition: var(--transition-fast);
-            border: 1px solid transparent;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
+		/* 对话列表 */
+		.conversation-list {
+			flex: 1;
+			overflow-y: auto;
+			padding: 16px;
+		}
 
-        .conversation-item img {
-            width: 36px;
-        }
+		.conversation-item {
+			padding: 12px 16px;
+			border-radius: var(--radius-medium);
+			margin-bottom: 8px;
+			cursor: pointer;
+			transition: var(--transition-fast);
+			border: 1px solid transparent;
+			display: flex;
+			align-items: center;
+			gap: 12px;
+		}
 
-        .conversation-item:hover {
-            background-color: var(--border-color);
-        }
+		.conversation-item img {
+			width: 36px;
+		}
 
-        .conversation-item.active {
-            background-color: var(--primary-color);
-            color: white;
-            border-color: var(--primary-color);
-        }
+		.conversation-item:hover {
+			background-color: var(--border-color);
+		}
 
-        .conversation-item.active .conversation-title,
-        .conversation-item.active .conversation-preview {
-            color: white;
-        }
+		.conversation-item.active {
+			background-color: var(--primary-color);
+			color: white;
+			border-color: var(--primary-color);
+		}
 
-        .conversation-avatar {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            font-size: 14px;
-        }
+		.conversation-item.active .conversation-title,
+		.conversation-item.active .conversation-preview {
+			color: white;
+		}
 
-        .conversation-info {
-            flex: 1;
-            min-width: 0;
-        }
+		.conversation-avatar {
+			width: 36px;
+			height: 36px;
+			border-radius: 50%;
+			background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			color: white;
+			font-weight: bold;
+			font-size: 14px;
+		}
 
-        .conversation-title {
-            font-weight: 500;
-            color: var(--text-primary);
-            margin-bottom: 4px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
+		.conversation-info {
+			flex: 1;
+			min-width: 0;
+		}
 
-        .conversation-preview {
-            font-size: 13px;
-            color: var(--text-secondary);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
+		.conversation-title {
+			font-weight: 500;
+			color: var(--text-primary);
+			margin-bottom: 4px;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
 
-        /* 内容面板 */
-        .content-panel {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-        }
+		.conversation-preview {
+			font-size: 13px;
+			color: var(--text-secondary);
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
 
-        .messages-container {
-    flex: 1;
-    overflow-y: auto;
-    padding: 24px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
+		/* 内容面板 */
+		.content-panel {
+			flex: 1;
+			display: flex;
+			flex-direction: column;
+			position: relative;
+		}
 
-.message {
-    max-width: 80%;
-    margin: 8px 0;
-    padding: 16px;
-    border-radius: var(--radius-large);
-    animation: slideIn 0.3s ease-out;
-    position: relative;
-    word-wrap: break-word;
-    word-break: break-word;
-}
+		.messages-container {
+			flex: 1;
+			overflow-y: auto;
+			padding: 24px;
+			display: flex;
+			flex-direction: column;
+			gap: 20px;
+		}
 
-.user-message {
-    align-self: flex-end;
-    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-    color: white;
-    border-bottom-right-radius: var(--radius-small);
-    margin-left: auto;
-}
+		.message {
+			max-width: 80%;
+			margin: 8px 0;
+			padding: 16px;
+			border-radius: var(--radius-large);
+			animation: slideIn 0.3s ease-out;
+			position: relative;
+			word-wrap: break-word;
+			word-break: break-word;
+		}
 
-.ai-message {
-    align-self: flex-start;
-    background-color: var(--border-color);
-    color: var(--text-primary);
-    border-bottom-left-radius: var(--radius-small);
-    margin-right: auto;
-}
+		.user-message {
+			align-self: flex-end;
+			background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+			color: white;
+			border-bottom-right-radius: var(--radius-small);
+			margin-left: auto;
+		}
 
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+		.ai-message {
+			align-self: flex-start;
+			background-color: var(--border-color);
+			color: var(--text-primary);
+			border-bottom-left-radius: var(--radius-small);
+			margin-right: auto;
+		}
 
-        /* 聊天内容容器 */
-        .chat-content-inner {
-            display: none;
-            width: 100%;
-            height: 100%;
-        }
+		@keyframes slideIn {
+			from {
+				opacity: 0;
+				transform: translateY(20px);
+			}
 
-        .chat-content-inner.active {
-            display: block;
-        }
+			to {
+				opacity: 1;
+				transform: translateY(0);
+			}
+		}
 
-        /* 输入区域 */
-        .input-area {
-            padding: 20px;
-            border-top: 1px solid var(--border-color);
-            background-color: var(--surface-color);
-        }
+		/* 聊天内容容器 */
+		.chat-content-inner {
+			display: none;
+			width: 100%;
+			height: 100%;
+		}
 
-        .input-container {
-            display: flex;
-            gap: 12px;
-            align-items: flex-end;
-        }
+		.chat-content-inner.active {
+			display: block;
+		}
 
-        .message-input {
-            flex: 1;
-            padding: 14px 16px;
-            border: 2px solid var(--border-color);
-            border-radius: var(--radius-large);
-            resize: none;
-            min-height: 56px;
-            max-height: 150px;
-            font-size: 16px;
-            outline: none;
-            transition: var(--transition-fast);
-            background-color: var(--surface-color);
-            color: var(--text-primary);
-        }
+		/* 输入区域 */
+		.input-area {
+			padding: 20px;
+			border-top: 1px solid var(--border-color);
+			background-color: var(--surface-color);
+		}
 
-        .message-input:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
-        }
+		.input-container {
+			display: flex;
+			gap: 12px;
+			align-items: flex-end;
+		}
 
-        .send-button {
-            padding: 14px 24px;
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: white;
-            border: none;
-            border-radius: var(--radius-large);
-            cursor: pointer;
-            font-weight: 500;
-            transition: var(--transition-fast);
-            min-width: 80px;
-        }
+		.message-input {
+			flex: 1;
+			padding: 14px 16px;
+			border: 2px solid var(--border-color);
+			border-radius: var(--radius-large);
+			resize: none;
+			min-height: 56px;
+			max-height: 150px;
+			font-size: 16px;
+			outline: none;
+			transition: var(--transition-fast);
+			background-color: var(--surface-color);
+			color: var(--text-primary);
+		}
 
-        .send-button:hover {
-            transform: translateY(-1px);
-            box-shadow: var(--shadow-medium);
-        }
+		.message-input:focus {
+			border-color: var(--primary-color);
+			box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+		}
 
-        .send-button:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
+		.send-button {
+			padding: 14px 24px;
+			background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+			color: white;
+			border: none;
+			border-radius: var(--radius-large);
+			cursor: pointer;
+			font-weight: 500;
+			transition: var(--transition-fast);
+			min-width: 80px;
+		}
 
-        /* 工具栏 */
-        .toolbar {
-            display: flex;
-            gap: 12px;
-            margin-top: 12px;
-            flex-wrap: wrap;
-        }
+		.send-button:hover {
+			transform: translateY(-1px);
+			box-shadow: var(--shadow-medium);
+		}
 
-        .toolbar-button {
-            padding: 8px 12px;
-            border: 1px solid var(--border-color);
-            background-color: var(--surface-color);
-            border-radius: var(--radius-medium);
-            cursor: pointer;
-            transition: var(--transition-fast);
-            font-size: 14px;
-        }
+		.send-button:disabled {
+			opacity: 0.6;
+			cursor: not-allowed;
+			transform: none;
+			box-shadow: none;
+		}
 
-        .toolbar-button:hover {
-            background-color: var(--border-color);
-            border-color: var(--primary-color);
-        }
+		/* 工具栏 */
+		.toolbar {
+			display: flex;
+			gap: 12px;
+			margin-top: 12px;
+			flex-wrap: wrap;
+		}
 
-        /* 用户引导 */
-        .user-guide {
-            text-align: center;
-            padding: 40px 20px;
-            color: var(--text-secondary);
-        }
+		.toolbar-button {
+			padding: 8px 12px;
+			border: 1px solid var(--border-color);
+			background-color: var(--surface-color);
+			border-radius: var(--radius-medium);
+			cursor: pointer;
+			transition: var(--transition-fast);
+			font-size: 14px;
+		}
 
-        .guide-title {
-            font-size: 24px;
-            font-weight: 600;
-            margin-bottom: 16px;
-            color: var(--text-primary);
-        }
+		.toolbar-button:hover {
+			background-color: var(--border-color);
+			border-color: var(--primary-color);
+		}
 
-        .guide-description {
-            font-size: 16px;
-            margin-bottom: 32px;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
+		/* 用户引导 */
+		.user-guide {
+			text-align: center;
+			padding: 40px 20px;
+			color: var(--text-secondary);
+		}
 
-        /* 滚动条美化 */
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
+		.guide-title {
+			font-size: 24px;
+			font-weight: 600;
+			margin-bottom: 16px;
+			color: var(--text-primary);
+		}
 
-        ::-webkit-scrollbar-track {
-            background: transparent;
-        }
+		.guide-description {
+			font-size: 16px;
+			margin-bottom: 32px;
+			max-width: 600px;
+			margin-left: auto;
+			margin-right: auto;
+		}
 
-        ::-webkit-scrollbar-thumb {
-            background: var(--border-color);
-            border-radius: 3px;
-        }
+		/* 滚动条美化 */
+		::-webkit-scrollbar {
+			width: 6px;
+			height: 6px;
+		}
 
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--text-secondary);
-        }
+		::-webkit-scrollbar-track {
+			background: transparent;
+		}
 
-        /* 加载状态 */
-        .loading {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid var(--border-color);
-            border-radius: 50%;
-            border-top-color: var(--primary-color);
-            animation: spin 1s ease-in-out infinite;
-        }
+		::-webkit-scrollbar-thumb {
+			background: var(--border-color);
+			border-radius: 3px;
+		}
 
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
+		::-webkit-scrollbar-thumb:hover {
+			background: var(--text-secondary);
+		}
 
-        /* 消息上下文菜单 */
-        .message-context-menu {
-            position: fixed;
-            background: white;
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-small);
-            box-shadow: var(--shadow-heavy);
-            z-index: 9999;
-        }
+		/* 加载状态 */
+		.loading {
+			display: inline-block;
+			width: 20px;
+			height: 20px;
+			border: 3px solid var(--border-color);
+			border-radius: 50%;
+			border-top-color: var(--primary-color);
+			animation: spin 1s ease-in-out infinite;
+		}
 
-        .context-menu-item {
-            padding: 8px 16px;
-            cursor: pointer;
-            font-size: 14px;
-            color: var(--text-primary);
-            min-width: 120px;
-        }
+		@keyframes spin {
+			to {
+				transform: rotate(360deg);
+			}
+		}
 
-        .context-menu-item:hover {
-            background-color: var(--border-color);
-        }
+		/* 消息上下文菜单 */
+		.message-context-menu {
+			position: fixed;
+			background: white;
+			border: 1px solid var(--border-color);
+			border-radius: var(--radius-small);
+			box-shadow: var(--shadow-heavy);
+			z-index: 9999;
+		}
 
-        /* 响应式设计 */
-        @media (max-width: 1000px) {
-            .chat-container {
-                flex-direction: column;
-            }
-            
-            .menu-panel {
-                width: 100%;
-                height: auto;
-                border-right: none;
-                border-bottom: 1px solid var(--border-color);
-                position: static;
-                transform: none;
-            }
-            
-            .menu-panel.active {
-                position: absolute;
-                height: 100%;
-            }
-            
-            .content-panel {
-                min-height: 500px;
-            }
-            
-            .message {
-                max-width: 90%;
-            }
-        }
+		.context-menu-item {
+			padding: 8px 16px;
+			cursor: pointer;
+			font-size: 14px;
+			color: var(--text-primary);
+			min-width: 120px;
+		}
 
-        @media (max-width: 768px) {
-            .chat-container {
-                height: 100vh;
-                position: fixed;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-            }
-            
-            .messages-container {
-                padding: 16px;
-            }
-            
-            .input-area {
-                padding: 16px;
-            }
-            
-            .message {
-                max-width: 95%;
-            }
-            
-            .conversation-list {
-                padding: 12px;
-            }
-            
-            .conversation-item {
-                padding: 12px;
-            }
-        }
-    </style>
+		.context-menu-item:hover {
+			background-color: var(--border-color);
+		}
+
+		/* 响应式设计 */
+		@media (max-width: 1000px) {
+			.chat-container {
+				flex-direction: column;
+			}
+
+			.menu-panel {
+				width: 100%;
+				height: auto;
+				border-right: none;
+				border-bottom: 1px solid var(--border-color);
+				position: static;
+				transform: none;
+			}
+
+			.menu-panel.active {
+				position: absolute;
+				height: 100%;
+			}
+
+			.content-panel {
+				min-height: 500px;
+			}
+
+			.message {
+				max-width: 90%;
+			}
+		}
+
+		@media (max-width: 768px) {
+			.chat-container {
+				height: 100vh;
+				position: fixed;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+			}
+
+			.messages-container {
+				padding: 16px;
+			}
+
+			.input-area {
+				padding: 16px;
+			}
+
+			.message {
+				max-width: 95%;
+			}
+
+			.conversation-list {
+				padding: 12px;
+			}
+
+			.conversation-item {
+				padding: 12px;
+			}
+		}
+	</style>
 </head>
+
 <body>
-    <div class="chat-container">
-        <!-- 菜单面板 -->
-        <div class="menu-panel" id="menuPanel">
-            <div class="header">
-                <button class="mobile-back-btn" id="mobileBackBtn">←</button>
-                <h2 class="header-title">对话历史</h2>
-                <div style="width: 24px;"></div> <!-- 占位符保持居中 -->
-            </div>
-            <div class="conversation-list" id="conversationList">
-                <!-- 对话项目将通过JavaScript动态生成 -->
-                <div class="conversation-item active">
-                    <div class="conversation-avatar">A</div>
-                    <div class="conversation-info">
-                        <div class="conversation-title">新对话</div>
-                        <div class="conversation-preview">开始新的对话...</div>
-                    </div>
-                </div>
-            </div>
-        </div>
+	<div class="chat-container">
+		<!-- 菜单面板 -->
+		<div class="menu-panel" id="menuPanel">
+			<div class="header">
+				<button class="mobile-back-btn" id="mobileBackBtn">←</button>
+				<h2 class="header-title">对话历史</h2>
+				<div style="width: 24px;"></div> <!-- 占位符保持居中 -->
+			</div>
+			<div class="conversation-list" id="conversationList">
+				<!-- 对话项目将通过JavaScript动态生成 -->
+				<div class="conversation-item active">
+					<div class="conversation-avatar">A</div>
+					<div class="conversation-info">
+						<div class="conversation-title">新对话</div>
+						<div class="conversation-preview">开始新的对话...</div>
+					</div>
+				</div>
+			</div>
+		</div>
 
-        <!-- 内容面板 -->
-        <div class="content-panel">
-            <div class="messages-container" id="messagesContainer">
-                <!-- 消息将通过JavaScript动态生成 -->
-                <div class="user-guide" id="userGuide">
-                    <h3 class="guide-title">欢迎使用AI对话助手</h3>
-                    <p class="guide-description">在这里您可以与AI进行智能对话，提出问题或讨论话题，AI将为您提供帮助和解答。</p>
-                </div>
-            </div>
+		<!-- 内容面板 -->
+		<div class="content-panel">
+			<div class="messages-container" id="messagesContainer">
+				<!-- 消息将通过JavaScript动态生成 -->
+				<div class="user-guide" id="userGuide">
+					<h3 class="guide-title">欢迎使用AI对话助手</h3>
+					<p class="guide-description">在这里您可以与AI进行智能对话，提出问题或讨论话题，AI将为您提供帮助和解答。</p>
+				</div>
+			</div>
 
-            <div class="input-area">
-                <div class="toolbar" id="msgToolBar">
-                    <button class="toolbar-button" data-action="clear">清空对话</button>
-                    <button class="toolbar-button" data-action="export">导出对话</button>
-                    <button class="toolbar-button" data-action="help">帮助</button>
-                </div>
-                <div class="input-container">
-                    <div class="message-input" id="msgInput"></div>
-                    <button class="send-button" id="sendButton" disabled>发送</button>
-                </div>
-            </div>
-        </div>
-    </div>
+			<div class="input-area">
+				<div class="toolbar" id="msgToolBar">
+					<button class="toolbar-button" data-action="clear">清空对话</button>
+					<button class="toolbar-button" data-action="export">导出对话</button>
+					<button class="toolbar-button" data-action="help">帮助</button>
+				</div>
+				<div class="input-container">
+					<div class="message-input" id="msgInput"></div>
+					<button class="send-button" id="sendButton" disabled>发送</button>
+				</div>
+			</div>
+		</div>
+	</div>
 
-    <!-- 隐藏字段 -->
-    <input type="hidden" id="from_uid" value="{$fromuid}">
+	<!-- 隐藏字段 -->
+	<input type="hidden" id="from_uid" value="{$fromuid}">
 
-    <!-- 引入外部资源 -->
-    <script src="/static/layui/layui.js?4"></script>
-	<script>var $=layui.jquery;</script>
-    <script src="/static/common/js/index.js?22"></script>
-    <script src="/static/common/js/wangEditor.min.js"></script>
-    <script src="/static/chat/js/edit.js?v=12"></script>
+	<!-- 引入外部资源 -->
+	<script src="/static/layui/layui.js?4"></script>
+	<script>var $ = layui.jquery;</script>
+	<script src="/static/common/js/index.js?22"></script>
+	<script src="/static/common/js/wangEditor.min.js"></script>
+	<script src="/static/chat/js/edit.js?v=12"></script>
 
-    <script>
-        // 配置信息
-        const config = {
-            'wsserver': "{$wsserver}",
-            'reconnectInterval': 3000,
-            'heartbeatInterval': 30000
-        };
+	<script>
+		// 配置信息
+		const config = {
+			'wsserver': "{$wsserver}",
+			'reconnectInterval': 3000,
+			'heartbeatInterval': 30000
+		};
 
-        // DOM 元素缓存
-        const DOM = {
-            menuPanel: document.getElementById('menuPanel'),
-            contentPanel: document.querySelector('.content-panel'),
-            conversationList: document.getElementById('conversationList'),
-            messagesContainer: document.getElementById('messagesContainer'),
-            msgInput: document.getElementById('msgInput'),
-            sendButton: document.getElementById('sendButton'),
-            mobileBackBtn: document.getElementById('mobileBackBtn')
-        };
+		// DOM 元素缓存
+		const DOM = {
+			menuPanel: document.getElementById('menuPanel'),
+			contentPanel: document.querySelector('.content-panel'),
+			conversationList: document.getElementById('conversationList'),
+			messagesContainer: document.getElementById('messagesContainer'),
+			msgInput: document.getElementById('msgInput'),
+			sendButton: document.getElementById('sendButton'),
+			mobileBackBtn: document.getElementById('mobileBackBtn')
+		};
 
-        // 工具函数
-        const utils = {
-            /**
-             * 创建聊天容器
-             * @param {string} listtagid - 聊天标签ID
-             * @returns {jQuery} 创建的聊天容器
-             */
-            createChatContainer: function(listtagid) {
-                const containerId = `chatContent-${listtagid}`;
-                const lineHolderId = `chatLineHolder-${listtagid}`;
-                
-                // 检查容器是否已存在
-                if ($(`#${containerId}`).length > 0) {
-                    return $(`#${lineHolderId}`);
-                }
-                
-                // 创建新容器
-                const container = $(`
+		// 工具函数
+		const utils = {
+			/**
+			 * 创建聊天容器
+			 * @param {string} listtagid - 聊天标签ID
+			 * @returns {jQuery} 创建的聊天容器
+			 */
+			createChatContainer: function (listtagid) {
+				const containerId = `chatContent-${listtagid}`;
+				const lineHolderId = `chatLineHolder-${listtagid}`;
+
+				// 检查容器是否已存在
+				if ($(`#${containerId}`).length > 0) {
+					return $(`#${lineHolderId}`);
+				}
+
+				// 创建新容器
+				const container = $(`
                     <div class="chat-content-inner" id="${containerId}">
                         <div class="chat-line-holder" id="${lineHolderId}"></div>
                     </div>
                 `);
-                
-                $('#messagesContainer').append(container);
-                return $(`#${lineHolderId}`);
-            },
 
-            /**
-             * 获取列表标签名称
-             * @param {string} listtagId - 标签ID
-             * @returns {string} 标签名称
-             */
-            getListTagName: function(listtagId) {
-                const tagNames = {
-                    'PrivateLetter': '私信',
-                    'Friends': '好友',
-                    'Group': '群聊',
-                    'MessageChat': '评论',
-                    'ChannelMessageChat': '频道评论'
-                };
-                return tagNames[listtagId] || listtagId;
-            },
+				$('#messagesContainer').append(container);
+				return $(`#${lineHolderId}`);
+			},
 
-            /**
-             * 检查是否为移动端
-             * @returns {boolean} 是否为移动端
-             */
-            isMobile: function() {
-                return window.innerWidth <= 768;
-            }
-        };
+			/**
+			 * 获取列表标签名称
+			 * @param {string} listtagId - 标签ID
+			 * @returns {string} 标签名称
+			 */
+			getListTagName: function (listtagId) {
+				const tagNames = {
+					'PrivateLetter': '私信',
+					'Friends': '好友',
+					'Group': '群聊',
+					'MessageChat': '评论',
+					'ChannelMessageChat': '频道评论'
+				};
+				return tagNames[listtagId] || listtagId;
+			},
 
-        // WebSocket 管理模块
-        const wsManager = {
-            data: {
-                wSock: null,
-                lockReconnect: false,
-                heartbeatTimer: null,
-                reconnectTimer: null
-            },
+			/**
+			 * 检查是否为移动端
+			 * @returns {boolean} 是否为移动端
+			 */
+			isMobile: function () {
+				return window.innerWidth <= 768;
+			}
+		};
 
-            /**
-             * 初始化WebSocket连接
-             */
-            init: function() {
-                try {
-                    this.data.wSock = new WebSocket(config.wsserver);
-                    this.bindEvents();
-                } catch (e) {
-                    console.error('WebSocket连接失败:', e);
-                    this.scheduleReconnect();
-                }
-            },
+		// WebSocket 管理模块
+		const wsManager = {
+			data: {
+				wSock: null,
+				lockReconnect: false,
+				heartbeatTimer: null,
+				reconnectTimer: null
+			},
 
-            /**
-             * 绑定WebSocket事件
-             */
-            bindEvents: function() {
-                this.data.wSock.onopen = this.onOpen.bind(this);
-                this.data.wSock.onmessage = this.onMessage.bind(this);
-                this.data.wSock.onclose = this.onClose.bind(this);
-                this.data.wSock.onerror = this.onError.bind(this);
-            },
+			/**
+			 * 初始化WebSocket连接
+			 */
+			init: function () {
+				try {
+					this.data.wSock = new WebSocket(config.wsserver);
+					this.bindEvents();
+				} catch (e) {
+					console.error('WebSocket连接失败:', e);
+					this.scheduleReconnect();
+				}
+			},
 
-            /**
-             * 连接打开处理
-             */
-            onOpen: function() {
-                this.startHeartbeat();
-                chat.data.uid = $("#from_uid").val();
-                this.sendMessage({ 
-                    "type": 0, 
-                    "listtagid": 'TagInfo', 
-                    "uid": chat.data.uid 
-                });
-            },
+			/**
+			 * 绑定WebSocket事件
+			 */
+			bindEvents: function () {
+				this.data.wSock.onopen = this.onOpen.bind(this);
+				this.data.wSock.onmessage = this.onMessage.bind(this);
+				this.data.wSock.onclose = this.onClose.bind(this);
+				this.data.wSock.onerror = this.onError.bind(this);
+			},
 
-            /**
-             * 接收消息处理
-             * @param {Event} event - 消息事件
-             */
-            onMessage: function(event) {
-                this.resetHeartbeat();
-                
-                try {
-                    const data = JSON.parse(event.data);
-                    chat.handleMessage(data);
-                } catch (e) {
-                    console.log('消息解析失败:', event.data, e);
-                }
-            },
+			/**
+			 * 连接打开处理
+			 */
+			onOpen: function () {
+				this.startHeartbeat();
+				chat.data.uid = $("#from_uid").val();
+				this.sendMessage({
+					"type": 0,
+					"listtagid": 'TagInfo',
+					"uid": chat.data.uid
+				});
+			},
 
-            /**
-             * 连接关闭处理
-             */
-            onClose: function() {
-                console.log('WebSocket连接已关闭');
-                layer.msg('与服务器断开连接，正在尝试重连...', { time: 2000 });
-                this.scheduleReconnect();
-            },
+			/**
+			 * 接收消息处理
+			 * @param {Event} event - 消息事件
+			 */
+			onMessage: function (event) {
+				this.resetHeartbeat();
 
-            /**
-             * 连接错误处理
-             * @param {Event} event - 错误事件
-             */
-            onError: function(event) {
-                console.error('WebSocket连接发生错误:', event);
-                this.scheduleReconnect();
-            },
+				try {
+					const data = JSON.parse(event.data);
+					chat.handleMessage(data);
+				} catch (e) {
+					console.log('消息解析失败:', event.data, e);
+				}
+			},
 
-            /**
-             * 发送消息
-             * @param {Object} data - 消息数据
-             */
-            sendMessage: function(data) {
-                if (this.data.wSock && this.data.wSock.readyState === WebSocket.OPEN) {
-                    this.data.wSock.send(JSON.stringify(data));
-                } else {
-                    console.error('WebSocket未连接，无法发送消息');
-                    layer.msg('连接异常，请刷新页面重试', { icon: 2 });
-                }
-            },
+			/**
+			 * 连接关闭处理
+			 */
+			onClose: function () {
+				console.log('WebSocket连接已关闭');
+				layer.msg('与服务器断开连接，正在尝试重连...', { time: 2000 });
+				this.scheduleReconnect();
+			},
 
-            /**
-             * 开始心跳检测
-             */
-            startHeartbeat: function() {
-                this.stopHeartbeat();
-                this.data.heartbeatTimer = setInterval(() => {
-                    this.sendHeartbeat();
-                }, config.heartbeatInterval);
-            },
+			/**
+			 * 连接错误处理
+			 * @param {Event} event - 错误事件
+			 */
+			onError: function (event) {
+				console.error('WebSocket连接发生错误:', event);
+				this.scheduleReconnect();
+			},
 
-            /**
-             * 发送心跳
-             */
-            sendHeartbeat: function() {
-                if (this.data.wSock && this.data.wSock.readyState === WebSocket.OPEN) {
-                    this.sendMessage({ type: 'ping' });
-                }
-            },
+			/**
+			 * 发送消息
+			 * @param {Object} data - 消息数据
+			 */
+			sendMessage: function (data) {
+				if (this.data.wSock && this.data.wSock.readyState === WebSocket.OPEN) {
+					this.data.wSock.send(JSON.stringify(data));
+				} else {
+					console.error('WebSocket未连接，无法发送消息');
+					layer.msg('连接异常，请刷新页面重试', { icon: 2 });
+				}
+			},
 
-            /**
-             * 重置心跳
-             */
-            resetHeartbeat: function() {
-                if (this.data.heartbeatTimer) {
-                    clearInterval(this.data.heartbeatTimer);
-                    this.startHeartbeat();
-                }
-            },
+			/**
+			 * 开始心跳检测
+			 */
+			startHeartbeat: function () {
+				this.stopHeartbeat();
+				this.data.heartbeatTimer = setInterval(() => {
+					this.sendHeartbeat();
+				}, config.heartbeatInterval);
+			},
 
-            /**
-             * 停止心跳
-             */
-            stopHeartbeat: function() {
-                if (this.data.heartbeatTimer) {
-                    clearInterval(this.data.heartbeatTimer);
-                    this.data.heartbeatTimer = null;
-                }
-            },
+			/**
+			 * 发送心跳
+			 */
+			sendHeartbeat: function () {
+				if (this.data.wSock && this.data.wSock.readyState === WebSocket.OPEN) {
+					this.sendMessage({ type: 'ping' });
+				}
+			},
 
-            /**
-             * 计划重连
-             */
-            scheduleReconnect: function() {
-                if (this.data.lockReconnect) return;
-                
-                this.data.lockReconnect = true;
-                this.data.reconnectTimer = setTimeout(() => {
-                    console.log('尝试重连WebSocket...');
-                    this.init();
-                    this.data.lockReconnect = false;
-                }, config.reconnectInterval);
-            }
-        };
+			/**
+			 * 重置心跳
+			 */
+			resetHeartbeat: function () {
+				if (this.data.heartbeatTimer) {
+					clearInterval(this.data.heartbeatTimer);
+					this.startHeartbeat();
+				}
+			},
 
-        // 聊天核心功能
-        const chat = {
-            // 数据存储
-            data: {
-                uid: 0,
-                fd: 0,
-                crd: '',
-                rds: [],
-                touid: 0,
-                listtagid: 'PrivateLetter'
-            },
+			/**
+			 * 停止心跳
+			 */
+			stopHeartbeat: function () {
+				if (this.data.heartbeatTimer) {
+					clearInterval(this.data.heartbeatTimer);
+					this.data.heartbeatTimer = null;
+				}
+			},
 
-            /**
-             * 初始化聊天功能
-             */
-            init: function() {
-                this.bindEvents();
-                
-                // 初始化WebSocket连接
-                setTimeout(() => {
-                    if (config.wsserver) {
-                        wsManager.init();
-                    } else {
-                        layer.msg('WebSocket服务器地址未配置', { icon: 2 });
-                    }
-                }, 1000);
-            },
+			/**
+			 * 计划重连
+			 */
+			scheduleReconnect: function () {
+				if (this.data.lockReconnect) return;
 
-            /**
-             * 绑定事件
-             */
-            bindEvents: function() {
-                // 发送按钮点击
-                DOM.sendButton.addEventListener('click', improvedSendMessage);
-                
-                // 移动端菜单切换
-                DOM.mobileBackBtn.addEventListener('click', toggleMobileMenu);
-                
-                // 键盘快捷键
-                document.addEventListener('keydown', (e) => {
-                    // Ctrl+Enter 发送消息
-                    if (e.ctrlKey && e.key === 'Enter' && 
-                        e.target.closest('#msgInput, .message-input')) {
-                        e.preventDefault();
-                        improvedSendMessage();
-                    }
-                });
-                
-                // 窗口大小变化
-                window.addEventListener('resize', handleResize);
-            },
+				this.data.lockReconnect = true;
+				this.data.reconnectTimer = setTimeout(() => {
+					console.log('尝试重连WebSocket...');
+					this.init();
+					this.data.lockReconnect = false;
+				}, config.reconnectInterval);
+			}
+		};
 
-            /**
-             * 处理WebSocket消息
-             * @param {Object} data - 消息数据
-             */
-            handleMessage: function(data) {
-                switch (data.code) {
-                    case 1: // 用户加入
-                        this.handleUserJoin(data.data);
-                        break;
-                    case 2: // 普通消息
-                        this.handleNormalMessage(data.data);
-                        break;
-                    case 3: // 加载历史数据
-                        this.handleLoadHistory(data.data, data.listtagid);
-                        break;
-                    case 4: // 页面初始化
-                        this.handleInitPage(data.data);
-                        break;
-                    case 5: // 房间切换
-                        this.handleRoomChange(data.data);
-                        break;
-                    case 8: // 消息撤回
-                        this.handleRecallMessage(data.data);
-                        break;
-                    default:
-                        console.log('未知消息类型:', data);
-                }
-            },
+		// 聊天核心功能
+		const chat = {
+			// 数据存储
+			data: {
+				uid: 0,
+				fd: 0,
+				crd: '',
+				rds: [],
+				touid: 0,
+				listtagid: 'PrivateLetter'
+			},
 
-            /**
-             * 页面初始化处理
-             * @param {Object} data - 初始化数据
-             */
-            handleInitPage: function(data) {
-                this.initListTags(data.listtags);
-                this.initUsers(data.users);
-                console.log('页面初始化完成');
-            },
+			/**
+			 * 初始化聊天功能
+			 */
+			init: function () {
+				this.bindEvents();
 
-            /**
-             * 初始化列表标签
-             * @param {Array} listtags - 标签列表
-             */
-            initListTags: function(listtags) {
-                // 清空现有列表
-                $('#chat-list').empty();
-                
-                // 添加新的列表项
-                $.each(listtags, function(index, tag) {
-                    const $item = $(`<div class="chat-item" data-listtagid="${tag.listtagid}" onclick="chat.switchChat('${tag.listtagid}')">
+				// 初始化WebSocket连接
+				setTimeout(() => {
+					if (config.wsserver) {
+						wsManager.init();
+					} else {
+						layer.msg('WebSocket服务器地址未配置', { icon: 2 });
+					}
+				}, 1000);
+			},
+
+			/**
+			 * 绑定事件
+			 */
+			bindEvents: function () {
+				// 发送按钮点击
+				DOM.sendButton.addEventListener('click', improvedSendMessage);
+
+				// 移动端菜单切换
+				DOM.mobileBackBtn.addEventListener('click', toggleMobileMenu);
+
+				// 键盘快捷键
+				document.addEventListener('keydown', (e) => {
+					// Ctrl+Enter 发送消息
+					if (e.ctrlKey && e.key === 'Enter' &&
+						e.target.closest('#msgInput, .message-input')) {
+						e.preventDefault();
+						improvedSendMessage();
+					}
+				});
+
+				// 窗口大小变化
+				window.addEventListener('resize', handleResize);
+			},
+
+			/**
+			 * 处理WebSocket消息
+			 * @param {Object} data - 消息数据
+			 */
+			handleMessage: function (data) {
+				switch (data.code) {
+					case 1: // 用户加入
+						this.handleUserJoin(data.data);
+						break;
+					case 2: // 普通消息
+						this.handleNormalMessage(data.data);
+						break;
+					case 3: // 加载历史数据
+						this.handleLoadHistory(data.data, data.listtagid);
+						break;
+					case 4: // 页面初始化
+						this.handleInitPage(data.data);
+						break;
+					case 5: // 房间切换
+						this.handleRoomChange(data.data);
+						break;
+					case 8: // 消息撤回
+						this.handleRecallMessage(data.data);
+						break;
+					default:
+						console.log('未知消息类型:', data);
+				}
+			},
+
+			/**
+			 * 页面初始化处理
+			 * @param {Object} data - 初始化数据
+			 */
+			handleInitPage: function (data) {
+				this.initListTags(data.listtags);
+				this.initUsers(data.users);
+				console.log('页面初始化完成');
+			},
+
+			/**
+			 * 初始化列表标签
+			 * @param {Array} listtags - 标签列表
+			 */
+			initListTags: function (listtags) {
+				// 清空现有列表
+				$('#chat-list').empty();
+
+				// 添加新的列表项
+				$.each(listtags, function (index, tag) {
+					const $item = $(`<div class="chat-item" data-listtagid="${tag.listtagid}" onclick="chat.switchChat('${tag.listtagid}')">
                         <div class="chat-info">
                             <div class="chat-title">${tag.listtagname}</div>
                             <div class="chat-time">${tag.last_time || ''}</div>
                         </div>
                         <div class="chat-unread" id="unread-${tag.listtagid}" style="display:none">0</div>
                     </div>`);
-                    $('#chat-list').append($item);
-                });
-            },
+					$('#chat-list').append($item);
+				});
+			},
 
-            /**
-             * 初始化用户列表
-             * @param {Object} users - 用户列表数据
-             */
-            initUsers: function(users) {
-                // 遍历不同类型的聊天标签
-                for (const listtagId in users) {
-                    const userList = users[listtagId];
-                    
-                    // 根据不同类型处理用户列表
-                    if (Array.isArray(userList)) {
-                        // 如果是数组类型（如群组）
-                        $.each(userList, function(index, userInfo) {
-                            chat.renderConversationItem(listtagId, userInfo, index);
-                        });
-                    } else if (typeof userList === 'object') {
-                        // 如果是对象类型（如私信、好友）
-                        for (const userId in userList) {
-                            const userInfo = userList[userId];
-                            chat.renderConversationItem(listtagId, userInfo, userId);
-                        }
-                    }
-                }
-            },
+			/**
+			 * 初始化用户列表
+			 * @param {Object} users - 用户列表数据
+			 */
+			initUsers: function (users) {
+				// 遍历不同类型的聊天标签
+				for (const listtagId in users) {
+					const userList = users[listtagId];
 
-            /**
-             * 渲染对话项目
-             * @param {string} listtagId - 标签ID
-             * @param {Object} userInfo - 用户信息
-             * @param {string} identifier - 标识符
-             */
-            renderConversationItem: function(listtagId, userInfo, identifier) {
-                // 确保userInfo包含必要的字段
-                const nickname = userInfo.nickname || '未知用户';
-                const headImage = userInfo.head_image || '/static/chat/images/default_avatar.png';
-                const messageCount = userInfo.message_count || 0;
-                const uid = userInfo.uid || identifier;
-                
-                // 创建对话项目元素
-                const conversationItem = $(`
+					// 根据不同类型处理用户列表
+					if (Array.isArray(userList)) {
+						// 如果是数组类型（如群组）
+						$.each(userList, function (index, userInfo) {
+							chat.renderConversationItem(listtagId, userInfo, index);
+						});
+					} else if (typeof userList === 'object') {
+						// 如果是对象类型（如私信、好友）
+						for (const userId in userList) {
+							const userInfo = userList[userId];
+							chat.renderConversationItem(listtagId, userInfo, userId);
+						}
+					}
+				}
+			},
+
+			/**
+			 * 渲染对话项目
+			 * @param {string} listtagId - 标签ID
+			 * @param {Object} userInfo - 用户信息
+			 * @param {string} identifier - 标识符
+			 */
+			renderConversationItem: function (listtagId, userInfo, identifier) {
+				// 确保userInfo包含必要的字段
+				const nickname = userInfo.nickname || '未知用户';
+				const headImage = userInfo.head_image || '/static/chat/images/default_avatar.png';
+				const messageCount = userInfo.message_count || 0;
+				const uid = userInfo.uid || identifier;
+
+				// 创建对话项目元素
+				const conversationItem = $(`
                     <div class="conversation-item" 
                          data-listtagid="${listtagId}" 
                          data-uid="${uid}"
@@ -932,67 +935,67 @@
                         </div>
                     </div>
                 `);
-                
-                DOM.conversationList.appendChild(conversationItem[0]);
-            },
 
-            /**
-             * 选择对话
-             * @param {string} listtagId - 标签ID
-             * @param {number} uid - 用户ID
-             */
-            selectConversation: function(listtagId, uid) {
-                // 更新当前聊天的用户和标签
-                this.data.listtagid = listtagId;
-                this.data.touid = uid;
-                
-                // 切换到对应聊天
-                this.switchChat(listtagId);
-                
-                // 更新选中状态
-                $('.conversation-item').removeClass('active');
-                $(`.conversation-item[data-listtagid="${listtagId}"][data-uid="${uid}"]`).addClass('active');
-                
-                // 如果是私信或好友聊天，加载历史消息
-                if (listtagId === 'PrivateLetter' || listtagId === 'Friends') {
-                    this.loadUserHistory(uid);
-                }
-            },
+				DOM.conversationList.appendChild(conversationItem[0]);
+			},
 
-            /**
-             * 加载用户历史消息
-             * @param {number} uid - 用户ID
-             */
-            loadUserHistory: function(uid) {
-                // 发送请求获取历史消息
-                wsManager.sendMessage({
-                    type: 2, // 假设类型2为请求历史消息
-                    fromuid: this.data.uid,
-                    touid: uid,
-                    listtagid: this.data.listtagid
-                });
-            },
+			/**
+			 * 选择对话
+			 * @param {string} listtagId - 标签ID
+			 * @param {number} uid - 用户ID
+			 */
+			selectConversation: function (listtagId, uid) {
+				// 更新当前聊天的用户和标签
+				this.data.listtagid = listtagId;
+				this.data.touid = uid;
 
-            /**
-             * 处理用户加入
-             * @param {Object} userData - 用户数据
-             */
-            handleUserJoin: function(userData) {
-                // 添加新用户到用户列表
-                this.addUserToList(userData);
-                console.log('用户加入:', userData);
-            },
+				// 切换到对应聊天
+				this.switchChat(listtagId);
 
-            /**
-             * 将用户添加到列表
-             * @param {Object} userData - 用户数据
-             */
-            addUserToList: function(userData) {
-                // 检查用户是否已存在于列表中
-                const $existingUser = $(`.user-item[data-uid="${userData.uid}"]`);
-                if ($existingUser.length === 0) {
-                    // 创建新用户项
-                    const $userItem = $(`
+				// 更新选中状态
+				$('.conversation-item').removeClass('active');
+				$(`.conversation-item[data-listtagid="${listtagId}"][data-uid="${uid}"]`).addClass('active');
+
+				// 如果是私信或好友聊天，加载历史消息
+				if (listtagId === 'PrivateLetter' || listtagId === 'Friends') {
+					this.loadUserHistory(uid);
+				}
+			},
+
+			/**
+			 * 加载用户历史消息
+			 * @param {number} uid - 用户ID
+			 */
+			loadUserHistory: function (uid) {
+				// 发送请求获取历史消息
+				wsManager.sendMessage({
+					type: 2, // 假设类型2为请求历史消息
+					fromuid: this.data.uid,
+					touid: uid,
+					listtagid: this.data.listtagid
+				});
+			},
+
+			/**
+			 * 处理用户加入
+			 * @param {Object} userData - 用户数据
+			 */
+			handleUserJoin: function (userData) {
+				// 添加新用户到用户列表
+				this.addUserToList(userData);
+				console.log('用户加入:', userData);
+			},
+
+			/**
+			 * 将用户添加到列表
+			 * @param {Object} userData - 用户数据
+			 */
+			addUserToList: function (userData) {
+				// 检查用户是否已存在于列表中
+				const $existingUser = $(`.user-item[data-uid="${userData.uid}"]`);
+				if ($existingUser.length === 0) {
+					// 创建新用户项
+					const $userItem = $(`
                         <div class="user-item" 
                              data-uid="${userData.uid}"
                              data-nickname="${userData.nickname}"
@@ -1005,115 +1008,115 @@
                             </div>
                         </div>
                     `);
-                    
-                    // 添加到用户列表
-                    $('#online-users-list').prepend($userItem);
-                } else {
-                    // 更新现有用户的状态
-                    $existingUser.find('.user-status').text(userData.status === 1 ? '在线' : '离线');
-                    $existingUser.find('.avatar').attr('src', userData.head_image);
-                }
-            },
 
-            /**
-             * 根据UID选择用户进行聊天
-             * @param {number} uid - 用户ID
-             */
-            selectUserByUid: function(uid) {
-                // 查找该用户所属的列表标签
-                const $userItem = $(`.user-item[data-uid="${uid}"]`);
-                const listtagid = $userItem.data('listtagid') || 'PrivateLetter'; // 默认为私信
-                
-                this.selectConversation(listtagid, uid);
-            },
+					// 添加到用户列表
+					$('#online-users-list').prepend($userItem);
+				} else {
+					// 更新现有用户的状态
+					$existingUser.find('.user-status').text(userData.status === 1 ? '在线' : '离线');
+					$existingUser.find('.avatar').attr('src', userData.head_image);
+				}
+			},
 
-            /**
-             * 处理普通消息
-             * @param {Object} msgData - 消息数据
-             */
-            handleNormalMessage: function(msgData) {
-                // 创建消息发送者对象
-                const sender = {
-                    uid: msgData.fromuid,
-                    nickname: msgData.nickname,
-                    head_image: msgData.head_image
-                };
-                
-                this.addMessageToChat(msgData.content, sender, msgData.listtagid);
-                this.playNotificationSound();
-                this.updateUnreadCount(msgData.listtagid);
-            },
+			/**
+			 * 根据UID选择用户进行聊天
+			 * @param {number} uid - 用户ID
+			 */
+			selectUserByUid: function (uid) {
+				// 查找该用户所属的列表标签
+				const $userItem = $(`.user-item[data-uid="${uid}"]`);
+				const listtagid = $userItem.data('listtagid') || 'PrivateLetter'; // 默认为私信
 
-            /**
-             * 处理历史消息加载
-             * @param {Array} historyData - 历史消息数据
-             * @param {string} listtagid - 标签ID
-             */
-            handleLoadHistory: function(historyData, listtagid) {
-                // 确保有listtagid参数
-                if (!listtagid) {
-                    console.error('handleLoadHistory: 缺少listtagid参数');
-                    return;
-                }
-                
-                // 创建/获取聊天容器
-                const chatContainer = utils.createChatContainer(listtagid);
-                
-                // 清空当前聊天容器
-                chatContainer.empty();
-                
-                // 遍历历史消息添加到聊天界面
-                if (Array.isArray(historyData)) {
-                    historyData.forEach(msg => {
-                        // 创建消息发送者对象
-                        const sender = {
-                            uid: msg.fromuid,
-                            nickname: msg.nickname,
-                            head_image: msg.head_image
-                        };
-                        
-                        this.addMessageToChat(msg.content, sender, listtagid);
-                    });
-                }
-                
-                // 滚动到底部
-                this.scrollToBottom(chatContainer);
-            },
+				this.selectConversation(listtagid, uid);
+			},
 
-            /**
-             * 处理房间切换
-             * @param {Object} roomData - 房间数据
-             */
-            handleRoomChange: function(roomData) {
-                this.data.crd = roomData.listtagid;
-                console.log('房间切换至:', roomData.listtagid);
-            },
+			/**
+			 * 处理普通消息
+			 * @param {Object} msgData - 消息数据
+			 */
+			handleNormalMessage: function (msgData) {
+				// 创建消息发送者对象
+				const sender = {
+					uid: msgData.fromuid,
+					nickname: msgData.nickname,
+					head_image: msgData.head_image
+				};
 
-            /**
-             * 处理消息撤回
-             * @param {Object} msgData - 消息数据
-             */
-            handleRecallMessage: function(msgData) {
-                console.log('消息撤回:', msgData);
-                layer.msg('一条消息已被撤回', { icon: 7, time: 1500 });
-            },
+				this.addMessageToChat(msgData.content, sender, msgData.listtagid);
+				this.playNotificationSound();
+				this.updateUnreadCount(msgData.listtagid);
+			},
 
-            /**
-             * 添加消息到聊天界面
-             * @param {string} content - 消息内容
-             * @param {Object} sender - 发送者信息
-             * @param {string} listtagid - 标签ID
-             */
-            addMessageToChat: function(content, sender, listtagid) {
-                // 创建/获取聊天容器
-                const chatContainer = utils.createChatContainer(listtagid);
-                
-                // 判断是否为当前用户发送的消息
-                const isCurrentUser = sender.uid == this.data.uid;
-                const messageClass = isCurrentUser ? 'user-message' : 'ai-message';
-                
-                // 创建消息元素
-                const messageElement = $(`
+			/**
+			 * 处理历史消息加载
+			 * @param {Array} historyData - 历史消息数据
+			 * @param {string} listtagid - 标签ID
+			 */
+			handleLoadHistory: function (historyData, listtagid) {
+				// 确保有listtagid参数
+				if (!listtagid) {
+					console.error('handleLoadHistory: 缺少listtagid参数');
+					return;
+				}
+
+				// 创建/获取聊天容器
+				const chatContainer = utils.createChatContainer(listtagid);
+
+				// 清空当前聊天容器
+				chatContainer.empty();
+
+				// 遍历历史消息添加到聊天界面
+				if (Array.isArray(historyData)) {
+					historyData.forEach(msg => {
+						// 创建消息发送者对象
+						const sender = {
+							uid: msg.fromuid,
+							nickname: msg.nickname,
+							head_image: msg.head_image
+						};
+
+						this.addMessageToChat(msg.content, sender, listtagid);
+					});
+				}
+
+				// 滚动到底部
+				this.scrollToBottom(chatContainer);
+			},
+
+			/**
+			 * 处理房间切换
+			 * @param {Object} roomData - 房间数据
+			 */
+			handleRoomChange: function (roomData) {
+				this.data.crd = roomData.listtagid;
+				console.log('房间切换至:', roomData.listtagid);
+			},
+
+			/**
+			 * 处理消息撤回
+			 * @param {Object} msgData - 消息数据
+			 */
+			handleRecallMessage: function (msgData) {
+				console.log('消息撤回:', msgData);
+				layer.msg('一条消息已被撤回', { icon: 7, time: 1500 });
+			},
+
+			/**
+			 * 添加消息到聊天界面
+			 * @param {string} content - 消息内容
+			 * @param {Object} sender - 发送者信息
+			 * @param {string} listtagid - 标签ID
+			 */
+			addMessageToChat: function (content, sender, listtagid) {
+				// 创建/获取聊天容器
+				const chatContainer = utils.createChatContainer(listtagid);
+
+				// 判断是否为当前用户发送的消息
+				const isCurrentUser = sender.uid == this.data.uid;
+				const messageClass = isCurrentUser ? 'user-message' : 'ai-message';
+
+				// 创建消息元素
+				const messageElement = $(`
                     <div class="message ${messageClass}">
                         <div class="message-bubble">
                             <div class="message-content">${content}</div>
@@ -1121,296 +1124,297 @@
                         </div>
                     </div>
                 `);
-                
-                // 添加消息到容器
-                chatContainer.append(messageElement);
-                
-                // 滚动到底部
-                this.scrollToBottom(chatContainer);
-            },
 
-            /**
-             * 滚动到聊天底部
-             * @param {jQuery} container - 聊天容器
-             */
-            scrollToBottom: function(container) {
-                if (container && container.length > 0) {
-                    container.animate({ scrollTop: container[0].scrollHeight }, 300);
-                }
-            },
+				// 添加消息到容器
+				chatContainer.append(messageElement);
 
-            /**
-             * 更新未读消息数
-             * @param {string} listtagid - 标签ID
-             */
-            updateUnreadCount: function(listtagid) {
-                if (this.data.crd !== listtagid) { // 只有不在当前聊天窗口才增加未读数
-                    const $unreadBadge = $(`#unread-${listtagid}`);
-                    let count = parseInt($unreadBadge.text()) || 0;
-                    count++;
-                    $unreadBadge.text(count);
-                    $unreadBadge.show();
-                }
-            },
+				// 滚动到底部
+				this.scrollToBottom(chatContainer);
+			},
 
-            /**
-             * 播放通知声音
-             */
-            playNotificationSound: function() {
-                try {
-                    const audio = new Audio('/static/chat/voices/notify.mp3');
-                    audio.play().catch(e => console.log('音频播放失败:', e));
-                } catch (e) {
-                    console.log('创建音频失败:', e);
-                }
-            },
+			/**
+			 * 滚动到聊天底部
+			 * @param {jQuery} container - 聊天容器
+			 */
+			scrollToBottom: function (container) {
+				if (container && container.length > 0) {
+					container.animate({ scrollTop: container[0].scrollHeight }, 300);
+				}
+			},
 
-            /**
-             * 切换聊天
-             * @param {string} listtagid - 标签ID
-             */
-            switchChat: function(listtagid) {
-                // 创建/获取聊天容器
-                utils.createChatContainer(listtagid);
-                
-                // 隐藏所有聊天容器
-                $('.chat-content-inner').hide();
-                
-                // 显示目标聊天容器
-                $(`#chatContent-${listtagid}`).show();
-                
-                // 更新当前聊天ID
-                this.data.listtagid = listtagid;
-                this.data.crd = listtagid;
-                
-                // 更新选中状态
-                $('.chat-item').removeClass('active');
-                $(`[data-listtagid="${listtagid}"]`).addClass('active');
-                
-                // 隐藏未读消息数
-                $(`#unread-${listtagid}`).hide();
-                $(`#unread-${listtagid}`).text('0');
-            }
-        };
+			/**
+			 * 更新未读消息数
+			 * @param {string} listtagid - 标签ID
+			 */
+			updateUnreadCount: function (listtagid) {
+				if (this.data.crd !== listtagid) { // 只有不在当前聊天窗口才增加未读数
+					const $unreadBadge = $(`#unread-${listtagid}`);
+					let count = parseInt($unreadBadge.text()) || 0;
+					count++;
+					$unreadBadge.text(count);
+					$unreadBadge.show();
+				}
+			},
 
-        // 改进的消息发送功能
-        function improvedSendMessage() {
-            // 获取消息内容
-            let content = '';
-            
-            // 检查是否有编辑器实例
-            if (typeof editor !== 'undefined' && editor && editor.txt) {
-                content = editor.txt.html().trim();
-            } else {
-                // 尝试从消息输入框获取内容
-                const $msgInput = $('#msgInput');
-                if ($msgInput.length) {
-                    content = $msgInput.html().trim();
-                }
-            }
-            
-            if (!content || content === '<p><br></p>') {
-                layer.msg('请输入消息内容', { icon: 2 });
-                return;
-            }
-            
-            // 禁用发送按钮
-            const $sendBtn = $('#sendButton');
-            if ($sendBtn.hasClass('disabled')) {
-                return;
-            }
-            
-            $sendBtn.addClass('disabled').text('发送中...');
-            
-            try {
-                // 构建消息数据
-                const messageData = {
-                    type: 2,
-                    content: content,
-                    fromuid: chat.data.uid,
-                    touid: chat.data.touid,
-                    listtagid: chat.data.listtagid
-                };
-                
-                // 发送消息
-                wsManager.sendMessage(messageData);
-                
-                // 清空编辑器
-                if (typeof editor !== 'undefined' && editor && editor.txt) {
-                    editor.txt.clear();
-                } else {
-                    const $msgInput = $('#msgInput');
-                    if ($msgInput.length) {
-                        $msgInput.html('');
-                    }
-                }
-                
-                // 恢复发送按钮状态
-                setTimeout(() => {
-                    $sendBtn.removeClass('disabled').text('发送');
-                }, 500);
-            } catch (e) {
-                console.error('发送消息失败:', e);
-                layer.msg('发送失败，请重试', { icon: 2 });
-                $sendBtn.removeClass('disabled').text('发送');
-            }
-        }
+			/**
+			 * 播放通知声音
+			 */
+			playNotificationSound: function () {
+				try {
+					const audio = new Audio('/static/chat/voices/notify.mp3');
+					audio.play().catch(e => console.log('音频播放失败:', e));
+				} catch (e) {
+					console.log('创建音频失败:', e);
+				}
+			},
 
-        // 移动端菜单切换
-        function toggleMobileMenu() {
-            if (!utils.isMobile()) return;
-            
-            const $menuPanel = $('#menuPanel');
-            const $contentPanel = $('.content-panel');
-            
-            if ($menuPanel.hasClass('active')) {
-                $menuPanel.removeClass('active');
-                $contentPanel.show();
-            } else {
-                $menuPanel.addClass('active');
-                $contentPanel.hide();
-            }
-        }
+			/**
+			 * 切换聊天
+			 * @param {string} listtagid - 标签ID
+			 */
+			switchChat: function (listtagid) {
+				// 创建/获取聊天容器
+				utils.createChatContainer(listtagid);
 
-        // 响应式处理
-        function handleResize() {
-            if (window.innerWidth <= 768) {
-                $('#mobileToggleMenu').show();
-            } else {
-                $('#mobileToggleMenu').hide();
-                $('#menuPanel').show();
-                $('.content-panel').show();
-            }
-        }
+				// 隐藏所有聊天容器
+				$('.chat-content-inner').hide();
 
-        // 页面加载完成后初始化
-        $(document).ready(function() {
-            // 初始化聊天功能
-            chat.init();
-            
-            // 消息搜索
-            $('#searchMessages').on('input', function() {
-                searchMessages($(this).val());
-            });
-            
-            // 表情选择
-            $('#emojiPicker').on('click', '.emoji-item', function() {
-                insertEmoji($(this).data('emoji'));
-            });
-            
-            // 设置消息右键菜单
-            setupMessageContextMenu();
-        });
+				// 显示目标聊天容器
+				$(`#chatContent-${listtagid}`).show();
 
-        // 其他功能函数（保持原有逻辑）
-        function searchMessages(keyword) {
-            const $allMessages = $('.message-content');
-            $allMessages.each(function() {
-                const $msgEl = $(this);
-                const messageText = $msgEl.text();
-                
-                if (keyword === '') {
-                    $msgEl.closest('.message-item').removeClass('highlight-search-result');
-                } else if (messageText.toLowerCase().includes(keyword.toLowerCase())) {
-                    $msgEl.closest('.message-item').addClass('highlight-search-result');
-                } else {
-                    $msgEl.closest('.message-item').removeClass('highlight-search-result');
-                }
-            });
-        }
+				// 更新当前聊天ID
+				this.data.listtagid = listtagid;
+				this.data.crd = listtagid;
 
-        function recallMessage($messageItem) {
-            layer.confirm('确定要撤回这条消息吗？', {
-                icon: 3,
-                title: '消息撤回'
-            }, function(index) {
-                const messageData = {
-                    type: 8, // 消息撤回类型
-                    messageId: $messageItem.data('message-id'),
-                    fromuid: chat.data.uid
-                };
-                
-                wsManager.sendMessage(messageData);
-                layer.close(index);
-            });
-        }
+				// 更新选中状态
+				$('.chat-item').removeClass('active');
+				$(`[data-listtagid="${listtagid}"]`).addClass('active');
 
-        function copyMessageContent(content) {
-            if (navigator.clipboard) {
-                navigator.clipboard.writeText(content)
-                    .then(() => {
-                        layer.msg('已复制到剪贴板', { icon: 1 });
-                    })
-                    .catch(err => {
-                        console.error('复制失败:', err);
-                        fallbackCopyTextToClipboard(content);
-                    });
-            } else {
-                fallbackCopyTextToClipboard(content);
-            }
-        }
+				// 隐藏未读消息数
+				$(`#unread-${listtagid}`).hide();
+				$(`#unread-${listtagid}`).text('0');
+			}
+		};
 
-        function fallbackCopyTextToClipboard(text) {
-            const $tempTextarea = $('<textarea>');
-            $('body').append($tempTextarea);
-            $tempTextarea.val(text).select();
-            
-            try {
-                const successful = document.execCommand('copy');
-                if (successful) {
-                    layer.msg('已复制到剪贴板', { icon: 1 });
-                } else {
-                    layer.msg('复制失败', { icon: 2 });
-                }
-            } catch (err) {
-                console.error('复制失败:', err);
-                layer.msg('复制失败', { icon: 2 });
-            }
-            $tempTextarea.remove();
-        }
+		// 改进的消息发送功能
+		function improvedSendMessage() {
+			// 获取消息内容
+			let content = '';
 
-        function insertEmoji(emoji) {
-            let currentContent = '';
-            
-            // 检查是否有编辑器实例
-            if (typeof editor !== 'undefined' && editor && editor.txt) {
-                currentContent = editor.txt.html();
-                editor.txt.html(currentContent + emoji + '&nbsp;');
-            } else {
-                // 尝试从消息输入框获取内容
-                const $msgInput = $('#msgInput');
-                if ($msgInput.length) {
-                    currentContent = $msgInput.html();
-                    $msgInput.html(currentContent + emoji + '&nbsp;');
-                }
-            }
-        }
+			// 检查是否有编辑器实例
+			if (typeof editor !== 'undefined' && editor && editor.txt) {
+				content = editor.txt.html().trim();
+			} else {
+				// 尝试从消息输入框获取内容
+				const $msgInput = $('#msgInput');
+				if ($msgInput.length) {
+					content = $msgInput.html().trim();
+				}
+			}
 
-        function setupMessageContextMenu() {
-            $(document).on('contextmenu', '.message', function(e) {
-                e.preventDefault();
-                
-                const $messageItem = $(this);
-                const messageContent = $messageItem.find('.message-content').text();
-                
-                // 移除之前的菜单
-                $('.message-context-menu').remove();
-                
-                const $contextMenu = $(`
+			if (!content || content === '<p><br></p>') {
+				layer.msg('请输入消息内容', { icon: 2 });
+				return;
+			}
+
+			// 禁用发送按钮
+			const $sendBtn = $('#sendButton');
+			if ($sendBtn.hasClass('disabled')) {
+				return;
+			}
+
+			$sendBtn.addClass('disabled').text('发送中...');
+
+			try {
+				// 构建消息数据
+				const messageData = {
+					type: 2,
+					content: content,
+					fromuid: chat.data.uid,
+					touid: chat.data.touid,
+					listtagid: chat.data.listtagid
+				};
+
+				// 发送消息
+				wsManager.sendMessage(messageData);
+
+				// 清空编辑器
+				if (typeof editor !== 'undefined' && editor && editor.txt) {
+					editor.txt.clear();
+				} else {
+					const $msgInput = $('#msgInput');
+					if ($msgInput.length) {
+						$msgInput.html('');
+					}
+				}
+
+				// 恢复发送按钮状态
+				setTimeout(() => {
+					$sendBtn.removeClass('disabled').text('发送');
+				}, 500);
+			} catch (e) {
+				console.error('发送消息失败:', e);
+				layer.msg('发送失败，请重试', { icon: 2 });
+				$sendBtn.removeClass('disabled').text('发送');
+			}
+		}
+
+		// 移动端菜单切换
+		function toggleMobileMenu() {
+			if (!utils.isMobile()) return;
+
+			const $menuPanel = $('#menuPanel');
+			const $contentPanel = $('.content-panel');
+
+			if ($menuPanel.hasClass('active')) {
+				$menuPanel.removeClass('active');
+				$contentPanel.show();
+			} else {
+				$menuPanel.addClass('active');
+				$contentPanel.hide();
+			}
+		}
+
+		// 响应式处理
+		function handleResize() {
+			if (window.innerWidth <= 768) {
+				$('#mobileToggleMenu').show();
+			} else {
+				$('#mobileToggleMenu').hide();
+				$('#menuPanel').show();
+				$('.content-panel').show();
+			}
+		}
+
+		// 页面加载完成后初始化
+		$(document).ready(function () {
+			// 初始化聊天功能
+			chat.init();
+
+			// 消息搜索
+			$('#searchMessages').on('input', function () {
+				searchMessages($(this).val());
+			});
+
+			// 表情选择
+			$('#emojiPicker').on('click', '.emoji-item', function () {
+				insertEmoji($(this).data('emoji'));
+			});
+
+			// 设置消息右键菜单
+			setupMessageContextMenu();
+		});
+
+		// 其他功能函数（保持原有逻辑）
+		function searchMessages(keyword) {
+			const $allMessages = $('.message-content');
+			$allMessages.each(function () {
+				const $msgEl = $(this);
+				const messageText = $msgEl.text();
+
+				if (keyword === '') {
+					$msgEl.closest('.message-item').removeClass('highlight-search-result');
+				} else if (messageText.toLowerCase().includes(keyword.toLowerCase())) {
+					$msgEl.closest('.message-item').addClass('highlight-search-result');
+				} else {
+					$msgEl.closest('.message-item').removeClass('highlight-search-result');
+				}
+			});
+		}
+
+		function recallMessage($messageItem) {
+			layer.confirm('确定要撤回这条消息吗？', {
+				icon: 3,
+				title: '消息撤回'
+			}, function (index) {
+				const messageData = {
+					type: 8, // 消息撤回类型
+					messageId: $messageItem.data('message-id'),
+					fromuid: chat.data.uid
+				};
+
+				wsManager.sendMessage(messageData);
+				layer.close(index);
+			});
+		}
+
+		function copyMessageContent(content) {
+			if (navigator.clipboard) {
+				navigator.clipboard.writeText(content)
+					.then(() => {
+						layer.msg('已复制到剪贴板', { icon: 1 });
+					})
+					.catch(err => {
+						console.error('复制失败:', err);
+						fallbackCopyTextToClipboard(content);
+					});
+			} else {
+				fallbackCopyTextToClipboard(content);
+			}
+		}
+
+		function fallbackCopyTextToClipboard(text) {
+			const $tempTextarea = $('<textarea>');
+			$('body').append($tempTextarea);
+			$tempTextarea.val(text).select();
+
+			try {
+				const successful = document.execCommand('copy');
+				if (successful) {
+					layer.msg('已复制到剪贴板', { icon: 1 });
+				} else {
+					layer.msg('复制失败', { icon: 2 });
+				}
+			} catch (err) {
+				console.error('复制失败:', err);
+				layer.msg('复制失败', { icon: 2 });
+			}
+			$tempTextarea.remove();
+		}
+
+		function insertEmoji(emoji) {
+			let currentContent = '';
+
+			// 检查是否有编辑器实例
+			if (typeof editor !== 'undefined' && editor && editor.txt) {
+				currentContent = editor.txt.html();
+				editor.txt.html(currentContent + emoji + '&nbsp;');
+			} else {
+				// 尝试从消息输入框获取内容
+				const $msgInput = $('#msgInput');
+				if ($msgInput.length) {
+					currentContent = $msgInput.html();
+					$msgInput.html(currentContent + emoji + '&nbsp;');
+				}
+			}
+		}
+
+		function setupMessageContextMenu() {
+			$(document).on('contextmenu', '.message', function (e) {
+				e.preventDefault();
+
+				const $messageItem = $(this);
+				const messageContent = $messageItem.find('.message-content').text();
+
+				// 移除之前的菜单
+				$('.message-context-menu').remove();
+
+				const $contextMenu = $(`
                     <div class="message-context-menu" style="position:fixed;top:${e.pageY}px;left:${e.pageX}px;">
                         <div class="context-menu-item" onclick="copyMessageContent('${messageContent.replace(/'/g, "\\'")}')">复制消息</div>
                         <div class="context-menu-item" onclick="recallMessage($messageItem)">撤回消息</div>
                     </div>
                 `);
-                
-                $('body').append($contextMenu);
-                
-                // 点击其他地方关闭菜单
-                $(document).one('click', function() {
-                    $('.message-context-menu').remove();
-                });
-            });
-        }
-    </script>
+
+				$('body').append($contextMenu);
+
+				// 点击其他地方关闭菜单
+				$(document).one('click', function () {
+					$('.message-context-menu').remove();
+				});
+			});
+		}
+	</script>
 </body>
+
 </html>
