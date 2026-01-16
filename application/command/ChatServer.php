@@ -79,6 +79,7 @@ class ChatServer extends Command
             $funcArr = [
                 // type 0 默认方法
                 'index',
+                'none',
                 // 在线聊天
                 'chatOnline',
                 // 聊天记录
