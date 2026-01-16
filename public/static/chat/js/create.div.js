@@ -1,3 +1,5 @@
+/* 优化create.div.js中的DOM生成结构 */
+
 /*创建div dom*/
 var cdiv = {
 	userlists : function(listtagid,is_none){
@@ -7,7 +9,7 @@ var cdiv = {
 	},
 	chatlists : function(listtagid,is_none){
 		var arr = [];
-		arr = [ '<div class="msg-items" id="chatLineHolder-'+listtagid+'" style="display:',is_none,'"></div>'];
+		arr = [ '<div class="msg-items" id="chatLineHolder-',listtagid,'" style="display:',is_none,'"></div>'];
 		return arr.join('');
 	},
 	render : function(template,params){
@@ -15,24 +17,52 @@ var cdiv = {
 		switch(template){
 			case 'mymessage':
 				arr = [
-					'<div style="display: block;" class="msg-box"><div class="chat-item me"><div class="clearfix"><div class="head_image"><div class="normal user-head_image" style="background-image: url(',params.head_image,');"></div></div><div class="msg-bubble-box"><div class="msg-bubble-area"><div><div class="msg-bubble"><pre class="text">', params.content,'</pre></div></div></div></div></div></div></div>'
+					'<div class="msg-item right">',
+					'<div class="msg-avatar" style="background-image: url(',params.head_image,'); background-size: cover; background-position: center;"></div>',
+					'<div class="msg-content-wrapper">',
+					'<div class="msg-bubble">', params.content,'</div>',
+					'<div class="msg-time" data-ctime="',params.create_time,'">', params.ctime, '</div>',
+					'</div>',
+					'</div>'
 				];
 			break;
 			
 			case 'chatLine':
 				arr = [
-					'<div style="display: block;" class="msg-box"><div class="chat-item not-me"><div class="chat-profile-info clearfix"><span class="profile-wrp"><span class="name clearfix"><span class="name-text">',params.nickname,'</span></span></span><span class="chat-time" data-ctime="',params.create_time,'">',params.ctime,'</span></div><div class="clearfix"><div class="head_image"><div class="normal user-head_image" onclick="chat.clickUser(this)" uid="',params.touid,'" uname="',params.nickname,'" style="background-image: url(\'',params.head_image,'\');"></div></div><div class="msg-bubble-box"><div class="msg-bubble-area"><div class="msg-bubble"><pre class="text">',params.content,'</pre></div></div></div></div></div></div>'
+					'<div class="msg-item left">',
+					'<div class="msg-avatar" style="background-image: url(',params.head_image,'); background-size: cover; background-position: center;"></div>',
+					'<div class="msg-content-wrapper">',
+					'<div class="msg-bubble">',params.content,'</div>',
+					'<div class="msg-time" data-ctime="',params.create_time,'">',params.ctime,'</div>',
+					'</div>',
+					'</div>'
 				];
 			break;
 			
 			case 'user':
 				if (params.message_count) {
 					arr = [
-						'<div id=\'user-',params.listtagid,'-',params.uid,'\' listtagid="',params.listtagid,'" uid="',params.uid,'" onclick="chat.changeUser(this)" uname="',params.nickname,'" class="list-item conv-item context-menu conv-item-company"><i class="iconfont icon-delete-conv tipper-attached"></i><div class="head_image-wrap"><div class="group-head_image"><div class="normal group-logo-head_image" style="background-image: url(',params.head_image,');"></div></div></div><div class="conv-item-content"><div class="title-wrap info"><div class="name-wrap"><p class="name">',params.nickname,'</p></div></div></div><span class="layui-badge" style="font-size:10px" id="message-',params.listtagid,'-',params.uid,'">未读</span></div>'
+						'<div id=\'user-',params.listtagid,'-',params.uid,'\' listtagid="',params.listtagid,'" uid="',params.uid,'" onclick="chat.changeUser(this)" uname="',params.nickname,'" class="conv-item">',
+						'<div class="conv-avatar" style="background-image: url(',params.head_image,'); background-size: cover; background-position: center;"></div>',
+						'<div class="conv-info">',
+						'<div class="conv-name">',params.nickname,'</div>',
+						'<div class="conv-preview">',params.content ? params.content.substring(0, 30) + (params.content.length > 30 ? '...' : '') : '','</div>',
+						'</div>',
+						'<div class="conv-time">',params.ctime ? params.ctime : '','</div>',
+						'<span class="layui-badge" style="font-size:10px" id="message-',params.listtagid,'-',params.uid,'">未读</span>',
+						'</div>'
 					];
 				} else {
 					arr = [
-						'<div id=\'user-',params.listtagid,'-',params.uid,'\' listtagid="',params.listtagid,'" uid="',params.uid,'" onclick="chat.changeUser(this)" uname="',params.nickname,'" class="list-item conv-item context-menu conv-item-company"><i class="iconfont icon-delete-conv tipper-attached"></i><div class="head_image-wrap"><div class="group-head_image"><div class="normal group-logo-head_image" style="background-image: url(',params.head_image,');"></div></div></div><div class="conv-item-content"><div class="title-wrap info"><div class="name-wrap"><p class="name">',params.nickname,'</p></div></div></div><span class="layui-badge" style="display:none; font-size:10px" id="message-',params.listtagid,'-',params.uid,'">未读</span></div>'
+						'<div id=\'user-',params.listtagid,'-',params.uid,'\' listtagid="',params.listtagid,'" uid="',params.uid,'" onclick="chat.changeUser(this)" uname="',params.nickname,'" class="conv-item">',
+						'<div class="conv-avatar" style="background-image: url(',params.head_image,'); background-size: cover; background-position: center;"></div>',
+						'<div class="conv-info">',
+						'<div class="conv-name">',params.nickname,'</div>',
+						'<div class="conv-preview">',params.content ? params.content.substring(0, 30) + (params.content.length > 30 ? '...' : '') : '','</div>',
+						'</div>',
+						'<div class="conv-time">',params.ctime ? params.ctime : '','</div>',
+						'<span class="layui-badge" style="display:none; font-size:10px" id="message-',params.listtagid,'-',params.uid,'">未读</span>',
+						'</div>'
 					];
 				}
 				
@@ -40,11 +70,27 @@ var cdiv = {
 			case 'group':
 				if (params.message_count) {
 					arr = [
-						'<div id=\'group-',params.listtagid,'-',params.groupid,'\' listtagid="',params.listtagid,'" groupid="',params.groupid,'" onclick="chat.changeGroup(this)" uname="',params.groupname,'" class="list-item conv-item context-menu conv-item-company"><i class="iconfont icon-delete-conv tipper-attached"></i><div class="head_image-wrap"><div class="group-head_image"><div class="normal group-logo-head_image" style="background-image: url(',params.head_image,');"></div></div></div><div class="conv-item-content"><div class="title-wrap info"><div class="name-wrap"><p class="name">',params.groupname,'</p></div></div></div><span class="layui-badge" style="font-size:10px" id="message-',params.listtagid,'-',params.groupid,'">未读</span></div>'
+						'<div id=\'group-',params.listtagid,'-',params.groupid,'\' listtagid="',params.listtagid,'" groupid="',params.groupid,'" onclick="chat.changeGroup(this)" uname="',params.groupname,'" class="conv-item">',
+						'<div class="conv-avatar" style="background-image: url(',params.head_image,'); background-size: cover; background-position: center;"></div>',
+						'<div class="conv-info">',
+						'<div class="conv-name">',params.groupname,'</div>',
+						'<div class="conv-preview">',params.content ? params.content.substring(0, 30) + (params.content.length > 30 ? '...' : '') : '','</div>',
+						'</div>',
+						'<div class="conv-time">',params.ctime ? params.ctime : '','</div>',
+						'<span class="layui-badge" style="font-size:10px" id="message-',params.listtagid,'-',params.groupid,'">未读</span>',
+						'</div>'
 					];
 				} else {
 					arr = [
-						'<div id=\'group-',params.listtagid,'-',params.groupid,'\' listtagid="',params.listtagid,'" groupid="',params.groupid,'" onclick="chat.changeGroup(this)" uname="',params.groupname,'" class="list-item conv-item context-menu conv-item-company"><i class="iconfont icon-delete-conv tipper-attached"></i><div class="head_image-wrap"><div class="group-head_image"><div class="normal group-logo-head_image" style="background-image: url(',params.head_image,');"></div></div></div><div class="conv-item-content"><div class="title-wrap info"><div class="name-wrap"><p class="name">',params.groupname,'</p></div></div></div><span class="layui-badge" style="display:none; font-size:10px" id="message-',params.listtagid,'-',params.groupid,'">未读</span></div>'
+						'<div id=\'group-',params.listtagid,'-',params.groupid,'\' listtagid="',params.listtagid,'" groupid="',params.groupid,'" onclick="chat.changeGroup(this)" uname="',params.groupname,'" class="conv-item">',
+						'<div class="conv-avatar" style="background-image: url(',params.head_image,'); background-size: cover; background-position: center;"></div>',
+						'<div class="conv-info">',
+						'<div class="conv-name">',params.groupname,'</div>',
+						'<div class="conv-preview">',params.content ? params.content.substring(0, 30) + (params.content.length > 30 ? '...' : '') : '','</div>',
+						'</div>',
+						'<div class="conv-time">',params.ctime ? params.ctime : '','</div>',
+						'<span class="layui-badge" style="display:none; font-size:10px" id="message-',params.listtagid,'-',params.groupid,'">未读</span>',
+						'</div>'
 					];
 				}
 				
