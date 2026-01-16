@@ -55,7 +55,7 @@ class Index extends Controller
         $this->assign('messageChatId', $messageChatId);
         $this->assign('channelMessageChatId', $channelMessageChatId);
         $this->assign('fromuid', $fromuid);
-        return $this->fetch('mobile');
+        return $this->fetch('pc');
     }
 
     protected function checkPrivate($touid, $fromuid)

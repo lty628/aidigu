@@ -5,14 +5,19 @@ namespace app\chat\libs;
 class TagInfo
 {
 
-    public static function getTagInfo($uid)
+    public static function index($server, $frame, $frameData)
     {
+        $uid = $frameData['uid'] ?? 0;
+        if (!$uid) {
+            $server->push($frame->fd, 'pong');
+            return;
+        }
         $data['Friends'] = self::friendList($uid);
         $data['PrivateLetter'] = self::privateLetterList($uid);
         $data['Group'] = self::groupList($uid);
         $data['MessageChat'] = self::messageChatList($uid);
 
-        return [
+        $info = [
             'code' => 4,
             'msg' => 'success',
             'data' => [
@@ -21,6 +26,7 @@ class TagInfo
                 'users' => $data
             ]
         ];
+        $server->push($frame->fd, json_encode($info, 320));
     }
 
     // 好友列表

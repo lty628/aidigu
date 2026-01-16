@@ -57,7 +57,7 @@ class ChatServer extends Command
         $uid = $loginUserInfo['uid'];
         \app\common\libs\Remind::clean($uid, 'chat');
         // 好友列表
-        $friendList = \app\chat\libs\TagInfo::getTagInfo($uid);
+        // $friendList = \app\chat\libs\TagInfo::getTagInfo($uid);
         $data['fd'] = $request->fd;
         $data['uid'] = $uid;
         $data['online_time'] = time();
@@ -67,7 +67,7 @@ class ChatServer extends Command
             'msg' => 'success',
             'data' => $loginUserInfo
         ], 320));
-        $server->push($request->fd, json_encode($friendList, 320));
+        // $server->push($request->fd, json_encode($friendList, 320));
     }
 
     public function onMessage($server, $frame)
@@ -77,8 +77,8 @@ class ChatServer extends Command
         } else {
             $frameData = json_decode($frame->data, true);
             $funcArr = [
-                'none',
-                'login',
+                // type 0 默认方法
+                'index',
                 // 在线聊天
                 'chatOnline',
                 // 聊天记录

@@ -197,6 +197,7 @@ login		: false,
 				chat.doLogin( name , email );
 			}
 			*/
+			chat.data.uid = $("#fromuid").val()
 			var messageChatId = $("#messageChatId").val()
 			var channelMessageChatId = $("#channelMessageChatId").val()
 			var privateToUid = $("#privateToUid").val()
@@ -213,11 +214,13 @@ login		: false,
 				$("#menu-pannel").hide();
 				chat.privateChat(privateToUid)
 			}
+			var json = {"type": 0, "listtagid": 'TagInfo', "uid": chat.data.uid};
+			chat.wsSend(JSON.stringify(json));
 		}
 	},
 	sendMedia: function(data) {
 		var text = data.media_info+'.'+ data.media_type
-		chat.data.type = 2; //发送消息标志
+		chat.data.type = 0; //发送消息标志
 		var json = {"type": chat.data.type, "listtagid": chat.data.listtagid, "content": text, 'content_type': data.media_type, "touid": chat.data.touid, 'head_image': chat.data.head_image, 'nickname': chat.data.nickname, 'fromuid': chat.data.uid, 'groupid': chat.data.groupid};
 		chat.wsSend(JSON.stringify(json));
 	},
