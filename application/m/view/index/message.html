@@ -34,6 +34,8 @@
 		</div> -->
 	</div>
 	{/foreach}
+	<iframe id="iframe-comment-{$message.msg_id}" style="width: 100%;border:none;min-height: 600px;" name="commentFrame" src="/tools/comment/index/?msg_id={$message.msg_id}"></iframe>
+
 	{if isset($messageBlock[0])}
 	{foreach $messageBlock as $block}
 	<div  class="comment-body">
