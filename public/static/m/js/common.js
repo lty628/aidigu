@@ -189,7 +189,7 @@ function comdel(url){
 								+ '<h2><a href="/' +userInfo.blog + '/own/">' +userInfo.nickname + '</a></h2><small><i class="fa fa-clock-o"></i>刚刚<i class="fa fa-eye"></i>'
 								+ '</div>'
 								+ '<div class="post-content">' +message.contents +message.repost + '</div>'
-								+ '<p class="massageImg clear showVideo' + message.msg_id + '" vid="' + message.media + '"><video width="400px"  controls=""  name="media"><source src="" type="video/mp4"></video></p>'
+								+ '<p class="massageImg clear showVideo' + message.msg_id + '" vid="' + message.media + '"><video style="max-width: 300px;"  controls=""  name="media"><source src="" type="video/mp4"></video></p>'
 								+ '</div>'
 								+ '<div class="clear"></div>'
 								// + '<div class="post-meta">'+'<span><i class="fa fa-user"></i><a href="/' + message.blog + '/del/message/' + message.msg_id + '">删除</a></span></div>'
