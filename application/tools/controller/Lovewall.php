@@ -25,7 +25,7 @@ class Lovewall extends Base
         $limit = $get['limit'] ?? 50; // 增加到50条，适应墙式展示
 
 
-        $count = Db::name('love_wall')
+        $count = Db::name('tools_love_wall')
             ->where('status', 1)
             ->count();
 
@@ -38,7 +38,7 @@ class Lovewall extends Base
         }
         
         // 获取表白墙列表，按时间倒序排列
-        $list = Db::name('love_wall')
+        $list = Db::name('tools_love_wall')
             ->where('status', 1)
             ->order('create_time desc')
             ->limit($limit)
@@ -91,7 +91,7 @@ class Lovewall extends Base
                 'update_time' => date('Y-m-d H:i:s')
             ];
             
-            $result = Db::name('love_wall')->insert($data);
+            $result = Db::name('tools_love_wall')->insert($data);
             
             if ($result) {
                 return json(['code' => 0, 'msg' => '表白成功']);
@@ -116,7 +116,7 @@ class Lovewall extends Base
         }
         
         // 检查是否是发布者或管理员
-        $confession = Db::name('love_wall')->where('id', $id)->find();
+        $confession = Db::name('tools_love_wall')->where('id', $id)->find();
         if (!$confession) {
             return json(['code' => 1, 'msg' => '表白信息不存在']);
         }
@@ -126,7 +126,7 @@ class Lovewall extends Base
             return json(['code' => 1, 'msg' => '无权限删除']);
         }
         
-        $result = Db::name('love_wall')->where('id', $id)->update([
+        $result = Db::name('tools_love_wall')->where('id', $id)->update([
             'status' => 0,
             'update_time' => date('Y-m-d H:i:s')
         ]);
@@ -149,7 +149,7 @@ class Lovewall extends Base
             return json(['code' => 1, 'msg' => '参数错误']);
         }
         
-        $confession = Db::name('love_wall')
+        $confession = Db::name('tools_love_wall')
             ->where('id', $id)
             ->where('status', 1)
             ->find();
