@@ -88,8 +88,8 @@
             }
           },
           { fixed: 'right', align: 'center', title: '操作', templet: function(d) {
-            // var str = '<a target="__blank" href="/tools/notice/view?msgId='+d.msg_id+'" class="layui-btn layui-btn-xs">查看</a>'
-            var str = '<a data-title="评论: '+d.contents.substring(0, 20)+'..." data-url="/chat/messageChatId/'+d.msg_id+'" onclick="parent.showFrameHtml(this, \'60%\', \'70%\')" class="layui-btn layui-btn-xs">查看</a>'
+            var str = '<a target="__blank" href="/tools/notice/view?msgId='+d.msg_id+'" class="layui-btn layui-btn-xs">查看</a>'
+            // var str = '<a data-title="评论: '+d.contents.substring(0, 20)+'..." data-url="/chat/messageChatId/'+d.msg_id+'" onclick="parent.showFrameHtml(this, \'60%\', \'70%\')" class="layui-btn layui-btn-xs">查看</a>'
             if (d.status) {
               return str+'<a class="layui-btn layui-btn-xs">已读</a>'
             } else {
