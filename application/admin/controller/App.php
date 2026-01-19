@@ -90,7 +90,7 @@ class App extends Base
             }
             
             // 设置创建者
-            $data['fromuid'] = 1;
+            $data['fromuid'] = (int)$data['fromuid'] ?: 0;
             $data['create_time'] = date('Y-m-d H:i:s');
             $data['update_time'] = date('Y-m-d H:i:s');
             
@@ -156,6 +156,10 @@ class App extends Base
             if (!$validate->check($data)) {
                 $this->error($validate->getError());
             }
+
+            // 设置创建者
+            $data['fromuid'] = (int)$data['fromuid'] ?: 0;
+            $data['update_time'] = date('Y-m-d H:i:s');
             
             // 如果app_config为空，设置为默认值
             if (empty($data['app_config'])) {
