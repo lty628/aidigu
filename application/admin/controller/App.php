@@ -3,6 +3,7 @@ namespace app\admin\controller;
 use think\facade\Request;
 use think\facade\Validate;
 use app\common\model\App as AppModel;
+use DateRangeError;
 
 class App extends Base
 {
@@ -89,15 +90,17 @@ class App extends Base
             }
             
             // 设置创建者
-            $data['fromuid'] = session('admin.uid', 0);
+            $data['fromuid'] = 1;
+            $data['create_time'] = date('Y-m-d H:i:s');
+            $data['update_time'] = date('Y-m-d H:i:s');
             
             // 如果app_config为空，设置为默认值
             if (empty($data['app_config'])) {
                 $data['app_config'] = '{}';
             }
             
-            // 创建应用
-            $app = new App();
+            // 创建应用 - 修复此处的错误，使用正确的模型类
+            $app = new AppModel();
             $result = $app->allowField(true)->save($data);
             
             if ($result) {
