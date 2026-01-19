@@ -77,7 +77,7 @@ class App extends Base
             // 验证表单数据
             $validate = Validate::rule([
                 'app_name' => 'require|max:255',
-                'app_url' => 'require|max:255|url',
+                'app_url' => 'require|max:255',
                 'app_image' => 'require|max:255',
                 'app_status' => 'require|in:0,1,2',
                 'app_type' => 'require|in:0,1,2',
