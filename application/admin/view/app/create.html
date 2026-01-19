@@ -73,7 +73,7 @@
                             <input type="text" 
                                    name="app_url" 
                                    placeholder="请输入应用链接（带http/https）" 
-                                   lay-verify="required|url" 
+                                   lay-verify="required" 
                                    autocomplete="off"
                                    class="layui-input">
                         </div>
@@ -82,19 +82,41 @@
                     <div class="layui-form-item">
                         <label class="layui-form-label">应用图片 <span class="required-mark">*</span></label>
                         <div class="layui-input-block">
-                            <div class="layui-upload">
-                                <button type="button" class="layui-btn" id="upload-image">
-                                    <i class="layui-icon layui-icon-upload"></i> 上传图片
-                                </button>
-                                <div class="layui-upload-list upload-container">
-                                    <img class="layui-upload-img" id="preview-image" alt="应用图片预览">
-                                    <div id="image-text"></div>
+                            <div class="layui-tab layui-tab-brief" lay-filter="image-tab">
+                                <ul class="layui-tab-title">
+                                    <li class="layui-this" data-type="upload">上传图片</li>
+                                    <li data-type="url">填写地址</li>
+                                </ul>
+                                <div class="layui-tab-content">
+                                    <div class="layui-tab-item layui-show">
+                                        <div class="layui-upload">
+                                            <button type="button" class="layui-btn" id="upload-image">
+                                                <i class="layui-icon layui-icon-upload"></i> 选择图片
+                                            </button>
+                                            <div class="layui-upload-list upload-container">
+                                                <img class="layui-upload-img" id="preview-image" alt="应用图片预览">
+                                                <div id="image-text"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-tab-item">
+                                        <input type="text" 
+                                               name="image_url" 
+                                               id="image-url-input"
+                                               placeholder="请输入图片地址（http:// 或 https://）" 
+                                               autocomplete="off"
+                                               class="layui-input">
+                                        <div class="layui-upload-list upload-container" style="margin-top: 10px;">
+                                            <img class="layui-upload-img" id="url-preview-image" alt="图片预览" style="display: none;">
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <input type="hidden" 
                                    name="app_image" 
                                    id="app-image-input" 
                                    lay-verify="required">
+                            <div class="layui-form-mid layui-word-aux">请上传应用图标或填写图片地址</div>
                         </div>
                     </div>
                     
@@ -173,10 +195,11 @@
     
     <script src="/static/layui/layui.js"></script>
     <script>
-    layui.use(['layer', 'form', 'upload'], function() {
+    layui.use(['layer', 'form', 'upload', 'element'], function() {
         var layer = layui.layer;
         var form = layui.form;
         var upload = layui.upload;
+        var element = layui.element;
         var $ = layui.$;
         
         // 图片上传
@@ -236,8 +259,86 @@
             }
         });
         
-        // 表单提交
+        // 监听图片输入方式切换
+        element.on('tab(image-tab)', function(data){
+            if(this.getAttribute('data-type') === 'url') {
+                // 切换到URL输入模式时清空隐藏字段
+                $('#app-image-input').val('');
+                $('#url-preview-image').hide();
+            } else {
+                // 切换到上传模式时清空URL输入框
+                $('#image-url-input').val('');
+                $('#url-preview-image').hide();
+            }
+        });
+        
+        // 监听图片URL输入框变化
+        $('#image-url-input').on('input', function() {
+            var imageUrl = $(this).val().trim();
+            // if(imageUrl && isValidImageUrl(imageUrl)) {
+            if(imageUrl) {
+                // 验证是有效的图片URL后，显示预览
+                showImagePreview(imageUrl);
+                $('#app-image-input').val(imageUrl); // 将URL设置为隐藏字段的值
+            } else {
+                $('#url-preview-image').hide();
+                $('#app-image-input').val('');
+            }
+        });
+        
+        // 验证是否为有效的图片URL
+        function isValidImageUrl(url) {
+            // 检查是否为有效的URL且包含常见图片扩展名或包含image关键词
+            const imageExtensions = /\.(jpg|jpeg|png|gif|bmp|webp|svg)$/i;
+            const imageUrlPattern = /^https?:\/\/.+/i;
+            
+            return imageUrlPattern.test(url) && 
+                   (imageExtensions.test(url) || url.toLowerCase().includes('image'));
+        }
+        
+        // 显示图片预览
+        function showImagePreview(url) {
+            const img = new Image();
+            img.onload = function() {
+                $('#url-preview-image').attr('src', url).show();
+            };
+            img.onerror = function() {
+                $('#url-preview-image').hide();
+                layer.msg('图片地址无效或无法访问', {icon: 2});
+            };
+            img.src = url;
+        }
+        
+        // 表单提交前验证
         form.on('submit(submit-form)', function(data) {
+            var activeTab = $('.layui-tab-title .layui-this').data('type');
+            var isValid = false;
+            
+            if(activeTab === 'upload') {
+                // 上传模式：检查隐藏字段是否有值
+                if($('#app-image-input').val()) {
+                    isValid = true;
+                } else {
+                    layer.msg('请先上传图片', {icon: 2});
+                    return false;
+                }
+            } else if(activeTab === 'url') {
+                // URL模式：检查URL是否有效
+                var imageUrl = $('#image-url-input').val().trim();
+                // if(imageUrl && isValidImageUrl(imageUrl)) {
+                if(imageUrl) {
+                    isValid = true;
+                } else {
+                    layer.msg('请输入有效的图片地址', {icon: 2});
+                    return false;
+                }
+            }
+            
+            if(!isValid) {
+                layer.msg('请选择或输入有效的图片', {icon: 2});
+                return false;
+            }
+            
             var loading = layer.load(2);
             
             $.ajax({
