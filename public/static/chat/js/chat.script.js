@@ -500,6 +500,7 @@ d.data[index].listtagid = d.listtagid
 		$(".msg-items").css('display',"none");
 		$("#conv-lists-"+tagid).css('display',"block");
 		$("#chatLineHolder-"+tagid).css('display',"block");
+		$("#chat-lists").show();
 	},
 	changeChannelMessageChatId:function () {
 		// window.parent.$(".layui-layer-title").text(chat.data.title);
@@ -508,6 +509,7 @@ d.data[index].listtagid = d.listtagid
 		$(".msg-items").css('display',"none");
 		$("#conv-lists-"+tagid).css('display',"block");
 		$("#chatLineHolder-"+tagid).css('display',"block");
+		$("#chat-lists").show();
 	},
 	changeList: function (obj) {
 
