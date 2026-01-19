@@ -680,8 +680,12 @@ padding: 12px 16px; /* 减小内边距 */
                 currentPage = page;
                 const msgId = $('#msgId').val() || 1;
                 const type = $('#type').val();
-                const commentId = $('#commentId').val() || 0;
-                const replyId = $('#replyId').val() || 0;
+                var commentId = $('#commentId').val() || 0;
+                var replyId = $('#replyId').val() || 0;
+                if (page != 1) {
+                    commentId = 0;
+                    replyId = 0;
+                }
 
                 $('#commentsContainer').html('<div class="loading"><i class="fas fa-spinner fa-spin"></i> 加载中...</div>');
 
