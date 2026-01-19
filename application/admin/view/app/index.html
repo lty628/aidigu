@@ -31,6 +31,13 @@
                                 <input type="text" name="keyword" placeholder="应用名称/链接" class="layui-input">
                             </div>
                         </div>
+                        <!-- 创建人ID -->
+                        <div class="layui-inline">
+                            <label class="layui-form-label">创建人ID</label>
+                            <div class="layui-input-inline">
+                                <input type="number" name="fromuid" value="0" class="layui-input">
+                            </div>
+                        </div>
                         <div class="layui-inline">
                             <label class="layui-form-label">状态</label>
                             <div class="layui-input-inline">
@@ -118,6 +125,23 @@
         var form = layui.form;
         var $ = layui.$;
         
+        // 初始化页面时自动应用默认搜索条件
+        $(document).ready(function() {
+            // 设置默认值后触发表单提交
+            form.val('search-form', {
+                'fromuid': '0'
+            });
+            // 延迟执行搜索，确保表单值已设置
+            setTimeout(function() {
+                appTable.reload({
+                    where: {
+                        'fromuid': '0'
+                    },
+                    page: {curr: 1}
+                });
+            }, 100);
+        });
+        
         // 渲染数据表格
         var appTable = table.render({
             elem: '#appTable',
@@ -160,11 +184,14 @@
         $('#reset-search').on('click', function() {
             form.val('search-form', {
                 'keyword': '',
+                'fromuid': '0', // 重置时也恢复默认的fromuid值
                 'app_status': '',
                 'app_type': ''
             });
             appTable.reload({
-                where: {},
+                where: {
+                    'fromuid': '0' // 重置时也应用默认的fromuid筛选
+                },
                 page: {curr: 1}
             });
         });

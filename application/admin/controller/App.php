@@ -27,9 +27,12 @@ class App extends Base
         $keyword = Request::param('keyword', '');
         $app_status = Request::param('app_status', '');
         $app_type = Request::param('app_type', '');
+        $fromuid = Request::param('fromuid', 0, 'intval');
         
         // 构建查询条件
         $where = [];
+
+        $where['fromuid'] = $fromuid;
         
         if (!empty($keyword)) {
             $where[] = ['app_name|app_url', 'like', '%' . $keyword . '%'];
