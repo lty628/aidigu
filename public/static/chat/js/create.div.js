@@ -42,7 +42,7 @@ var cdiv = {
 			case 'user':
 				if (params.message_count) {
 					arr = [
-						'<div id=\'user-',params.listtagid,'-',params.uid,'\' listtagid="',params.listtagid,'" uid="',params.uid,'" onclick="chat.changeUser(this)" uname="',params.nickname,'" class="conv-item">',
+						'<div id=\'user-',params.listtagid,'-',params.uid,'\' listtagid="',params.listtagid,'" uid="',params.uid,'" onclick="chat.changeUser(this)" uname="',params.nickname,'" class="conv-item list-item">',
 						'<div class="conv-avatar" style="background-image: url(',params.head_image,'); background-size: cover; background-position: center;"></div>',
 						'<div class="conv-info">',
 						'<div class="conv-name">',params.nickname,'</div>',
@@ -54,7 +54,7 @@ var cdiv = {
 					];
 				} else {
 					arr = [
-						'<div id=\'user-',params.listtagid,'-',params.uid,'\' listtagid="',params.listtagid,'" uid="',params.uid,'" onclick="chat.changeUser(this)" uname="',params.nickname,'" class="conv-item">',
+						'<div id=\'user-',params.listtagid,'-',params.uid,'\' listtagid="',params.listtagid,'" uid="',params.uid,'" onclick="chat.changeUser(this)" uname="',params.nickname,'" class="conv-item list-item">',
 						'<div class="conv-avatar" style="background-image: url(',params.head_image,'); background-size: cover; background-position: center;"></div>',
 						'<div class="conv-info">',
 						'<div class="conv-name">',params.nickname,'</div>',
@@ -70,7 +70,7 @@ var cdiv = {
 			case 'group':
 				if (params.message_count) {
 					arr = [
-						'<div id=\'group-',params.listtagid,'-',params.groupid,'\' listtagid="',params.listtagid,'" groupid="',params.groupid,'" onclick="chat.changeGroup(this)" uname="',params.groupname,'" class="conv-item">',
+						'<div id=\'group-',params.listtagid,'-',params.groupid,'\' listtagid="',params.listtagid,'" groupid="',params.groupid,'" onclick="chat.changeGroup(this)" uname="',params.groupname,'" class="conv-item list-item">',
 						'<div class="conv-avatar" style="background-image: url(',params.head_image,'); background-size: cover; background-position: center;"></div>',
 						'<div class="conv-info">',
 						'<div class="conv-name">',params.groupname,'</div>',
@@ -82,7 +82,7 @@ var cdiv = {
 					];
 				} else {
 					arr = [
-						'<div id=\'group-',params.listtagid,'-',params.groupid,'\' listtagid="',params.listtagid,'" groupid="',params.groupid,'" onclick="chat.changeGroup(this)" uname="',params.groupname,'" class="conv-item">',
+						'<div id=\'group-',params.listtagid,'-',params.groupid,'\' listtagid="',params.listtagid,'" groupid="',params.groupid,'" onclick="chat.changeGroup(this)" uname="',params.groupname,'" class="conv-item list-item">',
 						'<div class="conv-avatar" style="background-image: url(',params.head_image,'); background-size: cover; background-position: center;"></div>',
 						'<div class="conv-info">',
 						'<div class="conv-name">',params.groupname,'</div>',
