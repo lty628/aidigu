@@ -133,9 +133,9 @@
                         <div class="layui-input-block">
                             <select name="app_status" lay-verify="required">
                                 <option value="">请选择应用状态</option>
-                                {volist name="statusOptions" id="name" key="key"}
+                                {foreach($statusOptions as $key => $name)}
                                 <option value="{$key}" {if condition="$key == $app.app_status"}selected{/if}>{$name}</option>
-                                {/volist}
+                                {/foreach}
                             </select>
                         </div>
                     </div>
@@ -145,9 +145,9 @@
                         <div class="layui-input-block">
                             <select name="app_type" lay-verify="required">
                                 <option value="">请选择应用类型</option>
-                                {volist name="typeOptions" id="name" key="key"}
+                                {foreach($typeOptions as $key => $name)}
                                 <option value="{$key}" {if condition="$key == $app.app_type"}selected{/if}>{$name}</option>
-                                {/volist}
+                                {/foreach}
                             </select>
                         </div>
                     </div>
@@ -157,9 +157,9 @@
                         <div class="layui-input-block">
                             <select name="open_type" lay-verify="required">
                                 <option value="">请选择打开方式</option>
-                                {volist name="openTypeOptions" id="name" key="key"}
+                                {foreach($openTypeOptions as $key => $name)}
                                 <option value="{$key}" {if condition="$key == $app.open_type"}selected{/if}>{$name}</option>
-                                {/volist}
+                                {/foreach}
                             </select>
                         </div>
                     </div>
