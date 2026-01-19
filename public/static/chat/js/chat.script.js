@@ -533,7 +533,7 @@ d.data[index].listtagid = d.listtagid
 		$(".msg-items").css('display',"none");
 		$("#conv-lists-"+tagid).css('display',"block");
 		$("#chatLineHolder-"+tagid).css('display',"block");
-		$(".input-area").hide()
+		$(".send-msg-box-wrapper").hide()
 		$("#chat-lists").hide();
 		// 默认选中第一个
 		// $("#conv-lists-"+tagid).children().first().trigger('click')
@@ -612,7 +612,7 @@ d.data[index].listtagid = d.listtagid
 		chat.data.uid = chat.data.fromuid
 		var json = {"type": 3,"touid": touid, 'fromuid': chat.data.uid, "listtagid": listtagid};
 		chat.wsSend(JSON.stringify(json));
-		$(".input-area").show()
+		$(".send-msg-box-wrapper").show()
 	},
 	messageChat:  function(msgid, touid){
 		
@@ -626,7 +626,7 @@ d.data[index].listtagid = d.listtagid
 		chat.data.uid = chat.data.fromuid
 		var json = {"type": 3,"msgid": msgid, "touid": touid, 'fromuid': chat.data.uid, "listtagid": listtagid};
 		chat.wsSend(JSON.stringify(json));
-		$(".input-area").show()
+		$(".send-msg-box-wrapper").show()
 	},
 	channelMessageChat:  function(msgid, touid){
 		
@@ -640,7 +640,7 @@ d.data[index].listtagid = d.listtagid
 		chat.data.uid = chat.data.fromuid
 		var json = {"type": 3,"msgid": msgid, "touid": touid, 'fromuid': chat.data.uid, "listtagid": listtagid};
 		chat.wsSend(JSON.stringify(json));
-		$(".input-area").show()
+		$(".send-msg-box-wrapper").show()
 	},
 	clickUser : function(obj){
 		
@@ -696,7 +696,7 @@ d.data[index].listtagid = d.listtagid
 		chat.data.fromuid = chat.data.uid
 		var json = {"type": 3,"touid": uid, 'fromuid': chat.data.uid, "listtagid": listtagid};
 		chat.wsSend(JSON.stringify(json));
-		$(".input-area").show()
+		$(".send-msg-box-wrapper").show()
 	},
 	changeGroup : function(obj){
 		
@@ -725,7 +725,7 @@ d.data[index].listtagid = d.listtagid
 		chat.data.uid = chat.data.uid
 		var json = {"type": 3,"groupid": groupid, 'uid': chat.data.uid, "listtagid": listtagid};
 		chat.wsSend(JSON.stringify(json));
-		$(".input-area").show()
+		$(".send-msg-box-wrapper").show()
 		$("#chat-lists").show();
 	},
 	
