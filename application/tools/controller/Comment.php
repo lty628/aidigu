@@ -102,6 +102,7 @@ class Comment extends Controller
         $type = input('type', 'default');
         $msgId = input('msg_id');
         $commentId = input('comment_id');
+        $replyId = input('reply_id');
         $currentUid = getLoginUid();
 
         $content_table = $this->typeRelationArr[$type]['content_table'] ?? '';
@@ -113,6 +114,7 @@ class Comment extends Controller
         // $this->assign('title', $type == 'channel' ? '频道评论' : '文章评论');
         $this->assign('msgId', $msgId);
         $this->assign('commentId', $commentId);
+        $this->assign('replyId', $replyId);
         $this->assign('msgUid', $msgUid);
         $this->assign('type', $type);
         $this->assign('currentUid', $currentUid);
@@ -127,6 +129,7 @@ class Comment extends Controller
     {
         $msgId = input('msg_id');
         $commentId = input('comment_id');
+        $replyId = input('reply_id');
         $type = input('type');
         $limit = input('limit', 5);
         $page = input('page', 1);
@@ -158,6 +161,7 @@ class Comment extends Controller
             $where[] = ['msg_id', '=', $msgId];
         }
 
+
         // 获取评论列表
         $list = Db::name($commentTable)
             ->where($where)
@@ -181,17 +185,22 @@ class Comment extends Controller
 
         $uidArr = array_column($list, 'fromuid');
 
-        // 获取所有评论的relation_reply_id
-        $replyIds = array_column($list, 'relation_reply_id');
-        $replyIdArr = [];
-        if ($replyIds) {
-            foreach ($replyIds as $commentId) {
-                if (!empty($commentId)) {
-                    $replyIdArr = array_merge($replyIdArr, explode(',', $commentId));
+        if ($replyId) {
+            $replyIdArr = [$replyId];
+        } else {
+            // 获取所有评论的relation_reply_id
+            $replyIds = array_column($list, 'relation_reply_id');
+            $replyIdArr = [];
+            if ($replyIds) {
+                foreach ($replyIds as $commentId) {
+                    if (!empty($commentId)) {
+                        $replyIdArr = array_merge($replyIdArr, explode(',', $commentId));
+                    }
                 }
             }
+            $replyIdArr = array_filter($replyIdArr);
         }
-        $replyIdArr = array_filter($replyIdArr);
+
 
         // 初始化回复列表数组
         $replyList = [];
@@ -340,15 +349,20 @@ class Comment extends Controller
             $result = Db::name($commentTable)->insertGetId($data);
             Db::name($contentTable)->where('msg_id', $msgId)->setInc('commentsum');
             if ($result) {
-                Reminder::saveReminder($msgId , $uid, (int)$data['touid'], $this->typeRelationArr[$type]['comment_type'],
-                [
-                    'comment_id' => $result,
-                    'msg' => $data['msg'],
-                    'msg_id' => $msgId,
-                    'touid' => $data['touid'],
-                    'fromuid' => $uid,
-                    'ctime' => $data['ctime'],
-                ]);
+                Reminder::saveReminder(
+                    $msgId,
+                    $uid,
+                    (int)$data['touid'],
+                    $this->typeRelationArr[$type]['comment_type'],
+                    [
+                        'comment_id' => $result,
+                        'msg' => $data['msg'],
+                        'msg_id' => $msgId,
+                        'touid' => $data['touid'],
+                        'fromuid' => $uid,
+                        'ctime' => $data['ctime'],
+                    ]
+                );
                 return json([
                     'code' => 200,
                     'msg' => '评论成功',
@@ -385,7 +399,7 @@ class Comment extends Controller
 
         // 获取用户ID
         $uid = getLoginUid() ?: 0;
-    // dump($uid);
+        // dump($uid);
         // 构建插入数据
         $data = [
             'fromuid' => $uid,
@@ -434,7 +448,7 @@ class Comment extends Controller
                 // 提交事务
                 Db::commit();
                 // 保存提醒
-                Reminder::saveReminder($msgId , $uid, (int)$data['touid'], $this->typeRelationArr[$type]['rely_type'], [
+                Reminder::saveReminder($msgId, $uid, (int)$data['touid'], $this->typeRelationArr[$type]['rely_type'], [
                     'rid' => $result,
                     'fromuid' => $data['fromuid'],
                     'touid' => $data['touid'],
@@ -566,16 +580,16 @@ class Comment extends Controller
                 // 查询该评论的所有回复
                 $remainingReplies = Db::name($replyTable)->where('cid', $commentId)->select();
                 $replyCount = count($remainingReplies);
-                
+
                 // 更新评论表中的回复数
                 Db::name($commentTable)->where('cid', $commentId)->update([
                     'reply_count' => $replyCount
                 ]);
-                
+
                 // 更新关联的回复ID列表
                 $replyIds = array_column($remainingReplies, 'rid');
                 $relationReplyIds = implode(',', array_slice($replyIds, 0, 3)); // 只保留前3个
-                
+
                 Db::name($commentTable)->where('cid', $commentId)->update([
                     'relation_reply_id' => $relationReplyIds
                 ]);

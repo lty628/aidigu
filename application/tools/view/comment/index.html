@@ -590,6 +590,7 @@ padding: 12px 16px; /* 减小内边距 */
     <!-- 隐藏字段 -->
     <input type="hidden" id="msgId" value="{$msgId|default=0}">
     <input type="hidden" id="commentId" value="{$commentId|default=0}">
+    <input type="hidden" id="replyId" value="{$replyId|default=0}">
     <input type="hidden" id="type" value="{$type|default='default'}">
     <input type="hidden" id="currentUid" value="{$currentUid|default=0}">
     <input type="hidden" id="msgUid" value="{$msgUid|default=0}">
@@ -680,6 +681,7 @@ padding: 12px 16px; /* 减小内边距 */
                 const msgId = $('#msgId').val() || 1;
                 const type = $('#type').val();
                 const commentId = $('#commentId').val() || 0;
+                const replyId = $('#replyId').val() || 0;
 
                 $('#commentsContainer').html('<div class="loading"><i class="fas fa-spinner fa-spin"></i> 加载中...</div>');
 
@@ -689,6 +691,7 @@ padding: 12px 16px; /* 减小内边距 */
                     data: {
                         msg_id: msgId,
                         comment_id: commentId,
+                        reply_id: replyId,
                         type: type,
                         page: page,
                         limit: 5
@@ -809,7 +812,7 @@ padding: 12px 16px; /* 减小内边距 */
                                     ${replyPrefix} ${reply.msg}
                                 </div>
                                 <div class="action-buttons">
-                                    <button class="action-btn reply-btn" data-touid="${reply.fromuid}" data-comment-id="${comment.cid}" data-reply-id="${reply.cid}">
+                                    <button class="action-btn reply-btn" data-touid="${reply.fromuid}" data-comment-id="${comment.cid}" data-reply-id="${reply.rid}">
                                         <i class="fas fa-reply"></i> 回复                                    </button>
                                     ${isOwnReply ? `<button class="action-btn delete-btn delete-reply" data-reply-id="${reply.rid}" data-comment-id="${comment.cid}">
                                         <i class="fas fa-trash"></i> 删除
