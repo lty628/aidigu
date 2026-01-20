@@ -585,6 +585,8 @@ function viewDetail(type, reminderId, msgId, cid, rid, channelId) {
         case 4: // 频道回复
         // base64Encode('channelId=' + data[i].channel_id + '&msgId=' + data[i].msg_id) 
             url = `/channel/${base64Encode('channelId=' + channelId + '&msgId=' + msgId+'&cid='+cid+'&rid='+rid)}`; // 或者跳转到频道详情页
+            // console.log('channelId=' + channelId + '&msgId=' + msgId+'&cid='+cid+'&rid='+rid);
+            // return false
             break;
         case 5: // 关注
             url = `/index/user/space/uid/${item.from_uid || 0}`; // 跳转到关注者主页

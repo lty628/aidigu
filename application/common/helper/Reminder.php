@@ -270,7 +270,7 @@ class Reminder
         // 从消息ID获取原始消息信息
         $messageInfo = null;
         if ($commentInfo && !empty($commentInfo['msg_id'])) {
-            $messageInfo = Db::name('channel_message')->field('contents, ctime')->where('msg_id', $commentInfo['msg_id'])->find();
+            $messageInfo = Db::name('channel_message')->field('channel_id, contents, ctime')->where('msg_id', $commentInfo['msg_id'])->find();
         }
         
         $result = [
@@ -305,7 +305,7 @@ class Reminder
         // 从消息ID获取原始消息信息
         $messageInfo = null;
         if ($replyInfo && !empty($replyInfo['msg_id'])) {
-            $messageInfo = Db::name('channel_message')->field('contents, ctime')->where('msg_id', $replyInfo['msg_id'])->find();
+            $messageInfo = Db::name('channel_message')->field('channel_id, contents, ctime')->where('msg_id', $replyInfo['msg_id'])->find();
         }
         
         $result = [
@@ -399,7 +399,7 @@ class Reminder
      */
     private static function generateFavoriteChannelWeiboReminderData($msgId, $userInfo, $extra)
     {
-        $messageInfo = Db::name('channel_message')->field('contents, ctime, fromuid')->where('msg_id', $msgId)->find();
+        $messageInfo = Db::name('channel_message')->field('channel_id, contents, ctime, fromuid')->where('msg_id', $msgId)->find();
         
         // 获取原作者信息
         $originalAuthorInfo = null;
