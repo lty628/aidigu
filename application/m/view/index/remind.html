@@ -19,7 +19,7 @@
                 <span class="remind-tab-count" id="count-2">{$unreadCount.unreadTypeCount.2}</span>
             {/if}
             </div>
-            <div class="remind-tab" data-type="3">频道评论
+            <!-- <div class="remind-tab" data-type="3">频道评论
             {if isset($unreadCount.unreadTypeCount.3) && $unreadCount.unreadTypeCount.3 > 0}
                 <span class="remind-tab-count" id="count-3">{$unreadCount.unreadTypeCount.3}</span>
             {/if}
@@ -28,7 +28,7 @@
             {if isset($unreadCount.unreadTypeCount.4) && $unreadCount.unreadTypeCount.4 > 0}
                 <span class="remind-tab-count" id="count-4">{$unreadCount.unreadTypeCount.4}</span>
             {/if}
-            </div>
+            </div> -->
             <!-- <div class="remind-tab" data-type="5">关注
             {if isset($unreadCount.unreadTypeCount.5) && $unreadCount.unreadTypeCount.5 > 0}
                 <span class="remind-tab-count" id="count-5">{$unreadCount.unreadTypeCount.5}</span>
@@ -258,6 +258,7 @@ function loadReminders(type, page) {
         url: "{:url('/index/ajax/getRemind')}",
         data: { 
             page: page,
+            isMobile: 1,
             type: type === 'all' ? '' : type
         },
         dataType: "json",

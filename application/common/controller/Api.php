@@ -435,9 +435,10 @@ class Api extends Base
             $uid = getLoginUid();
             $page = input('get.page', 1);
             $type = input('get.type', ''); // 可选的提醒类型筛选
+            $isMobile = input('get.isMobile', 0);
             
             // 使用新的Reminder类获取提醒消息
-            $reminderMsg = \app\common\helper\Reminder::getReminderMsg($uid, 20, $page, $type);
+            $reminderMsg = \app\common\helper\Reminder::getReminderMsg($uid, 20, $page, $type, $isMobile);
             
             return json(['status' => 1, 'msg' => 'ok', 'data' => $reminderMsg]);
         // }
