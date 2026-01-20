@@ -28,7 +28,9 @@ class Reminder
      * @param int $fromuid 发送提醒的用户ID
      * @param int $touid 接收提醒的用户ID
      * @param int $type 提醒类型：1评论，2回复，3@提及等
-     * @param array $extra 额外参数 ['msg_id'=>消息ID, 
+     * @param array $extra 额外参数 
+     * [
+     * 'msg_id'=>消息ID, 
      * 'cid'=>评论ID, 
      * 'rid'=>回复ID, 
      * 'msg'=>'主内容',
@@ -37,7 +39,6 @@ class Reminder
      * 'msg_timestamp'=>'主内容时间戳', 
      * 'comment_timestamp'=>'评论时间戳', 
      * 'reply_timestamp'=>'回复时间戳'
-     * 
      * ]
      * @return bool|object
      */
@@ -47,7 +48,18 @@ class Reminder
             return false;
         }
         
-        // 使用辅助函数生成提醒数据
+        // [
+        // 'msg_id'=>消息ID
+        // 'cid'=>评论ID
+        // 'rid'=>回复ID
+        // 'msg'=>'主内容','comment_msg'=>'评论内容','reply_msg'=>'回复内容'
+        // 'msg_timestamp'=>'主内容时间戳'
+        // 'comment_timestamp'=>'评论时间戳'
+        // 'reply_timestamp'=>'回复时间戳'
+        // 'from_nickname'=>'来源昵称'
+        // 'from_head_image'=>'来源头像',
+        // 'from_blog'=>'来源博客',
+        // ]
         $extraData = self::generateReminderData($ukId, $fromuid, $type, $extra);
 
         // 检查是否已存在相同的提醒记录
