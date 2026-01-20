@@ -542,16 +542,16 @@ function formatTimeWithDate(timestamp) {
     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 }
 
-function markAsRead(cid, rid) {
+function markAsRead(reminder_id) {
     $.ajax({
         type: "POST",
         url: "{:url('/index/ajax/markRead')}",
-        data: { reminder_id: cid, rid },
+        data: { reminder_id: reminder_id },
         dataType: "json",
         success: function(response) {
             if (response.status === 1) {
                 // 移除已读提醒项
-                $(`.remind-item[data-id="${cid, rid}"]`).fadeOut(300, function() {
+                $(`.remind-item[data-id="${reminder_id}"]`).fadeOut(300, function() {
                     $(this).remove();
                     if ($('.remind-item').length === 0) {
                         $('#remindList').html('<div class="no-data">暂无提醒</div>');

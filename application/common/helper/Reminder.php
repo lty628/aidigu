@@ -38,7 +38,7 @@ class Reminder
             ->join('user u', 'u.uid = reminder.fromuid', 'LEFT')
             ->field('reminder.*, u.nickname as from_nickname, u.head_image as from_head_image, u.blog as from_blog')
             ->where('reminder.touid', $userid)
-            ->where('reminder.status', 0)  // 只获取未读提醒
+            // ->where('reminder.status', 0)  // 只获取未读提醒
             ->where($where)
             ->order('reminder.status asc, reminder.ctime desc');
         
