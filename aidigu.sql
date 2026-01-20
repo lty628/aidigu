@@ -40,7 +40,7 @@ CREATE TABLE `wb_admin_system_setting`  (
 
 INSERT INTO `wb_admin_system_setting` VALUES (1, 'app', 'staticDomain', '', '配置CDN域名加速使用', '2025-12-04 20:15:33', '2025-12-04 20:15:33');
 INSERT INTO `wb_admin_system_setting` VALUES (2, 'app', 'beian', '京ICP备2020000023012号-1', '填入备案号', '2025-12-04 20:15:55', '2025-12-05 08:37:00');
-INSERT INTO `wb_admin_system_setting` VALUES (3, 'app', 'noRegister', '1', '是否开放注册', '2025-12-04 20:16:22', '2025-12-08 13:52:07');
+INSERT INTO `wb_admin_system_setting` VALUES (3, 'app', 'noRegister', '0', '是否开放注册', '2025-12-04 20:16:22', '2025-12-08 13:52:07');
 INSERT INTO `wb_admin_system_setting` VALUES (4, 'app', 'pubIndex', '', '首页是否无需登录【默认0，必须登录，可改为1】', '2025-12-04 20:17:45', '2025-12-05 08:33:27');
 INSERT INTO `wb_admin_system_setting` VALUES (5, 'app', 'defaultIndex', '/', '首页默认地址,如设置 app\\tools\\controller\\Nav@index 后首页为导航', '2025-12-04 20:18:53', '2025-12-04 20:18:53');
 INSERT INTO `wb_admin_system_setting` VALUES (6, 'app', 'picUploadSize', '4194304', '图片上传限制大小，默认： 4194304 【4M】', '2025-12-04 20:19:21', '2025-12-04 20:20:44');
