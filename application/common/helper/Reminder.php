@@ -52,7 +52,7 @@ class Reminder
         // 'msg_id'=>消息ID
         // 'cid'=>评论ID
         // 'rid'=>回复ID
-        // 'msg_content'=>'主内容','comment_content'=>'评论内容','reply_content'=>'回复内容'
+        // 'msg_contents'=>'主内容','comment_contents'=>'评论内容','reply_contents'=>'回复内容'
         // 'msg_timestamp'=>'主内容时间戳'
         // 'comment_timestamp'=>'评论时间戳'
         // 'reply_timestamp'=>'回复时间戳'
@@ -172,7 +172,7 @@ class Reminder
         // 从消息ID获取原始消息信息
         $messageInfo = null;
         if ($commentInfo && !empty($commentInfo['msg_id'])) {
-            $messageInfo = Db::name('message')->field('content, ctime')->where('msg_id', $commentInfo['msg_id'])->find();
+            $messageInfo = Db::name('message')->field('contents, ctime')->where('msg_id', $commentInfo['msg_id'])->find();
         }
         
         $result = [
@@ -180,9 +180,9 @@ class Reminder
             'from_nickname' => $userInfo['nickname'],
             'from_head_image' => $userInfo['head_image'],
             'from_blog' => $userInfo['blog'],
-            'msg_content' => $messageInfo ? mb_substr($messageInfo['content'], 0, 100, 'utf-8') : '',
+            'msg_contents' => $messageInfo ? mb_substr($messageInfo['contents'], 0, 100, 'utf-8') : '',
             'msg_timestamp' => $messageInfo ? $messageInfo['ctime'] : 0,
-            'comment_content' => $commentInfo ? mb_substr($commentInfo['msg'], 0, 50, 'utf-8') : '', // 评论内容
+            'comment_contents' => $commentInfo ? mb_substr($commentInfo['msg'], 0, 50, 'utf-8') : '', // 评论内容
             'comment_timestamp' => $commentInfo ? $commentInfo['ctime'] : 0,
             'comment_id' => $commentId,
             'timestamp' => time()
@@ -207,7 +207,7 @@ class Reminder
         // 从消息ID获取原始消息信息
         $messageInfo = null;
         if ($replyInfo && !empty($replyInfo['msg_id'])) {
-            $messageInfo = Db::name('message')->field('content, ctime')->where('msg_id', $replyInfo['msg_id'])->find();
+            $messageInfo = Db::name('message')->field('contents, ctime')->where('msg_id', $replyInfo['msg_id'])->find();
         }
         
         $result = [
@@ -215,11 +215,11 @@ class Reminder
             'from_nickname' => $userInfo['nickname'],
             'from_head_image' => $userInfo['head_image'],
             'from_blog' => $userInfo['blog'],
-            'msg_content' => $messageInfo ? mb_substr($messageInfo['content'], 0, 100, 'utf-8') : '',
+            'msg_contents' => $messageInfo ? mb_substr($messageInfo['contents'], 0, 100, 'utf-8') : '',
             'msg_timestamp' => $messageInfo ? $messageInfo['ctime'] : 0,
-            'comment_content' => $replyInfo ? mb_substr($replyInfo['comment_msg'], 0, 50, 'utf-8') : '', // 原评论内容
+            'comment_contents' => $replyInfo ? mb_substr($replyInfo['comment_msg'], 0, 50, 'utf-8') : '', // 原评论内容
             'comment_timestamp' => $replyInfo ? $replyInfo['comment_ctime'] : 0,
-            'reply_content' => $replyInfo ? mb_substr($replyInfo['reply_msg'], 0, 50, 'utf-8') : '', // 回复内容
+            'reply_contents' => $replyInfo ? mb_substr($replyInfo['reply_msg'], 0, 50, 'utf-8') : '', // 回复内容
             'reply_timestamp' => $replyInfo ? $replyInfo['reply_ctime'] : 0,
             'reply_id' => $replyId,
             'comment_id' => $replyInfo ? $replyInfo['comment_id'] : null,
@@ -240,7 +240,7 @@ class Reminder
         // 从消息ID获取原始消息信息
         $messageInfo = null;
         if ($commentInfo && !empty($commentInfo['msg_id'])) {
-            $messageInfo = Db::name('channel_message')->field('content, ctime')->where('msg_id', $commentInfo['msg_id'])->find();
+            $messageInfo = Db::name('channel_message')->field('contents, ctime')->where('msg_id', $commentInfo['msg_id'])->find();
         }
         
         $result = [
@@ -248,9 +248,9 @@ class Reminder
             'from_nickname' => $userInfo['nickname'],
             'from_head_image' => $userInfo['head_image'],
             'from_blog' => $userInfo['blog'],
-            'msg_content' => $messageInfo ? mb_substr($messageInfo['content'], 0, 100, 'utf-8') : '',
+            'msg_contents' => $messageInfo ? mb_substr($messageInfo['contents'], 0, 100, 'utf-8') : '',
             'msg_timestamp' => $messageInfo ? $messageInfo['ctime'] : 0,
-            'comment_content' => $commentInfo ? mb_substr($commentInfo['msg'], 0, 50, 'utf-8') : '', // 评论内容
+            'comment_contents' => $commentInfo ? mb_substr($commentInfo['msg'], 0, 50, 'utf-8') : '', // 评论内容
             'comment_timestamp' => $commentInfo ? $commentInfo['ctime'] : 0,
             'comment_id' => $commentId,
             'timestamp' => time()
@@ -274,7 +274,7 @@ class Reminder
         // 从消息ID获取原始消息信息
         $messageInfo = null;
         if ($replyInfo && !empty($replyInfo['msg_id'])) {
-            $messageInfo = Db::name('channel_message')->field('content, ctime')->where('msg_id', $replyInfo['msg_id'])->find();
+            $messageInfo = Db::name('channel_message')->field('contents, ctime')->where('msg_id', $replyInfo['msg_id'])->find();
         }
         
         $result = [
@@ -282,11 +282,11 @@ class Reminder
             'from_nickname' => $userInfo['nickname'],
             'from_head_image' => $userInfo['head_image'],
             'from_blog' => $userInfo['blog'],
-            'msg_content' => $messageInfo ? mb_substr($messageInfo['content'], 0, 100, 'utf-8') : '',
+            'msg_contents' => $messageInfo ? mb_substr($messageInfo['contents'], 0, 100, 'utf-8') : '',
             'msg_timestamp' => $messageInfo ? $messageInfo['ctime'] : 0,
-            'comment_content' => $replyInfo ? mb_substr($replyInfo['comment_msg'], 0, 50, 'utf-8') : '', // 原评论内容
+            'comment_contents' => $replyInfo ? mb_substr($replyInfo['comment_msg'], 0, 50, 'utf-8') : '', // 原评论内容
             'comment_timestamp' => $replyInfo ? $replyInfo['comment_ctime'] : 0,
-            'reply_content' => $replyInfo ? mb_substr($replyInfo['reply_msg'], 0, 50, 'utf-8') : '', // 回复内容
+            'reply_contents' => $replyInfo ? mb_substr($replyInfo['reply_msg'], 0, 50, 'utf-8') : '', // 回复内容
             'reply_timestamp' => $replyInfo ? $replyInfo['reply_ctime'] : 0,
             'reply_id' => $replyId,
             'comment_id' => $replyInfo ? $replyInfo['comment_id'] : null,
@@ -319,14 +319,14 @@ class Reminder
      */
     private static function generateAtReminderData($msgId, $userInfo, $extra)
     {
-        $messageInfo = Db::name('message')->field('content, ctime')->where('msg_id', $msgId)->find();
+        $messageInfo = Db::name('message')->field('contents, ctime')->where('msg_id', $msgId)->find();
         
         $result = [
             'note' => $userInfo['nickname'] . ' 在内容中提到了你',
             'from_nickname' => $userInfo['nickname'],
             'from_head_image' => $userInfo['head_image'],
             'from_blog' => $userInfo['blog'],
-            'msg_content' => $messageInfo ? mb_substr($messageInfo['content'], 0, 100, 'utf-8') : '',
+            'msg_contents' => $messageInfo ? mb_substr($messageInfo['contents'], 0, 100, 'utf-8') : '',
             'msg_timestamp' => $messageInfo ? $messageInfo['ctime'] : 0,
             'timestamp' => time()
         ];
@@ -339,7 +339,7 @@ class Reminder
      */
     private static function generateFavoriteWeiboReminderData($msgId, $userInfo, $extra)
     {
-        $messageInfo = Db::name('message')->field('content, ctime, fromuid')->where('msg_id', $msgId)->find();
+        $messageInfo = Db::name('message')->field('contents, ctime, fromuid')->where('msg_id', $msgId)->find();
         
         // 获取原作者信息
         $originalAuthorInfo = null;
@@ -352,7 +352,7 @@ class Reminder
             'from_nickname' => $userInfo['nickname'],
             'from_head_image' => $userInfo['head_image'],
             'from_blog' => $userInfo['blog'],
-            'msg_content' => $messageInfo ? mb_substr($messageInfo['content'], 0, 100, 'utf-8') : '',
+            'msg_contents' => $messageInfo ? mb_substr($messageInfo['contents'], 0, 100, 'utf-8') : '',
             'msg_timestamp' => $messageInfo ? $messageInfo['ctime'] : 0,
             'original_author_nickname' => $originalAuthorInfo['nickname'] ?? '',
             'original_author_head_image' => $originalAuthorInfo['head_image'] ?? '',
@@ -367,7 +367,7 @@ class Reminder
      */
     private static function generateFavoriteChannelWeiboReminderData($msgId, $userInfo, $extra)
     {
-        $messageInfo = Db::name('channel_message')->field('content, ctime, fromuid')->where('msg_id', $msgId)->find();
+        $messageInfo = Db::name('channel_message')->field('contents, ctime, fromuid')->where('msg_id', $msgId)->find();
         
         // 获取原作者信息
         $originalAuthorInfo = null;
@@ -380,7 +380,7 @@ class Reminder
             'from_nickname' => $userInfo['nickname'],
             'from_head_image' => $userInfo['head_image'],
             'from_blog' => $userInfo['blog'],
-            'msg_content' => $messageInfo ? mb_substr($messageInfo['content'], 0, 100, 'utf-8') : '',
+            'msg_contents' => $messageInfo ? mb_substr($messageInfo['contents'], 0, 100, 'utf-8') : '',
             'msg_timestamp' => $messageInfo ? $messageInfo['ctime'] : 0,
             'original_author_nickname' => $originalAuthorInfo['nickname'] ?? '',
             'original_author_head_image' => $originalAuthorInfo['head_image'] ?? '',
