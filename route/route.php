@@ -87,7 +87,7 @@ Route::get('/channel/$',$module . '/Index/channelList');
 Route::get('/channel/myjoined/$',$module . '/Index/channelList');
 Route::get('/channel/mycreated/$',$module . '/Index/channelList');
 Route::get('/channel/:page$', $module . '/Index/channelList')->pattern(['page'=>'[0-9]+']);
-Route::get('/channel/:channel_id/$', $module . '/Index/channel');
+Route::get('/channel/:base64$', $module . '/Index/channel')->pattern(['base64' => '.+']);
 Route::get('/square/$',$module . '/Index/blog');
 Route::get('/square/:page$',$module . '/Index/blog')->pattern(['page'=>'[0-9]+']);
 Route::get('/remind/$',$module . '/Index/remind');

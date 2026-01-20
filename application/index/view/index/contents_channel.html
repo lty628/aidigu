@@ -75,7 +75,7 @@
     <span class="loading"></span>
     加载中...
 </div>
-
+<input type="hidden" id="msgId" value="{$msgId}">
 <script>
     /**
      * 缓冲函数
@@ -182,7 +182,13 @@
                         }
 
                         if (json.data.allow_delete != -1) {
-                            // delStr += '<a href="/' + data[i].blog + '/message/' + data[i].msg_id + '">查看</a> |';
+                            var iframeStr = '';
+                            if ($("#msgId").val() == data[i].msg_id) {
+                                iframeStr = '<iframe id="iframe-comment-'+data[i].msg_id+'" style="width: 100%;border:none;min-height: 600px;" name="commentFrame" src="/tools/comment/index/?msg_id='+data[i].msg_id+'&type=channel"></iframe>';
+                            } else {
+                                delStr += '<a href="/channel/' + base64Encode('channelId=' + data[i].channel_id + '&msgId=' + data[i].msg_id) + '">查看</a> |';
+                            }
+                            
                             if (json.data.allow_comment) {
                                 // delStr += '<a href="javascript:;" data-title="评论" data-url="/chat/channelMessageChatId/' + data[i].msg_id + '" onclick="showFrameHtml(this, \'60%\', \'70%\')">评论' + c2 + '</a>'
                                 delStr += '<a href="javascript:void(0);" onclick="toggleCommentIframe(' + data[i].msg_id + ', \'channel\')">评论' + c2 + '</a>';
@@ -201,7 +207,8 @@
                             }
                         }
 
-                        str = '<div class="entry" style="position: relative;">' + adminTag + '<div class="avatar"><div class="imgborder"><a href="/' + data[i].blog + '/own/"><img src="' + data[i].head_image + '" /></a></div></div><div class="box box-main"><p class="massageText"><a href="/' + data[i].blog + '/own/">' + data[i].nickname + '：</a>' + data[i].contents + data[i].repost + '</p>' + mediaStr + '<div class="static clear"><span>' + delStr + '</span>' + getDateDiff(data[i].ctime) + ' 来自 ' + data[i].refrom + '</div></div><div class="clear"></div></div>';
+                        str = '<div class="entry" style="position: relative;">' + adminTag + '<div class="avatar"><div class="imgborder"><a href="/' + data[i].blog + '/own/"><img src="' + data[i].head_image + '" /></a></div></div><div class="box box-main"><p class="massageText"><a href="/' + data[i].blog + '/own/">' + data[i].nickname + '：</a>' + data[i].contents + data[i].repost + '</p>' + mediaStr + '<div class="static clear"><span>' + delStr + '</span>' + getDateDiff(data[i].ctime) + ' 来自 ' + data[i].refrom + '</div></div><div class="clear"></div>'+iframeStr+'</div>';
+                        
                         $("#msgContent").append(str);
                         iniVideo(data[i].msg_id)
                     }

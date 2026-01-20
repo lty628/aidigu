@@ -143,10 +143,27 @@ class IndexInfo extends Info
     // 频道相关
     public function channel()
     {
-        $channelId = request()->param('channel_id');
+        $base64 = input('param.base64');
+        if (!$base64) {
+            return $this->error('参数错误');
+        }
+
+        $base64 = base64_decode($base64);
+
+        $params = parse_url($base64);
+        parse_str($params['path'], $params);
+
+        // dump($params);die;
+        $channelId = $params['channelId'] ?? 0;
+        $msgId = $params['msgId'] ?? 0;
+        // $rid = $params['rid'] ?? 0;
+        // $reminderId = $params['reminderId'] ?? 0;
+        // $channelId = request()->param('channel_id');
         if (empty($channelId)) {
             return $this->redirect('/channel/');
         }
+
+        $this->assign('msgId', $msgId);
         
         // 获取频道信息
         $channel = Db::name('channel')->where('channel_id', $channelId)->find();
@@ -169,13 +186,17 @@ class IndexInfo extends Info
                 $allowDelete = 1;
             }
             $allowComment = $channel['allow_comment'];
-            
+            $where = [];
+            $where[] = ['cm.channel_id', '=', $channelId];
+            if ($msgId) {
+                $where[] = ['cm.msg_id', '=', $msgId];
+            }
             // 获取频道消息（可根据需要添加分页）
             $messages = Db::name('channel_message')
                 ->alias('cm')
                 ->join('user u', 'cm.uid = u.uid')
                 ->join('channel_user cu', 'cm.uid = cu.uid AND cm.channel_id = cu.channel_id', 'LEFT')
-                ->where('cm.channel_id', $channelId)
+                ->where($where)
                 ->where('cm.is_delete', 0)
                 ->order('cm.ctime desc')
                 ->limit(20)

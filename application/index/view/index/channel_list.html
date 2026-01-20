@@ -263,7 +263,7 @@
                     <li class="channel-item">
                         <img src="{$channel.avatar|default='/static/images/default_channel_avatar.png'}" alt="{$channel.channel_name}" class="channel-avatar">
                         <div class="channel-content">
-                            <a href="/channel/{$channel.channel_id}/" class="channel-title">{$channel.channel_name}</a>
+                            <a href="/channel/{:base64_encode('channelId='.$channel.channel_id)}" class="channel-title">{$channel.channel_name}</a>
                             {if !empty($channel.description)}
                             <div class="channel-desc">{$channel.description}</div>
                             {/if}
@@ -284,9 +284,9 @@
                                 {if $currentTab != 'created'}
                                 <a href="javascript:void(0);" class="channel-exit-btn" data-channel-id="{$channel.channel_id}">退出频道</a>
                                 {/if}
-                                <a href="/channel/{$channel.channel_id}/" class="channel-join-btn">进入频道</a>
+                                <a href="/channel/{:base64_encode('channelId='.$channel.channel_id)}" class="channel-join-btn">进入频道</a>
                             {elseif !$channel['password']}
-                                <a href="/channel/{$channel.channel_id}/" class="channel-join-btn">进入频道</a>
+                                <a href="/channel/{:base64_encode('channelId='.$channel.channel_id)}" class="channel-join-btn">进入频道</a>
                             {else}
                                 <!-- 未加入的频道显示加入按钮 -->
                                 <a href="javascript:void(0);" class="channel-join-btn" data-channel-id="{$channel.channel_id}" data-has-password="{if !empty($channel.password)}1{else}0{/if}">
