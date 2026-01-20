@@ -20,7 +20,7 @@
 <!-- <a href="javascript:void(0);" onclick="comment({$message.msg_id}, {$message.uid});">评论{if 0 != $message.commentsum}（{$message.commentsum}）{/if}</a> -->
 <!-- <a href="javascript:void(0);" data-title="评论" data-url="/chat/messageChatId/{$message.msg_id}" onclick="showFrameHtml(this, '60%', '70%')">评论{if 0 != $message.commentsum}（{$message.commentsum}）{/if}</a> -->
   {if $userInfo.isSiteUser}
- | <a href="{:url('/'.$userInfo.blog.'/'.'del/message/'.$message.msg_id)}">删除</a>
+ <a href="{:url('/'.$userInfo.blog.'/'.'del/message/'.$message.msg_id)}">删除</a>
  {/if}
 </span>
 
