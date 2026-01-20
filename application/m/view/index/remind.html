@@ -1,27 +1,88 @@
 {include file='index/header' /}
+<div class="container">
+    <div class="remind-container">
+        <!-- <h2>提醒</h2> -->
+        
+        <div class="remind-tabs">
+            <div class="remind-tab active" data-type="all">全部
+            {if $unreadCount.unreadAllCount > 0}
+                <span class="remind-tab-count" id="count-all">{$unreadCount.unreadAllCount}</span>
+            {/if}
+            </div>
+            <div class="remind-tab" data-type="1">评论
+            {if isset($unreadCount.unreadTypeCount.1) && $unreadCount.unreadTypeCount.1 > 0}
+                <span class="remind-tab-count" id="count-1">{$unreadCount.unreadTypeCount.1}</span>
+            {/if}
+            </div>
+            <div class="remind-tab" data-type="2">回复
+            {if isset($unreadCount.unreadTypeCount.2) && $unreadCount.unreadTypeCount.2 > 0}
+                <span class="remind-tab-count" id="count-2">{$unreadCount.unreadTypeCount.2}</span>
+            {/if}
+            </div>
+            <div class="remind-tab" data-type="3">频道评论
+            {if isset($unreadCount.unreadTypeCount.3) && $unreadCount.unreadTypeCount.3 > 0}
+                <span class="remind-tab-count" id="count-3">{$unreadCount.unreadTypeCount.3}</span>
+            {/if}
+            </div>
+            <div class="remind-tab" data-type="4">频道回复
+            {if isset($unreadCount.unreadTypeCount.4) && $unreadCount.unreadTypeCount.4 > 0}
+                <span class="remind-tab-count" id="count-4">{$unreadCount.unreadTypeCount.4}</span>
+            {/if}
+            </div>
+            <!-- <div class="remind-tab" data-type="5">关注
+            {if isset($unreadCount.unreadTypeCount.5) && $unreadCount.unreadTypeCount.5 > 0}
+                <span class="remind-tab-count" id="count-5">{$unreadCount.unreadTypeCount.5}</span>
+            {/if}
+            </div>
+            <div class="remind-tab" data-type="7">@提及
+            {if isset($unreadCount.unreadTypeCount.7) && $unreadCount.unreadTypeCount.7 > 0}
+                <span class="remind-tab-count" id="count-7">{$unreadCount.unreadTypeCount.7}</span>
+            {/if}
+            </div>
+            <div class="remind-tab" data-type="8">收藏
+            {if isset($unreadCount.unreadTypeCount.8) && $unreadCount.unreadTypeCount.8 > 0}
+                <span class="remind-tab-count" id="count-8">{$unreadCount.unreadTypeCount.8}</span>
+            {/if}
+            </div> -->
+        </div>
+        
+        <div id="remindList">
+            <div class="loading">加载中...</div>
+        </div>
+        
+        <div id="loadMore" style="text-align: center; padding: 20px; display: none;">
+            <button onclick="loadMoreReminders()" class="btn">加载更多</button>
+        </div>
+    </div>
+</div>
+
 <style>
     .remind-container {
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 20px;
+        padding: 10px;
+        margin: 10px;
     }
     
     .remind-tabs {
         display: flex;
         flex-wrap: wrap;
         border-bottom: 1px solid var(--border-color);
-        margin-bottom: 20px;
+        margin-bottom: 15px;
+        overflow-x: auto;
+        white-space: nowrap;
+        justify-content: flex-start;
     }
     
     .remind-tab {
-        padding: 10px 15px;
+        padding: 8px 12px;
         cursor: pointer;
         border-bottom: 3px solid transparent;
         margin-right: 5px;
         margin-bottom: 5px;
         border-radius: 4px;
-        display: flex;
+        display: inline-flex;
         align-items: center;
+        min-width: fit-content;
+        white-space: nowrap;
     }
     
     .remind-tab.active {
@@ -35,79 +96,79 @@
         color: white;
         border-radius: 10px;
         padding: 2px 6px;
-        font-size: 12px;
+        font-size: 10px;
         margin-left: 5px;
     }
     
     .remind-item {
         border: 1px solid var(--border-color);
         border-radius: 8px;
-        padding: 15px;
-        margin-bottom: 15px;
-        /* background: white; */
+        padding: 12px;
+        margin-bottom: 12px;
+        background: var(--background-color);
         box-shadow: 0 2px 4px var(--shadow-color);
     }
     
     .remind-header {
         display: flex;
         align-items: center;
-        margin-bottom: 10px;
+        margin-bottom: 8px;
     }
     
     .remind-avatar {
-        width: 40px;
-        height: 40px;
+        width: 35px;
+        height: 35px;
         border-radius: 50%;
-        margin-right: 10px;
+        margin-right: 8px;
     }
     
     .remind-user {
         font-weight: bold;
         color: var(--base-font-color);
+        font-size: 14px;
     }
     
     .remind-content {
-        margin-left: 50px;
+        margin-left: 43px;
     }
     
     .remind-text {
         color: #666;
-        margin-bottom: 10px;
-        line-height: 1.5;
+        margin-bottom: 8px;
+        line-height: 1.4;
+        font-size: 14px;
     }
     
     .remind-detail {
         background: #f9f9f942;
-        padding: 10px;
+        padding: 8px;
         border-radius: 4px;
-        margin: 10px 0;
-        font-size: 14px;
+        margin: 8px 0;
+        font-size: 13px;
         color: #555;
     }
 
-    .contents h2 {
-        border-bottom: unset;
-    }
-    
     .remind-time {
-        font-size: 12px;
+        font-size: 11px;
         color: #999;
         text-align: right;
+        margin-top: 5px;
     }
     
     .remind-actions {
         text-align: right;
-        margin-top: 10px;
+        margin-top: 8px;
     }
     
     .remind-actions button {
-        margin-left: 10px;
-        padding: 5px 10px;
+        margin-left: 8px;
+        padding: 6px 12px;
         border: 1px solid var(--border-color);
         border-radius: 4px;
         background: var(--background-color);
         cursor: pointer;
         font-size: 12px;
+        min-width: 60px;
     }
     
     .remind-actions button:hover {
@@ -125,7 +186,7 @@
     .no-data {
         text-align: center;
         color: #999;
-        padding: 40px;
+        padding: 40px 20px;
     }
     
     .loading {
@@ -138,74 +199,35 @@
         opacity: 0;
         transition: opacity 0.3s ease;
     }
+    
+    /* 移动端适配 */
+    @media screen and (max-width: 768px) {
+        .remind-container {
+            padding: 8px;
+            margin: 5px;
+        }
+        
+        .remind-tab {
+            padding: 6px 10px;
+            font-size: 13px;
+        }
+        
+        .remind-text {
+            font-size: 13px;
+        }
+        
+        .remind-detail {
+            font-size: 12px;
+            padding: 6px;
+        }
+        
+        .remind-actions button {
+            padding: 5px 10px;
+            font-size: 11px;
+            min-width: 50px;
+        }
+    }
 </style>
-
-<div class="main">
-    <div class="contents">
-        <div class="remind-container">
-            <h2>提醒</h2>
-            
-            <div class="remind-tabs">
-                <div class="remind-tab active" data-type="all">全部
-                {if $unreadCount.unreadAllCount > 0}
-                    <span class="remind-tab-count" id="count-all">{$unreadCount.unreadAllCount}</span>
-                {/if}
-                </div>
-                <div class="remind-tab" data-type="1">评论
-                {if isset($unreadCount.unreadTypeCount.1) && $unreadCount.unreadTypeCount.1 > 0}
-                    <span class="remind-tab-count" id="count-1">{$unreadCount.unreadTypeCount.1}</span>
-                {/if}
-                </div>
-                <div class="remind-tab" data-type="2">回复
-                {if isset($unreadCount.unreadTypeCount.2) && $unreadCount.unreadTypeCount.2 > 0}
-                    <span class="remind-tab-count" id="count-2">{$unreadCount.unreadTypeCount.2}</span>
-                {/if}
-                </div>
-                <div class="remind-tab" data-type="3">频道评论
-                {if isset($unreadCount.unreadTypeCount.3) && $unreadCount.unreadTypeCount.3 > 0}
-                    <span class="remind-tab-count" id="count-3">{$unreadCount.unreadTypeCount.3}</span>
-                {/if}
-                </div>
-                <div class="remind-tab" data-type="4">频道回复
-                {if isset($unreadCount.unreadTypeCount.4) && $unreadCount.unreadTypeCount.4 > 0}
-                    <span class="remind-tab-count" id="count-4">{$unreadCount.unreadTypeCount.4}</span>
-                {/if}
-                </div>
-                <!-- <div class="remind-tab" data-type="5">关注
-                {if isset($unreadCount.unreadTypeCount.5) && $unreadCount.unreadTypeCount.5 > 0}
-                    <span class="remind-tab-count" id="count-5">{$unreadCount.unreadTypeCount.5}</span>
-                {/if}
-                </div>
-                <div class="remind-tab" data-type="7">@提及
-                {if isset($unreadCount.unreadTypeCount.7) && $unreadCount.unreadTypeCount.7 > 0}
-                    <span class="remind-tab-count" id="count-7">{$unreadCount.unreadTypeCount.7}</span>
-                {/if}
-                </div>
-                <div class="remind-tab" data-type="8">收藏
-                {if isset($unreadCount.unreadTypeCount.8) && $unreadCount.unreadTypeCount.8 > 0}
-                    <span class="remind-tab-count" id="count-8">{$unreadCount.unreadTypeCount.8}</span>
-                {/if}
-                </div> -->
-            </div>
-            
-            <div id="remindList">
-                <div class="loading">加载中...</div>
-            </div>
-            
-            <div id="loadMore" style="text-align: center; padding: 20px; display: none;">
-                <button onclick="loadMoreReminders()" class="layui-btn">加载更多</button>
-            </div>
-        </div>
-    </div>
-    <input type="hidden" id="loginUserInfo" value="{$loginUserInfo['blog']}">
-    {if $userInfo.isSiteUser}
-        {include file='index/sidebar_index' /}
-    {else}
-        {include file='index/sidebar_user' /}
-    {/if}
-</div>
-
-{include file='index/footer' /}
 
 <script>
 let currentPage = 1;
@@ -491,7 +513,7 @@ function buildReminderItem(item) {
     
     // 格式化时间
     const timeString = formatTime(item.ctime);
-    // console.log(item);
+    
     // 构建提醒项HTML
     return `
     <div class="remind-item" data-id="${item.reminder_id}">
@@ -542,16 +564,16 @@ function formatTimeWithDate(timestamp) {
     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 }
 
-function markAsRead(cid, rid) {
+function markAsRead(reminderId) {
     $.ajax({
         type: "POST",
-        url: "{:url('/index/ajax/markRead')}",
-        data: { reminder_id: cid, rid },
+        url: "{:url('/m/ajax/markRead')}",
+        data: { reminder_id: reminderId },
         dataType: "json",
         success: function(response) {
             if (response.status === 1) {
                 // 移除已读提醒项
-                $(`.remind-item[data-id="${cid, rid}"]`).fadeOut(300, function() {
+                $(`.remind-item[data-id="${reminderId}"]`).fadeOut(300, function() {
                     $(this).remove();
                     if ($('.remind-item').length === 0) {
                         $('#remindList').html('<div class="no-data">暂无提醒</div>');
@@ -560,11 +582,11 @@ function markAsRead(cid, rid) {
                 // 更新头部提醒计数
                 updateHeaderRemindCount(-1);
             } else {
-                layer.msg(response.msg || '标记失败');
+                alert(response.msg || '标记失败');
             }
         },
         error: function() {
-            layer.msg('网络错误');
+            alert('网络错误');
         }
     });
 }
@@ -583,20 +605,20 @@ function viewDetail(type, reminderId, msgId, cid, rid) {
             break;
         case 3: // 频道评论
         case 4: // 频道回复
-            url = `/index/index/msgdetail/id/${msgId}`; // 或者跳转到频道详情页
+            url = `/m/index/msgdetail/id/${msgId}`; // 移动端频道详情页
             break;
         case 5: // 关注
-            url = `/index/user/space/uid/${item.from_uid || 0}`; // 跳转到关注者主页
+            url = `/m/user/space/uid/${item.from_uid || 0}`; // 移动端关注者主页
             break;
         case 8: // 收藏微博
         case 9: // 收藏频道微博
-            url = `/index/index/msgdetail/id/${msgId}`;
+            url = `/m/index/msgdetail/id/${msgId}`;
             break;
         default:
-            url = `/index/index/msgdetail/id/${msgId}`;
+            url = `/m/index/msgdetail/id/${msgId}`;
     }
     
-    window.open(url, '_blank');
+    location.href = url;
 }
 
 function loadMoreReminders() {
@@ -606,18 +628,8 @@ function loadMoreReminders() {
 }
 
 function updateHeaderRemindCount(delta) {
-    const countElement = $('.remind-count'); // 假设有这样的元素
-    if (countElement.length > 0) {
-        let currentCount = parseInt(countElement.text()) || 0;
-        currentCount += delta;
-        if (currentCount < 0) currentCount = 0;
-        if (currentCount > 0) {
-            countElement.text(currentCount);
-            countElement.show();
-        } else {
-            countElement.hide();
-        }
-    }
+    // 更新头部提醒计数
+    // 此处可以根据实际情况更新顶部导航栏的提醒数量
 }
 
 // 滚动到底部自动加载更多
@@ -627,5 +639,15 @@ $(window).scroll(function() {
             loadMoreReminders();
         }
     }
+});
+
+// 移动端触摸事件优化
+$(document).ready(function() {
+    // 确保移动端可以正常点击
+    $('.remind-tab').on('touchstart', function(e) {
+        $(this).addClass('active-touch');
+    }).on('touchend', function(e) {
+        $(this).removeClass('active-touch');
+    });
 });
 </script>

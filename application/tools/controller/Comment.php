@@ -101,8 +101,8 @@ class Comment extends Controller
         // 分配类型变量
         $type = input('type', 'default');
         $msgId = input('msg_id');
-        $commentId = input('comment_id');
-        $replyId = input('reply_id');
+        $commentId = input('cid');
+        $replyId = input('rid');
         $currentUid = getLoginUid();
 
         $content_table = $this->typeRelationArr[$type]['content_table'] ?? '';

@@ -52,14 +52,25 @@
                 <!-- <li><a href="javascript:;" data-title="我的云盘" data-url="/cloud/show/" onclick="showFrameHtml(this, '100%', '100%')">网盘</a></li> -->
                 <!-- <li {if $action == 'info'}class="current"{/if}><a href="/info/">个人设置</a></li> -->
                 <!-- <li><a href="javascript:;" data-title="我的云盘" data-url="/cloud/show/" onclick="showFrameHtml(this, '100%', '100%')">网盘</a></li> -->
-                <li {if $action == 'tools'}class="current"{/if}>
-					<a href="/tools/">小应用</a>
-                    {if $checkRemind['chatRemind'] || $checkRemind['messageRemind']}
-					<span class="layui-badge-dot layui-bg-blue" id="checkRemind"></span>
-					{else} 
-					<span class="layui-badge-dot layui-bg-blue" id="checkRemind" style="display: none;"></span>
-					{/if}
-				</li>
+                    {if $checkRemind['messageRemind'] || $action == 'remind'}
+                    <li {if $action == 'remind'}class="current"{/if}>
+                        <a href="/remind/">提醒</a>
+                        {if $checkRemind['messageRemind']}
+                        <span class="layui-badge-dot layui-bg-blue" id="checkRemind"></span>
+                        {else} 
+                        <span class="layui-badge-dot layui-bg-blue" id="checkRemind" style="display: none;"></span>
+                        {/if}
+                    </li>
+                    {else}
+                    <li {if $action == 'tools'}class="current"{/if}>
+                        <a href="/tools/">小应用</a>
+                        {if $checkRemind['chatRemind'] || $checkRemind['messageRemind']}
+                        <span class="layui-badge-dot layui-bg-blue" id="checkRemind"></span>
+                        {else} 
+                        <span class="layui-badge-dot layui-bg-blue" id="checkRemind" style="display: none;"></span>
+                        {/if}
+                    </li>
+                    {/if}
                 {else} 
                 <li {if $action == 'home'}class="current"{/if}><a href="{:url('/'.$userInfo.blog.'/')}">{$userInfo.sex|getPerson}的首页</a></li>
                 <li {if $action == 'own'}class="current"{/if}><a href="{:url('/'.$userInfo.blog.'/own/')}" title="我的微博">{$userInfo.sex|getPerson}的微博</a></li>
