@@ -36,4 +36,9 @@ class Reminder extends Model
 	// 	return self::where('touid', $userid)->select();
 	// }
 
+	public function getExtraAttr($value, $data)
+	{
+		return json_decode($value, true);
+	}
+
 }

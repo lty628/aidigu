@@ -28,6 +28,15 @@ use app\common\model\Reminder as ReminderModel;
 
 class Reminder
 { 
+    public static function getReminderMsg($userid, $count = 20)
+    {
+        $result = ReminderModel::where('status', 0)
+            ->order('reminder.ctime desc')
+            ->where('touid', $userid)
+            // ->where('status', 0)
+            ->paginate($count, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
+        return $result;
+    }
     /**
      * 保存提醒信息
      * @param int|null $ukId 关联的内容ID

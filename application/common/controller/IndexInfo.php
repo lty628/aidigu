@@ -308,21 +308,21 @@ class IndexInfo extends Info
     {
         return $this->fetch('setting_passwd');
     }
-    public function newrepeat()
-    {
-        $this->getReminderMsg();
-        return $this->fetch();
-    }
-    public function newreply()
-    {
-        $this->getReminderMsg();
-        return $this->fetch();
-    }
-    public function newcomment()
-    {
-        $this->getReminderMsg();
-        return $this->fetch();
-    }
+    // public function newrepeat()
+    // {
+    //     $this->getReminderMsg();
+    //     return $this->fetch();
+    // }
+    // public function newreply()
+    // {
+    //     $this->getReminderMsg();
+    //     return $this->fetch();
+    // }
+    // public function newcomment()
+    // {
+    //     $this->getReminderMsg();
+    //     return $this->fetch();
+    // }
 
     public function tools()
     {
@@ -564,7 +564,7 @@ class IndexInfo extends Info
     {
         if (request()->isAjax()) {
             $userid = $this->userid;
-		    $reminderMsg = \app\common\helper\Fans::getReminderMsg($userid, 20);
+            $reminderMsg = \app\common\helper\Reminder::getReminderMsg($userid, 20);
             return json(['status' => 1, 'msg' => 'ok', 'data'=>$reminderMsg]);
          // $type 0: 转发 1: 评论 2: 回复 3: 好友 4: 私信  5: 群聊 【群聊提醒待定】
             // $uid = getLoginUid();

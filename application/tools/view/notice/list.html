@@ -6,125 +6,339 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>消息提醒 - 嘀咕</title>
   <link href="/static/layui/css/layui.css" rel="stylesheet">
+  <style>
+    .reminder-item {
+      padding: 15px;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      align-items: flex-start;
+    }
+    .reminder-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      margin-right: 12px;
+      flex-shrink: 0;
+    }
+    .reminder-content {
+      flex: 1;
+    }
+    .reminder-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 5px;
+    }
+    .reminder-nickname {
+      font-weight: bold;
+      color: #333;
+    }
+    .reminder-type {
+      font-size: 12px;
+      padding: 2px 6px;
+      background-color: #f0f0f0;
+      border-radius: 3px;
+      color: #666;
+    }
+    .reminder-body {
+      color: #666;
+      margin-bottom: 8px;
+      line-height: 1.5;
+    }
+    .reminder-footer {
+      display: flex;
+      justify-content: space-between;
+      color: #999;
+      font-size: 12px;
+    }
+    .reminder-actions {
+      text-align: right;
+    }
+    .reminder-actions button {
+      margin-left: 5px;
+      font-size: 12px;
+    }
+    .unread {
+      background-color: #f9f9f9;
+    }
+    .read {
+      background-color: #fff;
+    }
+    .content-preview {
+      margin: 8px 0;
+      padding: 8px;
+      background-color: #f8f9fa;
+      border-radius: 4px;
+      color: #555;
+      font-size: 13px;
+    }
+    .notification-badge {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: #ff4757;
+      margin-left: 5px;
+    }
+  </style>
 </head>
 
 <body class="main_body white">
-  <!-- <div class="layui-header">
-    <ul class="layui-nav layui-layout">
-      <li class="layui-nav-item"><a href="">我的群</a></li>
-  </div> -->
-
   <div class="layui-layout">
     <div style="padding: 16px;">
-      <table class="layui-hide" id="initTable" lay-filter="initTable"></table>
+      <div class="layui-row">
+        <div class="layui-col-md12">
+          <div class="layui-tab layui-tab-brief" lay-filter="reminderTab">
+            <ul class="layui-tab-title">
+              <li class="layui-this" data-type="">全部提醒</li>
+              <li data-type="1">评论提醒</li>
+              <li data-type="2">回复提醒</li>
+              <li data-type="3">频道评论</li>
+              <li data-type="4">频道回复</li>
+              <li data-type="5">关注提醒</li>
+              <li data-type="7">@提及</li>
+              <li data-type="8">收藏提醒</li>
+            </ul>
+            <div class="layui-tab-content">
+              <div class="layui-tab-item layui-show">
+                <div class="reminder-list-container">
+                  <table class="layui-hide" id="reminderTable" lay-filter="reminderTable"></table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
   <script src="/static/layui/layui.js"></script>
   <script>
-    function showMedia(obj) {
-      var $ = layui.$;
-      var url = $(obj).attr('data-url');
-      parent.layer.open({
-        type: 2,
-        title: false,
-        area: ['630px', '360px'],
-        shade: 0.8,
-        closeBtn: 0,
-        shadeClose: true,
-        content: url // video 地址
-      });
-    }
-    layui.use(['table', 'dropdown'], function () {
+    layui.use(['table', 'element'], function () {
       var table = layui.table;
-      var dropdown = layui.dropdown;
+      var element = layui.element;
       var $ = layui.$;
+      
+      // 初始化提醒列表
+      var currentType = '';
+      renderReminderTable(currentType);
 
-      // 创建渲染实例
-      table.render({
-        elem: '#initTable',
-        url: '/tools/notice/getList', // 此处为静态模拟数据，实际使用时需换成真实接口
-        toolbar: false,
-        defaultToolbar: false,
-        height: 'full-35', // 最大高度减去其他容器已占有的高度差
-        lineStyle: 'height: 70px;',
-        css: [ // 重设当前表格样式
-          '.layui-table-tool-temp{padding-right: 145px;}'
-        ].join(''),
-        cellMinWidth: 80,
-        page: true,
-        cols: [[
-          { field: 'contents', align: 'center', title: '内容',templet: function (d) {
-              if (!d.contents && d.media) {
-                return '<a href="javascript:;" data-url="' + d.media + '" onclick="showMedia(this)" alt="点击查看">点击查看</a>'
-              } else if(d.media) {
-                return d.contents+'：<a href="javascript:;" data-url="' + d.media + '" onclick="showMedia(this)" alt="点击查看">点击查看</a>'
-              } else {
-                return d.contents
-              }
-            } 
-          },
-          {
-            field: 'type', align: 'center', title: '提醒类型', templet: function (d) {
-              if (d.type ==1) {
-                return '评论提醒'
-              } else if (d.type ==2) {
-                return '回复提醒'
-              } else if (d.type ==3) {
-                return '点赞提醒'
-              } else if (d.type ==4) {
-                return '关注提醒'
-              } else if (d.type ==5) {
-                return '系统提醒'
-              } else {
-                return '未知提醒'
-              } 
-            }
-          },
-          {
-            field: 'remind_time', align: 'center', title: '提醒时间', templet: function (d) {
-              return d.remind_time
-            }
-          },
-          { fixed: 'right', align: 'center', title: '操作', templet: function(d) {
-            var str = '<a target="__blank" href="/tools/notice/view?msgId='+d.msg_id+'" class="layui-btn layui-btn-xs">查看</a>'
-            // var str = '<a data-title="评论: '+d.contents.substring(0, 20)+'..." data-url="/chat/messageChatId/'+d.msg_id+'" onclick="parent.showFrameHtml(this, \'60%\', \'70%\')" class="layui-btn layui-btn-xs">查看</a>'
-            if (d.status) {
-              return str+'<a class="layui-btn layui-btn-xs">已读</a>'
-            } else {
-              return str+'<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="edit">标记已读</a>'
-            }
-          } }
-        ]]
+      // 切换标签页
+      element.on('tab(reminderTab)', function(data) {
+        currentType = $(this).data('type') || '';
+        renderReminderTable(currentType);
       });
 
-
-      // 触发单元格工具事件
-      table.on('tool(initTable)', function (obj) { // 双击 toolDouble
-        var data = obj.data; // 获得当前行数据
-        // console.log(data)
-        if (obj.event === 'edit') {
-          layer.confirm('确定标记已读吗？', function (index) {
-            $.ajax({
-              type: "post",
-              url: "/tools/notice/del",
-              data: { 'id': data.id },
-              dataType: "json",
-              success: function (res) {
-                layer.msg(res.msg);
-                if (res.code == 0) {
-                  table.reload('initTable')
+      // 渲染提醒表格
+      function renderReminderTable(type) {
+        table.render({
+          elem: '#reminderTable',
+          url: '/tools/notice/getListNew', // 新的API端点
+          where: { type: type },
+          toolbar: false,
+          defaultToolbar: false,
+          height: 'full-100', // 最大高度减去其他容器已占有的高度差
+          lineStyle: 'height: auto;',
+          cellMinWidth: 80,
+          page: true,
+          limits: [10, 20, 30, 50],
+          limit: 20,
+          cols: [[
+            {
+              field: 'reminder_info', 
+              title: '提醒详情', 
+              width: '65%',
+              templet: function(d) {
+                var statusClass = d.status === 0 ? 'unread' : 'read';
+                var statusMark = d.status === 0 ? '<span class="notification-badge"></span>' : '';
+                
+                var avatar = d.extra && d.extra.from_head_image ? d.extra.from_head_image : '/static/images/default_avatar.png';
+                var nickname = d.extra && d.extra.from_nickname ? d.extra.from_nickname : '未知用户';
+                var typeText = getReminderTypeText(d.type);
+                var note = d.note || '你有一条新提醒';
+                
+                var contentPreview = '';
+                if (d.extra && (d.extra.msg_contents || d.extra.comment_contents || d.extra.reply_contents)) {
+                  contentPreview = '<div class="content-preview">';
+                  if (d.extra.msg_contents) {
+                    contentPreview += '<div><strong>主题:</strong> ' + d.extra.msg_contents + '</div>';
+                  }
+                  if (d.extra.comment_contents) {
+                    contentPreview += '<div><strong>评论:</strong> ' + d.extra.comment_contents + '</div>';
+                  }
+                  if (d.extra.reply_contents) {
+                    contentPreview += '<div><strong>回复:</strong> ' + d.extra.reply_contents + '</div>';
+                  }
+                  contentPreview += '</div>';
                 }
+                
+                var blogLink = d.extra && d.extra.from_blog ? '/'+d.extra.from_blog : 'javascript:;';
+                
+                return `
+                  <div class="reminder-item ${statusClass}">
+                    <img src="${avatar}" class="reminder-avatar" onerror="this.src='/static/images/default_avatar.png'">
+                    <div class="reminder-content">
+                      <div class="reminder-header">
+                        <a href="${blogLink}" class="reminder-nickname">${nickname}</a>
+                        <span class="reminder-type">${typeText}${statusMark}</span>
+                      </div>
+                      <div class="reminder-body">${note}</div>
+                      ${contentPreview}
+                      <div class="reminder-footer">
+                        <span>${formatTimestamp(d.ctime)}</span>
+                      </div>
+                    </div>
+                  </div>
+                `;
               }
-            });
-            // layer.close(index);
-            // // 向服务端发送删除指令
-            // table.reload('initTable')
-          });
+            },
+            { 
+              field: 'actions', 
+              title: '操作', 
+              width: '35%',
+              align: 'right',
+              templet: function(d) {
+                var viewUrl = getViewUrl(d);
+                var actionButtons = `
+                  <div class="reminder-actions">
+                    <a href="${viewUrl}" target="_blank" class="layui-btn layui-btn-xs">查看</a>
+                    ${d.status === 0 ? 
+                      `<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="markRead">标记已读</a>` : 
+                      `<a class="layui-btn layui-btn-xs layui-btn-normal">已读</a>`
+                    }
+                    <a class="layui-btn layui-btn-xs layui-btn-warm" lay-event="delete">删除</a>
+                  </div>
+                `;
+                return actionButtons;
+              }
+            }
+          ]]
+        });
+      }
+
+      // 获取提醒类型文本
+      function getReminderTypeText(type) {
+        var types = {
+          1: '评论',
+          2: '回复', 
+          3: '频道评论',
+          4: '频道回复',
+          5: '关注',
+          6: '取消关注',
+          7: '@提及',
+          8: '收藏微博',
+          9: '收藏频道'
+        };
+        return types[type] || '其他';
+      }
+
+      // 格式化时间戳
+      function formatTimestamp(timestamp) {
+        if (!timestamp) return '';
+        var date = new Date(timestamp * 1000);
+        var year = date.getFullYear();
+        var month = String(date.getMonth() + 1).padStart(2, '0');
+        var day = String(date.getDate()).padStart(2, '0');
+        var hours = String(date.getHours()).padStart(2, '0');
+        var minutes = String(date.getMinutes()).padStart(2, '0');
+        return `${year}-${month}-${day} ${hours}:${minutes}`;
+      }
+
+      // 获取查看链接
+      function getViewUrl(reminder) {
+        var baseUrl = '/tools/notice/view';
+        var params = '?msgId=' + (reminder.msg_id || reminder.uk_id || 0);
+        
+        // 根据提醒类型构建不同的查看链接
+        switch(reminder.type) {
+          case 1: // 评论
+            return baseUrl + params + '&type=comment';
+          case 2: // 回复
+            return baseUrl + params + '&type=reply';
+          case 7: // @提及
+            return baseUrl + params + '&type=mention';
+          default:
+            return baseUrl + params;
+        }
+      }
+
+      // 监听工具条事件
+      table.on('tool(reminderTable)', function(obj) {
+        var data = obj.data;
+        var layEvent = obj.event;
+
+        if (layEvent === 'markRead') {
+          markAsRead(data.id);
+        } else if (layEvent === 'delete') {
+          deleteReminder(data.id);
         }
       });
 
+      // 标记为已读
+      function markAsRead(id) {
+        layer.confirm('确定标记为已读吗？', function(index) {
+          $.ajax({
+            type: "POST",
+            url: "/tools/notice/markRead",
+            data: { 'id': id },
+            dataType: "json",
+            success: function(res) {
+              layer.msg(res.msg);
+              if (res.code == 0) {
+                table.reload('reminderTable');
+              }
+            },
+            error: function() {
+              layer.msg('操作失败，请稍后重试');
+            }
+          });
+          layer.close(index);
+        });
+      }
+
+      // 删除提醒
+      function deleteReminder(id) {
+        layer.confirm('确定删除此提醒吗？', function(index) {
+          $.ajax({
+            type: "POST",
+            url: "/tools/notice/delete",
+            data: { 'id': id },
+            dataType: "json",
+            success: function(res) {
+              layer.msg(res.msg);
+              if (res.code == 0) {
+                table.reload('reminderTable');
+              }
+            },
+            error: function() {
+              layer.msg('删除失败，请稍后重试');
+            }
+          });
+          layer.close(index);
+        });
+      }
+
+      // 刷新提醒数量
+      function refreshReminderCount() {
+        $.ajax({
+          type: "GET",
+          url: "/tools/notice/count",
+          dataType: "json",
+          success: function(res) {
+            if (res.code == 0) {
+              // 更新页面上的提醒数量显示
+              $('.layui-tab-title .layui-this').find('span').remove();
+              if (res.count > 0) {
+                $('.layui-tab-title .layui-this').append(`<span class="layui-badge">${res.count}</span>`);
+              }
+            }
+          }
+        });
+      }
+
+      // 页面加载完成后刷新提醒数量
+      refreshReminderCount();
     });
   </script>
 </body>
