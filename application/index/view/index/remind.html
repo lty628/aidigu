@@ -9,7 +9,7 @@
     .remind-tabs {
         display: flex;
         flex-wrap: wrap;
-        border-bottom: 1px solid #eee;
+        border-bottom: 1px solid var(--border-color);
         margin-bottom: 20px;
     }
     
@@ -25,8 +25,8 @@
     }
     
     .remind-tab.active {
-        border-bottom: 3px solid #1E9FFF;
-        color: #1E9FFF;
+        border-bottom: 3px solid var(--primary-color);
+        color: var(--primary-color);
         background: #f0f8ff;
     }
 
@@ -40,12 +40,12 @@
     }
     
     .remind-item {
-        border: 1px solid #eee;
+        border: 1px solid var(--border-color);
         border-radius: 8px;
         padding: 15px;
         margin-bottom: 15px;
-        background: white;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        /* background: white; */
+        box-shadow: 0 2px 4px var(--shadow-color);
     }
     
     .remind-header {
@@ -63,7 +63,7 @@
     
     .remind-user {
         font-weight: bold;
-        color: #333;
+        color: var(--base-font-color);
     }
     
     .remind-content {
@@ -77,12 +77,16 @@
     }
     
     .remind-detail {
-        background: #f9f9f9;
+        background: #f9f9f942;
         padding: 10px;
         border-radius: 4px;
         margin: 10px 0;
         font-size: 14px;
         color: #555;
+    }
+
+    .contents h2 {
+        border-bottom: unset;
     }
     
     .remind-time {
@@ -99,9 +103,9 @@
     .remind-actions button {
         margin-left: 10px;
         padding: 5px 10px;
-        border: 1px solid #ddd;
+        border: 1px solid var(--border-color);
         border-radius: 4px;
-        background: white;
+        background: var(--background-color);
         cursor: pointer;
         font-size: 12px;
     }
@@ -111,7 +115,7 @@
     }
     
     .remind-actions .read-btn {
-        color: #1E9FFF;
+        color: var(--primary-color);
     }
     
     .remind-actions .view-btn {
