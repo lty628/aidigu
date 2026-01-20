@@ -38,6 +38,26 @@ CREATE TABLE `wb_admin_system_setting`  (
 -- Records of wb_admin_system_setting
 -- ----------------------------
 
+INSERT INTO `wb_admin_system_setting` VALUES (1, 'app', 'staticDomain', '', '配置CDN域名加速使用', '2025-12-04 20:15:33', '2025-12-04 20:15:33');
+INSERT INTO `wb_admin_system_setting` VALUES (2, 'app', 'beian', '京ICP备2020000023012号-1', '填入备案号', '2025-12-04 20:15:55', '2025-12-05 08:37:00');
+INSERT INTO `wb_admin_system_setting` VALUES (3, 'app', 'noRegister', '1', '是否开放注册', '2025-12-04 20:16:22', '2025-12-08 13:52:07');
+INSERT INTO `wb_admin_system_setting` VALUES (4, 'app', 'pubIndex', '', '首页是否无需登录【默认0，必须登录，可改为1】', '2025-12-04 20:17:45', '2025-12-05 08:33:27');
+INSERT INTO `wb_admin_system_setting` VALUES (5, 'app', 'defaultIndex', '/', '首页默认地址,如设置 app\\tools\\controller\\Nav@index 后首页为导航', '2025-12-04 20:18:53', '2025-12-04 20:18:53');
+INSERT INTO `wb_admin_system_setting` VALUES (6, 'app', 'picUploadSize', '4194304', '图片上传限制大小，默认： 4194304 【4M】', '2025-12-04 20:19:21', '2025-12-04 20:20:44');
+INSERT INTO `wb_admin_system_setting` VALUES (7, 'app', 'fileUploadSize', '62914561', '文件上传限制大小，默认：62914561 【60M】', '2025-12-04 20:20:12', '2025-12-04 20:20:12');
+INSERT INTO `wb_admin_system_setting` VALUES (8, 'app', 'openToolType', '', '打开工具类型', '2025-12-04 20:21:22', '2025-12-08 13:43:11');
+INSERT INTO `wb_admin_system_setting` VALUES (9, 'storage', 'type', 'File', '网盘存储配置【File或S3File】', '2025-12-04 20:23:22', '2025-12-04 20:23:22');
+INSERT INTO `wb_admin_system_setting` VALUES (10, 's3Config', 'awsAccessKey', 'AccessKeyAccessKeyAccessKey', '对象存储的AccessKey', '2025-12-04 20:23:59', '2025-12-04 20:24:24');
+INSERT INTO `wb_admin_system_setting` VALUES (11, 's3Config', 'awsSecretKey', 'awsSecretKeyawsSecretKeyawsSecret', '对象存储的awsSecretKey', '2025-12-04 20:24:45', '2025-12-04 20:31:51');
+INSERT INTO `wb_admin_system_setting` VALUES (12, 's3Config', 'bucket', 'aidigu', '对象存储的桶名字', '2025-12-04 20:25:19', '2025-12-04 20:25:19');
+INSERT INTO `wb_admin_system_setting` VALUES (13, 's3Config', 'endpoint', 'http://192.168.1.11/', '对象存储地址', '2025-12-04 20:25:45', '2025-12-04 20:25:45');
+INSERT INTO `wb_admin_system_setting` VALUES (14, 's3Config', 'region', '中国华北一区', '对象存储的地区', '2025-12-04 20:26:26', '2025-12-04 20:26:47');
+INSERT INTO `wb_admin_system_setting` VALUES (15, 'wechat', 'app_id', 'app_id', '微信公众号app_id【暂时无效】', '2025-12-04 20:27:32', '2025-12-04 20:27:32');
+INSERT INTO `wb_admin_system_setting` VALUES (16, 'wechat', 'secret', 'secret', '微信公众号secret【暂时无效】', '2025-12-04 20:28:12', '2025-12-04 20:28:37');
+INSERT INTO `wb_admin_system_setting` VALUES (17, 'wechat', 'token', 'token', '微信公众号token【暂时无效】', '2025-12-04 20:29:36', '2025-12-04 20:29:36');
+INSERT INTO `wb_admin_system_setting` VALUES (18, 'wechat', 'aes_key', 'aes_key', '微信公众号aes_key【暂时无效】', '2025-12-04 20:30:05', '2025-12-04 20:30:05');
+INSERT INTO `wb_admin_system_setting` VALUES (19, 'wechat', 'callback', '/examples/oauth_callback.php', '微信公众号callback【暂时无效】', '2025-12-04 20:30:45', '2025-12-04 20:30:45');
+
 -- ----------------------------
 -- Table structure for wb_app
 -- ----------------------------
