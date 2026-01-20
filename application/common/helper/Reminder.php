@@ -7,18 +7,24 @@ use app\common\model\Reminder as ReminderModel;
 
 // $type  1: 微博评论 2: 微博回复，3频道评论，4频道回复 5: 好友关注 6: 取消关注  7: 提到@了您 8收藏了微博， 9收藏了频道微博
 // DROP TABLE IF EXISTS `wb_reminder`;
-// CREATE TABLE `wb_reminder`  (
-//   `reminder_id` bigint(20) NOT NULL AUTO_INCREMENT,
-//   `uk_id` bigint(20) NULL DEFAULT NULL,
-//   `fromuid` bigint(20) NOT NULL,
-//   `touid` bigint(20) NOT NULL,
-//   `type` tinyint(4) NOT NULL,
-//   `extra` text NULL DEFAULT NULL COMMENT '额外信息',
+// CREATE TABLE `wb_reminder` (
+//   `reminder_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '提醒记录ID，主键',
+//   `uk_id` bigint(20) NULL DEFAULT NULL COMMENT '唯一键ID，根据类型不同含义不同：评论类型=评论ID(cid)，回复类型=回复ID(rid)，收藏类型=消息ID(msg_id)，关注/取消关注=0',
+//   `fromuid` bigint(20) NOT NULL COMMENT '发送提醒的用户ID',
+//   `touid` bigint(20) NOT NULL COMMENT '接收提醒的用户ID',
+//   `type` tinyint(4) NOT NULL COMMENT '提醒类型：1微博评论，2微博回复，3频道评论，4频道回复，5好友关注，6取消关注，7@提及，8收藏微博，9收藏频道微博',
+//   `extra` text NULL DEFAULT NULL COMMENT '额外信息，JSON格式存储详细内容',
 //   `status` tinyint(3) UNSIGNED NOT NULL DEFAULT 0 COMMENT '状态：0未读，1已读',
-//   `ctime` bigint(20) NOT NULL,
-//   `uptime` bigint(20) NULL DEFAULT NULL,
-//   PRIMARY KEY (`reminder_id`) USING BTREE
-// ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = DYNAMIC;
+//   `ctime` bigint(20) NOT NULL COMMENT '创建时间戳',
+//   `uptime` bigint(20) NULL DEFAULT NULL COMMENT '更新时间戳',
+//   PRIMARY KEY (`reminder_id`),
+//   INDEX `idx_uk_from_touid_type` (`uk_id`, `fromuid`, `touid`, `type`),
+//   INDEX `idx_touid` (`touid`),
+//   INDEX `idx_touid_status_ctime` (`touid`, `status`, `ctime`),
+//   INDEX `idx_status` (`status`),
+//   INDEX `idx_type` (`type`),
+//   INDEX `idx_ctime` (`ctime`)
+// ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = DYNAMIC COMMENT='消息提醒表，存储各类消息提醒记录';
 
 class Reminder
 { 
