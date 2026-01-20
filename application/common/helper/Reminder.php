@@ -28,14 +28,35 @@ use app\common\model\Reminder as ReminderModel;
 
 class Reminder
 { 
-    public static function getReminderMsg($userid, $count = 20)
+    public static function getReminderMsg($userid, $count = 20, $page = 1, $type = null)
     {
-        $result = ReminderModel::where('status', 0)
-            ->order('reminder.ctime desc')
-            ->where('touid', $userid)
-            // ->where('status', 0)
-            ->paginate($count, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
-        return $result;
+        $query = ReminderModel::alias('reminder')
+            ->join('user u', 'u.uid = reminder.fromuid', 'LEFT')
+            ->field('reminder.*, u.nickname as from_nickname, u.head_image as from_head_image, u.blog as from_blog')
+            ->where('reminder.touid', $userid)
+            ->where('reminder.status', 0)  // 只获取未读提醒
+            ->order('reminder.ctime desc');
+        
+        // 如果指定了类型，则添加类型筛选
+        if ($type !== null && $type !== '') {
+            $query->where('reminder.type', (int)$type);
+        }
+        
+        $reminders = $query->page($page, $count)->select();
+        
+        // 解析额外信息
+        // foreach ($reminders as &$reminder) {
+        //     $extra = json_decode($reminder['extra'], true);
+        //     if ($extra) {
+        //         $reminder = array_merge($reminder, $extra);
+        //     }
+        // }
+        
+        return [
+            'data' => $reminders,
+            'page' => $page,
+            'count' => count($reminders)
+        ];
     }
     /**
      * 保存提醒信息

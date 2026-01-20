@@ -562,10 +562,10 @@ class IndexInfo extends Info
     // 提醒
     public function remind()
     {
-        if (request()->isAjax()) {
-            $userid = $this->userid;
-            $reminderMsg = \app\common\helper\Reminder::getReminderMsg($userid, 20);
-            return json(['status' => 1, 'msg' => 'ok', 'data'=>$reminderMsg]);
+    //     if (request()->isAjax()) {
+    //         $userid = $this->userid;
+    //         $reminderMsg = \app\common\helper\Reminder::getReminderMsg($userid, 20);
+    //         return json(['status' => 1, 'msg' => 'ok', 'data'=>$reminderMsg]);
          // $type 0: 转发 1: 评论 2: 回复 3: 好友 4: 私信  5: 群聊 【群聊提醒待定】
             // $uid = getLoginUid();
             // $get = input('get.');
@@ -585,9 +585,9 @@ class IndexInfo extends Info
 
             // // $userMessage = $userMessage->toArray()['data'];
             // return json(array('status' =>  1, 'msg' => 'ok', 'data' => ['data' => handleMessage($list), 'allow_delete' => 0]));
-        }
+        // }
         // $this->assign('siteUser', $this->siteUserId);
-        $this->assign('userMessage', []);
+        // $this->assign('userMessage', []);
         return $this->fetch();
         // dump($list);die;
         // return json(['code' => 0, 'data' => $list, 'count' => $count]);

@@ -428,4 +428,37 @@ class Api extends Base
         }
         return json(array('status' =>  1,'msg' => 'ok', 'data' => $data));
     }
+
+    public function getRemind()
+    {
+        // if (request()->isAjax()) {
+            $uid = getLoginUid();
+            $page = input('get.page', 1);
+            $type = input('get.type', ''); // 可选的提醒类型筛选
+            
+            // 使用新的Reminder类获取提醒消息
+            $reminderMsg = \app\common\helper\Reminder::getReminderMsg($uid, 20, $page, $type);
+            
+            return json(['status' => 1, 'msg' => 'ok', 'data' => $reminderMsg]);
+        // }
+    }
+
+    // 在类中添加以下方法
+    public function markRead()
+    {
+        $id = input('post.id');
+        
+        if (!$id) {
+            return json(['code' => 1, 'msg' => '参数错误']);
+        }
+        
+        $result = \app\common\helper\Reminder::markAsRead($id, getLoginUid());
+        
+        if ($result) {
+            return json(['code' => 0, 'msg' => '标记成功']);
+        } else {
+            return json(['code' => 1, 'msg' => '操作失败']);
+        }
+    }
+
 }
