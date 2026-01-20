@@ -34,7 +34,7 @@ class Reminder
             ->join('user u', 'u.uid = reminder.fromuid', 'LEFT')
             ->field('reminder.*, u.nickname as from_nickname, u.head_image as from_head_image, u.blog as from_blog')
             ->where('reminder.touid', $userid)
-            // ->where('reminder.status', 0)  // 只获取未读提醒
+            ->where('reminder.status', 0)  // 只获取未读提醒
             ->order('reminder.status asc, reminder.ctime desc');
         
         // 如果指定了类型，则添加类型筛选
@@ -283,6 +283,7 @@ class Reminder
             'comment_contents' => $commentInfo ? mb_substr($commentInfo['msg'], 0, 50, 'utf-8') : '', // 评论内容
             'comment_timestamp' => $commentInfo ? $commentInfo['ctime'] : 0,
             'comment_id' => $commentId,
+            'channel_id' => $messageInfo['channel_id'] ?? 0,
             'timestamp' => time()
         ];
         
@@ -320,6 +321,7 @@ class Reminder
             'reply_timestamp' => $replyInfo ? $replyInfo['reply_ctime'] : 0,
             'reply_id' => $replyId,
             'comment_id' => $replyInfo ? $replyInfo['comment_id'] : null,
+            'channel_id' => $messageInfo['channel_id'] ?? 0,
             'timestamp' => time()
         ];
         
@@ -414,6 +416,7 @@ class Reminder
             'msg_timestamp' => $messageInfo ? $messageInfo['ctime'] : 0,
             'original_author_nickname' => $originalAuthorInfo['nickname'] ?? '',
             'original_author_head_image' => $originalAuthorInfo['head_image'] ?? '',
+            'channel_id' => $messageInfo['channel_id'] ?? 0,
             'timestamp' => time()
         ];
         
