@@ -350,17 +350,13 @@ class Comment extends Controller
             Db::name($contentTable)->where('msg_id', $msgId)->setInc('commentsum');
             if ($result) {
                 Reminder::saveReminder(
-                    $msgId,
+                    $result,
                     $uid,
                     (int)$data['touid'],
                     $this->typeRelationArr[$type]['comment_type'],
                     [
-                        'comment_id' => $result,
-                        'msg' => $data['msg'],
-                        'msg_id' => $msgId,
-                        'touid' => $data['touid'],
-                        'fromuid' => $uid,
-                        'ctime' => $data['ctime'],
+                        'cid' => $result,
+                        'msg_id' => $msgId
                     ]
                 );
                 return json([
@@ -448,12 +444,8 @@ class Comment extends Controller
                 // 提交事务
                 Db::commit();
                 // 保存提醒
-                Reminder::saveReminder($msgId, $uid, (int)$data['touid'], $this->typeRelationArr[$type]['rely_type'], [
+                Reminder::saveReminder($result, $uid, (int)$data['touid'], $this->typeRelationArr[$type]['rely_type'], [
                     'rid' => $result,
-                    'fromuid' => $data['fromuid'],
-                    'touid' => $data['touid'],
-                    'msg' => $data['msg'],
-                    'ctime' => $data['ctime'],
                     'cid' => $commentId,
                     'msg_id' => $data['msg_id'],
                 ]);
