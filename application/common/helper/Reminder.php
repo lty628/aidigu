@@ -60,6 +60,7 @@ class Reminder
         // 'from_head_image'=>'来源头像',
         // 'from_blog'=>'来源博客',
         // ]
+        // ukId ： 评论=cid，回复=rid，收藏=msg_id, 好友关注 0， 取消关注 0 ...
         $extraData = self::generateReminderData($ukId, $fromuid, $type, $extra);
 
         // 检查是否已存在相同的提醒记录
@@ -104,24 +105,36 @@ class Reminder
      * @param int $ukId 关联的内容ID
      * @param int $fromuid 发送提醒的用户ID
      * @param int $type 提醒类型：1评论，2回复，3@提及等
-     * @param array $context 包含上下文信息的数组
-     * @return array 包含 note 和 extra 的数组
+     * @param array $extra 包含上下文信息的数组
+     * @return array 完整的提醒数据
      */
     public static function generateReminderData($ukId, $fromuid, $type, array $extra = [])
     {   
+        // 获取用户信息
+        $userInfo = self::getUserInfo($fromuid);
+        
         switch ($type) {
-            case 1: // 微博评论
-                return self::generateCommentReminderData($ukId, $fromuid, $extra);
-            case 2: // 微博回复
-                return self::generateReplyReminderData($ukId, $fromuid, $extra);
-            case 3: // 频道评论
-                return self::generateChannelCommentReminderData($ukId, $fromuid, $extra);
-            case 4: // 频道回复
-                return self::generateChannelReplyReminderData($ukId, $fromuid, $extra);
+            case 1: // 微博评论 - 主题内容，评论内容
+                return self::generateCommentReminderData($ukId, $userInfo, $extra);
+            case 2: // 微博回复 - 主题，回复，评论信息
+                return self::generateReplyReminderData($ukId, $userInfo, $extra);
+            case 3: // 频道评论 - 主题内容，评论内容
+                return self::generateChannelCommentReminderData($ukId, $userInfo, $extra);
+            case 4: // 频道回复 - 主题，回复，评论信息
+                return self::generateChannelReplyReminderData($ukId, $userInfo, $extra);
             case 7: // @提及
-                return self::generateAtReminderData($ukId, $fromuid, $extra);
+                return self::generateAtReminderData($ukId, $userInfo, $extra);
+            case 8: // 收藏了微博 - 收藏主体内容
+                return self::generateFavoriteWeiboReminderData($ukId, $userInfo, $extra);
+            case 9: // 收藏了频道微博 - 收藏主体内容
+                return self::generateFavoriteChannelWeiboReminderData($ukId, $userInfo, $extra);
             default:
-                return $extra;
+                // 默认情况下也包含用户信息
+                return [
+                    'from_nickname' => $userInfo['nickname'] ?? '',
+                    'from_head_image' => $userInfo['head_image'] ?? '',
+                    'from_blog' => $userInfo['blog'] ?? ''
+                ] + $extra;
         }
     }
 
@@ -148,125 +161,186 @@ class Reminder
     /**
      * 生成评论提醒数据
      */
-    private static function generateCommentReminderData($msgId, $fromuid, $extra)
+    private static function generateCommentReminderData($msgId, $userInfo, $extra)
     {
         $messageInfo = Db::name('message')->field('content, ctime')->where('msg_id', $msgId)->find();
-        if (!$messageInfo) {
-            return $extra;
-        }
-        
-        $userInfo = self::getUserInfo($fromuid);
-        $commentContent = mb_substr($extra['msg'] ?? '', 0, 50, 'utf-8'); // 限制评论内容长度
         
         $result = [
             'note' => $userInfo['nickname'] . ' 评论了你的内容',
-            'extra' => [
-                'from_nickname' => $userInfo['nickname'],
-                'from_head_image' => $userInfo['head_image'],
-                'from_blog' => $userInfo['blog'],
-                'content_preview' => mb_substr($messageInfo['content'], 0, 100, 'utf-8'),
-                'comment_content' => $commentContent,
-                'comment_id' => $extra['comment_id'] ?? null,
-                'timestamp' => time()
-            ] + $extra
+            'from_nickname' => $userInfo['nickname'],
+            'from_head_image' => $userInfo['head_image'],
+            'from_blog' => $userInfo['blog'],
+            'msg_content' => $messageInfo ? mb_substr($messageInfo['content'], 0, 100, 'utf-8') : '',
+            'msg_timestamp' => $messageInfo ? $messageInfo['ctime'] : 0,
+            'comment_content' => mb_substr($extra['msg'] ?? '', 0, 50, 'utf-8'), // 评论内容
+            'comment_id' => $extra['comment_id'] ?? $extra['cid'] ?? null,
+            'timestamp' => time()
         ];
         
-        return $result;
+        // 合并额外参数
+        return $result + $extra;
     }
 
     /**
-     * 生成回复提醒数据
+     * 生成微博回复提醒数据
      */
-    private static function generateReplyReminderData($msgId, $fromuid, $extra)
+    private static function generateReplyReminderData($msgId, $userInfo, $extra)
     {
         $messageInfo = Db::name('message')->field('content, ctime')->where('msg_id', $msgId)->find();
-        if (!$messageInfo) {
-            return $extra;
+        
+        // 获取评论信息
+        $commentId = $extra['cid'] ?? $extra['comment_id'] ?? null;
+        $commentInfo = null;
+        if ($commentId) {
+            $commentInfo = Db::name('comment')->field('msg, ctime')->where('cid', $commentId)->find();
         }
         
-        $userInfo = self::getUserInfo($fromuid);
-        $replyContent = mb_substr($extra['msg'] ?? '', 0, 50, 'utf-8'); // 限制回复内容长度
+        $result = [
+            'note' => $userInfo['nickname'] . ' 回复了你的评论',
+            'from_nickname' => $userInfo['nickname'],
+            'from_head_image' => $userInfo['head_image'],
+            'from_blog' => $userInfo['blog'],
+            'msg_content' => $messageInfo ? mb_substr($messageInfo['content'], 0, 100, 'utf-8') : '',
+            'msg_timestamp' => $messageInfo ? $messageInfo['ctime'] : 0,
+            'comment_content' => $commentInfo ? mb_substr($commentInfo['msg'], 0, 50, 'utf-8') : '', // 原评论内容
+            'comment_timestamp' => $commentInfo ? $commentInfo['ctime'] : 0,
+            'reply_content' => mb_substr($extra['msg'] ?? '', 0, 50, 'utf-8'), // 回复内容
+            'reply_id' => $extra['rid'] ?? $extra['reply_id'] ?? null,
+            'comment_id' => $commentId,
+            'timestamp' => time()
+        ];
         
-        return [
-                'from_nickname' => $userInfo['nickname'],
-                'from_head_image' => $userInfo['head_image'],
-                'from_blog' => $userInfo['blog'],
-                'content_preview' => mb_substr($messageInfo['content'], 0, 100, 'utf-8'),
-                'reply_content' => $replyContent,
-                'reply_id' => $extra['rid'] ?? null,
-                'comment_id' => $extra['cid'] ?? null,
-                'timestamp' => time()
-            ] + $extra;
+        return $result + $extra;
     }
 
     /**
      * 生成频道评论提醒数据
      */
-    private static function generateChannelCommentReminderData($msgId, $fromuid, $extra)
+    private static function generateChannelCommentReminderData($msgId, $userInfo, $extra)
     {
         $messageInfo = Db::name('channel_message')->field('content, ctime')->where('msg_id', $msgId)->find();
-        if (!$messageInfo) {
-            return $extra;
-        }
         
-        $userInfo = self::getUserInfo($fromuid);
-        $commentContent = mb_substr($extra['msg'] ?? '', 0, 50, 'utf-8');
+        $result = [
+            'note' => $userInfo['nickname'] . ' 评论了你的频道内容',
+            'from_nickname' => $userInfo['nickname'],
+            'from_head_image' => $userInfo['head_image'],
+            'from_blog' => $userInfo['blog'],
+            'msg_content' => $messageInfo ? mb_substr($messageInfo['content'], 0, 100, 'utf-8') : '',
+            'msg_timestamp' => $messageInfo ? $messageInfo['ctime'] : 0,
+            'comment_content' => mb_substr($extra['msg'] ?? '', 0, 50, 'utf-8'), // 评论内容
+            'comment_id' => $extra['comment_id'] ?? $extra['cid'] ?? null,
+            'timestamp' => time()
+        ];
         
-        return [
-                'from_nickname' => $userInfo['nickname'],
-                'from_head_image' => $userInfo['head_image'],
-                'from_blog' => $userInfo['blog'],
-                'content_preview' => mb_substr($messageInfo['content'], 0, 100, 'utf-8'),
-                'comment_content' => $commentContent,
-                'comment_id' => $extra['comment_id'] ?? null,
-                'timestamp' => time()
-            ] + $extra;
+        return $result + $extra;
     }
 
     /**
      * 生成频道回复提醒数据
      */
-    private static function generateChannelReplyReminderData($msgId, $fromuid, $extra)
+    private static function generateChannelReplyReminderData($msgId, $userInfo, $extra)
     {
         $messageInfo = Db::name('channel_message')->field('content, ctime')->where('msg_id', $msgId)->find();
-        if (!$messageInfo) {
-            return $extra;
+        
+        // 获取评论信息
+        $commentId = $extra['cid'] ?? $extra['comment_id'] ?? null;
+        $commentInfo = null;
+        if ($commentId) {
+            $commentInfo = Db::name('channel_comment')->field('msg, ctime')->where('cid', $commentId)->find();
         }
         
-        $userInfo = self::getUserInfo($fromuid);
-        $replyContent = mb_substr($extra['msg'] ?? '', 0, 50, 'utf-8');
+        $result = [
+            'note' => $userInfo['nickname'] . ' 回复了你的频道评论',
+            'from_nickname' => $userInfo['nickname'],
+            'from_head_image' => $userInfo['head_image'],
+            'from_blog' => $userInfo['blog'],
+            'msg_content' => $messageInfo ? mb_substr($messageInfo['content'], 0, 100, 'utf-8') : '',
+            'msg_timestamp' => $messageInfo ? $messageInfo['ctime'] : 0,
+            'comment_content' => $commentInfo ? mb_substr($commentInfo['msg'], 0, 50, 'utf-8') : '', // 原评论内容
+            'comment_timestamp' => $commentInfo ? $commentInfo['ctime'] : 0,
+            'reply_content' => mb_substr($extra['msg'] ?? '', 0, 50, 'utf-8'), // 回复内容
+            'reply_id' => $extra['rid'] ?? $extra['reply_id'] ?? null,
+            'comment_id' => $commentId,
+            'timestamp' => time()
+        ];
         
-        return [
-                'from_nickname' => $userInfo['nickname'],
-                'from_head_image' => $userInfo['head_image'],
-                'from_blog' => $userInfo['blog'],
-                'content_preview' => mb_substr($messageInfo['content'], 0, 100, 'utf-8'),
-                'reply_content' => $replyContent,
-                'reply_id' => $extra['rid'] ?? null,
-                'comment_id' => $extra['cid'] ?? null,
-                'timestamp' => time()
-            ] + $extra;
+        return $result + $extra;
     }
 
     /**
      * 生成@提及提醒数据
      */
-    private static function generateAtReminderData($msgId, $fromuid, $extra)
+    private static function generateAtReminderData($msgId, $userInfo, $extra)
     {
         $messageInfo = Db::name('message')->field('content, ctime')->where('msg_id', $msgId)->find();
-        if (!$messageInfo) {
-            return $extra;
+        
+        $result = [
+            'note' => $userInfo['nickname'] . ' 在内容中提到了你',
+            'from_nickname' => $userInfo['nickname'],
+            'from_head_image' => $userInfo['head_image'],
+            'from_blog' => $userInfo['blog'],
+            'msg_content' => $messageInfo ? mb_substr($messageInfo['content'], 0, 100, 'utf-8') : '',
+            'msg_timestamp' => $messageInfo ? $messageInfo['ctime'] : 0,
+            'timestamp' => time()
+        ];
+        
+        return $result + $extra;
+    }
+
+    /**
+     * 生成收藏微博提醒数据
+     */
+    private static function generateFavoriteWeiboReminderData($msgId, $userInfo, $extra)
+    {
+        $messageInfo = Db::name('message')->field('content, ctime, fromuid')->where('msg_id', $msgId)->find();
+        
+        // 获取原作者信息
+        $originalAuthorInfo = null;
+        if ($messageInfo && !empty($messageInfo['fromuid'])) {
+            $originalAuthorInfo = self::getUserInfo($messageInfo['fromuid']);
         }
         
-        $userInfo = self::getUserInfo($fromuid);
+        $result = [
+            'note' => $userInfo['nickname'] . ' 收藏了你的微博',
+            'from_nickname' => $userInfo['nickname'],
+            'from_head_image' => $userInfo['head_image'],
+            'from_blog' => $userInfo['blog'],
+            'msg_content' => $messageInfo ? mb_substr($messageInfo['content'], 0, 100, 'utf-8') : '',
+            'msg_timestamp' => $messageInfo ? $messageInfo['ctime'] : 0,
+            'original_author_nickname' => $originalAuthorInfo['nickname'] ?? '',
+            'original_author_head_image' => $originalAuthorInfo['head_image'] ?? '',
+            'timestamp' => time()
+        ];
         
-        return [
-                'from_nickname' => $userInfo['nickname'],
-                'from_head_image' => $userInfo['head_image'],
-                'from_blog' => $userInfo['blog'],
-                'content_preview' => mb_substr($messageInfo['content'], 0, 100, 'utf-8'),
-                'timestamp' => time()
-            ] + $extra;
+        return $result + $extra;
+    }
+
+    /**
+     * 生成收藏频道微博提醒数据
+     */
+    private static function generateFavoriteChannelWeiboReminderData($msgId, $userInfo, $extra)
+    {
+        $messageInfo = Db::name('channel_message')->field('content, ctime, fromuid')->where('msg_id', $msgId)->find();
+        
+        // 获取原作者信息
+        $originalAuthorInfo = null;
+        if ($messageInfo && !empty($messageInfo['fromuid'])) {
+            $originalAuthorInfo = self::getUserInfo($messageInfo['fromuid']);
+        }
+        
+        $result = [
+            'note' => $userInfo['nickname'] . ' 收藏了你的频道微博',
+            'from_nickname' => $userInfo['nickname'],
+            'from_head_image' => $userInfo['head_image'],
+            'from_blog' => $userInfo['blog'],
+            'msg_content' => $messageInfo ? mb_substr($messageInfo['content'], 0, 100, 'utf-8') : '',
+            'msg_timestamp' => $messageInfo ? $messageInfo['ctime'] : 0,
+            'original_author_nickname' => $originalAuthorInfo['nickname'] ?? '',
+            'original_author_head_image' => $originalAuthorInfo['head_image'] ?? '',
+            'timestamp' => time()
+        ];
+        
+        return $result + $extra;
     }
 
     /**
@@ -274,7 +348,13 @@ class Reminder
      */
     protected static function getUserInfo($userid)
     {
-        return Db::name('user')->field('uid, blog, nickname, head_image')->where('uid', $userid)->find();
+        $user = Db::name('user')->field('uid, blog, nickname, head_image')->where('uid', $userid)->find();
+        return $user ?: [
+            'uid' => $userid,
+            'blog' => '',
+            'nickname' => '未知用户',
+            'head_image' => ''
+        ];
     }
 
     /**
@@ -305,7 +385,7 @@ class Reminder
      */
     public static function markAsRead($reminderIds, $userId = null)
     {
-        $condition = ['id' => ['in', $reminderIds]];
+        $condition = is_array($reminderIds) ? ['reminder_id' => ['in', $reminderIds]] : ['reminder_id' => $reminderIds];
         if ($userId) {
             $condition['touid'] = $userId;
         }
@@ -323,5 +403,29 @@ class Reminder
     {
         $timeThreshold = time() - ($days * 24 * 3600);
         return ReminderModel::where('ctime', '<', $timeThreshold)->delete();
+    }
+
+    /**
+     * 获取用户提醒列表
+     */
+    public static function getUserReminders($userId, $page = 1, $limit = 20, $type = null)
+    {
+        $query = ReminderModel::where('touid', $userId);
+        
+        if ($type !== null) {
+            $query->where('type', $type);
+        }
+        
+        $reminders = $query
+            ->order('ctime DESC')
+            ->page($page, $limit)
+            ->select();
+            
+        foreach ($reminders as &$reminder) {
+            $extra = json_decode($reminder['extra'], true);
+            $reminder['extra'] = $extra ?: [];
+        }
+        
+        return $reminders;
     }
 }
