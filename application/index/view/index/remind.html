@@ -20,12 +20,23 @@
         margin-right: 5px;
         margin-bottom: 5px;
         border-radius: 4px;
+        display: flex;
+        align-items: center;
     }
     
     .remind-tab.active {
         border-bottom: 3px solid #1E9FFF;
         color: #1E9FFF;
         background: #f0f8ff;
+    }
+
+    .remind-tab-count {
+        background: #ff6b6b;
+        color: white;
+        border-radius: 10px;
+        padding: 2px 6px;
+        font-size: 12px;
+        margin-left: 5px;
     }
     
     .remind-item {
@@ -131,14 +142,46 @@
             <h2>提醒</h2>
             
             <div class="remind-tabs">
-                <div class="remind-tab active" data-type="all">全部</div>
-                <div class="remind-tab" data-type="1">评论</div>
-                <div class="remind-tab" data-type="2">回复</div>
-                <div class="remind-tab" data-type="3">频道评论</div>
-                <div class="remind-tab" data-type="4">频道回复</div>
-                <div class="remind-tab" data-type="5">关注</div>
-                <div class="remind-tab" data-type="7">@提及</div>
-                <div class="remind-tab" data-type="8">收藏</div>
+                <div class="remind-tab active" data-type="all">全部
+                {if $unreadCount.unreadAllCount > 0}
+                    <span class="remind-tab-count" id="count-all">{$unreadCount.unreadAllCount}</span>
+                {/if}
+                </div>
+                <div class="remind-tab" data-type="1">评论
+                {if isset($unreadCount.unreadTypeCount.1) && $unreadCount.unreadTypeCount.1 > 0}
+                    <span class="remind-tab-count" id="count-1">{$unreadCount.unreadTypeCount.1}</span>
+                {/if}
+                </div>
+                <div class="remind-tab" data-type="2">回复
+                {if isset($unreadCount.unreadTypeCount.2) && $unreadCount.unreadTypeCount.2 > 0}
+                    <span class="remind-tab-count" id="count-2">{$unreadCount.unreadTypeCount.2}</span>
+                {/if}
+                </div>
+                <div class="remind-tab" data-type="3">频道评论
+                {if isset($unreadCount.unreadTypeCount.3) && $unreadCount.unreadTypeCount.3 > 0}
+                    <span class="remind-tab-count" id="count-3">{$unreadCount.unreadTypeCount.3}</span>
+                {/if}
+                </div>
+                <div class="remind-tab" data-type="4">频道回复
+                {if isset($unreadCount.unreadTypeCount.4) && $unreadCount.unreadTypeCount.4 > 0}
+                    <span class="remind-tab-count" id="count-4">{$unreadCount.unreadTypeCount.4}</span>
+                {/if}
+                </div>
+                <div class="remind-tab" data-type="5">关注
+                {if isset($unreadCount.unreadTypeCount.5) && $unreadCount.unreadTypeCount.5 > 0}
+                    <span class="remind-tab-count" id="count-5">{$unreadCount.unreadTypeCount.5}</span>
+                {/if}
+                </div>
+                <div class="remind-tab" data-type="7">@提及
+                {if isset($unreadCount.unreadTypeCount.7) && $unreadCount.unreadTypeCount.7 > 0}
+                    <span class="remind-tab-count" id="count-7">{$unreadCount.unreadTypeCount.7}</span>
+                {/if}
+                </div>
+                <div class="remind-tab" data-type="8">收藏
+                {if isset($unreadCount.unreadTypeCount.8) && $unreadCount.unreadTypeCount.8 > 0}
+                    <span class="remind-tab-count" id="count-8">{$unreadCount.unreadTypeCount.8}</span>
+                {/if}
+                </div>
             </div>
             
             <div id="remindList">
@@ -498,7 +541,7 @@ function formatTimeWithDate(timestamp) {
 function markAsRead(reminderId) {
     $.ajax({
         type: "POST",
-        url: "{:url('/index/ajax/markRemindAsRead')}",
+        url: "{:url('/index/ajax/markRead')}",
         data: { reminder_id: reminderId },
         dataType: "json",
         success: function(response) {
@@ -555,7 +598,7 @@ function loadMoreReminders() {
     loadReminders(currentType, currentPage);
 }
 
-function updateHeaderRemindCount() {
+function updateHeaderRemindCount(delta) {
     const countElement = $('.remind-count'); // 假设有这样的元素
     if (countElement.length > 0) {
         let currentCount = parseInt(countElement.text()) || 0;

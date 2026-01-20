@@ -562,6 +562,11 @@ class IndexInfo extends Info
     // 提醒
     public function remind()
     {
+        // 获取用户分类未读数量
+        $unreadCount = \app\common\helper\Reminder::getUnreadCount(getLoginUid());
+        $this->assign('unreadCount', $unreadCount);
+
+
     //     if (request()->isAjax()) {
     //         $userid = $this->userid;
     //         $reminderMsg = \app\common\helper\Reminder::getReminderMsg($userid, 20);

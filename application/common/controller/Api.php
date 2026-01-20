@@ -446,7 +446,7 @@ class Api extends Base
     // 在类中添加以下方法
     public function markRead()
     {
-        $id = input('post.id');
+        $id = input('post.reminder_id');
         
         if (!$id) {
             return json(['code' => 1, 'msg' => '参数错误']);

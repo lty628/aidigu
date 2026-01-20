@@ -454,7 +454,19 @@ class Reminder
      */
     public static function getUnreadCount($userId)
     {
-        return ReminderModel::where(['touid' => $userId, 'status' => 0])->count();
+        $unreadTypeCountGroup = ReminderModel::where(['touid' => $userId, 'status' => 0])->field('count(*) as count, type')->group('type')->select();
+        $unreadTypeCount = [];
+        if ($unreadTypeCountGroup) {
+            foreach ($unreadTypeCountGroup as $value) {
+                $unreadTypeCount[$value['type']] = $value['count'];
+            }
+        }
+        $unreadAllCount = array_sum(array_values($unreadTypeCount));
+        // dump($unreadAllCount);die;
+        return [
+            'unreadAllCount' => $unreadAllCount,
+            'unreadTypeCount' => $unreadTypeCount
+        ];
     }
 
     /**
