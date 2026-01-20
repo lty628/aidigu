@@ -30,22 +30,22 @@ class Reminder
 { 
     public static function getReminderMsg($userid, $count = 20, $page = 1, $type = null, $isMobile = 0)
     {
-        $where = [];
-        if ($isMobile) {
-             $where['type'] = ['not in', [3,4,9]];
-        }
         $query = ReminderModel::alias('reminder')
             ->join('user u', 'u.uid = reminder.fromuid', 'LEFT')
             ->field('reminder.*, u.nickname as from_nickname, u.head_image as from_head_image, u.blog as from_blog')
-            ->where('reminder.touid', $userid)
-            ->where('reminder.status', 0)  // 只获取未读提醒
-            ->where($where)
-            ->order('reminder.status asc, reminder.ctime desc');
+            ->where('reminder.touid', $userid);
+        
+        // 如果是移动端，则排除类型3、4、9的提醒
+        if ($isMobile) {
+            $query->whereNotIn('reminder.type', [3,4,9]);
+        }
         
         // 如果指定了类型，则添加类型筛选
         if ($type !== null && $type !== '') {
             $query->where('reminder.type', (int)$type);
         }
+        
+        $query->order('reminder.status asc, reminder.ctime desc');
         
         $reminders = $query->page($page, $count)->select();
         
