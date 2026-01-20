@@ -28,7 +28,17 @@ class Reminder
      * @param int $fromuid 发送提醒的用户ID
      * @param int $touid 接收提醒的用户ID
      * @param int $type 提醒类型：1评论，2回复，3@提及等
-     * @param array $extra 额外参数 ['comment_id'=>评论ID, 'reply_id'=>回复ID, 'subtype'=>子类型, 'priority'=>优先级, 'note'=>提示语, 'extra'=>额外信息]
+     * @param array $extra 额外参数 ['msg_id'=>消息ID, 
+     * 'cid'=>评论ID, 
+     * 'rid'=>回复ID, 
+     * 'msg'=>'主内容',
+     * 'comment_msg'=>'评论内容',
+     * 'reply_msg'=>'回复内容', 
+     * 'msg_timestamp'=>'主内容时间戳', 
+     * 'comment_timestamp'=>'评论时间戳', 
+     * 'reply_timestamp'=>'回复时间戳'
+     * 
+     * ]
      * @return bool|object
      */
     public static function saveReminder($ukId, $fromuid, $touid, $type, $extra = [])
@@ -38,7 +48,7 @@ class Reminder
         }
         
         // 使用辅助函数生成提醒数据
-        $extraData = self::generateReminderData($ukId, $fromuid, $touid, $type, $extra);
+        $extraData = self::generateReminderData($ukId, $fromuid, $type, $extra);
 
         // 检查是否已存在相同的提醒记录
         $condition = [
@@ -79,29 +89,25 @@ class Reminder
 
     /**
      * 根据不同提醒类型生成特定的提醒数据
-     * @param int $msgId 关联的内容ID
+     * @param int $ukId 关联的内容ID
      * @param int $fromuid 发送提醒的用户ID
-     * @param int $touid 接收提醒的用户ID
      * @param int $type 提醒类型：1评论，2回复，3@提及等
      * @param array $context 包含上下文信息的数组
      * @return array 包含 note 和 extra 的数组
      */
-    public static function generateReminderData($msgId, $fromuid, $touid, $type, array $context = [])
-    {
-        // 兼容旧的参数格式
-        $extra = $context;
-        
+    public static function generateReminderData($ukId, $fromuid, $type, array $extra = [])
+    {   
         switch ($type) {
             case 1: // 微博评论
-                return self::generateCommentReminderData($msgId, $fromuid, $touid, $extra);
+                return self::generateCommentReminderData($ukId, $fromuid, $extra);
             case 2: // 微博回复
-                return self::generateReplyReminderData($msgId, $fromuid, $touid, $extra);
+                return self::generateReplyReminderData($ukId, $fromuid, $extra);
             case 3: // 频道评论
-                return self::generateChannelCommentReminderData($msgId, $fromuid, $touid, $extra);
+                return self::generateChannelCommentReminderData($ukId, $fromuid, $extra);
             case 4: // 频道回复
-                return self::generateChannelReplyReminderData($msgId, $fromuid, $touid, $extra);
+                return self::generateChannelReplyReminderData($ukId, $fromuid, $extra);
             case 7: // @提及
-                return self::generateAtReminderData($msgId, $fromuid, $touid, $extra);
+                return self::generateAtReminderData($ukId, $fromuid, $extra);
             default:
                 return $extra;
         }
@@ -130,7 +136,7 @@ class Reminder
     /**
      * 生成评论提醒数据
      */
-    private static function generateCommentReminderData($msgId, $fromuid, $touid, $extra)
+    private static function generateCommentReminderData($msgId, $fromuid, $extra)
     {
         $messageInfo = Db::name('message')->field('content, ctime')->where('msg_id', $msgId)->find();
         if (!$messageInfo) {
@@ -159,7 +165,7 @@ class Reminder
     /**
      * 生成回复提醒数据
      */
-    private static function generateReplyReminderData($msgId, $fromuid, $touid, $extra)
+    private static function generateReplyReminderData($msgId, $fromuid, $extra)
     {
         $messageInfo = Db::name('message')->field('content, ctime')->where('msg_id', $msgId)->find();
         if (!$messageInfo) {
@@ -169,9 +175,7 @@ class Reminder
         $userInfo = self::getUserInfo($fromuid);
         $replyContent = mb_substr($extra['msg'] ?? '', 0, 50, 'utf-8'); // 限制回复内容长度
         
-        $result = [
-            'note' => $userInfo['nickname'] . ' 回复了你的评论',
-            'extra' => [
+        return [
                 'from_nickname' => $userInfo['nickname'],
                 'from_head_image' => $userInfo['head_image'],
                 'from_blog' => $userInfo['blog'],
@@ -180,16 +184,13 @@ class Reminder
                 'reply_id' => $extra['rid'] ?? null,
                 'comment_id' => $extra['cid'] ?? null,
                 'timestamp' => time()
-            ] + $extra
-        ];
-        
-        return $result;
+            ] + $extra;
     }
 
     /**
      * 生成频道评论提醒数据
      */
-    private static function generateChannelCommentReminderData($msgId, $fromuid, $touid, $extra)
+    private static function generateChannelCommentReminderData($msgId, $fromuid, $extra)
     {
         $messageInfo = Db::name('channel_message')->field('content, ctime')->where('msg_id', $msgId)->find();
         if (!$messageInfo) {
@@ -213,7 +214,7 @@ class Reminder
     /**
      * 生成频道回复提醒数据
      */
-    private static function generateChannelReplyReminderData($msgId, $fromuid, $touid, $extra)
+    private static function generateChannelReplyReminderData($msgId, $fromuid, $extra)
     {
         $messageInfo = Db::name('channel_message')->field('content, ctime')->where('msg_id', $msgId)->find();
         if (!$messageInfo) {
@@ -238,7 +239,7 @@ class Reminder
     /**
      * 生成@提及提醒数据
      */
-    private static function generateAtReminderData($msgId, $fromuid, $touid, $extra)
+    private static function generateAtReminderData($msgId, $fromuid, $extra)
     {
         $messageInfo = Db::name('message')->field('content, ctime')->where('msg_id', $msgId)->find();
         if (!$messageInfo) {
