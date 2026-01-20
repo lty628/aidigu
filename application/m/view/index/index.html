@@ -207,7 +207,7 @@
 						}
 						// 添加样式类以实现右侧对齐和样式美化
 						delStr += '<div class="post-meta-icons" style="text-align: right;">'; 
-						delStr += '<span><a href="/' + data[i].blog + '/message/' + data[i].msg_id + '"><i class="layui-icon layui-icon-eye"></i> 查看</a></span>';
+						delStr += '<span><a href="/' + data[i].blog + '/message/' + base64Encode('msgId=' + data[i].msg_id) + '"><i class="layui-icon layui-icon-eye"></i> 查看</a></span>';
 						// delStr += '<span><a href="javascript:;" data-title="评论" data-url="/chat/messageChatId/' + data[i].msg_id + '" onclick="showFrameHtml(this, \'100%\', \'100%\')"><i class="layui-icon layui-icon-reply-fill"></i> 评论' + c2 + '</a></span>';
 						delStr += '<span><a href="javascript:;"  onclick="toggleCommentIframe(' + data[i].msg_id + ', \'message\')"><i class="layui-icon layui-icon-reply-fill"></i> 评论' + c2 + '</a></span>';
 						if (json.data.allow_delete) {

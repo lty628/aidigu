@@ -111,7 +111,7 @@ class Info extends Base
 
 	protected function getMessageById($msgId = '')
 	{
-		Reminder::where('touid', $this->userid)->where('msg_id', $msgId)->update(['status' => 1]);
+		// Reminder::where('touid', $this->userid)->where('msg_id', $msgId)->update(['status' => 1]);
 		$userMessage[0] = Message::getMessageById($msgId);
 		// $messageBlock = $userMessage[0]->comments()->where('msg_id',$msgId)->with('User')->order('ctime','desc')->paginate(20);
 		$this->assign('userMessage', handleMessage($userMessage));

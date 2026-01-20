@@ -356,3 +356,9 @@ function changeFrameHeight(cIframe) {
     let finalHeight = Math.max(lheight, b);
     cIframe.height = finalHeight + "px";
 }
+
+function base64Encode(str) {
+    return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function(match, p1) {
+        return String.fromCharCode('0x' + p1);
+    }));
+}

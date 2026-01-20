@@ -259,7 +259,36 @@ class IndexInfo extends Info
     }
     public function messageInfo()
     {
-        $this->getMessageById((int)input('param.msg_id'));
+        $base64 = input('param.base64');
+        if (!$base64) {
+            return $this->error('参数错误');
+        }
+
+        $base64 = base64_decode($base64);
+
+        $params = parse_url($base64);
+        parse_str($params['path'], $params);
+
+        // dump($params);die;
+        $msgId = $params['msgId'] ?? 0;
+        $cid = $params['cid'] ?? 0;
+        $rid = $params['rid'] ?? 0;
+        $reminderId = $params['reminderId'] ?? 0;
+
+        if ($reminderId) {
+            \app\common\helper\Reminder::markAsRead($reminderId, $this->userid);
+        }
+
+        if (!$msgId) {
+            return $this->error('参数错误');
+        }
+
+        $this->assign('cid', $cid);
+        $this->assign('rid', $rid);
+        $this->assign('msgId', $msgId);
+
+
+        $this->getMessageById((int)$msgId);
         $this->assign('siteUser', $this->siteUserId);
         return $this->fetch('message');
     }

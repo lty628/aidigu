@@ -125,7 +125,7 @@ Route::get('/:name/own/:page$', $module . '/Index/own')->pattern(['name' => '\w+
 // Route::get('/:name/newcomment/$', $module . '/Index/newcomment')->pattern(['name' => '\w+']);
 // Route::get('/:name/newreply/$', $module . '/Index/newreply')->pattern(['name' => '\w+']);
 // Route::get('/:name/newreply/:page$', $module . '/Index/newreply')->pattern(['name' => '\w+', 'page'=>'[0-9]+']);
-Route::get('/:name/message/:msg_id', $module . '/Index/messageInfo')->pattern(['name' => '\w+', 'msg_id' => '[0-9]+']);
+Route::get('/:name/message/:base64', $module . '/Index/messageInfo')->pattern(['name' => '\w+', 'base64' => '.+']);
 Route::get('/:name/del/message/:msg_id', $module . '/Ajax/delMessage')->pattern(['name' => '\w+', 'msg_id' => '[0-9]+']);	
 Route::get('/:name/del/channel_message/:msg_id', $module . '/Ajax/delChannelMessage')->pattern(['name' => '\w+', 'msg_id' => '[0-9]+']);	
 // 绑定域名方式

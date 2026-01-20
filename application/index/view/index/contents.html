@@ -160,7 +160,7 @@
                         }
 
                         if (json.data.allow_delete != -1) {
-                            delStr += '<a href="/' + data[i].blog + '/message/' + data[i].msg_id + '">查看</a> |';
+                            delStr += '<a href="/' + data[i].blog + '/message/' + base64Encode('msgId=' + data[i].msg_id) + '">查看</a> |';
                             // delStr += '<a href="javascript:;" data-title="评论" data-url="/chat/messageChatId/' + data[i].msg_id + '" onclick="showFrameHtml(this, \'60%\', \'70%\')">评论' + c2 + '</a>'
                             delStr += '<a href="javascript:void(0);" onclick="toggleCommentIframe(' + data[i].msg_id + ', \'message\')">评论' + c2 + '</a>';
                             // delStr += '<a href="javascript:void(0);" onclick="repost(this, '+data[i].uid+', '+data[i].msg_id+')">转发'+c1+'</a> |';

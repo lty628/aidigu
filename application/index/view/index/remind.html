@@ -193,7 +193,7 @@
             </div>
         </div>
     </div>
-    
+    <input type="hidden" id="loginUserInfo" value="{$loginUserInfo['blog']}">
     {if $userInfo.isSiteUser}
         {include file='index/sidebar_index' /}
     {else}
@@ -487,7 +487,7 @@ function buildReminderItem(item) {
     
     // 格式化时间
     const timeString = formatTime(item.ctime);
-    
+    // console.log(item);
     // 构建提醒项HTML
     return `
     <div class="remind-item" data-id="${item.reminder_id}">
@@ -503,7 +503,7 @@ function buildReminderItem(item) {
             <div class="remind-time">${timeString}</div>
             <div class="remind-actions">
                 <button class="read-btn" onclick="markAsRead(${item.reminder_id})">标记已读</button>
-                <button class="view-btn" onclick="viewDetail(${item.type}, ${item.uk_id || item.msg_id || 0}, ${item.reminder_id})">查看</button>
+                <button class="view-btn" onclick="viewDetail(${item.type}, ${item.reminder_id}, ${item.extra.msg_id || 0}, ${item.extra.cid || 0}, ${item.extra.rid || 0})">查看</button>
             </div>
         </div>
     </div>
@@ -538,16 +538,16 @@ function formatTimeWithDate(timestamp) {
     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 }
 
-function markAsRead(reminderId) {
+function markAsRead(cid, rid) {
     $.ajax({
         type: "POST",
         url: "{:url('/index/ajax/markRead')}",
-        data: { reminder_id: reminderId },
+        data: { reminder_id: cid, rid },
         dataType: "json",
         success: function(response) {
             if (response.status === 1) {
                 // 移除已读提醒项
-                $(`.remind-item[data-id="${reminderId}"]`).fadeOut(300, function() {
+                $(`.remind-item[data-id="${cid, rid}"]`).fadeOut(300, function() {
                     $(this).remove();
                     if ($('.remind-item').length === 0) {
                         $('#remindList').html('<div class="no-data">暂无提醒</div>');
@@ -565,14 +565,17 @@ function markAsRead(reminderId) {
     });
 }
 
-function viewDetail(type, msgId, reminderId) {
+function viewDetail(type, reminderId, msgId, cid, rid) {
     // 根据类型跳转到相应的详情页
     let url = '';
     switch(parseInt(type)) {
         case 1: // 评论
         case 2: // 回复
         case 7: // @提及
-            url = `/index/index/msgdetail/id/${msgId}`;
+            var blog = '{$userInfo.blog}';
+            var uri = `msgId=${msgId}&cid=${cid}&rid=${rid}&reminderId=${reminderId}`;
+            uri = base64Encode(uri);
+            url = `/${blog}/message/${uri}`;
             break;
         case 3: // 频道评论
         case 4: // 频道回复
