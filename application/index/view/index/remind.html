@@ -65,6 +65,15 @@
         line-height: 1.5;
     }
     
+    .remind-detail {
+        background: #f9f9f9;
+        padding: 10px;
+        border-radius: 4px;
+        margin: 10px 0;
+        font-size: 14px;
+        color: #555;
+    }
+    
     .remind-time {
         font-size: 12px;
         color: #999;
@@ -229,65 +238,225 @@ function renderReminders(reminders, isFirstPage) {
 function buildReminderItem(item) {
     // 根据提醒类型确定显示文本
     let typeText = '';
+    let detailHtml = '';
+    
     switch(parseInt(item.type)) {
-        case 1:
-            typeText = '评论了你的微博';
+        case 1: // 评论
+            // 显示格式：评论了微博：原微博内容 - 评论内容（评论时间）
+            if (item.extra && item.extra.msg_contents && item.extra.comment_contents && item.extra.comment_timestamp) {
+                typeText = `评论了微博：<span style="color: #333;">${item.extra.msg_contents}</span>`;
+                detailHtml = `<div class="remind-detail">评论内容：${item.extra.comment_contents}<br>评论时间：${formatTimeWithDate(item.extra.comment_timestamp)}</div>`;
+            } else if (item.msg_contents && item.comment_contents && item.comment_timestamp) {
+                typeText = `评论了微博：<span style="color: #333;">${item.msg_contents}</span>`;
+                detailHtml = `<div class="remind-detail">评论内容：${item.comment_contents}<br>评论时间：${formatTimeWithDate(item.comment_timestamp)}</div>`;
+            } else {
+                typeText = '评论了你的微博';
+                // 备选显示方案
+                if (item.extra && item.extra.msg_contents) {
+                    detailHtml += `<div class="remind-detail">原微博内容：${item.extra.msg_contents}</div>`;
+                } else if (item.msg_contents) {
+                    detailHtml += `<div class="remind-detail">原微博内容：${item.msg_contents}</div>`;
+                }
+                if (item.extra && item.extra.comment_contents) {
+                    detailHtml += `<div class="remind-detail">评论内容：${item.extra.comment_contents}</div>`;
+                } else if (item.comment_contents) {
+                    detailHtml += `<div class="remind-detail">评论内容：${item.comment_contents}</div>`;
+                }
+                if (item.extra && item.extra.comment_timestamp) {
+                    detailHtml += `<div class="remind-detail">评论时间：${formatTimeWithDate(item.extra.comment_timestamp)}</div>`;
+                } else if (item.comment_timestamp) {
+                    detailHtml += `<div class="remind-detail">评论时间：${formatTimeWithDate(item.comment_timestamp)}</div>`;
+                } else if (item.ctime) {
+                    detailHtml += `<div class="remind-detail">时间：${formatTimeWithDate(item.ctime)}</div>`;
+                }
+            }
             break;
-        case 2:
-            typeText = '回复了你的微博';
+        case 2: // 回复
+            // 显示格式：回复了评论：原评论内容 - 回复内容（回复时间）
+            if (item.extra && item.extra.comment_contents && item.extra.reply_contents && item.extra.reply_timestamp) {
+                typeText = `回复了评论：<span style="color: #333;">${item.extra.comment_contents}</span>`;
+                detailHtml = `<div class="remind-detail">回复内容：${item.extra.reply_contents}<br>回复时间：${formatTimeWithDate(item.extra.reply_timestamp)}</div>`;
+            } else if (item.comment_contents && item.reply_contents && item.reply_timestamp) {
+                typeText = `回复了评论：<span style="color: #333;">${item.comment_contents}</span>`;
+                detailHtml = `<div class="remind-detail">回复内容：${item.reply_contents}<br>回复时间：${formatTimeWithDate(item.reply_timestamp)}</div>`;
+            } else {
+                typeText = '回复了你的评论';
+                // 备选显示方案
+                if (item.extra && item.extra.comment_contents) {
+                    detailHtml += `<div class="remind-detail">原评论内容：${item.extra.comment_contents}</div>`;
+                } else if (item.comment_contents) {
+                    detailHtml += `<div class="remind-detail">原评论内容：${item.comment_contents}</div>`;
+                }
+                if (item.extra && item.extra.reply_contents) {
+                    detailHtml += `<div class="remind-detail">回复内容：${item.extra.reply_contents}</div>`;
+                } else if (item.reply_contents) {
+                    detailHtml += `<div class="remind-detail">回复内容：${item.reply_contents}</div>`;
+                }
+                if (item.extra && item.extra.reply_timestamp) {
+                    detailHtml += `<div class="remind-detail">回复时间：${formatTimeWithDate(item.extra.reply_timestamp)}</div>`;
+                } else if (item.reply_timestamp) {
+                    detailHtml += `<div class="remind-detail">回复时间：${formatTimeWithDate(item.reply_timestamp)}</div>`;
+                } else if (item.ctime) {
+                    detailHtml += `<div class="remind-detail">时间：${formatTimeWithDate(item.ctime)}</div>`;
+                }
+            }
             break;
-        case 3:
-            typeText = '评论了你的频道';
+        case 3: // 频道评论
+            // 显示格式：评论了频道微博：频道微博内容 - 评论内容（评论时间）
+            if (item.extra && item.extra.msg_contents && item.extra.comment_contents && item.extra.comment_timestamp) {
+                typeText = `评论了频道微博：<span style="color: #333;">${item.extra.msg_contents}</span>`;
+                detailHtml = `<div class="remind-detail">评论内容：${item.extra.comment_contents}<br>评论时间：${formatTimeWithDate(item.extra.comment_timestamp)}</div>`;
+            } else if (item.msg_contents && item.comment_contents && item.comment_timestamp) {
+                typeText = `评论了频道微博：<span style="color: #333;">${item.msg_contents}</span>`;
+                detailHtml = `<div class="remind-detail">评论内容：${item.comment_contents}<br>评论时间：${formatTimeWithDate(item.comment_timestamp)}</div>`;
+            } else {
+                typeText = '评论了你的频道微博';
+                // 备选显示方案
+                if (item.extra && item.extra.msg_contents) {
+                    detailHtml += `<div class="remind-detail">频道微博内容：${item.extra.msg_contents}</div>`;
+                } else if (item.msg_contents) {
+                    detailHtml += `<div class="remind-detail">频道微博内容：${item.msg_contents}</div>`;
+                }
+                if (item.extra && item.extra.comment_contents) {
+                    detailHtml += `<div class="remind-detail">评论内容：${item.extra.comment_contents}</div>`;
+                } else if (item.comment_contents) {
+                    detailHtml += `<div class="remind-detail">评论内容：${item.comment_contents}</div>`;
+                }
+                if (item.extra && item.extra.comment_timestamp) {
+                    detailHtml += `<div class="remind-detail">评论时间：${formatTimeWithDate(item.extra.comment_timestamp)}</div>`;
+                } else if (item.comment_timestamp) {
+                    detailHtml += `<div class="remind-detail">评论时间：${formatTimeWithDate(item.comment_timestamp)}</div>`;
+                } else if (item.ctime) {
+                    detailHtml += `<div class="remind-detail">时间：${formatTimeWithDate(item.ctime)}</div>`;
+                }
+            }
             break;
-        case 4:
-            typeText = '回复了你的频道评论';
+        case 4: // 频道回复
+            // 显示格式：回复了频道评论：原频道评论内容 - 回复内容（回复时间）
+            if (item.extra && item.extra.comment_contents && item.extra.reply_contents && item.extra.reply_timestamp) {
+                typeText = `回复了频道评论：<span style="color: #333;">${item.extra.comment_contents}</span>`;
+                detailHtml = `<div class="remind-detail">回复内容：${item.extra.reply_contents}<br>回复时间：${formatTimeWithDate(item.extra.reply_timestamp)}</div>`;
+            } else if (item.comment_contents && item.reply_contents && item.reply_timestamp) {
+                typeText = `回复了频道评论：<span style="color: #333;">${item.comment_contents}</span>`;
+                detailHtml = `<div class="remind-detail">回复内容：${item.reply_contents}<br>回复时间：${formatTimeWithDate(item.reply_timestamp)}</div>`;
+            } else {
+                typeText = '回复了你的频道评论';
+                // 备选显示方案
+                if (item.extra && item.extra.comment_contents) {
+                    detailHtml += `<div class="remind-detail">原频道评论内容：${item.extra.comment_contents}</div>`;
+                } else if (item.comment_contents) {
+                    detailHtml += `<div class="remind-detail">原频道评论内容：${item.comment_contents}</div>`;
+                }
+                if (item.extra && item.extra.reply_contents) {
+                    detailHtml += `<div class="remind-detail">回复内容：${item.extra.reply_contents}</div>`;
+                } else if (item.reply_contents) {
+                    detailHtml += `<div class="remind-detail">回复内容：${item.reply_contents}</div>`;
+                }
+                if (item.extra && item.extra.reply_timestamp) {
+                    detailHtml += `<div class="remind-detail">回复时间：${formatTimeWithDate(item.extra.reply_timestamp)}</div>`;
+                } else if (item.reply_timestamp) {
+                    detailHtml += `<div class="remind-detail">回复时间：${formatTimeWithDate(item.reply_timestamp)}</div>`;
+                } else if (item.ctime) {
+                    detailHtml += `<div class="remind-detail">时间：${formatTimeWithDate(item.ctime)}</div>`;
+                }
+            }
             break;
-        case 5:
+        case 5: // 关注
             typeText = '关注了你';
+            // 从extra字段获取详细信息
+            if (item.extra && item.extra.follow_time) {
+                detailHtml = `<div class="remind-detail">关注时间：${formatTimeWithDate(item.extra.follow_time)}</div>`;
+            } else if (item.ctime) {
+                detailHtml = `<div class="remind-detail">关注时间：${formatTimeWithDate(item.ctime)}</div>`;
+            }
             break;
-        case 6:
+        case 6: // 取消关注
             typeText = '取消关注了你';
+            if (item.ctime) {
+                detailHtml = `<div class="remind-detail">取消关注时间：${formatTimeWithDate(item.ctime)}</div>`;
+            }
             break;
-        case 7:
-            typeText = '在内容中提到了你';
+        case 7: // @提及
+            // 显示格式：在微博中提到了你：微博内容（提及时间）
+            if (item.extra && item.extra.msg_contents && item.extra.msg_timestamp) {
+                typeText = `在微博中提到了你：<span style="color: #333;">${item.extra.msg_contents}</span>`;
+                detailHtml = `<div class="remind-detail">提及时间：${formatTimeWithDate(item.extra.msg_timestamp)}</div>`;
+            } else if (item.msg_contents && item.msg_timestamp) {
+                typeText = `在微博中提到了你：<span style="color: #333;">${item.msg_contents}</span>`;
+                detailHtml = `<div class="remind-detail">提及时间：${formatTimeWithDate(item.msg_timestamp)}</div>`;
+            } else {
+                typeText = '在微博中提到了你';
+                // 备选显示方案
+                if (item.extra && item.extra.msg_contents) {
+                    detailHtml += `<div class="remind-detail">提及内容：${item.extra.msg_contents}</div>`;
+                } else if (item.msg_contents) {
+                    detailHtml += `<div class="remind-detail">提及内容：${item.msg_contents}</div>`;
+                }
+                if (item.extra && item.extra.msg_timestamp) {
+                    detailHtml += `<div class="remind-detail">提及时间：${formatTimeWithDate(item.extra.msg_timestamp)}</div>`;
+                } else if (item.msg_timestamp) {
+                    detailHtml += `<div class="remind-detail">提及时间：${formatTimeWithDate(item.msg_timestamp)}</div>`;
+                } else if (item.ctime) {
+                    detailHtml += `<div class="remind-detail">时间：${formatTimeWithDate(item.ctime)}</div>`;
+                }
+            }
             break;
-        case 8:
+        case 8: // 收藏微博
             typeText = '收藏了你的微博';
+            // 从extra字段获取详细信息
+            if (item.extra && item.extra.msg_contents) {
+                detailHtml = `<div class="remind-detail">收藏内容：${item.extra.msg_contents}</div>`;
+            } else if (item.msg_contents) {
+                detailHtml = `<div class="remind-detail">收藏内容：${item.msg_contents}</div>`;
+            }
+            // 如果有收藏时间也显示
+            if (item.extra && item.extra.collect_timestamp) {
+                detailHtml += detailHtml ? `<br>收藏时间：${formatTimeWithDate(item.extra.collect_timestamp)}` : `<div class="remind-detail">收藏时间：${formatTimeWithDate(item.extra.collect_timestamp)}</div>`;
+            } else if (item.ctime) {
+                detailHtml += detailHtml ? `<br>收藏时间：${formatTimeWithDate(item.ctime)}` : `<div class="remind-detail">收藏时间：${formatTimeWithDate(item.ctime)}</div>`;
+            }
             break;
-        case 9:
+        case 9: // 收藏频道微博
             typeText = '收藏了你的频道微博';
+            // 从extra字段获取详细信息
+            if (item.extra && item.extra.msg_contents) {
+                detailHtml = `<div class="remind-detail">收藏内容：${item.extra.msg_contents}</div>`;
+            } else if (item.msg_contents) {
+                detailHtml = `<div class="remind-detail">收藏内容：${item.msg_contents}</div>`;
+            }
+            // 如果有收藏时间也显示
+            if (item.extra && item.extra.collect_timestamp) {
+                detailHtml += detailHtml ? `<br>收藏时间：${formatTimeWithDate(item.extra.collect_timestamp)}` : `<div class="remind-detail">收藏时间：${formatTimeWithDate(item.extra.collect_timestamp)}</div>`;
+            } else if (item.ctime) {
+                detailHtml += detailHtml ? `<br>收藏时间：${formatTimeWithDate(item.ctime)}` : `<div class="remind-detail">收藏时间：${formatTimeWithDate(item.ctime)}</div>`;
+            }
             break;
         default:
             typeText = item.note || '有新的互动';
+            // 尝试从其他字段获取内容
+            if (item.content_preview) {
+                typeText += `：<span style="color: #333;">${item.content_preview}</span>`;
+            }
+            if (item.ctime) {
+                detailHtml = `<div class="remind-detail">时间：${formatTimeWithDate(item.ctime)}</div>`;
+            }
     }
     
     // 格式化时间
     const timeString = formatTime(item.ctime);
     
-    // 获取内容预览，优先使用特定字段
-    let contentPreview = '';
-    if (item.content_preview) {
-        contentPreview = item.content_preview;
-    } else if (item.msg_contents) {
-        contentPreview = item.msg_contents;
-    } else if (item.comment_contents) {
-        contentPreview = item.comment_contents;
-    } else if (item.reply_contents) {
-        contentPreview = item.reply_contents;
-    }
-    
     // 构建提醒项HTML
     return `
     <div class="remind-item" data-id="${item.reminder_id}">
         <div class="remind-header">
-            <img src="${item.from_head_image || '/static/images/default_avatar.png'}" class="remind-avatar" alt="${item.from_nickname}">
-            <div class="remind-user">${item.from_nickname}</div>
+            <img src="${item.from_head_image || item.extra?.from_head_image || '/static/images/default_avatar.png'}" class="remind-avatar" alt="${item.from_nickname || item.extra?.from_nickname}">
+            <div class="remind-user">${item.from_nickname || item.extra?.from_nickname}</div>
         </div>
         <div class="remind-content">
             <div class="remind-text">
                 ${typeText}
-                ${contentPreview ? '：<br><span style="color: #333;">' + contentPreview + '</span>' : ''}
             </div>
+            ${detailHtml}
             <div class="remind-time">${timeString}</div>
             <div class="remind-actions">
                 <button class="read-btn" onclick="markAsRead(${item.reminder_id})">标记已读</button>
@@ -314,120 +483,99 @@ function formatTime(timestamp) {
     }
 }
 
-function markAsRead(id) {
-    // 添加淡出效果
-    const itemElement = $(`.remind-item[data-id="${id}"]`);
-    itemElement.addClass('fade-out');
-    
-    // 等待动画完成后移除元素
-    setTimeout(function() {
-        itemElement.fadeOut();
-    }, 300);
-    
-    // 发送请求标记为已读
+function formatTimeWithDate(timestamp) {
+    if (!timestamp) return '';
+    const date = new Date(timestamp * 1000);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const seconds = String(date.getSeconds()).padStart(2, '0');
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+}
+
+function markAsRead(reminderId) {
     $.ajax({
         type: "POST",
-        url: "/index/ajax/markRead", // 新增一个标记已读的API接口
-        data: { id: id },
+        url: "{:url('/index/ajax/markRemindAsRead')}",
+        data: { reminder_id: reminderId },
         dataType: "json",
         success: function(response) {
-            if (response.code !== 0) {
-                // 如果失败，恢复元素显示
-                itemElement.removeClass('fade-out').show();
-                alert(response.msg || '操作失败');
+            if (response.status === 1) {
+                // 移除已读提醒项
+                $(`.remind-item[data-id="${reminderId}"]`).fadeOut(300, function() {
+                    $(this).remove();
+                    if ($('.remind-item').length === 0) {
+                        $('#remindList').html('<div class="no-data">暂无提醒</div>');
+                    }
+                });
+                // 更新头部提醒计数
+                updateHeaderRemindCount(-1);
             } else {
-                // 成功则更新头部提醒计数
-                updateHeaderRemindCount();
+                layer.msg(response.msg || '标记失败');
             }
         },
         error: function() {
-            // 如果网络错误，恢复元素显示
-            itemElement.removeClass('fade-out').show();
-            alert('网络错误，请重试');
+            layer.msg('网络错误');
         }
     });
 }
 
-function viewDetail(type, targetId, reminderId) {
+function viewDetail(type, msgId, reminderId) {
+    // 根据类型跳转到相应的详情页
     let url = '';
-    
     switch(parseInt(type)) {
         case 1: // 评论
         case 2: // 回复
         case 7: // @提及
-        case 8: // 收藏微博
-            url = `/index/${loginUserInfo.blog}/message/${targetId}`;
+            url = `/index/index/msgdetail/id/${msgId}`;
             break;
         case 3: // 频道评论
         case 4: // 频道回复
-        case 9: // 收藏频道微博
-            url = `/tools/channel/message/${targetId}`;
+            url = `/index/index/msgdetail/id/${msgId}`; // 或者跳转到频道详情页
             break;
         case 5: // 关注
-        case 6: // 取消关注
-            url = `/index/${loginUserInfo.blog}/`;
+            url = `/index/user/space/uid/${item.from_uid || 0}`; // 跳转到关注者主页
+            break;
+        case 8: // 收藏微博
+        case 9: // 收藏频道微博
+            url = `/index/index/msgdetail/id/${msgId}`;
             break;
         default:
-            url = `/index/${loginUserInfo.blog}/message/${targetId}`;
+            url = `/index/index/msgdetail/id/${msgId}`;
     }
     
-    // 标记为已读
-    markAsRead(reminderId);
-    
-    // 跳转到详情页
-    window.location.href = url;
+    window.open(url, '_blank');
 }
 
 function loadMoreReminders() {
     if (!hasMore) return;
-    
     currentPage++;
     loadReminders(currentType, currentPage);
 }
 
 function updateHeaderRemindCount() {
-    // 更新头部的提醒计数
-    $.ajax({
-        type: "GET",
-        url: "/index/ajax/checkRemind",
-        dataType: "json",
-        success: function(response) {
-            if (response.status === 1 && response.data) {
-                if (response.data.messageRemind) {
-                    $('#checkmessageRemind').show();
-                } else {
-                    $('#checkmessageRemind').hide();
-                }
-                
-                if (response.data.chatRemind) {
-                    $('#checkRemind').show();
-                } else {
-                    $('#checkRemind').hide();
-                }
-            }
+    const countElement = $('.remind-count'); // 假设有这样的元素
+    if (countElement.length > 0) {
+        let currentCount = parseInt(countElement.text()) || 0;
+        currentCount += delta;
+        if (currentCount < 0) currentCount = 0;
+        if (currentCount > 0) {
+            countElement.text(currentCount);
+            countElement.show();
+        } else {
+            countElement.hide();
         }
-    });
+    }
 }
 
-// 滚动加载更多
+// 滚动到底部自动加载更多
 $(window).scroll(function() {
     if ($(window).scrollTop() + $(window).height() >= $(document).height() - 100) {
-        loadMoreReminders();
+        if (hasMore) {
+            loadMoreReminders();
+        }
     }
 });
-
-// 添加标记已读的API接口
-function markRead(id) {
-    $.ajax({
-        type: "POST",
-        url: "{:url('/index/index/markRead')}", // 使用当前控制器的标记已读方法
-        data: { id: id },
-        dataType: "json",
-        success: function(response) {
-            if (response.status === 1) {
-                updateHeaderRemindCount();
-            }
-        }
-    });
-}
 </script>

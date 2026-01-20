@@ -229,7 +229,7 @@ class Reminder
     {
         // 从回复ID获取回复信息
         $replyInfo = Db::name('comment')->alias('c')
-            ->join('comment_reply cr', 'c.cid = cr.tocid')
+            ->join('comment_reply cr', 'c.cid = cr.cid')
             ->field('c.msg as comment_msg, c.ctime as comment_ctime, c.msg_id, cr.msg as reply_msg, cr.ctime as reply_ctime, cr.cid as comment_id')
             ->where('cr.rid', $replyId)
             ->find();
@@ -296,7 +296,7 @@ class Reminder
     {
         // 从回复ID获取回复信息
         $replyInfo = Db::name('channel_comment')->alias('c')
-            ->join('channel_comment_reply cr', 'c.cid = cr.tocid')
+            ->join('channel_comment_reply cr', 'c.cid = cr.cid')
             ->field('c.msg as comment_msg, c.ctime as comment_ctime, c.msg_id, cr.msg as reply_msg, cr.ctime as reply_ctime, cr.cid as comment_id')
             ->where('cr.rid', $replyId)
             ->find();
