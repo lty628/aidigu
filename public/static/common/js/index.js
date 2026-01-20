@@ -73,7 +73,7 @@ function showMessageImg(obj) {
 function toggleCommentIframe(msgId, type) {
     var iframeId = 'iframe-comment-' + msgId;
     var existingIframe = document.getElementById(iframeId);
-    
+    console.log(existingIframe);
     if (existingIframe) {
         // 如果已存在，则切换显示/隐藏
         if (existingIframe.style.display === 'none') {
@@ -92,7 +92,7 @@ function toggleCommentIframe(msgId, type) {
         iframe.style.marginTop = '10px';
         
         // 找到对应的消息项并插入 iframe
-        var entryDiv = document.querySelector('.entry:has([href*="' + msgId + '"])');
+        var entryDiv = document.getElementById('entry-'+msgId);
         if (entryDiv) {
             entryDiv.appendChild(iframe);
         }

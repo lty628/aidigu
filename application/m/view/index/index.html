@@ -218,7 +218,7 @@
 							delStr += '<span><a href="javascript:void(0);" onclick="collectMsg(' + data[i].msg_id + ',0);"><i class="layui-icon layui-icon-star"></i> 收藏</a></span>';
 						}
 						delStr += '</div>'; // 关闭样式类
-						str = '<div class="post entry"><img class="post-head" src="' + data[i].head_image + '" />'
+						str = '<div class="post entry" id="entry-'+ data[i].msg_id +'"><img class="post-head" src="' + data[i].head_image + '" />'
 							+ '<div class="post-article">'
 							+ '<div class="post-info-i">'
 							+ '<h2><a href="/' + data[i].blog + '/own/">' + data[i].nickname + '</a></h2><small><i class="fa fa-clock-o"></i>'+getDateDiff(data[i].ctime)+'<i class="fa fa-eye"></i>'+' 来自' + data[i].refrom+'</small>'
