@@ -168,7 +168,7 @@ class Comment extends Controller
             ->order($orderField, $orderDirection)
             ->limit($offset, $limit)
             ->select();
-sleep(11);
+            
         if (empty($list)) {
             return json([
                 'code' => 200,
