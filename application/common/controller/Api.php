@@ -332,7 +332,7 @@ class Api extends Base
                         $user['uid'],
                         7,
                         [
-                        'msg_id' => $data['msg_id'] 
+                            'msg_id' => $data['msg_id'] 
                         ]
                     );
                 }

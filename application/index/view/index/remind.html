@@ -593,6 +593,11 @@ function viewDetail(type, reminderId, msgId, cid, rid, channelId, fromBlog) {
             url = `/${fromBlog}/own/`; // 跳转到关注者主页
             break;
         case 8: // 收藏微博
+            var blog = '{$userInfo.blog}';
+            var uri = `msgId=${msgId}&reminderId=${reminderId}`;
+            uri = base64Encode(uri);
+            url = `/${blog}/message/${uri}`;
+            break;
         case 9: // 收藏频道微博
             url = `/index/index/msgdetail/id/${msgId}`;
             break;

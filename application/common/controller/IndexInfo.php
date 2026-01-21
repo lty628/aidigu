@@ -3,6 +3,7 @@
 namespace app\common\controller;
 
 use app\common\controller\Info;
+use app\common\helper\Reminder;
 use think\Db;
 // use think\facade\Session;
 use app\common\model\Message;
@@ -161,7 +162,7 @@ class IndexInfo extends Info
         $reminderId = $params['reminderId'] ?? 0;
 
         if ($reminderId) {
-            \app\common\helper\Reminder::markAsRead($reminderId, $this->userid);
+            Reminder::markAsRead($reminderId, $this->userid);
         }
 
 
@@ -312,7 +313,7 @@ class IndexInfo extends Info
         $reminderId = $params['reminderId'] ?? 0;
 
         if ($reminderId) {
-            \app\common\helper\Reminder::markAsRead($reminderId, $this->userid);
+            Reminder::markAsRead($reminderId, $this->userid);
         }
 
         if (!$msgId) {
@@ -539,6 +540,11 @@ class IndexInfo extends Info
         $data['msg_id'] = $msgId;
         $data['collect_time'] = date('Y-m-d H:i:s', $time);
 
+        $msgInfo = Db::name('message')->field('uid')->where('msg_id', $msgId)->find();
+        if (!$msgInfo) {
+            return json(['code' => 0, 'msg' => '消息不存在']);
+        }
+
         if ($isCancel) {
             $data['collect_time'] = date('Y-m-d H:i:s', $time);
             Db::name('user_collect')->where('fromuid', $this->userid)->where('msg_id', $msgId)->update([
@@ -559,6 +565,16 @@ class IndexInfo extends Info
             } else {
                 Db::name('user_collect')->insert($data);
                 Db::name('message')->where('msg_id', $msgId)->setInc('collectsum');
+                
+                Reminder::saveReminder(
+                    $data['msg_id'] ,
+                    $this->userid,
+                    $msgInfo['uid'],
+                    8,
+                    [
+                        'msg_id' => $data['msg_id'] 
+                    ]
+                );
                 $msg = '收藏成功';
             }
         }
@@ -628,7 +644,7 @@ class IndexInfo extends Info
     public function remind()
     {
         // 获取用户分类未读数量
-        $unreadCount = \app\common\helper\Reminder::getUnreadCount(getLoginUid());
+        $unreadCount = Reminder::getUnreadCount(getLoginUid());
         $this->assign('unreadCount', $unreadCount);
 
 
