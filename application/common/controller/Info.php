@@ -114,6 +114,7 @@ class Info extends Base
 		// Reminder::where('touid', $this->userid)->where('msg_id', $msgId)->update(['status' => 1]);
 		$userMessage[0] = Message::getMessageById($msgId);
 		// $messageBlock = $userMessage[0]->comments()->where('msg_id',$msgId)->with('User')->order('ctime','desc')->paginate(20);
+		// dump($userMessage);die;
 		$this->assign('userMessage', handleMessage($userMessage));
 		// $this->assign('messageBlock', $messageBlock);
 

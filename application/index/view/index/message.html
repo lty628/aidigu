@@ -4,9 +4,9 @@
 <div class="sendMsg"></div>
 		{foreach $userMessage as $message}
 		<div class="entry">
-			<div class="avatar"><div class="imgborder"><a href="{:url('/'.$message.blog.'/')}"><img src="{$userInfo.head_image|default=$defaultImage}" /></a></div></div>
+			<div class="avatar"><div class="imgborder"><a href="{:url('/'.$message.blog.'/')}"><img src="{$message.head_image|default=$defaultImage}" /></a></div></div>
 			<div class="box">
-				<p class="massageText"><a href="{:url('/'.$userInfo.blog.'/')}" id="nickname">{$message.nickname}：</a>{$message.contents|raw}{$message.repost|raw}</p>
+				<p class="massageText"><a href="{:url('/'.$message.blog.'/')}" id="nickname">{$message.nickname}：</a>{$message.contents|raw}{$message.repost|raw}</p>
 				{if $message.media}
 						{if json_decode($message.media_info, true)['media_type'] == 'mp4'}
 						<p  class="massageImg clear"><video width="400px"  controls=""  name="media"><source src="{$message.media}" type="video/mp4"></video></p>
@@ -20,7 +20,7 @@
 <!-- <a href="javascript:void(0);" onclick="comment({$message.msg_id}, {$message.uid});">评论{if 0 != $message.commentsum}（{$message.commentsum}）{/if}</a> -->
 <!-- <a href="javascript:void(0);" data-title="评论" data-url="/chat/messageChatId/{$message.msg_id}" onclick="showFrameHtml(this, '60%', '70%')">评论{if 0 != $message.commentsum}（{$message.commentsum}）{/if}</a> -->
   {if $userInfo.isSiteUser}
- <!-- <a href="{:url('/'.$userInfo.blog.'/'.'del/message/'.$message.msg_id)}">删除</a> -->
+ <!-- <a href="{:url('/'.$message.blog.'/'.'del/message/'.$message.msg_id)}">删除</a> -->
  {/if}
 </span>
 

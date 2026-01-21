@@ -2,10 +2,10 @@
 <div id="msgContent">
 	{foreach $userMessage as $message}
 	<div class="post">
-		<img class="post-head" src="{$userInfo.head_image|default=$defaultImage}" />
+		<img class="post-head" src="{$message.head_image|default=$defaultImage}" />
 		<div class="post-article">
 			<div class="post-info-i">
-				<h2><a title="{:url('/'.$userInfo.blog.'/')}" href="">{$message.nickname}：</a></h2>
+				<h2><a title="{:url('/'.$message.blog.'/')}" href="">{$message.nickname}：</a></h2>
 				<small>
 					<i class="fa fa-clock-o"></i>{$message.ctime|date='Y-m-d H:i:s'} 来自 {$message.refrom}
 				</small>
