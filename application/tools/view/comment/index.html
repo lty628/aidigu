@@ -76,7 +76,7 @@
         }
 
         .comment-header {
-            background: linear-gradient(135deg, var(--primary-color) 0%, #667eea 100%);
+            background: linear-gradient(135deg, var(--secondary-color) 0%, #667eea 100%);
             color: var(--primary-btn-color);
             padding: 16px 20px; /* 减小内边距 */
             position: relative;
@@ -203,7 +203,7 @@
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, var(--primary-color) 0%, #667eea 100%);
+            background: linear-gradient(135deg, var(--secondary-color) 0%, #667eea 100%);
             color: var(--primary-btn-color);
             box-shadow: 0 2px 4px var(--shadow-color);
         }
@@ -578,8 +578,9 @@ padding: 12px 16px; /* 减小内边距 */
                 <h3 class="section-title"><i class="fas fa-comments"></i> 最新评论</h3>
                 <div class="comments-list" id="commentsContainer">
                     <div class="loading">
-                        <i class="fas fa-spinner fa-spin"></i> 加载中...
+                        <i class="fas fa-spinner fa-spin"></i>
                     </div>
+                    加载中...
                 </div>
             </div>
 
@@ -687,7 +688,7 @@ padding: 12px 16px; /* 减小内边距 */
                     replyId = 0;
                 }
 
-                $('#commentsContainer').html('<div class="loading"><i class="fas fa-spinner fa-spin"></i> 加载中...</div>');
+                $('#commentsContainer').html('<div class="loading"><i class="fas fa-spinner fa-spin"></i> </div>加载中...');
 
                 $.ajax({
                     url: '/tools/comment/getCommentList',
