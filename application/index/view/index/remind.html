@@ -507,7 +507,7 @@ function buildReminderItem(item) {
             <div class="remind-time">${timeString}</div>
             <div class="remind-actions">
                 <button class="read-btn" onclick="markAsRead(${item.reminder_id})">标记已读</button>
-                <button class="view-btn" onclick="viewDetail(${item.type}, ${item.reminder_id}, ${item.extra.msg_id || 0}, ${item.extra.cid || 0}, ${item.extra.rid || 0}, ${item.extra.channel_id || 0})">查看</button>
+                <button class="view-btn" onclick="viewDetail(${item.type}, ${item.reminder_id}, ${item.extra.msg_id || 0}, ${item.extra.cid || 0}, ${item.extra.rid || 0}, ${item.extra.channel_id || 0}, '${item.extra.from_blog || ''}')">查看</button>
             </div>
         </div>
     </div>
@@ -569,7 +569,7 @@ function markAsRead(reminder_id) {
     });
 }
 
-function viewDetail(type, reminderId, msgId, cid, rid, channelId) {
+function viewDetail(type, reminderId, msgId, cid, rid, channelId, fromBlog) {
     // 根据类型跳转到相应的详情页
     let url = '';
     switch(parseInt(type)) {
@@ -589,7 +589,8 @@ function viewDetail(type, reminderId, msgId, cid, rid, channelId) {
             // return false
             break;
         case 5: // 关注
-            url = `/index/user/space/uid/${item.from_uid || 0}`; // 跳转到关注者主页
+        case 6:
+            url = `/${fromBlog}/own/`; // 跳转到关注者主页
             break;
         case 8: // 收藏微博
         case 9: // 收藏频道微博
