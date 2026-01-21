@@ -49,7 +49,7 @@
 {if $userInfo && getThemeInfo($userInfo['theme'])[1]}
 <div class="background-blur" style="background: url({:getThemeInfo($userInfo['theme'])[1]}) no-repeat 0 0;background-attachment:fixed;background-size:100% 100%;height:auto;min-height: 100%"></div>
 {else}
-<div class="background-blur" style="filter: unset; background: linear-gradient(135deg, #F7FFF7 0%, #E3FDFD 100%);"></div>
+<div class="background-blur" style="filter: blur(1px);background: url(/static/index/images/bg.jpg) no-repeat 0 0;background-attachment:fixed;background-size:100% 100%;height:auto;min-height: 100%"></div>
 <script>
     // 粒子动画 - 优化版本
     (function() {
