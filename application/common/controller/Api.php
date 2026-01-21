@@ -167,7 +167,7 @@ class Api extends Base
         try {
             Db::name('comment')->insert($data);
             // if (getLoginUid()!=(int)input('get.uid'))
-            Reminder::saveReminder($data['msg_id'], getLoginUid(), (int)input('get.uid'), 2);
+            // Reminder::saveReminder($data['msg_id'], getLoginUid(), (int)input('get.uid'), 2);
             // 提交事务
             Db::commit();
             return json(array('status' =>  1,'msg' => '回复成功'));
@@ -186,7 +186,12 @@ class Api extends Base
         if (!$result) return json(array('status' =>  0,'msg' => '取消关注失败'));
 
         \app\chat\model\ChatFriends::editFriend($userid, $loginUid);
-        
+        Reminder::saveReminder(
+            0,
+            $loginUid,
+            $userid,
+            6
+        );
         return json(array('status' =>  1,'msg' => '已成功取消关注'));
     }
     public function addFollow()
@@ -204,6 +209,12 @@ class Api extends Base
             return json(array('status' =>  0,'msg' => '对方开启隐身模式，无法关注TA'));
         }
 
+        Reminder::saveReminder(
+            0,
+            $loginUid,
+            $userid,
+            5
+        );
         //是否被跟随
         $result = Fans::addFollow($userid, $loginUid);
         if ($loginUid == $userid ) return json(array('status' =>  0,'msg' => '您不能关注自己')); 
@@ -223,7 +234,7 @@ class Api extends Base
             Db::name('message')->where('msg_id',$data['msg_id'])->setInc('commentsum',1);
             Db::name('comment')->insert($data);
             // if (getLoginUid()!=(int)input('get.uid'))
-                Reminder::saveReminder($data['msg_id'], getLoginUid(), (int)input('get.uid'), 1);
+                // Reminder::saveReminder($data['msg_id'], getLoginUid(), (int)input('get.uid'), 1);
             // 提交事务
             Db::commit();
             return true;
@@ -291,11 +302,16 @@ class Api extends Base
         if (!$contents && !$mediaInfo) return false;
     	$repost = input('get.repost');
         $data['repost'] = '';
-    	if ($repost)  $data['repost'] = self::getMessage(strip_tags($repost, '<source><video><img><p><a>'));
         $data['uid'] = getLoginUid();
+    	if ($repost) {
+            $repost = self::getMessage(strip_tags($repost, '<source><video><img><p><a>'));
+            $data['repost']  = $repost;
+        }
         $topic = self::getTopic($contents, $data['uid']);
         $data['topic_id'] = $topic['topic_id'];
-        $data['contents'] = self::getMessage($topic['contents']);
+        $contents = self::getMessage($topic['contents']);
+        // dump($contents);die;
+        $data['contents'] = $contents['contents'];
         $data['refrom'] = self::$refrom;
         $data['ctime'] = time();
         Db::startTrans();
@@ -306,8 +322,21 @@ class Api extends Base
                 Db::name('message')->where('msg_id', $msgId)->setInc('repostsum',1);
             }
             if ($repost) {
-                Reminder::saveReminder($msgId, getLoginUid(), (int)input('get.fromuid'), 0);
+                // Reminder::saveReminder($msgId, getLoginUid(), (int)input('get.fromuid'), 0);
             }
+            if ($contents['foundUsers']) {
+                foreach ($contents['foundUsers'] as $user) {
+                    Reminder::saveReminder(
+                        0,
+                        $data['uid'],
+                        $user['uid'],
+                        7,
+                        [
+                        'msg_id' => $data['msg_id'] 
+                        ]
+                    );
+                }
+            } 
             self::updateUserMessageSum();
             // 提交事务
             Db::commit();
@@ -355,25 +384,35 @@ class Api extends Base
 
     protected static function getMessage($contents = null) 
     {
-    	return preg_replace_callback(
-	        // '/^@(\w*[0-9]*[\u4e00-\u9fa5]*)(:){0,1}(:.;)*$/',
-	        // '/^@(\w*[0-9]*)(:){0,1}([:\.;])*$/ius',
-	        '/@{1}(\w*[\.0-9]*[\x{4e00}-\x{9fa5}]*)([：:]){0,1}([：:\.;])*/ui',
-	        function ($matches) {
-	        	// dump($matches);die;
-	            $findUser = Db::name('user')->where('nickname',$matches[1])->field('uid,blog')->find();
-	            if ($findUser) {
-	            	return str_replace('@'.$matches[1], '<a href="/'.$findUser['blog'].'/">@'.$matches[1].'</a>', $matches[0]);
-	            } else {
-	            	// return str_replace('@'.$matches[1], '<a href="javascript:;">@'.$matches[1].'</a>', $matches[0]);
+        $foundUsers = [];
+        
+        $processedContents = preg_replace_callback(
+            // '/^@(\w*[0-9]*[\u4e00-\u9fa5]*)(:){0,1}(:.;)*$/',
+            // '/^@(\w*[0-9]*)(:){0,1}([:\.;])*$/ius',
+            '/@{1}(\w*[\.0-9]*[\x{4e00}-\x{9fa5}]*)([：:]){0,1}([：:\.;])*/ui',
+            function ($matches) use (&$foundUsers) {
+                // dump($matches);die;
+                $findUser = Db::name('user')->where('nickname',$matches[1])->field('uid,blog')->find();
+                if ($findUser) {
+                    // 记录找到的用户
+                    $foundUsers[] = $findUser;
+                    // 返回替换后的HTML链接
+                    return str_replace('@'.$matches[1], '<a href="/'.$findUser['blog'].'/">@'.$matches[1].'</a>', $matches[0]);
+                } else {
+                    // return str_replace('@'.$matches[1], '<a href="javascript:;">@'.$matches[1].'</a>', $matches[0]);
                     return $matches[0];
-	            }
-	        },
-	        $contents
-	    );
-
+                }
+            },
+            $contents
+        );
+        
+        // 返回包含处理后的内容和找到的用户信息的数组
+        return [
+            'contents' => $processedContents,
+            'foundUsers' => $foundUsers
+        ];
     }
-    
+
     public static function updateUserMessageSum()
     {
         return Db::name('user')->where('uid', getLoginUid())->setInc('message_sum', 1);
