@@ -33,6 +33,7 @@ class Reminder
         $query = ReminderModel::alias('reminder')
             ->join('user u', 'u.uid = reminder.fromuid', 'LEFT')
             ->field('reminder.*, u.nickname as from_nickname, u.head_image as from_head_image, u.blog as from_blog')
+            ->where('reminder.status', 0)   
             ->where('reminder.touid', $userid);
         
         // 如果是移动端，则排除类型3、4、9的提醒
