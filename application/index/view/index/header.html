@@ -49,7 +49,163 @@
 {if $userInfo && getThemeInfo($userInfo['theme'])[1]}
 <div class="background-blur" style="background: url({:getThemeInfo($userInfo['theme'])[1]}) no-repeat 0 0;background-attachment:fixed;background-size:100% 100%;height:auto;min-height: 100%"></div>
 {else}
-<div class="background-blur"></div>
+<div class="background-blur" style="filter: unset; background: linear-gradient(135deg, #F7FFF7 0%, #E3FDFD 100%);"></div>
+<script>
+    // 粒子动画 - 优化版本
+    (function() {
+        // 配置参数
+        const CONFIG = {
+            particleCount: 80,
+            minSize: 1,
+            maxSize: 5,
+            minSpeed: -0.25,
+            maxSpeed: 0.25,
+            minAlpha: 0.3,
+            maxAlpha: 0.8,
+            colorPalette: [
+                'rgba(255, 107, 107, {alpha})', // 红色系
+                'rgba(107, 185, 255, {alpha})', // 蓝色系
+                'rgba(173, 107, 255, {alpha})', // 紫色系
+                'rgba(107, 255, 185, {alpha})'  // 青色系
+            ],
+            zIndex: 1,
+            pointerEvents: 'none'
+        };
+
+        let canvas, ctx, particles = [], animationId;
+
+        // 粒子类
+        class Particle {
+            constructor(width, height) {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.size = Math.random() * (CONFIG.maxSize - CONFIG.minSize) + CONFIG.minSize;
+                this.speedX = Math.random() * (CONFIG.maxSpeed - CONFIG.minSpeed) + CONFIG.minSpeed;
+                this.speedY = Math.random() * (CONFIG.maxSpeed - CONFIG.minSpeed) + CONFIG.minSpeed;
+                const alpha = Math.random() * (CONFIG.maxAlpha - CONFIG.minAlpha) + CONFIG.minAlpha;
+                const colorTemplate = CONFIG.colorPalette[Math.floor(Math.random() * CONFIG.colorPalette.length)];
+                this.color = colorTemplate.replace('{alpha}', alpha);
+            }
+
+            update(width, height) {
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                // 边界检测和反弹
+                if (this.x <= 0 || this.x >= width) {
+                    this.speedX *= -1;
+                    this.x = Math.max(0, Math.min(width, this.x)); // 防止超出边界
+                }
+                if (this.y <= 0 || this.y >= height) {
+                    this.speedY *= -1;
+                    this.y = Math.max(0, Math.min(height, this.y)); // 防止超出边界
+                }
+            }
+
+            draw(ctx) {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+            }
+        }
+
+        // 初始化画布和粒子
+        function init() {
+            canvas = document.createElement('canvas');
+            ctx = canvas.getContext('2d');
+
+            // 设置画布尺寸
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            // 设置画布样式
+            Object.assign(canvas.style, {
+                position: 'absolute',
+                top: '0',
+                left: '0',
+                zIndex: CONFIG.zIndex.toString(),
+                pointerEvents: CONFIG.pointerEvents
+            });
+
+            // 添加到背景容器
+            document.querySelector('.background-blur').appendChild(canvas);
+
+            // 创建粒子
+            particles = [];
+            for (let i = 0; i < CONFIG.particleCount; i++) {
+                particles.push(new Particle(canvas.width, canvas.height));
+            }
+
+            // 开始动画循环
+            animate();
+        }
+
+        // 动画循环
+        function animate() {
+            // 清除画布
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // 更新和绘制每个粒子
+            for (const particle of particles) {
+                particle.update(canvas.width, canvas.height);
+                particle.draw(ctx);
+            }
+
+            // 继续动画循环
+            animationId = requestAnimationFrame(animate);
+        }
+
+        // 窗口大小调整处理
+        function handleResize() {
+            if (!canvas) return;
+            
+            // 保存当前粒子位置比例
+            const widthRatio = window.innerWidth / canvas.width;
+            const heightRatio = window.innerHeight / canvas.height;
+
+            // 更新画布尺寸
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            // 按比例调整粒子位置，保持相对位置
+            for (const particle of particles) {
+                particle.x *= widthRatio;
+                particle.y *= heightRatio;
+            }
+        }
+
+        // 添加事件监听器
+        window.addEventListener('resize', handleResize);
+
+        // 页面可见性变化时暂停/恢复动画
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                if (animationId) {
+                    cancelAnimationFrame(animationId);
+                    animationId = null;
+                }
+            } else {
+                if (!animationId) {
+                    animate();
+                }
+            }
+        });
+
+        // 页面卸载时清理资源
+        window.addEventListener('beforeunload', function() {
+            if (animationId) {
+                cancelAnimationFrame(animationId);
+            }
+            if (canvas && canvas.parentNode) {
+                canvas.parentNode.removeChild(canvas);
+            }
+        });
+
+        // 启动初始化
+        init();
+    })();
+</script>
 {/if}
 
 <div class="container">
