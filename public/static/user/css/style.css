@@ -29,10 +29,9 @@ body.style-3 {
 } */
     /* 全局样式 */
     body.tech-flat-bg {
-       background: #ffffff url(/static/index/images/bg.jpg) no-repeat 0 0;
+       background: url(/static/index/images/bg.jpg) no-repeat 0 0;
         /* background: linear-gradient(135deg, rgba(137, 247, 254, 0.5) 0%, rgba(102, 166, 255, 0.5) 100%); */
         color: #555;
-        font-family: 'Poppins', sans-serif;
         display: flex;
         justify-content: center;
         align-items: center;
