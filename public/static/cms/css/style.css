@@ -25,7 +25,7 @@ body {
 }
 
 .container {
-    max-width: 1200px;
+    /* max-width: 1200px; */
     margin: 0 auto;
     padding: 0 1rem;
 }
@@ -426,12 +426,6 @@ body {
 
 .edit-post {
     padding: 0;
-}
-
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 1rem;
 }
 
 /* 卡片样式 */
@@ -1451,6 +1445,7 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    margin: 0 auto;
 }
 
 .index-list-page {
@@ -1461,8 +1456,6 @@ body {
 
 .index-list-content {
     flex: 1;
-    background-color: #f8f9fa;
-    padding: 2rem 0;
 }
 
 .index-list-post {
@@ -1569,7 +1562,7 @@ body {
 }
 
 .index-grid {
-    margin-top: 1.5rem;
+    margin-top: 2.5rem;
 }
 
 .index-row {
@@ -2521,12 +2514,6 @@ body {
     background-color: #f8f9fa;
 }
 
-/* 主要容器 */
-.index-list-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-}
 
 .index-list-page {
     background-color: #fff;
@@ -2602,9 +2589,6 @@ body {
 }
 
 /* 文章列表网格 */
-.index-grid {
-    padding: 20px;
-}
 
 .index-row {
     display: grid;
@@ -2647,7 +2631,7 @@ body {
 .category-tag {
     position: absolute;
     top: 10px;
-    left: 10px;
+    right: 10px;
     background-color: #007bff;
     color: white;
     padding: 3px 8px;
