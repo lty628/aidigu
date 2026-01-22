@@ -25,7 +25,7 @@ body {
 }
 
 .container {
-    /* max-width: 1200px; */
+    max-width: 1200px;
     margin: 0 auto;
     padding: 0 1rem;
 }
@@ -1456,6 +1456,8 @@ body {
 
 .index-list-content {
     flex: 1;
+    background-color: #f8f9fa;
+    padding: 2rem 0;
 }
 
 .index-list-post {
@@ -1562,12 +1564,12 @@ body {
 }
 
 .index-grid {
-    margin-top: 2.5rem;
+    margin-top: 1.5rem;
 }
 
 .index-row {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 1.5rem;
 }
 
@@ -2586,14 +2588,6 @@ body {
 .filter-link:hover {
     background-color: #e9ecef;
     color: #495057;
-}
-
-/* 文章列表网格 */
-
-.index-row {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 25px;
 }
 
 /* 文章卡片 */
