@@ -114,7 +114,7 @@
 			info.content = editor.txt.html();
 			info.title = $("input[name='title']").val()
 			info.category_id = $("select[name='category-id']").val()
-			var article_img = $("#mediaVal").val()
+			var article_media = $("#mediaVal").val()
 
 
 
@@ -133,7 +133,7 @@
 			$.ajax({
 				type: "POST",
 				url: "/cms/commit/commit",
-				data: { info: info, article_img: article_img },
+				data: { info: info, article_media: article_media },
 				dataType: "json",
 				success: function (json) {
 					if (!json.code) {

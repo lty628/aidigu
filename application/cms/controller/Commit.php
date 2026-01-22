@@ -9,12 +9,14 @@ class Commit
 	public function commit(Content $content)
     {
         $info = input('post.info');
-        $article_img = input('post.article_img');
+        $article_media = input('post.article_media');
         // 此处有 bug 待完善 unfinish
         $info['uid'] = getUserId();
         $info['content_extra'] = '';
-        if ($article_img) {
-            $info['content_extra'] = json_encode(['article_img' => $article_img]);
+        if ($article_media) {
+            $article_media_info = pathinfo($article_media);
+            $article_media_type = $article_media_info['extension'];
+            $info['content_extra'] = json_encode(['article_media' => $article_media, 'article_media_type' => $article_media_type]);
         }
         $result = $content->add($info);
         if (!$result) return ajaxJson(0, '添加失败'); 
@@ -25,7 +27,7 @@ class Commit
     public function commitEdit(Content $content)
     {
         $info = input('post.info');
-        $article_img = input('post.article_img');
+        $article_media = input('post.article_media');
         $contentId = $info['content_id'];
         if (!$contentId) return ajaxJson(0, '参数不正确！'); 
         $find = $content->getOne(['content_id' => $contentId]);
@@ -33,8 +35,12 @@ class Commit
         $info['uid'] = getUserId();
         if ($find['uid'] != $info['uid']) return ajaxJson(0, '您没有权限编辑！'); 
         $info['content_extra'] = '';
-        if ($article_img) {
-            $info['content_extra'] = json_encode(['article_img' => $article_img]);
+        dump($article_media);
+        die;
+        if ($article_media) {
+            $article_media_info = pathinfo($article_media);
+            $article_media_type = $article_media_info['extension'];
+            $info['content_extra'] = json_encode(['article_media' => $article_media, 'article_media_type' => $article_media_type]);
         }
         
         // 此处有 bug 待完善 unfinish

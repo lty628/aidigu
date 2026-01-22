@@ -64,20 +64,22 @@
                                                         <!-- 多媒体内容区域 -->
                                                         <div class="article-media">
                                                             <!-- 文章图片 -->
-                                                            {{if isset($vo.content_extra.article_img) && $vo.content_extra.article_img }}
-                                                            <div class="article-image mb-3">
-                                                                <img src="{{$vo.content_extra.article_img}}" alt="article image" class="img-fluid rounded" />
-                                                            </div>
-                                                            {{/if}}
+                                                            {{if isset($vo.content_extra.article_media_type) && $vo.content_extra.article_media_type == 'mp4' }}
                                                             
-                                                            <!-- 文章视频 -->
-                                                            {{if isset($vo.content_extra.article_video) && $vo.content_extra.article_video }}
-                                                            <div class="article-video mb-3">
+                                                             <div class="article-video mb-3">
                                                                 <video controls class="w-100 rounded">
-                                                                    <source src="{{$vo.content_extra.article_video}}" type="video/mp4">
+                                                                    <source src="{{$vo.content_extra.article_media}}" type="video/mp4">
                                                                     您的浏览器不支持视频播放
                                                                 </video>
                                                             </div>
+                                                            {{elseif isset($vo.content_extra.article_media) && $vo.content_extra.article_media }}
+                                                           <div class="article-image mb-3">
+                                                                <img src="{{$vo.content_extra.article_media}}" alt="article image" class="img-fluid rounded" />
+                                                            </div>
+                                                            {{else}}
+                                                                <div class="article-image-default mb-3">
+                                                                    <span>暂无图片</span>
+                                                                </div>
                                                             {{/if}}
                                                         </div>
                                                         <div class="list-content">

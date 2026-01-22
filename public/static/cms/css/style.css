@@ -25,6 +25,7 @@ body {
 }
 
 .container {
+    min-height: 900px;
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 1rem;
@@ -120,7 +121,7 @@ body {
 
 .article-image img {
     width: 100%;
-    height: 100px;
+    height: 135px;
     object-fit: cover;
     border-radius: 6px;
 }
@@ -1446,8 +1447,6 @@ body {
 
 .index-list-content {
     flex: 1;
-    background-color: #f8f9fa;
-    padding: 2rem 0;
 }
 
 .index-list-post {
@@ -2646,15 +2645,21 @@ body {
     margin-bottom: 15px;
 }
 
-.article-image img {
-    width: 100%;
-    height: auto;
-    border-radius: 4px;
-}
-
 .article-video video {
     width: 100%;
     border-radius: 4px;
+}
+
+/* 添加默认图片占位符样式 */
+.article-image-default {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 135px;
+    background-color: #f0f2f5;
+    border-radius: 8px;
+    color: #6c757d;
+    font-size: 1rem;
 }
 
 /* 文章摘要 */
@@ -2760,7 +2765,7 @@ body {
 /* 响应式设计 */
 @media (max-width: 768px) {
     .index-row {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr; /* 在小屏幕上变为单列布局 */
     }
     
     .toolbar-actions {

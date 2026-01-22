@@ -17,7 +17,7 @@ return [
     // 最大字节
     'size' => 0,
     // 后缀
-    'ext' => 'jpg,png,gif,md,pdf',
+    'ext' => 'jpg,gif,md,pdf,jpeg,doc,docx,xls,xlsx,ppt,pptx,zip,rar,7z,txt,mp3,mp4,wmv,avi,flv,mkv,css,js,html,htm,xml,json,sql,exe,bat,psd,ai,eps,ps,cdr,svg,ico,tif,tiff,bmp,dng,png',
     // MIME
     'type' => 0,
     // 地址 或 空

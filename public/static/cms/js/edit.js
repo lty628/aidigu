@@ -75,7 +75,10 @@ editor.config.uploadVideoHooks = {
         // return
         // console.log('customInsert', result)
         // // insertVideoFn 可把视频插入到编辑器，传入视频 src ，执行函数即可
-        insertVideoFn(res.data.url)
+        if (!$("#mediaVal").val()) {
+            $("#mediaVal").val(res.data[0].url);
+        }
+        insertVideoFn(res.data[0].url)
         // insertVideoFn(result.data['media_info'] + '.' + result.data['media_type'])
     }
 }
