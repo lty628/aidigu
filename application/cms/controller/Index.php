@@ -11,6 +11,7 @@ class Index extends Base
     // 发表文章
 	public function commit()
     {
+        $this->assign('categoryName', 'commit');
         return $this->fetch('commit');
     }
 
@@ -21,6 +22,7 @@ class Index extends Base
         $this->assign([
             'article' => $article
         ]);
+        $this->assign('categoryName', 'commitEdit');
         return $this->fetch('commit-edit');
     }
 
@@ -31,6 +33,7 @@ class Index extends Base
         $article = $contentModel->getOne(['content_id' => $contentId]);
         
         $this->assign('article', $article);
+        $this->assign('categoryName', $article['category']['category_name']);
         return $this->fetch('details');
     }
 
@@ -38,18 +41,18 @@ class Index extends Base
     {
         $input = input();
         $input['category_name'] = $input['category_name'] ?? '';
-        $categoryArr = $categoryModel->getList(['category_name' => $input['category_name']]);
-        $where['category_id'] =  $categoryArr[$input['category_name']] ?? '';
+        $categoryArr = $categoryModel->getOne(['category_name' => $input['category_name']]);
+        $where['category_id'] =  $categoryArr['category_id'] ?? '';
         $where = array_filter($where);
 
         // content_id 降序
-        $list = $contentModel->pageList([], '*', 'content_id desc');
+        $list = $contentModel->pageList($where, '*', 'content_id desc');
         $page = $list->render();
         // dump($list);
         // die;
         $this->assign('list', $list);
         $this->assign('page', $page);
-
+        $this->assign('categoryName', $input['category_name']);
         // if ($input['category_name']) {
             return $this->fetch('index2');
         // }

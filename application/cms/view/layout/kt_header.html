@@ -12,14 +12,16 @@
                 <ul class="nav-menu">
                     
                     <li class="nav-item">
-                        <a class="{{if '' == 'cms/index/index'}}active{{/if}} nav-link" href="/blog/">首页</a>
+                        <a class="{{if '' == $categoryName}}active{{/if}} nav-link" href="/blog/">首页</a>
                     </li>
                     
+                    {{volist name="categoryList" id="vo"}}
                     
                     <li class="nav-item">
-                        <a class="{{if '' == 'cms/index/filelist'}}active{{/if}} nav-link"
-                            href="/blog/filelist.html">文件下载</a>
+                        <a href="/blog/category/{{$vo.category_name}}/" data-category-id="{{$vo.category_id}}"
+                            class="nav-link {{if $vo.category_name == $categoryName}}active{{/if}}">{{$vo.category_name}}</a>
                     </li>
+                    {{/volist}}
                     
                 </ul>
             </div>

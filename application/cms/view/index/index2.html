@@ -34,29 +34,6 @@
                         
                         <div class="container">
                             
-                            <div id="category" class="category-filter">
-                                
-                                <h2 class="filter-heading">分类</h2>
-                                    
-
-                                <div class="filter-options">
-                                    
-                                    <ul class="filter-nav">
-                                        {{volist name="categoryList" id="vo"}}
-                                        
-                                        <li class="filter-item">
-                                            <a href="/blog/category/{{$vo.category_name}}/" data-category-id="{{$vo.category_id}}"
-                                                class="filter-link">{{$vo.category_name}}</a>
-                                        </li>
-                                        {{/volist}}
-                                    </ul>
-                                        
-
-                                </div>
-
-                            </div>
-
-                            
                             <div class="index-tab-content">
                                 
                                 <div id="kt_projects_list_grid" class="index-grid">
@@ -65,7 +42,7 @@
                                         {{volist name="list" id="vo"}}
                                         <div class="index-item">
                                             
-                                            <a href="/blog/filelistxiazai/{{$vo.content_id}}.html" class="index-card-link">
+                                            <a href="/blog/article/{{$vo.content_id}}.html" class="index-card-link">
                                                 
                                                 <div class="index-card">
                                                     <!-- 分类标签 - 左上角 -->
