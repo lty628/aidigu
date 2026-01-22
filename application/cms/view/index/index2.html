@@ -16,6 +16,30 @@
                     <div id="kt_post" class="index-list-post">
                         
                         <div class="container">
+
+                             <div class="container">
+                            
+                            <div id="category" class="category-filter">
+                                
+                                <h2 class="filter-heading">分类</h2>
+
+
+                                <div class="filter-options">
+                                    
+                                    <ul class="filter-nav">
+                                        {{volist name="categoryList" id="vo"}}
+                                        
+                                        <li class="filter-item">
+                                            <a href="/blog/category/{{$vo.category_name}}/" data-category-id="{{$vo.category_id}}"
+                                                class="filter-link">{{$vo.category_name}}</a>
+                                        </li>
+                                        {{/volist}}
+                                    </ul>
+                                        
+
+                                </div>
+
+                            </div>
                             
                             <div class="index-tab-content">
                                 
