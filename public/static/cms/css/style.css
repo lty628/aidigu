@@ -25,7 +25,6 @@ body {
 }
 
 .container {
-    min-height: 900px;
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 1rem;
@@ -92,7 +91,6 @@ body {
 .author-profile {
     margin-left: 1rem;
 }
-
 
 .article-date {
     font-size: 0.875rem;
@@ -395,6 +393,7 @@ body {
         padding: 1rem;
     }
 }
+
 /* 编辑页面整体样式 */
 .edit-container {
     min-height: 100vh;
@@ -570,6 +569,7 @@ body {
         min-height: 400px;
     }
 }
+
 /* 创建页面整体样式 */
 .create-container {
     min-height: 100vh;
@@ -745,6 +745,7 @@ body {
         min-height: 400px;
     }
 }
+
 /* 详情页面整体样式 */
 .details-container {
     min-height: 100vh;
@@ -1164,6 +1165,7 @@ body {
         padding: 1rem;
     }
 }
+
 /* 下载详情页面整体样式 */
 .index-details-container {
     min-height: 100vh;
@@ -1432,6 +1434,7 @@ body {
         padding: 1rem;
     }
 }
+
 /* 下载列表页面整体样式 */
 .index-list-container {
     min-height: 100vh;
@@ -1748,6 +1751,7 @@ body {
         padding: 1rem 0;
     }
 }
+
 /* 分享页面整体样式 */
 .share-container {
     min-height: 100vh;
@@ -2021,11 +2025,11 @@ body {
         max-width: 150px;
     }
 }
+
 /* 侧边栏容器样式 */
 .aside-container {
     width: 100%;
 }
-
 
 .aside-btn {
     width: 100%;
@@ -2393,6 +2397,7 @@ body {
         height: 32px;
     }
 }
+
 /* 页脚样式 */
 .footer-container {
     background-color: #f8f9fa;
@@ -2496,8 +2501,7 @@ body {
     padding: 0;
 }
 
-
-
+/* 以下是已合并的重复样式 */
 .index-list-page {
     background-color: #fff;
     border-radius: 8px;
