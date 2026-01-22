@@ -19,6 +19,7 @@ class Index extends Base
     {
         $contentId = input('param.id');
         $article = $contentModel->getOne(['content_id' => $contentId]);
+        $article['content'] = json_encode($article['content'], JSON_HEX_TAG | JSON_HEX_AMP);
         $this->assign([
             'article' => $article
         ]);

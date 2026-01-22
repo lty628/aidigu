@@ -28,15 +28,13 @@ class Commit
     {
         $info = input('post.info');
         $article_media = input('post.article_media');
-        $contentId = $info['content_id'];
+        $contentId = input('post.content_id');
         if (!$contentId) return ajaxJson(0, '参数不正确！'); 
         $find = $content->getOne(['content_id' => $contentId]);
         if (!$find) return ajaxJson(0, '参数不正确！'); 
         $info['uid'] = getUserId();
         if ($find['uid'] != $info['uid']) return ajaxJson(0, '您没有权限编辑！'); 
         $info['content_extra'] = '';
-        dump($article_media);
-        die;
         if ($article_media) {
             $article_media_info = pathinfo($article_media);
             $article_media_type = $article_media_info['extension'];

@@ -56,6 +56,16 @@
 										</div>
 									</div>
 
+									<div class="form-row title-row">
+
+
+										<div class="form-col">
+											<label class="form-label">摘要</label>
+											<input type="text" name="content_filtered" class="form-input"
+												value="" placeholder="请输入摘要" autocomplete="off" />
+										</div>
+									</div>
+
 
 
 									<div class="form-row content-row">
@@ -110,7 +120,7 @@
 	$(function () {
 		$("#kt_commit_submit").click(function () {
 			var info = {}
-			info.content_filtered = editor.txt.text()
+			info.content_filtered = $("input[name='content_filtered']").val()
 			info.content = editor.txt.html();
 			info.title = $("input[name='title']").val()
 			info.category_id = $("select[name='category-id']").val()
@@ -144,7 +154,7 @@
 				}
 			})
 				.always(function () {
-					alertLoading()
+					// alertLoading()
 				}).complete(function () {
 					layer.closeAll('loading', function () { });
 				});

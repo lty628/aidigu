@@ -61,6 +61,16 @@
 										</div>
 									</div>
 
+									<div class="form-row title-row">
+
+
+										<div class="form-col">
+											<label class="form-label">摘要</label>
+											<input type="text" name="content_filtered" class="form-input"
+												value="{{$article.content_filtered}}" autocomplete="off" />
+										</div>
+									</div>
+
 
 
 									<div class="form-row content-row">
@@ -70,8 +80,7 @@
 											<label class="form-label">内容</label>
 											<div id="msgToolBar" class="editor-toolbar"></div>
 											<div id="msgInput" class="editor-container">
-												<textarea style="display:none;"
-													class="editor-textarea">{{$article.content_filtered}}</textarea>
+												<!-- 内容将在编辑器初始化后通过JS设置 -->
 											</div>
 
 										</div>
@@ -105,7 +114,7 @@
 	</div>
 
 
-
+<input type="hidden" value="{{$article.content_id}}" name="content_id" id="content_id">
 </body>
 
 
@@ -115,13 +124,17 @@
 
 <script>
 	$(function () {
+
+		editor.txt.html({{$article.content | raw}});
+		
 		$("#kt_commit_submit").click(function () {
 			var info = {}
-			info.content_filtered = editor.txt.text()
+			info.content_filtered = $("input[name='content_filtered']").val()
 			info.content = editor.txt.html();
 			info.title = $("input[name='title']").val()
 			info.category_id = $("select[name='category-id']").val()
 			var article_media = $("#mediaVal").val()
+			var content_id = $("#content_id").val()
 
 
 			if (!info.title) {
@@ -139,7 +152,7 @@
 			$.ajax({
 				type: "POST",
 				url: "/cms/commit/commitEdit",
-				data: { info: info, article_media: article_media },
+				data: { info: info, article_media: article_media, content_id: content_id },
 				dataType: "json",
 				success: function (json) {
 					if (!json.code) {
@@ -150,7 +163,7 @@
 				}
 			})
 				.always(function () {
-					alertLoading()
+					// alertLoading()
 				}).complete(function () {
 					layer.closeAll('loading', function () { });
 				});
