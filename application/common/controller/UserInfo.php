@@ -154,7 +154,11 @@ class UserInfo extends Controller
 	{
 		session(null);
 		cookie(null);
-		$this->redirect('/login/');
+		// 清除登录用户ID
+		session('userid', null);
+		cookie('rememberMe', null);
+		// 重定向到首页
+		$this->redirect('/');
 	}
 
 	public function rememberMe($isRemember = false, $data)
