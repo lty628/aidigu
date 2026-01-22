@@ -873,6 +873,7 @@ body {
 }
 
 .article-content img {
+    width: 250px;
     max-width: 100%;
     height: auto;
     border-radius: 6px;

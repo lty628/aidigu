@@ -12,21 +12,12 @@
 
 
 Route::get('/blog/$', 'cms/Index/index');
-Route::get('/blog/filelist$', 'cms/Index/index');
+Route::get('/blog/:page$', 'cms/Index/index')->pattern(['page'=>'[0-9]+']);
 Route::get('/blog/category/:category_name/$', 'cms/Index/index');
+Route::get('/blog/category/:category_name/:page$', 'cms/Index/index')->pattern(['page'=>'[0-9]+']);
 Route::get('/blog/commit$', 'cms/Index/commit');
 Route::get('/blog/commit/edit/:id$', 'cms/Index/commitEdit')->pattern(['id' => '[0-9]+']);;
 Route::get('/blog/article/:id$', 'cms/Index/details')->pattern(['id' => '[0-9]+']);
-
-
-Route::get('/blog/login$', 'cms/Index/login');
-Route::get('/blog/register$', 'cms/Index/register');
-Route::get('/blog/bind-phone$', 'cms/Index/bindPhone');
-
-//滑动验证码测试
-Route::get('/blog/aiverify$', 'cms/Index/aiverify');
-
-
 
 
 // 推广页

@@ -25,11 +25,9 @@ class BaseModel extends Model
     }
 
     // 系统自带分页查询
-    public function pageList($where = array(), $field = '*', $order = '', $pageCount = 20)
+    public function pageList($where = array(), $field = '*', $order = '', $pageCount = 16)
     {
-        return $this->where($where)->field($field)->order($order)->paginate($pageCount, false, [
-            'query' => request()->param(),
-        ]);
+        return $this->where($where)->field($field)->order($order)->paginate($pageCount, false, ['page' => request()->param('page/d', 1), 'path' => '[PAGE].html']);
     }
 
     /**
