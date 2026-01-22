@@ -61,6 +61,10 @@ body {
     display: block;
 }
 
+.article-content {
+    padding: 1.5rem;
+}
+
 /* 文章头部 */
 .article-header {
     display: flex;
@@ -853,9 +857,14 @@ body {
 
 /* 文章内容样式 */
 .article-content {
-    height: 176px;
+    margin: 1.5rem 0;
     line-height: 1.8;
     color: #333;
+}
+
+.list-content {
+    height: 176px;
+    overflow: hidden;
 }
 
 .article-content p {
@@ -2619,8 +2628,8 @@ body {
 }
 
 .article-title {
-    font-size: 1rem;
-    font-weight: 500;
+    font-size: 1.1rem;
+    font-weight: 600;
     margin-bottom: 10px;
     color: #343a40;
     line-height: 1.4;
@@ -2655,7 +2664,7 @@ body {
     line-height: 1.5;
     overflow: hidden;
     display: -webkit-box;
-    -webkit-line-clamp: 5;
+    -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
 }
 
