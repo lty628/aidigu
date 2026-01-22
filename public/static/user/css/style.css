@@ -210,11 +210,11 @@ body.style-3 {
 }
 
 .tech-flat-alert.alert-danger {
-  background-color: rgb(229 124 116)
+  background-color: rgb(229 124 116 / 73%)
 }
 
 .tech-flat-alert.alert-success {
-  background-color: #b3eae9;
+  background-color: #31c1f57a;
 }
 
 /* 定义淡入上移动画 */
