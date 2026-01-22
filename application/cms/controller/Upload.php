@@ -11,6 +11,7 @@ class Upload
     protected $dir = '';
     protected $rule = '';
     protected $url = '';
+    protected $field = 'file';
     protected $origin = [];
 
     public function __construct()
