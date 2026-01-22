@@ -61,10 +61,6 @@ body {
     display: block;
 }
 
-.article-content {
-    padding: 1.5rem;
-}
-
 /* 文章头部 */
 .article-header {
     display: flex;
@@ -92,16 +88,6 @@ body {
     margin-left: 1rem;
 }
 
-.article-title {
-    font-size: 1.25rem;
-    font-weight: 600;
-    margin: 0 0 0.5rem 0;
-    color: #333;
-}
-
-.article-title:hover {
-    color: #0d6efd;
-}
 
 .article-date {
     font-size: 0.875rem;
@@ -216,7 +202,6 @@ body {
     background: white;
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    padding: 1.5rem;
     height: fit-content;
 }
 
@@ -780,7 +765,7 @@ body {
 
 .details-layout {
     display: grid;
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: 3fr 1fr;
     gap: 2rem;
     margin-top: 1.5rem;
 }
@@ -868,7 +853,7 @@ body {
 
 /* 文章内容样式 */
 .article-content {
-    margin: 1.5rem 0;
+    height: 176px;
     line-height: 1.8;
     color: #333;
 }
@@ -2032,9 +2017,6 @@ body {
     width: 100%;
 }
 
-.aside-sticky {
-    margin-bottom: 2rem;
-}
 
 .aside-btn {
     width: 100%;
@@ -2637,8 +2619,8 @@ body {
 }
 
 .article-title {
-    font-size: 1.1rem;
-    font-weight: 600;
+    font-size: 1rem;
+    font-weight: 500;
     margin-bottom: 10px;
     color: #343a40;
     line-height: 1.4;
@@ -2673,7 +2655,7 @@ body {
     line-height: 1.5;
     overflow: hidden;
     display: -webkit-box;
-    -webkit-line-clamp: 3;
+    -webkit-line-clamp: 5;
     -webkit-box-orient: vertical;
 }
 

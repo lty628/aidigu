@@ -59,10 +59,7 @@
                                                     
                                                     <!-- 文章内容：标题、多媒体内容和摘要 -->
                                                     <div class="index-card-body">
-                                                        <h3 class="article-title">
-                                                            {{$vo.title}}
-                                                            <span class="author-nickname"> - {{$vo.user.nickname}}</span>
-                                                        </h3>
+                                                        
                                                         
                                                         <!-- 多媒体内容区域 -->
                                                         <div class="article-media">
@@ -83,10 +80,15 @@
                                                             </div>
                                                             {{/if}}
                                                         </div>
+                                                        <div class="article-content">
+                                                            <p class="article-title">
+                                                                {{$vo.title}}
+                                                            </p>
+                                                            <p class="article-excerpt">
+                                                                {{if mb_strlen($vo.content) > 200}}{{$vo.content | strip_tags | mb_substr=0,200}}...{{else}}{{$vo.content | strip_tags}}{{/if}}
+                                                            </p>
+                                                        </div>
                                                         
-                                                        <p class="article-excerpt">
-                                                            {{if mb_strlen($vo.content) > 200}}{{$vo.content | strip_tags | mb_substr=0,200}}...{{else}}{{$vo.content | strip_tags}}{{/if}}
-                                                        </p>
                                                     </div>
                                                     
                                                     <!-- 文章底部：用户信息和统计数据 -->
