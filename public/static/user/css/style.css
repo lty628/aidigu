@@ -11,7 +11,7 @@ body {
   color: #848484;
   background-color: #f0f0f0;
 }
-body.style-2 {
+/* body.style-2 {
   background-color: #ffffff;
   background-size: cover;
   background-position: -30% center;
@@ -19,16 +19,18 @@ body.style-2 {
   background-image: url(../images/bg_2.jpg);
   height: 100%;
 }
+
 body.style-3 {
-  background: #ffffff url(../images/bg.svg) no-repeat 0 0;
+  background: #ffffff url(/static/index/images/bg.jpg) no-repeat 0 0;
   background-attachment: fixed;
   background-size: 60% 100%;
   height: auto;
   min-height: 100%;
-}
+} */
     /* 全局样式 */
     body.tech-flat-bg {
-        background: linear-gradient(135deg, rgba(137, 247, 254, 0.5) 0%, rgba(102, 166, 255, 0.5) 100%);
+       background: #ffffff url(/static/index/images/bg.jpg) no-repeat 0 0;
+        /* background: linear-gradient(135deg, rgba(137, 247, 254, 0.5) 0%, rgba(102, 166, 255, 0.5) 100%); */
         color: #555;
         font-family: 'Poppins', sans-serif;
         display: flex;
@@ -36,10 +38,11 @@ body.style-3 {
         align-items: center;
         min-height: 100vh;
         margin: 0;
-        animation: gradient 15s ease infinite;
-        background-size: 400% 400%;
-        position: relative;
-        overflow: hidden;
+        /* animation: gradient 15s ease infinite; */
+        background-size: 100% 100%;
+        /* position: relative; */
+        /* overflow: hidden;
+        filter: blur(2px); */
     }
 
 /* 设置 canvas 样式 */
