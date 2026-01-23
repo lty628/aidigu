@@ -43,6 +43,7 @@ class Api
         
         // 此处有 bug 待完善 unfinish
         $where['uid'] = $info['uid'];
+        $where['content_id'] = $contentId;
         $result = $content->edit($where, $info);
         if (!$result) return ajaxJson(0, '编辑失败'); 
         // $contentId = $content->id;
