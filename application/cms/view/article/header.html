@@ -18,6 +18,10 @@
                 <li><a href="/square/">微博</a></li>
                 <li><a href="/tools/nav/">导航</a></li>
             </ul>
+            {{if $userInfo}}
             <a href="/article/add" class="publish-btn">发布</a>
+            {{else}}
+            <a href="/login/" class="btn btn-login">登录</a>
+            {{/if}}
         </div>
     </nav>
