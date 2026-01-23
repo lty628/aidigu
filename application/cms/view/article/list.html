@@ -5,8 +5,9 @@
     <main class="main-content">
         <div class="container">
             <section class="news-category">
+                <a href="/article/" class="category-btn {{$categoryName == '' ? 'active' : ''}}">全部</a>
                 {{volist name="categoryList" id="vo"}}
-                <a href="/article/category/{{$vo.category_name}}/" class="category-btn">{{$vo.category_name}}</a>
+                <a href="/article/category/{{$vo.category_name}}/" class="{{$vo.category_name == $categoryName ? 'active' : ''}} category-btn">{{$vo.category_name}}</a>
                 {{/volist}}
             </section>
             <!-- 新闻列表 -->
