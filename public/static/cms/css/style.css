@@ -194,9 +194,6 @@
 
         /* 响应式设计 */
         @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-            }
 
             .article-edit-card {
                 padding: 20px;
