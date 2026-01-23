@@ -59,6 +59,7 @@ class Index extends Base
         $this->assign('categoryName', $input['category_name']);
 
         $style = $categoryArr['style'] ?? 'list';
+        return $this->fetch('flex');
         return $this->fetch('index_style_' . $style);
 
     }
