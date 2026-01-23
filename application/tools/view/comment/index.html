@@ -1057,6 +1057,7 @@ padding: 12px 16px; /* 减小内边距 */
                             layer.msg('回复成功');
                             $('#replyForm-' + commentId + ' .reply-content').val('');
                             $('#replyForm-' + commentId).removeClass('active');
+                            $('#replyId').val(0);
                             loadComments(currentPage); // 重新加载当前页
                         } else {
                             layer.msg(response.msg);
@@ -1084,6 +1085,8 @@ padding: 12px 16px; /* 减小内边距 */
                         success: function (response) {
                             if (response.code === 200) {
                                 layer.msg('删除成功');
+                                $('#commentId').val(0);
+                                $('#replyId').val(0);
                                 loadComments(currentPage); // 重新加载当前页
                             } else {
                                 layer.msg(response.msg);
@@ -1114,6 +1117,7 @@ padding: 12px 16px; /* 减小内边距 */
                         success: function (response) {
                             if (response.code === 200) {
                                 layer.msg('删除成功');
+                                $('#replyId').val(0);
                                 loadComments(currentPage); // 重新加载当前页
                             } else {
                                 layer.msg(response.msg);
