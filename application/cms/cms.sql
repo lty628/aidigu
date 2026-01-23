@@ -28,19 +28,15 @@ DROP TABLE IF EXISTS `wb_cms_category`;
 CREATE TABLE `wb_cms_category` (
   `category_id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
   `category_name` varchar(255) NOT NULL COMMENT '分类名称',
-  `pinyin` varchar(255) NOT NULL COMMENT '拼音',
-  `first_word` varchar(255) NOT NULL COMMENT '首字母',
+  `style` varchar(255) NOT NULL COMMENT '风格',
   PRIMARY KEY (`category_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=65 DEFAULT CHARSET=utf8mb4;
 
 
-INSERT INTO `wb_cms_category` VALUES ('1', '前端', 'qian duan', 'qd');
-INSERT INTO `wb_cms_category` VALUES ('2', 'Java', 'java', 'java');
-INSERT INTO `wb_cms_category` VALUES ('3', 'SQL', 'sql', 'sql');
-INSERT INTO `wb_cms_category` VALUES ('4', 'Linux', 'linux', 'linux');
-INSERT INTO `wb_cms_category` VALUES ('5', '运营', 'yun ying', 'yy');
-INSERT INTO `wb_cms_category` VALUES ('6', '产品经理', 'chan pin jing li', 'cpjl');
-INSERT INTO `wb_cms_category` VALUES ('7', '思维', 'si wei', 'sw');
+INSERT INTO `wb_cms_category` VALUES ('1', '分类一', 'list');
+INSERT INTO `wb_cms_category` VALUES ('2', '分类二', 'flex');
+INSERT INTO `wb_cms_category` VALUES ('3', '分类三', 'flex');
+INSERT INTO `wb_cms_category` VALUES ('4', '分类四', 'list');
 
 
 DROP TABLE IF EXISTS `wb_cms_comment`;
