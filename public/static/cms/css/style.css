@@ -270,11 +270,9 @@ h4 {
     overflow: hidden;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     cursor: pointer;
-}
-
-.news-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
 
 .news-image {
@@ -285,6 +283,15 @@ h4 {
 
 .news-content {
     padding: 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.news-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
 }
 
 .news-title {
