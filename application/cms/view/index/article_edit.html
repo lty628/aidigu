@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{$article ? '编辑文章' : '发表文章'}} - 爱嘀咕</title>
+    <link rel="stylesheet" href="{{$Think.STATIC_URL}}static/layui/css/layui.css" />
     <style>
         :root {
             --primary: #FF6B6B;
@@ -298,6 +298,8 @@
 
     <script type="text/javascript" src="{{$Think.STATIC_URL}}static/common/js/wangEditor.min.js"></script>
     <script src="{{$Think.STATIC_URL}}static/cms/js/edit.js"></script>
+    <script src="{{$Think.STATIC_URL}}static/layui/layui.js"></script>
+    <script>var $ = layui.jquery;</script>
     <script>
         $(function () {
             // 初始化编辑器内容
@@ -315,12 +317,12 @@
 
                 // 验证
                 if (!info.title) {
-                    alertMsg("请填写标题");
+                    layer.msg("请填写标题");
                     return;
                 }
 
                 if (!info.content) {
-                    alertMsg("请填写内容");
+                    layer.msg("请填写内容");
                     return;
                 }
 
@@ -340,9 +342,9 @@
                     dataType: "json",
                     success: function (json) {
                         if (!json.code) {
-                            alertMsg(json.msg);
+                            layer.msg(json.msg);
                         } else {
-                            alertMsg(json.msg);
+                            layer.msg(json.msg);
                             // 发表成功后可以跳转到文章列表或详情页
                             // setTimeout(function() {
                             //     window.location.href = "/news";

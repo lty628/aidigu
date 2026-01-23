@@ -37,7 +37,7 @@ class Index extends Base
         ]);
         
         // 使用通用的文章编辑模板
-        return $this->fetch('article-edit');
+        return $this->fetch('article_edit');
     }
 
     // 发表文章（旧方法，保持兼容）
@@ -48,7 +48,7 @@ class Index extends Base
         $this->assign('categoryName', 'commit');
         $article = null;
         $this->assign('article', $article);
-        return $this->fetch('article-edit'); // 重定向到通用页面
+        return $this->fetch('article_edit'); // 重定向到通用页面
     }
 
     // 文章编辑（旧方法，保持兼容）
@@ -63,7 +63,7 @@ class Index extends Base
             'categoryList' => $categoryList
         ]);
         $this->assign('categoryName', 'commitEdit');
-        return $this->fetch('article-edit'); // 重定向到通用页面
+        return $this->fetch('article_edit'); // 重定向到通用页面
     }
 
     // 文章详情
@@ -74,7 +74,7 @@ class Index extends Base
         
         $this->assign('article', $article);
         $this->assign('categoryName', $article['category']['category_name']);
-        return $this->fetch('article');
+        return $this->fetch('article_details');
     }
 
     public function index(CategoryModel $categoryModel, ContentModel $contentModel)
@@ -96,6 +96,6 @@ class Index extends Base
         $this->assign('page', $page);
         $this->assign('categoryName', $input['category_name']);
 
-        return $this->fetch('flex');
+        return $this->fetch('article_list');
     }
 }
