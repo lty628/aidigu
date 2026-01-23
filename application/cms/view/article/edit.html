@@ -327,7 +327,7 @@
                 }
 
                 // 确定提交URL
-                var url = content_id ? "/cms/commit/commitEdit" : "/cms/commit/commit";
+                var url = content_id ? "/cms/api/articleEdit" : "/cms/api/articleAdd";
                 var data = { info: info, article_media: article_media };
                 
                 // 如果是编辑，添加content_id

@@ -3,10 +3,10 @@ namespace app\cms\controller;
 
 use app\cms\model\Content;
 
-class Commit
+class Api
 {	
     // 发表文章
-	public function commit(Content $content)
+	public function articleAdd(Content $content)
     {
         $info = input('post.info');
         $article_media = input('post.article_media');
@@ -24,7 +24,7 @@ class Commit
         return ajaxJson(1, '添加成功'); 
     }
 
-    public function commitEdit(Content $content)
+    public function articleEdit(Content $content)
     {
         $info = input('post.info');
         $article_media = input('post.article_media');
@@ -49,7 +49,7 @@ class Commit
         return ajaxJson(1, '编辑成功'); 
     }
 
-    public function addLike(Content $content)
+    public function articleAddLike(Content $content)
     {
         $contentId = input('post.content_id');
         if (!$contentId) return ajaxJson(0, '参数不正确！'); 
