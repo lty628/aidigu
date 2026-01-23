@@ -11,13 +11,13 @@
 
 
 
-Route::get('/blog/$', 'cms/Index/index');
-Route::get('/blog/:page$', 'cms/Index/index')->pattern(['page'=>'[0-9]+']);
-Route::get('/blog/category/:category_name/$', 'cms/Index/index');
-Route::get('/blog/category/:category_name/:page$', 'cms/Index/index')->pattern(['page'=>'[0-9]+']);
-Route::get('/blog/commit$', 'cms/Index/commit');
-Route::get('/blog/commit/edit/:id$', 'cms/Index/commitEdit')->pattern(['id' => '[0-9]+']);;
-Route::get('/blog/article/:id$', 'cms/Index/details')->pattern(['id' => '[0-9]+']);
+Route::get('/article/$', 'cms/Article/list');
+Route::get('/article/:page$', 'cms/Article/list')->pattern(['page'=>'[0-9]+']);
+Route::get('/article/category/:category_name/$', 'cms/Article/list');
+Route::get('/article/category/:category_name/:page$', 'cms/Article/list')->pattern(['page'=>'[0-9]+']);
+Route::get('/article/add$', 'cms/Article/edit');
+Route::get('/article/edit/:id$', 'cms/Article/edit')->pattern(['id' => '[0-9]+']);;
+Route::get('/article/detail/:id$', 'cms/Article/detail')->pattern(['id' => '[0-9]+']);
 
 
 // 推广页

@@ -24,7 +24,7 @@ class Base extends Controller
                 'userInfo' => $this->userInfo
             ]
         );
-        $this->aside();
+        // $this->aside();
         $this->getCategory();
         // dump(strtolower(request()->routeInfo()["route"]));die;
         // 未登录用户在特定路由下给提示
@@ -49,15 +49,15 @@ class Base extends Controller
     }
 
     // 页面右侧文件下载（部分页面调用使用）
-    public function aside()
-    {
-        $attachmentModel = new AttachmentModel();
-        $attachmentList = $attachmentModel->getPageData([],'attach_id,attach_title,uid,create_time',1, 4, 'attach_id desc');
-        $this->assign([
-            'asideData' => $attachmentList
-        ]);
-        // dump($attachmentList);die;
-    }
+    // public function aside()
+    // {
+    //     $attachmentModel = new AttachmentModel();
+    //     $attachmentList = $attachmentModel->getPageData([],'attach_id,attach_title,uid,create_time',1, 4, 'attach_id desc');
+    //     $this->assign([
+    //         'asideData' => $attachmentList
+    //     ]);
+    //     // dump($attachmentList);die;
+    // }
 
     // 部分路由 未登录 必须登录后才能访问
     protected function redirectLogin()

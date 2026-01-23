@@ -292,7 +292,7 @@
         <div class="container">
             <section class="news-category">
                 {{volist name="categoryList" id="vo"}}
-                <a href="/blog/category/{{$vo.category_name}}/" class="category-btn">{{$vo.category_name}}</a>
+                <a href="/article/category/{{$vo.category_name}}/" class="category-btn">{{$vo.category_name}}</a>
                 {{/volist}}
             </section>
             <!-- 新闻列表 -->
@@ -303,7 +303,7 @@
                     <!-- 新闻项 -->
 
                     {{volist name="list" id="vo"}}
-                    <article class="news-card" onclick="location.href='/blog/article/{{$vo.content_id}}.html'">
+                    <article class="news-card" onclick="location.href='/article/detail/{{$vo.content_id}}.html'">
                         {{if isset($vo.content_extra.article_media) && $vo.content_extra.article_media}}
                         <img src="{{$vo.content_extra.article_media}}" alt="{{$vo.title}}" class="news-image">
                         {{else}}
