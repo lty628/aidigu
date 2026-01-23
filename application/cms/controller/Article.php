@@ -19,6 +19,7 @@ class Article extends Base
                 // 文章不存在，跳转到发表页面
                 return redirect('/article/add');
             }
+            $article['content'] = json_encode($article['content'], JSON_HEX_TAG | JSON_HEX_AMP);
             // 检查权限
             if ($article['uid'] != getUserId()) {
                 // 没有权限编辑，跳转到首页
