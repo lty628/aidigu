@@ -42,7 +42,10 @@ class Index extends Base
     {
         $input = input();
         $input['category_name'] = $input['category_name'] ?? '';
-        $categoryArr = $categoryModel->getOne(['category_name' => $input['category_name']]);
+        $categoryArr = [];
+        if ($input['category_name']) {
+            $categoryArr = $categoryModel->getOne(['category_name' => $input['category_name']]);
+        }
         $where['category_id'] =  $categoryArr['category_id'] ?? '';
         $where = array_filter($where);
 
@@ -54,11 +57,10 @@ class Index extends Base
         $this->assign('list', $list);
         $this->assign('page', $page);
         $this->assign('categoryName', $input['category_name']);
-        // if ($input['category_name']) {
-            return $this->fetch('index2');
-        // }
-        
-        return $this->fetch();
+
+        $style = $categoryArr['style'] ?? 'list';
+        return $this->fetch('index_style_' . $style);
+
     }
 
 }
