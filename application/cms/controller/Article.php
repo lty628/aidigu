@@ -40,7 +40,12 @@ class Article extends Base
     {
         $contentId = input('param.id');
         $article = $contentModel->getOne(['content_id' => $contentId]);
-        
+        $viewsumCache = cookie('viewsum_'.$contentId);
+        if (!$viewsumCache) {
+            $contentModel->where(['content_id' => $contentId])->setInc('viewsum');
+            cookie('viewsum_'.$contentId, 1, 60);
+        }
+
         $this->assign('article', $article);
         $this->assign('categoryName', $article['category']['category_name']);
         return $this->fetch();

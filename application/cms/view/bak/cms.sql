@@ -24,6 +24,7 @@ CREATE TABLE `wb_cms_content` (
   `content_extra` text NOT NULL COMMENT '扩展内容',
   `commentsum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '评论数',
   `likesum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '点赞数',
+  `viewsum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '浏览数',
   `create_time` datetime NOT NULL COMMENT '创建时间',
   `update_time` datetime NOT NULL COMMENT '更新时间',
   PRIMARY KEY (`content_id`)
