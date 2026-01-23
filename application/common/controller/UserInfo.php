@@ -34,6 +34,9 @@ class UserInfo extends Controller
 	public function register()
 	{
 		$redirectUrl = input('get.url');
+		if (sysConfig('app.noRegister', '')) {
+			redirect('/');
+		}
 		$this->assign('redirectUrl', $redirectUrl);
 		return $this->fetch();
 	}
