@@ -8,23 +8,62 @@ use app\cms\model\User as UserModel;
 
 class Index extends Base  
 {	
-    // 发表文章
-	public function commit()
+    // 通用文章编辑页面（发表和编辑）
+    public function articleEdit(ContentModel $contentModel, CategoryModel $categoryModel)
     {
-        $this->assign('categoryName', 'commit');
-        return $this->fetch('commit');
+        $contentId = input('param.id');
+        $article = null;
+        
+        // 如果有ID，获取文章信息（编辑模式）
+        if ($contentId) {
+            $article = $contentModel->getOne(['content_id' => $contentId]);
+            if (!$article) {
+                // 文章不存在，跳转到发表页面
+                return redirect('/blog/commit');
+            }
+            // 检查权限
+            if ($article['uid'] != getUserId()) {
+                // 没有权限编辑，跳转到首页
+                return redirect('/');
+            }
+        }
+        
+        // 获取分类列表
+        $categoryList = $categoryModel->getAll();
+        
+        $this->assign([
+            'article' => $article,
+            'categoryList' => $categoryList
+        ]);
+        
+        // 使用通用的文章编辑模板
+        return $this->fetch('article-edit');
     }
 
-    public function commitEdit(ContentModel $contentModel)
+    // 发表文章（旧方法，保持兼容）
+	public function commit(CategoryModel $categoryModel)
+    {
+        $categoryList = $categoryModel->getAll();
+        $this->assign('categoryList', $categoryList);
+        $this->assign('categoryName', 'commit');
+        $article = null;
+        $this->assign('article', $article);
+        return $this->fetch('article-edit'); // 重定向到通用页面
+    }
+
+    // 文章编辑（旧方法，保持兼容）
+    public function commitEdit(ContentModel $contentModel, CategoryModel $categoryModel)
     {
         $contentId = input('param.id');
         $article = $contentModel->getOne(['content_id' => $contentId]);
-        $article['content'] = json_encode($article['content'], JSON_HEX_TAG | JSON_HEX_AMP);
+        $categoryList = $categoryModel->getAll();
+        
         $this->assign([
-            'article' => $article
+            'article' => $article,
+            'categoryList' => $categoryList
         ]);
         $this->assign('categoryName', 'commitEdit');
-        return $this->fetch('commit-edit');
+        return $this->fetch('article-edit'); // 重定向到通用页面
     }
 
     // 文章详情
@@ -35,7 +74,7 @@ class Index extends Base
         
         $this->assign('article', $article);
         $this->assign('categoryName', $article['category']['category_name']);
-        return $this->fetch('details');
+        return $this->fetch('article');
     }
 
     public function index(CategoryModel $categoryModel, ContentModel $contentModel)
@@ -52,16 +91,11 @@ class Index extends Base
         // content_id 降序
         $list = $contentModel->pageList($where, '*', 'content_id desc');
         $page = $list->render();
-        // dump($list);
-        // die;
+        
         $this->assign('list', $list);
         $this->assign('page', $page);
         $this->assign('categoryName', $input['category_name']);
 
-        $style = $categoryArr['style'] ?? 'list';
         return $this->fetch('flex');
-        return $this->fetch('index_style_' . $style);
-
     }
-
 }

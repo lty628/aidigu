@@ -16,6 +16,11 @@ class BaseModel extends Model
         return $this->where($where)->field($field)->limit($limit)->order($order)->select();
     }
 
+     public function getAll($where = array(), $field = '*', $order = '')
+    {
+        return $this->where($where)->field($field)->order($order)->select();
+    }
+
     /**
      * 手动分页数据查询
      */

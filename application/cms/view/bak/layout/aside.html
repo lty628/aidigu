@@ -1,0 +1,48 @@
+
+<div class="aside-container">
+
+
+
+    <div class="aside-sticky">
+        
+        <div class="aside-card">
+            
+            <div class="card-header">
+                
+                <div class="card-title-section">
+                    <h2 class="card-title">分类</h2>
+                </div>
+                
+            </div>
+            
+            
+            <div class="card-body">
+                
+                <div class="files-list">
+                    
+
+                    {{volist name="categoryList" id="vo"}}
+                    <div class="file-item">
+                        
+                        <div class="file-details">
+                            <a href="/blog/category/{{$vo.category_name}}/" class="file-title">{{$vo.category_name}}</a>
+                            
+                        </div>
+                        
+
+                    </div>
+                    {{/volist}}
+
+                </div>
+ 
+                
+            </div>
+            
+        </div>
+        
+    </div>
+
+</div>
+
+
+

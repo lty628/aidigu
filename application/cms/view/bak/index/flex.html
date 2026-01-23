@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新闻列表 - 爱嘀咕</title>
+    <style>
+        :root {
+            --primary: #FF6B6B;
+            --secondary: #4ECDC4;
+            --accent: #FFD166;
+            --dark: #1A535C;
+            --light: #F7FFF7;
+            --pink: #FF8EDF;
+            --purple: #B57BF9;
+            --sky-blue: #64B5F6;
+            --mint: #81C784;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background: linear-gradient(135deg, #F7FFF7 0%, #E3FDFD 100%);
+            color: var(--dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* 导航栏 */
+        .navbar {
+            padding: 20px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            background: rgba(247, 255, 247, 0.95);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            backdrop-filter: blur(10px);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        /* 主内容 */
+        .main-content {
+            margin-top: 100px;
+            padding: 40px 0;
+        }
+
+        /* 新闻分类 */
+        .news-category {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+
+        .category-btn {
+            padding: 10px 20px;
+            border: 2px solid var(--secondary);
+            border-radius: 25px;
+            background: transparent;
+            color: var(--secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            white-space: nowrap;
+        }
+
+        .category-btn:hover {
+            background: var(--secondary);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(78, 205, 196, 0.3);
+        }
+
+        .category-btn.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+
+        /* 新闻列表 */
+        .news-section {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+            padding: 40px;
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 36px;
+            margin-bottom: 30px;
+            color: var(--dark);
+            text-align: center;
+        }
+
+        .section-title span {
+            color: var(--primary);
+        }
+
+        .news-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .news-card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .news-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+
+        .news-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .news-content {
+            padding: 20px;
+        }
+
+        .news-title {
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: var(--dark);
+            word-break: break-word;
+        }
+
+        .news-excerpt {
+            color: #666;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .news-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            color: #999;
+        }
+
+        /* 分页 */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 40px;
+        }
+
+        .pagination li {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            background: var(--primary);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            list-style: none;
+        }
+        .pagination li a {
+            color: white;
+            /* 扩大点击区域 */
+            text-decoration: none;
+        }
+
+        .pagination li:hover {
+            background: #ff5252;
+            transform: translateY(-2px);
+        }
+
+        .pagination li.active {
+            background: var(--secondary);
+        }
+
+        .pagination li.disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        /* 页脚 */
+        .footer {
+            background: var(--dark);
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .section-title {
+                font-size: 28px;
+            }
+
+            .news-list {
+                grid-template-columns: 1fr;
+            }
+
+            .news-section {
+                padding: 20px;
+            }
+            
+            .news-category {
+                padding: 15px;
+                gap: 10px;
+            }
+            
+            .category-btn {
+                padding: 8px 16px;
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="/" class="logo">爱嘀咕</a>
+            <ul class="nav-links">
+                <li><a href="/">首页</a></li>
+                <li><a href="/news">新闻</a></li>
+                <li><a href="/tools">工具</a></li>
+                <li><a href="/about">关于</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- 主内容 -->
+    <main class="main-content">
+        <div class="container">
+            <section class="news-category">
+                {{volist name="categoryList" id="vo"}}
+                <a href="/blog/category/{{$vo.category_name}}/" class="category-btn">{{$vo.category_name}}</a>
+                {{/volist}}
+            </section>
+            <!-- 新闻列表 -->
+            <section class="news-section">
+                <h2 class="section-title">最新<span>新闻</span></h2>
+               
+                <div class="news-list">
+                    <!-- 新闻项 -->
+
+                    {{volist name="list" id="vo"}}
+                    <article class="news-card" onclick="location.href='/blog/article/{{$vo.content_id}}.html'">
+                        {{if isset($vo.content_extra.article_media) && $vo.content_extra.article_media}}
+                        <img src="{{$vo.content_extra.article_media}}" alt="{{$vo.title}}" class="news-image">
+                        {{else}}
+                        <!-- <img src="/static/cms/images/news1.jpg" alt="{{$vo.title}}" class="news-image"></img> -->
+                        {{/if}}
+                        <div class="news-content">
+                            <h3 class="news-title">{{$vo.title}}</h3>
+                            <p class="news-excerpt">{{if mb_strlen($vo.content) > 200}}{{$vo.content | strip_tags | mb_substr=0,200}}...{{else}}{{$vo.content | strip_tags}}{{/if}}</p>
+                            <div class="news-meta">
+                                <span>{{$vo.create_time | formatTime}}</span>
+                                <span>作者：{{$vo.user.nickname}}</span>
+                                <span>阅读 987</span>
+                            </div>
+                        </div>
+                    </article>
+                    {{/volist}}
+                </div>
+
+                <!-- 分页 -->
+                 {{$page | raw}}
+            </section>
+        </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2023 爱嘀咕. 保留所有权利.</p>
+        </div>
+    </footer>
+
+    <script>
+        // 分页功能
+        document.addEventListener('DOMContentLoaded', function() {
+            const pageBtns = document.querySelectorAll('.page-btn');
+            
+            pageBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    if (this.classList.contains('disabled')) return;
+                    
+                    // 移除所有激活状态
+                    pageBtns.forEach(b => b.classList.remove('active'));
+                    // 添加当前激活状态
+                    this.classList.add('active');
+                });
+            });
+        });
+    </script>
+</body>
+</html>

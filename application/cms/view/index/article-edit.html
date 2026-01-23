@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{$article ? '编辑文章' : '发表文章'}} - 爱嘀咕</title>
+    <style>
+        :root {
+            --primary: #FF6B6B;
+            --secondary: #4ECDC4;
+            --accent: #FFD166;
+            --dark: #1A535C;
+            --light: #F7FFF7;
+            --pink: #FF8EDF;
+            --purple: #B57BF9;
+            --sky-blue: #64B5F6;
+            --mint: #81C784;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background: linear-gradient(135deg, #F7FFF7 0%, #E3FDFD 100%);
+            color: var(--dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* 导航栏 */
+        .navbar {
+            padding: 20px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            background: rgba(247, 255, 247, 0.95);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            backdrop-filter: blur(10px);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        /* 主内容 */
+        .main-content {
+            margin-top: 100px;
+            padding: 40px 0;
+        }
+
+        /* 文章编辑卡片 */
+        .article-edit-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+            padding: 40px;
+            margin-bottom: 40px;
+        }
+
+        .card-header {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .card-title {
+            font-size: 28px;
+            color: var(--dark);
+        }
+
+        /* 表单样式 */
+        .form-row {
+            margin-bottom: 25px;
+        }
+
+        .form-col {
+            width: 100%;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 16px;
+        }
+
+        .form-input,
+        .form-select {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #eee;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+            font-family: inherit;
+        }
+
+        .form-input:focus,
+        .form-select:focus {
+            outline: none;
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 3px rgba(78, 205, 196, 0.1);
+        }
+
+        /* 编辑器样式 */
+        .editor-toolbar {
+            background: #f9f9f9;
+            border: 2px solid #eee;
+            border-bottom: none;
+            border-radius: 10px 10px 0 0;
+            padding: 10px;
+        }
+
+        .editor-container {
+            background: white;
+            border: 2px solid #eee;
+            border-radius: 0 0 10px 10px;
+            min-height: 300px;
+            padding: 20px;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .editor-textarea {
+            width: 100%;
+            min-height: 300px;
+            border: none;
+            outline: none;
+            font-size: 16px;
+            line-height: 1.6;
+            font-family: inherit;
+        }
+
+        /* 提交按钮 */
+        .card-footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            text-align: right;
+        }
+
+        .submit-btn {
+            padding: 15px 40px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            background: #ff5252;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.3);
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .article-edit-card {
+                padding: 20px;
+            }
+
+            .card-title {
+                font-size: 24px;
+            }
+
+            .submit-btn {
+                width: 100%;
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="/" class="logo">爱嘀咕</a>
+            <ul class="nav-links">
+                <li><a href="/">首页</a></li>
+                <li><a href="/news">新闻</a></li>
+                <li><a href="/tools">工具</a></li>
+                <li><a href="/about">关于</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- 主内容 -->
+    <main class="main-content">
+        <div class="container">
+            <div class="article-edit-card">
+                <div class="card-header">
+                    <h2 class="card-title">{{$article ? '编辑文章' : '发表文章'}}</h2>
+                </div>
+                <div class="card-body">
+                    <div class="form-row type-row">
+                        <div class="form-col">
+                            <label class="form-label">分类</label>
+                            <select name="category-id" class="form-select">
+                                {{volist name="categoryList" id="vo"}}
+                                <option value="{{$vo.category_id}}" {{$article && $vo.category_id == $article.category.category_id ? 'selected' : ''}}>{{$vo.category_name}}</option>
+                                {{/volist}}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row title-row">
+                        <div class="form-col">
+                            <label class="form-label">标题</label>
+                            <input type="text" name="title" class="form-input" 
+                                value="{{$article ? $article.title : ''}}" 
+                                placeholder="请输入标题" autocomplete="off" />
+                        </div>
+                    </div>
+                    <div class="form-row title-row">
+                        <div class="form-col">
+                            <label class="form-label">摘要</label>
+                            <input type="text" name="content_filtered" class="form-input"
+                                value="{{$article ? $article.content_filtered : ''}}" 
+                                placeholder="请输入摘要" autocomplete="off" />
+                        </div>
+                    </div>
+                    <div class="form-row content-row">
+                        <div class="form-col">
+                            <label class="form-label">内容</label>
+                            <div id="msgToolBar" class="editor-toolbar"></div>
+                            <div id="msgInput" class="editor-container">
+                                <textarea style="display:none;" class="editor-textarea"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <input type="hidden" id="mediaVal" value="{{$article ? $article.content_extra.article_media : ''}}">
+                {{if $article}}
+                <input type="hidden" value="{{$article.content_id}}" name="content_id" id="content_id">
+                {{/if}}
+                <div class="card-footer">
+                    <button type="submit" id="kt_commit_submit" class="submit-btn">{{$article ? '保存修改' : '发表文章'}}</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2023 爱嘀咕. 保留所有权利.</p>
+        </div>
+    </footer>
+
+    <script type="text/javascript" src="{{$Think.STATIC_URL}}static/common/js/wangEditor.min.js"></script>
+    <script src="{{$Think.STATIC_URL}}static/cms/js/edit.js"></script>
+    <script>
+        $(function () {
+            // 初始化编辑器内容
+            editor.txt.html({{$article.content | raw}});
+
+            // 提交表单
+            $("#kt_commit_submit").click(function () {
+                var info = {};
+                info.content_filtered = $("input[name='content_filtered']").val();
+                info.content = editor.txt.html();
+                info.title = $("input[name='title']").val();
+                info.category_id = $("select[name='category-id']").val();
+                var article_media = $("#mediaVal").val();
+                var content_id = $("#content_id").val();
+
+                // 验证
+                if (!info.title) {
+                    alertMsg("请填写标题");
+                    return;
+                }
+
+                if (!info.content) {
+                    alertMsg("请填写内容");
+                    return;
+                }
+
+                // 确定提交URL
+                var url = content_id ? "/cms/commit/commitEdit" : "/cms/commit/commit";
+                var data = { info: info, article_media: article_media };
+                
+                // 如果是编辑，添加content_id
+                if (content_id) {
+                    data.content_id = content_id;
+                }
+
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: data,
+                    dataType: "json",
+                    success: function (json) {
+                        if (!json.code) {
+                            alertMsg(json.msg);
+                        } else {
+                            alertMsg(json.msg);
+                            // 发表成功后可以跳转到文章列表或详情页
+                            // setTimeout(function() {
+                            //     window.location.href = "/news";
+                            // }, 1500);
+                        }
+                    }
+                })
+                .always(function () {
+                    // 加载完成后的处理
+                })
+                .complete(function () {
+                    layer.closeAll('loading', function () {});
+                });
+            });
+        });
+    </script>
+</body>
+</html>
