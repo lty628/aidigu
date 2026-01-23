@@ -887,7 +887,7 @@ padding: 12px 16px; /* 减小内边距 */
                     success: function (response) {
                         if (response.code === 200) {
                             // 如果是初次加载，则替换整个回复列表
-                            if (isInitialLoad) {
+                            if (isInitialLoad || page === 1) {
                                 // 清空现有内容
                                 repliesContainer.empty();
                                 // 添加回复内容
@@ -931,7 +931,8 @@ padding: 12px 16px; /* 减小内边距 */
                     const replyUser = userList[reply.fromuid] || { nickname: '未知用户', head_image: '', blog: '' };
                     const isOwnReply = reply.fromuid == currentUid;
                     const toUser = userList[reply.touid] ? userList[reply.touid].nickname : '';
-                    const replyPrefix = toUser ? `@${toUser}` : '';
+                    // const replyPrefix = toUser ? `@${toUser}` : '';
+                    const replyPrefix = '';
 
                     const replyAvatar = replyUser.head_image ?
                         `<a href="/${replyUser.blog}/" class="user-link"><img src="${replyUser.head_image}" class="avatar" alt="头像"></a>` :
