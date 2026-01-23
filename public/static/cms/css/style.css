@@ -38,6 +38,11 @@ h4 {
     margin: 0 auto;
     padding: 0 20px;
 }
+.container.navbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 
 /* 导航栏 */
 .navbar {
@@ -81,6 +86,32 @@ h4 {
 
 .nav-links a:hover {
     color: var(--primary);
+}
+
+/* 发布按钮样式 */
+.publish-btn {
+    padding: 10px 20px;
+    background: var(--primary);
+    color: white;
+    text-decoration: none;
+    border-radius: 25px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    display: inline-block;
+}
+
+.publish-btn:hover {
+    background: #ff5252;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 107, 107, 0.3);
+    color: white;
+}
+
+.logo span {
+    color: var(--secondary);
 }
 
 /* 主内容 */
