@@ -65,7 +65,7 @@
 
 /* 海洋主题 */
 :root.ocean {
-    --base-font-color: #008B8B;
+    --base-font-color: #01bfff;
     --link-color: #00BFFF;
     --link-hover-color: #1E90FF;
     --primary-color: #87CEFA; /* 原 secondary-color 值 */
@@ -955,7 +955,7 @@ i.warning {
 
 .pagination .active {
     /* background-color: var(--secondary-color); */
-    color: white;
+    /* color: white; */
     font-weight: bold;
     border: 1px solid var(--secondary-color);
 }
