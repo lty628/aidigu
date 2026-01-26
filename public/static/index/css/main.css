@@ -1203,3 +1203,6 @@ h2 span {
 .w-e-toolbar .w-e-menu:hover {
     background-color: unset !important;
 }
+.w-e-toolbar .w-e-menu i {
+    color: var(--link-color) !important;
+}
