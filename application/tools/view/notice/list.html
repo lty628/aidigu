@@ -114,6 +114,7 @@
   </div>
 
   <script src="/static/layui/layui.js"></script>
+  <script language="javascript" type="text/javascript" src="/static/common/js/index.js?22"></script>
   <script>
     layui.use(['table', 'element'], function () {
       var table = layui.table;
@@ -199,7 +200,7 @@
               width: '35%',
               align: 'right',
               templet: function(d) {
-                var viewUrl = getViewUrl(d);
+                var viewUrl = getViewUrl(d.type, d.reminder_id, d.extra.msg_id, d.extra.cid, d.extra.rid, d.extra.channel_id, d.extra.from_blog);
                 var actionButtons = `
                   <div class="reminder-actions">
                     <a href="${viewUrl}" target="_blank" class="layui-btn layui-btn-xs">查看</a>
@@ -246,21 +247,41 @@
       }
 
       // 获取查看链接
-      function getViewUrl(reminder) {
-        var baseUrl = '/tools/notice/view';
-        var params = '?msgId=' + (reminder.msg_id || reminder.uk_id || 0);
-        
+      function getViewUrl(type, reminderId, msgId, cid, rid, channelId, fromBlog) {
         // 根据提醒类型构建不同的查看链接
-        switch(reminder.type) {
+        switch(parseInt(type)) {
           case 1: // 评论
-            return baseUrl + params + '&type=comment';
           case 2: // 回复
-            return baseUrl + params + '&type=reply';
           case 7: // @提及
-            return baseUrl + params + '&type=mention';
+              var blog = '{$userInfo.blog}';
+              var uri = `msgId=${msgId}&cid=${cid}&rid=${rid}&reminderId=${reminderId}`;
+              uri = base64Encode(uri);
+              url = `/${blog}/message/${uri}`;
+              break;
+          case 3: // 频道评论
+          case 4: // 频道回复
+          // base64Encode('channelId=' + data[i].channel_id + '&msgId=' + data[i].msg_id) 
+              url = `/channel/${base64Encode('channelId=' + channelId + '&msgId=' + msgId+'&cid='+cid+'&rid='+rid+'&reminderId='+reminderId)}`; // 或者跳转到频道详情页
+              // console.log('channelId=' + channelId + '&msgId=' + msgId+'&cid='+cid+'&rid='+rid+'&reminderId='+reminderId);
+              // return false
+              break;
+          case 5: // 关注
+          case 6:
+              url = `/${fromBlog}/own/`; // 跳转到关注者主页
+              break;
+          case 8: // 收藏微博
+              var blog = '{$userInfo.blog}';
+              var uri = `msgId=${msgId}&reminderId=${reminderId}`;
+              uri = base64Encode(uri);
+              url = `/${blog}/message/${uri}`;
+              break;
+          case 9: // 收藏频道微博
+              url = `/index/index/msgdetail/id/${msgId}`;
+              break;
           default:
-            return baseUrl + params;
+              url = `/index/index/msgdetail/id/${msgId}`;
         }
+        return url;
       }
 
       // 监听工具条事件

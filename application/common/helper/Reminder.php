@@ -514,7 +514,7 @@ class Reminder
     {
         $query = ReminderModel::where('touid', $userId);
         
-        if ($type !== null) {
+        if ($type) {
             $query->where('type', $type);
         }
         
@@ -523,10 +523,10 @@ class Reminder
             ->page($page, $limit)
             ->select();
             
-        foreach ($reminders as &$reminder) {
-            $extra = json_decode($reminder['extra'], true);
-            $reminder['extra'] = $extra ?: [];
-        }
+        // foreach ($reminders as &$reminder) {
+        //     $extra = json_decode($reminder['extra'], true);
+        //     $reminder['extra'] = $extra ?: [];
+        // }
         
         return $reminders;
     }

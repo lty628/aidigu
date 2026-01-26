@@ -11,6 +11,8 @@ class Notice extends Base
 {	
 	public function list()
     {
+        $userInfo = getLoginUserInfo();
+        $this->assign('userInfo', $userInfo);
         return $this->fetch();
     }
 
@@ -33,8 +35,8 @@ class Notice extends Base
 
         foreach ($reminders as &$reminder) {
             // 解析extra字段
-            $extra = json_decode($reminder['extra'], true);
-            $reminder['extra'] = $extra ?: [];
+            // $extra = json_decode($reminder['extra'], true);
+            // $reminder['extra'] = $extra ?: [];
             
             // 格式化时间
             $reminder['remind_time'] = date('Y-m-d H:i:s', $reminder['ctime']);
