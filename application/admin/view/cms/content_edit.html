@@ -17,14 +17,14 @@
                 </div>
                 <div class="layui-card-body">
                     <form class="layui-form" id="contentForm">
-                        <input type="hidden" name="content_id" value="{{data.content_id}}">
+                        <input type="hidden" name="content_id" value="{{$data.content_id}}">
                         <div class="layui-form-item">
                             <label class="layui-form-label">分类</label>
                             <div class="layui-input-block">
                                 <select name="category_id" required lay-verify="required" class="layui-select">
                                     <option value="">请选择分类</option>
                                     {{volist name="categories" id="category"}}
-                                    <option value="{{category.category_id}}" {{if data.category_id == category.category_id}}selected{{/if}}>{{category.category_name}}</option>
+                                    <option value="{{$category.category_id}}" {{if $data.category_id == $category.category_id}}selected{{/if}}>{{$category.category_name}}</option>
                                     {{/volist}}
                                 </select>
                             </div>
@@ -32,31 +32,31 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">标题</label>
                             <div class="layui-input-block">
-                                <input type="text" name="title" required lay-verify="required" value="{{data.title}}" placeholder="请输入内容标题" autocomplete="off" class="layui-input">
+                                <input type="text" name="title" required lay-verify="required" value="{{$data.title}}" placeholder="请输入内容标题" autocomplete="off" class="layui-input">
                             </div>
                         </div>
                         <div class="layui-form-item">
                             <label class="layui-form-label">内容</label>
                             <div class="layui-input-block">
-                                <textarea name="content" id="content" placeholder="请输入内容" class="layui-textarea" style="height: 300px;">{{data.content}}</textarea>
+                                <textarea name="content" id="content" placeholder="请输入内容" class="layui-textarea" style="height: 300px;">{{$data.content}}</textarea>
                             </div>
                         </div>
                         <div class="layui-form-item">
                             <label class="layui-form-label">过滤后内容</label>
                             <div class="layui-input-block">
-                                <textarea name="content_filtered" id="content_filtered" placeholder="请输入过滤后内容" class="layui-textarea" style="height: 300px;">{{data.content_filtered}}</textarea>
+                                <textarea name="content_filtered" id="content_filtered" placeholder="请输入过滤后内容" class="layui-textarea" style="height: 300px;">{{$data.content_filtered}}</textarea>
                             </div>
                         </div>
                         <div class="layui-form-item">
                             <label class="layui-form-label">扩展内容</label>
                             <div class="layui-input-block">
-                                <textarea name="content_extra" placeholder="请输入扩展内容（JSON格式）" class="layui-textarea">{{data.content_extra}}</textarea>
+                                <textarea name="content_extra" placeholder="请输入扩展内容（JSON格式）" class="layui-textarea">{{$data.content_extra}}</textarea>
                             </div>
                         </div>
                         <div class="layui-form-item">
                             <label class="layui-form-label">排序</label>
                             <div class="layui-input-block">
-                                <input type="number" name="sort_order" value="{{data.sort_order}}" placeholder="请输入排序值" autocomplete="off" class="layui-input">
+                                <input type="number" name="sort_order" value="{{$data.sort_order}}" placeholder="请输入排序值" autocomplete="off" class="layui-input">
                             </div>
                         </div>
                         <div class="layui-form-item">

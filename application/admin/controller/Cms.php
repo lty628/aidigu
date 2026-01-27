@@ -198,6 +198,27 @@ class Cms extends Base
         return json(['code' => 0, 'msg' => '删除成功']);
     }
 
+    // 切换内容状态
+    public function contentToggleStatus()
+    {
+        $contentId = input('post.content_id');
+        $content = Db::name('cms_content')->where('content_id', $contentId)->find();
+        
+        if (!$content) {
+            return json(['code' => 1, 'msg' => '内容不存在']);
+        }
+        
+        // 切换状态
+        $newStatus = $content['status'] == 1 ? 0 : 1;
+        $result = Db::name('cms_content')->where('content_id', $contentId)->update(['status' => $newStatus]);
+        
+        if ($result !== false) {
+            return json(['code' => 0, 'msg' => '状态更新成功', 'status' => $newStatus]);
+        } else {
+            return json(['code' => 1, 'msg' => '状态更新失败']);
+        }
+    }
+
     // ======================= 友情链接分类管理 =======================
     
     // 友情链接分类列表页面

@@ -14,16 +14,31 @@
             <div class="layui-card">
                 <div class="layui-card-header" style="height: unset;">
                     <h3>内容管理</h3>
-                    <div class="layui-input-inline">
-                        <select id="categoryFilter" class="layui-select">
-                            <option value="0">所有分类</option>
-                            {{volist name="categories" id="category"}}
-                            <option value="{{category.category_id}}">{{category.category_name}}</option>
-                            {{/volist}}
-                        </select>
-                        <input type="text" id="searchKeyword" placeholder="搜索内容标题" class="layui-input" style="margin-left: 10px; width: 200px;">
-                        <button class="layui-btn layui-btn-primary" onclick="search()" style="margin-left: 10px;">搜索</button>
-                        <button class="layui-btn" onclick="addContent()">添加内容</button>
+                    <div class="layui-form-item" style="margin-bottom: 0; float: right; margin-top: -40px;">
+                        <div class="layui-inline">
+                            <select id="categoryFilter" class="layui-select">
+                                <option value="0">所有分类</option>
+                                {{volist name="categories" id="category"}}
+                                <option value="{{category.category_id}}">{{category.category_name}}</option>
+                                {{/volist}}
+                            </select>
+                        </div>
+                        <div class="layui-inline">
+                            <select id="statusFilter" class="layui-select">
+                                <option value="">所有状态</option>
+                                <option value="1">正常</option>
+                                <option value="0">禁用</option>
+                            </select>
+                        </div>
+                        <div class="layui-inline">
+                            <input type="text" id="searchKeyword" placeholder="搜索内容标题" class="layui-input">
+                        </div>
+                        <div class="layui-inline">
+                            <button class="layui-btn layui-btn-primary" onclick="search()">搜索</button>
+                        </div>
+                        <div class="layui-inline">
+                            <button class="layui-btn" onclick="addContent()">添加内容</button>
+                        </div>
                     </div>
                 </div>
                 <div class="layui-card-body">
@@ -35,12 +50,19 @@
 
     <!-- 操作栏模板 -->
     <script type="text/html" id="actionBar">
-        <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+        <a class="layui-btn layui-btn-xs" lay-event="view">查看</a>
+        <!-- <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="toggleStatus">{{# if(d.status == 1){ }}禁用{{# } else { }}启用{{# } }}</a> -->
         <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>
+    </script>
+
+    <!-- 状态列模板 -->
+    <script type="text/html" id="statusTpl">
+        <input type="checkbox" name="status" value="{{d.content_id}}" lay-skin="switch" lay-text="正常|禁用" lay-filter="statusSwitch" {{d.status==1?'checked':''}}>
     </script>
 
     <script src="/static/layui/layui.js"></script>
     <script>
+        var $ = layui.$;
         layui.use(['table', 'layer', 'form'], function () {
             var table = layui.table;
             var layer = layui.layer;
@@ -56,11 +78,11 @@
                     { field: 'title', title: '标题', width: 250 },
                     { field: 'category_name', title: '分类', width: 100 },
                     { field: 'nickname', title: '作者', width: 100 },
-                    { field: 'comment_num', title: '评论数', width: 80 },
-                    { field: 'like_num', title: '点赞数', width: 80 },
+                    { field: 'viewsum', title: '访问量', width: 80 },
+                    { field: 'status', title: '状态', width: 100, templet: '#statusTpl' },
                     { field: 'create_time', title: '创建时间', width: 180 },
                     { field: 'update_time', title: '更新时间', width: 180 },
-                    { title: '操作', width: 150, align: 'center', toolbar: '#actionBar' }
+                    { title: '操作', fixed: 'right', width: 200, align: 'center', toolbar: '#actionBar' }
                 ]],
                 page: true,
                 limit: 10,
@@ -73,8 +95,10 @@
             // 监听工具条
             table.on('tool(contentTable)', function (obj) {
                 var data = obj.data;
-                if (obj.event === 'edit') {
-                    window.location.href = '/admin/cms/contentEdit?content_id=' + data.content_id;
+                if (obj.event === 'view') {
+                    window.open('/article/detail/' + data.content_id + '.html');
+                } else if (obj.event === 'toggleStatus') {
+                    toggleStatus(data.content_id, data.status);
                 } else if (obj.event === 'delete') {
                     layer.confirm('确定要删除该内容吗？', function (index) {
                         $.ajax({
@@ -99,9 +123,46 @@
                 }
             });
 
+            // 监听状态开关
+            form.on('switch(statusSwitch)', function(obj) {
+                var contentId = this.value;
+                var status = obj.elem.checked ? 1 : 0;
+                toggleStatus(contentId, status);
+            });
+
             // 表单渲染
             form.render();
         });
+
+        // 切换状态
+        function toggleStatus(contentId, currentStatus) {
+            var newStatus = currentStatus == 1 ? 0 : 1;
+            layui.layer.confirm('确定要' + (newStatus == 1 ? '禁用' : '启用') + '该内容吗？', function(index) {
+                $.ajax({
+                    url: '/admin/cms/contentToggleStatus',
+                    type: 'post',
+                    data: { content_id: contentId },
+                    dataType: 'json',
+                    success: function(res) {
+                        if (res.code === 0) {
+                            layui.layer.msg(res.msg, { icon: 6 });
+                            // 重新加载表格
+                            layui.table.reload('contentTable');
+                        } else {
+                            layui.layer.msg(res.msg, { icon: 5 });
+                            // 恢复开关状态
+                            layui.form.render();
+                        }
+                    },
+                    error: function() {
+                        layui.layer.msg('请求失败', { icon: 5 });
+                        // 恢复开关状态
+                        layui.form.render();
+                    }
+                });
+                layui.layer.close(index);
+            });
+        }
 
         // 搜索
         function search() {

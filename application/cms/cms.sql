@@ -24,6 +24,7 @@ CREATE TABLE `wb_cms_content` (
   `content` longtext NOT NULL COMMENT '内容',
   `content_filtered` longtext NOT NULL COMMENT '内容过滤，简介',
   `content_extra` text NOT NULL COMMENT '扩展内容',
+  `sort_order` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '排序',
   `status` tinyint(3) unsigned NOT NULL DEFAULT '1' COMMENT '状态 1:正常 0:禁用',
   `commentsum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '评论数',
   `likesum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '点赞数',
