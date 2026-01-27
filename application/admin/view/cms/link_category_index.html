@@ -30,6 +30,7 @@
     <!-- 操作栏模板 -->
     <script type="text/html" id="actionBar">
         <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+        <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="toggleStatus">{{# if(d.status == 1){ }}禁用{{# } else { }}启用{{# } }}</a>
         <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>
     </script>
 
