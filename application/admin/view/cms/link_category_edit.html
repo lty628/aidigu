@@ -30,13 +30,7 @@
                                 <input type="number" name="sort_order" value="{{data.sort_order}}" placeholder="请输入排序值" autocomplete="off" class="layui-input">
                             </div>
                         </div>
-                        <div class="layui-form-item">
-                            <label class="layui-form-label">状态</label>
-                            <div class="layui-input-block">
-                                <input type="radio" name="status" value="1" title="正常" {{if data.status == 1}}checked{{/if}}>
-                                <input type="radio" name="status" value="0" title="禁用" {{if data.status == 0}}checked{{/if}}>
-                            </div>
-                        </div>
+
                         <div class="layui-form-item">
                             <div class="layui-input-block">
                                 <button class="layui-btn" lay-submit lay-filter="saveCategory">保存</button>

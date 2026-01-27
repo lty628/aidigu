@@ -22,9 +22,9 @@
                             <div class="layui-input-block">
                                 <select name="link_category_id" required lay-verify="required" class="layui-select">
                                     <option value="">请选择分类</option>
-                                    {{volist name="categories" id="category"}}
-                                    <option value="{{category.link_category_id}}">{{category.category_name}}</option>
-                                    {{/volist}}
+                                    {volist name="categories" id="category"}
+                                    <option value="{$category.link_category_id}">{$category.category_name}</option>
+                                    {/volist}
                                 </select>
                             </div>
                         </div>

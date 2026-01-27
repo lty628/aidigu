@@ -23,12 +23,7 @@
                                 <input type="text" name="category_name" required lay-verify="required" placeholder="请输入分类名称" autocomplete="off" class="layui-input">
                             </div>
                         </div>
-                        <div class="layui-form-item">
-                            <label class="layui-form-label">风格</label>
-                            <div class="layui-input-block">
-                                <input type="text" name="style" placeholder="请输入风格（如：list/flex）" autocomplete="off" class="layui-input">
-                            </div>
-                        </div>
+
                         <div class="layui-form-item">
                             <label class="layui-form-label">排序</label>
                             <div class="layui-input-block">
@@ -64,9 +59,9 @@
                     success: function (res) {
                         if (res.code === 0) {
                             layer.msg(res.msg, { icon: 6 });
-                            setTimeout(function () {
-                                window.location.href = '/admin/cms/contentCategoryIndex';
-                            }, 1500);
+                            if (parent.layer) {
+                                parent.layer.closeAll();
+                            }
                         } else {
                             layer.msg(res.msg, { icon: 5 });
                         }
