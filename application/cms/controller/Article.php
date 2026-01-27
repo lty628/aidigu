@@ -3,9 +3,27 @@ namespace app\cms\controller;
 
 use app\cms\model\Content as ContentModel;
 use app\cms\model\Category as CategoryModel;
+use app\cms\model\LinkCategory;
 
 class Article extends Base  
 {	
+    public function nav()
+    {
+        $categoryModel = new CategoryModel();
+        $categoryList = $categoryModel->getList();
+        $this->assign('categoryList', $categoryList);
+        return $this->fetch('navigation');
+    }
+
+
+    public function link()
+    {
+        // 获取所有友情链接分类及其下的链接
+        $categories = LinkCategory::with('links')->order('sort_order asc')->select();
+        
+        $this->assign('categories', $categories);
+        return $this->fetch('link');
+    }
     // 通用文章编辑页面（发表和编辑）
     public function edit(ContentModel $contentModel)
     {

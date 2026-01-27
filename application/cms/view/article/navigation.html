@@ -1,0 +1,205 @@
+{{include file='article/header' /}}
+
+<!-- 主内容 -->
+<main class="main-content">
+    <div class="container">
+        <section class="news-section">
+            <h2 class="section-title">网站<span>导航</span></h2>
+            
+            <div class="nav-categories">
+                <!-- 导航分类 -->
+                <div class="nav-category">
+                    <h3 class="category-title">主要功能</h3>
+                    <div class="nav-list">
+                        <a href="/" class="nav-card">
+                            <div class="nav-icon">🏠</div>
+                            <div class="nav-info">
+                                <h4 class="nav-name">首页</h4>
+                                <p class="nav-description">网站主页，查看最新动态</p>
+                            </div>
+                        </a>
+                        <a href="/article/" class="nav-card">
+                            <div class="nav-icon">📰</div>
+                            <div class="nav-info">
+                                <h4 class="nav-name">新闻资讯</h4>
+                                <p class="nav-description">浏览最新新闻和文章</p>
+                            </div>
+                        </a>
+                        <a href="/square/" class="nav-card">
+                            <div class="nav-icon">💬</div>
+                            <div class="nav-info">
+                                <h4 class="nav-name">微博广场</h4>
+                                <p class="nav-description">查看热门微博和话题</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="nav-category">
+                    <h3 class="category-title">工具集合</h3>
+                    <div class="nav-list">
+                        <a href="/tools/nav/" class="nav-card">
+                            <div class="nav-icon">🔧</div>
+                            <div class="nav-info">
+                                <h4 class="nav-name">工具导航</h4>
+                                <p class="nav-description">常用工具快捷入口</p>
+                            </div>
+                        </a>
+                        <a href="/tools/chat/" class="nav-card">
+                            <div class="nav-icon">💭</div>
+                            <div class="nav-info">
+                                <h4 class="nav-name">聊天工具</h4>
+                                <p class="nav-description">在线聊天和交流</p>
+                            </div>
+                        </a>
+                        <a href="/tools/movie/" class="nav-card">
+                            <div class="nav-icon">🎬</div>
+                            <div class="nav-info">
+                                <h4 class="nav-name">电影工具</h4>
+                                <p class="nav-description">电影资源和播放</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="nav-category">
+                    <h3 class="category-title">个人中心</h3>
+                    <div class="nav-list">
+                        <a href="/user/setting/" class="nav-card">
+                            <div class="nav-icon">⚙️</div>
+                            <div class="nav-info">
+                                <h4 class="nav-name">设置</h4>
+                                <p class="nav-description">个人账号设置</p>
+                            </div>
+                        </a>
+                        <a href="/collect/list" class="nav-card">
+                            <div class="nav-icon">⭐</div>
+                            <div class="nav-info">
+                                <h4 class="nav-name">收藏夹</h4>
+                                <p class="nav-description">查看我的收藏</p>
+                            </div>
+                        </a>
+                        <a href="/article/add" class="nav-card">
+                            <div class="nav-icon">✍️</div>
+                            <div class="nav-info">
+                                <h4 class="nav-name">发布文章</h4>
+                                <p class="nav-description">发布新的新闻或文章</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
+
+<!-- 页脚 -->
+<footer class="footer">
+    <div class="container">
+        <p>&copy; 2023 爱嘀咕. 保留所有权利.</p>
+    </div>
+</footer>
+
+<style>
+    /* 导航页特定样式 */
+    .nav-categories {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 30px;
+        margin-top: 40px;
+    }
+    
+    .nav-category {
+        background: white;
+        border-radius: 20px;
+        padding: 25px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+    }
+    
+    .category-title {
+        font-size: 20px;
+        color: var(--dark);
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid var(--secondary);
+        display: inline-block;
+    }
+    
+    .nav-list {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .nav-card {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 15px;
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        border-radius: 15px;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+    
+    .nav-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+    
+    .nav-icon {
+        font-size: 32px;
+        width: 60px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .nav-info {
+        flex: 1;
+    }
+    
+    .nav-name {
+        font-size: 18px;
+        color: var(--dark);
+        margin-bottom: 5px;
+    }
+    
+    .nav-description {
+        font-size: 14px;
+        color: #666;
+        line-height: 1.4;
+    }
+    
+    /* 响应式设计 */
+    @media (max-width: 768px) {
+        .nav-categories {
+            grid-template-columns: 1fr;
+        }
+        
+        .nav-card {
+            padding: 12px;
+        }
+        
+        .nav-icon {
+            font-size: 28px;
+            width: 50px;
+            height: 50px;
+        }
+        
+        .nav-name {
+            font-size: 16px;
+        }
+        
+        .nav-description {
+            font-size: 13px;
+        }
+    }
+</style>
+
+</body>
+</html>

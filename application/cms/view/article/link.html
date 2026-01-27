@@ -1,0 +1,147 @@
+{{include file='article/header' /}}
+
+<!-- 主内容 -->
+<main class="main-content">
+    <div class="container">
+        <section class="news-section">
+            <h2 class="section-title">友情<span>链接</span></h2>
+            
+            <div class="nav-categories">
+                <!-- 友情链接分类 -->
+                {{volist name="categories" id="category"}}
+                <div class="nav-category">
+                    <h3 class="category-title">{{category.category_name}}</h3>
+                    <div class="nav-list">
+                        {{volist name="category.links" id="link"}}
+                        <a href="{{link.site_url}}" class="nav-card" target="_blank">
+                            <div class="nav-icon">
+                                {{if link.site_logo}}
+                                <img src="{{link.site_logo}}" alt="{{link.site_name}}" style="width: 100%; height: 100%; object-fit: contain;">
+                                {{else}}
+                                🌐
+                                {{/if}}
+                            </div>
+                            <div class="nav-info">
+                                <h4 class="nav-name">{{link.site_name}}</h4>
+                                <p class="nav-description">{{link.description}}</p>
+                            </div>
+                        </a>
+                        {{/volist}}
+                    </div>
+                </div>
+                {{/volist}}
+            </div>
+        </section>
+    </div>
+</main>
+
+<!-- 页脚 -->
+<footer class="footer">
+    <div class="container">
+        <p>&copy; 2023 爱嘀咕. 保留所有权利.</p>
+    </div>
+</footer>
+
+<style>
+    /* 友情链接特定样式 */
+    .nav-categories {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 30px;
+        margin-top: 40px;
+    }
+    
+    .nav-category {
+        background: white;
+        border-radius: 20px;
+        padding: 25px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+    }
+    
+    .category-title {
+        font-size: 20px;
+        color: var(--dark);
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid var(--secondary);
+        display: inline-block;
+    }
+    
+    .nav-list {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .nav-card {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 15px;
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        border-radius: 15px;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+    
+    .nav-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+    
+    .nav-icon {
+        font-size: 32px;
+        width: 60px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .nav-info {
+        flex: 1;
+    }
+    
+    .nav-name {
+        font-size: 18px;
+        color: var(--dark);
+        margin-bottom: 5px;
+    }
+    
+    .nav-description {
+        font-size: 14px;
+        color: #666;
+        line-height: 1.4;
+    }
+    
+    /* 响应式设计 */
+    @media (max-width: 768px) {
+        .nav-categories {
+            grid-template-columns: 1fr;
+        }
+        
+        .nav-card {
+            padding: 12px;
+        }
+        
+        .nav-icon {
+            font-size: 28px;
+            width: 50px;
+            height: 50px;
+        }
+        
+        .nav-name {
+            font-size: 16px;
+        }
+        
+        .nav-description {
+            font-size: 13px;
+        }
+    }
+</style>
+
+</body>
+</html>
