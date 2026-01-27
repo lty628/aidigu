@@ -3,15 +3,16 @@
 DROP TABLE IF EXISTS `wb_cms_category`;
 CREATE TABLE `wb_cms_category` (
   `category_id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `sort_order` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '排序',
   `category_name` varchar(255) NOT NULL COMMENT '分类名称',
   PRIMARY KEY (`category_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
-INSERT INTO `wb_cms_category` VALUES ('1', '资讯');
-INSERT INTO `wb_cms_category` VALUES ('2', '求助');
-INSERT INTO `wb_cms_category` VALUES ('3', '日志');
-INSERT INTO `wb_cms_category` VALUES ('4', '分享');
+INSERT INTO `wb_cms_category` VALUES ('1', '1', '资讯');
+INSERT INTO `wb_cms_category` VALUES ('2', '2', '求助');
+INSERT INTO `wb_cms_category` VALUES ('3', '3', '日志');
+INSERT INTO `wb_cms_category` VALUES ('4', '4', '分享');
 
 
 DROP TABLE IF EXISTS `wb_cms_content`;
