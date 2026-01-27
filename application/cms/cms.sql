@@ -1,17 +1,17 @@
 
+
 DROP TABLE IF EXISTS `wb_cms_category`;
 CREATE TABLE `wb_cms_category` (
   `category_id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
   `category_name` varchar(255) NOT NULL COMMENT '分类名称',
-  `style` varchar(255) NOT NULL COMMENT '风格',
   PRIMARY KEY (`category_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=65 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
-INSERT INTO `wb_cms_category` VALUES ('1', '分类一', 'list');
-INSERT INTO `wb_cms_category` VALUES ('2', '分类二', 'flex');
-INSERT INTO `wb_cms_category` VALUES ('3', '分类三', 'flex');
-INSERT INTO `wb_cms_category` VALUES ('4', '分类四', 'list');
+INSERT INTO `wb_cms_category` VALUES ('1', '资讯');
+INSERT INTO `wb_cms_category` VALUES ('2', '求助');
+INSERT INTO `wb_cms_category` VALUES ('3', '日志');
+INSERT INTO `wb_cms_category` VALUES ('4', '分享');
 
 
 DROP TABLE IF EXISTS `wb_cms_content`;
@@ -21,27 +21,17 @@ CREATE TABLE `wb_cms_content` (
   `category_id` int(11) NOT NULL COMMENT '分类id',
   `title` varchar(255) NOT NULL COMMENT '标题',
   `content` longtext NOT NULL COMMENT '内容',
-  `content_filtered` longtext NOT NULL COMMENT '内容过滤',
+  `content_filtered` longtext NOT NULL COMMENT '内容过滤，简介',
   `content_extra` text NOT NULL COMMENT '扩展内容',
-  `comment_num` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '评论数',
-  `like_num` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '点赞数',
+  `status` tinyint(3) unsigned NOT NULL DEFAULT '1' COMMENT '状态 1:正常 0:禁用',
+  `commentsum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '评论数',
+  `likesum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '点赞数',
+  `viewsum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '浏览数',
   `create_time` datetime NOT NULL COMMENT '创建时间',
   `update_time` datetime NOT NULL COMMENT '更新时间',
   PRIMARY KEY (`content_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-
-DROP TABLE IF EXISTS `wb_email`;
-CREATE TABLE `wb_email` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
-  `event` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT '' COMMENT '事件',
-  `email` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT '' COMMENT '邮箱',
-  `code` varchar(1000) COLLATE utf8mb4_unicode_ci DEFAULT '' COMMENT '验证码',
-  `times` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '验证次数',
-  `ip` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT '' COMMENT 'IP',
-  `createtime` int(10) DEFAULT NULL COMMENT '创建时间',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC COMMENT='邮箱验证码表';
 
 
 DROP TABLE IF EXISTS `wb_cms_link_category`;
