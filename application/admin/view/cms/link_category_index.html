@@ -30,7 +30,6 @@
     <!-- 操作栏模板 -->
     <script type="text/html" id="actionBar">
         <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
-        <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="toggleStatus">{{# if(d.status == 1){ }}禁用{{# } else { }}启用{{# } }}</a>
         <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>
     </script>
 
@@ -49,16 +48,12 @@
                     { field: 'link_category_id', title: 'ID', width: 80 },
                     { field: 'category_name', title: '分类名称', width: 150 },
                     { field: 'sort_order', title: '排序', width: 80 },
-                    { field: 'status', title: '状态', width: 100, templet: function(d) {
-                        return d.status === 1 ? '<span style="color: #5FB878;">正常</span>' : '<span style="color: #FF5722;">禁用</span>';
-                    }},
-                    { title: '操作', width: 200, align: 'center', toolbar: '#actionBar' }
+                    { title: '操作', width: 150, align: 'center', toolbar: '#actionBar' }
                 ]],
                 page: true,
                 limit: 10,
                 where: {
-                    keyword: $('#searchKeyword').val(),
-                    status: $('#statusFilter').val()
+                    keyword: $('#searchKeyword').val()
                 }
             });
 
@@ -67,6 +62,8 @@
                 var data = obj.data;
                 if (obj.event === 'edit') {
                     window.location.href = '/admin/cms/linkCategoryEdit?link_category_id=' + data.link_category_id;
+                } else if (obj.event === 'toggleStatus') {
+                    toggleCategoryStatus(data.link_category_id, data.status);
                 } else if (obj.event === 'delete') {
                     layer.confirm('确定要删除该分类吗？', function (index) {
                         $.ajax({
@@ -90,18 +87,49 @@
                     });
                 }
             });
+
+            // 表单渲染
+            form.render();
         });
 
         // 搜索
         function search() {
             layui.table.reload('categoryTable', {
                 where: {
-                    keyword: $('#searchKeyword').val()
+                    keyword: $('#searchKeyword').val(),
+                    status: $('#statusFilter').val()
                 },
                 page: {
                     curr: 1
                 }
             });
+        }
+
+        // 切换分类状态
+        function toggleCategoryStatus(categoryId, currentStatus) {
+            var newStatus = currentStatus == 1 ? 0 : 1;
+            layui.layer.confirm('确定要' + (newStatus == 1 ? '启用' : '禁用') + '该分类吗？', function(index) {
+                $.ajax({
+                    url: '/admin/cms/linkCategoryToggleStatus',
+                    type: 'post',
+                    data: { link_category_id: categoryId },
+                    dataType: 'json',
+                    success: function(res) {
+                        if (res.code === 0) {
+                            layui.layer.msg(res.msg, { icon: 6 });
+                            // 重新加载表格
+                            layui.table.reload('categoryTable');
+                        } else {
+                            layui.layer.msg(res.msg, { icon: 5 });
+                        }
+                    },
+                    error: function() {
+                        layui.layer.msg('请求失败', { icon: 5 });
+                    }
+                });
+                layui.layer.close(index);
+            });
+        }
         }
 
         // 添加分类
