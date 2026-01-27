@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>内容分类管理</title>
+    <link href="/static/layui/css/layui.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="layui-layout">
+        <div style="padding: 16px;">
+            <div class="layui-card">
+                <div class="layui-card-header" style="height: unset;">
+                    <h3>内容分类管理</h3>
+                    <div class="layui-input-inline">
+                        <input type="text" id="searchKeyword" placeholder="搜索分类名称" class="layui-input">
+                        <button class="layui-btn layui-btn-primary" onclick="search()" style="margin-left: 10px;">搜索</button>
+                        <button class="layui-btn" onclick="addCategory()">添加分类</button>
+                    </div>
+                </div>
+                <div class="layui-card-body">
+                    <table class="layui-table" id="categoryTable" lay-filter="categoryTable"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 操作栏模板 -->
+    <script type="text/html" id="actionBar">
+        <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>
+    </script>
+
+    <script src="/static/layui/layui.js"></script>
+    <script>
+        layui.use(['table', 'layer'], function () {
+            var table = layui.table;
+            var layer = layui.layer;
+            var $ = layui.$;
+
+            // 渲染表格
+            table.render({
+                elem: '#categoryTable',
+                url: '/admin/cms/getContentCategoryList',
+                cols: [[
+                    { field: 'category_id', title: 'ID', width: 80 },
+                    { field: 'category_name', title: '分类名称', width: 150 },
+                    { field: 'style', title: '风格', width: 100 },
+                    { field: 'sort_order', title: '排序', width: 80 },
+                    { title: '操作', width: 150, align: 'center', toolbar: '#actionBar' }
+                ]],
+                page: true,
+                limit: 10,
+                where: {
+                    keyword: $('#searchKeyword').val()
+                }
+            });
+
+            // 监听工具条
+            table.on('tool(categoryTable)', function (obj) {
+                var data = obj.data;
+                if (obj.event === 'edit') {
+                    window.location.href = '/admin/cms/contentCategoryEdit?category_id=' + data.category_id;
+                } else if (obj.event === 'delete') {
+                    layer.confirm('确定要删除该分类吗？', function (index) {
+                        $.ajax({
+                            url: '/admin/cms/contentCategoryDelete',
+                            type: 'post',
+                            data: { category_id: data.category_id },
+                            dataType: 'json',
+                            success: function (res) {
+                                if (res.code === 0) {
+                                    layer.msg(res.msg, { icon: 6 });
+                                    obj.del();
+                                } else {
+                                    layer.msg(res.msg, { icon: 5 });
+                                }
+                            },
+                            error: function () {
+                                layer.msg('请求失败', { icon: 5 });
+                            }
+                        });
+                        layer.close(index);
+                    });
+                }
+            });
+        });
+
+        // 搜索
+        function search() {
+            layui.table.reload('categoryTable', {
+                where: {
+                    keyword: $('#searchKeyword').val()
+                },
+                page: {
+                    curr: 1
+                }
+            });
+        }
+
+        // 添加分类
+        function addCategory() {
+            window.location.href = '/admin/cms/contentCategoryAdd';
+        }
+    </script>
+</body>
+
+</html>

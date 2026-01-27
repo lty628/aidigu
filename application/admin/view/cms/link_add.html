@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>添加友情链接</title>
+    <link href="/static/layui/css/layui.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="layui-layout">
+        <div style="padding: 16px;">
+            <div class="layui-card">
+                <div class="layui-card-header" style="height: unset;">
+                    <h3>添加友情链接</h3>
+                </div>
+                <div class="layui-card-body">
+                    <form class="layui-form" id="linkForm">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">分类</label>
+                            <div class="layui-input-block">
+                                <select name="link_category_id" required lay-verify="required" class="layui-select">
+                                    <option value="">请选择分类</option>
+                                    {{volist name="categories" id="category"}}
+                                    <option value="{{category.link_category_id}}">{{category.category_name}}</option>
+                                    {{/volist}}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">网站名称</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="site_name" required lay-verify="required" placeholder="请输入网站名称" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">网站地址</label>
+                            <div class="layui-input-block">
+                                <input type="url" name="site_url" required lay-verify="required|url" placeholder="请输入网站地址" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">网站LOGO</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="site_logo" placeholder="请输入网站LOGO地址" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">网站描述</label>
+                            <div class="layui-input-block">
+                                <textarea name="description" placeholder="请输入网站描述" class="layui-textarea"></textarea>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">排序</label>
+                            <div class="layui-input-block">
+                                <input type="number" name="sort_order" value="0" placeholder="请输入排序值" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                                <button class="layui-btn" lay-submit lay-filter="saveLink">保存</button>
+                                <a class="layui-btn layui-btn-primary" href="/admin/cms/linkIndex">返回</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/layui/layui.js"></script>
+    <script>
+        layui.use(['form', 'layer'], function () {
+            var form = layui.form;
+            var layer = layui.layer;
+            var $ = layui.$;
+
+            // 监听提交
+            form.on('submit(saveLink)', function (data) {
+                $.ajax({
+                    url: '/admin/cms/linkAddOrEdit',
+                    type: 'post',
+                    data: data.field,
+                    dataType: 'json',
+                    success: function (res) {
+                        if (res.code === 0) {
+                            layer.msg(res.msg, { icon: 6 });
+                            setTimeout(function () {
+                                window.location.href = '/admin/cms/linkIndex';
+                            }, 1500);
+                        } else {
+                            layer.msg(res.msg, { icon: 5 });
+                        }
+                    },
+                    error: function () {
+                        layer.msg('请求失败', { icon: 5 });
+                    }
+                });
+                return false;
+            });
+        });
+    </script>
+</body>
+
+</html>

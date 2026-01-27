@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>编辑内容分类</title>
+    <link href="/static/layui/css/layui.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="layui-layout">
+        <div style="padding: 16px;">
+            <div class="layui-card">
+                <div class="layui-card-header" style="height: unset;">
+                    <h3>编辑内容分类</h3>
+                </div>
+                <div class="layui-card-body">
+                    <form class="layui-form" id="categoryForm">
+                        <input type="hidden" name="category_id" value="{{data.category_id}}">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">分类名称</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="category_name" required lay-verify="required" value="{{data.category_name}}" placeholder="请输入分类名称" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">风格</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="style" value="{{data.style}}" placeholder="请输入风格（如：list/flex）" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">排序</label>
+                            <div class="layui-input-block">
+                                <input type="number" name="sort_order" value="{{data.sort_order}}" placeholder="请输入排序值" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                                <button class="layui-btn" lay-submit lay-filter="saveCategory">保存</button>
+                                <a class="layui-btn layui-btn-primary" href="/admin/cms/contentCategoryIndex">返回</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/layui/layui.js"></script>
+    <script>
+        layui.use(['form', 'layer'], function () {
+            var form = layui.form;
+            var layer = layui.layer;
+            var $ = layui.$;
+
+            // 监听提交
+            form.on('submit(saveCategory)', function (data) {
+                $.ajax({
+                    url: '/admin/cms/contentCategoryAddOrEdit',
+                    type: 'post',
+                    data: data.field,
+                    dataType: 'json',
+                    success: function (res) {
+                        if (res.code === 0) {
+                            layer.msg(res.msg, { icon: 6 });
+                            setTimeout(function () {
+                                window.location.href = '/admin/cms/contentCategoryIndex';
+                            }, 1500);
+                        } else {
+                            layer.msg(res.msg, { icon: 5 });
+                        }
+                    },
+                    error: function () {
+                        layer.msg('请求失败', { icon: 5 });
+                    }
+                });
+                return false;
+            });
+        });
+    </script>
+</body>
+
+</html>

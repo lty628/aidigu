@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>友情链接管理</title>
+    <link href="/static/layui/css/layui.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="layui-layout">
+        <div style="padding: 16px;">
+            <div class="layui-card">
+                <div class="layui-card-header" style="height: unset;">
+                    <h3>友情链接管理</h3>
+                    <div class="layui-input-inline">
+                        <select id="categoryFilter" class="layui-select">
+                            <option value="0">所有分类</option>
+                            {{volist name="categories" id="category"}}
+                            <option value="{{category.link_category_id}}">{{category.category_name}}</option>
+                            {{/volist}}
+                        </select>
+                        <input type="text" id="searchKeyword" placeholder="搜索网站名称" class="layui-input" style="margin-left: 10px; width: 200px;">
+                        <button class="layui-btn layui-btn-primary" onclick="search()" style="margin-left: 10px;">搜索</button>
+                        <button class="layui-btn" onclick="addLink()">添加链接</button>
+                    </div>
+                </div>
+                <div class="layui-card-body">
+                    <table class="layui-table" id="linkTable" lay-filter="linkTable"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 操作栏模板 -->
+    <script type="text/html" id="actionBar">
+        <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>
+    </script>
+
+    <!-- LOGO模板 -->
+    <script type="text/html" id="logoTpl">
+        {{# if(d.site_logo) {
+            return '<img src="'+d.site_logo+'" style="width: 30px; height: 30px; object-fit: contain;">';
+        } else {
+            return '无';
+        }}}
+    </script>
+
+    <script src="/static/layui/layui.js"></script>
+    <script>
+        layui.use(['table', 'layer', 'form'], function () {
+            var table = layui.table;
+            var layer = layui.layer;
+            var form = layui.form;
+            var $ = layui.$;
+
+            // 渲染表格
+            table.render({
+                elem: '#linkTable',
+                url: '/admin/cms/getLinkList',
+                cols: [[
+                    { field: 'link_id', title: 'ID', width: 80 },
+                    { field: 'category_name', title: '分类', width: 120 },
+                    { field: 'site_name', title: '网站名称', width: 150 },
+                    { field: 'site_url', title: '网站地址', width: 200, templet: function(d) { return '<a href="'+d.site_url+'" target="_blank">'+d.site_url+'</a>'; } },
+                    { field: 'site_logo', title: 'LOGO', width: 100, templet: '#logoTpl' },
+                    { field: 'description', title: '描述', width: 200 },
+                    { field: 'sort_order', title: '排序', width: 80 },
+                    { field: 'create_time', title: '创建时间', width: 180 },
+                    { title: '操作', width: 150, align: 'center', toolbar: '#actionBar' }
+                ]],
+                page: true,
+                limit: 10,
+                where: {
+                    keyword: $('#searchKeyword').val(),
+                    link_category_id: $('#categoryFilter').val()
+                }
+            });
+
+            // 监听工具条
+            table.on('tool(linkTable)', function (obj) {
+                var data = obj.data;
+                if (obj.event === 'edit') {
+                    window.location.href = '/admin/cms/linkEdit?link_id=' + data.link_id;
+                } else if (obj.event === 'delete') {
+                    layer.confirm('确定要删除该链接吗？', function (index) {
+                        $.ajax({
+                            url: '/admin/cms/linkDelete',
+                            type: 'post',
+                            data: { link_id: data.link_id },
+                            dataType: 'json',
+                            success: function (res) {
+                                if (res.code === 0) {
+                                    layer.msg(res.msg, { icon: 6 });
+                                    obj.del();
+                                } else {
+                                    layer.msg(res.msg, { icon: 5 });
+                                }
+                            },
+                            error: function () {
+                                layer.msg('请求失败', { icon: 5 });
+                            }
+                        });
+                        layer.close(index);
+                    });
+                }
+            });
+
+            // 表单渲染
+            form.render();
+        });
+
+        // 搜索
+        function search() {
+            layui.table.reload('linkTable', {
+                where: {
+                    keyword: $('#searchKeyword').val(),
+                    link_category_id: $('#categoryFilter').val()
+                },
+                page: {
+                    curr: 1
+                }
+            });
+        }
+
+        // 添加链接
+        function addLink() {
+            window.location.href = '/admin/cms/linkAdd';
+        }
+    </script>
+</body>
+
+</html>
