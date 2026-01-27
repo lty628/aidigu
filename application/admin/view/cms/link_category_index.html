@@ -30,6 +30,7 @@
     <!-- 操作栏模板 -->
     <script type="text/html" id="actionBar">
         <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+        <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="toggleStatus">{{# if(d.status == 1){ }}禁用{{# } else { }}启用{{# } }}</a>
         <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>
     </script>
 
@@ -48,12 +49,16 @@
                     { field: 'link_category_id', title: 'ID', width: 80 },
                     { field: 'category_name', title: '分类名称', width: 150 },
                     { field: 'sort_order', title: '排序', width: 80 },
-                    { title: '操作', width: 150, align: 'center', toolbar: '#actionBar' }
+                    { field: 'status', title: '状态', width: 100, templet: function(d) {
+                        return d.status === 1 ? '<span style="color: #5FB878;">正常</span>' : '<span style="color: #FF5722;">禁用</span>';
+                    }},
+                    { title: '操作', width: 200, align: 'center', toolbar: '#actionBar' }
                 ]],
                 page: true,
                 limit: 10,
                 where: {
-                    keyword: $('#searchKeyword').val()
+                    keyword: $('#searchKeyword').val(),
+                    status: $('#statusFilter').val()
                 }
             });
 

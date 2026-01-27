@@ -250,6 +250,27 @@ class Cms extends Base
 
     // ======================= 友情链接分类管理 =======================
     
+    // 切换友情链接分类状态
+    public function linkCategoryToggleStatus()
+    {
+        $categoryId = input('post.link_category_id');
+        $category = Db::name('cms_link_category')->where('link_category_id', $categoryId)->find();
+        
+        if (!$category) {
+            return json(['code' => 1, 'msg' => '分类不存在']);
+        }
+        
+        // 切换状态
+        $newStatus = $category['status'] == 1 ? 0 : 1;
+        $result = Db::name('cms_link_category')->where('link_category_id', $categoryId)->update(['status' => $newStatus]);
+        
+        if ($result !== false) {
+            return json(['code' => 0, 'msg' => '状态更新成功', 'status' => $newStatus]);
+        } else {
+            return json(['code' => 1, 'msg' => '状态更新失败']);
+        }
+    }
+
     // 友情链接分类列表页面
     public function linkCategoryIndex()
     {
