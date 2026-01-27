@@ -54,6 +54,7 @@ CREATE TABLE `wb_cms_link` (
   `site_logo` varchar(255) DEFAULT NULL COMMENT '网站LOGO',
   `description` varchar(255) DEFAULT NULL COMMENT '网站描述',
   `sort_order` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '排序',
+  `status` tinyint(3) unsigned NOT NULL DEFAULT '1' COMMENT '状态 1:正常 0:禁用',
   `create_time` datetime NOT NULL COMMENT '创建时间',
   PRIMARY KEY (`link_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

@@ -14,16 +14,31 @@
             <div class="layui-card">
                 <div class="layui-card-header" style="height: unset;">
                     <h3>友情链接管理</h3>
-                    <div class="layui-input-inline">
-                        <select id="categoryFilter" class="layui-select">
-                            <option value="0">所有分类</option>
-                            {{volist name="categories" id="category"}}
-                            <option value="{{category.link_category_id}}">{{category.category_name}}</option>
-                            {{/volist}}
-                        </select>
-                        <input type="text" id="searchKeyword" placeholder="搜索网站名称" class="layui-input" style="margin-left: 10px; width: 200px;">
-                        <button class="layui-btn layui-btn-primary" onclick="search()" style="margin-left: 10px;">搜索</button>
-                        <button class="layui-btn" onclick="addLink()">添加链接</button>
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <select id="categoryFilter" class="layui-select">
+                                <option value="0">所有分类</option>
+                                {{volist name="categories" id="category"}}
+                                <option value="{{category.link_category_id}}">{{category.category_name}}</option>
+                                {{/volist}}
+                            </select>
+                        </div>
+                        <div class="layui-inline">
+                            <select id="statusFilter" class="layui-select">
+                                <option value="">所有状态</option>
+                                <option value="1">正常</option>
+                                <option value="0">禁用</option>
+                            </select>
+                        </div>
+                        <div class="layui-inline">
+                            <input type="text" id="searchKeyword" placeholder="搜索网站名称" class="layui-input">
+                        </div>
+                        <div class="layui-inline">
+                            <button class="layui-btn layui-btn-primary" onclick="search()">搜索</button>
+                        </div>
+                        <div class="layui-inline">
+                            <button class="layui-btn" onclick="addLink()">添加链接</button>
+                        </div>
                     </div>
                 </div>
                 <div class="layui-card-body">
@@ -68,6 +83,9 @@
                     { field: 'site_logo', title: 'LOGO', width: 100, templet: '#logoTpl' },
                     { field: 'description', title: '描述', width: 200 },
                     { field: 'sort_order', title: '排序', width: 80 },
+                    { field: 'status', title: '状态', width: 100, templet: function(d) {
+                        return d.status === 1 ? '<span style="color: #5FB878;">正常</span>' : '<span style="color: #FF5722;">禁用</span>';
+                    }},
                     { field: 'create_time', title: '创建时间', width: 180 },
                     { title: '操作', width: 150, align: 'center', toolbar: '#actionBar' }
                 ]],
@@ -84,6 +102,8 @@
                 var data = obj.data;
                 if (obj.event === 'edit') {
                     window.location.href = '/admin/cms/linkEdit?link_id=' + data.link_id;
+                } else if (obj.event === 'toggleStatus') {
+                    toggleLinkStatus(data.link_id, data.status);
                 } else if (obj.event === 'delete') {
                     layer.confirm('确定要删除该链接吗？', function (index) {
                         $.ajax({
@@ -112,12 +132,38 @@
             form.render();
         });
 
+        // 切换链接状态
+        function toggleLinkStatus(linkId, currentStatus) {
+            var newStatus = currentStatus == 1 ? 0 : 1;
+            layui.layer.confirm('确定要' + (newStatus == 1 ? '启用' : '禁用') + '该链接吗？', function(index) {
+                $.ajax({
+                    url: '/admin/cms/linkToggleStatus',
+                    type: 'post',
+                    data: { link_id: linkId },
+                    dataType: 'json',
+                    success: function(res) {
+                        if (res.code === 0) {
+                            layui.layer.msg(res.msg, { icon: 6 });
+                            // 重新加载表格
+                            layui.table.reload('linkTable');
+                        } else {
+                            layui.layer.msg(res.msg, { icon: 5 });
+                        }
+                    },
+                    error: function() {
+                        layui.layer.msg('请求失败', { icon: 5 });
+                    }
+                });
+                layui.layer.close(index);
+            });
+        }
         // 搜索
         function search() {
             layui.table.reload('linkTable', {
                 where: {
                     keyword: $('#searchKeyword').val(),
-                    link_category_id: $('#categoryFilter').val()
+                    link_category_id: $('#categoryFilter').val(),
+                    status: $('#statusFilter').val()
                 },
                 page: {
                     curr: 1

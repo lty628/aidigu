@@ -103,10 +103,11 @@ class Cms extends Base
     // 获取内容列表
     public function getContentList()
     {
-        $keyword = input('post.keyword', '');
-        $categoryId = input('post.category_id', 0, 'intval');
-        $page = input('post.page', 1, 'intval');
-        $limit = input('post.limit', 10, 'intval');
+        $keyword = input('get.keyword', '');
+        $categoryId = input('get.category_id', 0, 'intval');
+        $status = input('get.status', -1, 'intval');
+        $page = input('get.page', 1, 'intval');
+        $limit = input('get.limit', 10, 'intval');
         
         $query = Db::name('cms_content')
             ->alias('content')
@@ -118,6 +119,11 @@ class Cms extends Base
         // 关键词搜索
         if ($keyword) {
             $query->where('content.title', 'like', '%' . $keyword . '%');
+        }
+
+        // 状态筛选
+        if ($status >= 0) {
+            $query->where('content.status', $status);
         }
         
         // 分类筛选
@@ -211,6 +217,29 @@ class Cms extends Base
         // 切换状态
         $newStatus = $content['status'] == 1 ? 0 : 1;
         $result = Db::name('cms_content')->where('content_id', $contentId)->update(['status' => $newStatus]);
+        
+        if ($result !== false) {
+            return json(['code' => 0, 'msg' => '状态更新成功', 'status' => $newStatus]);
+        } else {
+            return json(['code' => 1, 'msg' => '状态更新失败']);
+        }
+    }
+
+    // ======================= 友情链接管理 =======================
+    
+    // 切换友情链接状态
+    public function linkToggleStatus()
+    {
+        $linkId = input('post.link_id');
+        $link = Db::name('cms_link')->where('link_id', $linkId)->find();
+        
+        if (!$link) {
+            return json(['code' => 1, 'msg' => '链接不存在']);
+        }
+        
+        // 切换状态
+        $newStatus = $link['status'] == 1 ? 0 : 1;
+        $result = Db::name('cms_link')->where('link_id', $linkId)->update(['status' => $newStatus]);
         
         if ($result !== false) {
             return json(['code' => 0, 'msg' => '状态更新成功', 'status' => $newStatus]);

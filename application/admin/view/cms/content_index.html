@@ -14,13 +14,13 @@
             <div class="layui-card">
                 <div class="layui-card-header" style="height: unset;">
                     <h3>内容管理</h3>
-                    <div class="layui-form-item" style="margin-bottom: 0; float: right; margin-top: -40px;">
+                    <div class="layui-form-item">
                         <div class="layui-inline">
                             <select id="categoryFilter" class="layui-select">
                                 <option value="0">所有分类</option>
-                                {{volist name="categories" id="category"}}
-                                <option value="{{category.category_id}}">{{category.category_name}}</option>
-                                {{/volist}}
+                                {volist name="categories" id="category"}
+                                <option value="{$category.category_id}">{$category.category_name}</option>
+                                {/volist}
                             </select>
                         </div>
                         <div class="layui-inline">
@@ -36,9 +36,9 @@
                         <div class="layui-inline">
                             <button class="layui-btn layui-btn-primary" onclick="search()">搜索</button>
                         </div>
-                        <div class="layui-inline">
+                        <!-- <div class="layui-inline">
                             <button class="layui-btn" onclick="addContent()">添加内容</button>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
                 <div class="layui-card-body">
@@ -169,7 +169,8 @@
             layui.table.reload('contentTable', {
                 where: {
                     keyword: $('#searchKeyword').val(),
-                    category_id: $('#categoryFilter').val()
+                    category_id: $('#categoryFilter').val(),
+                    status: $('#statusFilter').val()
                 },
                 page: {
                     curr: 1
