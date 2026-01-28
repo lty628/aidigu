@@ -18,6 +18,7 @@ Route::get('/article/category/:category_name/:page$', 'cms/Article/list')->patte
 Route::get('/article/add$', 'cms/Article/edit');
 Route::get('/article/edit/:id$', 'cms/Article/edit')->pattern(['id' => '[0-9]+']);;
 Route::get('/article/detail/:id$', 'cms/Article/detail')->pattern(['id' => '[0-9]+']);
+Route::get('/article/link/$', 'cms/Article/link');
 
 
 // 推广页
