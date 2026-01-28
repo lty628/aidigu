@@ -424,7 +424,8 @@ class Cms extends Base
     {
         $post = input('post.');
         $post['create_time'] = date('Y-m-d H:i:s');
-        
+        unset($post['file']);
+        unset($post['logo_url']);
         if (isset($post['link_id'])) {
             // 编辑链接
             // 移除创建时间，避免更新
