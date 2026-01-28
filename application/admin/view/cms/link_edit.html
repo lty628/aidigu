@@ -44,7 +44,40 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">网站LOGO</label>
                             <div class="layui-input-block">
-                                <input type="text" name="site_logo" value="{$data.site_logo}" placeholder="请输入网站LOGO地址" autocomplete="off" class="layui-input">
+                                <div class="layui-tab layui-tab-brief" lay-filter="logo-tab">
+                                    <ul class="layui-tab-title">
+                                        <li class="layui-this" data-type="upload">上传图片</li>
+                                        <li data-type="url">填写地址</li>
+                                    </ul>
+                                    <div class="layui-tab-content">
+                                        <div class="layui-tab-item layui-show">
+                                            <div class="layui-upload">
+                                                <button type="button" class="layui-btn" id="upload-logo">
+                                                    <i class="layui-icon layui-icon-upload"></i> 选择图片
+                                                </button>
+                                                <div class="layui-upload-list" style="margin-top: 10px;">
+                                                    <img class="layui-upload-img" id="preview-logo" style="max-width: 120px; max-height: 120px; display: none; border-radius: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+                                                    <div id="logo-text"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-tab-item">
+                                            <input type="text" 
+                                                   name="logo_url" 
+                                                   id="logo-url-input"
+                                                   placeholder="请输入LOGO图片地址（http:// 或 https://）" 
+                                                   autocomplete="off"
+                                                   class="layui-input" value="{if strpos($data.site_logo, 'http') !== false}{$data.site_logo}{/if}">
+                                            <div class="layui-upload-list" style="margin-top: 10px;">
+                                                <img class="layui-upload-img" id="url-preview-logo" style="max-width: 120px; max-height: 120px; display: none; border-radius: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);" {if strpos($data.site_logo, 'http') !== false}src="{$data.site_logo}"{/if}>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <input type="hidden" 
+                                       name="site_logo" 
+                                       id="site-logo-input" value="{$data.site_logo}">
+                                <div class="layui-form-mid layui-word-aux">请上传LOGO或填写图片地址</div>
                             </div>
                         </div>
                         <div class="layui-form-item">
