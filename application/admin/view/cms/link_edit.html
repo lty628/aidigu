@@ -73,13 +73,152 @@
 
     <script src="/static/layui/layui.js"></script>
     <script>
-        layui.use(['form', 'layer'], function () {
+        layui.use(['form', 'layer', 'upload', 'element'], function () {
             var form = layui.form;
             var layer = layui.layer;
+            var upload = layui.upload;
+            var element = layui.element;
             var $ = layui.$;
+            
+            // 初始化数据
+            var initialLogoValue = $('#site-logo-input').val();
+            
+            // 检测初始值是否为URL还是已上传的文件，根据值决定默认显示哪个选项卡
+            if(initialLogoValue && (initialLogoValue.startsWith('http://') || initialLogoValue.startsWith('https://'))) {
+                // 如果初始值是URL，则切换到URL选项卡
+                $('.layui-tab-title li[data-type="url"]').trigger('click');
+                $('#logo-url-input').val(initialLogoValue);
+                $('#url-preview-logo').attr('src', initialLogoValue).show();
+            } else if(initialLogoValue) {
+                // 如果是文件路径，则保持在上传选项卡并显示预览
+                $('#preview-logo').attr('src', initialLogoValue).show();
+            }
+
+            // 图片上传
+            var uploadInst = upload.render({
+                elem: '#upload-logo',
+                url: '{:url("admin/upload/upload")}',
+                method: 'POST',
+                data: {
+                    type: 'logo'
+                },
+                accept: 'images',
+                acceptMime: 'image/*',
+                size: 2048, // 限制文件大小，单位 KB
+                before: function(obj) {
+                    // 预读本地文件示例，不支持ie8
+                    obj.preview(function(index, file, result) {
+                        $('#preview-logo').attr('src', result).show();
+                    });
+                    
+                    layer.load(2);
+                },
+                done: function(res) {
+                    layer.closeAll('loading');
+                    
+                    // 如果上传成功
+                    if (res.code === 1) {
+                        $('#site-logo-input').val(res.data.src);
+                        $('#logo-text').html('<span style="color: #5FB878;"><i class="layui-icon layui-icon-ok-circle"></i> 上传成功</span>');
+                        layer.msg('上传成功', {icon: 1});
+                    } else {
+                        // 显示错误信息
+                        $('#logo-text').html('<span style="color: #FF5722;"><i class="layui-icon layui-icon-close"></i> 上传失败：' + res.msg + '</span>');
+                        $('#preview-logo').hide();
+                        layer.msg('上传失败：' + res.msg, {icon: 2});
+                    }
+                },
+                error: function() {
+                    layer.closeAll('loading');
+                    
+                    // 演示失败状态，并实现重传
+                    $('#logo-text').html(`
+                        <span style="color: #FF5722;">
+                            <i class="layui-icon layui-icon-close"></i> 上传失败
+                        </span>
+                        <button class="layui-btn layui-btn-xs layui-btn-primary demo-reload" style="margin-left: 10px;">
+                            <i class="layui-icon layui-icon-refresh"></i> 重试
+                        </button>
+                    `);
+                    
+                    $('#preview-logo').hide();
+                    
+                    $('#logo-text .demo-reload').on('click', function() {
+                        uploadInst.upload();
+                    });
+                    
+                    layer.msg('上传失败，请重试', {icon: 2});
+                }
+            });
+            
+            // 监听图片输入方式切换
+            element.on('tab(logo-tab)', function(data){
+                if(this.getAttribute('data-type') === 'url') {
+                    // 切换到URL输入模式时清空隐藏字段
+                    $('#site-logo-input').val('');
+                    $('#url-preview-logo').hide();
+                } else {
+                    // 切换到上传模式时清空URL输入框
+                    $('#logo-url-input').val('');
+                    $('#url-preview-logo').hide();
+                }
+            });
+            
+            // 监听图片URL输入框变化
+            $('#logo-url-input').on('input', function() {
+                var logoUrl = $(this).val().trim();
+                if(logoUrl) {
+                    // 显示预览
+                    showLogoPreview(logoUrl);
+                    $('#site-logo-input').val(logoUrl); // 将URL设置为隐藏字段的值
+                } else {
+                    $('#url-preview-logo').hide();
+                    $('#site-logo-input').val('');
+                }
+            });
+            
+            // 显示LOGO预览
+            function showLogoPreview(url) {
+                const img = new Image();
+                img.onload = function() {
+                    $('#url-preview-logo').attr('src', url).show();
+                };
+                img.onerror = function() {
+                    $('#url-preview-logo').hide();
+                    layer.msg('图片地址无效或无法访问', {icon: 2});
+                };
+                img.src = url;
+            }
 
             // 监听提交
             form.on('submit(saveLink)', function (data) {
+                var activeTab = $('.layui-tab-title .layui-this').data('type');
+                var isValid = false;
+                
+                if(activeTab === 'upload') {
+                    // 上传模式：检查隐藏字段是否有值
+                    if($('#site-logo-input').val()) {
+                        isValid = true;
+                    } else {
+                        layer.msg('请先上传LOGO', {icon: 2});
+                        return false;
+                    }
+                } else if(activeTab === 'url') {
+                    // URL模式：检查URL是否有效
+                    var logoUrl = $('#logo-url-input').val().trim();
+                    if(logoUrl) {
+                        isValid = true;
+                    } else {
+                        layer.msg('请输入有效的LOGO图片地址', {icon: 2});
+                        return false;
+                    }
+                }
+                
+                if(!isValid) {
+                    layer.msg('请选择或输入有效的LOGO', {icon: 2});
+                    return false;
+                }
+                
                 $.ajax({
                     url: '/admin/cms/linkAddOrEdit',
                     type: 'post',
