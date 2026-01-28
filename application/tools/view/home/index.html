@@ -333,15 +333,15 @@
             position: relative;
             overflow: hidden;
             border: 2px solid transparent;
+            cursor: pointer;
         }
 
         .feature-card:hover {
             transform: translateY(-15px) scale(1.02);
             box-shadow: 0 25px 55px rgba(26, 83, 92, 0.15);
-            border-color: var(--primary);
         }
 
-        .feature-icon {
+        /* .feature-icon {
             width: 100px;
             height: 100px;
             background: linear-gradient(135deg, var(--primary), var(--pink));
@@ -354,12 +354,11 @@
             color: white;
             box-shadow: 0 15px 30px rgba(255, 107, 107, 0.3);
             transition: all 0.3s ease;
-        }
+        } */
         .feature-icon img{ 
-            width: 150px;
             height: 150px;
             border-radius: 10px;
-            box-shadow: 0 15px 30px rgba(255, 107, 107, 0.3);
+            /* box-shadow: 0 15px 30px rgba(255, 107, 107, 0.3); */
         }
 
         /* .feature-card:hover .feature-icon {
@@ -850,8 +849,8 @@
                         <i class="fas fa-user-friends"></i>
                         {/if}
                     </div>
-                    <h3>{$vo.title}</h3>   
-                    <p>{if mb_strlen($vo.content_filtered) > 200}{$vo.content_filtered | strip_tags | mb_substr=0,200}...{else}{$vo.content_filtered | strip_tags}{/if}</p>
+                    <h4>{$vo.title}</h4>   
+                    <!-- <p>{if mb_strlen($vo.content_filtered) > 200}{$vo.content_filtered | strip_tags | mb_substr=0,200}...{else}{$vo.content_filtered | strip_tags}{/if}</p> -->
                 </div>
                 {/volist}
             </div>
