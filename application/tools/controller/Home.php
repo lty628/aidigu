@@ -8,9 +8,10 @@ class Home extends Controller
 	public function index()
     {
         $userInfo = getLoginUserInfo();
-        // if ($userInfo) {
-        //     $this->redirect('/square/');
-        // }
+        // 自动登录
+        if (!$userInfo && cookie('rememberMe')) {
+            $userInfo = checkUserCookie(cookie('rememberMe'));
+        }
         $this->assign('beian', sysConfig('app.beian', ''));
         $this->assign('userInfo', $userInfo);
         // 近期6篇文章

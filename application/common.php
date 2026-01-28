@@ -34,7 +34,7 @@ function checkUserCookie($rememberMe, $fields = 'uid,nickname,password,head_imag
 		cookie('rememberMe', serialize(serialize($rememberMe)), 86400*60);
 		session('userid', $info['uid']);
 	}
-	
+	unset($info['password']);
 	return $info;
 }
 function getWsUserInfoByCookie($rememberMe)
