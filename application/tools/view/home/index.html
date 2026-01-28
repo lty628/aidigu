@@ -173,7 +173,7 @@
         }
 
         .hero-content {
-            margin-top: 65px;
+            /* margin-top: 65px; */
             animation: fadeInLeft 1s ease-out;
             position: relative;
             z-index: 2;
@@ -778,16 +778,19 @@
         <div class="container">
             <a href="/" class="logo">爱<span>嘀咕</span></a>
             <div class="nav-links">
+                <a href="/article/">嘀咕博客</a>
+                <a href="/article/link/">网址导航</a>
                 <a href="#features">功能特色</a>
                 <a href="#testimonials">用户评价</a>
-                <a href="/article/">嘀咕博客</a>
                 <!-- <a href="#about">关于我们</a>
                 <a href="#contact">联系我们</a> -->
             </div>
+            {if !$userInfo}
             <div class="auth-buttons">
                 <a href="/login/" class="btn btn-login">登录</a>
                 <a href="/register/" class="btn btn-register">免费注册</a>
             </div>
+            {/if}
         </div>
     </nav>
 
@@ -795,11 +798,15 @@
     <section class="hero">
         <div id="particles-js"></div>
         <div class="container">
-            <div class="hero-content">
+            <div class="hero-content" style="{if !$userInfo}margin-top: 65px;{/if}">
                 <h1>发现有趣的<span>灵魂</span>，分享真实的自己</h1>
                 <p>爱嘀咕是一个温暖有趣的社交平台，在这里你可以遇见志同道合的朋友，分享生活中的点点滴滴，记录每一个美好瞬间。</p>
                 <div class="hero-buttons">
+                    {if $userInfo}
+                    <a href="/square/" class="btn btn-register">进入微博</a>
+                    {else}
                     <a href="/register/" class="btn btn-register">立即加入</a>
+                    {/if}
                     <a href="#features" class="btn btn-login">了解更多</a>
                 </div>
             </div>
