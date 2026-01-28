@@ -58,11 +58,11 @@ class Upload extends Controller
             $info = $file->validate([
                 'size' => $maxSize,
                 'ext' => implode(',', $allowExt)
-            ])->move('uploads/admin/' . $type . 's/');
+            ])->move('uploads/'.md5('admin').'/' . $type . 's/');
 
             if ($info) {
                 // 上传成功
-                $filePath = '/uploads/admin/' . $type . 's/' . str_replace('\\', '/', $info->getSaveName());
+                $filePath = '/uploads/'.md5('admin').'/' . $type . 's/' . str_replace('\\', '/', $info->getSaveName());
                 
                 return json([
                     'code' => 1,
@@ -101,11 +101,11 @@ class Upload extends Controller
             $info = $file->validate([
                 'size' => 2 * 1024 * 1024, // 2MB
                 'ext' => 'jpg,jpeg,png,gif,webp'
-            ])->move('uploads/admin/logos/');
+            ])->move('uploads/'.md5('admin').'/logos/');
 
             if ($info) {
                 // 上传成功
-                $filePath = '/uploads/admin/logos/' . str_replace('\\', '/', $info->getSaveName());
+                $filePath = '/uploads/'.md5('admin').'/logos/' . str_replace('\\', '/', $info->getSaveName());
                 
                 return json([
                     'code' => 1,
@@ -144,11 +144,11 @@ class Upload extends Controller
             $info = $file->validate([
                 'size' => 1 * 1024 * 1024, // 1MB
                 'ext' => 'jpg,jpeg,png,gif,webp,ico'
-            ])->move('uploads/admin/icons/');
+            ])->move('uploads/'.md5('admin').'/icons/');
 
             if ($info) {
                 // 上传成功
-                $filePath = '/uploads/admin/icons/' . str_replace('\\', '/', $info->getSaveName());
+                $filePath = '/uploads/'.md5('admin').'/icons/' . str_replace('\\', '/', $info->getSaveName());
                 
                 return json([
                     'code' => 1,
@@ -192,11 +192,11 @@ class Upload extends Controller
                 $info = $file->validate([
                     'size' => 5 * 1024 * 1024, // 5MB
                     'ext' => 'jpg,jpeg,png,gif,webp,pdf,doc,docx,txt'
-                ])->move('uploads/admin/common/');
+                ])->move('uploads/'.md5('admin').'/common/');
 
                 if ($info) {
                     // 上传成功
-                    $filePath = '/uploads/admin/common/' . str_replace('\\', '/', $info->getSaveName());
+                    $filePath = '/uploads/'.md5('admin').'/common/' . str_replace('\\', '/', $info->getSaveName());
                     
                     $results[] = [
                         'code' => 1,

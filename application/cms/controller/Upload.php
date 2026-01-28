@@ -23,7 +23,7 @@ class Upload
             'type' => $config['type']
         ]);
         $this->field = $config['field'] ?: 'file';
-        $this->dir = $config['dir'] ?: 'uploads';
+        $this->dir = ($config['dir'] ?: 'uploads') . '/' . md5('cms');
         $this->rule = $config['rule'] ?: 'date';
         $this->origin = $config['origin'];
         $this->url = $config['url'];
