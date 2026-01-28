@@ -16,9 +16,9 @@ class Cms extends Base
     // 获取内容分类列表
     public function getContentCategoryList()
     {
-        $keyword = input('post.keyword', '');
-        $page = input('post.page', 1, 'intval');
-        $limit = input('post.limit', 10, 'intval');
+        $keyword = input('get.keyword', '');
+        $page = input('get.page', 1, 'intval');
+        $limit = input('get.limit', 10, 'intval');
         
         $query = Db::name('cms_category')->order('category_id', 'asc');
         
@@ -280,9 +280,9 @@ class Cms extends Base
     // 获取友情链接分类列表
     public function getLinkCategoryList()
     {
-        $keyword = input('post.keyword', '');
-        $page = input('post.page', 1, 'intval');
-        $limit = input('post.limit', 10, 'intval');
+        $keyword = input('get.keyword', '');
+        $page = input('get.page', 1, 'intval');
+        $limit = input('get.limit', 10, 'intval');
         
         $query = Db::name('cms_link_category')->order('sort_order', 'asc');
         
@@ -364,10 +364,11 @@ class Cms extends Base
     // 获取友情链接列表
     public function getLinkList()
     {
-        $keyword = input('post.keyword', '');
-        $categoryId = input('post.link_category_id', 0, 'intval');
-        $page = input('post.page', 1, 'intval');
-        $limit = input('post.limit', 10, 'intval');
+        $keyword = input('get.keyword', '');
+        $categoryId = input('get.link_category_id', 0, 'intval');
+        $page = input('get.page', 1, 'intval');
+        $limit = input('get.limit', 10, 'intval');
+        $status = input('get.status', -1, 'intval');
         
         $query = Db::name('cms_link')
             ->alias('link')
@@ -378,6 +379,10 @@ class Cms extends Base
         // 关键词搜索
         if ($keyword) {
             $query->where('link.site_name', 'like', '%' . $keyword . '%');
+        }
+        // 状态筛选
+        if ($status >= 0) {
+            $query->where('link.status', $status);
         }
         
         // 分类筛选

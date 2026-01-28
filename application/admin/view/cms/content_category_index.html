@@ -100,6 +100,7 @@
             });
         });
 
+        var $ = layui.$;
         // 搜索
         function search() {
             layui.table.reload('categoryTable', {
@@ -114,14 +115,7 @@
 
         // 添加分类
         function addCategory() {
-            layer.open({
-                type: 2,
-                title: '编辑分类',
-                shadeClose: true,
-                shade: 0.3,
-                area: ['600px', '450px'],
-                content: '/admin/cms/contentCategoryAdd'
-            });
+            window.location.href = '/admin/cms/contentCategoryAdd';
         }
     </script>
 </body>

@@ -17,17 +17,17 @@
                 </div>
                 <div class="layui-card-body">
                     <form class="layui-form" id="categoryForm">
-                        <input type="hidden" name="link_category_id" value="{{data.link_category_id}}">
+                        <input type="hidden" name="link_category_id" value="{$data.link_category_id}">
                         <div class="layui-form-item">
                             <label class="layui-form-label">分类名称</label>
                             <div class="layui-input-block">
-                                <input type="text" name="category_name" required lay-verify="required" value="{{data.category_name}}" placeholder="请输入分类名称" autocomplete="off" class="layui-input">
+                                <input type="text" name="category_name" required lay-verify="required" value="{$data.category_name}" placeholder="请输入分类名称" autocomplete="off" class="layui-input">
                             </div>
                         </div>
                         <div class="layui-form-item">
                             <label class="layui-form-label">排序</label>
                             <div class="layui-input-block">
-                                <input type="number" name="sort_order" value="{{data.sort_order}}" placeholder="请输入排序值" autocomplete="off" class="layui-input">
+                                <input type="number" name="sort_order" value="{$data.sort_order}" placeholder="请输入排序值" autocomplete="off" class="layui-input">
                             </div>
                         </div>
 
