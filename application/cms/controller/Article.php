@@ -7,14 +7,6 @@ use app\cms\model\LinkCategory;
 
 class Article extends Base  
 {	
-    public function nav()
-    {
-        $categoryModel = new CategoryModel();
-        $categoryList = $categoryModel->getList();
-        $this->assign('categoryList', $categoryList);
-        return $this->fetch('navigation');
-    }
-
 
     public function link()
     {

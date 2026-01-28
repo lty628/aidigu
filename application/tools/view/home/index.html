@@ -355,11 +355,17 @@
             box-shadow: 0 15px 30px rgba(255, 107, 107, 0.3);
             transition: all 0.3s ease;
         }
+        .feature-icon img{ 
+            width: 150px;
+            height: 150px;
+            border-radius: 10px;
+            box-shadow: 0 15px 30px rgba(255, 107, 107, 0.3);
+        }
 
-        .feature-card:hover .feature-icon {
+        /* .feature-card:hover .feature-icon {
             transform: scale(1.1) rotate(5deg);
             box-shadow: 0 20px 40px rgba(255, 107, 107, 0.4);
-        }
+        } */
 
         .feature-card h3 {
             font-size: 1.8rem;
@@ -832,15 +838,22 @@
     <!-- 特色功能 -->
     <section class="features" id="features">
         <div class="container">
-            <h2 class="section-title">为什么选择<span>爱嘀咕</span>？</h2>
+            <h2 class="section-title">最新<span>文章</span></h2>
             <div class="features-grid">
-                <div class="feature-card animate-on-scroll">
+                {volist name="articleList" id="vo"}
+                <div class="feature-card animate-on-scroll" onclick="location.href='/article/detail/{$vo.content_id}.html'">
                     <div class="feature-icon">
+                        {php}$vo['content_extra'] = json_decode($vo['content_extra'], true);{/php}
+                        {if isset($vo.content_extra.article_media) && $vo.content_extra.article_media}
+                        <img src="{$vo.content_extra.article_media}" alt="{$vo.title}" class="news-image">
+                        {else}
                         <i class="fas fa-user-friends"></i>
+                        {/if}
                     </div>
-                    <h3>遇见同好</h3>
-                    <p>基于兴趣标签智能匹配，让你轻松找到志同道合的朋友，不再孤单。</p>
+                    <h3>{$vo.title}</h3>   
+                    <p>{if mb_strlen($vo.content_filtered) > 200}{$vo.content_filtered | strip_tags | mb_substr=0,200}...{else}{$vo.content_filtered | strip_tags}{/if}</p>
                 </div>
+                {/volist}
                 <div class="feature-card animate-on-scroll">
                     <div class="feature-icon">
                         <i class="fas fa-lock"></i>
