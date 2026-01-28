@@ -15,8 +15,14 @@
             <ul class="nav-links">
                 <li><a href="/">首页</a></li>
                 <li><a href="/article/">新闻</a></li>
-                <li><a href="/square/">微博</a></li>
+                
                 <li><a href="/article/link/">网址导航</a></li>
+                {{if $userInfo}}
+                <li><a href="/square/">微博</a></li>
+                    {{if $userInfo.uid == 1}}
+                    <li><a href="/admin/">管理中心</a></li>
+                    {{/if}}
+                {{/if}}
             </ul>
             {{if $userInfo}}
             <a href="/article/add" class="publish-btn">发布</a>
