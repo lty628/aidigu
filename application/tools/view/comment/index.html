@@ -742,8 +742,8 @@ padding: 12px 16px; /* 减小内边距 */
                     const isOwnComment = comment.fromuid == currentUid;
 
                     const avatar = user.head_image ?
-                        `<a href="/${user.blog}/" class="user-link"><img src="${user.head_image}" class="avatar" alt="头像"></a>` :
-                        `<a href="/${user.blog}/" class="user-link"><span class="avatar">${user.nickname.charAt(0).toUpperCase()}</span></a>`;
+                        `<a href="/${user.blog}/" targert="_blank" class="user-link"><img src="${user.head_image}" class="avatar" alt="头像"></a>` :
+                        `<a href="/${user.blog}/" targert="_blank" class="user-link"><span class="avatar">${user.nickname.charAt(0).toUpperCase()}</span></a>`;
 
                     html += `
                     <div class="comment-item" data-cid="${comment.cid}">
@@ -751,7 +751,7 @@ padding: 12px 16px; /* 减小内边距 */
                             <div class="user-info">
                                 ${avatar}
                                 <div class="user-details">
-                                    <a href="/${user.blog}/" class="user-link comment-author">${user.nickname}</a>
+                                    <a href="/${user.blog}/" targert="_blank" class="user-link comment-author">${user.nickname}</a>
                                     <div class="comment-time">${formatTime(comment.ctime)}</div>
                                 </div>
                             </div>
@@ -799,8 +799,8 @@ padding: 12px 16px; /* 减小内边距 */
                             const replyPrefix = '';
 
                             const replyAvatar = replyUser.head_image ?
-                                `<a href="/${replyUser.blog}/" class="user-link"><img src="${replyUser.head_image}" class="avatar" alt="头像"></a>` :
-                                `<a href="/${replyUser.blog}/" class="user-link"><span class="avatar">${replyUser.nickname.charAt(0).toUpperCase()}</span></a>`;
+                                `<a href="/${replyUser.blog}/" targert="_blank" class="user-link"><img src="${replyUser.head_image}" class="avatar" alt="头像"></a>` :
+                                `<a href="/${replyUser.blog}/" targert="_blank" class="user-link"><span class="avatar">${replyUser.nickname.charAt(0).toUpperCase()}</span></a>`;
 
                             html += `
                             <div class="comment-item">
@@ -808,7 +808,7 @@ padding: 12px 16px; /* 减小内边距 */
                                     <div class="user-info">
                                         ${replyAvatar}
                                         <div class="user-details">
-                                            <a href="/${replyUser.blog}/" class="user-link comment-author">${replyUser.nickname}</a>
+                                            <a href="/${replyUser.blog}/" targert="_blank" class="user-link comment-author">${replyUser.nickname}</a>
                                             <div class="comment-time">${formatTime(reply.ctime)}</div>
                                         </div>
                                     </div>
@@ -935,8 +935,8 @@ padding: 12px 16px; /* 减小内边距 */
                     const replyPrefix = '';
 
                     const replyAvatar = replyUser.head_image ?
-                        `<a href="/${replyUser.blog}/" class="user-link"><img src="${replyUser.head_image}" class="avatar" alt="头像"></a>` :
-                        `<a href="/${replyUser.blog}/" class="user-link"><span class="avatar">${replyUser.nickname.charAt(0).toUpperCase()}</span></a>`;
+                        `<a href="/${replyUser.blog}/" targert="_blank" class="user-link"><img src="${replyUser.head_image}" class="avatar" alt="头像"></a>` :
+                        `<a href="/${replyUser.blog}/" targert="_blank" class="user-link"><span class="avatar">${replyUser.nickname.charAt(0).toUpperCase()}</span></a>`;
 
                     html += `
                     <div class="comment-item">
@@ -944,7 +944,7 @@ padding: 12px 16px; /* 减小内边距 */
                             <div class="user-info">
                                 ${replyAvatar}
                                 <div class="user-details">
-                                    <a href="/${replyUser.blog}/" class="user-link comment-author">${replyUser.nickname}</a>
+                                    <a href="/${replyUser.blog}/" targert="_blank" class="user-link comment-author">${replyUser.nickname}</a>
                                     <div class="comment-time">${formatTime(reply.ctime)}</div>
                                 </div>
                             </div>
