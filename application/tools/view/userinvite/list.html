@@ -30,9 +30,13 @@
   </script>
 
   <script type="text/html" id="barLineInfo">
-    <div class="layui-clear-space">
-      <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="edit">删除</a>
-    </div>
+   <div class="layui-clear-space">
+    {{# if (d.invite_status == 2) { }}
+      <a class="layui-btn layui-btn-xs layui-btn-primary" lay-event="edit">已邀请</a>
+    {{# } else { }}
+      <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="delete">删除</a>
+    {{# } }}
+  </div>
 </script>
   <script src="/static/layui/layui.js"></script>
   <script src="/static/common/js/clipboard.min.js"></script>
