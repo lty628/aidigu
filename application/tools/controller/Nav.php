@@ -35,7 +35,7 @@ class Nav extends Base
             //     $bg = getThemeInfo($this->userInfo['theme'])[1];
             //     echo $bg;die;
             // } else {
-                $bg = '/static/index/images/bg4.svg';
+                $bg = '/static/index/images/bg.jpg';
             // }
             // cache('bg_nav'.$this->uid, $bg, 600);
         }
