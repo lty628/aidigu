@@ -452,6 +452,7 @@ a img {
     width: 80px;
     background-color: var(--secondary-color);
     color: var(--primary-btn-color);
+    box-shadow: 0 0px 5px var(--shadow-color);
 }
 .contents .post .postnow span {
     float: right;
