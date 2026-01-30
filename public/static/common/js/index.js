@@ -103,13 +103,15 @@ function toggleCommentIframe(msgId, type) {
 var showFrame = false;
 var currentLayerIndex = null;
 
-function showFrameHtml(obj, width, height) {
+function showFrameHtml(obj, width, height ,style = 0) {
     if (showFrame) return
     showFrame = true
     if (parent.layer) {
         var layer = parent.layer
     }
 
+    var skinArr = ['', 'layui-layer-win10', 'layui-layer-molv'];
+    
     var resize = true;
     var maxmin = true;
     // 判断是否是手机
@@ -129,6 +131,8 @@ function showFrameHtml(obj, width, height) {
         maxmin: maxmin,
         scrollbar: false,
         content: $(obj).attr('data-url'),
+        // win10风格 
+        skin: skinArr[style],
         zIndex: layer.zIndex, //重点1
         success: function (layero) {
             layer.setTop(layero); //重点2
