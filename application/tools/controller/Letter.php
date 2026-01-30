@@ -10,6 +10,8 @@ class Letter extends Base
 {
     public function index()
     {
+        $touser = input('get.touser', '');
+        $this->assign('touser', $touser);
         return view();
     }
     

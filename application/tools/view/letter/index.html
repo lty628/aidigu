@@ -415,6 +415,7 @@
         </div>
     </div>
 
+    <input type="hidden" name="touser" value="{$touser}" id="touser">
     <script src="https://cdn.staticfile.org/jquery/3.6.0/jquery.min.js"></script>
     <script>
         // 当前筛选状态和分页信息
@@ -423,6 +424,12 @@
         let totalPages = 1;
         let totalRecords = 0;  // 添加总记录数
         const limit = 10;
+
+        const touser = $('#touser').val();
+        if (touser) {
+            $('#receiver').val(touser);
+            $('#writeModal').css('display', 'flex');
+        }
 
         // 初始化粒子背景
         function initParticles() {

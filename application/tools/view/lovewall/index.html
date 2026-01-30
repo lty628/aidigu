@@ -617,10 +617,15 @@
             </form>
         </div>
     </div>
-
+    <input type="hidden" name="touser" value="{$touser}" id="touser">
     <script src="https://cdn.staticfile.org/jquery/3.6.0/jquery.min.js"></script>
     <script src="/static/layui/layui.js"></script>
     <script>
+        const touser = $('#touser').val();
+        if (touser) {
+            $('#to_name').val(touser);
+            $('#publish-popup').show();
+        }
         layui.use(['form', 'layer'], function () {
             var form = layui.form;
             var layer = layui.layer;
