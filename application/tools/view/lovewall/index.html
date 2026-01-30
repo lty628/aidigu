@@ -623,7 +623,7 @@
     <script>
         const touser = $('#touser').val();
         if (touser) {
-            $('#to_name').val(touser);
+            $('input[name="to_name"]').val(touser);
             $('#publish-popup').show();
         }
         layui.use(['form', 'layer'], function () {
