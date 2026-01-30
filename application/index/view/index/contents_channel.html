@@ -186,7 +186,7 @@
                             if ($("#msgId").val() == data[i].msg_id) {
                                 iframeStr = '<iframe id="iframe-comment-'+data[i].msg_id+'" style="width: 100%;border:none;min-height: 600px;" name="commentFrame" src="/tools/comment/index/?msg_id='+data[i].msg_id+'&type=channel"></iframe>';
                             } else {
-                                delStr += '<a href="/channel/' + base64Encode('channelId=' + data[i].channel_id + '&msgId=' + data[i].msg_id) + '">查看</a> |';
+                                delStr += '<a href="/channel/' + base64Encode('channelId=' + data[i].channel_id + '&msgId=' + data[i].msg_id) + '">查看</a> | ';
                             }
                             
                             if (json.data.allow_comment) {
