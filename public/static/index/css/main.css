@@ -202,8 +202,8 @@
     --background-color: linear-gradient(135deg, #F4F4F4, #E0E0E0);
     --primary-btn-color: linear-gradient(45deg, #FF6B6B, #556270);
     --light-background-color: linear-gradient(135deg, #FFFFFF, #F5F5F5);
-    --border-color: #424242;
-    --shadow-color: rgba(50, 50, 50, 0.8);
+    --border-color: #42424252;
+    --shadow-color: rgb(50 50 50 /50%);
     --warning-color: #FF4500;
 }
 
@@ -614,6 +614,7 @@ a img {
     font-weight: normal;
     padding: 0 10px;
     margin-top: 15px;
+    box-shadow: 0px 0px 3px -1px var(--shadow-color)
 }
 
 .sidebar h2 a {
