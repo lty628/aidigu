@@ -17,8 +17,8 @@
 
 /* 粉系少女主题 */
 :root.pink {
-    --base-font-color: #FF69B4;
-    --link-color: #FFB6C1;
+    --base-font-color: #ff69b4c9;
+    --link-color: #FF8CBA;
     --link-hover-color: #FF1493;
     --primary-color: #FFB6C1; /* 原 secondary-color 值 */
     --primary-hover-color: #FF69B4;
