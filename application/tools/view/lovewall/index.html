@@ -29,9 +29,11 @@
             0% {
                 background-position: 0% 50%;
             }
+
             50% {
                 background-position: 100% 50%;
             }
+
             100% {
                 background-position: 0% 50%;
             }
@@ -58,10 +60,13 @@
         }
 
         @keyframes float {
-            0%, 100% {
+
+            0%,
+            100% {
                 transform: translateY(0px) rotate(0deg);
                 opacity: 0.8;
             }
+
             50% {
                 transform: translateY(-30px) rotate(180deg);
                 opacity: 0.4;
@@ -127,9 +132,11 @@
             0% {
                 background-position: 0% 50%;
             }
+
             50% {
                 background-position: 100% 50%;
             }
+
             100% {
                 background-position: 0% 50%;
             }
@@ -343,6 +350,7 @@
                 opacity: 0;
                 transform: scale(0.7) translateY(-50px);
             }
+
             to {
                 opacity: 1;
                 transform: scale(1) translateY(0);
@@ -465,8 +473,13 @@
         }
 
         @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         /* 响应式设计 */
@@ -618,9 +631,9 @@
         </div>
     </div>
     <input type="hidden" name="touser" value="{$touser}" id="touser">
-    <script src="https://cdn.staticfile.org/jquery/3.6.0/jquery.min.js"></script>
     <script src="/static/layui/layui.js"></script>
     <script>
+        var $ = layui.jquery;
         const touser = $('#touser').val();
         if (touser) {
             $('input[name="to_name"]').val(touser);
@@ -629,6 +642,7 @@
         layui.use(['form', 'layer'], function () {
             var form = layui.form;
             var layer = layui.layer;
+            var $ = layui.jquery;
 
             // 页面状态管理
             var pageState = {
@@ -679,7 +693,7 @@
                 form.on('submit(publish-submit)', function (data) {
                     // 获取表单数据
                     var formData = data.field;
-                    
+
                     // 将匿名复选框的值转换为1或0
                     formData.is_anonymous = formData.is_anonymous ? 1 : 0;
 
@@ -954,7 +968,7 @@
                                         </div>
                                     </div>
                                 `,
-                                success: function(layero, index) {
+                                success: function (layero, index) {
                                     // 自定义弹窗样式
                                     layero.find('.layui-layer-title').css({
                                         'background': 'linear-gradient(135deg, #ff6b6b, #ff8e8e)',

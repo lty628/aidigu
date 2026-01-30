@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>时光邮局 - 写信给未来的自己</title>
+    <link rel="stylesheet" href="/static/layui/css/layui.css">
     <style>
         /* ... existing code ... */
         body {
@@ -17,9 +19,17 @@
 
         /* 渐变背景动画 */
         @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
         }
 
         /* 粒子背景 */
@@ -43,8 +53,17 @@
         }
 
         @keyframes float {
-            0%, 100% { transform: translateY(0) translateX(0); opacity: 0.5; }
-            50% { transform: translateY(-20px) translateX(10px); opacity: 1; }
+
+            0%,
+            100% {
+                transform: translateY(0) translateX(0);
+                opacity: 0.5;
+            }
+
+            50% {
+                transform: translateY(-20px) translateX(10px);
+                opacity: 1;
+            }
         }
 
         .container {
@@ -64,7 +83,7 @@
         .header h1 {
             font-size: 2.5em;
             margin: 0;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         }
 
         .header p {
@@ -86,17 +105,18 @@
 
         .filter-btn {
             padding: 8px 16px;
-            border: 2px solid rgba(255,255,255,0.3);
-            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.1);
             color: white;
             border-radius: 20px;
             cursor: pointer;
             transition: all 0.3s ease;
         }
 
-        .filter-btn:hover, .filter-btn.active {
-            background: rgba(255,255,255,0.3);
-            border-color: rgba(255,255,255,0.6);
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.6);
         }
 
         .pagination {
@@ -109,15 +129,15 @@
 
         .pagination button {
             padding: 8px 12px;
-            border: 2px solid rgba(255,255,255,0.3);
-            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.1);
             color: white;
             border-radius: 5px;
             cursor: pointer;
         }
 
         .pagination button:hover:not(:disabled) {
-            background: rgba(255,255,255,0.3);
+            background: rgba(255, 255, 255, 0.3);
         }
 
         .pagination button:disabled {
@@ -137,21 +157,21 @@
 
         .left-panel {
             flex: 1;
-            background: rgba(255,255,255,0.1);
+            background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
             border-radius: 15px;
             padding: 20px;
-            border: 1px solid rgba(255,255,255,0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             overflow-y: auto;
         }
 
         .right-panel {
             flex: 2;
-            background: rgba(255,255,255,0.1);
+            background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
             border-radius: 15px;
             padding: 20px;
-            border: 1px solid rgba(255,255,255,0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             overflow-y: auto;
         }
 
@@ -170,7 +190,7 @@
 
         .write-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
         }
 
         .letter-list {
@@ -181,7 +201,7 @@
         .letter-item {
             padding: 15px;
             margin-bottom: 10px;
-            background: rgba(255,255,255,0.1);
+            background: rgba(255, 255, 255, 0.1);
             border-radius: 10px;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -189,13 +209,13 @@
         }
 
         .letter-item:hover {
-            background: rgba(255,255,255,0.2);
-            border-color: rgba(255,255,255,0.3);
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.3);
         }
 
         .letter-item.active {
-            background: rgba(255,255,255,0.3);
-            border-color: rgba(255,255,255,0.5);
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.5);
         }
 
         .letter-item strong {
@@ -216,7 +236,7 @@
 
         .letter-meta {
             font-size: 12px;
-            color: rgba(255,255,255,0.7);
+            color: rgba(255, 255, 255, 0.7);
         }
 
         .letter-detail h2 {
@@ -225,7 +245,7 @@
         }
 
         .letter-info {
-            background: rgba(255,255,255,0.1);
+            background: rgba(255, 255, 255, 0.1);
             padding: 15px;
             border-radius: 10px;
             margin-bottom: 20px;
@@ -249,7 +269,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.8);
+            background: rgba(0, 0, 0, 0.8);
             z-index: 1000;
             align-items: center;
             justify-content: center;
@@ -321,7 +341,7 @@
 
         .submit-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
         }
 
         .loading {
@@ -329,9 +349,11 @@
             color: white;
             padding: 20px;
         }
+
         /* ... existing code ... */
     </style>
 </head>
+
 <body>
     <!-- 粒子背景 -->
     <div id="particle-bg"></div>
@@ -358,7 +380,7 @@
                 <div class="letter-list" id="letterList">
                     <div class="loading">加载中...</div>
                 </div>
-                
+
                 <!-- 分页控件 -->
                 <div class="pagination" id="pagination">
                     <button id="prevPage" disabled>&lt; 上一页</button>
@@ -416,8 +438,9 @@
     </div>
 
     <input type="hidden" name="touser" value="{$touser}" id="touser">
-    <script src="https://cdn.staticfile.org/jquery/3.6.0/jquery.min.js"></script>
+    <script src="/static/layui/layui.js"></script>
     <script>
+        var $ = layui.jquery;
         // 当前筛选状态和分页信息
         let currentStatus = '';
         let currentPage = 1;
@@ -453,11 +476,11 @@
                 status: currentStatus,
                 page: page,
                 limit: limit
-            }, function(res) {
+            }, function (res) {
                 if (res.code === 0) {
                     let html = '';
                     if (res.data.length > 0) {
-                        res.data.forEach(function(item) {
+                        res.data.forEach(function (item) {
                             html += `
                                 <div class="letter-item" data-id="${item.id}">
                                     <strong>${item.title}</strong>
@@ -471,9 +494,9 @@
                     } else {
                         html = '<div class="no-data" style="color: white; text-align: center; padding: 20px;">暂无信件</div>';
                     }
-                    
+
                     $('#letterList').html(html);
-                    
+
                     // 更新分页信息
                     currentPage = res.pagination.currentPage;
                     totalPages = res.pagination.totalPages;
@@ -487,7 +510,7 @@
         function updatePaginationControls() {
             $('#prevPage').prop('disabled', currentPage <= 1);
             $('#nextPage').prop('disabled', currentPage >= totalPages);
-            
+
             if (totalPages > 0) {
                 $('#paginationInfo').text(`第 ${currentPage} 页，共 ${totalPages} 页 (${totalRecords} 条记录)`);
             } else {
@@ -497,7 +520,7 @@
 
         // 显示信件详情
         function showLetterDetail(id) {
-            $.get(`/tools/letter/getDetail/?id=${id}`, function(res) {
+            $.get(`/tools/letter/getDetail/?id=${id}`, function (res) {
                 if (res.code === 0) {
                     const letter = res.data;
                     $('#letterDetail').html(`
@@ -521,7 +544,7 @@
 
         // 初始化筛选按钮事件
         function initFilterButtons() {
-            $('.filter-btn').click(function() {
+            $('.filter-btn').click(function () {
                 $('.filter-btn').removeClass('active');
                 $(this).addClass('active');
                 currentStatus = $(this).data('status');
@@ -532,13 +555,13 @@
 
         // 初始化分页按钮事件
         function initPaginationButtons() {
-            $('#prevPage').click(function() {
+            $('#prevPage').click(function () {
                 if (currentPage > 1) {
                     loadLetterList(currentPage - 1);
                 }
             });
 
-            $('#nextPage').click(function() {
+            $('#nextPage').click(function () {
                 if (currentPage < totalPages) {
                     loadLetterList(currentPage + 1);
                 }
@@ -548,7 +571,7 @@
         // 初始化弹窗交互
         function initPopup() {
             // 打开写信弹窗
-            $('#btnWrite').click(function() {
+            $('#btnWrite').click(function () {
                 $('#writeModal').css('display', 'flex');
                 // 重置表单
                 $('#letterForm')[0].reset();
@@ -556,19 +579,19 @@
             });
 
             // 关闭写信弹窗
-            $('#closeBtn').click(function() {
+            $('#closeBtn').click(function () {
                 $('#writeModal').hide();
             });
 
             // 点击弹窗外部关闭
-            $('#writeModal').click(function(e) {
+            $('#writeModal').click(function (e) {
                 if (e.target === this) {
                     $(this).hide();
                 }
             });
 
             // 时间类型切换
-            $('input[name="time_type"]').change(function() {
+            $('input[name="time_type"]').change(function () {
                 if ($(this).val() === 'future') {
                     $('#futureTimeDiv').show();
                 } else {
@@ -577,21 +600,21 @@
             });
 
             // 提交信件
-            $('#letterForm').submit(function(e) {
+            $('#letterForm').submit(function (e) {
                 e.preventDefault();
-                
+
                 var formData = {
                     receiver: $('#receiver').val(),
                     title: $('#title').val(),
                     content: $('#content').val()
                 };
-                
+
                 // 处理时间
                 if ($('input[name="time_type"]:checked').val() === 'future') {
                     formData.receive_time = $('#receive_time').val();
                 }
-                
-                $.post('/tools/letter/send', formData, function(res) {
+
+                $.post('/tools/letter/send', formData, function (res) {
                     if (res.code === 0) {
                         alert('发送成功');
                         $('#writeModal').hide();
@@ -613,11 +636,11 @@
         }
 
         // 页面加载完成后初始化
-        $(document).ready(function() {
+        $(document).ready(function () {
             init();
 
             // 点击信件项显示详情
-            $(document).on('click', '.letter-item', function() {
+            $(document).on('click', '.letter-item', function () {
                 $('.letter-item').removeClass('active');
                 $(this).addClass('active');
                 const id = $(this).data('id');
