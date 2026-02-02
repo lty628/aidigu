@@ -252,16 +252,16 @@ function compressImage(file) {
         const fileSize = file.size;
         if (fileSize <= 500 * 1024) {
             // 500KB以下轻微压缩
-            targetSize = fileSize * 0.8;
+            targetSize = fileSize * 0.95;
         } else if (fileSize > 500 * 1024 && fileSize <= 2 * 1024 * 1024) {
-            // 500KB-2MB压缩至200KB内
-            targetSize = 200 * 1024;
+            // 500KB-2MB压缩至80%大小
+            targetSize = fileSize * 0.8;
         } else if (fileSize > 2 * 1024 * 1024 && fileSize <= 3 * 1024 * 1024) {
-            // 2MB-3MB压缩至300KB内
-            targetSize = 300 * 1024;
+            // 2MB-3MB压缩至70%大小
+            targetSize = fileSize * 0.7;
         } else {
-            // 3MB以上压缩至500KB内
-            targetSize = 500 * 1024;
+            // 3MB以上压缩至60%大小
+            targetSize = fileSize * 0.6;
         }
 
         const canvas = document.createElement('canvas');
@@ -270,8 +270,8 @@ function compressImage(file) {
 
         img.onload = function () {
             // 计算缩放比例
-            const maxWidth = 1920;
-            const maxHeight = 1080;
+            const maxWidth = 3840; // 提高最大宽度限制
+            const maxHeight = 2160; // 提高最大高度限制
             let width = img.width;
             let height = img.height;
 
@@ -292,13 +292,13 @@ function compressImage(file) {
             ctx.drawImage(img, 0, 0, width, height);
 
             // 使用二分法查找合适的压缩质量
-            let minQuality = 0.1;
-            let maxQuality = 0.9;
-            let finalQuality = 0.7;
+            let minQuality = 0.3;
+            let maxQuality = 0.95;
+            let finalQuality = 0.85;
 
             // 如果文件本身就很小，就不需要大幅度压缩了
             if (fileSize <= 100 * 1024) {
-                finalQuality = 0.9;
+                finalQuality = 0.95;
             } else {
                 // 使用二分法寻找合适的压缩质量
                 const binarySearchQuality = (min, max, attempts = 0) => {
