@@ -229,10 +229,10 @@
         <!-- 导航栏 -->
         <nav class="navbar">
             <a href="/" class="logo">爱<span>嘀咕</span></a>
-            <div class="nav-links">
+            <!-- <div class="nav-links">
                 <a href="/article/">嘀咕博客</a>
                 <a href="/article/link/">网址导航</a>
-            </div>
+            </div> -->
             {if !$userInfo}
             <div class="auth-buttons">
                 <a href="/login/" class="btn btn-login">登录</a>
@@ -247,10 +247,10 @@
             <p class="subtitle">一个温暖有趣的社交平台，分享生活点滴，记录美好瞬间</p>
             
             <div class="action-buttons">
+                <a href="/article/" class="btn btn-login">嘀咕博客</a>
+                <a href="/article/link/" class="btn btn-login">网址导航</a>
                 {if $userInfo}
-                <a href="/square/" class="btn btn-register">进入广场</a>
-                {else}
-                <a href="/register/" class="btn btn-register">立即加入</a>
+                <a href="/square/" class="btn btn-register">进入微博广场</a>
                 {/if}
             </div>
             
