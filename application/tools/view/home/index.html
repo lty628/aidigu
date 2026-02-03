@@ -233,12 +233,10 @@
                 <a href="/article/">嘀咕博客</a>
                 <a href="/article/link/">网址导航</a>
             </div> -->
-            {if !$userInfo}
-            <div class="auth-buttons">
+            <!-- <div class="auth-buttons">
                 <a href="/login/" class="btn btn-login">登录</a>
                 <a href="/register/" class="btn btn-register">注册</a>
-            </div>
-            {/if}
+            </div> -->
         </nav>
 
         <!-- 主体内容 -->
@@ -251,6 +249,8 @@
                 <a href="/article/link/" class="btn btn-login">网址导航</a>
                 {if $userInfo}
                 <a href="/square/" class="btn btn-register">进入微博广场</a>
+                {else}
+                <a href="/login/" class="btn btn-register">进入微博广场</a>
                 {/if}
             </div>
             
