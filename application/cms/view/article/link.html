@@ -4,7 +4,7 @@
 <main class="main-content">
     <div class="container">
         <section class="news-section">
-            <h2 class="section-title">网址<span>导航</span></h2>
+            <!-- <h2 class="section-title">网址<span>导航</span></h2> -->
             
             <div class="nav-categories">
                 <!-- 友情链接分类 -->
@@ -48,22 +48,11 @@
         display: flex;
         flex-direction: column;
         gap: 40px;
-        margin-top: 40px;
+        /* margin-top: 40px; */
     }
     
     .nav-category {
-        background: white;
-        border-radius: 16px;
-        padding: 30px;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
-        transition: all 0.3s ease;
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        backdrop-filter: blur(10px);
-    }
-    
-    .nav-category:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        padding: 0 10px;
     }
     
     .category-title {
@@ -77,8 +66,8 @@
     
     .nav-list {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-        gap: 25px;
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 15px;
         justify-content: center;
     }
     
@@ -87,9 +76,9 @@
         flex-direction: column;
         align-items: center;
         text-align: center;
-        padding: 20px 15px;
+        padding: 15px 10px;
         background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-        border-radius: 14px;
+        border-radius: 12px;
         text-decoration: none;
         transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
         border: 1px solid rgba(0, 0, 0, 0.03);
@@ -120,17 +109,15 @@
     }
     
     .nav-icon {
-        font-size: 32px;
-        width: 70px;
-        height: 70px;
+        font-size: 24px;
+        width: 50px;
+        height: 50px;
         display: flex;
         align-items: center;
         justify-content: center;
-        background: linear-gradient(135deg, var(--secondary), #6ddde5);
-        border-radius: 16px;
-        box-shadow: 0 8px 20px rgba(78, 205, 196, 0.4);
+        border-radius: 12px;
         color: white;
-        margin-bottom: 12px;
+        margin-bottom: 8px;
     }
     
     .nav-info {
@@ -138,22 +125,22 @@
     }
     
     .nav-name {
-        font-size: 16px;
+        font-size: 14px;
         color: var(--dark);
-        margin-bottom: 8px;
+        margin-bottom: 6px;
         font-weight: 600;
         word-break: break-word;
     }
     
     .nav-description {
-        font-size: 12px;
+        font-size: 11px;
         color: #666;
-        line-height: 1.4;
+        line-height: 1.3;
         display: -webkit-box;
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
         overflow: hidden;
-        height: 2.8em;
+        height: 2.6em;
     }
     
     /* 响应式设计 */
@@ -171,34 +158,34 @@
         }
         
         .nav-list {
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-            gap: 15px;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 12px;
         }
         
         .nav-card {
-            padding: 15px 10px;
+            padding: 12px 8px;
         }
         
         .nav-icon {
-            font-size: 28px;
-            width: 60px;
-            height: 60px;
-            margin-bottom: 8px;
+            font-size: 20px;
+            width: 45px;
+            height: 45px;
+            margin-bottom: 6px;
         }
         
         .nav-name {
-            font-size: 14px;
+            font-size: 13px;
         }
         
         .nav-description {
-            font-size: 11px;
-            height: 2.6em;
+            font-size: 10px;
+            height: 2.4em;
         }
     }
     
     @media (max-width: 480px) {
         .nav-list {
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(3, 1fr);
         }
     }
     

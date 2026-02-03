@@ -271,10 +271,10 @@ h4 {
 
 /* 新闻列表 */
 .news-section {
-    background: white;
-    border-radius: 20px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
-    padding: 40px;
+    /* background: white; */
+    /* border-radius: 20px; */
+    /* box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05); */
+    padding: 20px 0;
     margin-bottom: 40px;
 }
 
@@ -296,7 +296,7 @@ h4 {
 }
 
 .news-card {
-    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    background: linear-gradient(135deg, #ffffff 0%, #ecf3ff 100%);
     border-radius: 15px;
     overflow: hidden;
     transition: transform 0.3s ease, box-shadow 0.3s ease;

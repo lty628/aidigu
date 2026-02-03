@@ -22,11 +22,13 @@
                         {{if isset($vo.content_extra.article_media) && $vo.content_extra.article_media}}
                         <img src="{{$vo.content_extra.article_media}}" alt="{{$vo.title}}" class="news-image">
                         {{else}}
-                        <!-- <img src="/static/cms/images/news1.jpg" alt="{{$vo.title}}" class="news-image"></img> -->
+                        <div class="news-image-placeholder random-color-placeholder" style="height: 200px;background: var(--secondary); display: flex; align-items: center; justify-content: center;">
+                            <div style="font-size: 16px; color: #fff;">无图片</div>
+                        </div>
                         {{/if}}
                         <div class="news-content">
                             <h3 class="news-title">{{$vo.title}}</h3>
-                            <p class="news-excerpt">{{if mb_strlen($vo.content) > 200}}{{$vo.content | strip_tags | mb_substr=0,200}}...{{else}}{{$vo.content | strip_tags}}{{/if}}</p>
+                            <!-- <p class="news-excerpt">{{if mb_strlen($vo.content) > 200}}{{$vo.content | strip_tags | mb_substr=0,200}}...{{else}}{{$vo.content | strip_tags}}{{/if}}</p> -->
                             <div class="news-meta">
                                 <span>{{$vo.create_time | formatTime}}</span>
                                 <span>作者：{{$vo.user.nickname}}</span>
