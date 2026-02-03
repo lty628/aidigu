@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>爱嘀咕 - 发现有趣的灵魂</title>
-    <style>
+     <style>
         :root {
             --primary: #FF6B6B;
             --secondary: #4ECDC4;
@@ -32,10 +31,7 @@
             overflow-x: hidden;
         }
 
-        h1,
-        h2,
-        h3,
-        h4 {
+        h1, h2, h3, h4 {
             font-family: 'Poppins', sans-serif;
             font-weight: 700;
         }
@@ -359,7 +355,7 @@
             box-shadow: 0 15px 30px rgba(255, 107, 107, 0.3);
             transition: all 0.3s ease;
         } */
-        .feature-icon img {
+        .feature-icon img{ 
             height: 150px;
             border-radius: 10px;
             /* box-shadow: 0 15px 30px rgba(255, 107, 107, 0.3); */
@@ -465,7 +461,7 @@
             height: 150%;
             top: -25%;
             left: -25%;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
             background-size: 30px 30px;
             animation: pulse 15s linear infinite;
         }
@@ -575,8 +571,7 @@
             color: #aaa;
             font-size: 1rem;
         }
-
-        .hero-image-showcase {
+                .hero-image-showcase {
             width: 100%;
             max-width: 550px;
             height: 450px;
@@ -638,7 +633,6 @@
                 opacity: 0;
                 transform: translateX(-60px);
             }
-
             to {
                 opacity: 1;
                 transform: translateX(0);
@@ -650,7 +644,6 @@
                 opacity: 0;
                 transform: translateX(60px);
             }
-
             to {
                 opacity: 1;
                 transform: translateX(0);
@@ -658,12 +651,9 @@
         }
 
         @keyframes float {
-
-            0%,
-            100% {
+            0%, 100% {
                 transform: translateY(0) rotate(0deg);
             }
-
             50% {
                 transform: translateY(-25px) rotate(5deg);
             }
@@ -673,11 +663,9 @@
             0% {
                 box-shadow: 0 12px 25px rgba(255, 107, 107, 0.35);
             }
-
             50% {
                 box-shadow: 0 12px 35px rgba(255, 107, 107, 0.55);
             }
-
             100% {
                 box-shadow: 0 12px 25px rgba(255, 107, 107, 0.35);
             }
@@ -789,7 +777,6 @@
         }
     </style>
 </head>
-
 <body>
     <!-- 导航栏 -->
     <nav class="navbar">
@@ -828,37 +815,153 @@
                     <!-- <a href="#features" class="btn btn-login">了解更多</a> -->
                 </div>
             </div>
-            <div class="hero-image">
-                <div class="hero-image-showcase">
-                    <div class="image-slider">
-                        <img src="/static/tools/common/home/dh.png" alt="爱嘀咕功能展示" class="slider-image active">
-                        <img src="/static/tools/common/home/gc.png" alt="爱嘀咕广场" class="slider-image">
-                        <img src="/static/tools/common/home/gj.png" alt="爱嘀咕工具" class="slider-image">
-                        <img src="/static/tools/common/home/ht.png" alt="爱嘀咕话题" class="slider-image">
+                            <div class="hero-image">
+                    <div class="hero-image-showcase">
+                        <div class="image-slider">
+                            <img src="/static/tools/common/home/dh.png" alt="爱嘀咕功能展示" class="slider-image active">
+                            <img src="/static/tools/common/home/gc.png" alt="爱嘀咕广场" class="slider-image">
+                            <img src="/static/tools/common/home/gj.png" alt="爱嘀咕工具" class="slider-image">
+                            <img src="/static/tools/common/home/ht.png" alt="爱嘀咕话题" class="slider-image">
+                        </div>
+                        <div class="slider-dots">
+                            <span class="dot active" data-slide="0"></span>
+                            <span class="dot" data-slide="1"></span>
+                            <span class="dot" data-slide="2"></span>
+                            <span class="dot" data-slide="3"></span>
+                        </div>
                     </div>
-                    <div class="slider-dots">
-                        <span class="dot active" data-slide="0"></span>
-                        <span class="dot" data-slide="1"></span>
-                        <span class="dot" data-slide="2"></span>
-                        <span class="dot" data-slide="3"></span>
+                </div>
+        </div>
+    </section>
+
+    <!-- 特色功能 -->
+    <section class="features" id="features">
+        <div class="container">
+            <h2 class="section-title">最新<span>文章</span></h2>
+            <div class="features-grid">
+                {volist name="articleList" id="vo"}
+                <div class="feature-card animate-on-scroll" onclick="location.href='/article/detail/{$vo.content_id}.html'">
+                    <div class="feature-icon">
+                        {php}$vo['content_extra'] = json_decode($vo['content_extra'], true);{/php}
+                        {if isset($vo.content_extra.article_media) && $vo.content_extra.article_media}
+                        <img src="{$vo.content_extra.article_media}" alt="{$vo.title}" class="news-image">
+                        {else}
+                        <i class="fas fa-user-friends"></i>
+                        {/if}
+                    </div>
+                    <h4>{$vo.title}</h4>   
+                    <!-- <p>{if mb_strlen($vo.content_filtered) > 200}{$vo.content_filtered | strip_tags | mb_substr=0,200}...{else}{$vo.content_filtered | strip_tags}{/if}</p> -->
+                </div>
+                {/volist}
+            </div>
+        </div>
+    </section>
+
+    <!-- 用户评价 -->
+    <section class="testimonials" id="testimonials">
+        <div class="container">
+            <h2 class="section-title">用户<span>怎么说</span>？</h2>
+            <div class="testimonials-grid">
+                <div class="testimonial-card animate-on-scroll">
+                    <p class="testimonial-text">"在爱嘀咕认识了很多志同道合的朋友，每天分享生活中的小确幸，感觉生活变得更加美好了！"</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">小A</div>
+                        <div class="author-info">
+                            <h4>快乐每一天</h4>
+                            <p>使用6个月</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card animate-on-scroll">
+                    <p class="testimonial-text">"隐私保护做得非常好，我可以放心地分享自己的想法和感受，不用担心被不必要的人看到。"</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">小B</div>
+                        <div class="author-info">
+                            <h4>自由的风</h4>
+                            <p>使用3个月</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card animate-on-scroll">
+                    <p class="testimonial-text">"界面设计简洁美观，功能丰富但不复杂，很容易上手。已经推荐给身边的朋友们了！"</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">小C</div>
+                        <div class="author-info">
+                            <h4>科技爱好者</h4>
+                            <p>使用1年</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
+    <!-- CTA区域 -->
+    <section class="cta">
+        <div class="container">
+            <div class="cta-content">
+                <h2>加入爱嘀咕，开启精彩社交之旅</h2>
+                <p>已经有超过10,000名用户在这里找到了属于自己的朋友圈，你也快来加入我们吧！</p>
+                <a href="/register/" class="btn">免费注册，立即体验</a>
+            </div>
+        </div>
+    </section>
 
-    <div class="copyright">
-        <p>&copy; 2025 爱嘀咕. 保留所有权利。</p>
-    </div>
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>爱嘀咕</h3>
+                    <p>一个温暖有趣的社交平台，致力于让用户发现有趣的人，分享真实的生活。</p>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-weibo"></i></a>
+                        <a href="#"><i class="fab fa-weixin"></i></a>
+                        <a href="#"><i class="fab fa-github"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>快速链接</h3>
+                    <ul>
+                        <li><a href="/">首页</a></li>
+                        <li><a href="/explore">发现</a></li>
+                        <li><a href="/topics">话题</a></li>
+                        <li><a href="/users">用户</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>关于我们</h3>
+                    <ul>
+                        <li><a href="/about">关于我们</a></li>
+                        <li><a href="/contact">联系我们</a></li>
+                        <li><a href="/privacy">隐私政策</a></li>
+                        <li><a href="/terms">服务条款</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>联系方式</h3>
+                    <ul>
+                        <li><i class="fas fa-envelope"></i> contact@aidigu.com</li>
+                        <li><i class="fas fa-phone"></i> 400-123-4567</li>
+                        <li><i class="fas fa-map-marker-alt"></i> 北京市朝阳区某某大厦</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 爱嘀咕. 保留所有权利。</p>
+            </div>
+        </div>
+    </footer>
+
     <script>
         // 粒子动画
-        (function () {
+        (function() {
             var canvas = document.createElement('canvas');
             var ctx = canvas.getContext('2d');
             var particles = [];
             var particleCount = 80;
-
+            
             function init() {
                 canvas.width = window.innerWidth;
                 canvas.height = window.innerHeight;
@@ -868,7 +971,7 @@
                 canvas.style.zIndex = '1';
                 canvas.style.pointerEvents = 'none';
                 document.querySelector('.hero').appendChild(canvas);
-
+                
                 for (var i = 0; i < particleCount; i++) {
                     particles.push({
                         x: Math.random() * canvas.width,
@@ -876,43 +979,43 @@
                         size: Math.random() * 4 + 1,
                         speedX: Math.random() * 0.5 - 0.25,
                         speedY: Math.random() * 0.5 - 0.25,
-                        color: 'rgba(255, 107, 107, ' + (Math.random() * 0.5 + 0.3) + ')'
+                        color: 'rgba(255, 107, 107, ' + (Math.random() * 0.5 + 0.3) + ')' 
                     });
                 }
-
+                
                 animate();
             }
-
+            
             function animate() {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
-
+                
                 for (var i = 0; i < particles.length; i++) {
                     var p = particles[i];
                     ctx.beginPath();
                     ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
                     ctx.fillStyle = p.color;
                     ctx.fill();
-
+                    
                     p.x += p.speedX;
                     p.y += p.speedY;
-
+                    
                     if (p.x < 0 || p.x > canvas.width) p.speedX *= -1;
                     if (p.y < 0 || p.y > canvas.height) p.speedY *= -1;
                 }
-
+                
                 requestAnimationFrame(animate);
             }
-
-            window.addEventListener('resize', function () {
+            
+            window.addEventListener('resize', function() {
                 canvas.width = window.innerWidth;
                 canvas.height = window.innerHeight;
             });
-
+            
             init();
         })();
 
         // 滚动效果
-        window.addEventListener('scroll', function () {
+        window.addEventListener('scroll', function() {
             const navbar = document.querySelector('.navbar');
             if (window.scrollY > 50) {
                 navbar.style.padding = '10px 0';
@@ -950,8 +1053,8 @@
         document.querySelectorAll('.animate-on-scroll').forEach(el => {
             observer.observe(el);
         });
-        // 图片轮播
-        (function () {
+                // 图片轮播
+        (function() {
             let currentSlide = 0;
             const slides = document.querySelectorAll('.slider-image');
             const dots = document.querySelectorAll('.dot');
@@ -987,5 +1090,4 @@
         })();
     </script>
 </body>
-
 </html>
