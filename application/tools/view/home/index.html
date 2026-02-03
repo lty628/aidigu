@@ -576,7 +576,7 @@
             font-size: 1rem;
         }
 
-        .hero-image-showcase {
+        .hero-text-showcase {
             width: 100%;
             max-width: 550px;
             height: 450px;
@@ -586,27 +586,47 @@
             box-shadow: 0 40px 80px rgba(26, 83, 92, 0.25);
             animation: float 8s ease-in-out infinite;
             background: linear-gradient(135deg, var(--secondary), var(--accent));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+            padding: 30px;
         }
 
-        .image-slider {
+        .text-slider {
             width: 100%;
             height: 100%;
             position: relative;
         }
 
-        .slider-image {
+        .slider-text {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             opacity: 0;
             transition: opacity 0.5s ease-in-out;
+            padding: 30px;
         }
 
-        .slider-image.active {
+        .slider-text.active {
             opacity: 1;
+        }
+
+        .slider-text h3 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+        }
+
+        .slider-text p {
+            font-size: 1.1rem;
+            line-height: 1.6;
         }
 
         .slider-dots {
@@ -829,12 +849,24 @@
                 </div>
             </div>
             <div class="hero-image">
-                <div class="hero-image-showcase">
-                    <div class="image-slider">
-                        <img src="/static/tools/common/home/dh.png" alt="爱嘀咕功能展示" class="slider-image active">
-                        <img src="/static/tools/common/home/gc.png" alt="爱嘀咕广场" class="slider-image">
-                        <img src="/static/tools/common/home/gj.png" alt="爱嘀咕工具" class="slider-image">
-                        <img src="/static/tools/common/home/ht.png" alt="爱嘀咕话题" class="slider-image">
+                <div class="hero-text-showcase">
+                    <div class="text-slider">
+                        <div class="slider-text active">
+                            <h3>功能丰富</h3>
+                            <p>爱嘀咕提供多样化功能，满足您的社交需求，让表达更自由、交流更便捷</p>
+                        </div>
+                        <div class="slider-text">
+                            <h3>社区活跃</h3>
+                            <p>汇聚有趣灵魂的社区，发现志同道合的朋友，分享生活的点滴与感悟</p>
+                        </div>
+                        <div class="slider-text">
+                            <h3>工具实用</h3>
+                            <p>集成多种实用工具，提升效率，让生活工作更加便利和高效</p>
+                        </div>
+                        <div class="slider-text">
+                            <h3>话题多样</h3>
+                            <p>涵盖各类热门话题，参与讨论，拓展视野，发现更多可能性</p>
+                        </div>
                     </div>
                     <div class="slider-dots">
                         <span class="dot active" data-slide="0"></span>
@@ -950,10 +982,10 @@
         document.querySelectorAll('.animate-on-scroll').forEach(el => {
             observer.observe(el);
         });
-        // 图片轮播
+        // 文字轮播
         (function () {
             let currentSlide = 0;
-            const slides = document.querySelectorAll('.slider-image');
+            const slides = document.querySelectorAll('.slider-text');
             const dots = document.querySelectorAll('.dot');
             const totalSlides = slides.length;
 
@@ -975,7 +1007,7 @@
                 showSlide(nextIndex);
             }
 
-            // 点击指示点切换图片
+            // 点击指示点切换文字
             dots.forEach((dot, index) => {
                 dot.addEventListener('click', () => {
                     showSlide(index);
