@@ -12,10 +12,6 @@
             --accent: #FFD166;
             --dark: #1A535C;
             --light: #F7FFF7;
-            --pink: #FF8EDF;
-            --purple: #B57BF9;
-            --sky-blue: #64B5F6;
-            --mint: #81C784;
         }
 
         * {
@@ -29,15 +25,6 @@
             background: linear-gradient(135deg, #F7FFF7 0%, #E3FDFD 100%);
             color: var(--dark);
             line-height: 1.6;
-            overflow-x: hidden;
-        }
-
-        h1,
-        h2,
-        h3,
-        h4 {
-            font-family: 'Poppins', sans-serif;
-            font-weight: 700;
         }
 
         .container {
@@ -53,14 +40,6 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            left: 0;
-            z-index: 1000;
-            background: rgba(247, 255, 247, 0.95);
-            backdrop-filter: blur(15px);
-            transition: all 0.3s ease;
         }
 
         .logo {
@@ -68,7 +47,6 @@
             font-weight: 700;
             color: var(--primary);
             text-decoration: none;
-            text-shadow: 2px 2px 4px rgba(255, 107, 107, 0.2);
         }
 
         .logo span {
@@ -76,9 +54,8 @@
         }
 
         .nav-links {
-            padding: 10px 0;
             display: flex;
-            gap: 35px;
+            gap: 30px;
         }
 
         .nav-links a {
@@ -86,39 +63,19 @@
             color: var(--dark);
             font-weight: 500;
             transition: all 0.3s ease;
-            position: relative;
-            font-size: 16px;
         }
 
         .nav-links a:hover {
             color: var(--primary);
-            transform: translateY(-2px);
-        }
-
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 0;
-            height: 3px;
-            background: linear-gradient(90deg, var(--primary), var(--pink));
-            border-radius: 10px;
-            transition: width 0.3s ease;
-        }
-
-        .nav-links a:hover::after {
-            width: 100%;
         }
 
         .auth-buttons {
-            margin-top: 20px;
             display: flex;
-            gap: 20px;
+            gap: 15px;
         }
 
         .btn {
-            padding: 12px 28px;
+            padding: 10px 25px;
             border-radius: 50px;
             text-decoration: none;
             font-weight: 600;
@@ -126,10 +83,6 @@
             cursor: pointer;
             border: none;
             font-size: 16px;
-            display: inline-block;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
         }
 
         .btn-login {
@@ -141,897 +94,197 @@
         .btn-login:hover {
             background: var(--dark);
             color: white;
-            transform: translateY(-3px);
-            box-shadow: 0 12px 25px rgba(26, 83, 92, 0.25);
         }
 
         .btn-register {
-            background: linear-gradient(135deg, var(--primary), var(--pink));
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
-            box-shadow: 0 12px 25px rgba(255, 107, 107, 0.35);
-            animation: pulse 2s infinite;
         }
 
         .btn-register:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 18px 30px rgba(255, 107, 107, 0.5);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
         }
 
-        /* 英雄区域 */
-        .hero {
-            padding: 150px 0 100px;
+        /* 主体内容 */
+        .main-content {
             display: flex;
-            align-items: center;
-            min-height: 100vh;
-            position: relative;
-            overflow: hidden;
-        }
-
-        #particles-js {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            z-index: 1;
-        }
-
-        .hero-content {
-            /* margin-top: 65px; */
-            animation: fadeInLeft 1s ease-out;
-            position: relative;
-            z-index: 2;
-        }
-
-        .hero-image {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            animation: fadeInRight 1s ease-out 0.2s both;
-            position: relative;
-            z-index: 2;
-        }
-
-        .hero h1 {
-            font-size: 4rem;
-            line-height: 1.1;
-            margin: 25px 0;
-            color: var(--dark);
-            text-shadow: 2px 2px 4px rgba(26, 83, 92, 0.1);
-        }
-
-        .hero h1 span {
-            color: var(--primary);
-            position: relative;
-        }
-
-        .hero h1 span::after {
-            content: '';
-            position: absolute;
-            bottom: 8px;
-            left: 0;
-            width: 100%;
-            height: 20px;
-            background: rgba(255, 107, 107, 0.3);
-            z-index: -1;
-            transform: rotate(-1deg);
-            border-radius: 50%;
-        }
-
-        .hero p {
-            font-size: 1.3rem;
-            margin-bottom: 40px;
-            color: var(--dark);
-            max-width: 650px;
-            opacity: 0.9;
-        }
-
-        .hero-buttons {
-            display: flex;
-            gap: 25px;
-            flex-wrap: wrap;
-        }
-
-        .hero-buttons .btn {
-            padding: 15px 35px;
-            font-size: 18px;
-        }
-
-        .hero-image-placeholder {
-            width: 100%;
-            max-width: 550px;
-            height: 450px;
-            background: linear-gradient(135deg, var(--secondary), var(--accent));
-            border-radius: 35px;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 40px 80px rgba(26, 83, 92, 0.25);
-            animation: float 8s ease-in-out infinite;
-        }
-
-        .bubble {
-            position: absolute;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.35);
-            animation: float 6s ease-in-out infinite;
-        }
-
-        .bubble:nth-child(1) {
-            width: 90px;
-            height: 90px;
-            top: 18%;
-            left: 8%;
-            animation-delay: 0s;
-        }
-
-        .bubble:nth-child(2) {
-            width: 70px;
-            height: 70px;
-            top: 65%;
-            left: 18%;
-            animation-delay: 1s;
-        }
-
-        .bubble:nth-child(3) {
-            width: 110px;
-            height: 110px;
-            top: 45%;
-            right: 12%;
-            animation-delay: 2s;
-        }
-
-        .bubble:nth-child(4) {
-            width: 50px;
-            height: 50px;
-            top: 80%;
-            right: 25%;
-            animation-delay: 1.5s;
-        }
-
-        /* 特色功能 */
-        .features {
-            padding: 120px 0;
-            background: white;
-            position: relative;
-        }
-
-        .features::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100px;
-            background: linear-gradient(180deg, #E3FDFD 0%, white 100%);
-            z-index: 1;
-        }
-
-        .section-title {
-            text-align: center;
-            font-size: 3rem;
-            margin-bottom: 70px;
-            color: var(--dark);
-            position: relative;
-            z-index: 2;
-        }
-
-        .section-title span {
-            color: var(--primary);
-        }
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 40px;
-            position: relative;
-            z-index: 2;
-        }
-
-        .feature-card {
-            background: var(--light);
-            border-radius: 25px;
-            padding: 40px 30px;
-            text-align: center;
-            transition: all 0.4s ease;
-            box-shadow: 0 15px 40px rgba(26, 83, 92, 0.08);
-            position: relative;
-            overflow: hidden;
-            border: 2px solid transparent;
-            cursor: pointer;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-15px) scale(1.02);
-            box-shadow: 0 25px 55px rgba(26, 83, 92, 0.15);
-        }
-
-        /* .feature-icon {
-            width: 100px;
-            height: 100px;
-            background: linear-gradient(135deg, var(--primary), var(--pink));
-            border-radius: 50%;
-            display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 30px;
-            font-size: 40px;
-            color: white;
-            box-shadow: 0 15px 30px rgba(255, 107, 107, 0.3);
-            transition: all 0.3s ease;
-        } */
-        .feature-icon img {
-            height: 150px;
-            border-radius: 10px;
-            /* box-shadow: 0 15px 30px rgba(255, 107, 107, 0.3); */
+            min-height: 80vh;
+            text-align: center;
+            padding: 50px 0;
         }
 
-        /* .feature-card:hover .feature-icon {
-            transform: scale(1.1) rotate(5deg);
-            box-shadow: 0 20px 40px rgba(255, 107, 107, 0.4);
-        } */
-
-        .feature-card h3 {
-            font-size: 1.8rem;
+        h1 {
+            font-size: 3.5rem;
             margin-bottom: 20px;
             color: var(--dark);
         }
 
-        .feature-card p {
-            color: var(--dark);
-            opacity: 0.85;
-            font-size: 1.1rem;
-            line-height: 1.7;
-        }
-
-        /* 用户评价 */
-        .testimonials {
-            padding: 120px 0;
-            background: linear-gradient(135deg, #F7FFF7 0%, #E3FDFD 100%);
-        }
-
-        .testimonials-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 35px;
-        }
-
-        .testimonial-card {
-            background: white;
-            border-radius: 20px;
-            padding: 35px;
-            box-shadow: 0 15px 40px rgba(26, 83, 92, 0.1);
-            transition: all 0.3s ease;
-            border-left: 5px solid var(--primary);
-        }
-
-        .testimonial-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 50px rgba(26, 83, 92, 0.15);
-        }
-
-        .testimonial-text {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            margin-bottom: 25px;
-            color: var(--dark);
-            opacity: 0.9;
-            font-style: italic;
-        }
-
-        .testimonial-author {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .author-avatar {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary), var(--pink));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 24px;
-            font-weight: 700;
-        }
-
-        .author-info h4 {
-            font-size: 1.2rem;
-            margin-bottom: 5px;
-            color: var(--dark);
-        }
-
-        .author-info p {
+        h1 span {
             color: var(--primary);
-            font-size: 0.9rem;
         }
 
-        /* CTA区域 */
-        .cta {
-            padding: 130px 0;
-            background: linear-gradient(135deg, var(--primary), var(--pink));
-            color: white;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .cta::before {
-            content: '';
-            position: absolute;
-            width: 150%;
-            height: 150%;
-            top: -25%;
-            left: -25%;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
-            background-size: 30px 30px;
-            animation: pulse 15s linear infinite;
-        }
-
-        .cta-content {
-            position: relative;
-            z-index: 2;
-        }
-
-        .cta h2 {
-            font-size: 3.2rem;
-            margin-bottom: 25px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .cta p {
+        .subtitle {
             font-size: 1.4rem;
             margin-bottom: 40px;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
-            opacity: 0.95;
+            color: var(--dark);
+            max-width: 700px;
         }
 
-        .cta .btn {
+        .action-buttons {
+            display: flex;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .feature-cards {
+            display: flex;
+            gap: 30px;
+            margin-top: 60px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .feature-card {
             background: white;
-            color: var(--primary);
-            font-weight: 700;
-            padding: 18px 50px;
-            font-size: 20px;
-            box-shadow: 0 18px 35px rgba(0, 0, 0, 0.25);
+            border-radius: 15px;
+            padding: 30px;
+            width: 250px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
         }
 
-        .cta .btn:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.35);
+        .feature-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .feature-card h3 {
+            margin-bottom: 10px;
+            color: var(--dark);
         }
 
         /* 页脚 */
         .footer {
-            padding: 80px 0 30px;
             background: var(--dark);
             color: white;
+            padding: 40px 0 20px;
+            text-align: center;
+            margin-top: 60px;
         }
 
-        .footer-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 45px;
-            margin-bottom: 50px;
+        .footer p {
+            margin: 10px 0;
         }
 
-        .footer-column h3 {
-            font-size: 1.5rem;
-            margin-bottom: 25px;
-            color: var(--accent);
+        .social-links {
+            margin: 20px 0;
         }
 
-        .footer-column ul {
-            list-style: none;
-        }
-
-        .footer-column ul li {
-            margin-bottom: 12px;
-        }
-
-        .footer-column ul li a {
-            color: #ddd;
+        .social-links a {
+            color: white;
             text-decoration: none;
-            transition: all 0.3s ease;
-            display: inline-block;
-        }
-
-        .footer-column ul li a:hover {
-            color: var(--accent);
-            transform: translateX(8px);
-        }
-
-        .social-icons {
-            display: flex;
-            gap: 20px;
-            margin-top: 25px;
-        }
-
-        .social-icons a {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 45px;
-            height: 45px;
-            background: rgba(255, 255, 255, 0.15);
-            border-radius: 50%;
-            color: white;
-            transition: all 0.3s ease;
-            font-size: 1.2rem;
-        }
-
-        .social-icons a:hover {
-            background: linear-gradient(135deg, var(--primary), var(--pink));
-            transform: translateY(-5px) scale(1.1);
-        }
-
-        .copyright {
-            text-align: center;
-            padding-top: 30px;
-            border-top: 1px solid rgba(255, 255, 255, 0.15);
-            color: #aaa;
-            font-size: 1rem;
-        }
-
-        .hero-text-showcase {
-            width: 100%;
-            max-width: 550px;
-            height: 450px;
-            border-radius: 35px;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 40px 80px rgba(26, 83, 92, 0.25);
-            animation: float 8s ease-in-out infinite;
-            background: linear-gradient(135deg, var(--secondary), var(--accent));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            text-align: center;
-            padding: 30px;
-        }
-
-        .text-slider {
-            width: 100%;
-            height: 100%;
-            position: relative;
-        }
-
-        .slider-text {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            transition: opacity 0.5s ease-in-out;
-            padding: 30px;
-            text-align: center;
-        }
-
-        .slider-text.active {
-            opacity: 1;
-        }
-
-        .slider-text h3 {
-            font-size: 2.2rem;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-        }
-
-        .slider-text p {
-            font-size: 1.2rem;
-            line-height: 1.7;
-            max-width: 90%;
-            margin: 0 auto;
-        }
-
-        .slider-dots {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 10px;
-            z-index: 3;
-        }
-
-        .feature-icon-large {
-            font-size: 3rem;
-            margin-bottom: 15px;
-            opacity: 0.9;
-        }
-
-        .dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.5);
-            cursor: pointer;
-            transition: background 0.3s ease;
-        }
-
-        .dot.active {
-            background: white;
-        }
-
-        /* 动画 */
-        @keyframes fadeInLeft {
-            from {
-                opacity: 0;
-                transform: translateX(-60px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        @keyframes fadeInRight {
-            from {
-                opacity: 0;
-                transform: translateX(60px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        @keyframes float {
-
-            0%,
-            100% {
-                transform: translateY(0) rotate(0deg);
-            }
-
-            50% {
-                transform: translateY(-25px) rotate(5deg);
-            }
-        }
-
-        @keyframes pulse {
-            0% {
-                box-shadow: 0 12px 25px rgba(255, 107, 107, 0.35);
-            }
-
-            50% {
-                box-shadow: 0 12px 35px rgba(255, 107, 107, 0.55);
-            }
-
-            100% {
-                box-shadow: 0 12px 25px rgba(255, 107, 107, 0.35);
-            }
-        }
-
-        /* 响应式设计 */
-        @media (max-width: 992px) {
-            .hero {
-                flex-direction: column;
-                text-align: center;
-                padding: 120px 0 80px;
-            }
-
-            .hero-content {
-                margin-bottom: 60px;
-            }
-
-            .hero-buttons {
-                justify-content: center;
-            }
-
-            .hero p {
-                margin-left: auto;
-                margin-right: auto;
-            }
-
-            .hero h1 {
-                font-size: 3.2rem;
-            }
-
-            .section-title {
-                font-size: 2.5rem;
-            }
+            margin: 0 10px;
+            font-size: 1.5rem;
         }
 
         @media (max-width: 768px) {
             .navbar {
                 flex-direction: column;
                 gap: 20px;
-                padding: 15px 0;
             }
-
+            
             .nav-links {
-                gap: 20px;
+                gap: 15px;
                 flex-wrap: wrap;
                 justify-content: center;
             }
-
-            .hero h1 {
-                font-size: 2.6rem;
-            }
-
-            .hero p {
-                font-size: 1.1rem;
-            }
-
-            .hero-buttons {
+            
+            .action-buttons {
                 flex-direction: column;
-                gap: 20px;
+                align-items: center;
             }
-
-            .hero-buttons .btn {
-                width: 100%;
-                max-width: 350px;
-                margin: 0 auto;
-            }
-
-            .section-title {
-                font-size: 2.2rem;
-            }
-
-            .features-grid {
-                grid-template-columns: 1fr;
-                gap: 30px;
-            }
-
-            .testimonials-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .cta h2 {
+            
+            h1 {
                 font-size: 2.5rem;
             }
-
-            .cta p {
-                font-size: 1.2rem;
+            
+            .subtitle {
+                font-size: 1.1rem;
             }
-
-            .footer-content {
-                grid-template-columns: 1fr;
-                text-align: center;
-            }
-
-            .social-icons {
-                justify-content: center;
-            }
-        }
-
-        /* 滚动动画 */
-        .animate-on-scroll {
-            opacity: 0;
-            transform: translateY(50px);
-            transition: all 0.6s ease;
-        }
-
-        .animate-on-scroll.visible {
-            opacity: 1;
-            transform: translateY(0);
         }
     </style>
 </head>
 
 <body>
-    <!-- 导航栏 -->
-    <nav class="navbar">
-        <div class="container">
+    <div class="container">
+        <!-- 导航栏 -->
+        <nav class="navbar">
             <a href="/" class="logo">爱<span>嘀咕</span></a>
             <div class="nav-links">
                 <a href="/article/">嘀咕博客</a>
                 <a href="/article/link/">网址导航</a>
-                <a href="#features">功能特色</a>
-                <a href="#testimonials">用户评价</a>
-                <!-- <a href="#about">关于我们</a>
-                <a href="#contact">联系我们</a> -->
             </div>
             {if !$userInfo}
             <div class="auth-buttons">
                 <a href="/login/" class="btn btn-login">登录</a>
-                <a href="/register/" class="btn btn-register">免费注册</a>
+                <a href="/register/" class="btn btn-register">注册</a>
             </div>
             {/if}
-        </div>
-    </nav>
+        </nav>
 
-    <!-- 英雄区域 -->
-    <section class="hero">
-        <div id="particles-js"></div>
-        <div class="container">
-            <div class="hero-content" style="{if !$userInfo}margin-top: 65px;{/if}">
-                <h1>发现有趣的<span>灵魂</span>，分享真实的自己</h1>
-                <p>爱嘀咕是一个温暖有趣的社交平台，在这里你可以遇见志同道合的朋友，分享生活中的点点滴滴，记录每一个美好瞬间。</p>
-                <div class="hero-buttons">
-                    {if $userInfo}
-                    <a href="/square/" target="_blank" class="btn btn-register">进入微博</a>
-                    {else}
-                    <a href="/register/" class="btn btn-register">立即加入</a>
-                    {/if}
-                    <!-- <a href="#features" class="btn btn-login">了解更多</a> -->
-                </div>
+        <!-- 主体内容 -->
+        <div class="main-content">
+            <h1>发现有趣的<span>灵魂</span></h1>
+            <p class="subtitle">一个温暖有趣的社交平台，分享生活点滴，记录美好瞬间</p>
+            
+            <div class="action-buttons">
+                {if $userInfo}
+                <a href="/square/" class="btn btn-register">进入广场</a>
+                {else}
+                <a href="/register/" class="btn btn-register">立即加入</a>
+                {/if}
             </div>
-            <div class="hero-image">
-                <div class="hero-text-showcase">
-                    <div class="text-slider">
-                        <div class="slider-text active">
-                            <div class="feature-icon-large">✨</div>
-                            <h3>功能丰富</h3>
-                            <p>爱嘀咕提供多样化功能，满足您的社交需求，让表达更自由、交流更便捷。支持图文分享、话题讨论、个人主页等多种互动形式。</p>
-                        </div>
-                        <div class="slider-text">
-                            <div class="feature-icon-large">👥</div>
-                            <h3>社区活跃</h3>
-                            <p>汇聚有趣灵魂的社区，发现志同道合的朋友，分享生活的点滴与感悟。每日有数千用户在线互动，营造温馨的交流氛围。</p>
-                        </div>
-                        <div class="slider-text">
-                            <div class="feature-icon-large">🔧</div>
-                            <h3>工具实用</h3>
-                            <p>集成多种实用工具，提升效率，让生活工作更加便利和高效。包括网址导航、实用小工具等，一站式解决日常需求。</p>
-                        </div>
-                        <div class="slider-text">
-                            <div class="feature-icon-large">💬</div>
-                            <h3>话题多样</h3>
-                            <p>涵盖各类热门话题，参与讨论，拓展视野，发现更多可能性。从科技到生活，从兴趣到专业，总有一个话题适合你。</p>
-                        </div>
-                    </div>
-                    <div class="slider-dots">
-                        <span class="dot active" data-slide="0"></span>
-                        <span class="dot" data-slide="1"></span>
-                        <span class="dot" data-slide="2"></span>
-                        <span class="dot" data-slide="3"></span>
-                    </div>
+            
+            <div class="feature-cards">
+                <div class="feature-card">
+                    <div class="feature-icon">💬</div>
+                    <h3>轻松分享</h3>
+                    <p>随时随地记录生活趣事</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">👥</div>
+                    <h3>结识朋友</h3>
+                    <p>找到志同道合的伙伴</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">✨</div>
+                    <h3>发现精彩</h3>
+                    <p>探索有趣的创意内容</p>
                 </div>
             </div>
         </div>
-    </section>
-
-
-    <div class="copyright">
-        <p>&copy; 2025 爱嘀咕. 保留所有权利。</p>
     </div>
-    <script>
-        // 粒子动画
-        (function () {
-            var canvas = document.createElement('canvas');
-            var ctx = canvas.getContext('2d');
-            var particles = [];
-            var particleCount = 80;
 
-            function init() {
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
-                canvas.style.position = 'absolute';
-                canvas.style.top = '0';
-                canvas.style.left = '0';
-                canvas.style.zIndex = '1';
-                canvas.style.pointerEvents = 'none';
-                document.querySelector('.hero').appendChild(canvas);
-
-                for (var i = 0; i < particleCount; i++) {
-                    particles.push({
-                        x: Math.random() * canvas.width,
-                        y: Math.random() * canvas.height,
-                        size: Math.random() * 4 + 1,
-                        speedX: Math.random() * 0.5 - 0.25,
-                        speedY: Math.random() * 0.5 - 0.25,
-                        color: 'rgba(255, 107, 107, ' + (Math.random() * 0.5 + 0.3) + ')'
-                    });
-                }
-
-                animate();
-            }
-
-            function animate() {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-                for (var i = 0; i < particles.length; i++) {
-                    var p = particles[i];
-                    ctx.beginPath();
-                    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-                    ctx.fillStyle = p.color;
-                    ctx.fill();
-
-                    p.x += p.speedX;
-                    p.y += p.speedY;
-
-                    if (p.x < 0 || p.x > canvas.width) p.speedX *= -1;
-                    if (p.y < 0 || p.y > canvas.height) p.speedY *= -1;
-                }
-
-                requestAnimationFrame(animate);
-            }
-
-            window.addEventListener('resize', function () {
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
-            });
-
-            init();
-        })();
-
-        // 滚动效果
-        window.addEventListener('scroll', function () {
-            const navbar = document.querySelector('.navbar');
-            if (window.scrollY > 50) {
-                navbar.style.padding = '10px 0';
-                navbar.style.boxShadow = '0 8px 30px rgba(0,0,0,0.15)';
-            } else {
-                navbar.style.padding = '20px 0';
-                navbar.style.boxShadow = 'none';
-            }
-        });
-
-        // 平滑滚动
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
-            });
-        });
-
-        // 滚动动画
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
-            });
-        }, observerOptions);
-
-        document.querySelectorAll('.animate-on-scroll').forEach(el => {
-            observer.observe(el);
-        });
-        // 文字轮播
-        (function () {
-            let currentSlide = 0;
-            const slides = document.querySelectorAll('.slider-text');
-            const dots = document.querySelectorAll('.dot');
-            const totalSlides = slides.length;
-
-            function showSlide(index) {
-                // 移除当前活动状态
-                slides[currentSlide].classList.remove('active');
-                dots[currentSlide].classList.remove('active');
-
-                // 更新当前幻灯片索引
-                currentSlide = index;
-
-                // 添加新的活动状态
-                slides[currentSlide].classList.add('active');
-                dots[currentSlide].classList.add('active');
-            }
-
-            function nextSlide() {
-                const nextIndex = (currentSlide + 1) % totalSlides;
-                showSlide(nextIndex);
-            }
-
-            // 点击指示点切换文字
-            dots.forEach((dot, index) => {
-                dot.addEventListener('click', () => {
-                    showSlide(index);
-                });
-            });
-
-            // 每3秒自动切换
-            setInterval(nextSlide, 3000);
-        })();
-    </script>
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container">
+            <p>爱嘀咕 - 发现有趣的灵魂</p>
+            <div class="social-links">
+                <a href="#">FB</a>
+                <a href="#">TW</a>
+                <a href="#">IG</a>
+            </div>
+            <p>&copy; 2025 爱嘀咕. 保留所有权利。</p>
+        </div>
+    </footer>
 </body>
 
 </html>
