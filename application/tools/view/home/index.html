@@ -12,6 +12,7 @@
             --accent: #FFD166;
             --dark: #1A535C;
             --light: #F7FFF7;
+            --pink: #FF6B6B;
         }
 
         * {
@@ -22,7 +23,7 @@
 
         body {
             font-family: 'Noto Sans SC', sans-serif;
-            background: linear-gradient(135deg, #F7FFF7 0%, #E3FDFD 100%);
+            background: url(/static/index/images/bg.jpg) no-repeat 0 0 ;
             color: var(--dark);
             line-height: 1.6;
         }
@@ -97,7 +98,7 @@
         }
 
         .btn-register {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            background: linear-gradient(135deg, var(--primary), var(--pink));
             color: white;
         }
 
@@ -173,7 +174,7 @@
 
         /* 页脚 */
         .footer {
-            background: var(--dark);
+            /* background: var(--dark); */
             color: white;
             padding: 40px 0 20px;
             text-align: center;
@@ -276,15 +277,75 @@
     <!-- 页脚 -->
     <footer class="footer">
         <div class="container">
-            <p>爱嘀咕 - 发现有趣的灵魂</p>
+            <!-- <p>爱嘀咕 - 发现有趣的灵魂</p>
             <div class="social-links">
                 <a href="#">FB</a>
                 <a href="#">TW</a>
                 <a href="#">IG</a>
-            </div>
+            </div> -->
             <p>&copy; 2025 爱嘀咕. 保留所有权利。</p>
         </div>
     </footer>
 </body>
+<script>
+            // 粒子动画
+        (function() {
+            var canvas = document.createElement('canvas');
+            var ctx = canvas.getContext('2d');
+            var particles = [];
+            var particleCount = 80;
+            
+            function init() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                canvas.style.position = 'absolute';
+                canvas.style.top = '0';
+                canvas.style.left = '0';
+                canvas.style.zIndex = '1';
+                canvas.style.pointerEvents = 'none';
+                document.querySelector('body').appendChild(canvas);
+                
+                for (var i = 0; i < particleCount; i++) {
+                    particles.push({
+                        x: Math.random() * canvas.width,
+                        y: Math.random() * canvas.height,
+                        size: Math.random() * 4 + 1,
+                        speedX: Math.random() * 0.5 - 0.25,
+                        speedY: Math.random() * 0.5 - 0.25,
+                        color: 'rgba(255, 107, 107, ' + (Math.random() * 0.5 + 0.3) + ')' 
+                    });
+                }
+                
+                animate();
+            }
+            
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                for (var i = 0; i < particles.length; i++) {
+                    var p = particles[i];
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                    ctx.fillStyle = p.color;
+                    ctx.fill();
+                    
+                    p.x += p.speedX;
+                    p.y += p.speedY;
+                    
+                    if (p.x < 0 || p.x > canvas.width) p.speedX *= -1;
+                    if (p.y < 0 || p.y > canvas.height) p.speedY *= -1;
+                }
+                
+                requestAnimationFrame(animate);
+            }
+            
+            window.addEventListener('resize', function() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            });
+            
+            init();
+        })();
 
+</script>
 </html>
