@@ -66,8 +66,12 @@
     <script>
         $(function () {
             // 初始化编辑器内容
-            var content = {{$article ? raw($article.content) : ''}}
-            editor.txt.html(content);
+            {{if $article}}
+
+                editor.txt.html({{$article.content | raw}} );
+
+            {{/if}}
+            
 
             // 提交表单
             $("#kt_commit_submit").click(function () {
