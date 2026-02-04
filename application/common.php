@@ -199,7 +199,7 @@ function getThemeInfo($theme)
 {
 	if (!$theme) {
 		$themeInfo[0] = 'default';
-		$themeInfo[1] = '';
+		$themeInfo[1] = '/static/index/images/bg.jpg';
 		// $themeInfo[1] = '/static/index/images/bg4.svg';
 	} else {
 		$themeInfo = explode(';', $theme);	
