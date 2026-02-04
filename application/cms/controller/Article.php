@@ -20,7 +20,7 @@ class Article extends Base
     public function edit(ContentModel $contentModel)
     {
         $contentId = input('param.id');
-        $article = null;
+        $article = [];
         
         // 如果有ID，获取文章信息（编辑模式）
         if ($contentId) {
