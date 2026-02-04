@@ -29,6 +29,7 @@ class Base extends Controller
         // dump(strtolower(request()->routeInfo()["route"]));die;
         // 未登录用户在特定路由下给提示
         $this->redirectLogin();
+        $this->assign('beian', sysConfig('app.beian', ''));
         $this->assign(
             'router', strtolower(request()->routeInfo()["route"] ?? '')
         );
