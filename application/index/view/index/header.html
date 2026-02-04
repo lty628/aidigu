@@ -22,7 +22,7 @@
     document.addEventListener('DOMContentLoaded', function() {
         // 从 localStorage 中读取保存的主题
         // var selectedTheme = localStorage.getItem('selectedTheme');
-		var selectedTheme = '{:getThemeInfo($userInfo['theme'])[0]}';
+		var selectedTheme = '{$siteTheme}';
         if (selectedTheme) {
             if (selectedTheme === 'default') {
                 document.documentElement.className = '';
@@ -45,9 +45,9 @@
 </head>
 
 <body>
-
-{if $userInfo && getThemeInfo($userInfo['theme'])[1]}
-<div class="background-blur" style="background: url({:getThemeInfo($userInfo['theme'])[1]}) no-repeat 0 0;background-attachment:fixed;background-size:100% 100%;height:auto;min-height: 100%"></div>
+<input type="hidden" id="siteTheme" value="{$siteTheme}">
+{if $userInfo && $siteBg}
+<div class="background-blur" style="background: url({$siteBg}) no-repeat 0 0;background-attachment:fixed;background-size:100% 100%;height:auto;min-height: 100%"></div>
 {else}
 <div class="background-blur" style="filter: blur(1px);background: url(/static/index/images/bg.jpg) no-repeat 0 0;background-attachment:fixed;background-size:100% 100%;height:auto;min-height: 100%"></div>
 <script>

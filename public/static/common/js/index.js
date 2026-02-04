@@ -73,7 +73,7 @@ function showMessageImg(obj) {
 function toggleCommentIframe(msgId, type) {
     var iframeId = 'iframe-comment-' + msgId;
     var existingIframe = document.getElementById(iframeId);
-    console.log(existingIframe);
+    var siteTheme = $('#siteTheme').val();
     if (existingIframe) {
         // 如果已存在，则切换显示/隐藏
         if (existingIframe.style.display === 'none') {
@@ -85,7 +85,7 @@ function toggleCommentIframe(msgId, type) {
         // 创建新的 iframe 并插入到对应的评论区域
         var iframe = document.createElement('iframe');
         iframe.id = iframeId;
-        iframe.src = '/tools/comment/index?msg_id=' + msgId + '&type=' + type;
+        iframe.src = '/tools/comment/index?msg_id=' + msgId + '&type=' + type+'&theme='+siteTheme;
         iframe.style.width = '100%';
         iframe.style.minHeight = '230px';
         iframe.style.border = 'none';

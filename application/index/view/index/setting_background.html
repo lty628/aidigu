@@ -9,7 +9,7 @@
 		<div class="entry" style="border-bottom: unset">
 			<div class="backgroundhtml">
 				<img width="100%" style="min-height: 200px; max-height: 350px;"
-					src="{:getThemeInfo($userInfo.theme)[1]}" alt="">
+					src="{$siteBg}" alt="">
 			</div>
 			{if $bgArr}
 			<div class="recent-backgrounds"
@@ -146,8 +146,8 @@
 
 
 	</div>
-	<input type="hidden" value="{:getThemeInfo($userInfo.theme)[1]}" id="backgroundVal">
-	<input type="hidden" value="{:getThemeInfo($userInfo.theme)[0]}" id="backgroundTheme">
+	<input type="hidden" value="{$siteBg}" id="backgroundVal">
+	<input type="hidden" value="{$siteTheme}" id="backgroundTheme">
 	<script>
 
 		$(function () {

@@ -70,7 +70,8 @@ class Info extends Base
 		// $userInfo['fans_count'] = Fans::where('touid', $userid)->where('fromuid','<>',$userid)->count();
 		// $userInfo['concern_count'] = Fans::where('fromuid', $userid)->where('touid','<>',$userid)->count();
 		// $userInfo['message_count'] = Message::where('uid', $userid)->count();
-		
+		$this->assign('siteTheme', getThemeInfo($userInfo['theme'])[0]);
+		$this->assign('siteBg',  getThemeInfo($userInfo['theme'])[1]);
 		$this->assign('userInfo', $userInfo);
 	}
 	protected function setMyFans($userid, $loginUid)

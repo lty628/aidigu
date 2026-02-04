@@ -104,6 +104,7 @@ class Comment extends Controller
         $commentId = input('cid');
         $replyId = input('rid');
         $currentUid = getLoginUid();
+        $theme = input('theme', 'default');
 
         $content_table = $this->typeRelationArr[$type]['content_table'] ?? '';
         if (empty($content_table)) {
@@ -118,8 +119,6 @@ class Comment extends Controller
         $this->assign('msgUid', $msgUid);
         $this->assign('type', $type);
         $this->assign('currentUid', $currentUid);
-        $userInfo = getLoginUserInfo();
-        $theme = getThemeInfo($userInfo['theme'])[0] ?? 'default';
         $this->assign('theme', $theme);
         // 渲染视图
         return $this->fetch();

@@ -29,11 +29,11 @@
 </head>
 
 <body>
-
+    <input type="hidden" id="siteTheme" value="default">
     <div class="body c-min">
     {if !$userInfo.isSiteUser}
-        {if getThemeInfo($userInfo['theme'])[1]}
-        <div class="body-top-bg shadow" style="background-image: url({:getThemeInfo($userInfo['theme'])[1]})">
+        {if $siteBg}
+        <div class="body-top-bg shadow" style="background-image: url({$siteBg})">
         {else}
         <div class="body-top-bg shadow" style="background-image: url(/static/index/images/bg4.svg)">
         {/if}
