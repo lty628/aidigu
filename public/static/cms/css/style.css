@@ -38,6 +38,7 @@ h4 {
     margin: 0 auto;
     padding: 0 20px;
 }
+
 .container.navbar-container {
     display: flex;
     justify-content: space-between;
@@ -315,7 +316,8 @@ h4 {
 }
 
 .news-content {
-    padding: 10px 30px 30px;;
+    padding: 10px 30px 30px;
+    ;
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -665,9 +667,17 @@ h4 {
         grid-template-columns: 1fr;
     }
 
-    .news-section {
-        padding: 20px;
+    .container {
+        width: 100%;
     }
+
+    .main-content {
+        margin-top: 60px;
+    }
+
+    /* .news-section {
+        padding: 20px;
+    } */
 
     .news-category {
         padding: 15px;
@@ -698,7 +708,10 @@ h4 {
 
     .article-section,
     .comments-section {
-        padding: 20px;
+        padding: 0;
+        width: 100%;
+        box-shadow: unset;
+        background: unset;
     }
 
     .article-actions {
