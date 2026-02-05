@@ -8,6 +8,7 @@ function ajaxJson($code, $msg, $data = [])
 function getLoginUserInfo()
 {
 	$userid = getLoginUid();
+	if (!$userid) return [];
 	$info = session('userInfo' . $userid);
 	if (!$info) {
 		$info = Db::name('user')->field('blog,uid,nickname,theme')->where('uid', $userid)->find();
