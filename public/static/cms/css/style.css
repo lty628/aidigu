@@ -452,6 +452,7 @@ h4 {
     font-size: 14px;
     text-decoration: none;
     transition: all 0.3s ease;
+    margin-left: auto;
 }
 
 .category-link:hover {
@@ -654,7 +655,7 @@ h4 {
 }
 
 /* 响应式设计 */
-@media (max-width: 768px) {
+@media (max-width: 900px) {
     .nav-links {
         display: none;
     }

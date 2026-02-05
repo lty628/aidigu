@@ -15,10 +15,10 @@
                             <div class="author-name">{{$article.user.nickname}}</div>
                             <a href="#" class="publish-time">发表于 {{$article.create_time | formatTime}}</a>
                         </div>
+                        <a href="/article/category/{{$article.category.category_name}}/" class="category-link">
+                            {{$article.category.category_name}}
+                        </a>
                     </div>
-                    <a href="/article/category/{{$article.category.category_name}}/" class="category-link">
-                        {{$article.category.category_name}}
-                    </a>
                 </div>
                 <h1 class="article-title">{{$article.title}}</h1>
                 <div class="article-content">
