@@ -7,11 +7,11 @@ class Home extends Controller
 {	
 	public function index()
     {
-        // $userInfo = getLoginUserInfo();
-        // // 自动登录
-        // if (!$userInfo && cookie('rememberMe')) {
-        //     $userInfo = checkUserCookie(cookie('rememberMe'));
-        // }
+        $userInfo = getLoginUserInfo();
+        // 自动登录
+        if (!$userInfo && cookie('rememberMe')) {
+            $userInfo = checkUserCookie(cookie('rememberMe'));
+        }
 
         $host = request()->host();
         $scheme = request()->scheme();
