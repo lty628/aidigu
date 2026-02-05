@@ -1,15 +1,14 @@
-<p align="center">
-    <a href="https://github.com/lty628/aidigu">
-        <img src="https://raw.githubusercontent.com/lty628/aidigu/master/public/favicon.ico" width="256" alt="aidigu" />
-    </a>
-</p>
-<p align="center">
-    <a href="https://github.com/lty628/aidigu"><img src="https://img.shields.io/badge/PHP-7.2%2B-blue?style=for-the-badge&color=%238d4bbb" alt="PHP 7.2+"></a>
-    <a href="https://github.com/lty628/aidigu"><img src="https://img.shields.io/badge/STABLE-1.7.0-blue?style=for-the-badge&color=%230aa344" alt="Latest Stable Version"></a>
-    <a href="https://github.com/lty628/aidigu"><img src="https://img.shields.io/badge/UNSTABLE-1.9.x--DEV-blue?style=for-the-badge&color=%23ff0097" alt="Latest Unstable Version"></a>
-    <a href="https://github.com/lty628/aidigu"><img src="https://img.shields.io/badge/SIZE-9.3MB-blue?style=for-the-badge&color=%23f0c239" alt="Download Size"></a>
-    <a href="https://raw.githubusercontent.com/lty628/aidigu/master/LICENSE"><img src="https://img.shields.io/badge/LICENSE-MIT-blue?style=for-the-badge&color=%234b5cc4" alt="MIT License"></a>
-</p>
+各位的朋友们：
+
+本项目已经七年了，项目成立之初PHP还很火，原本想写个开源项目一是练练手二是能获得一些star。
+
+但，近几年的AI发展实在太猛了，预计2026年AI会迎来再次爆发，随便一个AI工具，分分钟就能写出比爱嘀咕更高效、更智能的代码，
+
+功能还更丰富。鉴于爱嘀咕这个项目，技术架构老旧，功能也跟不上时代，维护并没有意义。
+
+因此本项目预计在2026年3月1日正式删除。
+
+江湖再见！
 
 ### **主要功能特性**
 
