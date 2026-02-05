@@ -33,6 +33,13 @@ class Base extends Controller
         $this->assign(
             'router', strtolower(request()->routeInfo()["route"] ?? '')
         );
+
+        $host = request()->host();
+        if ($host == 'aidigu.com') {
+            $host = 'aidigu.cn';
+        }
+
+        $this->assign('host', $host);
     }
 
     public function getUserId()
