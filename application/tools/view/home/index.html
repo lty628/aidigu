@@ -23,7 +23,7 @@
 
         body {
             font-family: 'Noto Sans SC', sans-serif;
-            background: url(https://aidigu.com/static/index/images/bg.jpg) no-repeat 0 0 ;
+            background: url({$scheme}://{$host}/static/index/images/bg.jpg) no-repeat 0 0 ;
             background-size: cover;
             background-position: center;
             color: var(--dark);
@@ -248,12 +248,12 @@
             <p class="subtitle">分享生活点滴，连接有趣的人，记录美好瞬间</p>
             
             <div class="action-buttons">
-                <a href="https://aidigu.com/article/" class="btn btn-login">嘀咕博客</a>
-                <a href="https://aidigu.com/article/link/" class="btn btn-login">网址导航</a>
+                <a href="{$scheme}://{$host}/article/" class="btn btn-login">嘀咕博客</a>
+                <a href="{$scheme}://{$host}/article/link/" class="btn btn-login">网址导航</a>
                 {if $userInfo}
-                <a href="https://aidigu.com/square/" class="btn btn-register">进入微博广场</a>
+                <a href="{$scheme}://{$host}/square/" class="btn btn-register">进入微博广场</a>
                 {else}
-                <a href="https://aidigu.com/login/" class="btn btn-register">进入微博广场</a>
+                <a href="{$scheme}://{$host}/login/" class="btn btn-register">进入微博广场</a>
                 {/if}
             </div>
             
