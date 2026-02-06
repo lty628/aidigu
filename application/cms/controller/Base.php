@@ -12,12 +12,12 @@ class Base extends Controller
 
     public function initialize()
     {
-        $userid = getUserId();
-        $info = [];
-        if ($userid) {
-            $info = Db::table('wb_user')->field('uid,nickname,head_image,blog,status,uptime,theme')->where('uid', $userid)->find();
+        $userInfo = getLoginUserInfo();
+        // 自动登录
+        if (!$userInfo && cookie('rememberMe')) {
+            $userInfo = checkUserCookie(cookie('rememberMe'));
         }
-        $this->userInfo = $info;
+        $this->userInfo = $userInfo;
         // var_dump($this->userInfo);die;
         $this->assign(
             [
