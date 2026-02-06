@@ -23,7 +23,7 @@ function checkUserCookie($rememberMe, $fields = 'uid,nickname,password,head_imag
 		return false;
 	}
 
-	$info = Db::name('user')->where('blog', $rememberMe['blog'])->field($fields)->find();
+	$info = Db::table('wb_user')->where('blog', $rememberMe['blog'])->field($fields)->find();
 	if (!$info) return false;
 	if ($info['status'] != 0 || $info['nickname'] != $rememberMe['nickname'] || $rememberMe['password'] != encryptionPass($info['password'])) return false;
 	if ($info['uptime'] - $rememberMe['uptime'] > 86400*60) return false;
@@ -31,7 +31,7 @@ function checkUserCookie($rememberMe, $fields = 'uid,nickname,password,head_imag
 	if (!$isCli) {
 		$time = time();
 		$rememberMe['uptime'] = $time;
-		Db::name('user')->where('uid', $info['uid'])->update(['uptime' => $time]);
+		Db::table('wb_user')->where('uid', $info['uid'])->update(['uptime' => $time]);
 		cookie('rememberMe', serialize(serialize($rememberMe)), 86400*60);
 		session('userid', $info['uid']);
 	}

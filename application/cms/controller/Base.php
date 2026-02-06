@@ -17,6 +17,7 @@ class Base extends Controller
         if (!$userInfo && cookie('rememberMe')) {
             $userInfo = checkUserCookie(cookie('rememberMe'));
         }
+        // Db::table('wb_user')->field('uid,nickname,head_image,blog,status,uptime,theme')->where('uid', $userid)->find();
         $this->userInfo = $userInfo;
         // var_dump($this->userInfo);die;
         $this->assign(
