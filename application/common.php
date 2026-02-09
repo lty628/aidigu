@@ -17,7 +17,7 @@ function getLoginUserInfo()
 }
 function checkUserCookie($rememberMe, $fields = 'uid,nickname,password,head_image,blog,status,uptime', $isCli = false)
 {
-	if (!$rememberMe) return false;
+	if (!$rememberMe || $rememberMe == '-1') return false;
 	$rememberMe = unserialize(unserialize($rememberMe));
 	if (!isset($rememberMe['blog']) || !isset($rememberMe['nickname']) || !isset($rememberMe['uptime']) || !isset($rememberMe['password'])) {
 		return false;

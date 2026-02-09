@@ -156,7 +156,7 @@ class UserInfo extends Controller
 		cookie(null);
 		// 清除登录用户ID
 		session('userid', null);
-		cookie('rememberMe', null);
+		cookie('rememberMe', -1);
 		// 重定向到首页
 		$this->redirect('/');
 	}
