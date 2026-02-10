@@ -13,9 +13,16 @@ class Base extends Controller
     public function initialize()
     {
         $userInfo = getLoginUserInfo();
+        $rememberMe = cookie('rememberMe');
+        
         // 自动登录
-        if (!$userInfo && cookie('rememberMe')) {
-            $userInfo = checkUserCookie(cookie('rememberMe'));
+        if (!$userInfo && $rememberMe) {
+            if ($rememberMe) {
+                $userInfo = checkUserCookie($rememberMe);
+            } else {
+                cookie('rememberMe', -1);
+            }
+            
         }
         // Db::table('wb_user')->field('uid,nickname,head_image,blog,status,uptime,theme')->where('uid', $userid)->find();
         $this->userInfo = $userInfo;
