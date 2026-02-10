@@ -13,11 +13,10 @@ class Base extends Controller
     public function initialize()
     {
         $userInfo = getLoginUserInfo();
-        $rememberMe = cookie('rememberMe');
-        
         // 自动登录
-        if (!$userInfo && $rememberMe) {
-            if ($rememberMe) {
+        if (!$userInfo) {
+            $rememberMe = cookie('rememberMe');
+            if ($rememberMe && $rememberMe != -1) {
                 $userInfo = checkUserCookie($rememberMe);
             } else {
                 cookie('rememberMe', -1);
