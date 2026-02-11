@@ -293,12 +293,14 @@
     </footer>
 </body>
 <script>
-            // 粒子动画
+            // 粒子动画和烟花特效
         (function() {
             var canvas = document.createElement('canvas');
             var ctx = canvas.getContext('2d');
             var particles = [];
+            var fireworks = [];
             var particleCount = 80;
+            var fireworkCount = 10; // 进一步增加烟花数量，使效果更密集
             
             function init() {
                 canvas.width = window.innerWidth;
@@ -310,6 +312,7 @@
                 canvas.style.pointerEvents = 'none';
                 document.querySelector('body').appendChild(canvas);
                 
+                // 初始化粒子
                 for (var i = 0; i < particleCount; i++) {
                     particles.push({
                         x: Math.random() * canvas.width,
@@ -321,12 +324,27 @@
                     });
                 }
                 
+                // 初始化烟花
+                for (var i = 0; i < fireworkCount; i++) {
+                    fireworks.push({
+                        x: Math.random() * canvas.width,
+                        y: canvas.height,
+                        size: 5,
+                        speedX: Math.random() * 6 - 3,
+                        speedY: Math.random() * -12 - 8, // 增加初始速度，飞得更高
+                        color: getRealisticFireworkColor(), // 使用更真实的烟花颜色
+                        exploded: false,
+                        explosionParticles: []
+                    });
+                }
+                
                 animate();
             }
             
             function animate() {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 
+                // 绘制粒子
                 for (var i = 0; i < particles.length; i++) {
                     var p = particles[i];
                     ctx.beginPath();
@@ -341,7 +359,120 @@
                     if (p.y < 0 || p.y > canvas.height) p.speedY *= -1;
                 }
                 
+                // 绘制烟花
+                for (var i = 0; i < fireworks.length; i++) {
+                    var f = fireworks[i];
+                    
+                    if (!f.exploded) {
+                        // 绘制上升的烟花
+                        ctx.beginPath();
+                        ctx.arc(f.x, f.y, f.size, 0, Math.PI * 2);
+                        ctx.fillStyle = f.color;
+                        ctx.fill();
+                        
+                        // 更新位置
+                        f.x += f.speedX;
+                        f.y += f.speedY;
+                        f.speedY += 0.2; // 重力
+                        
+                        // 当烟花到达顶点或速度开始下降时爆炸
+                        if (f.speedY >= -1) { // 调整爆炸条件，在更高位置爆炸
+                            f.exploded = true;
+                            createExplosion(f);
+                        }
+                    } else {
+                        // 绘制爆炸效果
+                        for (var j = f.explosionParticles.length - 1; j >= 0; j--) {
+                            var ep = f.explosionParticles[j];
+                            ctx.beginPath();
+                            ctx.arc(ep.x, ep.y, ep.size, 0, Math.PI * 2);
+                            ctx.fillStyle = ep.color;
+                            ctx.fill();
+                            
+                            ep.x += ep.speedX;
+                            ep.y += ep.speedY;
+                            ep.speedY += 0.05; // 减小重力，让粒子下落更慢
+                            ep.size *= 0.98; // 减小衰减速度，让粒子保持更久
+                            ep.color = ep.color.replace(/[^,]+(?=\))/, ep.alpha);
+                            ep.alpha -= 0.01; // 减小透明度衰减，让粒子停留更久
+                            
+                            // 移除已经消失的粒子
+                            if (ep.alpha <= 0 || ep.size <= 0.1) {
+                                f.explosionParticles.splice(j, 1);
+                            }
+                        }
+                        
+                        // 移除已经消失的烟花
+                        if (f.explosionParticles.length === 0) {
+                            fireworks.splice(i, 1);
+                            // 添加新的烟花，确保持续放烟花
+                            setTimeout(function() {
+                                fireworks.push({
+                                    x: Math.random() * canvas.width,
+                                    y: canvas.height,
+                                    size: 5,
+                                    speedX: Math.random() * 6 - 3,
+                                    speedY: Math.random() * -12 - 8, // 保持高初始速度
+                                    color: getRealisticFireworkColor(), // 使用更真实的烟花颜色
+                                    exploded: false,
+                                    explosionParticles: []
+                                });
+                            }, Math.random() * 1000); // 减少延迟，使烟花发射更频繁
+                        }
+                    }
+                }
+                
                 requestAnimationFrame(animate);
+            }
+            
+            function createExplosion(firework) {
+                var explosionParticleCount = 150; // 增加粒子数量，使烟花更壮观
+                for (var i = 0; i < explosionParticleCount; i++) {
+                    // 计算爆炸角度和速度
+                    var angle = (Math.PI * 2 * i) / explosionParticleCount;
+                    var speed = Math.random() * 6 + 3; // 减小初始速度，让粒子飞得更慢，停留更久
+                    firework.explosionParticles.push({
+                        x: firework.x,
+                        y: firework.y,
+                        size: Math.random() * 4 + 1, // 增加粒子大小
+                        speedX: Math.cos(angle) * speed,
+                        speedY: Math.sin(angle) * speed,
+                        color: firework.color,
+                        alpha: 1
+                    });
+                }
+            }
+            
+            // 生成更真实的烟花颜色
+            function getRealisticFireworkColor() {
+                // 预定义一些真实的烟花颜色组合
+                var colorSchemes = [
+                    [255, 0, 0],     // 红色
+                    [255, 165, 0],   // 橙色
+                    [255, 255, 0],   // 黄色
+                    [0, 255, 0],     // 绿色
+                    [0, 0, 255],     // 蓝色
+                    [128, 0, 128],   // 紫色
+                    [255, 192, 203], // 粉色
+                    [255, 255, 255], // 白色
+                    [255, 69, 0],    // 橙红色
+                    [0, 255, 255]    // 青色
+                ];
+                
+                // 随机选择一个颜色方案
+                var scheme = colorSchemes[Math.floor(Math.random() * colorSchemes.length)];
+                
+                // 对颜色进行微小调整，增加变化
+                var r = Math.floor(scheme[0] + (Math.random() * 20 - 10));
+                var g = Math.floor(scheme[1] + (Math.random() * 20 - 10));
+                var b = Math.floor(scheme[2] + (Math.random() * 20 - 10));
+                
+                // 确保颜色值在有效范围内
+                r = Math.max(0, Math.min(255, r));
+                g = Math.max(0, Math.min(255, g));
+                b = Math.max(0, Math.min(255, b));
+                
+                return 'rgba(' + r + ',' + g + ',' + b + ', 1)';
             }
             
             window.addEventListener('resize', function() {
